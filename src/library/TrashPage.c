@@ -15,6 +15,7 @@
 #include <gee.h>
 #include <gdk/gdk.h>
 #include <glib/gi18n-lib.h>
+#include <gio/gio.h>
 #include <cairo.h>
 #include <float.h>
 #include <math.h>
@@ -303,6 +304,16 @@ typedef struct _VideoSourceCollection VideoSourceCollection;
 typedef struct _VideoSourceCollectionClass VideoSourceCollectionClass;
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
 #define TYPE_MEDIA_SOURCE_ITEM (media_source_item_get_type ())
 #define MEDIA_SOURCE_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MEDIA_SOURCE_ITEM, MediaSourceItem))
 #define MEDIA_SOURCE_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_MEDIA_SOURCE_ITEM, MediaSourceItemClass))
@@ -445,7 +456,7 @@ typedef struct _TrashPageTrashSearchViewFilterPrivate TrashPageTrashSearchViewFi
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -455,8 +466,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -464,10 +473,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -766,6 +773,10 @@ enum  {
 static TrashPageTrashSearchViewFilter* trash_page_trash_search_view_filter_new (void);
 static TrashPageTrashSearchViewFilter* trash_page_trash_search_view_filter_construct (GType object_type);
 #define TRASH_PAGE_NAME _ ("Trash")
+static void trash_page_on_delete (TrashPage* self);
+static void _trash_page_on_delete_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void trash_page_on_restore (TrashPage* self);
+static void _trash_page_on_restore_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 TrashPage* trash_page_new (void);
 TrashPage* trash_page_construct (GType object_type);
 CheckerboardPage* checkerboard_page_construct (GType object_type, const gchar* page_name);
@@ -796,21 +807,10 @@ GType video_source_collection_get_type (void) G_GNUC_CONST;
 GeeCollection* media_source_collection_get_trashcan_contents (MediaSourceCollection* self);
 static void trash_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkActionEntry* trash_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-#define RESOURCES_DELETE_LABEL _ ("_Delete")
-#define TRANSLATABLE "translatable"
-static void trash_page_on_delete (TrashPage* self);
-static void _trash_page_on_delete_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_DELETE_PHOTOS_MENU _ ("_Delete")
-#define RESOURCES_DELETE_FROM_TRASH_TOOLTIP _ ("Remove the selected photos from the trash")
-static void _vala_array_add89 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_UNDELETE_LABEL _ ("_Undelete")
-static void trash_page_on_restore (TrashPage* self);
-static void _trash_page_on_restore_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_RESTORE_PHOTOS_MENU _ ("_Restore")
-#define RESOURCES_RESTORE_PHOTOS_TOOLTIP _ ("Move the selected photos back into the library")
-static void _vala_array_add90 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
+static void trash_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 static CoreViewTracker* trash_page_real_get_view_tracker (CheckerboardPage* base);
 static void trash_page_real_update_actions (Page* base, gint selected_count, gint count);
 void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
@@ -875,11 +875,26 @@ GType search_filter_criteria_get_type (void) G_GNUC_CONST;
 DefaultSearchViewFilter* default_search_view_filter_construct (GType object_type);
 static void trash_page_finalize (GObject* obj);
 
+static const GActionEntry TRASH_PAGE_entries[2] = {{"Delete", _trash_page_on_delete_gsimple_action_activate_callback}, {"Restore", _trash_page_on_restore_gsimple_action_activate_callback}};
+
+static void _trash_page_on_delete_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	trash_page_on_delete ((TrashPage*) self);
+#line 884 "TrashPage.c"
+}
+
+
+static void _trash_page_on_restore_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 50 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	trash_page_on_restore ((TrashPage*) self);
+#line 891 "TrashPage.c"
+}
+
 
 static void _trash_page_on_trashcan_contents_altered_media_source_collection_trashcan_contents_altered (MediaSourceCollection* _sender, GeeCollection* added, GeeCollection* removed, gpointer self) {
 #line 38 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	trash_page_on_trashcan_contents_altered ((TrashPage*) self, added, removed);
-#line 883 "TrashPage.c"
+#line 898 "TrashPage.c"
 }
 
 
@@ -899,11 +914,11 @@ TrashPage* trash_page_construct (GType object_type) {
 #line 29 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self = (TrashPage*) checkerboard_page_construct (object_type, TRASH_PAGE_NAME);
 #line 31 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/TrashContextMenu");
+	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "TrashContextMenu");
 #line 32 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	checkerboard_page_init_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/TrashPageMenu");
+	checkerboard_page_init_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "TrashPageMenu");
 #line 33 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	page_init_toolbar (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "/TrashToolbar");
+	page_init_toolbar (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "TrashToolbar");
 #line 35 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
 #line 35 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
@@ -946,14 +961,14 @@ TrashPage* trash_page_construct (GType object_type) {
 	_g_object_unref0 (_tmp10_);
 #line 28 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return self;
-#line 950 "TrashPage.c"
+#line 965 "TrashPage.c"
 }
 
 
 TrashPage* trash_page_new (void) {
 #line 28 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return trash_page_construct (TYPE_TRASH_PAGE);
-#line 957 "TrashPage.c"
+#line 972 "TrashPage.c"
 }
 
 
@@ -973,158 +988,34 @@ static void trash_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_f
 	_tmp1_ = ui_filenames;
 #line 47 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection), "trash.ui");
-#line 977 "TrashPage.c"
+#line 992 "TrashPage.c"
 }
 
 
-static void _trash_page_on_delete_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	trash_page_on_delete ((TrashPage*) self);
-#line 984 "TrashPage.c"
-}
-
-
-static void _vala_array_add89 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	if ((*length) == (*size)) {
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 995 "TrashPage.c"
-	}
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	(*array)[(*length)++] = *value;
-#line 999 "TrashPage.c"
-}
-
-
-static void _trash_page_on_restore_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	trash_page_on_restore ((TrashPage*) self);
-#line 1006 "TrashPage.c"
-}
-
-
-static void _vala_array_add90 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	if ((*length) == (*size)) {
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1017 "TrashPage.c"
-	}
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1021 "TrashPage.c"
-}
-
-
-static GtkActionEntry* trash_page_real_init_collect_action_entries (Page* base, int* result_length1) {
+static void trash_page_real_add_actions (Page* base) {
 	TrashPage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry delete_action = {0};
-	GtkActionEntry _tmp2_ = {0};
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry restore = {0};
-	GtkActionEntry _tmp5_ = {0};
-	GtkActionEntry* _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	GtkActionEntry _tmp7_ = {0};
-	GtkActionEntry* _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-#line 50 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
-#line 51 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp1_ = PAGE_CLASS (trash_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 51 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	actions = _tmp1_;
-#line 51 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	actions_length1 = _tmp0_;
-#line 51 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_actions_size_ = actions_length1;
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.name = "Delete";
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.stock_id = RESOURCES_DELETE_LABEL;
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.accelerator = "Delete";
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.tooltip = TRANSLATABLE;
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp2_.callback = (GCallback) _trash_page_on_delete_gtk_action_callback;
-#line 53 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	delete_action = _tmp2_;
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
 #line 55 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	delete_action.label = RESOURCES_DELETE_PHOTOS_MENU;
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
 #line 56 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	delete_action.tooltip = RESOURCES_DELETE_FROM_TRASH_TOOLTIP;
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp3_ = actions;
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp3__length1 = actions_length1;
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp4_ = delete_action;
-#line 57 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_vala_array_add89 (&actions, &actions_length1, &_actions_size_, &_tmp4_);
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.name = "Restore";
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.stock_id = RESOURCES_UNDELETE_LABEL;
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.accelerator = NULL;
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.tooltip = TRANSLATABLE;
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp5_.callback = (GCallback) _trash_page_on_restore_gtk_action_callback;
-#line 59 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	restore = _tmp5_;
-#line 61 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	restore.label = RESOURCES_RESTORE_PHOTOS_MENU;
-#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	restore.tooltip = RESOURCES_RESTORE_PHOTOS_TOOLTIP;
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp6_ = actions;
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp6__length1 = actions_length1;
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp7_ = restore;
-#line 63 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_vala_array_add90 (&actions, &actions_length1, &_actions_size_, &_tmp7_);
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp8_ = actions;
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	_tmp8__length1 = actions_length1;
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	if (result_length1) {
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-		*result_length1 = _tmp8__length1;
-#line 1115 "TrashPage.c"
-	}
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	result = _tmp8_;
-#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	return result;
-#line 1121 "TrashPage.c"
+	PAGE_CLASS (trash_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
+#line 58 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	_tmp0_ = app_window_get_instance ();
+#line 58 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	_tmp1_ = _tmp0_;
+#line 58 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), TRASH_PAGE_entries, G_N_ELEMENTS (TRASH_PAGE_entries), self);
+#line 58 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+	_g_object_unref0 (_tmp1_);
+#line 1012 "TrashPage.c"
 }
 
 
 static gpointer _core_tracker_ref0 (gpointer self) {
-#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return self ? core_tracker_ref (self) : NULL;
-#line 1128 "TrashPage.c"
+#line 1019 "TrashPage.c"
 }
 
 
@@ -1133,17 +1024,17 @@ static CoreViewTracker* trash_page_real_get_view_tracker (CheckerboardPage* base
 	CoreViewTracker* result = NULL;
 	MediaViewTracker* _tmp0_ = NULL;
 	CoreViewTracker* _tmp1_ = NULL;
-#line 68 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 61 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
-#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = self->priv->tracker;
-#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = _core_tracker_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, CORE_TYPE_VIEW_TRACKER, CoreViewTracker));
-#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	result = _tmp1_;
-#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 62 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return result;
-#line 1147 "TrashPage.c"
+#line 1038 "TrashPage.c"
 }
 
 
@@ -1153,59 +1044,59 @@ static void trash_page_real_update_actions (Page* base, gint selected_count, gin
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
-#line 72 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 65 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
-#line 73 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = selected_count;
-#line 73 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 66 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	has_selected = _tmp0_ > 0;
-#line 75 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 68 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Delete", has_selected);
-#line 76 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 69 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Delete", TRUE);
-#line 77 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 70 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Restore", has_selected);
-#line 78 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 71 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Restore", TRUE);
-#line 79 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 72 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	page_set_common_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonEmptyTrash", TRUE);
-#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 74 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = selected_count;
-#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 74 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp2_ = count;
-#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 74 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	PAGE_CLASS (trash_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp1_, _tmp2_);
-#line 1179 "TrashPage.c"
+#line 1070 "TrashPage.c"
 }
 
 
 static void trash_page_on_trashcan_contents_altered (TrashPage* self, GeeCollection* added, GeeCollection* removed) {
 	GeeCollection* _tmp0_ = NULL;
 	GeeCollection* _tmp12_ = NULL;
-#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 77 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	g_return_if_fail (IS_TRASH_PAGE (self));
-#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 77 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_COLLECTION (added));
-#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 77 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_COLLECTION (removed));
-#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = added;
-#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 79 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	if (_tmp0_ != NULL) {
-#line 1196 "TrashPage.c"
+#line 1087 "TrashPage.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp1_ = NULL;
 			GeeIterator* _tmp2_ = NULL;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_tmp1_ = added;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_tmp2_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_source_it = _tmp2_;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			while (TRUE) {
-#line 1209 "TrashPage.c"
+#line 1100 "TrashPage.c"
 				GeeIterator* _tmp3_ = NULL;
 				gboolean _tmp4_ = FALSE;
 				MediaSource* source = NULL;
@@ -1216,52 +1107,52 @@ static void trash_page_on_trashcan_contents_altered (TrashPage* self, GeeCollect
 				MediaSource* _tmp9_ = NULL;
 				TrashPageTrashView* _tmp10_ = NULL;
 				TrashPageTrashView* _tmp11_ = NULL;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp3_ = _source_it;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp4_ = gee_iterator_next (_tmp3_);
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				if (!_tmp4_) {
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 					break;
-#line 1228 "TrashPage.c"
+#line 1119 "TrashPage.c"
 				}
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp5_ = _source_it;
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp6_ = gee_iterator_get (_tmp5_);
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				source = (MediaSource*) _tmp6_;
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp7_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp8_ = _tmp7_;
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp9_ = source;
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp10_ = trash_page_trash_view_new (_tmp9_);
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp11_ = _tmp10_;
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				data_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_OBJECT, DataObject));
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_g_object_unref0 (_tmp11_);
-#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_data_collection_unref0 (_tmp8_);
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_g_object_unref0 (source);
-#line 1254 "TrashPage.c"
+#line 1145 "TrashPage.c"
 			}
-#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_g_object_unref0 (_source_it);
-#line 1258 "TrashPage.c"
+#line 1149 "TrashPage.c"
 		}
 	}
-#line 91 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp12_ = removed;
-#line 91 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	if (_tmp12_ != NULL) {
-#line 1265 "TrashPage.c"
+#line 1156 "TrashPage.c"
 		Marker* marker = NULL;
 		ViewCollection* _tmp13_ = NULL;
 		ViewCollection* _tmp14_ = NULL;
@@ -1270,32 +1161,32 @@ static void trash_page_on_trashcan_contents_altered (TrashPage* self, GeeCollect
 		ViewCollection* _tmp29_ = NULL;
 		ViewCollection* _tmp30_ = NULL;
 		Marker* _tmp31_ = NULL;
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp13_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp14_ = _tmp13_;
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp15_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_DATA_COLLECTION, DataCollection));
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp16_ = _tmp15_;
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_data_collection_unref0 (_tmp14_);
-#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 85 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		marker = _tmp16_;
-#line 1286 "TrashPage.c"
+#line 1177 "TrashPage.c"
 		{
 			GeeIterator* _source_it = NULL;
 			GeeCollection* _tmp17_ = NULL;
 			GeeIterator* _tmp18_ = NULL;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_tmp17_ = removed;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_tmp18_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_source_it = _tmp18_;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			while (TRUE) {
-#line 1299 "TrashPage.c"
+#line 1190 "TrashPage.c"
 				GeeIterator* _tmp19_ = NULL;
 				gboolean _tmp20_ = FALSE;
 				MediaSource* source = NULL;
@@ -1307,61 +1198,61 @@ static void trash_page_on_trashcan_contents_altered (TrashPage* self, GeeCollect
 				MediaSource* _tmp26_ = NULL;
 				DataView* _tmp27_ = NULL;
 				DataView* _tmp28_ = NULL;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp19_ = _source_it;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp20_ = gee_iterator_next (_tmp19_);
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				if (!_tmp20_) {
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 					break;
-#line 1319 "TrashPage.c"
+#line 1210 "TrashPage.c"
 				}
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp21_ = _source_it;
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp22_ = gee_iterator_get (_tmp21_);
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				source = (MediaSource*) _tmp22_;
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp23_ = marker;
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp24_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp25_ = _tmp24_;
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp26_ = source;
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp27_ = view_collection_get_view_for_source (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, TYPE_DATA_SOURCE, DataSource));
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_tmp28_ = _tmp27_;
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				marker_mark (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, TYPE_DATA_OBJECT, DataObject));
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_g_object_unref0 (_tmp28_);
-#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_data_collection_unref0 (_tmp25_);
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 				_g_object_unref0 (source);
-#line 1347 "TrashPage.c"
+#line 1238 "TrashPage.c"
 			}
-#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 			_g_object_unref0 (_source_it);
-#line 1351 "TrashPage.c"
+#line 1242 "TrashPage.c"
 		}
-#line 95 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp29_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 95 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp30_ = _tmp29_;
-#line 95 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp31_ = marker;
-#line 95 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		data_collection_remove_marked (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_DATA_COLLECTION, DataCollection), _tmp31_);
-#line 95 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 88 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_data_collection_unref0 (_tmp30_);
-#line 91 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 84 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_g_object_unref0 (marker);
-#line 1365 "TrashPage.c"
+#line 1256 "TrashPage.c"
 	}
 }
 
@@ -1379,51 +1270,51 @@ static void trash_page_on_restore (TrashPage* self) {
 	GeeCollection* _tmp9_ = NULL;
 	TrashUntrashPhotosCommand* _tmp10_ = NULL;
 	TrashUntrashPhotosCommand* _tmp11_ = NULL;
-#line 99 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	g_return_if_fail (IS_TRASH_PAGE (self));
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = _tmp0_;
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp3_ = _tmp2_ == 0;
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 93 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	if (_tmp3_) {
-#line 101 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		return;
-#line 1399 "TrashPage.c"
+#line 1290 "TrashPage.c"
 	}
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp4_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp5_ = _tmp4_;
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp6_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp7_ = _tmp6_;
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp8_ = view_collection_get_selected_sources (_tmp7_);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp10_ = trash_untrash_photos_command_new (_tmp9_, FALSE);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp11_ = _tmp10_;
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	command_manager_execute (_tmp5_, G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_COMMAND, Command));
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_g_object_unref0 (_tmp11_);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_g_object_unref0 (_tmp9_);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_data_collection_unref0 (_tmp7_);
-#line 103 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 96 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_command_manager_unref0 (_tmp5_);
-#line 1427 "TrashPage.c"
+#line 1318 "TrashPage.c"
 }
 
 
@@ -1432,17 +1323,17 @@ static gchar* trash_page_real_get_view_empty_message (CheckerboardPage* base) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 107 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 100 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
-#line 108 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = _ ("Trash is empty");
-#line 108 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 108 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	result = _tmp1_;
-#line 108 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 101 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return result;
-#line 1446 "TrashPage.c"
+#line 1337 "TrashPage.c"
 }
 
 
@@ -1457,55 +1348,55 @@ static void trash_page_on_delete (TrashPage* self) {
 	GeeList* _tmp8_ = NULL;
 	GeeCollection* _tmp9_ = NULL;
 	const gchar* _tmp10_ = NULL;
-#line 111 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 104 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	g_return_if_fail (IS_TRASH_PAGE (self));
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp2_ = _tmp1_;
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp3_ = view_collection_get_selected_count (_tmp2_);
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp4_ = _tmp3_ == 1;
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	if (_tmp4_) {
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp0_ = "Deleting a Photo";
-#line 1477 "TrashPage.c"
+#line 1368 "TrashPage.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp5_ = _ ("Deleting Photos");
-#line 113 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 106 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 		_tmp0_ = _tmp5_;
-#line 1484 "TrashPage.c"
+#line 1375 "TrashPage.c"
 	}
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp6_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp7_ = _tmp6_;
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp8_ = view_collection_get_selected_sources (_tmp7_);
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp10_ = _ ("Delete");
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	remove_from_app (_tmp9_, _tmp10_, _tmp0_);
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_g_object_unref0 (_tmp9_);
-#line 112 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_data_collection_unref0 (_tmp7_);
-#line 1502 "TrashPage.c"
+#line 1393 "TrashPage.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
-#line 117 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 1509 "TrashPage.c"
+#line 1400 "TrashPage.c"
 }
 
 
@@ -1514,17 +1405,17 @@ static SearchViewFilter* trash_page_real_get_search_view_filter (CheckerboardPag
 	SearchViewFilter* result = NULL;
 	TrashPageTrashSearchViewFilter* _tmp0_ = NULL;
 	SearchViewFilter* _tmp1_ = NULL;
-#line 116 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 109 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_TRASH_PAGE, TrashPage);
-#line 117 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 117 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	_tmp1_ = _view_filter_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
-#line 117 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	result = _tmp1_;
-#line 117 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
+#line 110 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return result;
-#line 1528 "TrashPage.c"
+#line 1419 "TrashPage.c"
 }
 
 
@@ -1553,21 +1444,21 @@ static TrashPageTrashView* trash_page_trash_view_construct (GType object_type, M
 	_vala_assert (_tmp4_, "source.is_trashed()");
 #line 11 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return self;
-#line 1557 "TrashPage.c"
+#line 1448 "TrashPage.c"
 }
 
 
 static TrashPageTrashView* trash_page_trash_view_new (MediaSource* source) {
 #line 11 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return trash_page_trash_view_construct (TRASH_PAGE_TYPE_TRASH_VIEW, source);
-#line 1564 "TrashPage.c"
+#line 1455 "TrashPage.c"
 }
 
 
 static void trash_page_trash_view_class_init (TrashPageTrashViewClass * klass) {
 #line 10 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	trash_page_trash_view_parent_class = g_type_class_peek_parent (klass);
-#line 1571 "TrashPage.c"
+#line 1462 "TrashPage.c"
 }
 
 
@@ -1596,7 +1487,7 @@ static guint trash_page_trash_search_view_filter_real_get_criteria (SearchViewFi
 	result = (guint) ((((SEARCH_FILTER_CRITERIA_TEXT | SEARCH_FILTER_CRITERIA_FLAG) | SEARCH_FILTER_CRITERIA_MEDIA) | SEARCH_FILTER_CRITERIA_RATING) | SEARCH_FILTER_CRITERIA_SAVEDSEARCH);
 #line 20 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return result;
-#line 1600 "TrashPage.c"
+#line 1491 "TrashPage.c"
 }
 
 
@@ -1606,14 +1497,14 @@ static TrashPageTrashSearchViewFilter* trash_page_trash_search_view_filter_const
 	self = (TrashPageTrashSearchViewFilter*) default_search_view_filter_construct (object_type);
 #line 18 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return self;
-#line 1610 "TrashPage.c"
+#line 1501 "TrashPage.c"
 }
 
 
 static TrashPageTrashSearchViewFilter* trash_page_trash_search_view_filter_new (void) {
 #line 18 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	return trash_page_trash_search_view_filter_construct (TRASH_PAGE_TYPE_TRASH_SEARCH_VIEW_FILTER);
-#line 1617 "TrashPage.c"
+#line 1508 "TrashPage.c"
 }
 
 
@@ -1622,7 +1513,7 @@ static void trash_page_trash_search_view_filter_class_init (TrashPageTrashSearch
 	trash_page_trash_search_view_filter_parent_class = g_type_class_peek_parent (klass);
 #line 18 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	((SearchViewFilterClass *) klass)->get_criteria = trash_page_trash_search_view_filter_real_get_criteria;
-#line 1626 "TrashPage.c"
+#line 1517 "TrashPage.c"
 }
 
 
@@ -1650,7 +1541,7 @@ static void trash_page_class_init (TrashPageClass * klass) {
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = trash_page_real_init_collect_ui_filenames;
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
-	((PageClass *) klass)->init_collect_action_entries = trash_page_real_init_collect_action_entries;
+	((PageClass *) klass)->add_actions = trash_page_real_add_actions;
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	((CheckerboardPageClass *) klass)->get_view_tracker = trash_page_real_get_view_tracker;
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
@@ -1661,7 +1552,7 @@ static void trash_page_class_init (TrashPageClass * klass) {
 	((CheckerboardPageClass *) klass)->get_search_view_filter = trash_page_real_get_search_view_filter;
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = trash_page_finalize;
-#line 1665 "TrashPage.c"
+#line 1556 "TrashPage.c"
 }
 
 
@@ -1673,7 +1564,7 @@ static void trash_page_instance_init (TrashPage * self) {
 	_tmp0_ = trash_page_trash_search_view_filter_new ();
 #line 25 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	self->priv->search_filter = _tmp0_;
-#line 1677 "TrashPage.c"
+#line 1568 "TrashPage.c"
 }
 
 
@@ -1687,7 +1578,7 @@ static void trash_page_finalize (GObject* obj) {
 	_core_tracker_unref0 (self->priv->tracker);
 #line 7 "/home/jens/Source/shotwell/src/library/TrashPage.vala"
 	G_OBJECT_CLASS (trash_page_parent_class)->finalize (obj);
-#line 1691 "TrashPage.c"
+#line 1582 "TrashPage.c"
 }
 
 

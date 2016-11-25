@@ -228,13 +228,12 @@ typedef struct _ConfigFacade ConfigFacade;
 typedef struct _ConfigFacadeClass ConfigFacadeClass;
 
 struct _PageWindow {
-	GtkWindow parent_instance;
+	GtkApplicationWindow parent_instance;
 	PageWindowPrivate * priv;
-	GtkUIManager* ui;
 };
 
 struct _PageWindowClass {
-	GtkWindowClass parent_class;
+	GtkApplicationWindowClass parent_class;
 	void (*switched_pages) (PageWindow* self, Page* old_page, Page* new_page);
 	void (*set_current_page) (PageWindow* self, Page* page);
 	void (*clear_current_page) (PageWindow* self);
@@ -248,8 +247,6 @@ struct _Dimensions {
 struct _AppWindow {
 	PageWindow parent_instance;
 	AppWindowPrivate * priv;
-	GtkActionGroup** common_action_groups;
-	gint common_action_groups_length1;
 	gboolean maximized;
 	Dimensions dimensions;
 	gint pos_x;
@@ -261,8 +258,7 @@ struct _AppWindowClass {
 	void (*on_fullscreen) (AppWindow* self);
 	gchar* (*get_app_role) (AppWindow* self);
 	void (*on_quit) (AppWindow* self);
-	GtkActionGroup** (*create_common_action_groups) (AppWindow* self, int* result_length1);
-	void (*replace_common_placeholders) (AppWindow* self, GtkUIManager* ui);
+	void (*add_actions) (AppWindow* self);
 	void (*update_common_action_availability) (AppWindow* self, Page* old_page, Page* new_page);
 	void (*update_common_actions) (AppWindow* self, Page* page, gint selected_count, gint count);
 };
@@ -327,8 +323,9 @@ static void _direct_window_on_photo_changed_view_collection_items_state_changed 
 void page_window_set_current_page (PageWindow* self, Page* page);
 void direct_window_update_title (DirectWindow* self, GFile* file, gboolean modified);
 void page_switched_to (Page* self);
-GtkMenuBar* page_get_menubar (Page* self);
 GtkToolbar* page_get_toolbar (Page* self);
+void application_set_menubar (GMenuModel* model);
+GMenuModel* page_get_menubar (Page* self);
 DirectWindow* direct_window_get_app (void);
 DirectPhotoPage* direct_window_get_direct_page (DirectWindow* self);
 Page* page_window_get_current_page (PageWindow* self);
@@ -367,14 +364,14 @@ static void direct_window_finalize (GObject* obj);
 static void _direct_window_on_photo_changed_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 12 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	direct_window_on_photo_changed ((DirectWindow*) self);
-#line 371 "DirectWindow.c"
+#line 368 "DirectWindow.c"
 }
 
 
 static void _direct_window_on_photo_changed_view_collection_items_state_changed (ViewCollection* _sender, GeeIterable* changed, gpointer self) {
 #line 13 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	direct_window_on_photo_changed ((DirectWindow*) self);
-#line 378 "DirectWindow.c"
+#line 375 "DirectWindow.c"
 }
 
 
@@ -394,12 +391,12 @@ DirectWindow* direct_window_construct (GType object_type, GFile* file) {
 	GtkBox* layout = NULL;
 	GtkBox* _tmp11_ = NULL;
 	DirectPhotoPage* _tmp12_ = NULL;
-	GtkMenuBar* _tmp13_ = NULL;
-	GtkMenuBar* _tmp14_ = NULL;
-	DirectPhotoPage* _tmp15_ = NULL;
+	DirectPhotoPage* _tmp13_ = NULL;
+	GtkToolbar* _tmp14_ = NULL;
+	GtkToolbar* _tmp15_ = NULL;
 	DirectPhotoPage* _tmp16_ = NULL;
-	GtkToolbar* _tmp17_ = NULL;
-	GtkToolbar* _tmp18_ = NULL;
+	GMenuModel* _tmp17_ = NULL;
+	GMenuModel* _tmp18_ = NULL;
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
@@ -455,48 +452,48 @@ DirectWindow* direct_window_construct (GType object_type, GFile* file) {
 #line 24 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp12_ = self->priv->direct_photo_page;
 #line 24 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp13_ = page_get_menubar (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_PAGE, Page));
-#line 24 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp14_ = _tmp13_;
-#line 24 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	gtk_box_pack_start (layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 24 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_g_object_unref0 (_tmp14_);
+	gtk_box_pack_start (layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 25 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp15_ = self->priv->direct_photo_page;
+	_tmp13_ = self->priv->direct_photo_page;
 #line 25 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	gtk_box_pack_start (layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 26 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp14_ = page_get_toolbar (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, TYPE_PAGE, Page));
+#line 25 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp15_ = _tmp14_;
+#line 25 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	gtk_box_pack_end (layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 25 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_g_object_unref0 (_tmp15_);
+#line 27 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp16_ = self->priv->direct_photo_page;
-#line 26 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp17_ = page_get_toolbar (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_PAGE, Page));
-#line 26 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 27 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp17_ = page_get_menubar (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_PAGE, Page));
+#line 27 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp18_ = _tmp17_;
-#line 26 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	gtk_box_pack_end (layout, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 26 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 27 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	application_set_menubar (_tmp18_);
+#line 27 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp18_);
-#line 28 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 29 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (layout, gtk_widget_get_type (), GtkWidget));
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (layout);
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return self;
-#line 486 "DirectWindow.c"
+#line 483 "DirectWindow.c"
 }
 
 
 DirectWindow* direct_window_new (GFile* file) {
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return direct_window_construct (TYPE_DIRECT_WINDOW, file);
-#line 493 "DirectWindow.c"
+#line 490 "DirectWindow.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 32 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 33 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 500 "DirectWindow.c"
+#line 497 "DirectWindow.c"
 }
 
 
@@ -504,30 +501,30 @@ DirectWindow* direct_window_get_app (void) {
 	DirectWindow* result = NULL;
 	AppWindow* _tmp0_ = NULL;
 	DirectWindow* _tmp1_ = NULL;
-#line 32 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 33 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = app_window_instance;
-#line 32 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 33 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_DIRECT_WINDOW, DirectWindow));
-#line 32 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 33 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = _tmp1_;
-#line 32 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 33 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 516 "DirectWindow.c"
+#line 513 "DirectWindow.c"
 }
 
 
 DirectPhotoPage* direct_window_get_direct_page (DirectWindow* self) {
 	DirectPhotoPage* result = NULL;
 	Page* _tmp0_ = NULL;
-#line 35 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 36 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_val_if_fail (IS_DIRECT_WINDOW (self), NULL);
-#line 36 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 37 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 36 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 37 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 36 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 37 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 531 "DirectWindow.c"
+#line 528 "DirectWindow.c"
 }
 
 
@@ -544,53 +541,53 @@ void direct_window_update_title (DirectWindow* self, GFile* file, gboolean modif
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
-#line 39 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_if_fail (IS_DIRECT_WINDOW (self));
-#line 39 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp1_ = modified;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	if (_tmp1_) {
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp0_ = "*";
-#line 558 "DirectWindow.c"
+#line 555 "DirectWindow.c"
 	} else {
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp0_ = "";
-#line 562 "DirectWindow.c"
+#line 559 "DirectWindow.c"
 	}
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp2_ = file;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp3_ = g_file_get_basename (_tmp2_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp4_ = _tmp3_;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp5_ = file;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp6_ = g_file_get_parent (_tmp5_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp7_ = _tmp6_;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp8_ = get_display_pathname (_tmp7_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp9_ = _tmp8_;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp10_ = g_strdup_printf ("%s%s (%s) - %s", _tmp0_, _tmp4_, _tmp9_, RESOURCES_APP_TITLE);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp11_ = _tmp10_;
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp11_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_free0 (_tmp11_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_free0 (_tmp9_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp7_);
-#line 40 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 41 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_free0 (_tmp4_);
-#line 594 "DirectWindow.c"
+#line 591 "DirectWindow.c"
 }
 
 
@@ -603,33 +600,33 @@ static void direct_window_real_on_fullscreen (AppWindow* base) {
 	GFile* _tmp3_ = NULL;
 	DirectFullscreenPhotoPage* _tmp4_ = NULL;
 	DirectFullscreenPhotoPage* _tmp5_ = NULL;
-#line 44 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = direct_window_get_direct_page (self);
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp2_ = direct_photo_page_get_current_file (_tmp1_);
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp1_);
-#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 46 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	file = _tmp3_;
-#line 47 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 48 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp4_ = direct_fullscreen_photo_page_new (file);
-#line 47 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 48 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_object_ref_sink (_tmp4_);
-#line 47 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 48 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp5_ = _tmp4_;
-#line 47 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 48 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	app_window_go_fullscreen (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_PAGE, Page));
-#line 47 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 48 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp5_);
-#line 44 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 45 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (file);
-#line 633 "DirectWindow.c"
+#line 630 "DirectWindow.c"
 }
 
 
@@ -637,15 +634,15 @@ static gchar* direct_window_real_get_app_role (AppWindow* base) {
 	DirectWindow * self;
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 50 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 51 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 51 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 52 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = g_strdup (RESOURCES_APP_DIRECT_ROLE);
-#line 51 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 52 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = _tmp0_;
-#line 51 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 52 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 649 "DirectWindow.c"
+#line 646 "DirectWindow.c"
 }
 
 
@@ -654,43 +651,43 @@ static void direct_window_on_photo_changed (DirectWindow* self) {
 	DirectPhotoPage* _tmp0_ = NULL;
 	Photo* _tmp1_ = NULL;
 	Photo* _tmp2_ = NULL;
-#line 54 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 55 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_if_fail (IS_DIRECT_WINDOW (self));
-#line 55 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 56 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = self->priv->direct_photo_page;
-#line 55 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 56 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp1_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 55 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 56 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	photo = _tmp1_;
-#line 56 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp2_ = photo;
-#line 56 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	if (_tmp2_ != NULL) {
-#line 670 "DirectWindow.c"
+#line 667 "DirectWindow.c"
 		Photo* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
 		Photo* _tmp6_ = NULL;
 		gboolean _tmp7_ = FALSE;
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp3_ = photo;
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp4_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp6_ = photo;
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp7_ = photo_has_alterations (_tmp6_);
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		direct_window_update_title (self, _tmp5_, _tmp7_);
-#line 57 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 58 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_g_object_unref0 (_tmp5_);
-#line 690 "DirectWindow.c"
+#line 687 "DirectWindow.c"
 	}
-#line 54 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 55 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (photo);
-#line 694 "DirectWindow.c"
+#line 691 "DirectWindow.c"
 }
 
 
@@ -704,39 +701,39 @@ static void direct_window_real_on_quit (AppWindow* base) {
 	ConfigFacade* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
 	Dimensions _tmp7_ = {0};
-#line 60 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp0_ = direct_window_get_direct_page (self);
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp1_ = _tmp0_;
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp2_ = direct_photo_page_check_quit (_tmp1_);
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp3_ = !_tmp2_;
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_g_object_unref0 (_tmp1_);
-#line 61 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	if (_tmp3_) {
 #line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp0_ = direct_window_get_direct_page (self);
+#line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp1_ = _tmp0_;
+#line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp2_ = direct_photo_page_check_quit (_tmp1_);
+#line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp3_ = !_tmp2_;
+#line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_g_object_unref0 (_tmp1_);
+#line 62 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	if (_tmp3_) {
+#line 63 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		return;
-#line 724 "DirectWindow.c"
+#line 721 "DirectWindow.c"
 	}
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp4_ = config_facade_get_instance ();
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp5_ = _tmp4_;
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow)->maximized;
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow)->dimensions;
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	configuration_facade_set_direct_window_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp6_, &_tmp7_);
-#line 64 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp5_);
-#line 66 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 67 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	APP_WINDOW_CLASS (direct_window_parent_class)->on_quit (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow));
-#line 740 "DirectWindow.c"
+#line 737 "DirectWindow.c"
 }
 
 
@@ -748,50 +745,50 @@ static gboolean direct_window_real_delete_event (GtkWidget* base, GdkEventAny* e
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
 	gboolean _tmp4_ = FALSE;
-#line 69 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 69 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp0_ = direct_window_get_direct_page (self);
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp2_ = direct_photo_page_check_quit (_tmp1_);
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_tmp3_ = !_tmp2_;
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	_g_object_unref0 (_tmp1_);
-#line 70 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	if (_tmp3_) {
-#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 72 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		result = TRUE;
-#line 71 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 72 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		return result;
-#line 772 "DirectWindow.c"
+#line 769 "DirectWindow.c"
 	}
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	if (GTK_WIDGET_CLASS (direct_window_parent_class)->delete_event != NULL) {
-#line 776 "DirectWindow.c"
+#line 773 "DirectWindow.c"
 		GdkEventAny* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp5_ = event;
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp6_ = GTK_WIDGET_CLASS (direct_window_parent_class)->delete_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow), gtk_widget_get_type (), GtkWidget), _tmp5_);
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp4_ = _tmp6_;
-#line 785 "DirectWindow.c"
+#line 782 "DirectWindow.c"
 	} else {
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp4_ = FALSE;
-#line 789 "DirectWindow.c"
+#line 786 "DirectWindow.c"
 	}
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = _tmp4_;
-#line 73 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 74 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 795 "DirectWindow.c"
+#line 792 "DirectWindow.c"
 }
 
 
@@ -800,29 +797,29 @@ static gboolean direct_window_real_button_press_event (GtkWidget* base, GdkEvent
 	gboolean result = FALSE;
 	GdkEventButton* _tmp0_ = NULL;
 	GdkEventType _tmp1_ = 0;
-#line 76 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 77 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 76 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 77 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 77 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp0_ = event;
-#line 77 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp1_ = _tmp0_->type;
-#line 77 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	if (_tmp1_ == GDK_2BUTTON_PRESS) {
 #line 78 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp0_ = event;
+#line 78 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp1_ = _tmp0_->type;
+#line 78 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	if (_tmp1_ == GDK_2BUTTON_PRESS) {
+#line 79 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		app_window_on_fullscreen (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow));
-#line 80 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 81 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		result = TRUE;
-#line 80 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 81 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		return result;
-#line 820 "DirectWindow.c"
+#line 817 "DirectWindow.c"
 	}
-#line 83 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 84 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = FALSE;
-#line 83 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 84 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 826 "DirectWindow.c"
+#line 823 "DirectWindow.c"
 }
 
 
@@ -833,48 +830,48 @@ static gboolean direct_window_real_key_press_event (GtkWidget* base, GdkEventKey
 	guint _tmp1_ = 0U;
 	const gchar* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 86 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 87 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_WINDOW, DirectWindow);
-#line 86 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 87 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 88 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp0_ = event;
-#line 88 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp1_ = _tmp0_->keyval;
-#line 88 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	_tmp2_ = gdk_keyval_name (_tmp1_);
-#line 88 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
-	if (g_strcmp0 (_tmp2_, "Escape") == 0) {
 #line 89 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp0_ = event;
+#line 89 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp1_ = _tmp0_->keyval;
+#line 89 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	_tmp2_ = gdk_keyval_name (_tmp1_);
+#line 89 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+	if (g_strcmp0 (_tmp2_, "Escape") == 0) {
+#line 90 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		app_window_on_quit (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow));
-#line 91 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 92 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		result = TRUE;
-#line 91 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 92 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		return result;
-#line 855 "DirectWindow.c"
+#line 852 "DirectWindow.c"
 	}
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	if (GTK_WIDGET_CLASS (direct_window_parent_class)->key_press_event != NULL) {
-#line 859 "DirectWindow.c"
+#line 856 "DirectWindow.c"
 		GdkEventKey* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp4_ = event;
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp5_ = GTK_WIDGET_CLASS (direct_window_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_APP_WINDOW, AppWindow), gtk_widget_get_type (), GtkWidget), _tmp4_);
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp3_ = _tmp5_;
-#line 868 "DirectWindow.c"
+#line 865 "DirectWindow.c"
 	} else {
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 		_tmp3_ = FALSE;
-#line 872 "DirectWindow.c"
+#line 869 "DirectWindow.c"
 	}
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	result = _tmp3_;
-#line 95 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	return result;
-#line 878 "DirectWindow.c"
+#line 875 "DirectWindow.c"
 }
 
 
@@ -897,14 +894,14 @@ static void direct_window_class_init (DirectWindowClass * klass) {
 	((GtkWidgetClass *) klass)->key_press_event = direct_window_real_key_press_event;
 #line 7 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	G_OBJECT_CLASS (klass)->finalize = direct_window_finalize;
-#line 901 "DirectWindow.c"
+#line 898 "DirectWindow.c"
 }
 
 
 static void direct_window_instance_init (DirectWindow * self) {
 #line 7 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	self->priv = DIRECT_WINDOW_GET_PRIVATE (self);
-#line 908 "DirectWindow.c"
+#line 905 "DirectWindow.c"
 }
 
 
@@ -916,7 +913,7 @@ static void direct_window_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->direct_photo_page);
 #line 7 "/home/jens/Source/shotwell/src/direct/DirectWindow.vala"
 	G_OBJECT_CLASS (direct_window_parent_class)->finalize (obj);
-#line 920 "DirectWindow.c"
+#line 917 "DirectWindow.c"
 }
 
 

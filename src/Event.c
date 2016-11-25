@@ -3752,7 +3752,7 @@ Event* event_create_empty_event (MediaSource* source) {
 #line 476 "/home/jens/Source/shotwell/src/Event.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3755 "Event.c"
-				goto __catch437_database_error;
+				goto __catch434_database_error;
 			}
 #line 476 "/home/jens/Source/shotwell/src/Event.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3790,8 +3790,8 @@ Event* event_create_empty_event (MediaSource* source) {
 		return result;
 #line 3792 "Event.c"
 	}
-	goto __finally437;
-	__catch437_database_error:
+	goto __finally434;
+	__catch434_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp14_ = NULL;
@@ -3811,7 +3811,7 @@ Event* event_create_empty_event (MediaSource* source) {
 		return result;
 #line 3813 "Event.c"
 	}
-	__finally437:
+	__finally434:
 #line 475 "/home/jens/Source/shotwell/src/Event.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 475 "/home/jens/Source/shotwell/src/Event.vala"
@@ -4020,11 +4020,11 @@ static void event_real_break_link_many (ContainerSource* base, GeeCollection* so
 #line 526 "/home/jens/Source/shotwell/src/Event.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4023 "Event.c"
-			goto __catch438_g_error;
+			goto __catch435_g_error;
 		}
 	}
-	goto __finally438;
-	__catch438_g_error:
+	goto __finally435;
+	__catch435_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -4051,7 +4051,7 @@ static void event_real_break_link_many (ContainerSource* base, GeeCollection* so
 		_g_error_free0 (err);
 #line 4053 "Event.c"
 	}
-	__finally438:
+	__finally435:
 #line 525 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 525 "/home/jens/Source/shotwell/src/Event.vala"
@@ -4081,11 +4081,11 @@ static void event_real_break_link_many (ContainerSource* base, GeeCollection* so
 #line 532 "/home/jens/Source/shotwell/src/Event.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4084 "Event.c"
-			goto __catch439_g_error;
+			goto __catch436_g_error;
 		}
 	}
-	goto __finally439;
-	__catch439_g_error:
+	goto __finally436;
+	__catch436_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp13_ = NULL;
@@ -4112,7 +4112,7 @@ static void event_real_break_link_many (ContainerSource* base, GeeCollection* so
 		_g_error_free0 (err);
 #line 4114 "Event.c"
 	}
-	__finally439:
+	__finally436:
 #line 531 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 531 "/home/jens/Source/shotwell/src/Event.vala"
@@ -4198,11 +4198,11 @@ static void event_real_establish_link_many (ContainerSource* base, GeeCollection
 #line 556 "/home/jens/Source/shotwell/src/Event.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4201 "Event.c"
-			goto __catch440_g_error;
+			goto __catch437_g_error;
 		}
 	}
-	goto __finally440;
-	__catch440_g_error:
+	goto __finally437;
+	__catch437_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -4229,7 +4229,7 @@ static void event_real_establish_link_many (ContainerSource* base, GeeCollection
 		_g_error_free0 (err);
 #line 4231 "Event.c"
 	}
-	__finally440:
+	__finally437:
 #line 555 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 555 "/home/jens/Source/shotwell/src/Event.vala"
@@ -4259,11 +4259,11 @@ static void event_real_establish_link_many (ContainerSource* base, GeeCollection
 #line 562 "/home/jens/Source/shotwell/src/Event.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4262 "Event.c"
-			goto __catch441_g_error;
+			goto __catch438_g_error;
 		}
 	}
-	goto __finally441;
-	__catch441_g_error:
+	goto __finally438;
+	__catch438_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp13_ = NULL;
@@ -4290,7 +4290,7 @@ static void event_real_establish_link_many (ContainerSource* base, GeeCollection
 		_g_error_free0 (err);
 #line 4292 "Event.c"
 	}
-	__finally441:
+	__finally438:
 #line 561 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 561 "/home/jens/Source/shotwell/src/Event.vala"
@@ -5324,7 +5324,7 @@ static Event* event_generate_event (MediaSource* media, ViewCollection* events_s
 #line 658 "/home/jens/Source/shotwell/src/Event.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5326 "Event.c"
-				goto __catch442_database_error;
+				goto __catch439_database_error;
 			}
 #line 658 "/home/jens/Source/shotwell/src/Event.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5381,8 +5381,8 @@ static Event* event_generate_event (MediaSource* media, ViewCollection* events_s
 		return result;
 #line 5382 "Event.c"
 	}
-	goto __finally442;
-	__catch442_database_error:
+	goto __finally439;
+	__catch439_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp49_ = NULL;
@@ -5398,7 +5398,7 @@ static Event* event_generate_event (MediaSource* media, ViewCollection* events_s
 		_g_error_free0 (err);
 #line 5399 "Event.c"
 	}
-	__finally442:
+	__finally439:
 #line 657 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 657 "/home/jens/Source/shotwell/src/Event.vala"
@@ -6904,7 +6904,7 @@ GdkPixbuf* event_get_preview_pixbuf (Event* self, Scaling* scaling) {
 #line 903 "/home/jens/Source/shotwell/src/Event.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6906 "Event.c"
-			goto __catch443_g_error;
+			goto __catch440_g_error;
 		}
 #line 903 "/home/jens/Source/shotwell/src/Event.vala"
 		_tmp6_ = _tmp0_;
@@ -6918,8 +6918,8 @@ GdkPixbuf* event_get_preview_pixbuf (Event* self, Scaling* scaling) {
 		return result;
 #line 6919 "Event.c"
 	}
-	goto __finally443;
-	__catch443_g_error:
+	goto __finally440;
+	__catch440_g_error:
 	{
 		GError* err = NULL;
 #line 902 "/home/jens/Source/shotwell/src/Event.vala"
@@ -6934,7 +6934,7 @@ GdkPixbuf* event_get_preview_pixbuf (Event* self, Scaling* scaling) {
 		return result;
 #line 6935 "Event.c"
 	}
-	__finally443:
+	__finally440:
 #line 902 "/home/jens/Source/shotwell/src/Event.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 902 "/home/jens/Source/shotwell/src/Event.vala"
@@ -6976,7 +6976,7 @@ static void event_real_destroy (DataSource* base) {
 #line 915 "/home/jens/Source/shotwell/src/Event.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6978 "Event.c"
-				goto __catch444_database_error;
+				goto __catch441_database_error;
 			}
 #line 915 "/home/jens/Source/shotwell/src/Event.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6987,8 +6987,8 @@ static void event_real_destroy (DataSource* base) {
 #line 6987 "Event.c"
 		}
 	}
-	goto __finally444;
-	__catch444_database_error:
+	goto __finally441;
+	__catch441_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7004,7 +7004,7 @@ static void event_real_destroy (DataSource* base) {
 		_g_error_free0 (err);
 #line 7005 "Event.c"
 	}
-	__finally444:
+	__finally441:
 #line 914 "/home/jens/Source/shotwell/src/Event.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 914 "/home/jens/Source/shotwell/src/Event.vala"

@@ -619,6 +619,7 @@ typedef struct _ImportPageCameraImportJobClass ImportPageCameraImportJobClass;
 
 typedef struct _AppWindow AppWindow;
 typedef struct _AppWindowClass AppWindowClass;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
 
 #define TYPE_MEDIA_SOURCE (media_source_get_type ())
 #define MEDIA_SOURCE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MEDIA_SOURCE, MediaSource))
@@ -1154,7 +1155,7 @@ struct _CameraAccumulatorPrivate {
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -1164,8 +1165,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -1173,10 +1172,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -1805,6 +1802,14 @@ static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_n
 static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_construct (GType object_type);
 #define IMPORT_PAGE_UNMOUNT_FAILED_MSG _ ("Unable to unmount camera. Try unmounting the camera from the file mana" \
 "ger.")
+static void import_page_on_import_selected (ImportPage* self);
+static void _import_page_on_import_selected_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void import_page_on_import_all (ImportPage* self);
+static void _import_page_on_import_all_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void page_on_action_toggle (Page* self, GAction* action, GVariant* value);
+static void _page_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void import_page_on_display_titles (ImportPage* self, GSimpleAction* action, GVariant* value);
+static void _import_page_on_display_titles_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
 ImportPage* import_page_new (Camera* camera, const gchar* uri, const gchar* display_name, const gchar* icon);
 ImportPage* import_page_construct (GType object_type, Camera* camera, const gchar* uri, const gchar* display_name, const gchar* icon);
 CheckerboardPage* checkerboard_page_construct (GType object_type, const gchar* page_name);
@@ -1853,7 +1858,6 @@ GType configuration_facade_get_type (void) G_GNUC_CONST;
 GType config_facade_get_type (void) G_GNUC_CONST;
 ConfigFacade* config_facade_get_instance (void);
 gboolean configuration_facade_get_hide_photos_already_imported (ConfigurationFacade* self);
-GtkAction* page_get_action (Page* self, const gchar* name);
 #define RESOURCES_IMPORT "shotwell-import"
 #define RESOURCES_IMPORT_ALL "shotwell-import-all"
 static void import_page_update_toolbar_state (ImportPage* self);
@@ -1873,21 +1877,13 @@ static GType import_page_camera_import_job_get_type (void) G_GNUC_CONST G_GNUC_U
 static time_t import_page_camera_import_job_get_exposure_time (ImportPageCameraImportJob* self);
 static void import_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkToggleActionEntry* import_page_real_init_collect_toggle_action_entries (Page* base, int* result_length1);
-GtkToggleActionEntry* page_init_collect_toggle_action_entries (Page* self, int* result_length1);
-#define TRANSLATABLE "translatable"
-static void import_page_on_display_titles (ImportPage* self, GtkAction* action);
-static void _import_page_on_display_titles_gtk_action_callback (GtkAction* action, gpointer self);
+static void import_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
+GAction* page_get_action (Page* self, const gchar* name);
 gboolean configuration_facade_get_display_photo_titles (ConfigurationFacade* self);
-static void _vala_array_add143 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
-static GtkActionEntry* import_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-static void import_page_on_import_selected (ImportPage* self);
-static void _import_page_on_import_selected_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add144 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void import_page_on_import_all (ImportPage* self);
-static void _import_page_on_import_all_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add145 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
+static GVariant* _variant_new11 (gboolean value);
 Camera* import_page_get_camera (ImportPage* self);
 gchar* import_page_get_uri (ImportPage* self);
 gboolean import_page_is_busy (ImportPage* self);
@@ -1901,9 +1897,6 @@ gint view_collection_get_unfiltered_count (ViewCollection* self);
 gint view_collection_get_selected_count (ViewCollection* self);
 void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
 gint data_collection_get_count (DataCollection* self);
-GType app_window_get_type (void) G_GNUC_CONST;
-AppWindow* app_window_get_instance (void);
-void app_window_set_common_action_sensitive (AppWindow* self, const gchar* name, gboolean sensitive);
 void checkerboard_page_set_display_titles (CheckerboardPage* self, gboolean display);
 void configuration_facade_set_display_photo_titles (ConfigurationFacade* self, gboolean display);
 static void import_page_real_switched_to (Page* base);
@@ -2015,6 +2008,7 @@ gboolean progress_dialog_monitor (ProgressDialog* self, guint64 count, guint64 t
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self);
 void progress_dialog_close (ProgressDialog* self);
 static void import_page_real_set_display_titles (CheckerboardPage* base, gboolean display);
+void page_set_action_active (Page* self, const gchar* name, gboolean active);
 static SearchViewFilter* import_page_real_get_search_view_filter (CheckerboardPage* base);
 #define IMPORT_PAGE_IMPORT_VIEW_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), IMPORT_PAGE_TYPE_IMPORT_VIEW_MANAGER, ImportPageImportViewManagerPrivate))
 enum  {
@@ -2083,6 +2077,7 @@ static gboolean import_page_hide_imported_view_filter_real_predicate (ViewFilter
 ViewFilter* view_filter_construct (GType object_type);
 static void import_page_finalize (GObject* obj);
 
+static const GActionEntry IMPORT_PAGE_entries[3] = {{"ImportSelected", _import_page_on_import_selected_gsimple_action_activate_callback}, {"ImportAll", _import_page_on_import_all_gsimple_action_activate_callback}, {"ViewTitle", _page_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _import_page_on_display_titles_gsimple_action_change_state_callback}};
 
 ImportSourceCollection* import_source_collection_construct (GType object_type, const gchar* name) {
 	ImportSourceCollection* self = NULL;
@@ -2095,14 +2090,14 @@ ImportSourceCollection* import_source_collection_construct (GType object_type, c
 	self = (ImportSourceCollection*) source_collection_construct (object_type, _tmp0_);
 #line 8 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 2098 "ImportPage.c"
+#line 2093 "ImportPage.c"
 }
 
 
 ImportSourceCollection* import_source_collection_new (const gchar* name) {
 #line 8 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_source_collection_construct (TYPE_IMPORT_SOURCE_COLLECTION, name);
-#line 2105 "ImportPage.c"
+#line 2100 "ImportPage.c"
 }
 
 
@@ -2120,7 +2115,7 @@ static gboolean import_source_collection_real_holds_type_of_source (SourceCollec
 	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_IMPORT_SOURCE);
 #line 13 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2123 "ImportPage.c"
+#line 2118 "ImportPage.c"
 }
 
 
@@ -2129,7 +2124,7 @@ static void import_source_collection_class_init (ImportSourceCollectionClass * k
 	import_source_collection_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((SourceCollectionClass *) klass)->holds_type_of_source = import_source_collection_real_holds_type_of_source;
-#line 2132 "ImportPage.c"
+#line 2127 "ImportPage.c"
 }
 
 
@@ -2152,7 +2147,7 @@ GType import_source_collection_get_type (void) {
 static gpointer _GPHOTO_REF_CAMERA0 (gpointer self) {
 #line 31 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? GPHOTO_REF_CAMERA (self) : NULL;
-#line 2155 "ImportPage.c"
+#line 2150 "ImportPage.c"
 }
 
 
@@ -2235,14 +2230,14 @@ ImportSource* import_source_construct (GType object_type, const gchar* camera_na
 	self->priv->indexable_keywords = _tmp12_;
 #line 28 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 2238 "ImportPage.c"
+#line 2233 "ImportPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 41 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2245 "ImportPage.c"
+#line 2240 "ImportPage.c"
 }
 
 
@@ -2261,7 +2256,7 @@ void import_source_set_preview (ImportSource* self, GdkPixbuf* preview) {
 	_g_object_unref0 (self->priv->preview);
 #line 41 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->preview = _tmp1_;
-#line 2264 "ImportPage.c"
+#line 2259 "ImportPage.c"
 }
 
 
@@ -2279,7 +2274,7 @@ gchar* import_source_get_camera_name (ImportSource* self) {
 	result = _tmp1_;
 #line 45 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2282 "ImportPage.c"
+#line 2277 "ImportPage.c"
 }
 
 
@@ -2297,7 +2292,7 @@ Camera* import_source_get_camera (ImportSource* self) {
 	result = _tmp1_;
 #line 49 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2300 "ImportPage.c"
+#line 2295 "ImportPage.c"
 }
 
 
@@ -2312,7 +2307,7 @@ gint import_source_get_fsid (ImportSource* self) {
 	result = _tmp0_;
 #line 53 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2315 "ImportPage.c"
+#line 2310 "ImportPage.c"
 }
 
 
@@ -2330,7 +2325,7 @@ gchar* import_source_get_folder (ImportSource* self) {
 	result = _tmp1_;
 #line 57 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2333 "ImportPage.c"
+#line 2328 "ImportPage.c"
 }
 
 
@@ -2348,7 +2343,7 @@ gchar* import_source_get_filename (ImportSource* self) {
 	result = _tmp1_;
 #line 61 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2351 "ImportPage.c"
+#line 2346 "ImportPage.c"
 }
 
 
@@ -2363,7 +2358,7 @@ gulong import_source_get_filesize (ImportSource* self) {
 	result = _tmp0_;
 #line 65 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2366 "ImportPage.c"
+#line 2361 "ImportPage.c"
 }
 
 
@@ -2378,7 +2373,7 @@ time_t import_source_get_modification_time (ImportSource* self) {
 	result = _tmp0_;
 #line 69 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2381 "ImportPage.c"
+#line 2376 "ImportPage.c"
 }
 
 
@@ -2394,7 +2389,7 @@ static GdkPixbuf* import_source_real_get_preview (ImportSource* self) {
 	result = _tmp1_;
 #line 73 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2397 "ImportPage.c"
+#line 2392 "ImportPage.c"
 }
 
 
@@ -2403,7 +2398,7 @@ GdkPixbuf* import_source_get_preview (ImportSource* self) {
 	g_return_val_if_fail (IS_IMPORT_SOURCE (self), NULL);
 #line 72 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return IMPORT_SOURCE_GET_CLASS (self)->get_preview (self);
-#line 2406 "ImportPage.c"
+#line 2401 "ImportPage.c"
 }
 
 
@@ -2416,7 +2411,7 @@ static time_t import_source_real_get_exposure_time (ImportSource* self) {
 	result = _tmp0_;
 #line 77 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2419 "ImportPage.c"
+#line 2414 "ImportPage.c"
 }
 
 
@@ -2425,7 +2420,7 @@ time_t import_source_get_exposure_time (ImportSource* self) {
 	g_return_val_if_fail (IS_IMPORT_SOURCE (self), 0);
 #line 76 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return IMPORT_SOURCE_GET_CLASS (self)->get_exposure_time (self);
-#line 2428 "ImportPage.c"
+#line 2423 "ImportPage.c"
 }
 
 
@@ -2470,7 +2465,7 @@ gchar* import_source_get_fulldir (ImportSource* self) {
 	result = _tmp8_;
 #line 81 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2473 "ImportPage.c"
+#line 2468 "ImportPage.c"
 }
 
 
@@ -2513,7 +2508,7 @@ static gchar* import_source_real_to_string (DataObject* base) {
 	result = _tmp7_;
 #line 85 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2516 "ImportPage.c"
+#line 2511 "ImportPage.c"
 }
 
 
@@ -2529,7 +2524,7 @@ static gchar* gp_result_to_full_string (int self) {
 	result = _tmp1_;
 #line 480 "/home/jens/Source/shotwell/vapi/libgphoto2.vapi"
 	return result;
-#line 2532 "ImportPage.c"
+#line 2527 "ImportPage.c"
 }
 
 
@@ -2577,7 +2572,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 	_tmp4_ = fulldir;
 #line 92 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ == NULL) {
-#line 2580 "ImportPage.c"
+#line 2575 "ImportPage.c"
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
@@ -2605,7 +2600,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 			_g_free0 (fulldir);
 #line 95 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return FALSE;
-#line 2608 "ImportPage.c"
+#line 2603 "ImportPage.c"
 		}
 #line 95 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = _tmp8_;
@@ -2613,7 +2608,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 		_g_free0 (fulldir);
 #line 95 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 2616 "ImportPage.c"
+#line 2611 "ImportPage.c"
 	}
 #line 98 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp10_ = import_source_get_camera (self);
@@ -2643,7 +2638,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 	_tmp19_ = _result_;
 #line 100 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp19_ != GP_OK) {
-#line 2646 "ImportPage.c"
+#line 2641 "ImportPage.c"
 		gchar* _tmp20_ = NULL;
 		gchar* _tmp21_ = NULL;
 		const gchar* _tmp22_ = NULL;
@@ -2668,7 +2663,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 		_g_free0 (_tmp25_);
 #line 101 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp21_);
-#line 2671 "ImportPage.c"
+#line 2666 "ImportPage.c"
 	}
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp28_ = DATA_SOURCE_CLASS (import_source_parent_class)->internal_delete_backing (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), TYPE_DATA_SOURCE, DataSource), &_inner_error_);
@@ -2682,21 +2677,21 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 		_g_free0 (fulldir);
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return FALSE;
-#line 2685 "ImportPage.c"
+#line 2680 "ImportPage.c"
 	}
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp27_) {
-#line 2689 "ImportPage.c"
+#line 2684 "ImportPage.c"
 		int _tmp29_ = 0;
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp29_ = _result_;
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp26_ = _tmp29_ == GP_OK;
-#line 2695 "ImportPage.c"
+#line 2690 "ImportPage.c"
 	} else {
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp26_ = FALSE;
-#line 2699 "ImportPage.c"
+#line 2694 "ImportPage.c"
 	}
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp26_;
@@ -2704,7 +2699,7 @@ static gboolean import_source_real_internal_delete_backing (DataSource* base, GE
 	_g_free0 (fulldir);
 #line 103 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2707 "ImportPage.c"
+#line 2702 "ImportPage.c"
 }
 
 
@@ -2720,7 +2715,7 @@ static const gchar* import_source_real_get_indexable_keywords (Indexable* base) 
 	result = _tmp0_;
 #line 107 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2723 "ImportPage.c"
+#line 2718 "ImportPage.c"
 }
 
 
@@ -2739,7 +2734,7 @@ static void import_source_class_init (ImportSourceClass * klass) {
 	((DataSourceClass *) klass)->internal_delete_backing = import_source_real_internal_delete_backing;
 #line 17 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = import_source_finalize;
-#line 2742 "ImportPage.c"
+#line 2737 "ImportPage.c"
 }
 
 
@@ -2748,7 +2743,7 @@ static void import_source_indexable_interface_init (IndexableIface * iface) {
 	import_source_indexable_parent_iface = g_type_interface_peek_parent (iface);
 #line 17 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	iface->get_indexable_keywords = (const gchar* (*)(Indexable*)) import_source_real_get_indexable_keywords;
-#line 2751 "ImportPage.c"
+#line 2746 "ImportPage.c"
 }
 
 
@@ -2759,7 +2754,7 @@ static void import_source_instance_init (ImportSource * self) {
 	self->priv->preview = NULL;
 #line 26 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->indexable_keywords = NULL;
-#line 2762 "ImportPage.c"
+#line 2757 "ImportPage.c"
 }
 
 
@@ -2781,7 +2776,7 @@ static void import_source_finalize (GObject* obj) {
 	_g_free0 (self->priv->indexable_keywords);
 #line 17 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (import_source_parent_class)->finalize (obj);
-#line 2784 "ImportPage.c"
+#line 2779 "ImportPage.c"
 }
 
 
@@ -2834,14 +2829,14 @@ VideoImportSource* video_import_source_construct (GType object_type, const gchar
 	self = (VideoImportSource*) import_source_construct (object_type, _tmp0_, _tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_, _tmp6_);
 #line 112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 2837 "ImportPage.c"
+#line 2832 "ImportPage.c"
 }
 
 
 VideoImportSource* video_import_source_new (const gchar* camera_name, Camera* camera, gint fsid, const gchar* folder, const gchar* filename, gulong file_size, time_t modification_time) {
 #line 112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return video_import_source_construct (TYPE_VIDEO_IMPORT_SOURCE, camera_name, camera, fsid, folder, filename, file_size, modification_time);
-#line 2844 "ImportPage.c"
+#line 2839 "ImportPage.c"
 }
 
 
@@ -2867,7 +2862,7 @@ static GdkPixbuf* video_import_source_real_get_thumbnail (ThumbnailSource* base,
 		g_propagate_error (error, _inner_error_);
 #line 118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return NULL;
-#line 2870 "ImportPage.c"
+#line 2865 "ImportPage.c"
 	}
 #line 118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = _tmp0_;
@@ -2879,7 +2874,7 @@ static GdkPixbuf* video_import_source_real_get_thumbnail (ThumbnailSource* base,
 	_g_object_unref0 (_tmp0_);
 #line 118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2882 "ImportPage.c"
+#line 2877 "ImportPage.c"
 }
 
 
@@ -2907,13 +2902,13 @@ static GdkPixbuf* video_import_source_real_create_thumbnail (ThumbnailSource* ba
 		result = NULL;
 #line 123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 2910 "ImportPage.c"
+#line 2905 "ImportPage.c"
 	}
 #line 127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = scale;
 #line 127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ > 0) {
-#line 2916 "ImportPage.c"
+#line 2911 "ImportPage.c"
 		GdkPixbuf* _tmp5_ = NULL;
 		GdkPixbuf* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
@@ -2932,7 +2927,7 @@ static GdkPixbuf* video_import_source_real_create_thumbnail (ThumbnailSource* ba
 		_tmp3_ = _tmp8_;
 #line 127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp6_);
-#line 2935 "ImportPage.c"
+#line 2930 "ImportPage.c"
 	} else {
 		GdkPixbuf* _tmp9_ = NULL;
 #line 128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -2941,13 +2936,13 @@ static GdkPixbuf* video_import_source_real_create_thumbnail (ThumbnailSource* ba
 		_g_object_unref0 (_tmp3_);
 #line 128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = _tmp9_;
-#line 2944 "ImportPage.c"
+#line 2939 "ImportPage.c"
 	}
 #line 127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp3_;
 #line 127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2950 "ImportPage.c"
+#line 2945 "ImportPage.c"
 }
 
 
@@ -2963,7 +2958,7 @@ static gchar* video_import_source_real_get_typename (DataSource* base) {
 	result = _tmp0_;
 #line 132 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2966 "ImportPage.c"
+#line 2961 "ImportPage.c"
 }
 
 
@@ -2979,7 +2974,7 @@ static gint64 video_import_source_real_get_instance_id (DataSource* base) {
 	result = _tmp0_;
 #line 136 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2982 "ImportPage.c"
+#line 2977 "ImportPage.c"
 }
 
 
@@ -2995,7 +2990,7 @@ static PhotoFileFormat video_import_source_real_get_preferred_thumbnail_format (
 	result = _tmp0_;
 #line 140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 2998 "ImportPage.c"
+#line 2993 "ImportPage.c"
 }
 
 
@@ -3011,7 +3006,7 @@ static gchar* video_import_source_real_get_name (DataObject* base) {
 	result = _tmp0_;
 #line 144 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3014 "ImportPage.c"
+#line 3009 "ImportPage.c"
 }
 
 
@@ -3026,7 +3021,7 @@ void video_import_source_update (VideoImportSource* self, GdkPixbuf* preview) {
 	_tmp1_ = preview;
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_ != NULL) {
-#line 3029 "ImportPage.c"
+#line 3024 "ImportPage.c"
 		GdkPixbuf* _tmp2_ = NULL;
 		GdkPixbuf* _tmp3_ = NULL;
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3037,7 +3032,7 @@ void video_import_source_update (VideoImportSource* self, GdkPixbuf* preview) {
 		_g_object_unref0 (_tmp0_);
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp3_;
-#line 3040 "ImportPage.c"
+#line 3035 "ImportPage.c"
 	} else {
 		GdkPixbuf* _tmp4_ = NULL;
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3046,13 +3041,13 @@ void video_import_source_update (VideoImportSource* self, GdkPixbuf* preview) {
 		_g_object_unref0 (_tmp0_);
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp4_;
-#line 3049 "ImportPage.c"
+#line 3044 "ImportPage.c"
 	}
 #line 148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_source_set_preview (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IMPORT_SOURCE, ImportSource), _tmp0_);
 #line 147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp0_);
-#line 3055 "ImportPage.c"
+#line 3050 "ImportPage.c"
 }
 
 
@@ -3071,7 +3066,7 @@ static void video_import_source_class_init (VideoImportSourceClass * klass) {
 	((ThumbnailSourceClass *) klass)->get_preferred_thumbnail_format = video_import_source_real_get_preferred_thumbnail_format;
 #line 111 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((DataObjectClass *) klass)->get_name = video_import_source_real_get_name;
-#line 3074 "ImportPage.c"
+#line 3069 "ImportPage.c"
 }
 
 
@@ -3131,14 +3126,14 @@ PhotoImportSource* photo_import_source_construct (GType object_type, const gchar
 	self->priv->file_format = _tmp7_;
 #line 161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 3134 "ImportPage.c"
+#line 3129 "ImportPage.c"
 }
 
 
 PhotoImportSource* photo_import_source_new (const gchar* camera_name, Camera* camera, gint fsid, const gchar* folder, const gchar* filename, gulong file_size, time_t modification_time, PhotoFileFormat file_format) {
 #line 161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return photo_import_source_construct (TYPE_PHOTO_IMPORT_SOURCE, camera_name, camera, fsid, folder, filename, file_size, modification_time, file_format);
-#line 3141 "ImportPage.c"
+#line 3136 "ImportPage.c"
 }
 
 
@@ -3162,7 +3157,7 @@ static gchar* photo_import_source_real_get_name (DataObject* base) {
 	_tmp3_ = is_string_empty (_tmp2_);
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (!_tmp3_) {
-#line 3165 "ImportPage.c"
+#line 3160 "ImportPage.c"
 		const gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3173,7 +3168,7 @@ static gchar* photo_import_source_real_get_name (DataObject* base) {
 		_g_free0 (_tmp1_);
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = _tmp5_;
-#line 3176 "ImportPage.c"
+#line 3171 "ImportPage.c"
 	} else {
 		gchar* _tmp6_ = NULL;
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3182,7 +3177,7 @@ static gchar* photo_import_source_real_get_name (DataObject* base) {
 		_g_free0 (_tmp1_);
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = _tmp6_;
-#line 3185 "ImportPage.c"
+#line 3180 "ImportPage.c"
 	}
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp1_;
@@ -3190,7 +3185,7 @@ static gchar* photo_import_source_real_get_name (DataObject* base) {
 	_g_free0 (title);
 #line 170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3193 "ImportPage.c"
+#line 3188 "ImportPage.c"
 }
 
 
@@ -3206,7 +3201,7 @@ static gchar* photo_import_source_real_get_typename (DataSource* base) {
 	result = _tmp0_;
 #line 174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3209 "ImportPage.c"
+#line 3204 "ImportPage.c"
 }
 
 
@@ -3222,7 +3217,7 @@ static gint64 photo_import_source_real_get_instance_id (DataSource* base) {
 	result = _tmp0_;
 #line 178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3225 "ImportPage.c"
+#line 3220 "ImportPage.c"
 }
 
 
@@ -3240,26 +3235,26 @@ static PhotoFileFormat photo_import_source_real_get_preferred_thumbnail_format (
 	_tmp2_ = photo_file_format_can_write (_tmp1_);
 #line 182 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp2_) {
-#line 3243 "ImportPage.c"
+#line 3238 "ImportPage.c"
 		PhotoFileFormat _tmp3_ = 0;
 #line 182 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = self->priv->file_format;
 #line 182 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp3_;
-#line 3249 "ImportPage.c"
+#line 3244 "ImportPage.c"
 	} else {
 		PhotoFileFormat _tmp4_ = 0;
 #line 183 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = photo_file_format_get_system_default_format ();
 #line 183 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp4_;
-#line 3256 "ImportPage.c"
+#line 3251 "ImportPage.c"
 	}
 #line 182 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp0_;
 #line 182 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3262 "ImportPage.c"
+#line 3257 "ImportPage.c"
 }
 
 
@@ -3287,13 +3282,13 @@ static GdkPixbuf* photo_import_source_real_create_thumbnail (ThumbnailSource* ba
 		result = NULL;
 #line 188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3290 "ImportPage.c"
+#line 3285 "ImportPage.c"
 	}
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = scale;
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ > 0) {
-#line 3296 "ImportPage.c"
+#line 3291 "ImportPage.c"
 		GdkPixbuf* _tmp5_ = NULL;
 		GdkPixbuf* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
@@ -3312,7 +3307,7 @@ static GdkPixbuf* photo_import_source_real_create_thumbnail (ThumbnailSource* ba
 		_tmp3_ = _tmp8_;
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp6_);
-#line 3315 "ImportPage.c"
+#line 3310 "ImportPage.c"
 	} else {
 		GdkPixbuf* _tmp9_ = NULL;
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3321,20 +3316,20 @@ static GdkPixbuf* photo_import_source_real_create_thumbnail (ThumbnailSource* ba
 		_g_object_unref0 (_tmp3_);
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = _tmp9_;
-#line 3324 "ImportPage.c"
+#line 3319 "ImportPage.c"
 	}
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp3_;
 #line 192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3330 "ImportPage.c"
+#line 3325 "ImportPage.c"
 }
 
 
 static gpointer _media_metadata_ref0 (gpointer self) {
 #line 199 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? media_metadata_ref (self) : NULL;
-#line 3337 "ImportPage.c"
+#line 3332 "ImportPage.c"
 }
 
 
@@ -3380,7 +3375,7 @@ void photo_import_source_update (PhotoImportSource* self, GdkPixbuf* preview, co
 	_g_free0 (self->priv->exif_md5);
 #line 200 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->exif_md5 = _tmp6_;
-#line 3383 "ImportPage.c"
+#line 3378 "ImportPage.c"
 }
 
 
@@ -3399,7 +3394,7 @@ static time_t photo_import_source_real_get_exposure_time (ImportSource* base) {
 	_tmp0_ = self->priv->metadata;
 #line 204 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ == NULL) {
-#line 3402 "ImportPage.c"
+#line 3397 "ImportPage.c"
 		time_t _tmp1_ = 0;
 #line 205 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = import_source_get_modification_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IMPORT_SOURCE, ImportSource));
@@ -3407,7 +3402,7 @@ static time_t photo_import_source_real_get_exposure_time (ImportSource* base) {
 		result = _tmp1_;
 #line 205 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3410 "ImportPage.c"
+#line 3405 "ImportPage.c"
 	}
 #line 207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->metadata;
@@ -3419,7 +3414,7 @@ static time_t photo_import_source_real_get_exposure_time (ImportSource* base) {
 	_tmp5_ = date_time;
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_ != NULL) {
-#line 3422 "ImportPage.c"
+#line 3417 "ImportPage.c"
 		MetadataDateTime* _tmp6_ = NULL;
 		time_t _tmp7_ = 0;
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3428,14 +3423,14 @@ static time_t photo_import_source_real_get_exposure_time (ImportSource* base) {
 		_tmp7_ = metadata_date_time_get_timestamp (_tmp6_);
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = _tmp7_;
-#line 3431 "ImportPage.c"
+#line 3426 "ImportPage.c"
 	} else {
 		time_t _tmp8_ = 0;
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = import_source_get_modification_time (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IMPORT_SOURCE, ImportSource));
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = _tmp8_;
-#line 3438 "ImportPage.c"
+#line 3433 "ImportPage.c"
 	}
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp4_;
@@ -3443,7 +3438,7 @@ static time_t photo_import_source_real_get_exposure_time (ImportSource* base) {
 	_metadata_date_time_unref0 (date_time);
 #line 209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3446 "ImportPage.c"
+#line 3441 "ImportPage.c"
 }
 
 
@@ -3457,7 +3452,7 @@ gchar* photo_import_source_get_title (PhotoImportSource* self) {
 	_tmp1_ = self->priv->metadata;
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_ != NULL) {
-#line 3460 "ImportPage.c"
+#line 3455 "ImportPage.c"
 		PhotoMetadata* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3468,19 +3463,19 @@ gchar* photo_import_source_get_title (PhotoImportSource* self) {
 		_g_free0 (_tmp0_);
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp3_;
-#line 3471 "ImportPage.c"
+#line 3466 "ImportPage.c"
 	} else {
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp0_);
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = NULL;
-#line 3477 "ImportPage.c"
+#line 3472 "ImportPage.c"
 	}
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp0_;
 #line 213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3483 "ImportPage.c"
+#line 3478 "ImportPage.c"
 }
 
 
@@ -3495,7 +3490,7 @@ PhotoMetadata* photo_import_source_get_metadata (PhotoImportSource* self) {
 	_tmp0_ = self->priv->associated;
 #line 217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ != NULL) {
-#line 3498 "ImportPage.c"
+#line 3493 "ImportPage.c"
 		PhotoImportSource* _tmp1_ = NULL;
 		PhotoMetadata* _tmp2_ = NULL;
 #line 218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3506,7 +3501,7 @@ PhotoMetadata* photo_import_source_get_metadata (PhotoImportSource* self) {
 		result = _tmp2_;
 #line 218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3509 "ImportPage.c"
+#line 3504 "ImportPage.c"
 	}
 #line 220 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = self->priv->metadata;
@@ -3516,7 +3511,7 @@ PhotoMetadata* photo_import_source_get_metadata (PhotoImportSource* self) {
 	result = _tmp4_;
 #line 220 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3519 "ImportPage.c"
+#line 3514 "ImportPage.c"
 }
 
 
@@ -3533,7 +3528,7 @@ static GdkPixbuf* photo_import_source_real_get_preview (ImportSource* base) {
 	_tmp0_ = self->priv->associated;
 #line 224 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ != NULL) {
-#line 3536 "ImportPage.c"
+#line 3531 "ImportPage.c"
 		PhotoImportSource* _tmp1_ = NULL;
 		GdkPixbuf* _tmp2_ = NULL;
 #line 225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3544,7 +3539,7 @@ static GdkPixbuf* photo_import_source_real_get_preview (ImportSource* base) {
 		result = _tmp2_;
 #line 225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3547 "ImportPage.c"
+#line 3542 "ImportPage.c"
 	}
 #line 227 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = IMPORT_SOURCE_CLASS (photo_import_source_parent_class)->get_preview (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IMPORT_SOURCE, ImportSource));
@@ -3556,7 +3551,7 @@ static GdkPixbuf* photo_import_source_real_get_preview (ImportSource* base) {
 	_g_object_unref0 (_tmp4_);
 #line 227 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_) {
-#line 3559 "ImportPage.c"
+#line 3554 "ImportPage.c"
 		GdkPixbuf* _tmp6_ = NULL;
 #line 228 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = IMPORT_SOURCE_CLASS (photo_import_source_parent_class)->get_preview (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_IMPORT_SOURCE, ImportSource));
@@ -3564,13 +3559,13 @@ static GdkPixbuf* photo_import_source_real_get_preview (ImportSource* base) {
 		result = _tmp6_;
 #line 228 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3567 "ImportPage.c"
+#line 3562 "ImportPage.c"
 	}
 #line 230 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = NULL;
 #line 230 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3573 "ImportPage.c"
+#line 3568 "ImportPage.c"
 }
 
 
@@ -3598,13 +3593,13 @@ static GdkPixbuf* photo_import_source_real_get_thumbnail (ThumbnailSource* base,
 		result = NULL;
 #line 235 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 3601 "ImportPage.c"
+#line 3596 "ImportPage.c"
 	}
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = scale;
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ > 0) {
-#line 3607 "ImportPage.c"
+#line 3602 "ImportPage.c"
 		GdkPixbuf* _tmp5_ = NULL;
 		GdkPixbuf* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
@@ -3623,7 +3618,7 @@ static GdkPixbuf* photo_import_source_real_get_thumbnail (ThumbnailSource* base,
 		_tmp3_ = _tmp8_;
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp6_);
-#line 3626 "ImportPage.c"
+#line 3621 "ImportPage.c"
 	} else {
 		GdkPixbuf* _tmp9_ = NULL;
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3632,13 +3627,13 @@ static GdkPixbuf* photo_import_source_real_get_thumbnail (ThumbnailSource* base,
 		_g_object_unref0 (_tmp3_);
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = _tmp9_;
-#line 3635 "ImportPage.c"
+#line 3630 "ImportPage.c"
 	}
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp3_;
 #line 237 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3641 "ImportPage.c"
+#line 3636 "ImportPage.c"
 }
 
 
@@ -3653,7 +3648,7 @@ PhotoFileFormat photo_import_source_get_file_format (PhotoImportSource* self) {
 	result = _tmp0_;
 #line 241 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3656 "ImportPage.c"
+#line 3651 "ImportPage.c"
 }
 
 
@@ -3671,7 +3666,7 @@ gchar* photo_import_source_get_preview_md5 (PhotoImportSource* self) {
 	result = _tmp1_;
 #line 245 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3674 "ImportPage.c"
+#line 3669 "ImportPage.c"
 }
 
 
@@ -3690,7 +3685,7 @@ void photo_import_source_set_associated (PhotoImportSource* self, PhotoImportSou
 	_g_object_unref0 (self->priv->associated);
 #line 249 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->associated = _tmp1_;
-#line 3693 "ImportPage.c"
+#line 3688 "ImportPage.c"
 }
 
 
@@ -3708,7 +3703,7 @@ PhotoImportSource* photo_import_source_get_associated (PhotoImportSource* self) 
 	result = _tmp1_;
 #line 253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3711 "ImportPage.c"
+#line 3706 "ImportPage.c"
 }
 
 
@@ -3731,13 +3726,13 @@ static gboolean photo_import_source_real_internal_delete_backing (DataSource* ba
 		g_propagate_error (error, _inner_error_);
 #line 257 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return FALSE;
-#line 3734 "ImportPage.c"
+#line 3729 "ImportPage.c"
 	}
 #line 258 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->associated;
 #line 258 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_ != NULL) {
-#line 3740 "ImportPage.c"
+#line 3735 "ImportPage.c"
 		gboolean _tmp2_ = FALSE;
 		PhotoImportSource* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
@@ -3754,19 +3749,19 @@ static gboolean photo_import_source_real_internal_delete_backing (DataSource* ba
 			g_propagate_error (error, _inner_error_);
 #line 259 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return FALSE;
-#line 3757 "ImportPage.c"
+#line 3752 "ImportPage.c"
 		}
 #line 259 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = ret;
 #line 259 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		ret = _tmp5_ & _tmp2_;
-#line 3763 "ImportPage.c"
+#line 3758 "ImportPage.c"
 	}
 #line 260 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = ret;
 #line 260 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 3769 "ImportPage.c"
+#line 3764 "ImportPage.c"
 }
 
 
@@ -3795,7 +3790,7 @@ static void photo_import_source_class_init (PhotoImportSourceClass * klass) {
 	((DataSourceClass *) klass)->internal_delete_backing = photo_import_source_real_internal_delete_backing;
 #line 152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = photo_import_source_finalize;
-#line 3798 "ImportPage.c"
+#line 3793 "ImportPage.c"
 }
 
 
@@ -3810,7 +3805,7 @@ static void photo_import_source_instance_init (PhotoImportSource * self) {
 	self->priv->exif_md5 = NULL;
 #line 159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->associated = NULL;
-#line 3813 "ImportPage.c"
+#line 3808 "ImportPage.c"
 }
 
 
@@ -3828,7 +3823,7 @@ static void photo_import_source_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->associated);
 #line 152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (photo_import_source_parent_class)->finalize (obj);
-#line 3831 "ImportPage.c"
+#line 3826 "ImportPage.c"
 }
 
 
@@ -3888,11 +3883,11 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, TYPE_VIDEO_IMPORT_SOURCE)) {
 #line 278 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		media_source_item_set_enable_sprockets (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE_ITEM, MediaSourceItem), TRUE);
-#line 3891 "ImportPage.c"
+#line 3886 "ImportPage.c"
 	}
 #line 281 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	pixbuf = NULL;
-#line 3895 "ImportPage.c"
+#line 3890 "ImportPage.c"
 	{
 		GdkPixbuf* _tmp6_ = NULL;
 		ImportSource* _tmp7_ = NULL;
@@ -3906,8 +3901,8 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_tmp6_ = _tmp8_;
 #line 283 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3909 "ImportPage.c"
-			goto __catch62_g_error;
+#line 3904 "ImportPage.c"
+			goto __catch61_g_error;
 		}
 #line 283 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = _tmp6_;
@@ -3919,10 +3914,10 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		pixbuf = _tmp9_;
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp6_);
-#line 3922 "ImportPage.c"
+#line 3917 "ImportPage.c"
 	}
-	goto __finally62;
-	__catch62_g_error:
+	goto __finally61;
+	__catch61_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp10_ = NULL;
@@ -3947,9 +3942,9 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_free0 (_tmp11_);
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_error_free0 (err);
-#line 3950 "ImportPage.c"
+#line 3945 "ImportPage.c"
 	}
-	__finally62:
+	__finally61:
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -3960,7 +3955,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		g_clear_error (&_inner_error_);
 #line 282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return NULL;
-#line 3963 "ImportPage.c"
+#line 3958 "ImportPage.c"
 	}
 #line 289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp14_ = pixbuf;
@@ -3970,7 +3965,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 	_tmp15_ = pixbuf;
 #line 290 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp15_ == NULL) {
-#line 3973 "ImportPage.c"
+#line 3968 "ImportPage.c"
 		GdkPixbuf* _tmp16_ = NULL;
 		GdkPixbuf* _tmp20_ = NULL;
 		GdkPixbuf* _tmp21_ = NULL;
@@ -3978,7 +3973,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_tmp16_ = import_preview_placeholder_preview;
 #line 291 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp16_ == NULL) {
-#line 3981 "ImportPage.c"
+#line 3976 "ImportPage.c"
 			GdkPixbuf* _tmp17_ = NULL;
 			GdkPixbuf* _tmp18_ = NULL;
 			GdkPixbuf* _tmp19_ = NULL;
@@ -3996,7 +3991,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 			_g_object_unref0 (import_preview_placeholder_preview);
 #line 293 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			import_preview_placeholder_preview = _tmp19_;
-#line 3999 "ImportPage.c"
+#line 3994 "ImportPage.c"
 		}
 #line 297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp20_ = import_preview_placeholder_preview;
@@ -4006,7 +4001,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_object_unref0 (pixbuf);
 #line 297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		pixbuf = _tmp21_;
-#line 4009 "ImportPage.c"
+#line 4004 "ImportPage.c"
 	}
 #line 301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp23_ = pixbuf;
@@ -4016,7 +4011,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 	if (_tmp24_ > IMPORT_PREVIEW_MAX_SCALE) {
 #line 301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp22_ = TRUE;
-#line 4019 "ImportPage.c"
+#line 4014 "ImportPage.c"
 	} else {
 		GdkPixbuf* _tmp25_ = NULL;
 		gint _tmp26_ = 0;
@@ -4026,11 +4021,11 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_tmp26_ = gdk_pixbuf_get_height (_tmp25_);
 #line 301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp22_ = _tmp26_ > IMPORT_PREVIEW_MAX_SCALE;
-#line 4029 "ImportPage.c"
+#line 4024 "ImportPage.c"
 	}
 #line 301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp22_) {
-#line 4033 "ImportPage.c"
+#line 4028 "ImportPage.c"
 		GdkPixbuf* _tmp27_ = NULL;
 		GdkPixbuf* _tmp28_ = NULL;
 #line 302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4041,13 +4036,13 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_object_unref0 (pixbuf);
 #line 302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		pixbuf = _tmp28_;
-#line 4044 "ImportPage.c"
+#line 4039 "ImportPage.c"
 	}
 #line 304 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp29_ = source;
 #line 304 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp29_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 4050 "ImportPage.c"
+#line 4045 "ImportPage.c"
 		PhotoImportSource* photo_import_source = NULL;
 		ImportSource* _tmp30_ = NULL;
 		PhotoImportSource* _tmp31_ = NULL;
@@ -4067,7 +4062,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_tmp33_ = using_placeholder;
 #line 307 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (!_tmp33_) {
-#line 4070 "ImportPage.c"
+#line 4065 "ImportPage.c"
 			PhotoImportSource* _tmp34_ = NULL;
 			PhotoMetadata* _tmp35_ = NULL;
 			PhotoMetadata* _tmp36_ = NULL;
@@ -4081,15 +4076,15 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 			_tmp32_ = _tmp36_ != NULL;
 #line 307 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_media_metadata_unref0 (_tmp36_);
-#line 4084 "ImportPage.c"
+#line 4079 "ImportPage.c"
 		} else {
 #line 307 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp32_ = FALSE;
-#line 4088 "ImportPage.c"
+#line 4083 "ImportPage.c"
 		}
 #line 307 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp32_) {
-#line 4092 "ImportPage.c"
+#line 4087 "ImportPage.c"
 			PhotoImportSource* _tmp37_ = NULL;
 			PhotoMetadata* _tmp38_ = NULL;
 			PhotoMetadata* _tmp39_ = NULL;
@@ -4114,7 +4109,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 			pixbuf = _tmp42_;
 #line 308 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_media_metadata_unref0 (_tmp39_);
-#line 4117 "ImportPage.c"
+#line 4112 "ImportPage.c"
 		}
 #line 310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp43_ = photo_import_source;
@@ -4128,7 +4123,7 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 		_g_object_unref0 (_tmp45_);
 #line 310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp46_) {
-#line 4131 "ImportPage.c"
+#line 4126 "ImportPage.c"
 			const gchar* _tmp47_ = NULL;
 			gchar* _tmp48_ = NULL;
 			gchar* _tmp49_ = NULL;
@@ -4142,11 +4137,11 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 			checkerboard_item_set_subtitle (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_ITEM, CheckerboardItem), _tmp49_, TRUE, PANGO_ALIGN_LEFT);
 #line 311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp49_);
-#line 4145 "ImportPage.c"
+#line 4140 "ImportPage.c"
 		}
 #line 304 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (photo_import_source);
-#line 4149 "ImportPage.c"
+#line 4144 "ImportPage.c"
 	}
 #line 315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp50_ = pixbuf;
@@ -4156,14 +4151,14 @@ ImportPreview* import_preview_construct (GType object_type, ImportSource* source
 	_g_object_unref0 (pixbuf);
 #line 271 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 4159 "ImportPage.c"
+#line 4154 "ImportPage.c"
 }
 
 
 ImportPreview* import_preview_new (ImportSource* source) {
 #line 271 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_preview_construct (TYPE_IMPORT_PREVIEW, source);
-#line 4166 "ImportPage.c"
+#line 4161 "ImportPage.c"
 }
 
 
@@ -4187,7 +4182,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 	if (_tmp1_ == NULL) {
 #line 319 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp0_);
-#line 4190 "ImportPage.c"
+#line 4185 "ImportPage.c"
 	}
 #line 319 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	photo_import_source = _tmp1_;
@@ -4195,7 +4190,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 	_tmp2_ = photo_import_source;
 #line 320 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp2_ != NULL) {
-#line 4198 "ImportPage.c"
+#line 4193 "ImportPage.c"
 		gchar* preview_md5 = NULL;
 		PhotoImportSource* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -4224,7 +4219,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 		_tmp9_ = is_string_empty (_tmp8_);
 #line 325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (!_tmp9_) {
-#line 4227 "ImportPage.c"
+#line 4222 "ImportPage.c"
 			const gchar* _tmp10_ = NULL;
 			PhotoFileFormat _tmp11_ = 0;
 			gboolean _tmp12_ = FALSE;
@@ -4236,15 +4231,15 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 			_tmp12_ = library_photo_has_nontrash_duplicate (NULL, _tmp10_, NULL, _tmp11_);
 #line 326 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = _tmp12_;
-#line 4239 "ImportPage.c"
+#line 4234 "ImportPage.c"
 		} else {
 #line 325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = FALSE;
-#line 4243 "ImportPage.c"
+#line 4238 "ImportPage.c"
 		}
 #line 325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp7_) {
-#line 4247 "ImportPage.c"
+#line 4242 "ImportPage.c"
 			const gchar* _tmp13_ = NULL;
 			PhotoFileFormat _tmp14_ = 0;
 			PhotoID _tmp15_ = {0};
@@ -4269,13 +4264,13 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 			_g_object_unref0 (photo_import_source);
 #line 331 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 4272 "ImportPage.c"
+#line 4267 "ImportPage.c"
 		}
 #line 337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp17_ = file_format;
 #line 337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp17_ == PHOTO_FILE_FORMAT_RAW) {
-#line 4278 "ImportPage.c"
+#line 4273 "ImportPage.c"
 			guint64 filesize = 0ULL;
 			ImportSource* _tmp18_ = NULL;
 			ImportSource* _tmp19_ = NULL;
@@ -4298,7 +4293,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 			_tmp22_ = filesize;
 #line 340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp22_ <= ((guint64) G_MAXINT64)) {
-#line 4301 "ImportPage.c"
+#line 4296 "ImportPage.c"
 				LibraryPhotoSourceCollection* _tmp23_ = NULL;
 				ImportSource* _tmp24_ = NULL;
 				ImportSource* _tmp25_ = NULL;
@@ -4329,7 +4324,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 				_g_object_unref0 (_tmp25_);
 #line 341 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp30_) {
-#line 4332 "ImportPage.c"
+#line 4327 "ImportPage.c"
 					LibraryPhotoSourceCollection* _tmp31_ = NULL;
 					ImportSource* _tmp32_ = NULL;
 					ImportSource* _tmp33_ = NULL;
@@ -4370,7 +4365,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 					_g_object_unref0 (photo_import_source);
 #line 348 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 4373 "ImportPage.c"
+#line 4368 "ImportPage.c"
 				}
 			}
 		}
@@ -4382,7 +4377,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 		_g_object_unref0 (photo_import_source);
 #line 353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 4385 "ImportPage.c"
+#line 4380 "ImportPage.c"
 	}
 #line 356 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp39_ = import_preview_get_import_source (self);
@@ -4392,7 +4387,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 	if (_tmp40_ == NULL) {
 #line 356 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp39_);
-#line 4395 "ImportPage.c"
+#line 4390 "ImportPage.c"
 	}
 #line 356 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	video_import_source = _tmp40_;
@@ -4400,7 +4395,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 	_tmp41_ = video_import_source;
 #line 357 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp41_ != NULL) {
-#line 4403 "ImportPage.c"
+#line 4398 "ImportPage.c"
 		VideoSourceCollection* _tmp42_ = NULL;
 		VideoImportSource* _tmp43_ = NULL;
 		gchar* _tmp44_ = NULL;
@@ -4429,7 +4424,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 		_g_free0 (_tmp45_);
 #line 362 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp49_) {
-#line 4432 "ImportPage.c"
+#line 4427 "ImportPage.c"
 			VideoSourceCollection* _tmp50_ = NULL;
 			VideoImportSource* _tmp51_ = NULL;
 			gchar* _tmp52_ = NULL;
@@ -4468,7 +4463,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 			_g_object_unref0 (photo_import_source);
 #line 370 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 4471 "ImportPage.c"
+#line 4466 "ImportPage.c"
 		}
 #line 373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
@@ -4478,7 +4473,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 		_g_object_unref0 (photo_import_source);
 #line 373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 4481 "ImportPage.c"
+#line 4476 "ImportPage.c"
 	}
 #line 376 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = FALSE;
@@ -4488,7 +4483,7 @@ gboolean import_preview_is_already_imported (ImportPreview* self) {
 	_g_object_unref0 (photo_import_source);
 #line 376 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4491 "ImportPage.c"
+#line 4486 "ImportPage.c"
 }
 
 
@@ -4507,7 +4502,7 @@ DuplicatedFile* import_preview_get_duplicated_file (ImportPreview* self) {
 		result = NULL;
 #line 381 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 4510 "ImportPage.c"
+#line 4505 "ImportPage.c"
 	}
 #line 383 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->duplicated_file;
@@ -4517,7 +4512,7 @@ DuplicatedFile* import_preview_get_duplicated_file (ImportPreview* self) {
 	result = _tmp2_;
 #line 383 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4520 "ImportPage.c"
+#line 4515 "ImportPage.c"
 }
 
 
@@ -4532,7 +4527,7 @@ ImportSource* import_preview_get_import_source (ImportPreview* self) {
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_IMPORT_SOURCE, ImportSource);
 #line 387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4535 "ImportPage.c"
+#line 4530 "ImportPage.c"
 }
 
 
@@ -4543,14 +4538,14 @@ static void import_preview_class_init (ImportPreviewClass * klass) {
 	g_type_class_add_private (klass, sizeof (ImportPreviewPrivate));
 #line 264 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = import_preview_finalize;
-#line 4546 "ImportPage.c"
+#line 4541 "ImportPage.c"
 }
 
 
 static void import_preview_instance_init (ImportPreview * self) {
 #line 264 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv = IMPORT_PREVIEW_GET_PRIVATE (self);
-#line 4553 "ImportPage.c"
+#line 4548 "ImportPage.c"
 }
 
 
@@ -4562,7 +4557,7 @@ static void import_preview_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->duplicated_file);
 #line 264 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (import_preview_parent_class)->finalize (obj);
-#line 4565 "ImportPage.c"
+#line 4560 "ImportPage.c"
 }
 
 
@@ -4600,14 +4595,14 @@ CameraViewTracker* camera_view_tracker_construct (GType object_type, ViewCollect
 	core_view_tracker_start (G_TYPE_CHECK_INSTANCE_CAST (self, CORE_TYPE_VIEW_TRACKER, CoreViewTracker), G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, CORE_TYPE_TRACKER_ACCUMULATOR, CoreTrackerAccumulator), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, CORE_TYPE_TRACKER_ACCUMULATOR, CoreTrackerAccumulator), G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, CORE_TYPE_TRACKER_ACCUMULATOR, CoreTrackerAccumulator));
 #line 396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 4603 "ImportPage.c"
+#line 4598 "ImportPage.c"
 }
 
 
 CameraViewTracker* camera_view_tracker_new (ViewCollection* collection) {
 #line 396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return camera_view_tracker_construct (TYPE_CAMERA_VIEW_TRACKER, collection);
-#line 4610 "ImportPage.c"
+#line 4605 "ImportPage.c"
 }
 
 
@@ -4616,7 +4611,7 @@ static void camera_view_tracker_class_init (CameraViewTrackerClass * klass) {
 	camera_view_tracker_parent_class = g_type_class_peek_parent (klass);
 #line 391 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((CoreTrackerClass *) klass)->finalize = camera_view_tracker_finalize;
-#line 4619 "ImportPage.c"
+#line 4614 "ImportPage.c"
 }
 
 
@@ -4636,7 +4631,7 @@ static void camera_view_tracker_instance_init (CameraViewTracker * self) {
 	_tmp2_ = camera_accumulator_new ();
 #line 394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->selected = _tmp2_;
-#line 4639 "ImportPage.c"
+#line 4634 "ImportPage.c"
 }
 
 
@@ -4652,7 +4647,7 @@ static void camera_view_tracker_finalize (CoreTracker* obj) {
 	_g_object_unref0 (self->selected);
 #line 391 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	CORE_TRACKER_CLASS (camera_view_tracker_parent_class)->finalize (obj);
-#line 4655 "ImportPage.c"
+#line 4650 "ImportPage.c"
 }
 
 
@@ -4704,7 +4699,7 @@ static gboolean camera_accumulator_real_include (CoreTrackerAccumulator* base, D
 	_tmp6_ = photo;
 #line 415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp6_ != NULL) {
-#line 4707 "ImportPage.c"
+#line 4702 "ImportPage.c"
 		PhotoImportSource* _tmp7_ = NULL;
 		PhotoFileFormat _tmp8_ = 0;
 #line 415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4713,21 +4708,21 @@ static gboolean camera_accumulator_real_include (CoreTrackerAccumulator* base, D
 		_tmp8_ = photo_import_source_get_file_format (_tmp7_);
 #line 415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = _tmp8_ != PHOTO_FILE_FORMAT_RAW;
-#line 4716 "ImportPage.c"
+#line 4711 "ImportPage.c"
 	} else {
 #line 415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = FALSE;
-#line 4720 "ImportPage.c"
+#line 4715 "ImportPage.c"
 	}
 #line 415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_) {
-#line 4724 "ImportPage.c"
+#line 4719 "ImportPage.c"
 		gint _tmp9_ = 0;
 #line 416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = self->priv->_photos;
 #line 416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		camera_accumulator_set_photos (self, _tmp9_ + 1);
-#line 4730 "ImportPage.c"
+#line 4725 "ImportPage.c"
 	} else {
 		gboolean _tmp10_ = FALSE;
 		PhotoImportSource* _tmp11_ = NULL;
@@ -4735,7 +4730,7 @@ static gboolean camera_accumulator_real_include (CoreTrackerAccumulator* base, D
 		_tmp11_ = photo;
 #line 417 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp11_ != NULL) {
-#line 4738 "ImportPage.c"
+#line 4733 "ImportPage.c"
 			PhotoImportSource* _tmp12_ = NULL;
 			PhotoFileFormat _tmp13_ = 0;
 #line 417 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4744,34 +4739,34 @@ static gboolean camera_accumulator_real_include (CoreTrackerAccumulator* base, D
 			_tmp13_ = photo_import_source_get_file_format (_tmp12_);
 #line 417 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp10_ = _tmp13_ == PHOTO_FILE_FORMAT_RAW;
-#line 4747 "ImportPage.c"
+#line 4742 "ImportPage.c"
 		} else {
 #line 417 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp10_ = FALSE;
-#line 4751 "ImportPage.c"
+#line 4746 "ImportPage.c"
 		}
 #line 417 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp10_) {
-#line 4755 "ImportPage.c"
+#line 4750 "ImportPage.c"
 			gint _tmp14_ = 0;
 #line 418 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp14_ = self->priv->_raw;
 #line 418 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			camera_accumulator_set_raw (self, _tmp14_ + 1);
-#line 4761 "ImportPage.c"
+#line 4756 "ImportPage.c"
 		} else {
 			ImportSource* _tmp15_ = NULL;
 #line 419 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp15_ = source;
 #line 419 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp15_, TYPE_VIDEO_IMPORT_SOURCE)) {
-#line 4768 "ImportPage.c"
+#line 4763 "ImportPage.c"
 				gint _tmp16_ = 0;
 #line 420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp16_ = self->priv->_videos;
 #line 420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				camera_accumulator_set_videos (self, _tmp16_ + 1);
-#line 4774 "ImportPage.c"
+#line 4769 "ImportPage.c"
 			}
 		}
 	}
@@ -4783,7 +4778,7 @@ static gboolean camera_accumulator_real_include (CoreTrackerAccumulator* base, D
 	_g_object_unref0 (source);
 #line 423 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4786 "ImportPage.c"
+#line 4781 "ImportPage.c"
 }
 
 
@@ -4823,7 +4818,7 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 	_tmp6_ = photo;
 #line 432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp6_ != NULL) {
-#line 4826 "ImportPage.c"
+#line 4821 "ImportPage.c"
 		PhotoImportSource* _tmp7_ = NULL;
 		PhotoFileFormat _tmp8_ = 0;
 #line 432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4832,15 +4827,15 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 		_tmp8_ = photo_import_source_get_file_format (_tmp7_);
 #line 432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = _tmp8_ != PHOTO_FILE_FORMAT_RAW;
-#line 4835 "ImportPage.c"
+#line 4830 "ImportPage.c"
 	} else {
 #line 432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = FALSE;
-#line 4839 "ImportPage.c"
+#line 4834 "ImportPage.c"
 	}
 #line 432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_) {
-#line 4843 "ImportPage.c"
+#line 4838 "ImportPage.c"
 		gint _tmp9_ = 0;
 		gint _tmp10_ = 0;
 #line 433 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4851,7 +4846,7 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 		_tmp10_ = self->priv->_photos;
 #line 434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		camera_accumulator_set_photos (self, _tmp10_ - 1);
-#line 4854 "ImportPage.c"
+#line 4849 "ImportPage.c"
 	} else {
 		gboolean _tmp11_ = FALSE;
 		PhotoImportSource* _tmp12_ = NULL;
@@ -4859,7 +4854,7 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 		_tmp12_ = photo;
 #line 435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp12_ != NULL) {
-#line 4862 "ImportPage.c"
+#line 4857 "ImportPage.c"
 			PhotoImportSource* _tmp13_ = NULL;
 			PhotoFileFormat _tmp14_ = 0;
 #line 435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4868,15 +4863,15 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 			_tmp14_ = photo_import_source_get_file_format (_tmp13_);
 #line 435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = _tmp14_ == PHOTO_FILE_FORMAT_RAW;
-#line 4871 "ImportPage.c"
+#line 4866 "ImportPage.c"
 		} else {
 #line 435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = FALSE;
-#line 4875 "ImportPage.c"
+#line 4870 "ImportPage.c"
 		}
 #line 435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp11_) {
-#line 4879 "ImportPage.c"
+#line 4874 "ImportPage.c"
 			gint _tmp15_ = 0;
 			gint _tmp16_ = 0;
 #line 436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4887,14 +4882,14 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 			_tmp16_ = self->priv->_raw;
 #line 437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			camera_accumulator_set_raw (self, _tmp16_ - 1);
-#line 4890 "ImportPage.c"
+#line 4885 "ImportPage.c"
 		} else {
 			ImportSource* _tmp17_ = NULL;
 #line 438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp17_ = source;
 #line 438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp17_, TYPE_VIDEO_IMPORT_SOURCE)) {
-#line 4897 "ImportPage.c"
+#line 4892 "ImportPage.c"
 				gint _tmp18_ = 0;
 				gint _tmp19_ = 0;
 #line 439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -4905,7 +4900,7 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 				_tmp19_ = self->priv->_videos;
 #line 440 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				camera_accumulator_set_videos (self, _tmp19_ - 1);
-#line 4908 "ImportPage.c"
+#line 4903 "ImportPage.c"
 			}
 		}
 	}
@@ -4917,7 +4912,7 @@ static gboolean camera_accumulator_real_uninclude (CoreTrackerAccumulator* base,
 	_g_object_unref0 (source);
 #line 444 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4920 "ImportPage.c"
+#line 4915 "ImportPage.c"
 }
 
 
@@ -4934,7 +4929,7 @@ static gboolean camera_accumulator_real_altered (CoreTrackerAccumulator* base, D
 	result = FALSE;
 #line 449 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4937 "ImportPage.c"
+#line 4932 "ImportPage.c"
 }
 
 
@@ -4961,7 +4956,7 @@ gchar* camera_accumulator_to_string (CameraAccumulator* self) {
 	result = _tmp4_;
 #line 453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4964 "ImportPage.c"
+#line 4959 "ImportPage.c"
 }
 
 
@@ -4971,14 +4966,14 @@ CameraAccumulator* camera_accumulator_construct (GType object_type) {
 	self = (CameraAccumulator*) g_object_new (object_type, NULL);
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 4974 "ImportPage.c"
+#line 4969 "ImportPage.c"
 }
 
 
 CameraAccumulator* camera_accumulator_new (void) {
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return camera_accumulator_construct (TYPE_CAMERA_ACCUMULATOR);
-#line 4981 "ImportPage.c"
+#line 4976 "ImportPage.c"
 }
 
 
@@ -4993,7 +4988,7 @@ gint camera_accumulator_get_total (CameraAccumulator* self) {
 	result = _tmp0_;
 #line 404 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 4996 "ImportPage.c"
+#line 4991 "ImportPage.c"
 }
 
 
@@ -5007,7 +5002,7 @@ static void camera_accumulator_set_total (CameraAccumulator* self, gint value) {
 	self->priv->_total = _tmp0_;
 #line 404 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_notify ((GObject *) self, "total");
-#line 5010 "ImportPage.c"
+#line 5005 "ImportPage.c"
 }
 
 
@@ -5022,7 +5017,7 @@ gint camera_accumulator_get_photos (CameraAccumulator* self) {
 	result = _tmp0_;
 #line 405 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5025 "ImportPage.c"
+#line 5020 "ImportPage.c"
 }
 
 
@@ -5036,7 +5031,7 @@ static void camera_accumulator_set_photos (CameraAccumulator* self, gint value) 
 	self->priv->_photos = _tmp0_;
 #line 405 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_notify ((GObject *) self, "photos");
-#line 5039 "ImportPage.c"
+#line 5034 "ImportPage.c"
 }
 
 
@@ -5051,7 +5046,7 @@ gint camera_accumulator_get_videos (CameraAccumulator* self) {
 	result = _tmp0_;
 #line 406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5054 "ImportPage.c"
+#line 5049 "ImportPage.c"
 }
 
 
@@ -5065,7 +5060,7 @@ static void camera_accumulator_set_videos (CameraAccumulator* self, gint value) 
 	self->priv->_videos = _tmp0_;
 #line 406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_notify ((GObject *) self, "videos");
-#line 5068 "ImportPage.c"
+#line 5063 "ImportPage.c"
 }
 
 
@@ -5080,7 +5075,7 @@ gint camera_accumulator_get_raw (CameraAccumulator* self) {
 	result = _tmp0_;
 #line 407 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5083 "ImportPage.c"
+#line 5078 "ImportPage.c"
 }
 
 
@@ -5094,7 +5089,7 @@ static void camera_accumulator_set_raw (CameraAccumulator* self, gint value) {
 	self->priv->_raw = _tmp0_;
 #line 407 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_notify ((GObject *) self, "raw");
-#line 5097 "ImportPage.c"
+#line 5092 "ImportPage.c"
 }
 
 
@@ -5117,7 +5112,7 @@ static void camera_accumulator_class_init (CameraAccumulatorClass * klass) {
 	g_object_class_install_property (G_OBJECT_CLASS (klass), CAMERA_ACCUMULATOR_VIDEOS, g_param_spec_int ("videos", "videos", "videos", G_MININT, G_MAXINT, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), CAMERA_ACCUMULATOR_RAW, g_param_spec_int ("raw", "raw", "raw", G_MININT, G_MAXINT, 0, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-#line 5120 "ImportPage.c"
+#line 5115 "ImportPage.c"
 }
 
 
@@ -5130,7 +5125,7 @@ static void camera_accumulator_core_tracker_accumulator_interface_init (CoreTrac
 	iface->uninclude = (gboolean (*)(CoreTrackerAccumulator*, DataObject*)) camera_accumulator_real_uninclude;
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	iface->altered = (gboolean (*)(CoreTrackerAccumulator*, DataObject*, Alteration*)) camera_accumulator_real_altered;
-#line 5133 "ImportPage.c"
+#line 5128 "ImportPage.c"
 }
 
 
@@ -5145,7 +5140,7 @@ static void camera_accumulator_instance_init (CameraAccumulator * self) {
 	self->priv->_videos = 0;
 #line 407 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->_raw = 0;
-#line 5148 "ImportPage.c"
+#line 5143 "ImportPage.c"
 }
 
 
@@ -5155,7 +5150,7 @@ static void camera_accumulator_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_CAMERA_ACCUMULATOR, CameraAccumulator);
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (camera_accumulator_parent_class)->finalize (obj);
-#line 5158 "ImportPage.c"
+#line 5153 "ImportPage.c"
 }
 
 
@@ -5202,13 +5197,13 @@ static void _vala_camera_accumulator_get_property (GObject * object, guint prope
 		g_value_set_int (value, camera_accumulator_get_raw (self));
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		break;
-#line 5205 "ImportPage.c"
+#line 5200 "ImportPage.c"
 		default:
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		break;
-#line 5211 "ImportPage.c"
+#line 5206 "ImportPage.c"
 	}
 }
 
@@ -5242,13 +5237,13 @@ static void _vala_camera_accumulator_set_property (GObject * object, guint prope
 		camera_accumulator_set_raw (self, g_value_get_int (value));
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		break;
-#line 5245 "ImportPage.c"
+#line 5240 "ImportPage.c"
 		default:
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		break;
-#line 5251 "ImportPage.c"
+#line 5246 "ImportPage.c"
 	}
 }
 
@@ -5256,7 +5251,7 @@ static void _vala_camera_accumulator_set_property (GObject * object, guint prope
 static void _import_page_on_media_added_removed_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
 #line 766 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_media_added_removed ((ImportPage*) self);
-#line 5259 "ImportPage.c"
+#line 5254 "ImportPage.c"
 }
 
 
@@ -5272,12 +5267,40 @@ GType import_page_refresh_result_get_type (void) {
 }
 
 
+static void _import_page_on_import_selected_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 868 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	import_page_on_import_selected ((ImportPage*) self);
+#line 5273 "ImportPage.c"
+}
+
+
+static void _import_page_on_import_all_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 868 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	import_page_on_import_all ((ImportPage*) self);
+#line 5280 "ImportPage.c"
+}
+
+
+static void _page_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 868 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	page_on_action_toggle ((Page*) self, action, parameter);
+#line 5287 "ImportPage.c"
+}
+
+
+static void _import_page_on_display_titles_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 868 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	import_page_on_display_titles ((ImportPage*) self, action, value);
+#line 5294 "ImportPage.c"
+}
+
+
 static gint64 _import_page_preview_comparator_comparator (void* a, void* b, gpointer self) {
 	gint64 result;
 	result = import_page_preview_comparator (a, b);
 #line 747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5280 "ImportPage.c"
+#line 5303 "ImportPage.c"
 }
 
 
@@ -5286,28 +5309,28 @@ static gboolean _import_page_preview_comparator_predicate_comparator_predicate (
 	result = import_page_preview_comparator_predicate (object, alteration);
 #line 747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5289 "ImportPage.c"
+#line 5312 "ImportPage.c"
 }
 
 
 static void _import_page_on_view_changed_view_collection_items_state_changed (ViewCollection* _sender, GeeIterable* changed, gpointer self) {
 #line 750 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed ((ImportPage*) self);
-#line 5296 "ImportPage.c"
+#line 5319 "ImportPage.c"
 }
 
 
 static void _import_page_on_view_changed_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
 #line 751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed ((ImportPage*) self);
-#line 5303 "ImportPage.c"
+#line 5326 "ImportPage.c"
 }
 
 
 static void _import_page_on_view_changed_view_collection_items_visibility_changed (ViewCollection* _sender, GeeCollection* changed, gpointer self) {
 #line 752 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed ((ImportPage*) self);
-#line 5310 "ImportPage.c"
+#line 5333 "ImportPage.c"
 }
 
 
@@ -5416,7 +5439,7 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 	_tmp14_ = display_name;
 #line 719 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (NULL != _tmp14_) {
-#line 5419 "ImportPage.c"
+#line 5442 "ImportPage.c"
 		const gchar* _tmp15_ = NULL;
 		gchar* _tmp16_ = NULL;
 #line 720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -5427,7 +5450,7 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 		_g_free0 (self->priv->camera_name);
 #line 720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		self->priv->camera_name = _tmp16_;
-#line 5430 "ImportPage.c"
+#line 5453 "ImportPage.c"
 	} else {
 		CameraAbilities abilities = {0};
 		int res = 0;
@@ -5449,7 +5472,7 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 		_tmp20_ = res;
 #line 724 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp20_ != GP_OK) {
-#line 5452 "ImportPage.c"
+#line 5475 "ImportPage.c"
 			int _tmp21_ = 0;
 			gchar* _tmp22_ = NULL;
 			gchar* _tmp23_ = NULL;
@@ -5473,11 +5496,11 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 			_g_free0 (self->priv->camera_name);
 #line 726 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			self->priv->camera_name = _tmp25_;
-#line 5476 "ImportPage.c"
+#line 5499 "ImportPage.c"
 		}
 #line 719 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		 (abilities);
-#line 5480 "ImportPage.c"
+#line 5503 "ImportPage.c"
 	}
 #line 729 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp26_ = self->priv->camera_label;
@@ -5499,7 +5522,7 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 	_tmp30_ = import_page_null_context;
 #line 736 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp30_ == NULL) {
-#line 5502 "ImportPage.c"
+#line 5525 "ImportPage.c"
 		GPContextWrapper* _tmp31_ = NULL;
 #line 737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp31_ = gp_context_wrapper_new ();
@@ -5507,13 +5530,13 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 		_gp_context_wrapper_unref0 (import_page_null_context);
 #line 737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_null_context = _tmp31_;
-#line 5510 "ImportPage.c"
+#line 5533 "ImportPage.c"
 	}
 #line 740 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp32_ = import_page_spin_idle_context;
 #line 740 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp32_ == NULL) {
-#line 5516 "ImportPage.c"
+#line 5539 "ImportPage.c"
 		GPSpinIdleWrapper* _tmp33_ = NULL;
 #line 741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp33_ = gp_spin_idle_wrapper_new ();
@@ -5521,7 +5544,7 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 		_gp_context_wrapper_unref0 (import_page_spin_idle_context);
 #line 741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_spin_idle_context = _tmp33_;
-#line 5524 "ImportPage.c"
+#line 5547 "ImportPage.c"
 	}
 #line 744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp34_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
@@ -5603,21 +5626,21 @@ ImportPage* import_page_construct (GType object_type, Camera* camera, const gcha
 	checkerboard_page_init_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/ImportContextMenu");
 #line 709 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 5606 "ImportPage.c"
+#line 5629 "ImportPage.c"
 }
 
 
 ImportPage* import_page_new (Camera* camera, const gchar* uri, const gchar* display_name, const gchar* icon) {
 #line 709 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_page_construct (TYPE_IMPORT_PAGE, camera, uri, display_name, icon);
-#line 5613 "ImportPage.c"
+#line 5636 "ImportPage.c"
 }
 
 
 static void _import_page_on_hide_imported_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 777 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_hide_imported ((ImportPage*) self);
-#line 5620 "ImportPage.c"
+#line 5643 "ImportPage.c"
 }
 
 
@@ -5625,15 +5648,15 @@ static GtkToolbar* import_page_real_get_toolbar (Page* base) {
 	ImportPage * self;
 	GtkToolbar* result = NULL;
 	GtkToolbar* _tmp0_ = NULL;
-	GtkToolbar* _tmp56_ = NULL;
-	GtkToolbar* _tmp57_ = NULL;
+	GtkToolbar* _tmp50_ = NULL;
+	GtkToolbar* _tmp51_ = NULL;
 #line 770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
 #line 771 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
 #line 771 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ == NULL) {
-#line 5636 "ImportPage.c"
+#line 5659 "ImportPage.c"
 		GtkToolbar* _tmp1_ = NULL;
 		GtkToolbar* _tmp2_ = NULL;
 		const gchar* _tmp3_ = NULL;
@@ -5671,30 +5694,24 @@ static GtkToolbar* import_page_real_get_toolbar (Page* base) {
 		GtkToggleToolButton* find_button = NULL;
 		GtkToggleToolButton* _tmp32_ = NULL;
 		GtkToggleToolButton* _tmp33_ = NULL;
-		GtkAction* _tmp34_ = NULL;
-		GtkAction* _tmp35_ = NULL;
+		GtkToolbar* _tmp34_ = NULL;
+		GtkToggleToolButton* _tmp35_ = NULL;
 		GtkToolbar* _tmp36_ = NULL;
-		GtkToggleToolButton* _tmp37_ = NULL;
-		GtkToolbar* _tmp38_ = NULL;
-		GtkSeparatorToolItem* _tmp39_ = NULL;
-		GtkSeparatorToolItem* _tmp40_ = NULL;
+		GtkSeparatorToolItem* _tmp37_ = NULL;
+		GtkSeparatorToolItem* _tmp38_ = NULL;
 		GtkToolButton* import_selected_button = NULL;
+		GtkToolButton* _tmp39_ = NULL;
+		GtkToolButton* _tmp40_ = NULL;
 		GtkToolButton* _tmp41_ = NULL;
-		GtkToolButton* _tmp42_ = NULL;
+		GtkToolbar* _tmp42_ = NULL;
 		GtkToolButton* _tmp43_ = NULL;
-		GtkAction* _tmp44_ = NULL;
-		GtkAction* _tmp45_ = NULL;
-		GtkToolbar* _tmp46_ = NULL;
-		GtkToolButton* _tmp47_ = NULL;
 		GtkToolButton* import_all_button = NULL;
+		GtkToolButton* _tmp44_ = NULL;
+		GtkToolButton* _tmp45_ = NULL;
+		GtkToolButton* _tmp46_ = NULL;
+		GtkToolbar* _tmp47_ = NULL;
 		GtkToolButton* _tmp48_ = NULL;
-		GtkToolButton* _tmp49_ = NULL;
-		GtkToolButton* _tmp50_ = NULL;
-		GtkAction* _tmp51_ = NULL;
-		GtkAction* _tmp52_ = NULL;
-		GtkToolbar* _tmp53_ = NULL;
-		GtkToolButton* _tmp54_ = NULL;
-		GtkProgressBar* _tmp55_ = NULL;
+		GtkProgressBar* _tmp49_ = NULL;
 #line 772 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = PAGE_CLASS (import_page_parent_class)->get_toolbar (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
 #line 772 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -5818,87 +5835,69 @@ static GtkToolbar* import_page_real_get_toolbar (Page* base) {
 #line 804 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp33_ = find_button;
 #line 804 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp34_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonDisplaySearchbar");
-#line 804 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp35_ = _tmp34_;
-#line 804 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_activatable_set_related_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, GTK_TYPE_ACTIVATABLE, GtkActivatable), _tmp35_);
-#line 804 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (_tmp35_);
+		gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, GTK_TYPE_ACTIONABLE, GtkActionable), "win.CommonDisplaySearchbar");
 #line 806 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp34_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
+#line 806 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp35_ = find_button;
+#line 806 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		gtk_toolbar_insert (_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp36_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
-#line 806 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp37_ = find_button;
-#line 806 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_toolbar_insert (_tmp36_, G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_tool_item_get_type (), GtkToolItem), -1);
 #line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp38_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
+		_tmp37_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
 #line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp39_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
+		g_object_ref_sink (_tmp37_);
 #line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp38_ = _tmp37_;
+#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		gtk_toolbar_insert (_tmp36_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_g_object_unref0 (_tmp38_);
+#line 812 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp39_ = (GtkToolButton*) gtk_tool_button_new (NULL, NULL);
+#line 812 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_object_ref_sink (_tmp39_);
-#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp40_ = _tmp39_;
-#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_toolbar_insert (_tmp38_, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 809 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (_tmp40_);
 #line 812 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp41_ = (GtkToolButton*) gtk_tool_button_new (NULL, NULL);
-#line 812 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_object_ref_sink (_tmp41_);
-#line 812 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		import_selected_button = _tmp41_;
+		import_selected_button = _tmp39_;
 #line 813 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp42_ = import_selected_button;
+		_tmp40_ = import_selected_button;
 #line 813 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_tool_button_set_icon_name (_tmp42_, RESOURCES_IMPORT);
+		gtk_tool_button_set_icon_name (_tmp40_, RESOURCES_IMPORT);
 #line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp41_ = import_selected_button;
+#line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, GTK_TYPE_ACTIONABLE, GtkActionable), "win.ImportSelected");
+#line 816 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp42_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
+#line 816 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp43_ = import_selected_button;
-#line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp44_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportSelected");
-#line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp45_ = _tmp44_;
-#line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_activatable_set_related_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, GTK_TYPE_ACTIVATABLE, GtkActivatable), _tmp45_);
-#line 814 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (_tmp45_);
 #line 816 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp46_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
-#line 816 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp47_ = import_selected_button;
-#line 816 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_toolbar_insert (_tmp46_, G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_tool_item_get_type (), GtkToolItem), -1);
+		gtk_toolbar_insert (_tmp42_, G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_tool_item_get_type (), GtkToolItem), -1);
 #line 819 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp48_ = (GtkToolButton*) gtk_tool_button_new (NULL, NULL);
+		_tmp44_ = (GtkToolButton*) gtk_tool_button_new (NULL, NULL);
 #line 819 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_object_ref_sink (_tmp48_);
+		g_object_ref_sink (_tmp44_);
 #line 819 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		import_all_button = _tmp48_;
+		import_all_button = _tmp44_;
 #line 820 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp49_ = import_all_button;
+		_tmp45_ = import_all_button;
 #line 820 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_tool_button_set_icon_name (_tmp49_, RESOURCES_IMPORT_ALL);
+		gtk_tool_button_set_icon_name (_tmp45_, RESOURCES_IMPORT_ALL);
 #line 821 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp50_ = import_all_button;
+		_tmp46_ = import_all_button;
 #line 821 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp51_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportAll");
-#line 821 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp52_ = _tmp51_;
-#line 821 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_activatable_set_related_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, GTK_TYPE_ACTIVATABLE, GtkActivatable), _tmp52_);
-#line 821 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (_tmp52_);
+		gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, GTK_TYPE_ACTIONABLE, GtkActionable), "win.ImportAll");
 #line 823 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp53_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
+		_tmp47_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
 #line 823 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp54_ = import_all_button;
+		_tmp48_ = import_all_button;
 #line 823 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_toolbar_insert (_tmp53_, G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, gtk_tool_item_get_type (), GtkToolItem), -1);
+		gtk_toolbar_insert (_tmp47_, G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_tool_item_get_type (), GtkToolItem), -1);
 #line 827 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp55_ = self->priv->progress_bar;
+		_tmp49_ = self->priv->progress_bar;
 #line 827 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_widget_set_no_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, gtk_widget_get_type (), GtkWidget), TRUE);
+		gtk_widget_set_no_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 829 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_update_toolbar_state (self);
 #line 831 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -5915,24 +5914,24 @@ static GtkToolbar* import_page_real_get_toolbar (Page* base) {
 		_g_object_unref0 (separator);
 #line 771 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (hide_item);
-#line 5918 "ImportPage.c"
+#line 5917 "ImportPage.c"
 	}
 #line 834 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp56_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
+	_tmp50_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->toolbar;
 #line 834 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp57_ = _g_object_ref0 (_tmp56_);
+	_tmp51_ = _g_object_ref0 (_tmp50_);
 #line 834 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	result = _tmp57_;
+	result = _tmp51_;
 #line 834 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5928 "ImportPage.c"
+#line 5927 "ImportPage.c"
 }
 
 
 static gpointer _core_tracker_ref0 (gpointer self) {
 #line 838 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? core_tracker_ref (self) : NULL;
-#line 5935 "ImportPage.c"
+#line 5934 "ImportPage.c"
 }
 
 
@@ -5951,7 +5950,7 @@ static CoreViewTracker* import_page_real_get_view_tracker (CheckerboardPage* bas
 	result = _tmp1_;
 #line 838 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5954 "ImportPage.c"
+#line 5953 "ImportPage.c"
 }
 
 
@@ -5970,7 +5969,7 @@ static gchar* import_page_real_get_view_empty_message (CheckerboardPage* base) {
 	result = _tmp1_;
 #line 842 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5973 "ImportPage.c"
+#line 5972 "ImportPage.c"
 }
 
 
@@ -5989,7 +5988,7 @@ static gchar* import_page_real_get_filter_no_match_message (CheckerboardPage* ba
 	result = _tmp1_;
 #line 846 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 5992 "ImportPage.c"
+#line 5991 "ImportPage.c"
 }
 
 
@@ -6030,7 +6029,7 @@ static gint64 import_page_preview_comparator (void* a, void* b) {
 	result = _tmp8_;
 #line 850 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6033 "ImportPage.c"
+#line 6032 "ImportPage.c"
 }
 
 
@@ -6050,7 +6049,7 @@ static gboolean import_page_preview_comparator_predicate (DataObject* object, Al
 	result = _tmp1_;
 #line 855 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6053 "ImportPage.c"
+#line 6052 "ImportPage.c"
 }
 
 
@@ -6074,7 +6073,7 @@ static gint64 import_page_import_job_comparator (ImportPage* self, void* a, void
 	result = (gint64) (_tmp1_ - _tmp3_);
 #line 859 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6077 "ImportPage.c"
+#line 6076 "ImportPage.c"
 }
 
 
@@ -6094,276 +6093,69 @@ static void import_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_
 	_tmp1_ = ui_filenames;
 #line 865 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_COLLECTION, GeeCollection), "import.ui");
-#line 6097 "ImportPage.c"
+#line 6096 "ImportPage.c"
 }
 
 
-static void _import_page_on_display_titles_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_page_on_display_titles ((ImportPage*) self, action);
-#line 6104 "ImportPage.c"
-}
-
-
-static void _vala_array_add143 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if ((*length) == (*size)) {
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 6115 "ImportPage.c"
-	}
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	(*array)[(*length)++] = *value;
-#line 6119 "ImportPage.c"
-}
-
-
-static GtkToggleActionEntry* import_page_real_init_collect_toggle_action_entries (Page* base, int* result_length1) {
-	ImportPage * self;
-	GtkToggleActionEntry* result = NULL;
-	GtkToggleActionEntry* toggle_actions = NULL;
-	gint _tmp0_ = 0;
-	GtkToggleActionEntry* _tmp1_ = NULL;
-	gint toggle_actions_length1 = 0;
-	gint _toggle_actions_size_ = 0;
-	GtkToggleActionEntry titles = {0};
-	ConfigFacade* _tmp2_ = NULL;
-	ConfigFacade* _tmp3_ = NULL;
-	gboolean _tmp4_ = FALSE;
-	GtkToggleActionEntry _tmp5_ = {0};
-	GtkToggleActionEntry _tmp6_ = {0};
-	const gchar* _tmp7_ = NULL;
-	const gchar* _tmp8_ = NULL;
-	GtkToggleActionEntry* _tmp9_ = NULL;
-	gint _tmp9__length1 = 0;
-	GtkToggleActionEntry _tmp10_ = {0};
-	GtkToggleActionEntry* _tmp11_ = NULL;
-	gint _tmp11__length1 = 0;
-#line 868 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 869 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp1_ = PAGE_CLASS (import_page_parent_class)->init_collect_toggle_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 869 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	toggle_actions = _tmp1_;
-#line 869 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	toggle_actions_length1 = _tmp0_;
-#line 869 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_toggle_actions_size_ = toggle_actions_length1;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_ = config_facade_get_instance ();
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp3_ = _tmp2_;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp4_ = configuration_facade_get_display_photo_titles (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.name = "ViewTitle";
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.stock_id = NULL;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.accelerator = "<Ctrl><Shift>T";
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.tooltip = TRANSLATABLE;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.callback = (GCallback) _import_page_on_display_titles_gtk_action_callback;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_.is_active = _tmp4_;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp6_ = _tmp5_;
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_g_object_unref0 (_tmp3_);
-#line 871 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	titles = _tmp6_;
-#line 873 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_ = _ ("_Titles");
-#line 873 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	titles.label = _tmp7_;
-#line 874 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp8_ = _ ("Display the title of each photo");
-#line 874 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	titles.tooltip = _tmp8_;
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp9_ = toggle_actions;
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp9__length1 = toggle_actions_length1;
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp10_ = titles;
-#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_vala_array_add143 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp10_);
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp11_ = toggle_actions;
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp11__length1 = toggle_actions_length1;
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if (result_length1) {
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*result_length1 = _tmp11__length1;
-#line 6204 "ImportPage.c"
-	}
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	result = _tmp11_;
-#line 877 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	return result;
-#line 6210 "ImportPage.c"
-}
-
-
-static void _import_page_on_import_selected_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_page_on_import_selected ((ImportPage*) self);
-#line 6217 "ImportPage.c"
-}
-
-
-static void _vala_array_add144 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if ((*length) == (*size)) {
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 6228 "ImportPage.c"
-	}
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	(*array)[(*length)++] = *value;
-#line 6232 "ImportPage.c"
-}
-
-
-static void _import_page_on_import_all_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_page_on_import_all ((ImportPage*) self);
-#line 6239 "ImportPage.c"
-}
-
-
-static void _vala_array_add145 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if ((*length) == (*size)) {
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 6250 "ImportPage.c"
-	}
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	(*array)[(*length)++] = *value;
-#line 6254 "ImportPage.c"
-}
-
-
-static GtkActionEntry* import_page_real_init_collect_action_entries (Page* base, int* result_length1) {
-	ImportPage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry import_selected = {0};
-	GtkActionEntry _tmp2_ = {0};
-	const gchar* _tmp3_ = NULL;
-	const gchar* _tmp4_ = NULL;
-	GtkActionEntry* _tmp5_ = NULL;
-	gint _tmp5__length1 = 0;
-	GtkActionEntry _tmp6_ = {0};
-	GtkActionEntry import_all = {0};
-	GtkActionEntry _tmp7_ = {0};
-	const gchar* _tmp8_ = NULL;
-	const gchar* _tmp9_ = NULL;
-	GtkActionEntry* _tmp10_ = NULL;
-	gint _tmp10__length1 = 0;
-	GtkActionEntry _tmp11_ = {0};
-	GtkActionEntry* _tmp12_ = NULL;
-	gint _tmp12__length1 = 0;
+static GVariant* _variant_new11 (gboolean value) {
 #line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 6103 "ImportPage.c"
+}
+
+
+static void import_page_real_add_actions (Page* base) {
+	ImportPage * self;
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+	GAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+	GSimpleAction* _tmp4_ = NULL;
+	ConfigFacade* _tmp5_ = NULL;
+	ConfigFacade* _tmp6_ = NULL;
+	gboolean _tmp7_ = FALSE;
+	GVariant* _tmp8_ = NULL;
+#line 875 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 881 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp1_ = PAGE_CLASS (import_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 881 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	actions = _tmp1_;
-#line 881 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	actions_length1 = _tmp0_;
-#line 881 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_actions_size_ = actions_length1;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.name = "ImportSelected";
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.stock_id = RESOURCES_IMPORT;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.accelerator = NULL;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.tooltip = NULL;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_.callback = (GCallback) _import_page_on_import_selected_gtk_action_callback;
-#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_selected = _tmp2_;
-#line 885 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp3_ = _ ("Import _Selected");
-#line 885 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_selected.label = _tmp3_;
-#line 886 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp4_ = _ ("Import the selected photos into your library");
-#line 886 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_selected.tooltip = _tmp4_;
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5_ = actions;
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp5__length1 = actions_length1;
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp6_ = import_selected;
-#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_vala_array_add144 (&actions, &actions_length1, &_actions_size_, &_tmp6_);
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.name = "ImportAll";
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.stock_id = RESOURCES_IMPORT_ALL;
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.label = TRANSLATABLE;
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.accelerator = NULL;
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.tooltip = NULL;
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp7_.callback = (GCallback) _import_page_on_import_all_gtk_action_callback;
-#line 889 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_all = _tmp7_;
-#line 891 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp8_ = _ ("Import _All");
-#line 891 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_all.label = _tmp8_;
-#line 892 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp9_ = _ ("Import all the photos into your library");
-#line 892 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	import_all.tooltip = _tmp9_;
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp10_ = actions;
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp10__length1 = actions_length1;
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp11_ = import_all;
-#line 893 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_vala_array_add145 (&actions, &actions_length1, &_actions_size_, &_tmp11_);
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp12_ = actions;
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp12__length1 = actions_length1;
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if (result_length1) {
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		*result_length1 = _tmp12__length1;
-#line 6360 "ImportPage.c"
+#line 876 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	PAGE_CLASS (import_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
+#line 878 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp0_ = app_window_get_instance ();
+#line 878 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp1_ = _tmp0_;
+#line 878 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), IMPORT_PAGE_entries, G_N_ELEMENTS (IMPORT_PAGE_entries), self);
+#line 878 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_g_object_unref0 (_tmp1_);
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp2_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ViewTitle");
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp2_) : NULL;
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	if (_tmp3_ == NULL) {
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_g_object_unref0 (_tmp2_);
+#line 6138 "ImportPage.c"
 	}
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	result = _tmp12_;
-#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	return result;
-#line 6366 "ImportPage.c"
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp4_ = _tmp3_;
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp5_ = config_facade_get_instance ();
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp6_ = _tmp5_;
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp7_ = configuration_facade_get_display_photo_titles (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp8_ = _variant_new11 (_tmp7_);
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_simple_action_set_state (_tmp4_, _tmp8_);
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_g_variant_unref0 (_tmp8_);
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_g_object_unref0 (_tmp6_);
+#line 880 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_g_object_unref0 (_tmp4_);
+#line 6158 "ImportPage.c"
 }
 
 
@@ -6371,17 +6163,17 @@ Camera* import_page_get_camera (ImportPage* self) {
 	Camera* result = NULL;
 	Camera* _tmp0_ = NULL;
 	Camera* _tmp1_ = NULL;
-#line 898 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 883 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), NULL);
-#line 899 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 884 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->camera;
-#line 899 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 884 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _GPHOTO_REF_CAMERA0 (_tmp0_);
-#line 899 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 884 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp1_;
-#line 899 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 884 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6384 "ImportPage.c"
+#line 6176 "ImportPage.c"
 }
 
 
@@ -6389,32 +6181,32 @@ gchar* import_page_get_uri (ImportPage* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 902 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 887 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), NULL);
-#line 903 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 888 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->uri;
-#line 903 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 888 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 903 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 888 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp1_;
-#line 903 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 888 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6402 "ImportPage.c"
+#line 6194 "ImportPage.c"
 }
 
 
 gboolean import_page_is_busy (ImportPage* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 906 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 891 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), FALSE);
-#line 907 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 892 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->busy;
-#line 907 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 892 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp0_;
-#line 907 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 892 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6417 "ImportPage.c"
+#line 6209 "ImportPage.c"
 }
 
 
@@ -6422,21 +6214,21 @@ static void import_page_real_init_actions (Page* base, gint selected_count, gint
 	ImportPage * self;
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 910 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 895 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 911 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 896 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 913 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 898 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportSelected", TRUE);
-#line 914 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 899 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportAll", TRUE);
-#line 916 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 901 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = selected_count;
-#line 916 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 901 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = count;
-#line 916 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 901 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	PAGE_CLASS (import_page_parent_class)->init_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp0_, _tmp1_);
-#line 6439 "ImportPage.c"
+#line 6231 "ImportPage.c"
 }
 
 
@@ -6444,29 +6236,29 @@ gboolean import_page_is_refreshed (ImportPage* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 919 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 904 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), FALSE);
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->refreshed;
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_) {
-#line 6453 "ImportPage.c"
+#line 6245 "ImportPage.c"
 		gboolean _tmp2_ = FALSE;
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = self->priv->busy;
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = !_tmp2_;
-#line 6459 "ImportPage.c"
+#line 6251 "ImportPage.c"
 	} else {
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = FALSE;
-#line 6463 "ImportPage.c"
+#line 6255 "ImportPage.c"
 	}
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp0_;
-#line 920 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 905 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6469 "ImportPage.c"
+#line 6261 "ImportPage.c"
 }
 
 
@@ -6474,130 +6266,130 @@ gchar* import_page_get_refresh_message (ImportPage* self) {
 	gchar* result = NULL;
 	gchar* msg = NULL;
 	const gchar* _tmp0_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 908 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), NULL);
-#line 924 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 909 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	msg = NULL;
-#line 925 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 910 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->refresh_error;
-#line 925 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 910 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ != NULL) {
-#line 6485 "ImportPage.c"
+#line 6277 "ImportPage.c"
 		const gchar* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
-#line 926 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 911 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = self->priv->refresh_error;
-#line 926 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 911 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = g_strdup (_tmp1_);
-#line 926 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 911 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (msg);
-#line 926 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 911 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		msg = _tmp2_;
-#line 6496 "ImportPage.c"
+#line 6288 "ImportPage.c"
 	} else {
 		int _tmp3_ = 0;
-#line 927 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 912 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = self->priv->refresh_result;
-#line 927 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 912 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp3_ == GP_OK) {
-#line 6503 "ImportPage.c"
+#line 6295 "ImportPage.c"
 		} else {
 			int _tmp4_ = 0;
 			gchar* _tmp5_ = NULL;
-#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 915 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp4_ = self->priv->refresh_result;
-#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 915 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp5_ = gp_result_to_full_string (_tmp4_);
-#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 915 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (msg);
-#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 915 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			msg = _tmp5_;
-#line 6515 "ImportPage.c"
+#line 6307 "ImportPage.c"
 		}
 	}
-#line 933 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 918 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = msg;
-#line 933 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 918 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 6522 "ImportPage.c"
+#line 6314 "ImportPage.c"
 }
 
 
 static void import_page_update_status (ImportPage* self, gboolean busy, gboolean refreshed) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 921 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 937 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 922 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = busy;
-#line 937 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 922 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->busy = _tmp0_;
-#line 938 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 923 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = refreshed;
-#line 938 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 923 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refreshed = _tmp1_;
-#line 940 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 925 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 6541 "ImportPage.c"
+#line 6333 "ImportPage.c"
 }
 
 
 static void import_page_update_toolbar_state (ImportPage* self) {
 	GtkCheckButton* _tmp0_ = NULL;
-#line 943 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 928 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 944 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 929 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->hide_imported;
-#line 944 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 929 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_ != NULL) {
-#line 6553 "ImportPage.c"
+#line 6345 "ImportPage.c"
 		gboolean _tmp1_ = FALSE;
 		gboolean _tmp2_ = FALSE;
 		gboolean _tmp3_ = FALSE;
 		GtkCheckButton* _tmp8_ = NULL;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = self->priv->busy;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (!_tmp3_) {
-#line 6562 "ImportPage.c"
+#line 6354 "ImportPage.c"
 			gboolean _tmp4_ = FALSE;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp4_ = self->priv->refreshed;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp2_ = _tmp4_;
-#line 6568 "ImportPage.c"
+#line 6360 "ImportPage.c"
 		} else {
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp2_ = FALSE;
-#line 6572 "ImportPage.c"
+#line 6364 "ImportPage.c"
 		}
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp2_) {
-#line 6576 "ImportPage.c"
+#line 6368 "ImportPage.c"
 			ViewCollection* _tmp5_ = NULL;
 			ViewCollection* _tmp6_ = NULL;
 			gint _tmp7_ = 0;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp6_ = _tmp5_;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = view_collection_get_unfiltered_count (_tmp6_);
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp1_ = _tmp7_ > 0;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_data_collection_unref0 (_tmp6_);
-#line 6590 "ImportPage.c"
+#line 6382 "ImportPage.c"
 		} else {
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp1_ = FALSE;
-#line 6594 "ImportPage.c"
+#line 6386 "ImportPage.c"
 		}
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = self->priv->hide_imported;
-#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 930 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), _tmp1_);
-#line 6600 "ImportPage.c"
+#line 6392 "ImportPage.c"
 	}
 }
 
@@ -6611,167 +6403,167 @@ static void import_page_on_view_changed (ImportPage* self) {
 	gboolean _tmp9_ = FALSE;
 	gboolean _tmp14_ = FALSE;
 	gboolean _tmp15_ = FALSE;
-	AppWindow* _tmp19_ = NULL;
-	AppWindow* _tmp20_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 933 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->busy;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (!_tmp2_) {
-#line 6622 "ImportPage.c"
+#line 6412 "ImportPage.c"
 		gboolean _tmp3_ = FALSE;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = self->priv->refreshed;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = _tmp3_;
-#line 6628 "ImportPage.c"
+#line 6418 "ImportPage.c"
 	} else {
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = FALSE;
-#line 6632 "ImportPage.c"
+#line 6422 "ImportPage.c"
 	}
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_) {
-#line 6636 "ImportPage.c"
+#line 6426 "ImportPage.c"
 		ViewCollection* _tmp4_ = NULL;
 		ViewCollection* _tmp5_ = NULL;
 		gint _tmp6_ = 0;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = _tmp4_;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = view_collection_get_selected_count (_tmp5_);
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp6_ > 0;
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 6650 "ImportPage.c"
+#line 6440 "ImportPage.c"
 	} else {
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = FALSE;
-#line 6654 "ImportPage.c"
+#line 6444 "ImportPage.c"
 	}
-#line 949 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 934 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportSelected", _tmp0_);
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = self->priv->busy;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (!_tmp9_) {
-#line 6662 "ImportPage.c"
+#line 6452 "ImportPage.c"
 		gboolean _tmp10_ = FALSE;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = self->priv->refreshed;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = _tmp10_;
-#line 6668 "ImportPage.c"
+#line 6458 "ImportPage.c"
 	} else {
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = FALSE;
-#line 6672 "ImportPage.c"
+#line 6462 "ImportPage.c"
 	}
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp8_) {
-#line 6676 "ImportPage.c"
+#line 6466 "ImportPage.c"
 		ViewCollection* _tmp11_ = NULL;
 		ViewCollection* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp11_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = _tmp11_;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp13_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_DATA_COLLECTION, DataCollection));
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = _tmp13_ > 0;
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_data_collection_unref0 (_tmp12_);
-#line 6690 "ImportPage.c"
+#line 6480 "ImportPage.c"
 	} else {
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = FALSE;
-#line 6694 "ImportPage.c"
+#line 6484 "ImportPage.c"
 	}
-#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 935 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ImportAll", _tmp7_);
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp15_ = self->priv->busy;
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (!_tmp15_) {
-#line 6702 "ImportPage.c"
+#line 6492 "ImportPage.c"
 		ViewCollection* _tmp16_ = NULL;
 		ViewCollection* _tmp17_ = NULL;
 		gint _tmp18_ = 0;
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp16_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp17_ = _tmp16_;
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp18_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, TYPE_DATA_COLLECTION, DataCollection));
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp14_ = _tmp18_ > 0;
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_data_collection_unref0 (_tmp17_);
-#line 6716 "ImportPage.c"
+#line 6506 "ImportPage.c"
 	} else {
-#line 952 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp14_ = FALSE;
-#line 6720 "ImportPage.c"
+#line 6510 "ImportPage.c"
 	}
-#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp19_ = app_window_get_instance ();
-#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp20_ = _tmp19_;
-#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	app_window_set_common_action_sensitive (_tmp20_, "CommonSelectAll", _tmp14_);
-#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_g_object_unref0 (_tmp20_);
-#line 954 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 936 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonSelectAll", _tmp14_);
+#line 938 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_toolbar_state (self);
-#line 6732 "ImportPage.c"
+#line 6516 "ImportPage.c"
 }
 
 
 static void import_page_on_media_added_removed (ImportPage* self) {
 	ImportPageImportPageSearchViewFilter* _tmp0_ = NULL;
-#line 957 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 941 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 958 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 942 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 958 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 942 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIEW_FILTER, ViewFilter), "refresh");
-#line 6744 "ImportPage.c"
+#line 6528 "ImportPage.c"
 }
 
 
-static void import_page_on_display_titles (ImportPage* self, GtkAction* action) {
+static void import_page_on_display_titles (ImportPage* self, GSimpleAction* action, GVariant* value) {
 	gboolean display = FALSE;
-	GtkAction* _tmp0_ = NULL;
+	GVariant* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	ConfigFacade* _tmp2_ = NULL;
 	ConfigFacade* _tmp3_ = NULL;
-#line 961 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	GSimpleAction* _tmp4_ = NULL;
+	GVariant* _tmp5_ = NULL;
+#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 961 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 962 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp0_ = action;
-#line 962 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 962 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 945 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 946 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp0_ = value;
+#line 946 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp1_ = g_variant_get_boolean (_tmp0_);
+#line 946 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	display = _tmp1_;
-#line 964 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 948 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	checkerboard_page_set_display_titles (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), display);
-#line 965 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = config_facade_get_instance ();
-#line 965 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = _tmp2_;
-#line 965 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	configuration_facade_set_display_photo_titles (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), display);
-#line 965 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 950 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 6774 "ImportPage.c"
+#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp4_ = action;
+#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp5_ = value;
+#line 951 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_simple_action_set_state (_tmp4_, _tmp5_);
+#line 6566 "ImportPage.c"
 }
 
 
@@ -6780,36 +6572,36 @@ static void import_page_real_switched_to (Page* base) {
 	ConfigFacade* _tmp0_ = NULL;
 	ConfigFacade* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 968 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 954 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 969 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 955 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 969 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 955 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _tmp0_;
-#line 969 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 955 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = configuration_facade_get_display_photo_titles (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 969 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 955 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	checkerboard_page_set_display_titles (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp2_);
-#line 969 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 955 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 957 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	PAGE_CLASS (import_page_parent_class)->switched_to (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
-#line 6797 "ImportPage.c"
+#line 6589 "ImportPage.c"
 }
 
 
 static void import_page_real_ready (Page* base) {
 	ImportPage * self;
 	ImportPageHideImportedViewFilter* _tmp0_ = NULL;
-#line 974 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 960 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 975 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 961 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_try_refreshing_camera (self, FALSE);
-#line 976 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 962 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->hide_imported_filter;
-#line 976 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 962 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIEW_FILTER, ViewFilter), "refresh");
-#line 6812 "ImportPage.c"
+#line 6604 "ImportPage.c"
 }
 
 
@@ -6820,50 +6612,50 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 	ImportPageRefreshResult _tmp3_ = 0;
 	ImportPageRefreshResult _tmp4_ = 0;
 	GError * _inner_error_ = NULL;
-#line 979 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 965 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->refreshed;
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_) {
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = TRUE;
-#line 6831 "ImportPage.c"
+#line 6623 "ImportPage.c"
 	} else {
 		gboolean _tmp2_ = FALSE;
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = self->priv->busy;
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp2_;
-#line 6838 "ImportPage.c"
+#line 6630 "ImportPage.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 967 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_) {
-#line 982 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 968 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return;
-#line 6844 "ImportPage.c"
+#line 6636 "ImportPage.c"
 	}
-#line 984 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 970 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = import_page_refresh_camera (self);
-#line 984 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 970 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	res = _tmp3_;
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = res;
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	switch (_tmp4_) {
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case IMPORT_PAGE_REFRESH_RESULT_OK:
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case IMPORT_PAGE_REFRESH_RESULT_BUSY:
-#line 6858 "ImportPage.c"
+#line 6650 "ImportPage.c"
 		{
-#line 990 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 976 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			break;
-#line 6862 "ImportPage.c"
+#line 6654 "ImportPage.c"
 		}
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case IMPORT_PAGE_REFRESH_RESULT_LOCKED:
-#line 6866 "ImportPage.c"
+#line 6658 "ImportPage.c"
 		{
 			gboolean _tmp5_ = FALSE;
 			const gchar* _tmp6_ = NULL;
@@ -6872,89 +6664,89 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 			GFile* _tmp8_ = NULL;
 			GMount* mount = NULL;
 			GMount* _tmp13_ = NULL;
-#line 993 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 979 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp5_ = fail_on_locked;
-#line 993 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 979 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp5_) {
-#line 994 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 980 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				app_window_error_message (IMPORT_PAGE_UNMOUNT_FAILED_MSG, NULL);
-#line 996 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 982 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				break;
-#line 6883 "ImportPage.c"
+#line 6675 "ImportPage.c"
 			}
-#line 1000 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 986 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp6_ = self->priv->uri;
-#line 1000 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-			g_debug ("ImportPage.vala:1000: Checking if %s is mounted…", _tmp6_);
-#line 1002 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 986 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+			g_debug ("ImportPage.vala:986: Checking if %s is mounted…", _tmp6_);
+#line 988 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = self->priv->uri;
-#line 1002 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 988 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp8_ = g_file_new_for_uri (_tmp7_);
-#line 1002 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 988 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			uri = _tmp8_;
-#line 1004 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 990 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			mount = NULL;
-#line 6897 "ImportPage.c"
+#line 6689 "ImportPage.c"
 			{
 				GMount* _tmp9_ = NULL;
 				GFile* _tmp10_ = NULL;
 				GMount* _tmp11_ = NULL;
 				GMount* _tmp12_ = NULL;
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp10_ = uri;
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp11_ = g_file_find_enclosing_mount (_tmp10_, NULL, &_inner_error_);
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp9_ = _tmp11_;
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6911 "ImportPage.c"
-					goto __catch63_g_error;
+#line 6703 "ImportPage.c"
+					goto __catch62_g_error;
 				}
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp12_ = _tmp9_;
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp9_ = NULL;
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (mount);
-#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 992 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				mount = _tmp12_;
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp9_);
-#line 6924 "ImportPage.c"
+#line 6716 "ImportPage.c"
 			}
-			goto __finally63;
-			__catch63_g_error:
+			goto __finally62;
+			__catch62_g_error:
 			{
 				GError* err = NULL;
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				err = _inner_error_;
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_inner_error_ = NULL;
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_error_free0 (err);
-#line 6936 "ImportPage.c"
+#line 6728 "ImportPage.c"
 			}
-			__finally63:
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+			__finally62:
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (mount);
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (uri);
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_clear_error (&_inner_error_);
-#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 991 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				return;
-#line 6951 "ImportPage.c"
+#line 6743 "ImportPage.c"
 			}
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp13_ = mount;
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp13_ != NULL) {
-#line 6957 "ImportPage.c"
+#line 6749 "ImportPage.c"
 				gchar* mounted_message = NULL;
 				const gchar* _tmp14_ = NULL;
 				gchar* _tmp15_ = NULL;
@@ -6972,73 +6764,73 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				gint _tmp25_ = 0;
 				GtkMessageDialog* _tmp26_ = NULL;
 				gint _tmp27_ = 0;
-#line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 999 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp14_ = _ ("Shotwell needs to unmount the camera from the filesystem in order to a" \
 "ccess it. Continue?");
-#line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 999 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp15_ = g_strdup (_tmp14_);
-#line 1013 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 999 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				mounted_message = _tmp15_;
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp16_ = app_window_get_instance ();
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp17_ = _tmp16_;
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp18_ = mounted_message;
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp19_ = (GtkMessageDialog*) gtk_message_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_window_get_type (), GtkWindow), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_CANCEL, "%s", _tmp18_);
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_object_ref_sink (_tmp19_);
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp20_ = _tmp19_;
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp17_);
-#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1001 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				dialog = _tmp20_;
-#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1004 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp21_ = dialog;
-#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1004 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_window_get_type (), GtkWindow), RESOURCES_APP_TITLE);
-#line 1019 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp22_ = dialog;
-#line 1019 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp23_ = _ ("_Unmount");
-#line 1019 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1005 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_dialog_get_type (), GtkDialog), _tmp23_, (gint) GTK_RESPONSE_YES);
-#line 1020 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp24_ = dialog;
-#line 1020 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp25_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_dialog_get_type (), GtkDialog));
-#line 1020 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1006 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				dialog_res = _tmp25_;
-#line 1021 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1007 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp26_ = dialog;
-#line 1021 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1007 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_widget_get_type (), GtkWidget));
-#line 1023 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1009 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp27_ = dialog_res;
-#line 1023 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1009 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp27_ != ((gint) GTK_RESPONSE_YES)) {
-#line 7021 "ImportPage.c"
+#line 6813 "ImportPage.c"
 					const gchar* _tmp28_ = NULL;
-#line 1024 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1010 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp28_ = _ ("Please unmount the camera.");
-#line 1024 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1010 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					checkerboard_page_set_page_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp28_);
-#line 7027 "ImportPage.c"
+#line 6819 "ImportPage.c"
 				} else {
 					GMount* _tmp29_ = NULL;
-#line 1026 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1012 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp29_ = mount;
-#line 1026 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1012 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					import_page_unmount_camera (self, _tmp29_);
-#line 7034 "ImportPage.c"
+#line 6826 "ImportPage.c"
 				}
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (dialog);
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (mounted_message);
-#line 7040 "ImportPage.c"
+#line 6832 "ImportPage.c"
 			} else {
 				gchar* locked_message = NULL;
 				const gchar* _tmp30_ = NULL;
@@ -7053,115 +6845,115 @@ static void import_page_try_refreshing_camera (ImportPage* self, gboolean fail_o
 				GtkMessageDialog* _tmp38_ = NULL;
 				GtkMessageDialog* _tmp39_ = NULL;
 				const gchar* _tmp40_ = NULL;
-#line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp30_ = _ ("The camera is locked by another application. Shotwell can only access " \
 "the camera when it’s unlocked. Please close any other application usin" \
 "g the camera and try again.");
-#line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp31_ = g_strdup (_tmp30_);
-#line 1029 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1015 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				locked_message = _tmp31_;
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp32_ = app_window_get_instance ();
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp33_ = _tmp32_;
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp34_ = locked_message;
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp35_ = (GtkMessageDialog*) gtk_message_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_window_get_type (), GtkWindow), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "%s", _tmp34_);
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_object_ref_sink (_tmp35_);
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp36_ = _tmp35_;
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp33_);
-#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1018 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				dialog = _tmp36_;
-#line 1035 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1021 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp37_ = dialog;
-#line 1035 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1021 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_window_get_type (), GtkWindow), RESOURCES_APP_TITLE);
-#line 1036 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1022 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp38_ = dialog;
-#line 1036 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1022 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_dialog_get_type (), GtkDialog));
-#line 1037 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1023 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp39_ = dialog;
-#line 1037 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1023 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_widget_get_type (), GtkWidget));
-#line 1039 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1025 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp40_ = _ ("Please close any other application using the camera.");
-#line 1039 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1025 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				checkerboard_page_set_page_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp40_);
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (dialog);
-#line 1011 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 997 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (locked_message);
-#line 7097 "ImportPage.c"
+#line 6889 "ImportPage.c"
 			}
-#line 1041 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1027 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (mount);
-#line 1041 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1027 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (uri);
-#line 1041 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1027 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			break;
-#line 7105 "ImportPage.c"
+#line 6897 "ImportPage.c"
 		}
-#line 985 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 971 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case IMPORT_PAGE_REFRESH_RESULT_LIBRARY_ERROR:
-#line 7109 "ImportPage.c"
+#line 6901 "ImportPage.c"
 		{
 			const gchar* _tmp41_ = NULL;
 			gchar* _tmp42_ = NULL;
 			gchar* _tmp43_ = NULL;
 			gchar* _tmp44_ = NULL;
 			gchar* _tmp45_ = NULL;
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp41_ = _ ("Unable to fetch previews from the camera:\n%s");
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp42_ = import_page_get_refresh_message (self);
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp43_ = _tmp42_;
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp44_ = g_strdup_printf (_tmp41_, _tmp43_);
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp45_ = _tmp44_;
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			app_window_error_message (_tmp45_, NULL);
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp45_);
-#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1030 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp43_);
-#line 1046 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1032 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			break;
-#line 7134 "ImportPage.c"
+#line 6926 "ImportPage.c"
 		}
 		default:
 		{
 			ImportPageRefreshResult _tmp46_ = 0;
-#line 1049 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1035 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp46_ = res;
-#line 1049 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-			g_error ("ImportPage.vala:1049: Unknown result type %d", (gint) _tmp46_);
-#line 7143 "ImportPage.c"
+#line 1035 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+			g_error ("ImportPage.vala:1035: Unknown result type %d", (gint) _tmp46_);
+#line 6935 "ImportPage.c"
 		}
 	}
 }
 
 
 static void _import_page_on_unmounted_g_mount_unmounted (GMount* _sender, gpointer self) {
-#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1052 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_unmounted ((ImportPage*) self, _sender);
-#line 7152 "ImportPage.c"
+#line 6944 "ImportPage.c"
 }
 
 
 static void _import_page_on_unmount_finished_gasync_ready_callback (GObject* source_object, GAsyncResult* res, gpointer self) {
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_unmount_finished ((ImportPage*) self, source_object, res);
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_unref (self);
-#line 7161 "ImportPage.c"
+#line 6953 "ImportPage.c"
 }
 
 
@@ -7179,67 +6971,67 @@ gboolean import_page_unmount_camera (ImportPage* self, GMount* mount) {
 	AppWindow* _tmp9_ = NULL;
 	GtkMountOperation* _tmp10_ = NULL;
 	GtkMountOperation* _tmp11_ = NULL;
-#line 1053 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1039 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), FALSE);
-#line 1053 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1039 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (G_IS_MOUNT (mount), FALSE);
-#line 1054 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1040 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->busy;
-#line 1054 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1040 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_) {
-#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1041 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
-#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1041 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 7191 "ImportPage.c"
+#line 6983 "ImportPage.c"
 	}
-#line 1057 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1043 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, TRUE, FALSE);
-#line 1058 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->progress_bar;
-#line 1058 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1044 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1059 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1045 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->progress_bar;
-#line 1059 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1045 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_fraction (_tmp2_, 0.0);
-#line 1060 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1046 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = self->priv->progress_bar;
-#line 1060 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1046 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_ellipsize (_tmp3_, PANGO_ELLIPSIZE_NONE);
-#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1047 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = self->priv->progress_bar;
-#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1047 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = _ ("Unmounting…");
-#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1047 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_text (_tmp4_, _tmp5_);
-#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1052 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp6_ = mount;
-#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1052 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_signal_connect_object (_tmp6_, "unmounted", (GCallback) _import_page_on_unmounted_g_mount_unmounted, self, 0);
-#line 1068 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_debug ("ImportPage.vala:1068: Unmounting camera…");
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1054 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_debug ("ImportPage.vala:1054: Unmounting camera…");
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp7_ = mount;
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = app_window_get_instance ();
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = _tmp8_;
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp10_ = (GtkMountOperation*) gtk_mount_operation_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_window_get_type (), GtkWindow));
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = _tmp10_;
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_mount_unmount_with_operation (_tmp7_, G_MOUNT_UNMOUNT_NONE, G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, g_mount_operation_get_type (), GMountOperation), NULL, _import_page_on_unmount_finished_gasync_ready_callback, g_object_ref (self));
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp11_);
-#line 1069 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1055 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp9_);
-#line 1072 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1058 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = TRUE;
-#line 1072 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1058 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 7239 "ImportPage.c"
+#line 7031 "ImportPage.c"
 }
 
 
@@ -7248,35 +7040,35 @@ static void import_page_on_unmount_finished (ImportPage* self, GObject* source, 
 	GObject* _tmp0_ = NULL;
 	GMount* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1075 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1075 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail ((source == NULL) || G_IS_OBJECT (source));
-#line 1075 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (G_IS_ASYNC_RESULT (aresult));
-#line 1076 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_debug ("ImportPage.vala:1076: Async unmount finished");
-#line 1078 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1062 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_debug ("ImportPage.vala:1062: Async unmount finished");
+#line 1064 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = source;
-#line 1078 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1064 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, g_mount_get_type (), GMount));
-#line 1078 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1064 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	mount = _tmp1_;
-#line 7262 "ImportPage.c"
+#line 7054 "ImportPage.c"
 	{
 		GAsyncResult* _tmp2_ = NULL;
-#line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = aresult;
-#line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_mount_unmount_with_operation_finish (mount, _tmp2_, &_inner_error_);
-#line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1066 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7271 "ImportPage.c"
-			goto __catch64_g_error;
+#line 7063 "ImportPage.c"
+			goto __catch63_g_error;
 		}
 	}
-	goto __finally64;
-	__catch64_g_error:
+	goto __finally63;
+	__catch63_g_error:
 	{
 		GError* err = NULL;
 		guint _tmp3_ = 0U;
@@ -7284,52 +7076,52 @@ static void import_page_on_unmount_finished (ImportPage* self, GObject* source, 
 		GtkProgressBar* _tmp5_ = NULL;
 		GtkProgressBar* _tmp6_ = NULL;
 		GtkProgressBar* _tmp7_ = NULL;
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		err = _inner_error_;
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_inner_error_ = NULL;
-#line 1082 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1068 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		app_window_error_message (IMPORT_PAGE_UNMOUNT_FAILED_MSG, NULL);
-#line 1085 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1071 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_signal_parse_name ("unmounted", g_mount_get_type (), &_tmp3_, NULL, FALSE);
-#line 1085 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1071 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_signal_handlers_disconnect_matched (mount, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _import_page_on_unmounted_g_mount_unmounted, self);
-#line 1087 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1073 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = self->priv->refreshed;
-#line 1087 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1073 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_update_status (self, FALSE, _tmp4_);
-#line 1088 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1074 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = self->priv->progress_bar;
-#line 1088 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1074 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		gtk_progress_bar_set_ellipsize (_tmp5_, PANGO_ELLIPSIZE_NONE);
-#line 1089 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp6_ = self->priv->progress_bar;
-#line 1089 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_progress_bar_set_text (_tmp6_, "");
-#line 1090 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp7_ = self->priv->progress_bar;
-#line 1090 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_error_free0 (err);
-#line 7312 "ImportPage.c"
-	}
-	__finally64:
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (mount);
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_clear_error (&_inner_error_);
-#line 1079 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		return;
-#line 7325 "ImportPage.c"
-	}
 #line 1075 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp6_ = self->priv->progress_bar;
+#line 1075 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		gtk_progress_bar_set_text (_tmp6_, "");
+#line 1076 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_tmp7_ = self->priv->progress_bar;
+#line 1076 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_g_error_free0 (err);
+#line 7104 "ImportPage.c"
+	}
+	__finally63:
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		_g_object_unref0 (mount);
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_clear_error (&_inner_error_);
+#line 1065 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		return;
+#line 7117 "ImportPage.c"
+	}
+#line 1061 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (mount);
-#line 7329 "ImportPage.c"
+#line 7121 "ImportPage.c"
 }
 
 
@@ -7338,31 +7130,31 @@ static void import_page_on_unmounted (ImportPage* self, GMount* mount) {
 	GtkProgressBar* _tmp1_ = NULL;
 	GtkProgressBar* _tmp2_ = NULL;
 	GtkProgressBar* _tmp3_ = NULL;
-#line 1094 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1094 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1080 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (G_IS_MOUNT (mount));
-#line 1095 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_debug ("ImportPage.vala:1095: on_unmounted");
-#line 1097 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1081 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_debug ("ImportPage.vala:1081: on_unmounted");
+#line 1083 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->refreshed;
-#line 1097 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1083 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, FALSE, _tmp0_);
-#line 1098 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1084 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->progress_bar;
-#line 1098 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1084 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_ellipsize (_tmp1_, PANGO_ELLIPSIZE_NONE);
-#line 1099 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1085 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->progress_bar;
-#line 1099 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1085 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_text (_tmp2_, "");
-#line 1100 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1086 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = self->priv->progress_bar;
-#line 1100 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1086 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1102 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1088 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_try_refreshing_camera (self, TRUE);
-#line 7362 "ImportPage.c"
+#line 7154 "ImportPage.c"
 }
 
 
@@ -7371,23 +7163,23 @@ static void import_page_clear_all_import_sources (ImportPage* self) {
 	SourceCollection* _tmp0_ = NULL;
 	Marker* _tmp1_ = NULL;
 	SourceCollection* _tmp2_ = NULL;
-#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1091 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1106 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1092 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->import_sources;
-#line 1106 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1092 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1106 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1092 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	marker = _tmp1_;
-#line 1107 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1093 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	marker_mark_all (marker);
-#line 1108 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1094 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->import_sources;
-#line 1108 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1094 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	source_collection_destroy_marked (_tmp2_, marker, FALSE, NULL, NULL, NULL);
-#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1091 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (marker);
-#line 7387 "ImportPage.c"
+#line 7179 "ImportPage.c"
 }
 
 
@@ -7421,93 +7213,93 @@ static gboolean import_page_check_directory_exists (ImportPage* self, gint fsid,
 	gint list_len = 0;
 	CameraList* _tmp15_ = NULL;
 	gint _tmp16_ = 0;
-#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1104 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), FALSE);
-#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1104 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (dir != NULL, FALSE);
-#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1104 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (search_target != NULL, FALSE);
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->camera;
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->camera_name;
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = fsid;
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = dir;
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = import_page_get_fulldir (_tmp0_, _tmp1_, _tmp2_, _tmp3_);
-#line 1119 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1105 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	fulldir = _tmp4_;
-#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1109 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp6_ = gp_list_new (&_tmp5_);
-#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1109 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (folders);
-#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1109 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	folders = _tmp5_;
-#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1109 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_result_ = _tmp6_;
-#line 1124 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1110 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp7_ = _result_;
-#line 1124 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1110 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp7_ != GP_OK) {
-#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
-#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (folders);
-#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1112 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 7459 "ImportPage.c"
+#line 7251 "ImportPage.c"
 	}
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = self->priv->camera;
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = fulldir;
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp10_ = folders;
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = import_page_spin_idle_context;
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp13_ = gp_camera_folder_list_folders (_tmp8_, _tmp9_, _tmp10_, _tmp12_);
-#line 1129 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1115 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_result_ = _tmp13_;
-#line 1130 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1116 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp14_ = _result_;
-#line 1130 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1116 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp14_ != GP_OK) {
-#line 1132 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
-#line 1132 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (folders);
-#line 1132 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1132 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1118 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 7487 "ImportPage.c"
+#line 7279 "ImportPage.c"
 	}
-#line 1135 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1121 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp15_ = folders;
-#line 1135 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1121 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp16_ = gp_list_count (_tmp15_);
-#line 1135 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1121 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	list_len = _tmp16_;
-#line 7495 "ImportPage.c"
+#line 7287 "ImportPage.c"
 	{
 		gint list_index = 0;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		list_index = 0;
-#line 7500 "ImportPage.c"
+#line 7292 "ImportPage.c"
 		{
 			gboolean _tmp17_ = FALSE;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp17_ = TRUE;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			while (TRUE) {
-#line 7507 "ImportPage.c"
+#line 7299 "ImportPage.c"
 				gint _tmp19_ = 0;
 				gint _tmp20_ = 0;
 				gchar* tmp = NULL;
@@ -7517,73 +7309,73 @@ static gboolean import_page_check_directory_exists (ImportPage* self, gint fsid,
 				gchar* _tmp24_ = NULL;
 				const gchar* _tmp25_ = NULL;
 				const gchar* _tmp26_ = NULL;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!_tmp17_) {
-#line 7519 "ImportPage.c"
+#line 7311 "ImportPage.c"
 					gint _tmp18_ = 0;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp18_ = list_index;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					list_index = _tmp18_ + 1;
-#line 7525 "ImportPage.c"
+#line 7317 "ImportPage.c"
 				}
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp17_ = FALSE;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp19_ = list_index;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp20_ = list_len;
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!(_tmp19_ < _tmp20_)) {
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					break;
-#line 7537 "ImportPage.c"
+#line 7329 "ImportPage.c"
 				}
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp21_ = folders;
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp22_ = list_index;
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gp_list_get_name (_tmp21_, _tmp22_, &_tmp23_);
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (tmp);
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp24_ = g_strdup (_tmp23_);
-#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1126 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				tmp = _tmp24_;
-#line 1141 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp25_ = tmp;
-#line 1141 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp26_ = search_target;
-#line 1141 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1127 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (g_strcmp0 (_tmp25_, _tmp26_) == 0) {
-#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					result = TRUE;
-#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (tmp);
-#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (folders);
-#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1128 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 7567 "ImportPage.c"
+#line 7359 "ImportPage.c"
 				}
-#line 1137 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1123 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (tmp);
-#line 7571 "ImportPage.c"
+#line 7363 "ImportPage.c"
 			}
 		}
 	}
-#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1131 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = FALSE;
-#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1131 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (folders);
-#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1131 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_free0 (fulldir);
-#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1131 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 7583 "ImportPage.c"
+#line 7375 "ImportPage.c"
 }
 
 
@@ -7628,143 +7420,143 @@ static ImportPageRefreshResult import_page_refresh_camera (ImportPage* self) {
 	int _tmp85_ = 0;
 	int _tmp89_ = 0;
 	int _tmp94_ = 0;
-#line 1148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1134 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), 0);
-#line 1149 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1135 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->busy;
-#line 1149 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1135 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_) {
-#line 1150 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1136 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = IMPORT_PAGE_REFRESH_RESULT_BUSY;
-#line 1150 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1136 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 7638 "ImportPage.c"
+#line 7430 "ImportPage.c"
 	}
-#line 1152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1138 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _ ("Starting import, please wait…");
-#line 1152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1138 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	checkerboard_page_set_page_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp1_);
-#line 1154 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = self->priv->busy;
-#line 1154 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1140 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, _tmp2_, FALSE);
-#line 1156 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_free0 (self->priv->refresh_error);
-#line 1156 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1142 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_error = NULL;
-#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1143 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = self->priv->camera;
-#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1143 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = import_page_spin_idle_context;
-#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1143 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1143 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp6_ = gp_camera_init (_tmp3_, _tmp5_);
-#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1143 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp6_;
-#line 1158 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1144 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp7_ = self->priv->refresh_result;
-#line 1158 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1144 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp7_ != GP_OK) {
-#line 7666 "ImportPage.c"
+#line 7458 "ImportPage.c"
 		int _tmp8_ = 0;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
 		ImportPageRefreshResult _tmp11_ = 0;
 		int _tmp12_ = 0;
-#line 1159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = self->priv->refresh_result;
-#line 1159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = gp_result_to_full_string (_tmp8_);
-#line 1159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = _tmp9_;
-#line 1159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1159: Unable to initialize camera: %s", _tmp10_);
-#line 1159 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1145: Unable to initialize camera: %s", _tmp10_);
+#line 1145 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp10_);
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = self->priv->refresh_result;
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp12_ == GP_ERROR_IO_LOCK) {
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = IMPORT_PAGE_REFRESH_RESULT_LOCKED;
-#line 7688 "ImportPage.c"
+#line 7480 "ImportPage.c"
 		} else {
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = IMPORT_PAGE_REFRESH_RESULT_LIBRARY_ERROR;
-#line 7692 "ImportPage.c"
+#line 7484 "ImportPage.c"
 		}
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = _tmp11_;
-#line 1161 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1147 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 7698 "ImportPage.c"
+#line 7490 "ImportPage.c"
 	}
-#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1150 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp13_ = self->priv->refreshed;
-#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1150 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, TRUE, _tmp13_);
-#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1152 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 1168 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1154 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp14_ = self->priv->progress_bar;
-#line 1168 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1154 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_ellipsize (_tmp14_, PANGO_ELLIPSIZE_NONE);
-#line 1169 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1155 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp15_ = self->priv->progress_bar;
-#line 1169 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1155 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp16_ = _ ("Fetching photo information");
-#line 1169 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1155 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_text (_tmp15_, _tmp16_);
-#line 1170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1156 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp17_ = self->priv->progress_bar;
-#line 1170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1156 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_fraction (_tmp17_, 0.0);
-#line 1171 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp18_ = self->priv->progress_bar;
-#line 1171 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1157 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_pulse_step (_tmp18_, 0.01);
-#line 1172 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1158 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp19_ = self->priv->progress_bar;
-#line 1172 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1158 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1160 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp20_ = gee_array_list_new (TYPE_IMPORT_SOURCE, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 1174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1160 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_list = _tmp20_;
-#line 1176 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1162 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	sifs = NULL;
-#line 1177 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1163 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	count = 0;
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp21_ = self->priv->camera;
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp22_ = import_page_spin_idle_context;
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp23_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp25_ = gp_camera_get_storageinfo (_tmp21_, &sifs, &_tmp24_, _tmp23_);
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	count = _tmp24_;
-#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1164 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp25_;
-#line 1179 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1165 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp26_ = self->priv->refresh_result;
-#line 1179 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1165 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp26_ == GP_OK) {
-#line 7752 "ImportPage.c"
+#line 7544 "ImportPage.c"
 		{
 			gint fsid = 0;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			fsid = 0;
-#line 7757 "ImportPage.c"
+#line 7549 "ImportPage.c"
 			{
 				gboolean _tmp27_ = FALSE;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp27_ = TRUE;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				while (TRUE) {
-#line 7764 "ImportPage.c"
+#line 7556 "ImportPage.c"
 					gint _tmp29_ = 0;
 					gint _tmp30_ = 0;
 					gboolean got_well_known_dir = FALSE;
@@ -7789,381 +7581,381 @@ static ImportPageRefreshResult import_page_refresh_camera (ImportPage* self) {
 					gint _tmp67_ = 0;
 					gboolean _tmp68_ = FALSE;
 					gboolean _tmp71_ = FALSE;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (!_tmp27_) {
-#line 7791 "ImportPage.c"
+#line 7583 "ImportPage.c"
 						gint _tmp28_ = 0;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp28_ = fsid;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						fsid = _tmp28_ + 1;
-#line 7797 "ImportPage.c"
+#line 7589 "ImportPage.c"
 					}
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp27_ = FALSE;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp29_ = fsid;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp30_ = count;
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (!(_tmp29_ < _tmp30_)) {
-#line 1180 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1166 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						break;
-#line 7809 "ImportPage.c"
+#line 7601 "ImportPage.c"
 					}
-#line 1184 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1170 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					got_well_known_dir = FALSE;
-#line 1187 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1173 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp31_ = fsid;
-#line 1187 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1173 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp32_ = import_page_check_directory_exists (self, _tmp31_, "/", "DCIM");
-#line 1187 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1173 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp32_) {
-#line 7819 "ImportPage.c"
+#line 7611 "ImportPage.c"
 						gint _tmp33_ = 0;
 						GeeArrayList* _tmp34_ = NULL;
-#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp33_ = fsid;
-#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp34_ = import_list;
-#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1174 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp33_, "/DCIM", _tmp34_);
-#line 1189 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1175 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7830 "ImportPage.c"
+#line 7622 "ImportPage.c"
 					}
-#line 1191 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1177 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp35_ = fsid;
-#line 1191 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1177 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp36_ = import_page_check_directory_exists (self, _tmp35_, "/", "dcim");
-#line 1191 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1177 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp36_) {
-#line 7838 "ImportPage.c"
+#line 7630 "ImportPage.c"
 						gint _tmp37_ = 0;
 						GeeArrayList* _tmp38_ = NULL;
-#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp37_ = fsid;
-#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp38_ = import_list;
-#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1178 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp37_, "/dcim", _tmp38_);
-#line 1193 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1179 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7849 "ImportPage.c"
+#line 7641 "ImportPage.c"
 					}
-#line 1198 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1184 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp39_ = fsid;
-#line 1198 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1184 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp40_ = import_page_check_directory_exists (self, _tmp39_, "/PRIVATE/", "AVCHD");
-#line 1198 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1184 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp40_) {
-#line 7857 "ImportPage.c"
+#line 7649 "ImportPage.c"
 						gint _tmp41_ = 0;
 						GeeArrayList* _tmp42_ = NULL;
-#line 1199 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1185 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp41_ = fsid;
-#line 1199 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1185 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp42_ = import_list;
-#line 1199 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1185 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp41_, "/PRIVATE/AVCHD", _tmp42_);
-#line 1200 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1186 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7868 "ImportPage.c"
+#line 7660 "ImportPage.c"
 					}
-#line 1202 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp43_ = fsid;
-#line 1202 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp44_ = import_page_check_directory_exists (self, _tmp43_, "/private/", "avchd");
-#line 1202 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1188 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp44_) {
-#line 7876 "ImportPage.c"
+#line 7668 "ImportPage.c"
 						gint _tmp45_ = 0;
 						GeeArrayList* _tmp46_ = NULL;
-#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1189 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp45_ = fsid;
-#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1189 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp46_ = import_list;
-#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1189 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp45_, "/private/avchd", _tmp46_);
-#line 1204 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1190 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7887 "ImportPage.c"
+#line 7679 "ImportPage.c"
 					}
-#line 1206 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp47_ = fsid;
-#line 1206 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp48_ = import_page_check_directory_exists (self, _tmp47_, "/", "AVCHD");
-#line 1206 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1192 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp48_) {
-#line 7895 "ImportPage.c"
+#line 7687 "ImportPage.c"
 						gint _tmp49_ = 0;
 						GeeArrayList* _tmp50_ = NULL;
-#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1193 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp49_ = fsid;
-#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1193 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp50_ = import_list;
-#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1193 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp49_, "/AVCHD", _tmp50_);
-#line 1208 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1194 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7906 "ImportPage.c"
+#line 7698 "ImportPage.c"
 					}
-#line 1210 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1196 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp51_ = fsid;
-#line 1210 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1196 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp52_ = import_page_check_directory_exists (self, _tmp51_, "/", "avchd");
-#line 1210 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1196 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp52_) {
-#line 7914 "ImportPage.c"
+#line 7706 "ImportPage.c"
 						gint _tmp53_ = 0;
 						GeeArrayList* _tmp54_ = NULL;
-#line 1211 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1197 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp53_ = fsid;
-#line 1211 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1197 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp54_ = import_list;
-#line 1211 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1197 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp53_, "/avchd", _tmp54_);
-#line 1212 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1198 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7925 "ImportPage.c"
+#line 7717 "ImportPage.c"
 					}
-#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp55_ = fsid;
-#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp56_ = import_page_check_directory_exists (self, _tmp55_, "/PRIVATE/", "SONY");
-#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1203 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp56_) {
-#line 7933 "ImportPage.c"
+#line 7725 "ImportPage.c"
 						gint _tmp57_ = 0;
 						GeeArrayList* _tmp58_ = NULL;
-#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1204 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp57_ = fsid;
-#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1204 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp58_ = import_list;
-#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1204 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp57_, "/PRIVATE/SONY", _tmp58_);
-#line 1219 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1205 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7944 "ImportPage.c"
+#line 7736 "ImportPage.c"
 					}
-#line 1221 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp59_ = fsid;
-#line 1221 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp60_ = import_page_check_directory_exists (self, _tmp59_, "/private/", "sony");
-#line 1221 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1207 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp60_) {
-#line 7952 "ImportPage.c"
+#line 7744 "ImportPage.c"
 						gint _tmp61_ = 0;
 						GeeArrayList* _tmp62_ = NULL;
-#line 1222 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1208 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp61_ = fsid;
-#line 1222 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1208 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp62_ = import_list;
-#line 1222 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1208 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp61_, "/private/sony", _tmp62_);
-#line 1223 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1209 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7963 "ImportPage.c"
+#line 7755 "ImportPage.c"
 					}
-#line 1227 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp63_ = fsid;
-#line 1227 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp64_ = import_page_check_directory_exists (self, _tmp63_, "/", "MP_ROOT");
-#line 1227 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1213 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp64_) {
-#line 7971 "ImportPage.c"
+#line 7763 "ImportPage.c"
 						gint _tmp65_ = 0;
 						GeeArrayList* _tmp66_ = NULL;
-#line 1228 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1214 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp65_ = fsid;
-#line 1228 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1214 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp66_ = import_list;
-#line 1228 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1214 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp65_, "/MP_ROOT", _tmp66_);
-#line 1229 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1215 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 7982 "ImportPage.c"
+#line 7774 "ImportPage.c"
 					}
-#line 1231 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp67_ = fsid;
-#line 1231 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp68_ = import_page_check_directory_exists (self, _tmp67_, "/", "mp_root");
-#line 1231 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1217 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp68_) {
-#line 7990 "ImportPage.c"
+#line 7782 "ImportPage.c"
 						gint _tmp69_ = 0;
 						GeeArrayList* _tmp70_ = NULL;
-#line 1232 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp69_ = fsid;
-#line 1232 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp70_ = import_list;
-#line 1232 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1218 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						import_page_enumerate_files (self, _tmp69_, "/mp_root", _tmp70_);
-#line 1233 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1219 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						got_well_known_dir = TRUE;
-#line 8001 "ImportPage.c"
+#line 7793 "ImportPage.c"
 					}
-#line 1238 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1224 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp71_ = got_well_known_dir;
-#line 1238 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1224 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (!_tmp71_) {
-#line 8007 "ImportPage.c"
+#line 7799 "ImportPage.c"
 						gint _tmp72_ = 0;
 						GeeArrayList* _tmp73_ = NULL;
 						gboolean _tmp74_ = FALSE;
-#line 1239 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp72_ = fsid;
-#line 1239 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp73_ = import_list;
-#line 1239 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp74_ = import_page_enumerate_files (self, _tmp72_, "/", _tmp73_);
-#line 1239 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1225 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (!_tmp74_) {
-#line 1240 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1226 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							break;
-#line 8021 "ImportPage.c"
+#line 7813 "ImportPage.c"
 						}
 					}
 				}
 			}
 		}
 	}
-#line 1245 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1231 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_clear_all_import_sources (self);
-#line 1248 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1234 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp75_ = import_list;
-#line 1248 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1234 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_auto_match_raw_jpeg (self, _tmp75_);
-#line 1255 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1241 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp76_ = import_list;
-#line 1255 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1241 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_load_previews_and_metadata (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, GEE_TYPE_LIST, GeeList));
-#line 1262 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1248 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp77_ = self->priv->progress_bar;
-#line 1262 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1248 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1263 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1249 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp78_ = self->priv->progress_bar;
-#line 1263 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1249 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_ellipsize (_tmp78_, PANGO_ELLIPSIZE_NONE);
-#line 1264 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1250 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp79_ = self->priv->progress_bar;
-#line 1264 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1250 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_text (_tmp79_, "");
-#line 1265 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1251 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp80_ = self->priv->progress_bar;
-#line 1265 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1251 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_progress_bar_set_fraction (_tmp80_, 0.0);
-#line 1267 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp81_ = self->priv->camera;
-#line 1267 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp82_ = import_page_spin_idle_context;
-#line 1267 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp83_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1267 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp84_ = gp_camera_exit (_tmp81_, _tmp83_);
-#line 1267 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1253 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	res = _tmp84_;
-#line 1268 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1254 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp85_ = res;
-#line 1268 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1254 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp85_ != GP_OK) {
-#line 8068 "ImportPage.c"
+#line 7860 "ImportPage.c"
 		int _tmp86_ = 0;
 		gchar* _tmp87_ = NULL;
 		gchar* _tmp88_ = NULL;
-#line 1270 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1256 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp86_ = res;
-#line 1270 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1256 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp87_ = gp_result_to_full_string (_tmp86_);
-#line 1270 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1256 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp88_ = _tmp87_;
-#line 1270 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1270: Unable to unlock camera: %s", _tmp88_);
-#line 1270 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1256 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1256: Unable to unlock camera: %s", _tmp88_);
+#line 1256 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp88_);
-#line 8082 "ImportPage.c"
+#line 7874 "ImportPage.c"
 	}
-#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1259 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp89_ = self->priv->refresh_result;
-#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1259 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp89_ == GP_OK) {
-#line 8088 "ImportPage.c"
+#line 7880 "ImportPage.c"
 		SourceCollection* _tmp90_ = NULL;
 		gint _tmp91_ = 0;
-#line 1274 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1260 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp90_ = self->priv->import_sources;
-#line 1274 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1260 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp91_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1274 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1260 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp91_ == 0) {
-#line 8097 "ImportPage.c"
+#line 7889 "ImportPage.c"
 			gchar* _tmp92_ = NULL;
 			gchar* _tmp93_ = NULL;
-#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1261 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp92_ = checkerboard_page_get_view_empty_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage));
-#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1261 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp93_ = _tmp92_;
-#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1261 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			checkerboard_page_set_page_message (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp93_);
-#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1261 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp93_);
-#line 8108 "ImportPage.c"
+#line 7900 "ImportPage.c"
 		}
-#line 1277 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1263 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_update_status (self, FALSE, TRUE);
-#line 8112 "ImportPage.c"
+#line 7904 "ImportPage.c"
 	} else {
-#line 1279 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1265 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_update_status (self, FALSE, FALSE);
-#line 1282 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1268 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_clear_all_import_sources (self);
-#line 8118 "ImportPage.c"
+#line 7910 "ImportPage.c"
 	}
-#line 1285 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1271 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp94_ = self->priv->refresh_result;
-#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	switch (_tmp94_) {
-#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case GP_OK:
-#line 8128 "ImportPage.c"
+#line 7920 "ImportPage.c"
 		{
-#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = IMPORT_PAGE_REFRESH_RESULT_OK;
-#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (import_list);
-#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1275 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8136 "ImportPage.c"
+#line 7928 "ImportPage.c"
 		}
-#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1273 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		case GP_ERROR_IO_LOCK:
-#line 8140 "ImportPage.c"
+#line 7932 "ImportPage.c"
 		{
-#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1278 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = IMPORT_PAGE_REFRESH_RESULT_LOCKED;
-#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1278 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (import_list);
-#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1278 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8148 "ImportPage.c"
+#line 7940 "ImportPage.c"
 		}
 		default:
 		{
-#line 1295 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1281 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = IMPORT_PAGE_REFRESH_RESULT_LIBRARY_ERROR;
-#line 1295 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1281 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (import_list);
-#line 1295 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1281 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8158 "ImportPage.c"
+#line 7950 "ImportPage.c"
 		}
 	}
-#line 1148 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1134 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (import_list);
-#line 8163 "ImportPage.c"
+#line 7955 "ImportPage.c"
 }
 
 
@@ -8181,7 +7973,7 @@ static gchar string_get (const gchar* self, glong index) {
 	result = _tmp1_;
 #line 1087 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 8181 "ImportPage.c"
+#line 7973 "ImportPage.c"
 }
 
 
@@ -8214,7 +8006,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	_tmp2_ = start;
 #line 1330 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp2_ < ((glong) 0)) {
-#line 8214 "ImportPage.c"
+#line 8006 "ImportPage.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 #line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8223,13 +8015,13 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp4_ = start;
 #line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		start = _tmp3_ + _tmp4_;
-#line 8223 "ImportPage.c"
+#line 8015 "ImportPage.c"
 	}
 #line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp5_ = end;
 #line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp5_ < ((glong) 0)) {
-#line 8229 "ImportPage.c"
+#line 8021 "ImportPage.c"
 		glong _tmp6_ = 0L;
 		glong _tmp7_ = 0L;
 #line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8238,13 +8030,13 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp7_ = end;
 #line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		end = _tmp6_ + _tmp7_;
-#line 8238 "ImportPage.c"
+#line 8030 "ImportPage.c"
 	}
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp9_ = start;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp9_ >= ((glong) 0)) {
-#line 8244 "ImportPage.c"
+#line 8036 "ImportPage.c"
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8253,11 +8045,11 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp11_ = string_length;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp8_ = _tmp10_ <= _tmp11_;
-#line 8253 "ImportPage.c"
+#line 8045 "ImportPage.c"
 	} else {
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp8_ = FALSE;
-#line 8257 "ImportPage.c"
+#line 8049 "ImportPage.c"
 	}
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (_tmp8_, NULL);
@@ -8265,7 +8057,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	_tmp13_ = end;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp13_ >= ((glong) 0)) {
-#line 8265 "ImportPage.c"
+#line 8057 "ImportPage.c"
 		glong _tmp14_ = 0L;
 		glong _tmp15_ = 0L;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8274,11 +8066,11 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp15_ = string_length;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp12_ = _tmp14_ <= _tmp15_;
-#line 8274 "ImportPage.c"
+#line 8066 "ImportPage.c"
 	} else {
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp12_ = FALSE;
-#line 8278 "ImportPage.c"
+#line 8070 "ImportPage.c"
 	}
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (_tmp12_, NULL);
@@ -8300,7 +8092,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	result = _tmp21_;
 #line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 8300 "ImportPage.c"
+#line 8092 "ImportPage.c"
 }
 
 
@@ -8311,71 +8103,71 @@ static gchar* import_page_chomp_ch (const gchar* str, gchar ch) {
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
 	gchar* _tmp12_ = NULL;
-#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1285 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (str != NULL, NULL);
-#line 1300 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1286 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = str;
-#line 1300 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1286 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = strlen (_tmp0_);
-#line 1300 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1286 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = _tmp1_;
-#line 1300 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1286 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	offset = (glong) _tmp2_;
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	while (TRUE) {
-#line 8323 "ImportPage.c"
+#line 8115 "ImportPage.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		const gchar* _tmp5_ = NULL;
 		glong _tmp6_ = 0L;
 		gchar _tmp7_ = '\0';
 		gchar _tmp8_ = '\0';
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = offset;
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		offset = _tmp3_ - 1;
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = offset;
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (!(_tmp4_ >= ((glong) 0))) {
-#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1287 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			break;
-#line 8340 "ImportPage.c"
+#line 8132 "ImportPage.c"
 		}
-#line 1302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1288 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = str;
-#line 1302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1288 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = offset;
-#line 1302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1288 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = string_get (_tmp5_, _tmp6_);
-#line 1302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1288 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = ch;
-#line 1302 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1288 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp7_ != _tmp8_) {
-#line 8352 "ImportPage.c"
+#line 8144 "ImportPage.c"
 			const gchar* _tmp9_ = NULL;
 			glong _tmp10_ = 0L;
 			gchar* _tmp11_ = NULL;
-#line 1303 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp9_ = str;
-#line 1303 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp10_ = offset;
-#line 1303 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = string_slice (_tmp9_, (glong) 0, _tmp10_);
-#line 1303 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = _tmp11_;
-#line 1303 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1289 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8366 "ImportPage.c"
+#line 8158 "ImportPage.c"
 		}
 	}
-#line 1306 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = g_strdup ("");
-#line 1306 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp12_;
-#line 1306 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1292 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 8375 "ImportPage.c"
+#line 8167 "ImportPage.c"
 }
 
 
@@ -8384,127 +8176,127 @@ gchar* import_page_append_path (const gchar* basepath, const gchar* addition) {
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1295 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (basepath != NULL, NULL);
-#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1295 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (addition != NULL, NULL);
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = basepath;
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = g_str_has_suffix (_tmp1_, "/");
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (!_tmp2_) {
-#line 8394 "ImportPage.c"
+#line 8186 "ImportPage.c"
 		const gchar* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = addition;
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = g_str_has_prefix (_tmp3_, "/");
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = !_tmp4_;
-#line 8403 "ImportPage.c"
+#line 8195 "ImportPage.c"
 	} else {
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = FALSE;
-#line 8407 "ImportPage.c"
+#line 8199 "ImportPage.c"
 	}
-#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1296 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_) {
-#line 8411 "ImportPage.c"
+#line 8203 "ImportPage.c"
 		const gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = basepath;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = g_strconcat (_tmp5_, "/", NULL);
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = _tmp6_;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = addition;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = g_strconcat (_tmp7_, _tmp8_, NULL);
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = _tmp9_;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp7_);
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = _tmp10_;
-#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1297 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8436 "ImportPage.c"
+#line 8228 "ImportPage.c"
 	} else {
 		gboolean _tmp11_ = FALSE;
 		const gchar* _tmp12_ = NULL;
 		gboolean _tmp13_ = FALSE;
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = basepath;
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp13_ = g_str_has_suffix (_tmp12_, "/");
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp13_) {
-#line 8447 "ImportPage.c"
+#line 8239 "ImportPage.c"
 			const gchar* _tmp14_ = NULL;
 			gboolean _tmp15_ = FALSE;
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp14_ = addition;
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp15_ = g_str_has_prefix (_tmp14_, "/");
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = _tmp15_;
-#line 8456 "ImportPage.c"
+#line 8248 "ImportPage.c"
 		} else {
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = FALSE;
-#line 8460 "ImportPage.c"
+#line 8252 "ImportPage.c"
 		}
-#line 1312 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1298 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp11_) {
-#line 8464 "ImportPage.c"
+#line 8256 "ImportPage.c"
 			const gchar* _tmp16_ = NULL;
 			gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
 			const gchar* _tmp19_ = NULL;
 			gchar* _tmp20_ = NULL;
 			gchar* _tmp21_ = NULL;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp16_ = basepath;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp17_ = import_page_chomp_ch (_tmp16_, '/');
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp18_ = _tmp17_;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp19_ = addition;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp20_ = g_strconcat (_tmp18_, _tmp19_, NULL);
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp21_ = _tmp20_;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp18_);
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = _tmp21_;
-#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1299 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8489 "ImportPage.c"
+#line 8281 "ImportPage.c"
 		} else {
 			const gchar* _tmp22_ = NULL;
 			const gchar* _tmp23_ = NULL;
 			gchar* _tmp24_ = NULL;
-#line 1315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp22_ = basepath;
-#line 1315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp23_ = addition;
-#line 1315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp24_ = g_strconcat (_tmp22_, _tmp23_, NULL);
-#line 1315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			result = _tmp24_;
-#line 1315 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1301 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 8504 "ImportPage.c"
+#line 8296 "ImportPage.c"
 		}
 	}
 }
@@ -8530,80 +8322,80 @@ gchar* import_page_get_fs_basedir (Camera* camera, gint fsid) {
 	CameraStorageInformation* _tmp11_ = NULL;
 	CameraStorageInfoFields _tmp12_ = 0;
 	gchar* _tmp15_ = NULL;
-#line 1320 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1306 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (camera != NULL, NULL);
-#line 1321 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1307 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	sifs = NULL;
-#line 1322 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1308 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	count = 0;
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = camera;
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = import_page_null_context;
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = _tmp1_->context;
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = gp_camera_get_storageinfo (_tmp0_, &sifs, &_tmp3_, _tmp2_);
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	count = _tmp3_;
-#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1309 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	res = _tmp4_;
-#line 1324 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = res;
-#line 1324 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1310 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_ != GP_OK) {
-#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = NULL;
-#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1311 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8556 "ImportPage.c"
+#line 8348 "ImportPage.c"
 	}
-#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp6_ = fsid;
-#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp7_ = count;
-#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1313 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp6_ >= _tmp7_) {
-#line 1328 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1314 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = NULL;
-#line 1328 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1314 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8568 "ImportPage.c"
+#line 8360 "ImportPage.c"
 	}
-#line 1330 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1316 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = sifs;
-#line 1330 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1316 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = fsid;
-#line 1330 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1316 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	ifs = _tmp8_ + _tmp9_;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = ifs;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = (*_tmp11_).fields;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if ((_tmp12_ & GP_STORAGEINFO_BASE) != 0) {
-#line 8582 "ImportPage.c"
+#line 8374 "ImportPage.c"
 		CameraStorageInformation* _tmp13_ = NULL;
 		const gchar* _tmp14_ = NULL;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp13_ = ifs;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp14_ = (*_tmp13_).basedir;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = _tmp14_;
-#line 8591 "ImportPage.c"
+#line 8383 "ImportPage.c"
 	} else {
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = "/";
-#line 8595 "ImportPage.c"
+#line 8387 "ImportPage.c"
 	}
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp15_ = g_strdup (_tmp10_);
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp15_;
-#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1318 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 8603 "ImportPage.c"
+#line 8395 "ImportPage.c"
 }
 
 
@@ -8620,74 +8412,74 @@ gchar* import_page_get_fulldir (Camera* camera, const gchar* camera_name, gint f
 	const gchar* _tmp11_ = NULL;
 	const gchar* _tmp12_ = NULL;
 	gchar* _tmp13_ = NULL;
-#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1321 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (camera != NULL, NULL);
-#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1321 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (camera_name != NULL, NULL);
-#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1321 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (folder != NULL, NULL);
-#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1322 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = folder;
-#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1322 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = strlen (_tmp0_);
-#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1322 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = _tmp1_;
-#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1322 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp2_ > GP_MAX_BASEDIR_LENGTH) {
-#line 1337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = NULL;
-#line 1337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1323 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8638 "ImportPage.c"
+#line 8430 "ImportPage.c"
 	}
-#line 1339 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = camera;
-#line 1339 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = fsid;
-#line 1339 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = import_page_get_fs_basedir (_tmp3_, _tmp4_);
-#line 1339 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1325 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	basedir = _tmp5_;
-#line 1340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1326 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp6_ = basedir;
-#line 1340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1326 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp6_ == NULL) {
-#line 8652 "ImportPage.c"
+#line 8444 "ImportPage.c"
 		const gchar* _tmp7_ = NULL;
 		gint _tmp8_ = 0;
 		const gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-#line 1341 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = camera_name;
-#line 1341 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = fsid;
-#line 1341 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_debug ("ImportPage.vala:1341: Unable to find base directory for %s fsid %d", _tmp7_, _tmp8_);
-#line 1343 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1327 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_debug ("ImportPage.vala:1327: Unable to find base directory for %s fsid %d", _tmp7_, _tmp8_);
+#line 1329 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = folder;
-#line 1343 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1329 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = g_strdup (_tmp9_);
-#line 1343 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1329 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = _tmp10_;
-#line 1343 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1329 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (basedir);
-#line 1343 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1329 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8673 "ImportPage.c"
+#line 8465 "ImportPage.c"
 	}
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = basedir;
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = folder;
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp13_ = import_page_append_path (_tmp11_, _tmp12_);
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp13_;
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_free0 (basedir);
-#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1332 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 8687 "ImportPage.c"
+#line 8479 "ImportPage.c"
 }
 
 
@@ -8723,137 +8515,137 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 	int _tmp120_ = 0;
 	int _tmp121_ = 0;
 	GError * _inner_error_ = NULL;
-#line 1349 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (IS_IMPORT_PAGE (self), FALSE);
-#line 1349 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (dir != NULL, FALSE);
-#line 1349 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1335 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_val_if_fail (GEE_IS_ARRAY_LIST (import_list), FALSE);
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->camera;
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = self->priv->camera_name;
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = fsid;
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = dir;
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = import_page_get_fulldir (_tmp0_, _tmp1_, _tmp2_, _tmp3_);
-#line 1350 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1336 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	fulldir = _tmp4_;
-#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = fulldir;
-#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1337 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_ == NULL) {
-#line 8745 "ImportPage.c"
+#line 8537 "ImportPage.c"
 		const gchar* _tmp6_ = NULL;
-#line 1352 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1338 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = dir;
-#line 1352 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1352: Skipping enumerating %s: invalid folder name", _tmp6_);
-#line 1354 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1338 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1338: Skipping enumerating %s: invalid folder name", _tmp6_);
+#line 1340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = TRUE;
-#line 1354 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1354 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1340 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8757 "ImportPage.c"
+#line 8549 "ImportPage.c"
 	}
-#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1344 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = gp_list_new (&_tmp7_);
-#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1344 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (files);
-#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1344 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	files = _tmp7_;
-#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1344 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp8_;
-#line 1359 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1345 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = self->priv->refresh_result;
-#line 1359 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1345 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp9_ != GP_OK) {
-#line 8771 "ImportPage.c"
+#line 8563 "ImportPage.c"
 		int _tmp10_ = 0;
 		gchar* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
-#line 1360 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = self->priv->refresh_result;
-#line 1360 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp11_ = gp_result_to_full_string (_tmp10_);
-#line 1360 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = _tmp11_;
-#line 1360 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1360: Unable to create file list: %s", _tmp12_);
-#line 1360 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1346: Unable to create file list: %s", _tmp12_);
+#line 1346 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp12_);
-#line 1362 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1348 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
-#line 1362 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1348 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (files);
-#line 1362 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1348 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1362 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1348 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8793 "ImportPage.c"
+#line 8585 "ImportPage.c"
 	}
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp13_ = self->priv->camera;
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp14_ = fulldir;
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp15_ = files;
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp16_ = import_page_spin_idle_context;
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp17_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp18_ = gp_camera_folder_list_files (_tmp13_, _tmp14_, _tmp15_, _tmp17_);
-#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1351 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp18_;
-#line 1366 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1352 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp19_ = self->priv->refresh_result;
-#line 1366 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1352 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp19_ != GP_OK) {
-#line 8813 "ImportPage.c"
+#line 8605 "ImportPage.c"
 		const gchar* _tmp20_ = NULL;
 		int _tmp21_ = 0;
 		gchar* _tmp22_ = NULL;
 		gchar* _tmp23_ = NULL;
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp20_ = fulldir;
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp21_ = self->priv->refresh_result;
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp22_ = gp_result_to_full_string (_tmp21_);
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp23_ = _tmp22_;
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1367: Unable to list files in %s: %s", _tmp20_, _tmp23_);
-#line 1367 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1353: Unable to list files in %s: %s", _tmp20_, _tmp23_);
+#line 1353 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp23_);
-#line 1370 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1356 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		self->priv->refresh_result = GP_OK;
-#line 1372 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = TRUE;
-#line 1372 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (files);
-#line 1372 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1372 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1358 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 8840 "ImportPage.c"
+#line 8632 "ImportPage.c"
 	}
 	{
 		gint ctr = 0;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		ctr = 0;
-#line 8846 "ImportPage.c"
+#line 8638 "ImportPage.c"
 		{
 			gboolean _tmp24_ = FALSE;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp24_ = TRUE;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			while (TRUE) {
-#line 8853 "ImportPage.c"
+#line 8645 "ImportPage.c"
 				gint _tmp26_ = 0;
 				CameraList* _tmp27_ = NULL;
 				gint _tmp28_ = 0;
@@ -8864,79 +8656,79 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 				int _tmp32_ = 0;
 				gchar* _tmp33_ = NULL;
 				int _tmp34_ = 0;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!_tmp24_) {
-#line 8866 "ImportPage.c"
+#line 8658 "ImportPage.c"
 					gint _tmp25_ = 0;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp25_ = ctr;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					ctr = _tmp25_ + 1;
-#line 8872 "ImportPage.c"
+#line 8664 "ImportPage.c"
 				}
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp24_ = FALSE;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp26_ = ctr;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp27_ = files;
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp28_ = gp_list_count (_tmp27_);
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!(_tmp26_ < _tmp28_)) {
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					break;
-#line 8886 "ImportPage.c"
+#line 8678 "ImportPage.c"
 				}
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp29_ = files;
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp30_ = ctr;
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp32_ = gp_list_get_name (_tmp29_, _tmp30_, &_tmp31_);
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (filename);
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp33_ = g_strdup (_tmp31_);
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				filename = _tmp33_;
-#line 1377 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1363 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				self->priv->refresh_result = _tmp32_;
-#line 1378 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1364 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp34_ = self->priv->refresh_result;
-#line 1378 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1364 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp34_ != GP_OK) {
-#line 8906 "ImportPage.c"
+#line 8698 "ImportPage.c"
 					gint _tmp35_ = 0;
 					const gchar* _tmp36_ = NULL;
 					int _tmp37_ = 0;
 					gchar* _tmp38_ = NULL;
 					gchar* _tmp39_ = NULL;
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp35_ = ctr;
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp36_ = fulldir;
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp37_ = self->priv->refresh_result;
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp38_ = gp_result_to_full_string (_tmp37_);
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp39_ = _tmp38_;
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1379: Unable to get the name of file %d in %s: %s", _tmp35_, _tmp36_, _tmp39_);
-#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1365: Unable to get the name of file %d in %s: %s", _tmp35_, _tmp36_, _tmp39_);
+#line 1365 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp39_);
-#line 1382 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1368 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					result = FALSE;
-#line 1382 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1368 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (filename);
-#line 1382 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1368 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (files);
-#line 1382 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1368 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1382 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1368 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 8936 "ImportPage.c"
+#line 8728 "ImportPage.c"
 				}
 				{
 					CameraFileInfo info = {0};
@@ -8954,91 +8746,91 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 					const gchar* _tmp58_ = NULL;
 					gboolean _tmp59_ = FALSE;
 					GtkProgressBar* _tmp102_ = NULL;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp41_ = import_page_spin_idle_context;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp42_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp43_ = self->priv->camera;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp44_ = fulldir;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp45_ = filename;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp47_ = gp_get_info (_tmp42_, _tmp43_, _tmp44_, _tmp45_, &_tmp46_, &_inner_error_);
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					 (info);
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					info = _tmp46_;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp40_ = _tmp47_;
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						 (info);
-#line 8976 "ImportPage.c"
-						goto __catch65_g_error;
+#line 8768 "ImportPage.c"
+						goto __catch64_g_error;
 					}
-#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1373 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (!_tmp40_) {
-#line 8981 "ImportPage.c"
+#line 8773 "ImportPage.c"
 						const gchar* _tmp48_ = NULL;
 						const gchar* _tmp49_ = NULL;
-#line 1388 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1374 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp48_ = fulldir;
-#line 1388 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1374 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp49_ = filename;
-#line 1388 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-						g_warning ("ImportPage.vala:1388: Skipping import of %s/%s: name too long", _tmp48_, _tmp49_);
-#line 1390 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1374 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+						g_warning ("ImportPage.vala:1374: Skipping import of %s/%s: name too long", _tmp48_, _tmp49_);
+#line 1376 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						 (info);
-#line 1390 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1376 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (filename);
-#line 1390 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1376 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						continue;
-#line 8996 "ImportPage.c"
+#line 8788 "ImportPage.c"
 					}
-#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp50_ = info;
-#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp51_ = _tmp50_.file;
-#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp52_ = _tmp51_.fields;
-#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1379 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if ((_tmp52_ & GP_FILE_INFO_TYPE) == 0) {
-#line 9006 "ImportPage.c"
+#line 8798 "ImportPage.c"
 						const gchar* _tmp53_ = NULL;
 						const gchar* _tmp54_ = NULL;
 						CameraFileInfo _tmp55_ = {0};
 						CameraFileInfoFile _tmp56_ = {0};
 						CameraFileInfoFields _tmp57_ = 0;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp53_ = fulldir;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp54_ = filename;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp55_ = info;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp56_ = _tmp55_.file;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp57_ = _tmp56_.fields;
-#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-						g_message ("ImportPage.vala:1394: Skipping %s/%s: No file (file=%02Xh)", _tmp53_, _tmp54_, (guint) _tmp57_);
-#line 1397 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1380 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+						g_message ("ImportPage.vala:1380: Skipping %s/%s: No file (file=%02Xh)", _tmp53_, _tmp54_, (guint) _tmp57_);
+#line 1383 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						 (info);
-#line 1397 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1383 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (filename);
-#line 1397 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1383 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						continue;
-#line 9030 "ImportPage.c"
+#line 8822 "ImportPage.c"
 					}
-#line 1400 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1386 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp58_ = filename;
-#line 1400 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1386 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp59_ = video_reader_is_supported_video_filename (_tmp58_);
-#line 1400 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1386 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp59_) {
-#line 9038 "ImportPage.c"
+#line 8830 "ImportPage.c"
 						VideoImportSource* video_source = NULL;
 						const gchar* _tmp60_ = NULL;
 						Camera* _tmp61_ = NULL;
@@ -9054,41 +8846,41 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 						VideoImportSource* _tmp71_ = NULL;
 						GeeArrayList* _tmp72_ = NULL;
 						VideoImportSource* _tmp73_ = NULL;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp60_ = self->priv->camera_name;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp61_ = self->priv->camera;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp62_ = fsid;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp63_ = dir;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp64_ = filename;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp65_ = info;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp66_ = _tmp65_.file;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp67_ = _tmp66_.size;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp68_ = info;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp69_ = _tmp68_.file;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp70_ = _tmp69_.mtime;
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp71_ = video_import_source_new (_tmp60_, _tmp61_, _tmp62_, _tmp63_, _tmp64_, _tmp67_, _tmp70_);
-#line 1401 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1387 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						video_source = _tmp71_;
-#line 1403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1389 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp72_ = import_list;
-#line 1403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1389 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp73_ = video_source;
-#line 1403 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1389 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1400 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1386 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_object_unref0 (video_source);
-#line 9088 "ImportPage.c"
+#line 8880 "ImportPage.c"
 					} else {
 						PhotoFileFormat file_format = 0;
 						CameraFileInfo _tmp74_ = {0};
@@ -9111,110 +8903,110 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 						PhotoFileFormat _tmp99_ = 0;
 						PhotoImportSource* _tmp100_ = NULL;
 						PhotoImportSource* _tmp101_ = NULL;
-#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1392 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp74_ = info;
-#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1392 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp75_ = _tmp74_.file;
-#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1392 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp76_ = _tmp75_.type;
-#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1392 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp77_ = photo_file_format_from_gphoto_type (_tmp76_);
-#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1392 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						file_format = _tmp77_;
-#line 1407 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp78_ = file_format;
-#line 1407 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1393 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (_tmp78_ == PHOTO_FILE_FORMAT_UNKNOWN) {
-#line 9125 "ImportPage.c"
+#line 8917 "ImportPage.c"
 							const gchar* _tmp79_ = NULL;
 							PhotoFileFormat _tmp80_ = 0;
 							PhotoFileFormat _tmp81_ = 0;
-#line 1408 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp79_ = filename;
-#line 1408 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp80_ = photo_file_format_get_by_basename_extension (_tmp79_);
-#line 1408 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1394 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							file_format = _tmp80_;
-#line 1409 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1395 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp81_ = file_format;
-#line 1409 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1395 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							if (_tmp81_ == PHOTO_FILE_FORMAT_UNKNOWN) {
-#line 9139 "ImportPage.c"
+#line 8931 "ImportPage.c"
 								const gchar* _tmp82_ = NULL;
 								const gchar* _tmp83_ = NULL;
 								CameraFileInfo _tmp84_ = {0};
 								CameraFileInfoFile _tmp85_ = {0};
 								const gchar* _tmp86_ = NULL;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_tmp82_ = fulldir;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_tmp83_ = filename;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_tmp84_ = info;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_tmp85_ = _tmp84_.file;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_tmp86_ = _tmp85_.type;
-#line 1410 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-								g_message ("ImportPage.vala:1410: Skipping %s/%s: Not a supported file extension (" \
+#line 1396 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+								g_message ("ImportPage.vala:1396: Skipping %s/%s: Not a supported file extension (" \
 "%s)", _tmp82_, _tmp83_, _tmp86_);
-#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1399 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								 (info);
-#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1399 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								_g_free0 (filename);
-#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1399 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 								continue;
-#line 9163 "ImportPage.c"
+#line 8955 "ImportPage.c"
 							}
 						}
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp87_ = import_list;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp88_ = self->priv->camera_name;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp89_ = self->priv->camera;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp90_ = fsid;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp91_ = dir;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp92_ = filename;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp93_ = info;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp94_ = _tmp93_.file;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp95_ = _tmp94_.size;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp96_ = info;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp97_ = _tmp96_.file;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp98_ = _tmp97_.mtime;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp99_ = file_format;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp100_ = photo_import_source_new (_tmp88_, _tmp89_, _tmp90_, _tmp91_, _tmp92_, _tmp95_, _tmp98_, _tmp99_);
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp101_ = _tmp100_;
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp101_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1416 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1402 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_object_unref0 (_tmp101_);
-#line 9200 "ImportPage.c"
+#line 8992 "ImportPage.c"
 					}
-#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp102_ = self->priv->progress_bar;
-#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1406 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					gtk_progress_bar_pulse (_tmp102_);
-#line 1423 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1409 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					spin_event_loop ();
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					 (info);
-#line 9210 "ImportPage.c"
+#line 9002 "ImportPage.c"
 				}
-				goto __finally65;
-				__catch65_g_error:
+				goto __finally64;
+				__catch64_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp103_ = NULL;
@@ -9223,164 +9015,164 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 					GError* _tmp106_ = NULL;
 					const gchar* _tmp107_ = NULL;
 					gchar* _tmp108_ = NULL;
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					err = _inner_error_;
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_inner_error_ = NULL;
-#line 1425 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1411 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp103_ = fulldir;
-#line 1425 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1411 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp104_ = err;
-#line 1425 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1411 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp105_ = _tmp104_->message;
-#line 1425 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1425: Error while enumerating files in %s: %s", _tmp103_, _tmp105_);
-#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1411 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1411: Error while enumerating files in %s: %s", _tmp103_, _tmp105_);
+#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp106_ = err;
-#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp107_ = _tmp106_->message;
-#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp108_ = g_strdup (_tmp107_);
-#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (self->priv->refresh_error);
-#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1413 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					self->priv->refresh_error = _tmp108_;
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					result = FALSE;
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_error_free0 (err);
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (filename);
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (files);
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1415 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 9256 "ImportPage.c"
+#line 9048 "ImportPage.c"
 				}
-				__finally65:
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+				__finally64:
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (filename);
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (files);
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_clear_error (&_inner_error_);
-#line 1385 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1371 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return FALSE;
-#line 9273 "ImportPage.c"
+#line 9065 "ImportPage.c"
 				}
-#line 1375 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1361 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (filename);
-#line 9277 "ImportPage.c"
+#line 9069 "ImportPage.c"
 			}
 		}
 	}
-#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp110_ = gp_list_new (&_tmp109_);
-#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (folders);
-#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	folders = _tmp109_;
-#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1420 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp110_;
-#line 1435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1421 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp111_ = self->priv->refresh_result;
-#line 1435 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1421 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp111_ != GP_OK) {
-#line 9293 "ImportPage.c"
+#line 9085 "ImportPage.c"
 		int _tmp112_ = 0;
 		gchar* _tmp113_ = NULL;
 		gchar* _tmp114_ = NULL;
-#line 1436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1422 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp112_ = self->priv->refresh_result;
-#line 1436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1422 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp113_ = gp_result_to_full_string (_tmp112_);
-#line 1436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1422 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp114_ = _tmp113_;
-#line 1436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1436: Unable to create folder list: %s", _tmp114_);
-#line 1436 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1422 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1422: Unable to create folder list: %s", _tmp114_);
+#line 1422 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp114_);
-#line 1438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1424 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = FALSE;
-#line 1438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1424 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (folders);
-#line 1438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1424 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (files);
-#line 1438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1424 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1438 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1424 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 9317 "ImportPage.c"
+#line 9109 "ImportPage.c"
 	}
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp115_ = self->priv->camera;
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp116_ = fulldir;
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp117_ = folders;
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp118_ = import_page_spin_idle_context;
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp119_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp118_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp120_ = gp_camera_folder_list_folders (_tmp115_, _tmp116_, _tmp117_, _tmp119_);
-#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1427 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->refresh_result = _tmp120_;
-#line 1442 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1428 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp121_ = self->priv->refresh_result;
-#line 1442 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1428 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp121_ != GP_OK) {
-#line 9337 "ImportPage.c"
+#line 9129 "ImportPage.c"
 		const gchar* _tmp122_ = NULL;
 		int _tmp123_ = 0;
 		gchar* _tmp124_ = NULL;
 		gchar* _tmp125_ = NULL;
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp122_ = fulldir;
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp123_ = self->priv->refresh_result;
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp124_ = gp_result_to_full_string (_tmp123_);
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp125_ = _tmp124_;
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_warning ("ImportPage.vala:1443: Unable to list folders in %s: %s", _tmp122_, _tmp125_);
-#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_warning ("ImportPage.vala:1429: Unable to list folders in %s: %s", _tmp122_, _tmp125_);
+#line 1429 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp125_);
-#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1432 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		self->priv->refresh_result = GP_OK;
-#line 1448 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		result = TRUE;
-#line 1448 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (folders);
-#line 1448 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_gp_list_unref0 (files);
-#line 1448 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (fulldir);
-#line 1448 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1434 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 9366 "ImportPage.c"
+#line 9158 "ImportPage.c"
 	}
 	{
 		gint ctr = 0;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		ctr = 0;
-#line 9372 "ImportPage.c"
+#line 9164 "ImportPage.c"
 		{
 			gboolean _tmp126_ = FALSE;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp126_ = TRUE;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			while (TRUE) {
-#line 9379 "ImportPage.c"
+#line 9171 "ImportPage.c"
 				gint _tmp128_ = 0;
 				CameraList* _tmp129_ = NULL;
 				gint _tmp130_ = 0;
@@ -9399,151 +9191,151 @@ static gboolean import_page_enumerate_files (ImportPage* self, gint fsid, const 
 				GeeArrayList* _tmp146_ = NULL;
 				gboolean _tmp147_ = FALSE;
 				gboolean _tmp148_ = FALSE;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!_tmp126_) {
-#line 9400 "ImportPage.c"
+#line 9192 "ImportPage.c"
 					gint _tmp127_ = 0;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp127_ = ctr;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					ctr = _tmp127_ + 1;
-#line 9406 "ImportPage.c"
+#line 9198 "ImportPage.c"
 				}
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp126_ = FALSE;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp128_ = ctr;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp129_ = folders;
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp130_ = gp_list_count (_tmp129_);
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!(_tmp128_ < _tmp130_)) {
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					break;
-#line 9420 "ImportPage.c"
+#line 9212 "ImportPage.c"
 				}
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp131_ = folders;
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp132_ = ctr;
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp134_ = gp_list_get_name (_tmp131_, _tmp132_, &_tmp133_);
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (subdir);
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp135_ = g_strdup (_tmp133_);
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				subdir = _tmp135_;
-#line 1453 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1439 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				self->priv->refresh_result = _tmp134_;
-#line 1454 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1440 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp136_ = self->priv->refresh_result;
-#line 1454 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1440 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp136_ != GP_OK) {
-#line 9440 "ImportPage.c"
+#line 9232 "ImportPage.c"
 					gint _tmp137_ = 0;
 					int _tmp138_ = 0;
 					gchar* _tmp139_ = NULL;
 					gchar* _tmp140_ = NULL;
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp137_ = ctr;
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp138_ = self->priv->refresh_result;
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp139_ = gp_result_to_full_string (_tmp138_);
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp140_ = _tmp139_;
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1455: Unable to get name of folder %d: %s", _tmp137_, _tmp140_);
-#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1441: Unable to get name of folder %d: %s", _tmp137_, _tmp140_);
+#line 1441 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp140_);
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					result = FALSE;
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (subdir);
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (folders);
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (files);
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1443 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 9469 "ImportPage.c"
+#line 9261 "ImportPage.c"
 				}
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp141_ = fsid;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp142_ = dir;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp143_ = subdir;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp144_ = import_page_append_path (_tmp142_, _tmp143_);
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp145_ = _tmp144_;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp146_ = import_list;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp147_ = import_page_enumerate_files (self, _tmp141_, _tmp145_, _tmp146_);
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp148_ = !_tmp147_;
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (_tmp145_);
-#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1446 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp148_) {
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					result = FALSE;
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (subdir);
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (folders);
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_gp_list_unref0 (files);
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1447 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return result;
-#line 9503 "ImportPage.c"
+#line 9295 "ImportPage.c"
 				}
-#line 1451 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1437 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (subdir);
-#line 9507 "ImportPage.c"
+#line 9299 "ImportPage.c"
 			}
 		}
 	}
-#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1450 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = TRUE;
-#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1450 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (folders);
-#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1450 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_gp_list_unref0 (files);
-#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1450 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_free0 (fulldir);
-#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1450 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 9521 "ImportPage.c"
+#line 9313 "ImportPage.c"
 }
 
 
 static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* import_list) {
-#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1454 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1454 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (GEE_IS_ARRAY_LIST (import_list));
-#line 9530 "ImportPage.c"
+#line 9322 "ImportPage.c"
 	{
 		gint i = 0;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		i = 0;
-#line 9535 "ImportPage.c"
+#line 9327 "ImportPage.c"
 		{
 			gboolean _tmp0_ = FALSE;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp0_ = TRUE;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			while (TRUE) {
-#line 9542 "ImportPage.c"
+#line 9334 "ImportPage.c"
 				gint _tmp2_ = 0;
 				GeeArrayList* _tmp3_ = NULL;
 				gint _tmp4_ = 0;
@@ -9567,162 +9359,162 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 				PhotoImportSource* _tmp29_ = NULL;
 				gboolean _tmp30_ = FALSE;
 				PhotoImportSource* _tmp31_ = NULL;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!_tmp0_) {
-#line 9568 "ImportPage.c"
+#line 9360 "ImportPage.c"
 					gint _tmp1_ = 0;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp1_ = i;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					i = _tmp1_ + 1;
-#line 9574 "ImportPage.c"
+#line 9366 "ImportPage.c"
 				}
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp0_ = FALSE;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp2_ = i;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp3_ = import_list;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp4_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp5_ = _tmp4_;
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!(_tmp2_ < _tmp5_)) {
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					break;
-#line 9590 "ImportPage.c"
+#line 9382 "ImportPage.c"
 				}
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp6_ = import_list;
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp7_ = i;
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp8_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp7_);
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp9_ = (ImportSource*) _tmp8_;
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp10_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp9_, TYPE_PHOTO_IMPORT_SOURCE) ? ((PhotoImportSource*) _tmp9_) : NULL;
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp10_ == NULL) {
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_tmp9_);
-#line 9606 "ImportPage.c"
+#line 9398 "ImportPage.c"
 				}
-#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1456 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				current = _tmp10_;
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp12_ = i;
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp13_ = import_list;
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp14_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp15_ = _tmp14_;
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if ((_tmp12_ + 1) < _tmp15_) {
-#line 9620 "ImportPage.c"
+#line 9412 "ImportPage.c"
 					GeeArrayList* _tmp16_ = NULL;
 					gint _tmp17_ = 0;
 					gpointer _tmp18_ = NULL;
 					ImportSource* _tmp19_ = NULL;
 					PhotoImportSource* _tmp20_ = NULL;
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp16_ = import_list;
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp17_ = i;
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp18_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp17_ + 1);
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp19_ = (ImportSource*) _tmp18_;
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp20_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp19_, TYPE_PHOTO_IMPORT_SOURCE) ? ((PhotoImportSource*) _tmp19_) : NULL;
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp20_ == NULL) {
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_object_unref0 (_tmp19_);
-#line 9640 "ImportPage.c"
+#line 9432 "ImportPage.c"
 					}
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_tmp11_);
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp11_ = _tmp20_;
-#line 9646 "ImportPage.c"
+#line 9438 "ImportPage.c"
 				} else {
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_tmp11_);
-#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1458 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp11_ = NULL;
-#line 9652 "ImportPage.c"
+#line 9444 "ImportPage.c"
 				}
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp21_ = _g_object_ref0 (_tmp11_);
-#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				next = _tmp21_;
-#line 1473 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1459 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp23_ = i;
-#line 1473 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1459 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp23_ > 0) {
-#line 9662 "ImportPage.c"
+#line 9454 "ImportPage.c"
 					GeeArrayList* _tmp24_ = NULL;
 					gint _tmp25_ = 0;
 					gpointer _tmp26_ = NULL;
 					ImportSource* _tmp27_ = NULL;
 					PhotoImportSource* _tmp28_ = NULL;
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp24_ = import_list;
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp25_ = i;
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp26_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp25_ - 1);
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp27_ = (ImportSource*) _tmp26_;
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp28_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp27_, TYPE_PHOTO_IMPORT_SOURCE) ? ((PhotoImportSource*) _tmp27_) : NULL;
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp28_ == NULL) {
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_object_unref0 (_tmp27_);
-#line 9682 "ImportPage.c"
+#line 9474 "ImportPage.c"
 					}
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_tmp22_);
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp22_ = _tmp28_;
-#line 9688 "ImportPage.c"
+#line 9480 "ImportPage.c"
 				} else {
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_tmp22_);
-#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp22_ = NULL;
-#line 9694 "ImportPage.c"
+#line 9486 "ImportPage.c"
 				}
-#line 1473 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1459 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp29_ = _g_object_ref0 (_tmp22_);
-#line 1473 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1459 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				prev = _tmp29_;
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp31_ = current;
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp31_ != NULL) {
-#line 9704 "ImportPage.c"
+#line 9496 "ImportPage.c"
 					PhotoImportSource* _tmp32_ = NULL;
 					PhotoFileFormat _tmp33_ = 0;
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp32_ = current;
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp33_ = photo_import_source_get_file_format (_tmp32_);
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp30_ = _tmp33_ == PHOTO_FILE_FORMAT_RAW;
-#line 9713 "ImportPage.c"
+#line 9505 "ImportPage.c"
 				} else {
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp30_ = FALSE;
-#line 9717 "ImportPage.c"
+#line 9509 "ImportPage.c"
 				}
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp30_) {
-#line 9721 "ImportPage.c"
+#line 9513 "ImportPage.c"
 					gchar* current_name = NULL;
 					gchar* ext = NULL;
 					PhotoImportSource* _tmp34_ = NULL;
@@ -9736,48 +9528,48 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 					gboolean _tmp52_ = FALSE;
 					PhotoImportSource* _tmp53_ = NULL;
 					PhotoImportSource* _tmp65_ = NULL;
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp34_ = current;
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp35_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp36_ = _tmp35_;
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					disassemble_filename (_tmp36_, &_tmp37_, &_tmp38_);
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (current_name);
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					current_name = _tmp37_;
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (ext);
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					ext = _tmp38_;
-#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1464 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp36_);
-#line 1481 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1467 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					associated = NULL;
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp40_ = next;
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp40_ != NULL) {
-#line 9759 "ImportPage.c"
+#line 9551 "ImportPage.c"
 						PhotoImportSource* _tmp41_ = NULL;
 						PhotoFileFormat _tmp42_ = 0;
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp41_ = next;
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp42_ = photo_import_source_get_file_format (_tmp41_);
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp39_ = _tmp42_ == PHOTO_FILE_FORMAT_JFIF;
-#line 9768 "ImportPage.c"
+#line 9560 "ImportPage.c"
 					} else {
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp39_ = FALSE;
-#line 9772 "ImportPage.c"
+#line 9564 "ImportPage.c"
 					}
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp39_) {
-#line 9776 "ImportPage.c"
+#line 9568 "ImportPage.c"
 						gchar* next_name = NULL;
 						PhotoImportSource* _tmp43_ = NULL;
 						gchar* _tmp44_ = NULL;
@@ -9786,69 +9578,69 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 						gchar* _tmp47_ = NULL;
 						const gchar* _tmp48_ = NULL;
 						const gchar* _tmp49_ = NULL;
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp43_ = next;
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp44_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp45_ = _tmp44_;
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						disassemble_filename (_tmp45_, &_tmp46_, &_tmp47_);
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (next_name);
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						next_name = _tmp46_;
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (ext);
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						ext = _tmp47_;
-#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1470 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (_tmp45_);
-#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp48_ = next_name;
-#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp49_ = current_name;
-#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1471 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (g_strcmp0 (_tmp48_, _tmp49_) == 0) {
-#line 9809 "ImportPage.c"
+#line 9601 "ImportPage.c"
 							PhotoImportSource* _tmp50_ = NULL;
 							PhotoImportSource* _tmp51_ = NULL;
-#line 1486 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp50_ = next;
-#line 1486 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp51_ = _g_object_ref0 (_tmp50_);
-#line 1486 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_g_object_unref0 (associated);
-#line 1486 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							associated = _tmp51_;
-#line 9820 "ImportPage.c"
+#line 9612 "ImportPage.c"
 						}
-#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (next_name);
-#line 9824 "ImportPage.c"
+#line 9616 "ImportPage.c"
 					}
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp53_ = prev;
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp53_ != NULL) {
-#line 9830 "ImportPage.c"
+#line 9622 "ImportPage.c"
 						PhotoImportSource* _tmp54_ = NULL;
 						PhotoFileFormat _tmp55_ = 0;
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp54_ = prev;
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp55_ = photo_import_source_get_file_format (_tmp54_);
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp52_ = _tmp55_ == PHOTO_FILE_FORMAT_JFIF;
-#line 9839 "ImportPage.c"
+#line 9631 "ImportPage.c"
 					} else {
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp52_ = FALSE;
-#line 9843 "ImportPage.c"
+#line 9635 "ImportPage.c"
 					}
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp52_) {
-#line 9847 "ImportPage.c"
+#line 9639 "ImportPage.c"
 						gchar* prev_name = NULL;
 						PhotoImportSource* _tmp56_ = NULL;
 						gchar* _tmp57_ = NULL;
@@ -9857,52 +9649,52 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 						gchar* _tmp60_ = NULL;
 						const gchar* _tmp61_ = NULL;
 						const gchar* _tmp62_ = NULL;
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp56_ = prev;
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp57_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp58_ = _tmp57_;
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						disassemble_filename (_tmp58_, &_tmp59_, &_tmp60_);
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (prev_name);
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						prev_name = _tmp59_;
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (ext);
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						ext = _tmp60_;
-#line 1490 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1476 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (_tmp58_);
-#line 1491 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1477 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp61_ = prev_name;
-#line 1491 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1477 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp62_ = current_name;
-#line 1491 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1477 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (g_strcmp0 (_tmp61_, _tmp62_) == 0) {
-#line 9880 "ImportPage.c"
+#line 9672 "ImportPage.c"
 							PhotoImportSource* _tmp63_ = NULL;
 							PhotoImportSource* _tmp64_ = NULL;
-#line 1492 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp63_ = prev;
-#line 1492 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp64_ = _g_object_ref0 (_tmp63_);
-#line 1492 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_g_object_unref0 (associated);
-#line 1492 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1478 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							associated = _tmp64_;
-#line 9891 "ImportPage.c"
+#line 9683 "ImportPage.c"
 						}
-#line 1488 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1474 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (prev_name);
-#line 9895 "ImportPage.c"
+#line 9687 "ImportPage.c"
 					}
-#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp65_ = associated;
-#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp65_ != NULL) {
-#line 9901 "ImportPage.c"
+#line 9693 "ImportPage.c"
 						PhotoImportSource* _tmp66_ = NULL;
 						gchar* _tmp67_ = NULL;
 						gchar* _tmp68_ = NULL;
@@ -9914,68 +9706,68 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 						GeeArrayList* _tmp74_ = NULL;
 						PhotoImportSource* _tmp75_ = NULL;
 						gboolean _tmp76_ = FALSE;
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp66_ = current;
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp67_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp68_ = _tmp67_;
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp69_ = associated;
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp70_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp71_ = _tmp70_;
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-						g_debug ("ImportPage.vala:1497: Found RAW+JPEG pair: %s and %s", _tmp68_, _tmp71_);
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+						g_debug ("ImportPage.vala:1483: Found RAW+JPEG pair: %s and %s", _tmp68_, _tmp71_);
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (_tmp71_);
-#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1483 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_g_free0 (_tmp68_);
-#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp72_ = current;
-#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp73_ = associated;
-#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1484 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						photo_import_source_set_associated (_tmp72_, _tmp73_);
-#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp74_ = import_list;
-#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp75_ = associated;
-#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						_tmp76_ = gee_abstract_collection_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (!_tmp76_) {
-#line 9945 "ImportPage.c"
+#line 9737 "ImportPage.c"
 							PhotoImportSource* _tmp77_ = NULL;
-#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-							g_debug ("ImportPage.vala:1500: Unable to associate files");
-#line 1501 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1486 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+							g_debug ("ImportPage.vala:1486: Unable to associate files");
+#line 1487 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp77_ = current;
-#line 1501 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1487 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							photo_import_source_set_associated (_tmp77_, NULL);
-#line 9953 "ImportPage.c"
+#line 9745 "ImportPage.c"
 						}
 					}
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (associated);
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (ext);
-#line 1475 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1461 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (current_name);
-#line 9962 "ImportPage.c"
+#line 9754 "ImportPage.c"
 				}
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (prev);
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp22_);
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (next);
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp11_);
-#line 1469 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1455 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (current);
-#line 9974 "ImportPage.c"
+#line 9766 "ImportPage.c"
 			}
 		}
 	}
@@ -9985,13 +9777,13 @@ static void import_page_auto_match_raw_jpeg (ImportPage* self, GeeArrayList* imp
 static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* import_list) {
 	gint loaded_photos = 0;
 	GError * _inner_error_ = NULL;
-#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1494 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1494 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (GEE_IS_LIST (import_list));
-#line 1509 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1495 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	loaded_photos = 0;
-#line 9990 "ImportPage.c"
+#line 9782 "ImportPage.c"
 	{
 		GeeList* _import_source_list = NULL;
 		GeeList* _tmp0_ = NULL;
@@ -10001,25 +9793,25 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
 		gint _import_source_index = 0;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = import_list;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_import_source_list = _tmp1_;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = _import_source_list;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = _tmp3_;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_import_source_size = _tmp4_;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_import_source_index = -1;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		while (TRUE) {
-#line 10018 "ImportPage.c"
+#line 9810 "ImportPage.c"
 			gint _tmp5_ = 0;
 			gint _tmp6_ = 0;
 			gint _tmp7_ = 0;
@@ -10070,143 +9862,143 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 			GeeList* _tmp130_ = NULL;
 			gint _tmp131_ = 0;
 			gint _tmp132_ = 0;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp5_ = _import_source_index;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_import_source_index = _tmp5_ + 1;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp6_ = _import_source_index;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp7_ = _import_source_size;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (!(_tmp6_ < _tmp7_)) {
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				break;
-#line 10081 "ImportPage.c"
+#line 9873 "ImportPage.c"
 			}
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp8_ = _import_source_list;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp9_ = _import_source_index;
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp10_ = gee_list_get (_tmp8_, _tmp9_);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			import_source = (ImportSource*) _tmp10_;
-#line 1511 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp11_ = import_source;
-#line 1511 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp12_ = import_source_get_filename (_tmp11_);
-#line 1511 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1497 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			filename = _tmp12_;
-#line 1512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp13_ = import_source;
-#line 1512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp14_ = import_source_get_fulldir (_tmp13_);
-#line 1512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			fulldir = _tmp14_;
-#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp15_ = fulldir;
-#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp15_ == NULL) {
-#line 10107 "ImportPage.c"
+#line 9899 "ImportPage.c"
 				ImportSource* _tmp16_ = NULL;
 				gchar* _tmp17_ = NULL;
 				gchar* _tmp18_ = NULL;
-#line 1514 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp16_ = import_source;
-#line 1514 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp17_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_DATA_OBJECT, DataObject));
-#line 1514 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp18_ = _tmp17_;
-#line 1514 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-				g_warning ("ImportPage.vala:1514: Skipping loading preview of %s: invalid folder n" \
+#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+				g_warning ("ImportPage.vala:1500: Skipping loading preview of %s: invalid folder n" \
 "ame", _tmp18_);
-#line 1514 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1500 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (_tmp18_);
-#line 1516 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1502 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (fulldir);
-#line 1516 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1502 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (filename);
-#line 1516 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1502 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (import_source);
-#line 1516 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1502 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				continue;
-#line 10129 "ImportPage.c"
+#line 9921 "ImportPage.c"
 			}
-#line 1520 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1506 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			associated = NULL;
-#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1507 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp20_ = import_source;
-#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1507 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp20_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 10137 "ImportPage.c"
+#line 9929 "ImportPage.c"
 				ImportSource* _tmp21_ = NULL;
 				PhotoImportSource* _tmp22_ = NULL;
 				PhotoImportSource* _tmp23_ = NULL;
-#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp21_ = import_source;
-#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp22_ = photo_import_source_get_associated (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource));
-#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp23_ = _tmp22_;
-#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp19_ = _tmp23_ != NULL;
-#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp23_);
-#line 10151 "ImportPage.c"
+#line 9943 "ImportPage.c"
 			} else {
-#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1507 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp19_ = FALSE;
-#line 10155 "ImportPage.c"
+#line 9947 "ImportPage.c"
 			}
-#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1507 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp19_) {
-#line 10159 "ImportPage.c"
+#line 9951 "ImportPage.c"
 				ImportSource* _tmp24_ = NULL;
 				PhotoImportSource* _tmp25_ = NULL;
-#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1509 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp24_ = import_source;
-#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1509 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp25_ = photo_import_source_get_associated (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource));
-#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1509 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (associated);
-#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1509 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				associated = _tmp25_;
-#line 10170 "ImportPage.c"
+#line 9962 "ImportPage.c"
 			}
-#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp26_ = self->priv->progress_bar;
-#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			gtk_progress_bar_set_ellipsize (_tmp26_, PANGO_ELLIPSIZE_MIDDLE);
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp27_ = self->priv->progress_bar;
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp28_ = _ ("Fetching preview for %s");
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp29_ = import_source;
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp30_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, TYPE_DATA_OBJECT, DataObject));
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp31_ = _tmp30_;
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp32_ = g_strdup_printf (_tmp28_, _tmp31_);
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp33_ = _tmp32_;
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			gtk_progress_bar_set_text (_tmp27_, _tmp33_);
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp33_);
-#line 1527 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1513 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (_tmp31_);
-#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1520 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			metadata = NULL;
-#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp34_ = filename;
-#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp35_ = video_reader_is_supported_video_filename (_tmp34_);
-#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1521 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (!_tmp35_) {
-#line 10204 "ImportPage.c"
+#line 9996 "ImportPage.c"
 				{
 					PhotoMetadata* _tmp36_ = NULL;
 					GPSpinIdleWrapper* _tmp37_ = NULL;
@@ -10216,94 +10008,94 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					const gchar* _tmp41_ = NULL;
 					PhotoMetadata* _tmp42_ = NULL;
 					PhotoMetadata* _tmp43_ = NULL;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp37_ = import_page_spin_idle_context;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp38_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp39_ = self->priv->camera;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp40_ = fulldir;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp41_ = filename;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp42_ = gp_load_metadata (_tmp38_, _tmp39_, _tmp40_, _tmp41_, &_inner_error_);
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp36_ = _tmp42_;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 10230 "ImportPage.c"
-						goto __catch66_g_error;
+#line 10022 "ImportPage.c"
+						goto __catch65_g_error;
 					}
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp43_ = _tmp36_;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp36_ = NULL;
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_media_metadata_unref0 (metadata);
-#line 1537 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1523 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					metadata = _tmp43_;
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_media_metadata_unref0 (_tmp36_);
-#line 10243 "ImportPage.c"
+#line 10035 "ImportPage.c"
 				}
-				goto __finally66;
-				__catch66_g_error:
+				goto __finally65;
+				__catch65_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp44_ = NULL;
 					const gchar* _tmp45_ = NULL;
 					GError* _tmp46_ = NULL;
 					const gchar* _tmp47_ = NULL;
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					err = _inner_error_;
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_inner_error_ = NULL;
-#line 1540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp44_ = fulldir;
-#line 1540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp45_ = filename;
-#line 1540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp46_ = err;
-#line 1540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp47_ = _tmp46_->message;
-#line 1540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1540: Unable to fetch metadata for %s/%s: %s", _tmp44_, _tmp45_, _tmp47_);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1526 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1526: Unable to fetch metadata for %s/%s: %s", _tmp44_, _tmp45_, _tmp47_);
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_error_free0 (err);
-#line 10269 "ImportPage.c"
+#line 10061 "ImportPage.c"
 				}
-				__finally66:
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+				__finally65:
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_media_metadata_unref0 (metadata);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (associated);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (filename);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (import_source);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_import_source_list);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_clear_error (&_inner_error_);
-#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1522 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return;
-#line 10292 "ImportPage.c"
+#line 10084 "ImportPage.c"
 				}
 			}
-#line 1546 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1532 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			exif_only_md5 = NULL;
-#line 1547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1533 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp48_ = metadata;
-#line 1547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1533 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp48_ != NULL) {
-#line 10301 "ImportPage.c"
+#line 10093 "ImportPage.c"
 				guint8* flattened_sans_thumbnail = NULL;
 				PhotoMetadata* _tmp49_ = NULL;
 				gint _tmp50_ = 0;
@@ -10313,76 +10105,76 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 				gboolean _tmp52_ = FALSE;
 				guint8* _tmp53_ = NULL;
 				gint _tmp53__length1 = 0;
-#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp49_ = metadata;
-#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp51_ = photo_metadata_flatten_exif (_tmp49_, FALSE, &_tmp50_);
-#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				flattened_sans_thumbnail = _tmp51_;
-#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				flattened_sans_thumbnail_length1 = _tmp50_;
-#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1534 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_flattened_sans_thumbnail_size_ = flattened_sans_thumbnail_length1;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp53_ = flattened_sans_thumbnail;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp53__length1 = flattened_sans_thumbnail_length1;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp53_ != NULL) {
-#line 10327 "ImportPage.c"
+#line 10119 "ImportPage.c"
 					guint8* _tmp54_ = NULL;
 					gint _tmp54__length1 = 0;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp54_ = flattened_sans_thumbnail;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp54__length1 = flattened_sans_thumbnail_length1;
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp52_ = _tmp54__length1 > 0;
-#line 10336 "ImportPage.c"
+#line 10128 "ImportPage.c"
 				} else {
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp52_ = FALSE;
-#line 10340 "ImportPage.c"
+#line 10132 "ImportPage.c"
 				}
-#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1535 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp52_) {
-#line 10344 "ImportPage.c"
+#line 10136 "ImportPage.c"
 					guint8* _tmp55_ = NULL;
 					gint _tmp55__length1 = 0;
 					guint8* _tmp56_ = NULL;
 					gint _tmp56__length1 = 0;
 					gchar* _tmp57_ = NULL;
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp55_ = flattened_sans_thumbnail;
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp55__length1 = flattened_sans_thumbnail_length1;
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp56_ = flattened_sans_thumbnail;
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp56__length1 = flattened_sans_thumbnail_length1;
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp57_ = md5_binary (_tmp55_, (gsize) _tmp56__length1);
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (exif_only_md5);
-#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					exif_only_md5 = _tmp57_;
-#line 10364 "ImportPage.c"
+#line 10156 "ImportPage.c"
 				}
-#line 1547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1533 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				flattened_sans_thumbnail = (g_free (flattened_sans_thumbnail), NULL);
-#line 10368 "ImportPage.c"
+#line 10160 "ImportPage.c"
 			}
-#line 1559 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1545 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview_raw = NULL;
-#line 1559 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1545 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview_raw_length1 = 0;
-#line 1559 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1545 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_preview_raw_size_ = preview_raw_length1;
-#line 1560 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1546 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview_raw_length = (gsize) 0;
-#line 1561 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview = NULL;
-#line 10380 "ImportPage.c"
+#line 10172 "ImportPage.c"
 			{
 				gchar* preview_fulldir = NULL;
 				const gchar* _tmp58_ = NULL;
@@ -10402,260 +10194,260 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 				gsize _tmp75_ = 0UL;
 				GdkPixbuf* _tmp76_ = NULL;
 				GdkPixbuf* _tmp77_ = NULL;
-#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp58_ = fulldir;
-#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp59_ = g_strdup (_tmp58_);
-#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1549 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_fulldir = _tmp59_;
-#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp60_ = filename;
-#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp61_ = g_strdup (_tmp60_);
-#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1550 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_filename = _tmp61_;
-#line 1565 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1551 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp62_ = associated;
-#line 1565 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1551 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp62_ != NULL) {
-#line 10416 "ImportPage.c"
+#line 10208 "ImportPage.c"
 					PhotoImportSource* _tmp63_ = NULL;
 					gchar* _tmp64_ = NULL;
 					PhotoImportSource* _tmp65_ = NULL;
 					gchar* _tmp66_ = NULL;
-#line 1566 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1552 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp63_ = associated;
-#line 1566 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1552 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp64_ = import_source_get_fulldir (G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1566 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1552 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_fulldir);
-#line 1566 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1552 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					preview_fulldir = _tmp64_;
-#line 1567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1553 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp65_ = associated;
-#line 1567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1553 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp66_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1553 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_filename);
-#line 1567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1553 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					preview_filename = _tmp66_;
-#line 10437 "ImportPage.c"
+#line 10229 "ImportPage.c"
 				}
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp68_ = import_page_spin_idle_context;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp69_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp70_ = self->priv->camera;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp71_ = preview_fulldir;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp72_ = preview_filename;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp76_ = gp_load_preview (_tmp69_, _tmp70_, _tmp71_, _tmp72_, &_tmp73_, &_tmp74_, &_tmp75_, &_inner_error_);
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_raw = (g_free (preview_raw), NULL);
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_raw = _tmp73_;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_raw_length1 = _tmp74_;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_preview_raw_size_ = preview_raw_length1;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_raw_length = _tmp75_;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp67_ = _tmp76_;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_filename);
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_fulldir);
-#line 10469 "ImportPage.c"
-					goto __catch67_g_error;
+#line 10261 "ImportPage.c"
+					goto __catch66_g_error;
 				}
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp77_ = _tmp67_;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp67_ = NULL;
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (preview);
-#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview = _tmp77_;
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp67_);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (preview_filename);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (preview_fulldir);
-#line 10486 "ImportPage.c"
+#line 10278 "ImportPage.c"
 			}
-			goto __finally67;
-			__catch67_g_error:
+			goto __finally66;
+			__catch66_g_error:
 			{
 				GError* err = NULL;
 				const gchar* _tmp78_ = NULL;
 				gboolean _tmp79_ = FALSE;
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				err = _inner_error_;
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_inner_error_ = NULL;
-#line 1577 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp78_ = filename;
-#line 1577 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp79_ = video_reader_is_supported_video_filename (_tmp78_);
-#line 1577 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1563 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (!_tmp79_) {
-#line 10504 "ImportPage.c"
+#line 10296 "ImportPage.c"
 					const gchar* _tmp80_ = NULL;
 					const gchar* _tmp81_ = NULL;
 					GError* _tmp82_ = NULL;
 					const gchar* _tmp83_ = NULL;
-#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp80_ = fulldir;
-#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp81_ = filename;
-#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp82_ = err;
-#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp83_ = _tmp82_->message;
-#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1578: Unable to fetch preview for %s/%s: %s", _tmp80_, _tmp81_, _tmp83_);
-#line 10519 "ImportPage.c"
+#line 1564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1564: Unable to fetch preview for %s/%s: %s", _tmp80_, _tmp81_, _tmp83_);
+#line 10311 "ImportPage.c"
 				}
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_error_free0 (err);
-#line 10523 "ImportPage.c"
+#line 10315 "ImportPage.c"
 			}
-			__finally67:
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+			__finally66:
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (preview);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_raw = (g_free (preview_raw), NULL);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (exif_only_md5);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_media_metadata_unref0 (metadata);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (associated);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (fulldir);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (filename);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (import_source);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_import_source_list);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				g_clear_error (&_inner_error_);
-#line 1562 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1548 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				return;
-#line 10552 "ImportPage.c"
+#line 10344 "ImportPage.c"
 			}
-#line 1583 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1569 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview_md5 = NULL;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp86_ = preview;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp86_ != NULL) {
-#line 10560 "ImportPage.c"
+#line 10352 "ImportPage.c"
 				guint8* _tmp87_ = NULL;
 				gint _tmp87__length1 = 0;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp87_ = preview_raw;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp87__length1 = preview_raw_length1;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp85_ = _tmp87_ != NULL;
-#line 10569 "ImportPage.c"
+#line 10361 "ImportPage.c"
 			} else {
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp85_ = FALSE;
-#line 10573 "ImportPage.c"
+#line 10365 "ImportPage.c"
 			}
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp85_) {
-#line 10577 "ImportPage.c"
+#line 10369 "ImportPage.c"
 				gsize _tmp88_ = 0UL;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp88_ = preview_raw_length;
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp84_ = _tmp88_ > ((gsize) 0);
-#line 10583 "ImportPage.c"
+#line 10375 "ImportPage.c"
 			} else {
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp84_ = FALSE;
-#line 10587 "ImportPage.c"
+#line 10379 "ImportPage.c"
 			}
-#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1570 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp84_) {
-#line 10591 "ImportPage.c"
+#line 10383 "ImportPage.c"
 				guint8* _tmp89_ = NULL;
 				gint _tmp89__length1 = 0;
 				gsize _tmp90_ = 0UL;
 				gchar* _tmp91_ = NULL;
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp89_ = preview_raw;
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp89__length1 = preview_raw_length1;
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp90_ = preview_raw_length;
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp91_ = md5_binary (_tmp89_, _tmp90_);
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (preview_md5);
-#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1571 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				preview_md5 = _tmp91_;
-#line 10608 "ImportPage.c"
+#line 10400 "ImportPage.c"
 			}
-#line 1591 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1577 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp92_ = import_source;
-#line 1591 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1577 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp92_, TYPE_VIDEO_IMPORT_SOURCE)) {
-#line 10614 "ImportPage.c"
+#line 10406 "ImportPage.c"
 				ImportSource* _tmp93_ = NULL;
 				GdkPixbuf* _tmp94_ = NULL;
-#line 1592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp93_ = import_source;
-#line 1592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp94_ = preview;
-#line 1592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1578 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				video_import_source_update (G_TYPE_CHECK_INSTANCE_TYPE (_tmp93_, TYPE_VIDEO_IMPORT_SOURCE) ? ((VideoImportSource*) _tmp93_) : NULL, _tmp94_);
-#line 10623 "ImportPage.c"
+#line 10415 "ImportPage.c"
 			}
-#line 1594 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1580 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp95_ = import_source;
-#line 1594 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1580 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp95_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 10629 "ImportPage.c"
+#line 10421 "ImportPage.c"
 				ImportSource* _tmp96_ = NULL;
 				GdkPixbuf* _tmp97_ = NULL;
 				const gchar* _tmp98_ = NULL;
 				PhotoMetadata* _tmp99_ = NULL;
 				const gchar* _tmp100_ = NULL;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp96_ = import_source;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp97_ = preview;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp98_ = preview_md5;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp99_ = metadata;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp100_ = exif_only_md5;
-#line 1595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				photo_import_source_update (G_TYPE_CHECK_INSTANCE_TYPE (_tmp96_, TYPE_PHOTO_IMPORT_SOURCE) ? ((PhotoImportSource*) _tmp96_) : NULL, _tmp97_, _tmp98_, _tmp99_, _tmp100_);
-#line 10647 "ImportPage.c"
+#line 10439 "ImportPage.c"
 			}
-#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp101_ = associated;
-#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1584 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp101_ != NULL) {
-#line 10653 "ImportPage.c"
+#line 10445 "ImportPage.c"
 				{
 					PhotoMetadata* associated_metadata = NULL;
 					GPSpinIdleWrapper* _tmp102_ = NULL;
@@ -10673,55 +10465,55 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					GdkPixbuf* _tmp114_ = NULL;
 					const gchar* _tmp115_ = NULL;
 					PhotoMetadata* _tmp116_ = NULL;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp102_ = import_page_spin_idle_context;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp103_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp102_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp104_ = self->priv->camera;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp105_ = associated;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp106_ = import_source_get_fulldir (G_TYPE_CHECK_INSTANCE_CAST (_tmp105_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp107_ = _tmp106_;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp108_ = associated;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp109_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp108_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp110_ = _tmp109_;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp111_ = gp_load_metadata (_tmp103_, _tmp104_, _tmp107_, _tmp110_, &_inner_error_);
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp112_ = _tmp111_;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp110_);
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp107_);
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					associated_metadata = _tmp112_;
-#line 1600 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1586 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 10701 "ImportPage.c"
-						goto __catch68_g_error;
+#line 10493 "ImportPage.c"
+						goto __catch67_g_error;
 					}
-#line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1588 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp113_ = associated;
-#line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1588 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp114_ = preview;
-#line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1588 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp115_ = preview_md5;
-#line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1588 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp116_ = associated_metadata;
-#line 1602 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1588 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					photo_import_source_update (_tmp113_, _tmp114_, _tmp115_, _tmp116_, NULL);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_media_metadata_unref0 (associated_metadata);
-#line 10716 "ImportPage.c"
+#line 10508 "ImportPage.c"
 				}
-				goto __finally68;
-				__catch68_g_error:
+				goto __finally67;
+				__catch67_g_error:
 				{
 					GError* err = NULL;
 					PhotoImportSource* _tmp117_ = NULL;
@@ -10732,115 +10524,115 @@ static void import_page_load_previews_and_metadata (ImportPage* self, GeeList* i
 					gchar* _tmp122_ = NULL;
 					GError* _tmp123_ = NULL;
 					const gchar* _tmp124_ = NULL;
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					err = _inner_error_;
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_inner_error_ = NULL;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp117_ = associated;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp118_ = import_source_get_fulldir (G_TYPE_CHECK_INSTANCE_CAST (_tmp117_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp119_ = _tmp118_;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp120_ = associated;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp121_ = import_source_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, TYPE_IMPORT_SOURCE, ImportSource));
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp122_ = _tmp121_;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp123_ = err;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_tmp124_ = _tmp123_->message;
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-					g_warning ("ImportPage.vala:1604: Unable to fetch metadata for %s/%s: %s", _tmp119_, _tmp122_, _tmp124_);
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+					g_warning ("ImportPage.vala:1590: Unable to fetch metadata for %s/%s: %s", _tmp119_, _tmp122_, _tmp124_);
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp122_);
-#line 1604 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (_tmp119_);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_error_free0 (err);
-#line 10758 "ImportPage.c"
+#line 10550 "ImportPage.c"
 				}
-				__finally68:
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+				__finally67:
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (preview_md5);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (preview);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					preview_raw = (g_free (preview_raw), NULL);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (exif_only_md5);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_media_metadata_unref0 (metadata);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (associated);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (fulldir);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_free0 (filename);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (import_source);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					_g_object_unref0 (_import_source_list);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					g_clear_error (&_inner_error_);
-#line 1599 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1585 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					return;
-#line 10789 "ImportPage.c"
+#line 10581 "ImportPage.c"
 				}
 			}
-#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1596 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp125_ = self->priv->import_sources;
-#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1596 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp126_ = import_source;
-#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1596 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			data_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp125_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp126_, TYPE_DATA_OBJECT, DataObject));
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp127_ = self->priv->progress_bar;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp128_ = loaded_photos;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			loaded_photos = _tmp128_ + 1;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp129_ = loaded_photos;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp130_ = import_list;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp131_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp130_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp132_ = _tmp131_;
-#line 1612 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			gtk_progress_bar_set_fraction (_tmp127_, ((gdouble) _tmp129_) / ((gdouble) _tmp132_));
-#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1605 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			spin_event_loop ();
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (preview_md5);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (preview);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview_raw = (g_free (preview_raw), NULL);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (exif_only_md5);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_media_metadata_unref0 (metadata);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (associated);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (fulldir);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (filename);
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (import_source);
-#line 10834 "ImportPage.c"
+#line 10626 "ImportPage.c"
 		}
-#line 1510 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1496 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_import_source_list);
-#line 10838 "ImportPage.c"
+#line 10630 "ImportPage.c"
 	}
 }
 
@@ -10852,58 +10644,58 @@ static void import_page_on_hide_imported (ImportPage* self) {
 	ConfigFacade* _tmp9_ = NULL;
 	GtkCheckButton* _tmp10_ = NULL;
 	gboolean _tmp11_ = FALSE;
-#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1609 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1624 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->hide_imported;
-#line 1624 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1624 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1610 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp1_) {
-#line 10858 "ImportPage.c"
+#line 10650 "ImportPage.c"
 		ViewCollection* _tmp2_ = NULL;
 		ViewCollection* _tmp3_ = NULL;
 		ImportPageHideImportedViewFilter* _tmp4_ = NULL;
-#line 1625 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1611 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1625 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1611 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = _tmp2_;
-#line 1625 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1611 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = self->priv->hide_imported_filter;
-#line 1625 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1611 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		view_collection_install_view_filter (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_VIEW_FILTER, ViewFilter));
-#line 1625 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1611 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_data_collection_unref0 (_tmp3_);
-#line 10872 "ImportPage.c"
+#line 10664 "ImportPage.c"
 	} else {
 		ViewCollection* _tmp5_ = NULL;
 		ViewCollection* _tmp6_ = NULL;
 		ImportPageHideImportedViewFilter* _tmp7_ = NULL;
-#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = _tmp5_;
-#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = self->priv->hide_imported_filter;
-#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		view_collection_remove_view_filter (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_VIEW_FILTER, ViewFilter));
-#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_data_collection_unref0 (_tmp6_);
-#line 10887 "ImportPage.c"
+#line 10679 "ImportPage.c"
 	}
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = config_facade_get_instance ();
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp9_ = _tmp8_;
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp10_ = self->priv->hide_imported;
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	configuration_facade_set_hide_photos_already_imported (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp11_);
-#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1615 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp9_);
-#line 10901 "ImportPage.c"
+#line 10693 "ImportPage.c"
 }
 
 
@@ -10912,23 +10704,23 @@ static void import_page_on_import_selected (ImportPage* self) {
 	ViewCollection* _tmp1_ = NULL;
 	GeeList* _tmp2_ = NULL;
 	GeeList* _tmp3_ = NULL;
-#line 1632 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1618 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _tmp0_;
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = view_collection_get_selected (_tmp1_);
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = _tmp2_;
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_import (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1633 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 10926 "ImportPage.c"
+#line 10718 "ImportPage.c"
 }
 
 
@@ -10937,53 +10729,53 @@ static void import_page_on_import_all (ImportPage* self) {
 	ViewCollection* _tmp1_ = NULL;
 	GeeCollection* _tmp2_ = NULL;
 	GeeCollection* _tmp3_ = NULL;
-#line 1636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1622 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _tmp0_;
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = _tmp2_;
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_import (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 10951 "ImportPage.c"
+#line 10743 "ImportPage.c"
 }
 
 
 static gint64 _import_page_import_job_comparator_comparator (void* a, void* b, gpointer self) {
 	gint64 result;
 	result = import_page_import_job_comparator ((ImportPage*) self, a, b);
-#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1639 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 10960 "ImportPage.c"
+#line 10752 "ImportPage.c"
 }
 
 
 static void _import_page_import_reporter_batch_import_import_reporter (ImportManifest* manifest, BatchImportRoll* import_roll, gpointer self) {
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_import_reporter ((ImportPage*) self, manifest);
-#line 10967 "ImportPage.c"
+#line 10759 "ImportPage.c"
 }
 
 
 static void _import_page_on_import_job_failed_batch_import_import_job_failed (BatchImport* _sender, BatchImportResult* _result_, gpointer self) {
-#line 1691 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1677 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_import_job_failed ((ImportPage*) self, _result_);
-#line 10974 "ImportPage.c"
+#line 10766 "ImportPage.c"
 }
 
 
 static void _import_page_close_import_batch_import_import_complete (BatchImport* _sender, ImportManifest* manifest, BatchImportRoll* import_roll, gpointer self) {
-#line 1692 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1678 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_close_import ((ImportPage*) self);
-#line 10981 "ImportPage.c"
+#line 10773 "ImportPage.c"
 }
 
 
@@ -11007,85 +10799,85 @@ static void import_page_import (ImportPage* self, GeeIterable* items) {
 	SortedList* _tmp59_ = NULL;
 	gint _tmp60_ = 0;
 	gint _tmp61_ = 0;
-#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1626 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1626 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (GEE_IS_ITERABLE (items));
-#line 1641 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->camera;
-#line 1641 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = import_page_spin_idle_context;
-#line 1641 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1641 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = gp_camera_init (_tmp0_, _tmp2_);
-#line 1641 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	res = _tmp3_;
-#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1628 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = res;
-#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1628 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ != GP_OK) {
-#line 11023 "ImportPage.c"
+#line 10815 "ImportPage.c"
 		const gchar* _tmp5_ = NULL;
 		int _tmp6_ = 0;
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = _ ("Unable to lock camera: %s");
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = res;
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = gp_result_to_full_string (_tmp6_);
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = _tmp7_;
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = g_strdup_printf (_tmp5_, _tmp8_);
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = _tmp9_;
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		app_window_error_message (_tmp10_, NULL);
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp10_);
-#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp8_);
-#line 1645 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1631 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return;
-#line 11050 "ImportPage.c"
+#line 10842 "ImportPage.c"
 	}
-#line 1648 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1634 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp11_ = self->priv->refreshed;
-#line 1648 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1634 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, TRUE, _tmp11_);
-#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 1651 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = self->priv->progress_bar;
-#line 1651 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1639 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp13_ = sorted_list_new (IMPORT_PAGE_TYPE_CAMERA_IMPORT_JOB, (GBoxedCopyFunc) batch_import_job_ref, batch_import_job_unref, _import_page_import_job_comparator_comparator, self);
-#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1639 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	jobs = _tmp13_;
-#line 1654 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp14_ = gee_array_list_new (IMPORT_PAGE_TYPE_CAMERA_IMPORT_JOB, (GBoxedCopyFunc) batch_import_job_ref, batch_import_job_unref, NULL, NULL, NULL);
-#line 1654 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	already_imported = _tmp14_;
-#line 11070 "ImportPage.c"
+#line 10862 "ImportPage.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeIterable* _tmp15_ = NULL;
 		GeeIterator* _tmp16_ = NULL;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp15_ = items;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp16_ = gee_iterable_iterator (_tmp15_);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_object_it = _tmp16_;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		while (TRUE) {
-#line 11083 "ImportPage.c"
+#line 10875 "ImportPage.c"
 			GeeIterator* _tmp17_ = NULL;
 			gboolean _tmp18_ = FALSE;
 			DataObject* object = NULL;
@@ -11107,41 +10899,41 @@ static void import_page_import (ImportPage* self, GeeIterable* items) {
 			ImportSource* _tmp42_ = NULL;
 			SortedList* _tmp53_ = NULL;
 			ImportPageCameraImportJob* _tmp54_ = NULL;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp17_ = _object_it;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp18_ = gee_iterator_next (_tmp17_);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (!_tmp18_) {
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				break;
-#line 11113 "ImportPage.c"
+#line 10905 "ImportPage.c"
 			}
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp19_ = _object_it;
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp20_ = gee_iterator_get (_tmp19_);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			object = (DataObject*) _tmp20_;
-#line 1657 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp21_ = object;
-#line 1657 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, TYPE_IMPORT_PREVIEW, ImportPreview));
-#line 1657 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			preview = _tmp22_;
-#line 1658 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp23_ = preview;
-#line 1658 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp24_ = data_view_get_source (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_DATA_VIEW, DataView));
-#line 1658 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			import_file = G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_IMPORT_SOURCE, ImportSource);
-#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1646 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp25_ = preview;
-#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1646 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp26_ = import_preview_is_already_imported (_tmp25_);
-#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1646 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp26_) {
-#line 11139 "ImportPage.c"
+#line 10931 "ImportPage.c"
 				ImportSource* _tmp27_ = NULL;
 				gchar* _tmp28_ = NULL;
 				gchar* _tmp29_ = NULL;
@@ -11153,84 +10945,84 @@ static void import_page_import (ImportPage* self, GeeIterable* items) {
 				DuplicatedFile* _tmp35_ = NULL;
 				ImportPageCameraImportJob* _tmp36_ = NULL;
 				ImportPageCameraImportJob* _tmp37_ = NULL;
-#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp27_ = import_file;
-#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp28_ = import_source_get_filename (_tmp27_);
-#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp29_ = _tmp28_;
-#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-				g_message ("ImportPage.vala:1661: Skipping import of %s: checksum detected in libr" \
+#line 1647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+				g_message ("ImportPage.vala:1647: Skipping import of %s: checksum detected in libr" \
 "ary", _tmp29_);
-#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_free0 (_tmp29_);
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp30_ = already_imported;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp31_ = import_page_null_context;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp32_ = import_file;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp33_ = preview;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp34_ = import_preview_get_duplicated_file (_tmp33_);
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp35_ = _tmp34_;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp36_ = import_page_camera_import_job_new (_tmp31_, _tmp32_, _tmp35_);
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp37_ = _tmp36_;
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp37_);
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_batch_import_job_unref0 (_tmp37_);
-#line 1664 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp35_);
-#line 1667 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (import_file);
-#line 1667 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (preview);
-#line 1667 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (object);
-#line 1667 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1653 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				continue;
-#line 11191 "ImportPage.c"
+#line 10983 "ImportPage.c"
 			}
-#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp38_ = import_page_null_context;
-#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp39_ = import_file;
-#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp40_ = import_page_camera_import_job_new (_tmp38_, _tmp39_, NULL);
-#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			import_job = _tmp40_;
-#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1659 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp42_ = import_file;
-#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1659 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp42_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 11205 "ImportPage.c"
+#line 10997 "ImportPage.c"
 				ImportSource* _tmp43_ = NULL;
 				PhotoImportSource* _tmp44_ = NULL;
 				PhotoImportSource* _tmp45_ = NULL;
-#line 1674 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp43_ = import_file;
-#line 1674 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp44_ = photo_import_source_get_associated (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource));
-#line 1674 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp45_ = _tmp44_;
-#line 1674 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp41_ = _tmp45_ != NULL;
-#line 1674 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp45_);
-#line 11219 "ImportPage.c"
+#line 11011 "ImportPage.c"
 			} else {
-#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1659 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp41_ = FALSE;
-#line 11223 "ImportPage.c"
+#line 11015 "ImportPage.c"
 			}
-#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1659 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (_tmp41_) {
-#line 11227 "ImportPage.c"
+#line 11019 "ImportPage.c"
 				ImportPageCameraImportJob* _tmp46_ = NULL;
 				GPContextWrapper* _tmp47_ = NULL;
 				ImportSource* _tmp48_ = NULL;
@@ -11238,67 +11030,67 @@ static void import_page_import (ImportPage* self, GeeIterable* items) {
 				PhotoImportSource* _tmp50_ = NULL;
 				ImportPageCameraImportJob* _tmp51_ = NULL;
 				ImportPageCameraImportJob* _tmp52_ = NULL;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp46_ = import_job;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp47_ = import_page_null_context;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp48_ = import_file;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp49_ = photo_import_source_get_associated (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, TYPE_PHOTO_IMPORT_SOURCE, PhotoImportSource));
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp50_ = _tmp49_;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp51_ = import_page_camera_import_job_new (_tmp47_, G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, TYPE_IMPORT_SOURCE, ImportSource), NULL);
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_tmp52_ = _tmp51_;
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				batch_import_job_set_associated (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, TYPE_BATCH_IMPORT_JOB, BatchImportJob), G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, TYPE_BATCH_IMPORT_JOB, BatchImportJob));
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_batch_import_job_unref0 (_tmp52_);
-#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1661 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_tmp50_);
-#line 11255 "ImportPage.c"
+#line 11047 "ImportPage.c"
 			}
-#line 1679 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1665 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp53_ = jobs;
-#line 1679 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1665 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp54_ = import_job;
-#line 1679 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1665 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, GEE_TYPE_COLLECTION, GeeCollection), _tmp54_);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_batch_import_job_unref0 (import_job);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (import_file);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (preview);
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (object);
-#line 11271 "ImportPage.c"
+#line 11063 "ImportPage.c"
 		}
-#line 1656 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_object_it);
-#line 11275 "ImportPage.c"
+#line 11067 "ImportPage.c"
 	}
-#line 1682 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1668 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp55_ = jobs;
-#line 1682 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1668 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp56_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1682 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1668 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp57_ = _tmp56_;
-#line 1682 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1668 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp58_ = self->priv->camera_name;
-#line 1682 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	g_debug ("ImportPage.vala:1682: Importing %d files from %s", _tmp57_, _tmp58_);
-#line 1684 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1668 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	g_debug ("ImportPage.vala:1668: Importing %d files from %s", _tmp57_, _tmp58_);
+#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp59_ = jobs;
-#line 1684 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp60_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1684 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp61_ = _tmp60_;
-#line 1684 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp61_ > 0) {
-#line 11295 "ImportPage.c"
+#line 11087 "ImportPage.c"
 		ImportPage* _tmp62_ = NULL;
 		ImportPage* _tmp63_ = NULL;
 		BatchImport* batch_import = NULL;
@@ -11313,92 +11105,92 @@ static void import_page_import (ImportPage* self, GeeIterable* items) {
 		BatchImport* _tmp72_ = NULL;
 		LibraryWindow* _tmp73_ = NULL;
 		LibraryWindow* _tmp74_ = NULL;
-#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1672 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp62_ = self->priv->local_ref;
-#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1672 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_vala_assert (_tmp62_ == NULL, "local_ref == null");
-#line 1687 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp63_ = _g_object_ref0 (self);
-#line 1687 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (self->priv->local_ref);
-#line 1687 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		self->priv->local_ref = _tmp63_;
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp64_ = jobs;
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp65_ = self->priv->camera_name;
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp66_ = already_imported;
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp67_ = batch_import_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, GEE_TYPE_ITERABLE, GeeIterable), _tmp65_, _import_page_import_reporter_batch_import_import_reporter, self, NULL, _tmp66_, NULL, NULL, NULL);
-#line 1689 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1675 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		batch_import = _tmp67_;
-#line 1691 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1677 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp68_ = batch_import;
-#line 1691 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1677 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_signal_connect_object (_tmp68_, "import-job-failed", (GCallback) _import_page_on_import_job_failed_batch_import_import_job_failed, self, 0);
-#line 1692 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1678 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp69_ = batch_import;
-#line 1692 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1678 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_signal_connect_object (_tmp69_, "import-complete", (GCallback) _import_page_close_import_batch_import_import_complete, self, 0);
-#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1680 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp70_ = library_window_get_app ();
-#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1680 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp71_ = _tmp70_;
-#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1680 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp72_ = batch_import;
-#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1680 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		library_window_enqueue_batch_import (_tmp71_, _tmp72_, TRUE);
-#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1680 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp71_);
-#line 1695 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1681 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp73_ = library_window_get_app ();
-#line 1695 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1681 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp74_ = _tmp73_;
-#line 1695 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1681 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		library_window_switch_to_import_queue_page (_tmp74_);
-#line 1695 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1681 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp74_);
-#line 1684 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1670 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (batch_import);
-#line 11358 "ImportPage.c"
+#line 11150 "ImportPage.c"
 	} else {
 		GeeArrayList* _tmp75_ = NULL;
 		gint _tmp76_ = 0;
 		gint _tmp77_ = 0;
-#line 1699 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1685 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp75_ = already_imported;
-#line 1699 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1685 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp76_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1699 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1685 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp77_ = _tmp76_;
-#line 1699 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1685 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp77_ > 0) {
-#line 11371 "ImportPage.c"
+#line 11163 "ImportPage.c"
 			GeeArrayList* _tmp78_ = NULL;
 			ImportManifest* _tmp79_ = NULL;
 			ImportManifest* _tmp80_ = NULL;
-#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp78_ = already_imported;
-#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp79_ = import_manifest_new (NULL, G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, GEE_TYPE_LIST, GeeList));
-#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp80_ = _tmp79_;
-#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			import_page_import_reporter (self, _tmp80_);
-#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1686 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_import_manifest_unref0 (_tmp80_);
-#line 11385 "ImportPage.c"
+#line 11177 "ImportPage.c"
 		}
-#line 1702 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1688 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_page_close_import (self);
-#line 11389 "ImportPage.c"
+#line 11181 "ImportPage.c"
 	}
-#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1626 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (already_imported);
-#line 1640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1626 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (jobs);
-#line 11395 "ImportPage.c"
+#line 11187 "ImportPage.c"
 }
 
 
@@ -11407,53 +11199,53 @@ static void import_page_on_import_job_failed (ImportPage* self, BatchImportResul
 	BatchImportResult* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1706 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1692 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1706 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1692 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_BATCH_IMPORT_RESULT (_result_));
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _result_;
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = _tmp1_->file;
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp2_ == NULL) {
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = TRUE;
-#line 11416 "ImportPage.c"
+#line 11208 "ImportPage.c"
 	} else {
 		BatchImportResult* _tmp3_ = NULL;
 		ImportResult _tmp4_ = 0;
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp3_ = _result_;
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = _tmp3_->result;
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp4_ == IMPORT_RESULT_SUCCESS;
-#line 11426 "ImportPage.c"
+#line 11218 "ImportPage.c"
 	}
-#line 1707 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1693 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp0_) {
-#line 1708 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1694 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return;
-#line 11432 "ImportPage.c"
+#line 11224 "ImportPage.c"
 	}
 	{
 		BatchImportResult* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
-#line 1712 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1698 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = _result_;
-#line 1712 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1698 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = _tmp5_->file;
-#line 1712 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1698 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_file_delete (_tmp6_, NULL, &_inner_error_);
-#line 1712 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1698 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 11445 "ImportPage.c"
-			goto __catch69_g_error;
+#line 11237 "ImportPage.c"
+			goto __catch68_g_error;
 		}
 	}
-	goto __finally69;
-	__catch69_g_error:
+	goto __finally68;
+	__catch68_g_error:
 	{
 		GError* err = NULL;
 		BatchImportResult* _tmp7_ = NULL;
@@ -11462,57 +11254,57 @@ static void import_page_on_import_job_failed (ImportPage* self, BatchImportResul
 		gchar* _tmp10_ = NULL;
 		GError* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		err = _inner_error_;
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_inner_error_ = NULL;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = _result_;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = _tmp7_->file;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = g_file_get_path (_tmp8_);
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = _tmp9_;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp11_ = err;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = _tmp11_->message;
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_message ("ImportPage.vala:1714: Unable to delete downloaded file %s: %s", _tmp10_, _tmp12_);
-#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_message ("ImportPage.vala:1700: Unable to delete downloaded file %s: %s", _tmp10_, _tmp12_);
+#line 1700 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp10_);
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_error_free0 (err);
-#line 11481 "ImportPage.c"
+#line 11273 "ImportPage.c"
 	}
-	__finally69:
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	__finally68:
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		g_clear_error (&_inner_error_);
-#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1697 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return;
-#line 11492 "ImportPage.c"
+#line 11284 "ImportPage.c"
 	}
 }
 
 
 static gpointer _batch_import_job_ref0 (gpointer self) {
-#line 1758 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? batch_import_job_ref (self) : NULL;
-#line 11500 "ImportPage.c"
+#line 11292 "ImportPage.c"
 }
 
 
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self) {
 	gboolean result;
 	result = progress_dialog_monitor ((ProgressDialog*) self, current, total, do_event_loop);
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 11509 "ImportPage.c"
+#line 11301 "ImportPage.c"
 }
 
 
@@ -11542,31 +11334,31 @@ static void import_page_import_reporter (ImportPage* self, ImportManifest* manif
 	gint _tmp91_ = 0;
 	gint _tmp92_ = 0;
 	ProgressDialog* _tmp98_ = NULL;
-#line 1718 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1704 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1718 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1704 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_MANIFEST (manifest));
-#line 1724 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1710 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->local_ref;
-#line 1724 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1710 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1724 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1710 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	local_ref = _tmp1_;
-#line 1725 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (self->priv->local_ref);
-#line 1725 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1711 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->local_ref = NULL;
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = manifest;
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = _tmp2_->success;
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp5_ = _tmp4_;
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp5_ > 0) {
-#line 11563 "ImportPage.c"
+#line 11355 "ImportPage.c"
 		gchar* photos_string = NULL;
 		ImportManifest* _tmp6_ = NULL;
 		GeeList* _tmp7_ = NULL;
@@ -11626,176 +11418,176 @@ static void import_page_import_reporter (ImportPage* self, ImportManifest* manif
 		ImportManifest* _tmp56_ = NULL;
 		ImportUIQuestionParams* _tmp57_ = NULL;
 		gboolean _tmp58_ = FALSE;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = manifest;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = _tmp6_->success;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp8_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp9_ = _tmp8_;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp10_ = ngettext ("Delete this photo from camera?", "Delete these %d photos from camera?", (gulong) _tmp9_);
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp11_ = manifest;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp12_ = _tmp11_->success;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp13_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp14_ = _tmp13_;
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp15_ = g_strdup_printf (_tmp10_, _tmp14_);
-#line 1728 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1714 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		photos_string = _tmp15_;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp16_ = manifest;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp17_ = _tmp16_->success;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp18_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp19_ = _tmp18_;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp20_ = ngettext ("Delete this video from camera?", "Delete these %d videos from camera?", (gulong) _tmp19_);
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp21_ = manifest;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp22_ = _tmp21_->success;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp23_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp24_ = _tmp23_;
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp25_ = g_strdup_printf (_tmp20_, _tmp24_);
-#line 1731 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1717 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		videos_string = _tmp25_;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp26_ = manifest;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp27_ = _tmp26_->success;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp28_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp29_ = _tmp28_;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp30_ = ngettext ("Delete this photo/video from camera?", "Delete these %d photos/videos from camera?", (gulong) _tmp29_);
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp31_ = manifest;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp32_ = _tmp31_->success;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp33_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp34_ = _tmp33_;
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp35_ = g_strdup_printf (_tmp30_, _tmp34_);
-#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1720 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		both_string = _tmp35_;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp36_ = manifest;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp37_ = _tmp36_->success;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp38_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp39_ = _tmp38_;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp40_ = ngettext ("Delete these files from camera?", "Delete these %d files from camera?", (gulong) _tmp39_);
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp41_ = manifest;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp42_ = _tmp41_->success;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp43_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp44_ = _tmp43_;
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp45_ = g_strdup_printf (_tmp40_, _tmp44_);
-#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1723 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		neither_string = _tmp45_;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp46_ = manifest;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp47_ = _tmp46_->success;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp48_ = photos_string;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp49_ = videos_string;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp50_ = both_string;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp51_ = neither_string;
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp52_ = import_ui_get_media_specific_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, GEE_TYPE_COLLECTION, GeeCollection), _tmp48_, _tmp49_, _tmp50_, _tmp51_);
-#line 1741 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		question_string = _tmp52_;
-#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1730 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp53_ = question_string;
-#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1730 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp54_ = _ ("_Keep");
-#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1730 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp55_ = import_ui_question_params_new (_tmp53_, RESOURCES_DELETE_LABEL, _tmp54_);
-#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1730 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		question = _tmp55_;
-#line 1747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1733 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp56_ = manifest;
-#line 1747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1733 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp57_ = question;
-#line 1747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1733 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp58_ = import_ui_report_manifest (_tmp56_, FALSE, _tmp57_);
-#line 1747 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1733 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (!_tmp58_) {
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_import_ui_question_params_unref0 (question);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (question_string);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (neither_string);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (both_string);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (videos_string);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_free0 (photos_string);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (local_ref);
-#line 1748 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1734 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return;
-#line 11759 "ImportPage.c"
+#line 11551 "ImportPage.c"
 		}
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_import_ui_question_params_unref0 (question);
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (question_string);
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (neither_string);
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (both_string);
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (videos_string);
-#line 1727 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1713 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (photos_string);
-#line 11773 "ImportPage.c"
+#line 11565 "ImportPage.c"
 	} else {
 		ImportManifest* _tmp59_ = NULL;
-#line 1750 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1736 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp59_ = manifest;
-#line 1750 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1736 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		import_ui_report_manifest (_tmp59_, FALSE, NULL);
-#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (local_ref);
-#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1737 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return;
-#line 11784 "ImportPage.c"
+#line 11576 "ImportPage.c"
 	}
-#line 1756 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1742 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp60_ = self->priv->import_sources;
-#line 1756 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1742 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp61_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1756 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1742 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	marker = _tmp61_;
-#line 11792 "ImportPage.c"
+#line 11584 "ImportPage.c"
 	{
 		GeeList* _batch_result_list = NULL;
 		ImportManifest* _tmp62_ = NULL;
@@ -11806,27 +11598,27 @@ static void import_page_import_reporter (ImportPage* self, ImportManifest* manif
 		gint _tmp66_ = 0;
 		gint _tmp67_ = 0;
 		gint _batch_result_index = 0;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp62_ = manifest;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp63_ = _tmp62_->success;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp64_ = _g_object_ref0 (_tmp63_);
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_batch_result_list = _tmp64_;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp65_ = _batch_result_list;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp66_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp67_ = _tmp66_;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_batch_result_size = _tmp67_;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_batch_result_index = -1;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		while (TRUE) {
-#line 11823 "ImportPage.c"
+#line 11615 "ImportPage.c"
 			gint _tmp68_ = 0;
 			gint _tmp69_ = 0;
 			gint _tmp70_ = 0;
@@ -11842,134 +11634,134 @@ static void import_page_import_reporter (ImportPage* self, ImportManifest* manif
 			ImportPageCameraImportJob* _tmp78_ = NULL;
 			ImportSource* _tmp79_ = NULL;
 			ImportSource* _tmp80_ = NULL;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp68_ = _batch_result_index;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_batch_result_index = _tmp68_ + 1;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp69_ = _batch_result_index;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp70_ = _batch_result_size;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (!(_tmp69_ < _tmp70_)) {
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				break;
-#line 11851 "ImportPage.c"
+#line 11643 "ImportPage.c"
 			}
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp71_ = _batch_result_list;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp72_ = _batch_result_index;
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp73_ = gee_list_get (_tmp71_, _tmp72_);
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			batch_result = (BatchImportResult*) _tmp73_;
-#line 1758 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp74_ = batch_result;
-#line 1758 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp75_ = _tmp74_->job;
-#line 1758 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp76_ = _batch_import_job_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp75_, IMPORT_PAGE_TYPE_CAMERA_IMPORT_JOB) ? ((ImportPageCameraImportJob*) _tmp75_) : NULL);
-#line 1758 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1744 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			job = _tmp76_;
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp77_ = marker;
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp78_ = job;
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp79_ = import_page_camera_import_job_get_source (_tmp78_);
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp80_ = _tmp79_;
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			marker_mark (_tmp77_, G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, TYPE_DATA_OBJECT, DataObject));
-#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1746 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (_tmp80_);
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_batch_import_job_unref0 (job);
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_batch_import_result_unref0 (batch_result);
-#line 11885 "ImportPage.c"
+#line 11677 "ImportPage.c"
 		}
-#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1743 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_batch_result_list);
-#line 11889 "ImportPage.c"
+#line 11681 "ImportPage.c"
 	}
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp81_ = app_window_get_instance ();
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp82_ = _tmp81_;
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp83_ = _ ("Removing photos/videos from camera");
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp84_ = g_cancellable_new ();
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp85_ = _tmp84_;
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp86_ = progress_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_window_get_type (), GtkWindow), _tmp83_, _tmp85_);
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_object_ref_sink (_tmp86_);
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp87_ = _tmp86_;
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp85_);
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (_tmp82_);
-#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1749 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	progress = _tmp87_;
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp88_ = self->priv->import_sources;
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp89_ = marker;
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp90_ = progress;
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp91_ = source_collection_destroy_marked (_tmp88_, _tmp89_, TRUE, _progress_dialog_monitor_progress_monitor, _tmp90_, NULL);
-#line 1765 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1751 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	error_count = _tmp91_;
-#line 1766 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1752 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp92_ = error_count;
-#line 1766 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1752 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp92_ > 0) {
-#line 11927 "ImportPage.c"
+#line 11719 "ImportPage.c"
 		gchar* error_string = NULL;
 		gint _tmp93_ = 0;
 		const gchar* _tmp94_ = NULL;
 		gint _tmp95_ = 0;
 		gchar* _tmp96_ = NULL;
 		const gchar* _tmp97_ = NULL;
-#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1753 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp93_ = error_count;
-#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1753 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp94_ = ngettext ("Unable to delete %d photo/video from the camera due to errors.", "Unable to delete %d photos/videos from the camera due to errors.", (gulong) _tmp93_);
-#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1753 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp95_ = error_count;
-#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1753 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp96_ = g_strdup_printf (_tmp94_, _tmp95_);
-#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1753 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		error_string = _tmp96_;
-#line 1771 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp97_ = error_string;
-#line 1771 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1757 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		app_window_error_message (_tmp97_, NULL);
-#line 1766 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1752 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (error_string);
-#line 11950 "ImportPage.c"
+#line 11742 "ImportPage.c"
 	}
-#line 1774 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp98_ = progress;
-#line 1774 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1760 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	progress_dialog_close (_tmp98_);
-#line 1777 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (local_ref);
-#line 1777 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1763 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	local_ref = NULL;
-#line 1718 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1704 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (progress);
-#line 1718 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1704 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (marker);
-#line 1718 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1704 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_g_object_unref0 (local_ref);
-#line 11966 "ImportPage.c"
+#line 11758 "ImportPage.c"
 }
 
 
@@ -11981,98 +11773,70 @@ static void import_page_close_import (ImportPage* self) {
 	int _tmp3_ = 0;
 	int _tmp4_ = 0;
 	gboolean _tmp8_ = FALSE;
-#line 1780 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1766 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	g_return_if_fail (IS_IMPORT_PAGE (self));
-#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->camera;
-#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = import_page_spin_idle_context;
-#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper)->context;
-#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp3_ = gp_camera_exit (_tmp0_, _tmp2_);
-#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1767 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	res = _tmp3_;
-#line 1782 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1768 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp4_ = res;
-#line 1782 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1768 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp4_ != GP_OK) {
-#line 11994 "ImportPage.c"
+#line 11786 "ImportPage.c"
 		int _tmp5_ = 0;
 		gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 1784 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = res;
-#line 1784 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = gp_result_to_full_string (_tmp5_);
-#line 1784 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp7_ = _tmp6_;
-#line 1784 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		g_message ("ImportPage.vala:1784: Unable to unlock camera: %s", _tmp7_);
-#line 1784 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+		g_message ("ImportPage.vala:1770: Unable to unlock camera: %s", _tmp7_);
+#line 1770 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_free0 (_tmp7_);
-#line 12008 "ImportPage.c"
+#line 11800 "ImportPage.c"
 	}
-#line 1787 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1773 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp8_ = self->priv->refreshed;
-#line 1787 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1773 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_update_status (self, FALSE, _tmp8_);
-#line 1789 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1775 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	import_page_on_view_changed (self);
-#line 12016 "ImportPage.c"
+#line 11808 "ImportPage.c"
 }
 
 
 static void import_page_real_set_display_titles (CheckerboardPage* base, gboolean display) {
 	ImportPage * self;
 	gboolean _tmp0_ = FALSE;
-	GtkToggleAction* action = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkToggleAction* _tmp2_ = NULL;
-	GtkToggleAction* _tmp3_ = NULL;
-#line 1792 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	gboolean _tmp1_ = FALSE;
+#line 1778 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 1793 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1779 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = display;
-#line 1793 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1779 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	CHECKERBOARD_PAGE_CLASS (import_page_parent_class)->set_display_titles (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), _tmp0_);
-#line 1795 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp1_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ViewTitle");
-#line 1795 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp1_) : NULL;
-#line 1795 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if (_tmp2_ == NULL) {
-#line 1795 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_g_object_unref0 (_tmp1_);
-#line 12041 "ImportPage.c"
-	}
-#line 1795 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	action = _tmp2_;
-#line 1796 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_tmp3_ = action;
-#line 1796 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	if (_tmp3_ != NULL) {
-#line 12049 "ImportPage.c"
-		GtkToggleAction* _tmp4_ = NULL;
-		gboolean _tmp5_ = FALSE;
-#line 1797 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp4_ = action;
-#line 1797 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		_tmp5_ = display;
-#line 1797 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-		gtk_toggle_action_set_active (_tmp4_, _tmp5_);
-#line 12058 "ImportPage.c"
-	}
-#line 1792 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	_g_object_unref0 (action);
-#line 12062 "ImportPage.c"
+#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	_tmp1_ = display;
+#line 1781 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+	page_set_action_active (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ViewTitle", _tmp1_);
+#line 11826 "ImportPage.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
-#line 1802 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1786 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 12069 "ImportPage.c"
+#line 11833 "ImportPage.c"
 }
 
 
@@ -12081,17 +11845,17 @@ static SearchViewFilter* import_page_real_get_search_view_filter (CheckerboardPa
 	SearchViewFilter* result = NULL;
 	ImportPageImportPageSearchViewFilter* _tmp0_ = NULL;
 	SearchViewFilter* _tmp1_ = NULL;
-#line 1801 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1785 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_IMPORT_PAGE, ImportPage);
-#line 1802 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1786 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 1802 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1786 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp1_ = _view_filter_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
-#line 1802 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1786 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp1_;
-#line 1802 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
+#line 1786 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12088 "ImportPage.c"
+#line 11852 "ImportPage.c"
 }
 
 
@@ -12113,14 +11877,14 @@ static ImportPageImportViewManager* import_page_import_view_manager_construct (G
 	self->priv->owner = _tmp1_;
 #line 463 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 12110 "ImportPage.c"
+#line 11874 "ImportPage.c"
 }
 
 
 static ImportPageImportViewManager* import_page_import_view_manager_new (ImportPage* owner) {
 #line 463 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_page_import_view_manager_construct (IMPORT_PAGE_TYPE_IMPORT_VIEW_MANAGER, owner);
-#line 12117 "ImportPage.c"
+#line 11881 "ImportPage.c"
 }
 
 
@@ -12141,7 +11905,7 @@ static DataView* import_page_import_view_manager_real_create_view (ViewManager* 
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_VIEW, DataView);
 #line 468 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12138 "ImportPage.c"
+#line 11902 "ImportPage.c"
 }
 
 
@@ -12154,14 +11918,14 @@ static void import_page_import_view_manager_class_init (ImportPageImportViewMana
 	g_type_class_add_private (klass, sizeof (ImportPageImportViewManagerPrivate));
 #line 460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((ViewManagerClass *) klass)->create_view = import_page_import_view_manager_real_create_view;
-#line 12151 "ImportPage.c"
+#line 11915 "ImportPage.c"
 }
 
 
 static void import_page_import_view_manager_instance_init (ImportPageImportViewManager * self) {
 #line 460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv = IMPORT_PAGE_IMPORT_VIEW_MANAGER_GET_PRIVATE (self);
-#line 12158 "ImportPage.c"
+#line 11922 "ImportPage.c"
 }
 
 
@@ -12173,7 +11937,7 @@ static void import_page_import_view_manager_finalize (ViewManager* obj) {
 	_g_object_unref0 (self->priv->owner);
 #line 460 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	VIEW_MANAGER_CLASS (import_page_import_view_manager_parent_class)->finalize (obj);
-#line 12170 "ImportPage.c"
+#line 11934 "ImportPage.c"
 }
 
 
@@ -12192,7 +11956,7 @@ static GType import_page_import_view_manager_get_type (void) {
 static gpointer _gp_context_wrapper_ref0 (gpointer self) {
 #line 487 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self ? gp_context_wrapper_ref (self) : NULL;
-#line 12189 "ImportPage.c"
+#line 11953 "ImportPage.c"
 }
 
 
@@ -12288,7 +12052,7 @@ static ImportPageCameraImportJob* import_page_camera_import_job_construct (GType
 	_tmp16_ = import_file;
 #line 498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp16_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 12285 "ImportPage.c"
+#line 12049 "ImportPage.c"
 		ImportSource* _tmp17_ = NULL;
 		PhotoMetadata* _tmp18_ = NULL;
 #line 499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12299,13 +12063,13 @@ static ImportPageCameraImportJob* import_page_camera_import_job_construct (GType
 		_media_metadata_unref0 (_tmp15_);
 #line 499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp15_ = _tmp18_;
-#line 12296 "ImportPage.c"
+#line 12060 "ImportPage.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_media_metadata_unref0 (_tmp15_);
 #line 499 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp15_ = NULL;
-#line 12302 "ImportPage.c"
+#line 12066 "ImportPage.c"
 	}
 #line 498 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp19_ = _media_metadata_ref0 (_tmp15_);
@@ -12323,14 +12087,14 @@ static ImportPageCameraImportJob* import_page_camera_import_job_construct (GType
 	_media_metadata_unref0 (_tmp15_);
 #line 485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 12320 "ImportPage.c"
+#line 12084 "ImportPage.c"
 }
 
 
 static ImportPageCameraImportJob* import_page_camera_import_job_new (GPContextWrapper* context, ImportSource* import_file, DuplicatedFile* duplicated_file) {
 #line 485 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_page_camera_import_job_construct (IMPORT_PAGE_TYPE_CAMERA_IMPORT_JOB, context, import_file, duplicated_file);
-#line 12327 "ImportPage.c"
+#line 12091 "ImportPage.c"
 }
 
 
@@ -12345,7 +12109,7 @@ static time_t import_page_camera_import_job_get_exposure_time (ImportPageCameraI
 	result = _tmp0_;
 #line 504 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12342 "ImportPage.c"
+#line 12106 "ImportPage.c"
 }
 
 
@@ -12364,7 +12128,7 @@ static DuplicatedFile* import_page_camera_import_job_real_get_duplicated_file (B
 	result = _tmp1_;
 #line 508 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12361 "ImportPage.c"
+#line 12125 "ImportPage.c"
 }
 
 
@@ -12379,23 +12143,23 @@ static time_t import_page_camera_import_job_real_get_exposure_time_override (Bat
 	_tmp1_ = self->priv->import_file;
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, TYPE_VIDEO_IMPORT_SOURCE)) {
-#line 12376 "ImportPage.c"
+#line 12140 "ImportPage.c"
 		time_t _tmp2_ = 0;
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = import_page_camera_import_job_get_exposure_time (self);
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = _tmp2_;
-#line 12382 "ImportPage.c"
+#line 12146 "ImportPage.c"
 	} else {
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp0_ = (time_t) 0;
-#line 12386 "ImportPage.c"
+#line 12150 "ImportPage.c"
 	}
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = _tmp0_;
 #line 512 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12392 "ImportPage.c"
+#line 12156 "ImportPage.c"
 }
 
 
@@ -12414,7 +12178,7 @@ static gchar* import_page_camera_import_job_real_get_dest_identifier (BatchImpor
 	result = _tmp1_;
 #line 516 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12411 "ImportPage.c"
+#line 12175 "ImportPage.c"
 }
 
 
@@ -12433,7 +12197,7 @@ static gchar* import_page_camera_import_job_real_get_source_identifier (BatchImp
 	result = _tmp1_;
 #line 520 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12430 "ImportPage.c"
+#line 12194 "ImportPage.c"
 }
 
 
@@ -12452,7 +12216,7 @@ static gchar* import_page_camera_import_job_real_get_basename (BatchImportJob* b
 	result = _tmp1_;
 #line 524 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12449 "ImportPage.c"
+#line 12213 "ImportPage.c"
 }
 
 
@@ -12471,7 +12235,7 @@ static gchar* import_page_camera_import_job_real_get_path (BatchImportJob* base)
 	result = _tmp1_;
 #line 528 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12468 "ImportPage.c"
+#line 12232 "ImportPage.c"
 }
 
 
@@ -12491,7 +12255,7 @@ static void import_page_camera_import_job_real_set_associated (BatchImportJob* b
 	_batch_import_job_unref0 (self->priv->associated);
 #line 532 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->associated = _tmp1_;
-#line 12488 "ImportPage.c"
+#line 12252 "ImportPage.c"
 }
 
 
@@ -12509,7 +12273,7 @@ static ImportSource* import_page_camera_import_job_get_source (ImportPageCameraI
 	result = _tmp1_;
 #line 536 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12506 "ImportPage.c"
+#line 12270 "ImportPage.c"
 }
 
 
@@ -12522,7 +12286,7 @@ static gboolean import_page_camera_import_job_real_is_directory (BatchImportJob*
 	result = FALSE;
 #line 540 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12519 "ImportPage.c"
+#line 12283 "ImportPage.c"
 }
 
 
@@ -12548,21 +12312,21 @@ static gboolean import_page_camera_import_job_real_determine_file_size (BatchImp
 	if (filesize) {
 #line 547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		*filesize = _vala_filesize;
-#line 12545 "ImportPage.c"
+#line 12309 "ImportPage.c"
 	}
 #line 547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (file) {
 #line 547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		*file = _vala_file;
-#line 12551 "ImportPage.c"
+#line 12315 "ImportPage.c"
 	} else {
 #line 547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_vala_file);
-#line 12555 "ImportPage.c"
+#line 12319 "ImportPage.c"
 	}
 #line 547 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12559 "ImportPage.c"
+#line 12323 "ImportPage.c"
 }
 
 
@@ -12588,7 +12352,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 	_vala_copy_to_library = FALSE;
 #line 554 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	dest_file = NULL;
-#line 12585 "ImportPage.c"
+#line 12349 "ImportPage.c"
 	{
 		gboolean collision = FALSE;
 		GFile* _tmp0_ = NULL;
@@ -12612,8 +12376,8 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_tmp0_ = _tmp5_;
 #line 557 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 12609 "ImportPage.c"
-			goto __catch70_g_error;
+#line 12373 "ImportPage.c"
+			goto __catch69_g_error;
 		}
 #line 557 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp6_ = _tmp0_;
@@ -12625,10 +12389,10 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		dest_file = _tmp6_;
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_tmp0_);
-#line 12622 "ImportPage.c"
+#line 12386 "ImportPage.c"
 	}
-	goto __finally70;
-	__catch70_g_error:
+	goto __finally69;
+	__catch69_g_error:
 	{
 		GError* err = NULL;
 		ImportSource* _tmp7_ = NULL;
@@ -12656,9 +12420,9 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_g_free0 (_tmp9_);
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_error_free0 (err);
-#line 12653 "ImportPage.c"
+#line 12417 "ImportPage.c"
 	}
-	__finally70:
+	__finally69:
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12667,13 +12431,13 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_g_object_unref0 (dest_file);
 #line 555 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return FALSE;
-#line 12664 "ImportPage.c"
+#line 12428 "ImportPage.c"
 	}
 #line 564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp12_ = dest_file;
 #line 564 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp12_ == NULL) {
-#line 12670 "ImportPage.c"
+#line 12434 "ImportPage.c"
 		ImportSource* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
@@ -12695,27 +12459,27 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		if (file_to_import) {
 #line 567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			*file_to_import = _vala_file_to_import;
-#line 12692 "ImportPage.c"
+#line 12456 "ImportPage.c"
 		} else {
 #line 567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (_vala_file_to_import);
-#line 12696 "ImportPage.c"
+#line 12460 "ImportPage.c"
 		}
 #line 567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (copy_to_library) {
 #line 567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			*copy_to_library = _vala_copy_to_library;
-#line 12702 "ImportPage.c"
+#line 12466 "ImportPage.c"
 		}
 #line 567 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return result;
-#line 12706 "ImportPage.c"
+#line 12470 "ImportPage.c"
 	}
 #line 572 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp16_ = dest_file;
 #line 572 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	library_monitor_blacklist_file (_tmp16_, "CameraImportJob.prepare");
-#line 12712 "ImportPage.c"
+#line 12476 "ImportPage.c"
 	{
 		GPContextWrapper* _tmp17_ = NULL;
 		GPContext* _tmp18_ = NULL;
@@ -12739,18 +12503,18 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		gp_save_image (_tmp18_, _tmp19_, _tmp20_, _tmp21_, _tmp22_, &_inner_error_);
 #line 574 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 12736 "ImportPage.c"
-			goto __finally71;
+#line 12500 "ImportPage.c"
+			goto __finally70;
 		}
 	}
-	__finally71:
+	__finally70:
 	{
 		GFile* _tmp23_ = NULL;
 #line 576 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp23_ = dest_file;
 #line 576 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		library_monitor_unblacklist_file (_tmp23_);
-#line 12747 "ImportPage.c"
+#line 12511 "ImportPage.c"
 	}
 #line 573 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -12760,13 +12524,13 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_g_object_unref0 (dest_file);
 #line 573 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		return FALSE;
-#line 12757 "ImportPage.c"
+#line 12521 "ImportPage.c"
 	}
 #line 580 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp24_ = self->priv->associated;
 #line 580 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp24_ != NULL) {
-#line 12763 "ImportPage.c"
+#line 12527 "ImportPage.c"
 		BackingPhotoRow* _tmp39_ = NULL;
 		GFile* assoc_dest = NULL;
 		BackingPhotoRow* _tmp42_ = NULL;
@@ -12808,8 +12572,8 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			_tmp25_ = _tmp33_;
 #line 583 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 12805 "ImportPage.c"
-				goto __catch72_g_error;
+#line 12569 "ImportPage.c"
+				goto __catch71_g_error;
 			}
 #line 582 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp34_ = _tmp25_;
@@ -12821,10 +12585,10 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			self->priv->associated_file = _tmp34_;
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_backing_photo_row_unref0 (_tmp25_);
-#line 12818 "ImportPage.c"
+#line 12582 "ImportPage.c"
 		}
-		goto __finally72;
-		__catch72_g_error:
+		goto __finally71;
+		__catch71_g_error:
 		{
 			GError* err = NULL;
 			ImportPageCameraImportJob* _tmp35_ = NULL;
@@ -12848,9 +12612,9 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 ": %s", _tmp36_, _tmp38_);
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_error_free0 (err);
-#line 12844 "ImportPage.c"
+#line 12608 "ImportPage.c"
 		}
-		__finally72:
+		__finally71:
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12859,13 +12623,13 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			_g_object_unref0 (dest_file);
 #line 581 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return FALSE;
-#line 12855 "ImportPage.c"
+#line 12619 "ImportPage.c"
 		}
 #line 590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp39_ = self->priv->associated_file;
 #line 590 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp39_ == NULL) {
-#line 12861 "ImportPage.c"
+#line 12625 "ImportPage.c"
 			ImportPageCameraImportJob* _tmp40_ = NULL;
 			const gchar* _tmp41_ = NULL;
 #line 591 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -12882,21 +12646,21 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			if (file_to_import) {
 #line 592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				*file_to_import = _vala_file_to_import;
-#line 12878 "ImportPage.c"
+#line 12642 "ImportPage.c"
 			} else {
 #line 592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (_vala_file_to_import);
-#line 12882 "ImportPage.c"
+#line 12646 "ImportPage.c"
 			}
 #line 592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (copy_to_library) {
 #line 592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				*copy_to_library = _vala_copy_to_library;
-#line 12888 "ImportPage.c"
+#line 12652 "ImportPage.c"
 			}
 #line 592 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 12892 "ImportPage.c"
+#line 12656 "ImportPage.c"
 		}
 #line 595 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp42_ = self->priv->associated_file;
@@ -12910,7 +12674,7 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 		_tmp45_ = assoc_dest;
 #line 596 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		library_monitor_blacklist_file (_tmp45_, "CameraImportJob.prepare");
-#line 12906 "ImportPage.c"
+#line 12670 "ImportPage.c"
 		{
 			GPContextWrapper* _tmp46_ = NULL;
 			GPContext* _tmp47_ = NULL;
@@ -12940,18 +12704,18 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			gp_save_image (_tmp47_, _tmp48_, _tmp50_, _tmp52_, _tmp53_, &_inner_error_);
 #line 598 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 12936 "ImportPage.c"
-				goto __finally73;
+#line 12700 "ImportPage.c"
+				goto __finally72;
 			}
 		}
-		__finally73:
+		__finally72:
 		{
 			GFile* _tmp54_ = NULL;
 #line 601 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_tmp54_ = assoc_dest;
 #line 601 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			library_monitor_unblacklist_file (_tmp54_);
-#line 12947 "ImportPage.c"
+#line 12711 "ImportPage.c"
 		}
 #line 597 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -12963,11 +12727,11 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 			_g_object_unref0 (dest_file);
 #line 597 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return FALSE;
-#line 12959 "ImportPage.c"
+#line 12723 "ImportPage.c"
 		}
 #line 580 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (assoc_dest);
-#line 12963 "ImportPage.c"
+#line 12727 "ImportPage.c"
 	}
 #line 605 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	_tmp55_ = dest_file;
@@ -12987,21 +12751,21 @@ static gboolean import_page_camera_import_job_real_prepare (BatchImportJob* base
 	if (file_to_import) {
 #line 608 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		*file_to_import = _vala_file_to_import;
-#line 12983 "ImportPage.c"
+#line 12747 "ImportPage.c"
 	} else {
 #line 608 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (_vala_file_to_import);
-#line 12987 "ImportPage.c"
+#line 12751 "ImportPage.c"
 	}
 #line 608 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (copy_to_library) {
 #line 608 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		*copy_to_library = _vala_copy_to_library;
-#line 12993 "ImportPage.c"
+#line 12757 "ImportPage.c"
 	}
 #line 608 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 12997 "ImportPage.c"
+#line 12761 "ImportPage.c"
 }
 
 
@@ -13023,7 +12787,7 @@ static gboolean import_page_camera_import_job_real_complete (BatchImportJob* bas
 	_tmp0_ = source;
 #line 613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_PHOTO)) {
-#line 13019 "ImportPage.c"
+#line 12783 "ImportPage.c"
 		Photo* photo = NULL;
 		MediaSource* _tmp1_ = NULL;
 		Photo* _tmp2_ = NULL;
@@ -13038,7 +12802,7 @@ static gboolean import_page_camera_import_job_real_complete (BatchImportJob* bas
 		_tmp3_ = self->priv->associated_file;
 #line 617 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (_tmp3_ != NULL) {
-#line 13034 "ImportPage.c"
+#line 12798 "ImportPage.c"
 			Photo* _tmp4_ = NULL;
 			BackingPhotoRow* _tmp5_ = NULL;
 			Photo* _tmp6_ = NULL;
@@ -13059,7 +12823,7 @@ static gboolean import_page_camera_import_job_real_complete (BatchImportJob* bas
 				_g_object_unref0 (photo);
 #line 618 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				return FALSE;
-#line 13055 "ImportPage.c"
+#line 12819 "ImportPage.c"
 			}
 #line 619 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			ret = TRUE;
@@ -13075,17 +12839,17 @@ static gboolean import_page_camera_import_job_real_complete (BatchImportJob* bas
 			photo_set_raw_developer (_tmp6_, _tmp9_);
 #line 620 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			_g_object_unref0 (_tmp8_);
-#line 13071 "ImportPage.c"
+#line 12835 "ImportPage.c"
 		}
 #line 613 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_g_object_unref0 (photo);
-#line 13075 "ImportPage.c"
+#line 12839 "ImportPage.c"
 	}
 #line 623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	result = ret;
 #line 623 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 13081 "ImportPage.c"
+#line 12845 "ImportPage.c"
 }
 
 
@@ -13118,7 +12882,7 @@ static void import_page_camera_import_job_class_init (ImportPageCameraImportJobC
 	((BatchImportJobClass *) klass)->prepare = import_page_camera_import_job_real_prepare;
 #line 472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((BatchImportJobClass *) klass)->complete = import_page_camera_import_job_real_complete;
-#line 13114 "ImportPage.c"
+#line 12878 "ImportPage.c"
 }
 
 
@@ -13129,7 +12893,7 @@ static void import_page_camera_import_job_instance_init (ImportPageCameraImportJ
 	self->priv->associated = NULL;
 #line 482 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->associated_file = NULL;
-#line 13125 "ImportPage.c"
+#line 12889 "ImportPage.c"
 }
 
 
@@ -13157,7 +12921,7 @@ static void import_page_camera_import_job_finalize (BatchImportJob* obj) {
 	_g_object_unref0 (self->priv->duplicated_file);
 #line 472 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	BATCH_IMPORT_JOB_CLASS (import_page_camera_import_job_parent_class)->finalize (obj);
-#line 13153 "ImportPage.c"
+#line 12917 "ImportPage.c"
 }
 
 
@@ -13182,7 +12946,7 @@ static guint import_page_import_page_search_view_filter_real_get_criteria (Searc
 	result = (guint) (SEARCH_FILTER_CRITERIA_TEXT | SEARCH_FILTER_CRITERIA_MEDIA);
 #line 629 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 13178 "ImportPage.c"
+#line 12942 "ImportPage.c"
 }
 
 
@@ -13202,7 +12966,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 13198 "ImportPage.c"
+#line 12962 "ImportPage.c"
 }
 
 
@@ -13229,27 +12993,27 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 	_tmp3_ = search_view_filter_get_criteria (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if ((gboolean) (SEARCH_FILTER_CRITERIA_MEDIA & _tmp3_)) {
-#line 13225 "ImportPage.c"
+#line 12989 "ImportPage.c"
 		gboolean _tmp4_ = FALSE;
 #line 636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp4_ = search_view_filter_filter_by_media_type (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = _tmp4_;
-#line 13231 "ImportPage.c"
+#line 12995 "ImportPage.c"
 	} else {
 #line 636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp2_ = FALSE;
-#line 13235 "ImportPage.c"
+#line 12999 "ImportPage.c"
 	}
 #line 636 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if (_tmp2_) {
-#line 13239 "ImportPage.c"
+#line 13003 "ImportPage.c"
 		ImportSource* _tmp5_ = NULL;
 #line 637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp5_ = source;
 #line 637 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, TYPE_VIDEO_IMPORT_SOURCE)) {
-#line 13245 "ImportPage.c"
+#line 13009 "ImportPage.c"
 			gboolean _tmp6_ = FALSE;
 			gboolean _tmp7_ = FALSE;
 #line 638 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -13264,7 +13028,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 				_g_object_unref0 (source);
 #line 639 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				return result;
-#line 13260 "ImportPage.c"
+#line 13024 "ImportPage.c"
 			}
 		} else {
 			ImportSource* _tmp8_ = NULL;
@@ -13272,7 +13036,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 			_tmp8_ = source;
 #line 640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp8_, TYPE_PHOTO_IMPORT_SOURCE)) {
-#line 13268 "ImportPage.c"
+#line 13032 "ImportPage.c"
 				PhotoImportSource* photo = NULL;
 				ImportSource* _tmp9_ = NULL;
 				PhotoImportSource* _tmp10_ = NULL;
@@ -13290,7 +13054,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 				_tmp12_ = photo_import_source_get_file_format (_tmp11_);
 #line 642 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				if (_tmp12_ == PHOTO_FILE_FORMAT_RAW) {
-#line 13286 "ImportPage.c"
+#line 13050 "ImportPage.c"
 					PhotoImportSource* _tmp13_ = NULL;
 					PhotoImportSource* _tmp14_ = NULL;
 					PhotoImportSource* _tmp15_ = NULL;
@@ -13307,7 +13071,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 					_g_object_unref0 (_tmp15_);
 #line 643 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 					if (_tmp16_) {
-#line 13303 "ImportPage.c"
+#line 13067 "ImportPage.c"
 						gboolean _tmp17_ = FALSE;
 						gboolean _tmp18_ = FALSE;
 						gboolean _tmp19_ = FALSE;
@@ -13317,7 +13081,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 						_tmp19_ = _tmp18_;
 #line 644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (!_tmp19_) {
-#line 13313 "ImportPage.c"
+#line 13077 "ImportPage.c"
 							gboolean _tmp20_ = FALSE;
 							gboolean _tmp21_ = FALSE;
 #line 644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -13326,11 +13090,11 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 							_tmp21_ = _tmp20_;
 #line 644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp17_ = !_tmp21_;
-#line 13322 "ImportPage.c"
+#line 13086 "ImportPage.c"
 						} else {
 #line 644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							_tmp17_ = FALSE;
-#line 13326 "ImportPage.c"
+#line 13090 "ImportPage.c"
 						}
 #line 644 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						if (_tmp17_) {
@@ -13342,7 +13106,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 							_g_object_unref0 (source);
 #line 645 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							return result;
-#line 13338 "ImportPage.c"
+#line 13102 "ImportPage.c"
 						}
 					} else {
 						gboolean _tmp22_ = FALSE;
@@ -13361,7 +13125,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 							_g_object_unref0 (source);
 #line 647 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 							return result;
-#line 13357 "ImportPage.c"
+#line 13121 "ImportPage.c"
 						}
 					}
 				} else {
@@ -13381,12 +13145,12 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 						_g_object_unref0 (source);
 #line 650 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						return result;
-#line 13377 "ImportPage.c"
+#line 13141 "ImportPage.c"
 					}
 				}
 #line 640 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				_g_object_unref0 (photo);
-#line 13382 "ImportPage.c"
+#line 13146 "ImportPage.c"
 			}
 		}
 	}
@@ -13394,7 +13158,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 	_tmp26_ = search_view_filter_get_criteria (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 654 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	if ((gboolean) (SEARCH_FILTER_CRITERIA_TEXT & _tmp26_)) {
-#line 13390 "ImportPage.c"
+#line 13154 "ImportPage.c"
 		const gchar* keywords = NULL;
 		ImportSource* _tmp27_ = NULL;
 		const gchar* _tmp28_ = NULL;
@@ -13420,11 +13184,11 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 			_g_object_unref0 (source);
 #line 657 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			return result;
-#line 13416 "ImportPage.c"
+#line 13180 "ImportPage.c"
 		}
 #line 660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 		_tmp32_ = search_view_filter_get_search_filter_words (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter), &_tmp31_);
-#line 13420 "ImportPage.c"
+#line 13184 "ImportPage.c"
 		{
 			gchar** word_collection = NULL;
 			gint word_collection_length1 = 0;
@@ -13436,11 +13200,11 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 			word_collection_length1 = _tmp31_;
 #line 660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 			for (word_it = 0; word_it < _tmp31_; word_it = word_it + 1) {
-#line 13432 "ImportPage.c"
+#line 13196 "ImportPage.c"
 				const gchar* word = NULL;
 #line 660 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 				word = word_collection[word_it];
-#line 13436 "ImportPage.c"
+#line 13200 "ImportPage.c"
 				{
 					const gchar* _tmp33_ = NULL;
 					const gchar* _tmp34_ = NULL;
@@ -13459,7 +13223,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 						_g_object_unref0 (source);
 #line 662 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 						return result;
-#line 13455 "ImportPage.c"
+#line 13219 "ImportPage.c"
 					}
 				}
 			}
@@ -13471,7 +13235,7 @@ static gboolean import_page_import_page_search_view_filter_real_predicate (ViewF
 	_g_object_unref0 (source);
 #line 666 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 13467 "ImportPage.c"
+#line 13231 "ImportPage.c"
 }
 
 
@@ -13481,14 +13245,14 @@ static ImportPageImportPageSearchViewFilter* import_page_import_page_search_view
 	self = (ImportPageImportPageSearchViewFilter*) search_view_filter_construct (object_type);
 #line 627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 13477 "ImportPage.c"
+#line 13241 "ImportPage.c"
 }
 
 
 static ImportPageImportPageSearchViewFilter* import_page_import_page_search_view_filter_new (void) {
 #line 627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_page_import_page_search_view_filter_construct (IMPORT_PAGE_TYPE_IMPORT_PAGE_SEARCH_VIEW_FILTER);
-#line 13484 "ImportPage.c"
+#line 13248 "ImportPage.c"
 }
 
 
@@ -13499,7 +13263,7 @@ static void import_page_import_page_search_view_filter_class_init (ImportPageImp
 	((SearchViewFilterClass *) klass)->get_criteria = import_page_import_page_search_view_filter_real_get_criteria;
 #line 627 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((ViewFilterClass *) klass)->predicate = import_page_import_page_search_view_filter_real_predicate;
-#line 13495 "ImportPage.c"
+#line 13259 "ImportPage.c"
 }
 
 
@@ -13536,7 +13300,7 @@ static gboolean import_page_hide_imported_view_filter_real_predicate (ViewFilter
 	result = !_tmp1_;
 #line 673 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return result;
-#line 13532 "ImportPage.c"
+#line 13296 "ImportPage.c"
 }
 
 
@@ -13546,14 +13310,14 @@ static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_c
 	self = (ImportPageHideImportedViewFilter*) view_filter_construct (object_type);
 #line 671 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return self;
-#line 13542 "ImportPage.c"
+#line 13306 "ImportPage.c"
 }
 
 
 static ImportPageHideImportedViewFilter* import_page_hide_imported_view_filter_new (void) {
 #line 671 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	return import_page_hide_imported_view_filter_construct (IMPORT_PAGE_TYPE_HIDE_IMPORTED_VIEW_FILTER);
-#line 13549 "ImportPage.c"
+#line 13313 "ImportPage.c"
 }
 
 
@@ -13562,7 +13326,7 @@ static void import_page_hide_imported_view_filter_class_init (ImportPageHideImpo
 	import_page_hide_imported_view_filter_parent_class = g_type_class_peek_parent (klass);
 #line 671 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((ViewFilterClass *) klass)->predicate = import_page_hide_imported_view_filter_real_predicate;
-#line 13558 "ImportPage.c"
+#line 13322 "ImportPage.c"
 }
 
 
@@ -13598,9 +13362,7 @@ static void import_page_class_init (ImportPageClass * klass) {
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = import_page_real_init_collect_ui_filenames;
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	((PageClass *) klass)->init_collect_toggle_action_entries = import_page_real_init_collect_toggle_action_entries;
-#line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
-	((PageClass *) klass)->init_collect_action_entries = import_page_real_init_collect_action_entries;
+	((PageClass *) klass)->add_actions = import_page_real_add_actions;
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	((PageClass *) klass)->init_actions = import_page_real_init_actions;
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
@@ -13613,7 +13375,7 @@ static void import_page_class_init (ImportPageClass * klass) {
 	((CheckerboardPageClass *) klass)->get_search_view_filter = import_page_real_get_search_view_filter;
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = import_page_finalize;
-#line 13609 "ImportPage.c"
+#line 13371 "ImportPage.c"
 }
 
 
@@ -13658,7 +13420,7 @@ static void import_page_instance_init (ImportPage * self) {
 	_tmp3_ = import_page_hide_imported_view_filter_new ();
 #line 695 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	self->priv->hide_imported_filter = _tmp3_;
-#line 13654 "ImportPage.c"
+#line 13416 "ImportPage.c"
 }
 
 
@@ -13712,7 +13474,7 @@ static void import_page_finalize (GObject* obj) {
 	_core_tracker_unref0 (self->priv->tracker);
 #line 457 "/home/jens/Source/shotwell/src/camera/ImportPage.vala"
 	G_OBJECT_CLASS (import_page_parent_class)->finalize (obj);
-#line 13708 "ImportPage.c"
+#line 13470 "ImportPage.c"
 }
 
 

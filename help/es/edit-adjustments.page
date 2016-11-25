@@ -8,6 +8,12 @@
         <link type="next" xref="edit-crop"/>
     
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
+      <mal:name>Marina Prado</mal:name>
+      <mal:email>mapraro93@hotmail.com</mal:email>
+      <mal:years>2016</mal:years>
+    </mal:credit>
+  
+    <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Daniel Mustieles</mal:name>
       <mal:email>daniel.mustieles@gmail.com</mal:email>
       <mal:years>2014 - 2016</mal:years>
@@ -22,38 +28,38 @@
 
    <title>Ajustes del color</title>
 
-<p>The <gui>Adjust</gui> button opens a floating window with a histogram and sliders to adjust a photo's exposure, saturation, tint, temperature, and shadows. The histogram also has sliders to reduce the upper and lower intensity thresholds of the photograph, expanding the contrast of the middle range.</p>
+<p>El botón <gui>Ajustes</gui> abre una ventana flotante con un histograma y el control deslizante para ajustar la exposición, la saturación, el matiz, la calidez y las sombras de una fotografía. El histograma también tiene control deslizante para reducir los umbrales de intensidad superior e inferior de la fotografía, ampliando el contraste de la gama media.</p>
 
-<p>The <gui>Enhance</gui> button adjusts the histogram and shadows sliders to improve the quality of a photo.</p>
+<p>El botón <gui>Mejorar</gui> ajusta el histograma y el control deslizante de las sombras para mejorar la calidad de una foto.</p>
 
-<p>When the photo's colors and contrast are to your liking, press <gui>OK</gui> to save the changes. <gui>Reset</gui> will return the image to its original state. <gui>Cancel</gui> discards all changes you've made.</p>
+<p>Si los colores y el contraste de la foto son adecuados, pulse <gui>Aceptar</gui> para guardar los cambios. El botón <gui>Restablecer</gui> devolverá la imagen a su estado original. El botón <gui>Cancelar</gui> deshace todos los cambios realizados.</p>
 
 <section>
  <title>¿Qué hacen los ajustes del color?</title>
  <terms>
   <item>
    <title>Exposición</title>
-   <p>Changes the brightness to make it look like the photo was exposed for a longer or shorter time. Use this to correct under- or over-exposed photos.</p>
+   <p>Cambia el brillo para que parezca que la foto se ha expuesto por un tiempo más o menos largo. Utilice esta opción para corregir las fotografías sobreexpuestas o excesivamente subexpuestas.</p>
   </item>
   <item>
    <title>Saturación</title>
-   <p>Changes how vivid colors look. If your photo looks gray and washed out, try increasing the saturation. If colors look too bold, try decreasing it.</p>
+   <p>Cambia la intensidad de los colores. Si su foto parece gris y pálida, pruebe a aumentar la saturación. Si los colores se ven demasiado intensos, intente disminuirlos.</p>
   </item>
   <item>
    <title>Matiz</title>
-   <p>This tints the photo with a color. It's useful for correcting photos taken with the wrong white balance setting, which typically have an unnatural color cast. For example, photos taken outdoors with the white balance set to "Tungsten" may have a blue cast.</p>
+   <p>Esto matiza la foto con un color. Es útil para corregir fotos que se han tomado con el ajuste del balance de blancos erróneo, que normalmente tiene unas tonalidades de color poco naturales. Por ejemplo, las fotos tomadas en el exterior con el ajuste del balance de blancos en «Tungsten» pueden tener una tonalidad azulada.</p>
   </item>
   <item>
    <title>Temperatura</title>
-   <p>Changes how "warm" or "cool" the picture looks. Use this to make cold, depressing scenes look more lively, for example.</p>
+   <p>Cambia el aspecto «cálido» o «frío» de la imagen. Utilice esto, por ejemplo, para hacer que las escenas frías y tristes parezcan más alegres.</p>
   </item>
   <item>
    <title>Sombras</title>
-   <p>This makes shadowy areas appear lighter. Use this to make detail more visible if it's obscured by the darkness of a shadow.</p>
+   <p>Esto hace que las áreas oscuras aparezcan más claras. Si los detalles se han oscurecido por las sombras, utilice esto para hacerlos más visibles.</p>
   </item>
   <item>
    <title>Umbral de intensidad (control deslizante en el histograma)</title>
-   <p>These sliders change how light the brightest white is and how dark the darkest black is. Use them to change the contrast of the photo. Photos which look washed out should particularly benefit from changing these settings.</p>
+   <p>Estos controles deslizantes cambian cómo de claro es el blanco más brillante y cómo de oscuro es el negro más oscuro. Utilícelos para cambiar el contraste de la foto, sobre todo en las fotos que son pálidas.</p>
   </item>
  </terms>
 </section>

@@ -495,7 +495,7 @@ static gint flickr_service_real_get_pluggable_interface (SpitPluggable* base, gi
 static const gchar* flickr_service_real_get_id (SpitPluggable* base);
 static const gchar* flickr_service_real_get_pluggable_name (SpitPluggable* base);
 static void flickr_service_real_get_info (SpitPluggable* base, SpitPluggableInfo* info);
-static GdkPixbuf** _vala_array_dup7 (GdkPixbuf** self, int length);
+static GdkPixbuf** _vala_array_dup8 (GdkPixbuf** self, int length);
 static void flickr_service_real_activation (SpitPluggable* base, gboolean enabled);
 static SpitPublishingPublisher* flickr_service_real_create_publisher (SpitPublishingService* base, SpitPublishingPluginHost* host);
 PublishingFlickrFlickrPublisher* publishing_flickr_flickr_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host);
@@ -693,7 +693,7 @@ void publishing_flickr_upload_transaction_add_authorization_header_field (Publis
 static void _g_free0_ (gpointer var);
 static void _vala_array_add18 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value);
 PublishingRESTSupportArgument** publishing_flickr_upload_transaction_get_authorization_header_fields (PublishingFlickrUploadTransaction* self, int* result_length1);
-static PublishingRESTSupportArgument** _vala_array_dup8 (PublishingRESTSupportArgument** self, int length);
+static PublishingRESTSupportArgument** _vala_array_dup9 (PublishingRESTSupportArgument** self, int length);
 gchar* publishing_flickr_upload_transaction_get_authorization_header_string (PublishingFlickrUploadTransaction* self);
 static void publishing_flickr_upload_transaction_real_execute (PublishingRESTSupportTransaction* base, GError** error);
 static void publishing_flickr_upload_transaction_finalize (PublishingRESTSupportTransaction* obj);
@@ -875,7 +875,7 @@ static gpointer _g_object_ref0 (gpointer self) {
 }
 
 
-static GdkPixbuf** _vala_array_dup7 (GdkPixbuf** self, int length) {
+static GdkPixbuf** _vala_array_dup8 (GdkPixbuf** self, int length) {
 	GdkPixbuf** result;
 	int i;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -965,7 +965,7 @@ static void flickr_service_real_get_info (SpitPluggable* base, SpitPluggableInfo
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8__length1 = flickr_service_icon_pixbuf_set_length1;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = (_tmp8_ != NULL) ? _vala_array_dup7 (_tmp8_, _tmp8__length1) : ((gpointer) _tmp8_);
+	_tmp9_ = (_tmp8_ != NULL) ? _vala_array_dup8 (_tmp8_, _tmp8__length1) : ((gpointer) _tmp8_);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9__length1 = _tmp8__length1;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -6187,7 +6187,7 @@ static gpointer _publishing_rest_support_argument_ref0 (gpointer self) {
 }
 
 
-static PublishingRESTSupportArgument** _vala_array_dup8 (PublishingRESTSupportArgument** self, int length) {
+static PublishingRESTSupportArgument** _vala_array_dup9 (PublishingRESTSupportArgument** self, int length) {
 	PublishingRESTSupportArgument** result;
 	int i;
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -6223,7 +6223,7 @@ PublishingRESTSupportArgument** publishing_flickr_upload_transaction_get_authori
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0__length1 = self->priv->auth_header_fields_length1;
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup8 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
+	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup9 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
 #line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"

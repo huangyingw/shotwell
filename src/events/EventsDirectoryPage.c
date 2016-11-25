@@ -14,12 +14,13 @@
 #include <string.h>
 #include <gee.h>
 #include <gdk/gdk.h>
+#include <gio/gio.h>
+#include <glib/gi18n-lib.h>
 #include <time.h>
 #include <cairo.h>
 #include <float.h>
 #include <math.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <glib/gi18n-lib.h>
 
 
 #define TYPE_PAGE (page_get_type ())
@@ -362,6 +363,7 @@ typedef struct _EventDirectoryItemPrivate EventDirectoryItemPrivate;
 
 typedef struct _AppWindow AppWindow;
 typedef struct _AppWindowClass AppWindowClass;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
 
 #define TYPE_LIBRARY_WINDOW (library_window_get_type ())
 #define LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LIBRARY_WINDOW, LibraryWindow))
@@ -564,7 +566,7 @@ typedef struct _SubEventsDirectoryPageSubEventDirectoryManagerPrivate SubEventsD
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -574,8 +576,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -583,10 +583,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -921,12 +919,22 @@ static GType events_directory_page_events_directory_search_view_filter_get_type 
 enum  {
 	EVENTS_DIRECTORY_PAGE_DUMMY_PROPERTY
 };
-GtkAction* page_get_action (Page* self, const gchar* name);
-static void events_directory_page_on_sort_changed (EventsDirectoryPage* self, GtkAction* action, GtkAction* c);
-static void _events_directory_page_on_sort_changed_gtk_radio_action_changed (GtkRadioAction* _sender, GtkRadioAction* current, gpointer self);
+GAction* page_get_action (Page* self, const gchar* name);
+static void events_directory_page_on_sort_changed (EventsDirectoryPage* self, GSimpleAction* action, GVariant* value);
+static void _events_directory_page_on_sort_changed_g_simple_action_change_state (GSimpleAction* _sender, GVariant* value, gpointer self);
 static EventsDirectoryPageEventsDirectorySearchViewFilter* events_directory_page_events_directory_search_view_filter_new (void);
 static EventsDirectoryPageEventsDirectorySearchViewFilter* events_directory_page_events_directory_search_view_filter_construct (GType object_type);
 #define EVENTS_DIRECTORY_PAGE_MIN_PHOTOS_FOR_PROGRESS_WINDOW 50
+static void events_directory_page_on_rename (EventsDirectoryPage* self);
+static void _events_directory_page_on_rename_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void events_directory_page_on_merge (EventsDirectoryPage* self);
+static void _events_directory_page_on_merge_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void events_directory_page_on_edit_comment (EventsDirectoryPage* self);
+static void _events_directory_page_on_edit_comment_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void page_on_action_toggle (Page* self, GAction* action, GVariant* value);
+static void _page_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void events_directory_page_on_display_comments (EventsDirectoryPage* self, GSimpleAction* action, GVariant* value);
+static void _events_directory_page_on_display_comments_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
 GType data_source_get_type (void) G_GNUC_CONST;
 GType thumbnail_source_get_type (void) G_GNUC_CONST;
 GType event_source_get_type (void) G_GNUC_CONST;
@@ -974,7 +982,8 @@ void data_collection_set_property (DataCollection* self, const gchar* name, GVal
 gboolean configuration_facade_get_display_event_comments (ConfigurationFacade* self);
 void checkerboard_page_init_item_context_menu (CheckerboardPage* self, const gchar* path);
 GtkToolbar* page_get_toolbar (Page* self);
-#define RESOURCES_MERGE "shotwell-merge-events"
+#define RESOURCES_MERGE_LABEL _ ("Merge")
+#define RESOURCES_MERGE_TOOLTIP _ ("Combine events into a single event")
 static void events_directory_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
 gboolean alteration_has_detail (Alteration* self, const gchar* subject, const gchar* detail);
@@ -987,27 +996,11 @@ time_t event_source_get_start_time (EventSource* self);
 static gint64 events_directory_page_event_descending_comparator (void* a, void* b);
 static gint64 _events_directory_page_event_ascending_comparator_comparator (void* a, void* b, gpointer self);
 static gint64 _events_directory_page_event_descending_comparator_comparator (void* a, void* b, gpointer self);
-static GtkActionEntry* events_directory_page_real_init_collect_action_entries (Page* base, int* result_length1);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-#define TRANSLATABLE "translatable"
-static void events_directory_page_on_rename (EventsDirectoryPage* self);
-static void _events_directory_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_RENAME_EVENT_MENU _ ("Re_name Event…")
-static void _vala_array_add126 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_MERGE_TOOLTIP _ ("Combine events into a single event")
-static void events_directory_page_on_merge (EventsDirectoryPage* self);
-static void _events_directory_page_on_merge_gtk_action_callback (GtkAction* action, gpointer self);
-#define RESOURCES_MERGE_MENU _ ("_Merge Events")
-static void _vala_array_add127 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_EDIT_COMMENT_MENU _ ("Edit _Comment…")
-void events_directory_page_on_edit_comment (EventsDirectoryPage* self);
-static void _events_directory_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add128 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static GtkToggleActionEntry* events_directory_page_real_init_collect_toggle_action_entries (Page* base, int* result_length1);
-GtkToggleActionEntry* page_init_collect_toggle_action_entries (Page* self, int* result_length1);
-static void events_directory_page_on_display_comments (EventsDirectoryPage* self, GtkAction* action);
-static void _events_directory_page_on_display_comments_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add129 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
+static void events_directory_page_real_add_actions (Page* base);
+void page_add_actions (Page* self);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
+static GVariant* _variant_new10 (gboolean value);
 static void events_directory_page_real_init_actions (Page* base, gint selected_count, gint count);
 void page_init_actions (Page* self, gint selected_count, gint count);
 static void events_directory_page_real_update_actions (Page* base, gint selected_count, gint count);
@@ -1017,11 +1010,10 @@ void page_update_actions (Page* self, gint selected_count, gint count);
 static gchar* events_directory_page_real_get_view_empty_message (CheckerboardPage* base);
 static gchar* events_directory_page_real_get_filter_no_match_message (CheckerboardPage* base);
 static void events_directory_page_real_on_item_activated (CheckerboardPage* base, CheckerboardItem* item, CheckerboardPageActivator activator, CheckerboardPageKeyboardModifiers* modifiers);
-GType app_window_get_type (void) G_GNUC_CONST;
 GType library_window_get_type (void) G_GNUC_CONST;
 LibraryWindow* library_window_get_app (void);
 void library_window_switch_to_event (LibraryWindow* self, Event* event);
-#define LIBRARY_WINDOW_SORT_EVENTS_ORDER_ASCENDING 0
+#define LIBRARY_WINDOW_SORT_EVENTS_ORDER_ASCENDING "ascending"
 gint view_collection_get_selected_count (ViewCollection* self);
 DataView* view_collection_get_selected_at (ViewCollection* self, gint index);
 gpointer text_entry_dialog_mediator_ref (gpointer instance);
@@ -1133,11 +1125,47 @@ static gboolean sub_events_directory_page_sub_event_directory_manager_real_inclu
 gboolean view_manager_include_in_view (ViewManager* self, DataSource* source);
 static void sub_events_directory_page_sub_event_directory_manager_finalize (ViewManager* obj);
 
+static const GActionEntry EVENTS_DIRECTORY_PAGE_entries[4] = {{"Rename", _events_directory_page_on_rename_gsimple_action_activate_callback}, {"Merge", _events_directory_page_on_merge_gsimple_action_activate_callback}, {"EditComment", _events_directory_page_on_edit_comment_gsimple_action_activate_callback}, {"ViewComment", _page_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _events_directory_page_on_display_comments_gsimple_action_change_state_callback}};
 
-static void _events_directory_page_on_sort_changed_gtk_radio_action_changed (GtkRadioAction* _sender, GtkRadioAction* current, gpointer self) {
-#line 74 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	events_directory_page_on_sort_changed ((EventsDirectoryPage*) self, _sender, current);
+static void _events_directory_page_on_sort_changed_g_simple_action_change_state (GSimpleAction* _sender, GVariant* value, gpointer self) {
+#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	events_directory_page_on_sort_changed ((EventsDirectoryPage*) self, _sender, value);
+#line 1134 "EventsDirectoryPage.c"
+}
+
+
+static void _events_directory_page_on_rename_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	events_directory_page_on_rename ((EventsDirectoryPage*) self);
 #line 1141 "EventsDirectoryPage.c"
+}
+
+
+static void _events_directory_page_on_merge_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	events_directory_page_on_merge ((EventsDirectoryPage*) self);
+#line 1148 "EventsDirectoryPage.c"
+}
+
+
+static void _events_directory_page_on_edit_comment_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	events_directory_page_on_edit_comment ((EventsDirectoryPage*) self);
+#line 1155 "EventsDirectoryPage.c"
+}
+
+
+static void _page_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	page_on_action_toggle ((Page*) self, action, parameter);
+#line 1162 "EventsDirectoryPage.c"
+}
+
+
+static void _events_directory_page_on_display_comments_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	events_directory_page_on_display_comments ((EventsDirectoryPage*) self, action, value);
+#line 1169 "EventsDirectoryPage.c"
 }
 
 
@@ -1146,14 +1174,14 @@ static gboolean _events_directory_page_event_comparator_predicate_comparator_pre
 	result = events_directory_page_event_comparator_predicate (object, alteration);
 #line 50 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1150 "EventsDirectoryPage.c"
+#line 1178 "EventsDirectoryPage.c"
 }
 
 
 static gpointer _view_manager_ref0 (gpointer self) {
 #line 59 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self ? view_manager_ref (self) : NULL;
-#line 1157 "EventsDirectoryPage.c"
+#line 1185 "EventsDirectoryPage.c"
 }
 
 
@@ -1190,8 +1218,6 @@ EventsDirectoryPage* events_directory_page_construct (GType object_type, const g
 	GtkToolbar* _tmp25_ = NULL;
 	GtkToolButton* merge_button = NULL;
 	GtkToolButton* _tmp26_ = NULL;
-	GtkAction* _tmp27_ = NULL;
-	GtkAction* _tmp28_ = NULL;
 #line 45 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (page_name != NULL, NULL);
 #line 45 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
@@ -1275,7 +1301,7 @@ EventsDirectoryPage* events_directory_page_construct (GType object_type, const g
 #line 54 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp18_);
 #line 57 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "/EventsDirectoryContextMenu");
+	checkerboard_page_init_item_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), "EventsDirectoryContextMenu");
 #line 59 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp23_ = view_manager;
 #line 59 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
@@ -1289,20 +1315,20 @@ EventsDirectoryPage* events_directory_page_construct (GType object_type, const g
 #line 62 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	toolbar = _tmp25_;
 #line 65 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp26_ = (GtkToolButton*) gtk_tool_button_new_from_stock (RESOURCES_MERGE);
+	_tmp26_ = (GtkToolButton*) gtk_tool_button_new (NULL, RESOURCES_MERGE_LABEL);
 #line 65 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_object_ref_sink (_tmp26_);
 #line 65 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	merge_button = _tmp26_;
 #line 66 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp27_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Merge");
-#line 66 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp28_ = _tmp27_;
-#line 66 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	gtk_activatable_set_related_action (G_TYPE_CHECK_INSTANCE_CAST (merge_button, GTK_TYPE_ACTIVATABLE, GtkActivatable), _tmp28_);
-#line 66 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_g_object_unref0 (_tmp28_);
+	gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (merge_button, GTK_TYPE_ACTIONABLE, GtkActionable), "win.Merge");
+#line 67 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	gtk_tool_item_set_is_important (G_TYPE_CHECK_INSTANCE_CAST (merge_button, gtk_tool_item_get_type (), GtkToolItem), TRUE);
 #line 68 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (merge_button, gtk_tool_item_get_type (), GtkToolItem), RESOURCES_MERGE_TOOLTIP);
+#line 69 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	gtk_tool_button_set_icon_name (merge_button, "merge");
+#line 71 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	gtk_toolbar_insert (toolbar, G_TYPE_CHECK_INSTANCE_CAST (merge_button, gtk_tool_item_get_type (), GtkToolItem), -1);
 #line 45 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (merge_button);
@@ -1310,7 +1336,7 @@ EventsDirectoryPage* events_directory_page_construct (GType object_type, const g
 	_g_object_unref0 (toolbar);
 #line 45 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 1314 "EventsDirectoryPage.c"
+#line 1340 "EventsDirectoryPage.c"
 }
 
 
@@ -1318,19 +1344,19 @@ static void events_directory_page_real_init_collect_ui_filenames (Page* base, Ge
 	EventsDirectoryPage * self;
 	GeeList* _tmp0_ = NULL;
 	GeeList* _tmp1_ = NULL;
-#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 80 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (GEE_IS_LIST (ui_filenames));
-#line 78 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = ui_filenames;
-#line 78 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 81 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), "events_directory.ui");
-#line 80 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 83 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = ui_filenames;
-#line 80 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 83 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	PAGE_CLASS (events_directory_page_parent_class)->init_collect_ui_filenames (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp1_);
-#line 1334 "EventsDirectoryPage.c"
+#line 1360 "EventsDirectoryPage.c"
 }
 
 
@@ -1338,19 +1364,19 @@ gboolean events_directory_page_event_comparator_predicate (DataObject* object, A
 	gboolean result = FALSE;
 	Alteration* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 83 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_DATA_OBJECT (object), FALSE);
-#line 83 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 86 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_ALTERATION (alteration), FALSE);
-#line 84 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = alteration;
-#line 84 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = alteration_has_detail (_tmp0_, "metadata", "time");
-#line 84 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 84 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 87 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1354 "EventsDirectoryPage.c"
+#line 1380 "EventsDirectoryPage.c"
 }
 
 
@@ -1364,27 +1390,27 @@ static gint64 events_directory_page_event_ascending_comparator (void* a, void* b
 	void* _tmp3_ = NULL;
 	Event* _tmp4_ = NULL;
 	time_t _tmp5_ = 0;
-#line 88 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = a;
-#line 88 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST ((EventDirectoryItem*) _tmp0_, TYPE_EVENT_DIRECTORY_ITEM, EventDirectoryItem)->event;
-#line 88 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = event_source_get_start_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_EVENT_SOURCE, EventSource));
-#line 88 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	start_a = _tmp2_;
-#line 89 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = b;
-#line 89 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST ((EventDirectoryItem*) _tmp3_, TYPE_EVENT_DIRECTORY_ITEM, EventDirectoryItem)->event;
-#line 89 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = event_source_get_start_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_EVENT_SOURCE, EventSource));
-#line 89 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 92 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	start_b = _tmp5_;
-#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = (gint64) (start_a - start_b);
-#line 91 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 94 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1388 "EventsDirectoryPage.c"
+#line 1414 "EventsDirectoryPage.c"
 }
 
 
@@ -1393,388 +1419,146 @@ static gint64 events_directory_page_event_descending_comparator (void* a, void* 
 	void* _tmp0_ = NULL;
 	void* _tmp1_ = NULL;
 	gint64 _tmp2_ = 0LL;
-#line 95 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = b;
-#line 95 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = a;
-#line 95 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = events_directory_page_event_ascending_comparator (_tmp0_, _tmp1_);
-#line 95 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp2_;
-#line 95 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 98 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1407 "EventsDirectoryPage.c"
+#line 1433 "EventsDirectoryPage.c"
 }
 
 
 static gint64 _events_directory_page_event_ascending_comparator_comparator (void* a, void* b, gpointer self) {
 	gint64 result;
 	result = events_directory_page_event_ascending_comparator (a, b);
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1416 "EventsDirectoryPage.c"
+#line 1442 "EventsDirectoryPage.c"
 }
 
 
 static gint64 _events_directory_page_event_descending_comparator_comparator (void* a, void* b, gpointer self) {
 	gint64 result;
 	result = events_directory_page_event_descending_comparator (a, b);
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1425 "EventsDirectoryPage.c"
+#line 1451 "EventsDirectoryPage.c"
 }
 
 
 static Comparator events_directory_page_get_event_comparator (gboolean ascending, void** result_target, GDestroyNotify* result_target_destroy_notify) {
 	Comparator result = NULL;
 	gboolean _tmp0_ = FALSE;
-#line 99 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = ascending;
-#line 99 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp0_) {
-#line 1436 "EventsDirectoryPage.c"
+#line 1462 "EventsDirectoryPage.c"
 		Comparator _tmp1_ = NULL;
 		void* _tmp1__target = NULL;
 		GDestroyNotify _tmp1__target_destroy_notify = NULL;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp1_ = _events_directory_page_event_ascending_comparator_comparator;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp1__target = NULL;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp1__target_destroy_notify = NULL;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		*result_target = _tmp1__target;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		*result_target_destroy_notify = _tmp1__target_destroy_notify;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		result = _tmp1_;
-#line 100 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 103 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return result;
-#line 1454 "EventsDirectoryPage.c"
+#line 1480 "EventsDirectoryPage.c"
 	} else {
 		Comparator _tmp2_ = NULL;
 		void* _tmp2__target = NULL;
 		GDestroyNotify _tmp2__target_destroy_notify = NULL;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		_tmp2_ = _events_directory_page_event_descending_comparator_comparator;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		_tmp2__target = NULL;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		_tmp2__target_destroy_notify = NULL;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*result_target = _tmp2__target;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*result_target_destroy_notify = _tmp2__target_destroy_notify;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		result = _tmp2_;
-#line 102 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		return result;
-#line 1473 "EventsDirectoryPage.c"
-	}
-}
-
-
-static void _events_directory_page_on_rename_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	events_directory_page_on_rename ((EventsDirectoryPage*) self);
-#line 1481 "EventsDirectoryPage.c"
-}
-
-
-static void _vala_array_add126 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if ((*length) == (*size)) {
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1492 "EventsDirectoryPage.c"
-	}
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1496 "EventsDirectoryPage.c"
-}
-
-
-static void _events_directory_page_on_merge_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	events_directory_page_on_merge ((EventsDirectoryPage*) self);
-#line 1503 "EventsDirectoryPage.c"
-}
-
-
-static void _vala_array_add127 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if ((*length) == (*size)) {
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1514 "EventsDirectoryPage.c"
-	}
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1518 "EventsDirectoryPage.c"
-}
-
-
-static void _events_directory_page_on_edit_comment_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	events_directory_page_on_edit_comment ((EventsDirectoryPage*) self);
-#line 1525 "EventsDirectoryPage.c"
-}
-
-
-static void _vala_array_add128 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if ((*length) == (*size)) {
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1536 "EventsDirectoryPage.c"
-	}
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1540 "EventsDirectoryPage.c"
-}
-
-
-static GtkActionEntry* events_directory_page_real_init_collect_action_entries (Page* base, int* result_length1) {
-	EventsDirectoryPage * self;
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	gint _tmp0_ = 0;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry rename = {0};
-	GtkActionEntry _tmp2_ = {0};
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry merge = {0};
-	GtkActionEntry _tmp5_ = {0};
-	GtkActionEntry* _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	GtkActionEntry _tmp7_ = {0};
-	GtkActionEntry comment = {0};
-	GtkActionEntry _tmp8_ = {0};
-	GtkActionEntry* _tmp9_ = NULL;
-	gint _tmp9__length1 = 0;
-	GtkActionEntry _tmp10_ = {0};
-	GtkActionEntry* _tmp11_ = NULL;
-	gint _tmp11__length1 = 0;
 #line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 106 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp1_ = PAGE_CLASS (events_directory_page_parent_class)->init_collect_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 106 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	actions = _tmp1_;
-#line 106 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	actions_length1 = _tmp0_;
-#line 106 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_actions_size_ = actions_length1;
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.name = "Rename";
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.stock_id = NULL;
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.accelerator = "F2";
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.tooltip = TRANSLATABLE;
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_.callback = (GCallback) _events_directory_page_on_rename_gtk_action_callback;
-#line 108 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	rename = _tmp2_;
-#line 109 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	rename.label = RESOURCES_RENAME_EVENT_MENU;
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp3_ = actions;
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp3__length1 = actions_length1;
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp4_ = rename;
-#line 110 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_vala_array_add126 (&actions, &actions_length1, &_actions_size_, &_tmp4_);
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.name = "Merge";
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.stock_id = RESOURCES_MERGE;
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.accelerator = NULL;
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.tooltip = RESOURCES_MERGE_TOOLTIP;
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.callback = (GCallback) _events_directory_page_on_merge_gtk_action_callback;
-#line 112 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	merge = _tmp5_;
-#line 114 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	merge.label = RESOURCES_MERGE_MENU;
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp6_ = actions;
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp6__length1 = actions_length1;
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp7_ = merge;
-#line 115 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_vala_array_add127 (&actions, &actions_length1, &_actions_size_, &_tmp7_);
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.name = "EditComment";
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.stock_id = NULL;
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.label = TRANSLATABLE;
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.accelerator = NULL;
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.tooltip = RESOURCES_EDIT_COMMENT_MENU;
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_.callback = (GCallback) _events_directory_page_on_edit_comment_gtk_action_callback;
-#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	comment = _tmp8_;
-#line 119 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	comment.label = RESOURCES_EDIT_COMMENT_MENU;
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9_ = actions;
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__length1 = actions_length1;
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp10_ = comment;
-#line 120 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_vala_array_add128 (&actions, &actions_length1, &_actions_size_, &_tmp10_);
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp11_ = actions;
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp11__length1 = actions_length1;
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if (result_length1) {
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*result_length1 = _tmp11__length1;
-#line 1659 "EventsDirectoryPage.c"
+		_tmp2_ = _events_directory_page_event_descending_comparator_comparator;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		_tmp2__target = NULL;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		_tmp2__target_destroy_notify = NULL;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		*result_target = _tmp2__target;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		*result_target_destroy_notify = _tmp2__target_destroy_notify;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		result = _tmp2_;
+#line 105 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		return result;
+#line 1499 "EventsDirectoryPage.c"
 	}
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	result = _tmp11_;
-#line 122 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	return result;
-#line 1665 "EventsDirectoryPage.c"
 }
 
 
-static void _events_directory_page_on_display_comments_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	events_directory_page_on_display_comments ((EventsDirectoryPage*) self, action);
-#line 1672 "EventsDirectoryPage.c"
+static GVariant* _variant_new10 (gboolean value) {
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 1507 "EventsDirectoryPage.c"
 }
 
 
-static void _vala_array_add129 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if ((*length) == (*size)) {
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 1683 "EventsDirectoryPage.c"
-	}
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	(*array)[(*length)++] = *value;
-#line 1687 "EventsDirectoryPage.c"
-}
-
-
-static GtkToggleActionEntry* events_directory_page_real_init_collect_toggle_action_entries (Page* base, int* result_length1) {
+static void events_directory_page_real_add_actions (Page* base) {
 	EventsDirectoryPage * self;
-	GtkToggleActionEntry* result = NULL;
-	GtkToggleActionEntry* toggle_actions = NULL;
-	gint _tmp0_ = 0;
-	GtkToggleActionEntry* _tmp1_ = NULL;
-	gint toggle_actions_length1 = 0;
-	gint _toggle_actions_size_ = 0;
-	GtkToggleActionEntry comments = {0};
-	ConfigFacade* _tmp2_ = NULL;
-	ConfigFacade* _tmp3_ = NULL;
-	gboolean _tmp4_ = FALSE;
-	GtkToggleActionEntry _tmp5_ = {0};
-	GtkToggleActionEntry _tmp6_ = {0};
-	const gchar* _tmp7_ = NULL;
-	const gchar* _tmp8_ = NULL;
-	GtkToggleActionEntry* _tmp9_ = NULL;
-	gint _tmp9__length1 = 0;
-	GtkToggleActionEntry _tmp10_ = {0};
-	GtkToggleActionEntry* _tmp11_ = NULL;
-	gint _tmp11__length1 = 0;
-#line 125 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+	GAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+	GSimpleAction* _tmp4_ = NULL;
+	ConfigFacade* _tmp5_ = NULL;
+	ConfigFacade* _tmp6_ = NULL;
+	gboolean _tmp7_ = FALSE;
+	GVariant* _tmp8_ = NULL;
+#line 117 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp1_ = PAGE_CLASS (events_directory_page_parent_class)->init_collect_toggle_action_entries (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), &_tmp0_);
-#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	toggle_actions = _tmp1_;
-#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	toggle_actions_length1 = _tmp0_;
-#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_toggle_actions_size_ = toggle_actions_length1;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_ = config_facade_get_instance ();
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp3_ = _tmp2_;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp4_ = configuration_facade_get_display_event_comments (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.name = "ViewComment";
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.stock_id = NULL;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.accelerator = "<Ctrl><Shift>C";
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.tooltip = TRANSLATABLE;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.callback = (GCallback) _events_directory_page_on_display_comments_gtk_action_callback;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_.is_active = _tmp4_;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp6_ = _tmp5_;
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_g_object_unref0 (_tmp3_);
-#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	comments = _tmp6_;
-#line 130 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp7_ = _ ("_Comments");
-#line 130 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	comments.label = _tmp7_;
-#line 131 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_ = _ ("Display the comment of each event");
-#line 131 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	comments.tooltip = _tmp8_;
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9_ = toggle_actions;
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__length1 = toggle_actions_length1;
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp10_ = comments;
-#line 132 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_vala_array_add129 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp10_);
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp11_ = toggle_actions;
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp11__length1 = toggle_actions_length1;
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	if (result_length1) {
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-		*result_length1 = _tmp11__length1;
-#line 1772 "EventsDirectoryPage.c"
+#line 118 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	PAGE_CLASS (events_directory_page_parent_class)->add_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page));
+#line 119 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp0_ = app_window_get_instance ();
+#line 119 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp1_ = _tmp0_;
+#line 119 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), EVENTS_DIRECTORY_PAGE_entries, G_N_ELEMENTS (EVENTS_DIRECTORY_PAGE_entries), self);
+#line 119 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_g_object_unref0 (_tmp1_);
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp2_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ViewComment");
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp2_) : NULL;
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	if (_tmp3_ == NULL) {
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+		_g_object_unref0 (_tmp2_);
+#line 1542 "EventsDirectoryPage.c"
 	}
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	result = _tmp11_;
-#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	return result;
-#line 1778 "EventsDirectoryPage.c"
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp4_ = _tmp3_;
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp5_ = config_facade_get_instance ();
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp6_ = _tmp5_;
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7_ = configuration_facade_get_display_event_comments (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp8_ = _variant_new10 (_tmp7_);
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_simple_action_set_state (_tmp4_, _tmp8_);
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_g_variant_unref0 (_tmp8_);
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_g_object_unref0 (_tmp6_);
+#line 121 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_g_object_unref0 (_tmp4_);
+#line 1562 "EventsDirectoryPage.c"
 }
 
 
@@ -1782,36 +1566,36 @@ static void events_directory_page_real_init_actions (Page* base, gint selected_c
 	EventsDirectoryPage * self;
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-	GtkRadioAction* action = NULL;
-	GtkAction* _tmp2_ = NULL;
-	GtkRadioAction* _tmp3_ = NULL;
-#line 137 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	GSimpleAction* action = NULL;
+	GAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 125 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 138 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = selected_count;
-#line 138 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = count;
-#line 138 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 126 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	PAGE_CLASS (events_directory_page_parent_class)->init_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp0_, _tmp1_);
-#line 140 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonSortEventsAscending");
-#line 140 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, gtk_radio_action_get_type ()) ? ((GtkRadioAction*) _tmp2_) : NULL;
-#line 140 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp2_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonSortEvents");
+#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp2_) : NULL;
+#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp3_ == NULL) {
-#line 140 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1805 "EventsDirectoryPage.c"
+#line 1589 "EventsDirectoryPage.c"
 	}
-#line 140 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 128 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	action = _tmp3_;
-#line 141 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 129 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_vala_assert (action != NULL, "action != null");
-#line 142 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_signal_connect_object (action, "changed", (GCallback) _events_directory_page_on_sort_changed_gtk_radio_action_changed, self, 0);
-#line 137 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 130 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_signal_connect_object (action, "change-state", (GCallback) _events_directory_page_on_sort_changed_g_simple_action_change_state, self, 0);
+#line 125 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (action);
-#line 1815 "EventsDirectoryPage.c"
+#line 1599 "EventsDirectoryPage.c"
 }
 
 
@@ -1822,29 +1606,29 @@ static void events_directory_page_real_update_actions (Page* base, gint selected
 	gint _tmp2_ = 0;
 	gint _tmp3_ = 0;
 	gint _tmp4_ = 0;
-#line 145 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 133 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 146 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = selected_count;
-#line 146 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 134 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Merge", _tmp0_ > 1);
-#line 147 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 135 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	page_set_action_important (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Merge", TRUE);
-#line 148 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 136 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = selected_count;
-#line 148 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 136 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Rename", _tmp1_ == 1);
-#line 149 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 137 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = selected_count;
-#line 149 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 137 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "EditComment", _tmp2_ == 1);
-#line 151 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 139 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = selected_count;
-#line 151 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 139 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = count;
-#line 151 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 139 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	PAGE_CLASS (events_directory_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), TYPE_PAGE, Page), _tmp3_, _tmp4_);
-#line 1848 "EventsDirectoryPage.c"
+#line 1632 "EventsDirectoryPage.c"
 }
 
 
@@ -1853,17 +1637,17 @@ static gchar* events_directory_page_real_get_view_empty_message (CheckerboardPag
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 154 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 142 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 155 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = _ ("No events");
-#line 155 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 155 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 155 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 143 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1867 "EventsDirectoryPage.c"
+#line 1651 "EventsDirectoryPage.c"
 }
 
 
@@ -1872,24 +1656,24 @@ static gchar* events_directory_page_real_get_filter_no_match_message (Checkerboa
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 158 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 146 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 159 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = _ ("No events found");
-#line 159 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 159 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 159 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 147 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 1886 "EventsDirectoryPage.c"
+#line 1670 "EventsDirectoryPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 152 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1893 "EventsDirectoryPage.c"
+#line 1677 "EventsDirectoryPage.c"
 }
 
 
@@ -1901,91 +1685,86 @@ static void events_directory_page_real_on_item_activated (CheckerboardPage* base
 	LibraryWindow* _tmp2_ = NULL;
 	LibraryWindow* _tmp3_ = NULL;
 	Event* _tmp4_ = NULL;
-#line 162 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 150 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 162 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 150 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item));
-#line 162 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 150 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (modifiers != NULL);
-#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 152 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = item;
-#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 152 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_EVENT_DIRECTORY_ITEM, EventDirectoryItem));
-#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 152 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	event = _tmp1_;
-#line 165 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 153 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = library_window_get_app ();
-#line 165 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 153 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _tmp2_;
-#line 165 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 153 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = event->event;
-#line 165 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 153 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	library_window_switch_to_event (_tmp3_, _tmp4_);
-#line 165 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 153 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 162 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 150 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (event);
-#line 1929 "EventsDirectoryPage.c"
+#line 1713 "EventsDirectoryPage.c"
 }
 
 
-static void events_directory_page_on_sort_changed (EventsDirectoryPage* self, GtkAction* action, GtkAction* c) {
-	GtkRadioAction* current = NULL;
-	GtkAction* _tmp0_ = NULL;
-	GtkRadioAction* _tmp1_ = NULL;
-	ViewCollection* _tmp2_ = NULL;
-	ViewCollection* _tmp3_ = NULL;
-	gint _tmp4_ = 0;
-	gint _tmp5_ = 0;
-	void* _tmp6_ = NULL;
-	GDestroyNotify _tmp7_ = NULL;
-	Comparator _tmp8_ = NULL;
-	Comparator _tmp9_ = NULL;
-	void* _tmp9__target = NULL;
-	GDestroyNotify _tmp9__target_destroy_notify = NULL;
-#line 168 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+static void events_directory_page_on_sort_changed (EventsDirectoryPage* self, GSimpleAction* action, GVariant* value) {
+	ViewCollection* _tmp0_ = NULL;
+	ViewCollection* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	const gchar* _tmp3_ = NULL;
+	void* _tmp4_ = NULL;
+	GDestroyNotify _tmp5_ = NULL;
+	Comparator _tmp6_ = NULL;
+	Comparator _tmp7_ = NULL;
+	void* _tmp7__target = NULL;
+	GDestroyNotify _tmp7__target_destroy_notify = NULL;
+	GSimpleAction* _tmp8_ = NULL;
+	GVariant* _tmp9_ = NULL;
+#line 156 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_EVENTS_DIRECTORY_PAGE (self));
-#line 168 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 168 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_return_if_fail (GTK_IS_ACTION (c));
-#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp0_ = c;
-#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_radio_action_get_type (), GtkRadioAction));
-#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	current = _tmp1_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp2_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp3_ = _tmp2_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp4_ = gtk_radio_action_get_current_value (current);
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp5_ = _tmp4_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp8_ = events_directory_page_get_event_comparator (_tmp5_ == LIBRARY_WINDOW_SORT_EVENTS_ORDER_ASCENDING, &_tmp6_, &_tmp7_);
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9_ = _tmp8_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__target = _tmp6_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__target_destroy_notify = _tmp7_;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	data_collection_set_comparator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_COLLECTION, DataCollection), _tmp9_, _tmp6_, _events_directory_page_event_comparator_predicate_comparator_predicate, NULL);
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	(_tmp9__target_destroy_notify == NULL) ? NULL : (_tmp9__target_destroy_notify (_tmp9__target), NULL);
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9_ = NULL;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__target = NULL;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp9__target_destroy_notify = NULL;
-#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_data_collection_unref0 (_tmp3_);
-#line 168 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_g_object_unref0 (current);
-#line 1989 "EventsDirectoryPage.c"
+#line 156 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp1_ = _tmp0_;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp2_ = value;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp3_ = g_variant_get_string (_tmp2_, NULL);
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp6_ = events_directory_page_get_event_comparator (g_strcmp0 (_tmp3_, LIBRARY_WINDOW_SORT_EVENTS_ORDER_ASCENDING) == 0, &_tmp4_, &_tmp5_);
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7_ = _tmp6_;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7__target = _tmp4_;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7__target_destroy_notify = _tmp5_;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	data_collection_set_comparator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection), _tmp7_, _tmp4_, _events_directory_page_event_comparator_predicate_comparator_predicate, NULL);
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	(_tmp7__target_destroy_notify == NULL) ? NULL : (_tmp7__target_destroy_notify (_tmp7__target), NULL);
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7_ = NULL;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7__target = NULL;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp7__target_destroy_notify = NULL;
+#line 157 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_data_collection_unref0 (_tmp1_);
+#line 161 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp8_ = action;
+#line 161 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp9_ = value;
+#line 161 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_simple_action_set_state (_tmp8_, _tmp9_);
+#line 1768 "EventsDirectoryPage.c"
 }
 
 
@@ -2018,101 +1797,101 @@ static void events_directory_page_on_rename (EventsDirectoryPage* self) {
 	CommandManager* _tmp21_ = NULL;
 	CommandManager* _tmp22_ = NULL;
 	RenameEventCommand* _tmp23_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_EVENTS_DIRECTORY_PAGE (self));
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _tmp0_;
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _tmp2_ != 1;
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 178 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 166 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp3_) {
-#line 179 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 167 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return;
-#line 2038 "EventsDirectoryPage.c"
+#line 1817 "EventsDirectoryPage.c"
 	}
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = _tmp4_;
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp6_ = view_collection_get_selected_at (_tmp5_, 0);
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_EVENT_DIRECTORY_ITEM, EventDirectoryItem);
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 181 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	item = _tmp7_;
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp8_ = item;
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp9_ = _tmp8_->event;
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp10_ = event_get_raw_name (_tmp9_);
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp11_ = _tmp10_;
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp12_ = event_rename_dialog_new (_tmp11_);
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp13_ = _tmp12_;
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_free0 (_tmp11_);
-#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 171 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	rename_dialog = _tmp13_;
-#line 184 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 172 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp14_ = rename_dialog;
-#line 184 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 172 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp15_ = event_rename_dialog_execute (_tmp14_);
-#line 184 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 172 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	new_name = _tmp15_;
-#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 173 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp16_ = new_name;
-#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 173 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp16_ == NULL) {
-#line 186 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 174 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_free0 (new_name);
-#line 186 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 174 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_text_entry_dialog_mediator_unref0 (rename_dialog);
-#line 186 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 174 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_object_unref0 (item);
-#line 186 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 174 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return;
-#line 2086 "EventsDirectoryPage.c"
+#line 1865 "EventsDirectoryPage.c"
 	}
-#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp17_ = item;
-#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp18_ = _tmp17_->event;
-#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp19_ = new_name;
-#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp20_ = rename_event_command_new (_tmp18_, _tmp19_);
-#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command = _tmp20_;
-#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 177 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp21_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 177 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp22_ = _tmp21_;
-#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 177 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp23_ = command;
-#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 177 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command_manager_execute (_tmp22_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_COMMAND, Command));
-#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 177 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_command_manager_unref0 (_tmp22_);
-#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (command);
-#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_free0 (new_name);
-#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_text_entry_dialog_mediator_unref0 (rename_dialog);
-#line 176 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 164 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (item);
-#line 2116 "EventsDirectoryPage.c"
+#line 1895 "EventsDirectoryPage.c"
 }
 
 
@@ -2145,101 +1924,101 @@ void events_directory_page_on_edit_comment (EventsDirectoryPage* self) {
 	CommandManager* _tmp21_ = NULL;
 	CommandManager* _tmp22_ = NULL;
 	EditEventCommentCommand* _tmp23_ = NULL;
-#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 180 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_EVENTS_DIRECTORY_PAGE (self));
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _tmp0_;
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _tmp2_ != 1;
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 194 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 182 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp3_) {
-#line 195 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 183 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return;
-#line 2165 "EventsDirectoryPage.c"
+#line 1944 "EventsDirectoryPage.c"
 	}
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = _tmp4_;
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp6_ = view_collection_get_selected_at (_tmp5_, 0);
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp7_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_EVENT_DIRECTORY_ITEM, EventDirectoryItem);
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	item = _tmp7_;
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp8_ = item;
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp9_ = _tmp8_->event;
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp10_ = event_source_get_comment (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_EVENT_SOURCE, EventSource));
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp11_ = _tmp10_;
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp12_ = edit_comment_dialog_new (_tmp11_, FALSE);
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp13_ = _tmp12_;
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_free0 (_tmp11_);
-#line 199 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	edit_comment_dialog = _tmp13_;
-#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp14_ = edit_comment_dialog;
-#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp15_ = edit_comment_dialog_execute (_tmp14_);
-#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	new_comment = _tmp15_;
-#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp16_ = new_comment;
-#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 189 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp16_ == NULL) {
-#line 202 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 190 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_free0 (new_comment);
-#line 202 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 190 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_multi_text_entry_dialog_mediator_unref0 (edit_comment_dialog);
-#line 202 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 190 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_object_unref0 (item);
-#line 202 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 190 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return;
-#line 2213 "EventsDirectoryPage.c"
+#line 1992 "EventsDirectoryPage.c"
 	}
-#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp17_ = item;
-#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp18_ = _tmp17_->event;
-#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp19_ = new_comment;
-#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp20_ = edit_event_comment_command_new (_tmp18_, _tmp19_);
-#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command = _tmp20_;
-#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 193 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp21_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 193 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp22_ = _tmp21_;
-#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 193 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp23_ = command;
-#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 193 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command_manager_execute (_tmp22_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_COMMAND, Command));
-#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 193 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_command_manager_unref0 (_tmp22_);
-#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 180 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (command);
-#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 180 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_free0 (new_comment);
-#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 180 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_multi_text_entry_dialog_mediator_unref0 (edit_comment_dialog);
-#line 192 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 180 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (item);
-#line 2243 "EventsDirectoryPage.c"
+#line 2022 "EventsDirectoryPage.c"
 }
 
 
@@ -2258,92 +2037,100 @@ static void events_directory_page_on_merge (EventsDirectoryPage* self) {
 	CommandManager* _tmp10_ = NULL;
 	CommandManager* _tmp11_ = NULL;
 	MergeEventsCommand* _tmp12_ = NULL;
-#line 208 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 196 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_EVENTS_DIRECTORY_PAGE (self));
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _tmp0_;
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _tmp2_ <= 1;
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp3_) {
-#line 210 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 198 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return;
-#line 2278 "EventsDirectoryPage.c"
+#line 2057 "EventsDirectoryPage.c"
 	}
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = _tmp4_;
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp6_ = view_collection_get_selected (_tmp5_);
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp7_ = _tmp6_;
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp8_ = merge_events_command_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp9_ = _tmp8_;
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (_tmp7_);
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 212 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 200 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command = _tmp9_;
-#line 213 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp10_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 213 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp11_ = _tmp10_;
-#line 213 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp12_ = command;
-#line 213 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	command_manager_execute (_tmp11_, G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_COMMAND, Command));
-#line 213 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_command_manager_unref0 (_tmp11_);
-#line 208 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 196 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (command);
-#line 2310 "EventsDirectoryPage.c"
+#line 2089 "EventsDirectoryPage.c"
 }
 
 
-static void events_directory_page_on_display_comments (EventsDirectoryPage* self, GtkAction* action) {
+static void events_directory_page_on_display_comments (EventsDirectoryPage* self, GSimpleAction* action, GVariant* value) {
 	gboolean display = FALSE;
-	GtkAction* _tmp0_ = NULL;
+	GVariant* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	ConfigFacade* _tmp2_ = NULL;
 	ConfigFacade* _tmp3_ = NULL;
-#line 216 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	GSimpleAction* _tmp4_ = NULL;
+	GVariant* _tmp5_ = NULL;
+#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_if_fail (IS_EVENTS_DIRECTORY_PAGE (self));
-#line 216 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 217 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp0_ = action;
-#line 217 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 217 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 204 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp0_ = value;
+#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp1_ = g_variant_get_boolean (_tmp0_);
+#line 205 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	display = _tmp1_;
-#line 219 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 207 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	checkerboard_page_set_display_comments (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_PAGE, CheckerboardPage), display);
-#line 221 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = config_facade_get_instance ();
-#line 221 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _tmp2_;
-#line 221 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	configuration_facade_set_display_event_comments (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), display);
-#line 221 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 209 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 2340 "EventsDirectoryPage.c"
+#line 211 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp4_ = action;
+#line 211 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp5_ = value;
+#line 211 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_simple_action_set_state (_tmp4_, _tmp5_);
+#line 2127 "EventsDirectoryPage.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
-#line 225 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 2347 "EventsDirectoryPage.c"
+#line 2134 "EventsDirectoryPage.c"
 }
 
 
@@ -2352,17 +2139,17 @@ static SearchViewFilter* events_directory_page_real_get_search_view_filter (Chec
 	SearchViewFilter* result = NULL;
 	EventsDirectoryPageEventsDirectorySearchViewFilter* _tmp0_ = NULL;
 	SearchViewFilter* _tmp1_ = NULL;
-#line 224 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 214 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 225 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 225 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _view_filter_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
-#line 225 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 225 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2366 "EventsDirectoryPage.c"
+#line 2153 "EventsDirectoryPage.c"
 }
 
 
@@ -2383,7 +2170,7 @@ static DataView* events_directory_page_event_directory_manager_real_create_view 
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_VIEW, DataView);
 #line 10 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2387 "EventsDirectoryPage.c"
+#line 2174 "EventsDirectoryPage.c"
 }
 
 
@@ -2393,14 +2180,14 @@ EventsDirectoryPageEventDirectoryManager* events_directory_page_event_directory_
 	self = (EventsDirectoryPageEventDirectoryManager*) view_manager_construct (object_type);
 #line 8 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 2397 "EventsDirectoryPage.c"
+#line 2184 "EventsDirectoryPage.c"
 }
 
 
 EventsDirectoryPageEventDirectoryManager* events_directory_page_event_directory_manager_new (void) {
 #line 8 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return events_directory_page_event_directory_manager_construct (EVENTS_DIRECTORY_PAGE_TYPE_EVENT_DIRECTORY_MANAGER);
-#line 2404 "EventsDirectoryPage.c"
+#line 2191 "EventsDirectoryPage.c"
 }
 
 
@@ -2409,7 +2196,7 @@ static void events_directory_page_event_directory_manager_class_init (EventsDire
 	events_directory_page_event_directory_manager_parent_class = g_type_class_peek_parent (klass);
 #line 8 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((ViewManagerClass *) klass)->create_view = events_directory_page_event_directory_manager_real_create_view;
-#line 2413 "EventsDirectoryPage.c"
+#line 2200 "EventsDirectoryPage.c"
 }
 
 
@@ -2438,7 +2225,7 @@ static guint events_directory_page_events_directory_search_view_filter_real_get_
 	result = (guint) SEARCH_FILTER_CRITERIA_TEXT;
 #line 16 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2442 "EventsDirectoryPage.c"
+#line 2229 "EventsDirectoryPage.c"
 }
 
 
@@ -2458,7 +2245,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2462 "EventsDirectoryPage.c"
+#line 2249 "EventsDirectoryPage.c"
 }
 
 
@@ -2504,7 +2291,7 @@ static gboolean events_directory_page_events_directory_search_view_filter_real_p
 		result = TRUE;
 #line 22 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return result;
-#line 2508 "EventsDirectoryPage.c"
+#line 2295 "EventsDirectoryPage.c"
 	}
 #line 24 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = view;
@@ -2530,11 +2317,11 @@ static gboolean events_directory_page_events_directory_search_view_filter_real_p
 		_g_object_unref0 (source);
 #line 27 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return result;
-#line 2534 "EventsDirectoryPage.c"
+#line 2321 "EventsDirectoryPage.c"
 	}
 #line 30 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp12_ = search_view_filter_get_search_filter_words (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter), &_tmp11_);
-#line 2538 "EventsDirectoryPage.c"
+#line 2325 "EventsDirectoryPage.c"
 	{
 		gchar** word_collection = NULL;
 		gint word_collection_length1 = 0;
@@ -2546,11 +2333,11 @@ static gboolean events_directory_page_events_directory_search_view_filter_real_p
 		word_collection_length1 = _tmp11_;
 #line 30 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		for (word_it = 0; word_it < _tmp11_; word_it = word_it + 1) {
-#line 2550 "EventsDirectoryPage.c"
+#line 2337 "EventsDirectoryPage.c"
 			const gchar* word = NULL;
 #line 30 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			word = word_collection[word_it];
-#line 2554 "EventsDirectoryPage.c"
+#line 2341 "EventsDirectoryPage.c"
 			{
 				const gchar* _tmp13_ = NULL;
 				const gchar* _tmp14_ = NULL;
@@ -2569,7 +2356,7 @@ static gboolean events_directory_page_events_directory_search_view_filter_real_p
 					_g_object_unref0 (source);
 #line 32 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 					return result;
-#line 2573 "EventsDirectoryPage.c"
+#line 2360 "EventsDirectoryPage.c"
 				}
 			}
 		}
@@ -2580,7 +2367,7 @@ static gboolean events_directory_page_events_directory_search_view_filter_real_p
 	_g_object_unref0 (source);
 #line 35 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2584 "EventsDirectoryPage.c"
+#line 2371 "EventsDirectoryPage.c"
 }
 
 
@@ -2590,14 +2377,14 @@ static EventsDirectoryPageEventsDirectorySearchViewFilter* events_directory_page
 	self = (EventsDirectoryPageEventsDirectorySearchViewFilter*) search_view_filter_construct (object_type);
 #line 14 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 2594 "EventsDirectoryPage.c"
+#line 2381 "EventsDirectoryPage.c"
 }
 
 
 static EventsDirectoryPageEventsDirectorySearchViewFilter* events_directory_page_events_directory_search_view_filter_new (void) {
 #line 14 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return events_directory_page_events_directory_search_view_filter_construct (EVENTS_DIRECTORY_PAGE_TYPE_EVENTS_DIRECTORY_SEARCH_VIEW_FILTER);
-#line 2601 "EventsDirectoryPage.c"
+#line 2388 "EventsDirectoryPage.c"
 }
 
 
@@ -2608,7 +2395,7 @@ static void events_directory_page_events_directory_search_view_filter_class_init
 	((SearchViewFilterClass *) klass)->get_criteria = events_directory_page_events_directory_search_view_filter_real_get_criteria;
 #line 14 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((ViewFilterClass *) klass)->predicate = events_directory_page_events_directory_search_view_filter_real_predicate;
-#line 2612 "EventsDirectoryPage.c"
+#line 2399 "EventsDirectoryPage.c"
 }
 
 
@@ -2636,9 +2423,7 @@ static void events_directory_page_class_init (EventsDirectoryPageClass * klass) 
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = events_directory_page_real_init_collect_ui_filenames;
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	((PageClass *) klass)->init_collect_action_entries = events_directory_page_real_init_collect_action_entries;
-#line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	((PageClass *) klass)->init_collect_toggle_action_entries = events_directory_page_real_init_collect_toggle_action_entries;
+	((PageClass *) klass)->add_actions = events_directory_page_real_add_actions;
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((PageClass *) klass)->init_actions = events_directory_page_real_init_actions;
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
@@ -2653,7 +2438,7 @@ static void events_directory_page_class_init (EventsDirectoryPageClass * klass) 
 	((CheckerboardPageClass *) klass)->get_search_view_filter = events_directory_page_real_get_search_view_filter;
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = events_directory_page_finalize;
-#line 2657 "EventsDirectoryPage.c"
+#line 2442 "EventsDirectoryPage.c"
 }
 
 
@@ -2665,42 +2450,42 @@ static void events_directory_page_instance_init (EventsDirectoryPage * self) {
 	_tmp0_ = events_directory_page_events_directory_search_view_filter_new ();
 #line 43 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv->search_filter = _tmp0_;
-#line 2669 "EventsDirectoryPage.c"
+#line 2454 "EventsDirectoryPage.c"
 }
 
 
 static void events_directory_page_finalize (GObject* obj) {
 	EventsDirectoryPage * self;
-	GtkRadioAction* action = NULL;
-	GtkAction* _tmp0_ = NULL;
-	GtkRadioAction* _tmp1_ = NULL;
-	GtkRadioAction* _tmp2_ = NULL;
-	GtkRadioAction* _tmp3_ = NULL;
+	GSimpleAction* action = NULL;
+	GAction* _tmp0_ = NULL;
+	GSimpleAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
 	guint _tmp4_ = 0U;
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage);
-#line 72 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp0_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonSortEventsAscending");
-#line 72 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_radio_action_get_type ()) ? ((GtkRadioAction*) _tmp0_) : NULL;
-#line 72 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 75 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp0_ = page_get_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonSortEvents");
+#line 75 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp0_) : NULL;
+#line 75 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp1_ == NULL) {
-#line 72 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 75 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_object_unref0 (_tmp0_);
-#line 2691 "EventsDirectoryPage.c"
+#line 2476 "EventsDirectoryPage.c"
 	}
-#line 72 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 75 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	action = _tmp1_;
-#line 73 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 76 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = action;
-#line 73 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 76 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_vala_assert (_tmp2_ != NULL, "action != null");
-#line 74 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = action;
-#line 74 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_signal_parse_name ("changed", gtk_radio_action_get_type (), &_tmp4_, NULL, FALSE);
-#line 74 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
-	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _events_directory_page_on_sort_changed_gtk_radio_action_changed, self);
+#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_signal_parse_name ("change-state", g_simple_action_get_type (), &_tmp4_, NULL, FALSE);
+#line 77 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _events_directory_page_on_sort_changed_g_simple_action_change_state, self);
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (action);
 #line 41 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
@@ -2709,7 +2494,7 @@ static void events_directory_page_finalize (GObject* obj) {
 	_view_filter_unref0 (self->priv->search_filter);
 #line 7 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	G_OBJECT_CLASS (events_directory_page_parent_class)->finalize (obj);
-#line 2713 "EventsDirectoryPage.c"
+#line 2498 "EventsDirectoryPage.c"
 }
 
 
@@ -2732,39 +2517,39 @@ MasterEventsDirectoryPage* master_events_directory_page_construct (GType object_
 	EventSourceCollection* _tmp2_ = NULL;
 	GeeCollection* _tmp3_ = NULL;
 	GeeCollection* _tmp4_ = NULL;
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = events_directory_page_event_directory_manager_new ();
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = _tmp0_;
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = event_global;
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_DATA_COLLECTION, DataCollection));
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = (MasterEventsDirectoryPage*) events_directory_page_construct (object_type, MASTER_EVENTS_DIRECTORY_PAGE_NAME, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_VIEW_MANAGER, ViewManager), _tmp4_);
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (_tmp4_);
-#line 233 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_view_manager_unref0 (_tmp1_);
-#line 232 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 222 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 2754 "EventsDirectoryPage.c"
+#line 2539 "EventsDirectoryPage.c"
 }
 
 
 MasterEventsDirectoryPage* master_events_directory_page_new (void) {
-#line 232 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 222 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return master_events_directory_page_construct (TYPE_MASTER_EVENTS_DIRECTORY_PAGE);
-#line 2761 "EventsDirectoryPage.c"
+#line 2546 "EventsDirectoryPage.c"
 }
 
 
 static void master_events_directory_page_class_init (MasterEventsDirectoryPageClass * klass) {
-#line 229 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 219 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	master_events_directory_page_parent_class = g_type_class_peek_parent (klass);
-#line 2768 "EventsDirectoryPage.c"
+#line 2553 "EventsDirectoryPage.c"
 }
 
 
@@ -2838,7 +2623,7 @@ static gchar* g_time_format (struct tm *self, const gchar* format) {
 	buffer = (g_free (buffer), NULL);
 #line 2761 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2842 "EventsDirectoryPage.c"
+#line 2627 "EventsDirectoryPage.c"
 }
 
 
@@ -2851,71 +2636,71 @@ SubEventsDirectoryPage* sub_events_directory_page_construct (GType object_type, 
 	struct tm _tmp7_ = {0};
 	SubEventsDirectoryPageSubEventDirectoryManager* _tmp8_ = NULL;
 	SubEventsDirectoryPageSubEventDirectoryManager* _tmp9_ = NULL;
-#line 290 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 280 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (time != NULL, NULL);
-#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = type;
-#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp0_ == SUB_EVENTS_DIRECTORY_PAGE_DIRECTORY_TYPE_UNDATED) {
-#line 2861 "EventsDirectoryPage.c"
+#line 2646 "EventsDirectoryPage.c"
 		gchar* _tmp1_ = NULL;
-#line 293 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp1_ = g_strdup (SUB_EVENTS_DIRECTORY_PAGE_UNDATED_PAGE_NAME);
-#line 293 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_free0 (page_name);
-#line 293 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		page_name = _tmp1_;
-#line 2869 "EventsDirectoryPage.c"
+#line 2654 "EventsDirectoryPage.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 		SubEventsDirectoryPageDirectoryType _tmp3_ = 0;
 		gchar* _tmp4_ = NULL;
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp3_ = type;
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		if (_tmp3_ == SUB_EVENTS_DIRECTORY_PAGE_DIRECTORY_TYPE_YEAR) {
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_tmp2_ = SUB_EVENTS_DIRECTORY_PAGE_YEAR_FORMAT;
-#line 2880 "EventsDirectoryPage.c"
+#line 2665 "EventsDirectoryPage.c"
 		} else {
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_tmp2_ = SUB_EVENTS_DIRECTORY_PAGE_MONTH_FORMAT;
-#line 2884 "EventsDirectoryPage.c"
+#line 2669 "EventsDirectoryPage.c"
 		}
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp4_ = g_time_format (time, _tmp2_);
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_free0 (page_name);
-#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		page_name = _tmp4_;
-#line 2892 "EventsDirectoryPage.c"
+#line 2677 "EventsDirectoryPage.c"
 	}
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = page_name;
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp6_ = type;
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp7_ = *time;
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp8_ = sub_events_directory_page_sub_event_directory_manager_new (_tmp6_, &_tmp7_);
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp9_ = _tmp8_;
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = (SubEventsDirectoryPage*) events_directory_page_construct (object_type, _tmp5_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_VIEW_MANAGER, ViewManager), NULL);
-#line 298 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 288 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_view_manager_unref0 (_tmp9_);
-#line 290 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 280 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_free0 (page_name);
-#line 290 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 280 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 2912 "EventsDirectoryPage.c"
+#line 2697 "EventsDirectoryPage.c"
 }
 
 
 SubEventsDirectoryPage* sub_events_directory_page_new (SubEventsDirectoryPageDirectoryType type, struct tm* time) {
-#line 290 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 280 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return sub_events_directory_page_construct (TYPE_SUB_EVENTS_DIRECTORY_PAGE, type, time);
-#line 2919 "EventsDirectoryPage.c"
+#line 2704 "EventsDirectoryPage.c"
 }
 
 
@@ -2923,17 +2708,17 @@ gint sub_events_directory_page_get_month (SubEventsDirectoryPage* self) {
 	gint result = 0;
 	ViewManager* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 301 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 291 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_SUB_EVENTS_DIRECTORY_PAGE (self), 0);
-#line 302 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage)->view_manager;
-#line 302 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = sub_events_directory_page_sub_event_directory_manager_get_month (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, SubEventsDirectoryPageSubEventDirectoryManager));
-#line 302 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 302 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 292 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2937 "EventsDirectoryPage.c"
+#line 2722 "EventsDirectoryPage.c"
 }
 
 
@@ -2941,17 +2726,17 @@ gint sub_events_directory_page_get_year (SubEventsDirectoryPage* self) {
 	gint result = 0;
 	ViewManager* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 305 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 295 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_SUB_EVENTS_DIRECTORY_PAGE (self), 0);
-#line 306 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 296 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage)->view_manager;
-#line 306 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 296 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = sub_events_directory_page_sub_event_directory_manager_get_year (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, SubEventsDirectoryPageSubEventDirectoryManager));
-#line 306 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 296 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 306 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 296 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2955 "EventsDirectoryPage.c"
+#line 2740 "EventsDirectoryPage.c"
 }
 
 
@@ -2959,17 +2744,17 @@ SubEventsDirectoryPageDirectoryType sub_events_directory_page_get_event_director
 	SubEventsDirectoryPageDirectoryType result = 0;
 	ViewManager* _tmp0_ = NULL;
 	SubEventsDirectoryPageDirectoryType _tmp1_ = 0;
-#line 309 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 299 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_SUB_EVENTS_DIRECTORY_PAGE (self), 0);
-#line 310 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 300 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EVENTS_DIRECTORY_PAGE, EventsDirectoryPage)->view_manager;
-#line 310 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 300 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = sub_events_directory_page_sub_event_directory_manager_get_event_directory_type (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, SubEventsDirectoryPageSubEventDirectoryManager));
-#line 310 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 300 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp1_;
-#line 310 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 300 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 2973 "EventsDirectoryPage.c"
+#line 2758 "EventsDirectoryPage.c"
 }
 
 
@@ -2979,45 +2764,45 @@ static SubEventsDirectoryPageSubEventDirectoryManager* sub_events_directory_page
 	SubEventsDirectoryPageDirectoryType _tmp3_ = 0;
 	struct tm _tmp4_ = {0};
 	gint _tmp5_ = 0;
-#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 243 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (time != NULL, NULL);
-#line 254 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 244 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = (SubEventsDirectoryPageSubEventDirectoryManager*) events_directory_page_event_directory_manager_construct (object_type);
-#line 256 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 246 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = type;
-#line 256 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 246 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp0_ == SUB_EVENTS_DIRECTORY_PAGE_DIRECTORY_TYPE_MONTH) {
-#line 2991 "EventsDirectoryPage.c"
+#line 2776 "EventsDirectoryPage.c"
 		struct tm _tmp1_ = {0};
 		gint _tmp2_ = 0;
-#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 247 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp1_ = *time;
-#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 247 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp2_ = _tmp1_.tm_mon;
-#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 247 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		self->priv->month = _tmp2_;
-#line 3000 "EventsDirectoryPage.c"
+#line 2785 "EventsDirectoryPage.c"
 	}
-#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = type;
-#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv->type = _tmp3_;
-#line 259 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 249 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = *time;
-#line 259 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 249 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = _tmp4_.tm_year;
-#line 259 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 249 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv->year = _tmp5_;
-#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 243 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return self;
-#line 3014 "EventsDirectoryPage.c"
+#line 2799 "EventsDirectoryPage.c"
 }
 
 
 static SubEventsDirectoryPageSubEventDirectoryManager* sub_events_directory_page_sub_event_directory_manager_new (SubEventsDirectoryPageDirectoryType type, struct tm* time) {
-#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 243 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return sub_events_directory_page_sub_event_directory_manager_construct (SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, type, time);
-#line 3021 "EventsDirectoryPage.c"
+#line 2806 "EventsDirectoryPage.c"
 }
 
 
@@ -3032,7 +2817,7 @@ static void g_time_local (time_t time, struct tm* result) {
 	*result = _result_;
 #line 2751 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return;
-#line 3036 "EventsDirectoryPage.c"
+#line 2821 "EventsDirectoryPage.c"
 }
 
 
@@ -3051,162 +2836,162 @@ static gboolean sub_events_directory_page_sub_event_directory_manager_real_inclu
 	struct tm _tmp7_ = {0};
 	gint _tmp8_ = 0;
 	gint _tmp9_ = 0;
-#line 262 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 252 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, SubEventsDirectoryPageSubEventDirectoryManager);
-#line 262 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 252 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), FALSE);
-#line 263 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = source;
-#line 263 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp1_ = VIEW_MANAGER_CLASS (sub_events_directory_page_sub_event_directory_manager_parent_class)->include_in_view (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, EVENTS_DIRECTORY_PAGE_TYPE_EVENT_DIRECTORY_MANAGER, EventsDirectoryPageEventDirectoryManager), TYPE_VIEW_MANAGER, ViewManager), _tmp0_);
-#line 263 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 253 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (!_tmp1_) {
-#line 264 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 254 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		result = FALSE;
-#line 264 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 254 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return result;
-#line 3069 "EventsDirectoryPage.c"
+#line 2854 "EventsDirectoryPage.c"
 	}
-#line 266 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 256 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp2_ = source;
-#line 266 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 256 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp3_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_EVENT_SOURCE, EventSource));
-#line 266 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 256 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	event = _tmp3_;
-#line 267 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp4_ = event;
-#line 267 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp5_ = event_source_get_start_time (_tmp4_);
-#line 267 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_time_local (_tmp5_, &_tmp6_);
-#line 267 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 257 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	event_time = _tmp6_;
-#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp7_ = event_time;
-#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp8_ = _tmp7_.tm_year;
-#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp9_ = self->priv->year;
-#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	if (_tmp8_ == _tmp9_) {
-#line 3093 "EventsDirectoryPage.c"
+#line 2878 "EventsDirectoryPage.c"
 		SubEventsDirectoryPageDirectoryType _tmp10_ = 0;
-#line 269 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 259 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_tmp10_ = self->priv->type;
-#line 269 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 259 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		if (_tmp10_ == SUB_EVENTS_DIRECTORY_PAGE_DIRECTORY_TYPE_MONTH) {
-#line 3099 "EventsDirectoryPage.c"
+#line 2884 "EventsDirectoryPage.c"
 			struct tm _tmp11_ = {0};
 			gint _tmp12_ = 0;
 			gint _tmp13_ = 0;
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_tmp11_ = event_time;
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_tmp12_ = _tmp11_.tm_mon;
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_tmp13_ = self->priv->month;
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			result = _tmp12_ == _tmp13_;
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			_g_object_unref0 (event);
-#line 270 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 			return result;
-#line 3115 "EventsDirectoryPage.c"
+#line 2900 "EventsDirectoryPage.c"
 		}
-#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 262 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		result = TRUE;
-#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 262 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		_g_object_unref0 (event);
-#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 262 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 		return result;
-#line 3123 "EventsDirectoryPage.c"
+#line 2908 "EventsDirectoryPage.c"
 	}
-#line 274 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = FALSE;
-#line 274 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_g_object_unref0 (event);
-#line 274 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 3131 "EventsDirectoryPage.c"
+#line 2916 "EventsDirectoryPage.c"
 }
 
 
 static gint sub_events_directory_page_sub_event_directory_manager_get_month (SubEventsDirectoryPageSubEventDirectoryManager* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 277 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (SUB_EVENTS_DIRECTORY_PAGE_IS_SUB_EVENT_DIRECTORY_MANAGER (self), 0);
-#line 278 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = self->priv->month;
-#line 278 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp0_;
-#line 278 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 3146 "EventsDirectoryPage.c"
+#line 2931 "EventsDirectoryPage.c"
 }
 
 
 static gint sub_events_directory_page_sub_event_directory_manager_get_year (SubEventsDirectoryPageSubEventDirectoryManager* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 281 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 271 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (SUB_EVENTS_DIRECTORY_PAGE_IS_SUB_EVENT_DIRECTORY_MANAGER (self), 0);
-#line 282 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = self->priv->year;
-#line 282 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp0_;
-#line 282 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 272 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 3161 "EventsDirectoryPage.c"
+#line 2946 "EventsDirectoryPage.c"
 }
 
 
 static SubEventsDirectoryPageDirectoryType sub_events_directory_page_sub_event_directory_manager_get_event_directory_type (SubEventsDirectoryPageSubEventDirectoryManager* self) {
 	SubEventsDirectoryPageDirectoryType result = 0;
 	SubEventsDirectoryPageDirectoryType _tmp0_ = 0;
-#line 285 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 275 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_return_val_if_fail (SUB_EVENTS_DIRECTORY_PAGE_IS_SUB_EVENT_DIRECTORY_MANAGER (self), 0);
-#line 286 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 276 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	_tmp0_ = self->priv->type;
-#line 286 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 276 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	result = _tmp0_;
-#line 286 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 276 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	return result;
-#line 3176 "EventsDirectoryPage.c"
+#line 2961 "EventsDirectoryPage.c"
 }
 
 
 static void sub_events_directory_page_sub_event_directory_manager_class_init (SubEventsDirectoryPageSubEventDirectoryManagerClass * klass) {
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	sub_events_directory_page_sub_event_directory_manager_parent_class = g_type_class_peek_parent (klass);
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((ViewManagerClass *) klass)->finalize = sub_events_directory_page_sub_event_directory_manager_finalize;
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	g_type_class_add_private (klass, sizeof (SubEventsDirectoryPageSubEventDirectoryManagerPrivate));
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	((ViewManagerClass *) klass)->include_in_view = sub_events_directory_page_sub_event_directory_manager_real_include_in_view;
-#line 3189 "EventsDirectoryPage.c"
+#line 2974 "EventsDirectoryPage.c"
 }
 
 
 static void sub_events_directory_page_sub_event_directory_manager_instance_init (SubEventsDirectoryPageSubEventDirectoryManager * self) {
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv = SUB_EVENTS_DIRECTORY_PAGE_SUB_EVENT_DIRECTORY_MANAGER_GET_PRIVATE (self);
-#line 249 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 239 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv->month = 0;
-#line 250 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 240 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self->priv->year = 0;
-#line 3200 "EventsDirectoryPage.c"
+#line 2985 "EventsDirectoryPage.c"
 }
 
 
 static void sub_events_directory_page_sub_event_directory_manager_finalize (ViewManager* obj) {
 	SubEventsDirectoryPageSubEventDirectoryManager * self;
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SUB_EVENTS_DIRECTORY_PAGE_TYPE_SUB_EVENT_DIRECTORY_MANAGER, SubEventsDirectoryPageSubEventDirectoryManager);
-#line 248 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 238 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	VIEW_MANAGER_CLASS (sub_events_directory_page_sub_event_directory_manager_parent_class)->finalize (obj);
-#line 3210 "EventsDirectoryPage.c"
+#line 2995 "EventsDirectoryPage.c"
 }
 
 
@@ -3223,9 +3008,9 @@ static GType sub_events_directory_page_sub_event_directory_manager_get_type (voi
 
 
 static void sub_events_directory_page_class_init (SubEventsDirectoryPageClass * klass) {
-#line 237 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
+#line 227 "/home/jens/Source/shotwell/src/events/EventsDirectoryPage.vala"
 	sub_events_directory_page_parent_class = g_type_class_peek_parent (klass);
-#line 3229 "EventsDirectoryPage.c"
+#line 3014 "EventsDirectoryPage.c"
 }
 
 

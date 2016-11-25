@@ -2080,12 +2080,12 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d);
 static BackingFileState** photo_real_get_backing_files_state (MediaSource* base, int* result_length1);
 BackingFileState* backing_file_state_new_from_photo_row (BackingPhotoRow* photo_row, const gchar* md5);
 BackingFileState* backing_file_state_construct_from_photo_row (GType object_type, BackingPhotoRow* photo_row, const gchar* md5);
-static void _vala_array_add251 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
+static void _vala_array_add85 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
 gboolean photo_has_editable (Photo* self);
-static void _vala_array_add252 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
+static void _vala_array_add86 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
 gboolean photo_is_developed (Photo* self);
 GeeCollection* photo_get_raw_development_photo_rows (Photo* self);
-static void _vala_array_add253 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
+static void _vala_array_add87 (BackingFileState*** array, int* length, int* size, BackingFileState* value);
 static PhotoFileReader* photo_get_backing_reader (Photo* self, BackingFetchMode mode);
 static PhotoFileReader* photo_get_master_reader (Photo* self);
 static PhotoFileReader* photo_get_baseline_reader (Photo* self);
@@ -2151,12 +2151,12 @@ void photo_value_take_reimport_master_state (GValue* value, gpointer v_object);
 gpointer photo_value_get_reimport_master_state (const GValue* value);
 GType photo_reimport_master_state_get_type (void) G_GNUC_CONST;
 gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterState** reimport_state, GError** error);
-static void _vala_array_add254 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add255 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add256 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add257 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add258 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add259 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add88 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add89 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add90 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add91 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add92 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add93 (gchar*** array, int* length, int* size, gchar* value);
 static PhotoReimportMasterStateImpl* photo_reimport_master_state_impl_new (PhotoRow* row, PhotoMetadata* metadata, gchar** alterations, int alterations_length1);
 static PhotoReimportMasterStateImpl* photo_reimport_master_state_impl_construct (GType object_type, PhotoRow* row, PhotoMetadata* metadata, gchar** alterations, int alterations_length1);
 static GType photo_reimport_master_state_impl_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
@@ -2165,8 +2165,8 @@ static void photo_real_apply_user_metadata_for_reimport (Photo* self, PhotoMetad
 void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state, GError** error);
 void photo_table_reimport (PhotoTable* self, PhotoRow* row, GError** error);
 void backing_photo_row_copy_from (BackingPhotoRow* self, BackingPhotoRow* from);
-static void _vala_array_add260 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add261 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add94 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add95 (gchar*** array, int* length, int* size, gchar* value);
 Alteration* alteration_new_from_array (gchar** array, int array_length1);
 Alteration* alteration_construct_from_array (GType object_type, gchar** array, int array_length1);
 static gboolean photo_verify_file_for_reimport (Photo* self, GFile* file, BackingPhotoRow** backing, DetectedPhotoInformation** detected, GError** error);
@@ -2245,15 +2245,15 @@ static GFile* photo_real_get_file (MediaSource* base);
 void photo_set_master_file (Photo* self, GFile* file);
 void photo_table_set_filepath (PhotoTable* self, PhotoID* photo_id, const gchar* filepath, GError** error);
 void media_source_notify_master_replaced (MediaSource* self, GFile* old_file, GFile* new_file);
-static void _vala_array_add262 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add263 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add264 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add265 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add96 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add97 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add98 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add99 (gchar*** array, int* length, int* size, gchar* value);
 void photo_set_editable_file (Photo* self, GFile* file);
 void backing_photo_table_set_filepath (BackingPhotoTable* self, BackingPhotoID* id, const gchar* filepath, GError** error);
-static void _vala_array_add266 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add267 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add268 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add100 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add101 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add102 (gchar*** array, int* length, int* size, gchar* value);
 void photo_set_many_editable_file (GeeMap* map, GError** error);
 GFile* photo_get_actual_file (Photo* self);
 static GFile* photo_real_get_master_file (MediaSource* base);
@@ -2506,12 +2506,12 @@ static void photo_update_editable_attributes (Photo* self, GError** error);
 void photo_reimport_editable (Photo* self, GError** error);
 void photo_table_attach_editable (PhotoTable* self, PhotoRow* row, BackingPhotoID* editable_id, GError** error);
 void backing_photo_table_update_attributes (BackingPhotoTable* self, BackingPhotoID* id, time_t timestamp, gint64 filesize, GError** error);
-static void _vala_array_add269 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add270 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add271 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add272 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add273 (gchar*** array, int* length, int* size, gchar* value);
-static void _vala_array_add274 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add103 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add104 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add105 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add106 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add107 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add108 (gchar*** array, int* length, int* size, gchar* value);
 void backing_photo_id_init (BackingPhotoID *self, gint64 id);
 const gchar* g_file_monitor_event_to_string (GFileMonitorEvent self);
 static void photo_on_reimport_editable (Photo* self);
@@ -2569,7 +2569,7 @@ static void photo_reimport_master_state_finalize (PhotoReimportMasterState* obj)
 enum  {
 	PHOTO_REIMPORT_MASTER_STATE_IMPL_DUMMY_PROPERTY
 };
-static gchar** _vala_array_dup29 (gchar** self, int length);
+static gchar** _vala_array_dup28 (gchar** self, int length);
 static void photo_reimport_master_state_impl_finalize (PhotoReimportMasterState* obj);
 enum  {
 	PHOTO_REIMPORT_EDITABLE_STATE_DUMMY_PROPERTY
@@ -3965,7 +3965,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 #line 425 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3968 "Photo.c"
-						goto __catch256_database_error;
+						goto __catch253_database_error;
 					}
 #line 425 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (e);
@@ -3980,8 +3980,8 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 #line 3981 "Photo.c"
 				}
 			}
-			goto __finally256;
-			__catch256_database_error:
+			goto __finally253;
+			__catch253_database_error:
 			{
 				GError* err = NULL;
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -3992,7 +3992,7 @@ Photo* photo_construct (GType object_type, PhotoRow* row) {
 				_g_error_free0 (err);
 #line 3994 "Photo.c"
 			}
-			__finally256:
+			__finally253:
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 424 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4530,7 +4530,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 #line 4531 "Photo.c"
 			}
 		}
-		__finally257:
+		__finally254:
 		{
 			PhotoBackingReaders* _tmp6_ = NULL;
 #line 518 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4610,14 +4610,14 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 #line 533 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4613 "Photo.c"
-				goto __catch258_g_error;
+				goto __catch255_g_error;
 			}
 #line 533 "/home/jens/Source/shotwell/src/Photo.vala"
 			ret = _tmp12_;
 #line 4618 "Photo.c"
 		}
-		goto __finally258;
-		__catch258_g_error:
+		goto __finally255;
+		__catch255_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp15_ = NULL;
@@ -4657,7 +4657,7 @@ static gboolean photo_real_internal_delete_backing (DataSource* base, GError** e
 			_g_error_free0 (err);
 #line 4659 "Photo.c"
 		}
-		__finally258:
+		__finally255:
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 532 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4760,7 +4760,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 4763 "Photo.c"
-				goto __catch259_database_error;
+				goto __catch256_database_error;
 			}
 #line 553 "/home/jens/Source/shotwell/src/Photo.vala"
 			_backing_photo_row_unref0 (backing_row);
@@ -4784,8 +4784,8 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		_backing_photo_row_unref0 (_tmp2_);
 #line 4786 "Photo.c"
 	}
-	goto __finally259;
-	__catch259_database_error:
+	goto __finally256;
+	__catch256_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
@@ -4812,7 +4812,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 		_g_error_free0 (err);
 #line 4814 "Photo.c"
 	}
-	__finally259:
+	__finally256:
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 552 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4849,7 +4849,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 #line 560 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 4852 "Photo.c"
-					goto __catch260_database_error;
+					goto __catch257_database_error;
 				}
 #line 560 "/home/jens/Source/shotwell/src/Photo.vala"
 				_backing_photo_row_unref0 (backing_row);
@@ -4862,8 +4862,8 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 #line 4863 "Photo.c"
 			}
 		}
-		goto __finally260;
-		__catch260_database_error:
+		goto __finally257;
+		__catch257_database_error:
 		{
 			GError* err = NULL;
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4874,7 +4874,7 @@ static BackingPhotoRow* photo_get_backing_row (Photo* self, BackingPhotoID* id) 
 			_g_error_free0 (err);
 #line 4876 "Photo.c"
 		}
-		__finally260:
+		__finally257:
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 559 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -4973,7 +4973,7 @@ gboolean photo_is_raw_developer_complete (Photo* self, RawDeveloper d) {
 			return result;
 #line 4975 "Photo.c"
 		}
-		__finally261:
+		__finally258:
 		{
 			GeeHashMap* _tmp12_ = NULL;
 #line 573 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5035,7 +5035,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 #line 5036 "Photo.c"
 			}
 		}
-		__finally262:
+		__finally259:
 		{
 			GeeHashMap* _tmp5_ = NULL;
 #line 581 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5097,7 +5097,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 #line 595 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5100 "Photo.c"
-					goto __catch263_g_error;
+					goto __catch260_g_error;
 				}
 #line 596 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = meta;
@@ -5218,8 +5218,8 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				return result;
 #line 5220 "Photo.c"
 			}
-			goto __finally263;
-			__catch263_g_error:
+			goto __finally260;
+			__catch260_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp27_ = NULL;
@@ -5238,7 +5238,7 @@ gboolean photo_is_raw_developer_available (Photo* self, RawDeveloper d) {
 				_g_error_free0 (e);
 #line 5240 "Photo.c"
 			}
-			__finally263:
+			__finally260:
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 594 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5313,7 +5313,7 @@ void photo_add_backing_photo_for_development (Photo* self, RawDeveloper d, Backi
 			gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), (gpointer) ((gintptr) _tmp5_), _tmp6_);
 #line 5315 "Photo.c"
 		}
-		__finally264:
+		__finally261:
 		{
 			GeeHashMap* _tmp7_ = NULL;
 #line 633 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5662,7 +5662,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 678 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5665 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 678 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp7_ = _tmp1_;
@@ -5696,7 +5696,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 685 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5699 "Photo.c"
-							goto __finally266;
+							goto __finally263;
 						}
 #line 685 "/home/jens/Source/shotwell/src/Photo.vala"
 						_tmp12_ = _tmp9_;
@@ -5710,7 +5710,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						_g_object_unref0 (_tmp9_);
 #line 5712 "Photo.c"
 					}
-					__finally266:
+					__finally263:
 					{
 						PhotoBackingReaders* _tmp13_ = NULL;
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5726,7 +5726,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 680 "/home/jens/Source/shotwell/src/Photo.vala"
 						_backing_photo_row_unref0 (_tmp1_);
 #line 5729 "Photo.c"
-						goto __catch265_g_error;
+						goto __catch262_g_error;
 					}
 				}
 #line 688 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5759,14 +5759,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 717 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5762 "Photo.c"
-									goto __catch267_g_error;
+									goto __catch264_g_error;
 								}
 #line 719 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
 #line 5767 "Photo.c"
 							}
-							goto __finally267;
-							__catch267_g_error:
+							goto __finally264;
+							__catch264_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp18_ = NULL;
@@ -5785,11 +5785,11 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								_g_error_free0 (e);
 #line 5787 "Photo.c"
 							}
-							__finally267:
+							__finally264:
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5792 "Photo.c"
-								goto __catch265_g_error;
+								goto __catch262_g_error;
 							}
 						}
 					}
@@ -5814,7 +5814,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 694 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
 #line 5817 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 695 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp23_ = writer;
@@ -5831,7 +5831,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 695 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
 #line 5834 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 703 "/home/jens/Source/shotwell/src/Photo.vala"
 				wrote_img_to_disk = TRUE;
@@ -5848,7 +5848,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 708 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
 #line 5851 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 709 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp26_ = bps;
@@ -5869,7 +5869,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 709 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
 #line 5872 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 710 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp29_ = mwriter;
@@ -5890,7 +5890,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 710 "/home/jens/Source/shotwell/src/Photo.vala"
 					_backing_photo_row_unref0 (_tmp1_);
 #line 5893 "Photo.c"
-					goto __catch265_g_error;
+					goto __catch262_g_error;
 				}
 #line 676 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_file_adapter_unref0 (mwriter);
@@ -5904,8 +5904,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_backing_photo_row_unref0 (_tmp1_);
 #line 5906 "Photo.c"
 			}
-			goto __finally265;
-			__catch265_g_error:
+			goto __finally262;
+			__catch262_g_error:
 			{
 				GError* err = NULL;
 				GError* _tmp31_ = NULL;
@@ -5924,7 +5924,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_g_error_free0 (err);
 #line 5926 "Photo.c"
 			}
-			__finally265:
+			__finally262:
 			{
 				gboolean _tmp33_ = FALSE;
 #line 714 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -5944,14 +5944,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 717 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5947 "Photo.c"
-							goto __catch268_g_error;
+							goto __catch265_g_error;
 						}
 #line 719 "/home/jens/Source/shotwell/src/Photo.vala"
 						photo_notify_raw_development_modified (self);
 #line 5952 "Photo.c"
 					}
-					goto __finally268;
-					__catch268_g_error:
+					goto __finally265;
+					__catch265_g_error:
 					{
 						GError* e = NULL;
 						GError* _tmp36_ = NULL;
@@ -5970,7 +5970,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						_g_error_free0 (e);
 #line 5972 "Photo.c"
 					}
-					__finally268:
+					__finally265:
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 715 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6055,7 +6055,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 736 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6058 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 737 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp39_ = meta;
@@ -6089,14 +6089,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6092 "Photo.c"
-									goto __catch270_g_error;
+									goto __catch267_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
 #line 6097 "Photo.c"
 							}
-							goto __finally270;
-							__catch270_g_error:
+							goto __finally267;
+							__catch267_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp45_ = NULL;
@@ -6115,11 +6115,11 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								_g_error_free0 (e);
 #line 6117 "Photo.c"
 							}
-							__finally270:
+							__finally267:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6122 "Photo.c"
-								goto __catch269_g_error;
+								goto __catch266_g_error;
 							}
 						}
 					}
@@ -6167,14 +6167,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6170 "Photo.c"
-									goto __catch271_g_error;
+									goto __catch268_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
 #line 6175 "Photo.c"
 							}
-							goto __finally271;
-							__catch271_g_error:
+							goto __finally268;
+							__catch268_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp54_ = NULL;
@@ -6193,11 +6193,11 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								_g_error_free0 (e);
 #line 6195 "Photo.c"
 							}
-							__finally271:
+							__finally268:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6200 "Photo.c"
-								goto __catch269_g_error;
+								goto __catch266_g_error;
 							}
 						}
 					}
@@ -6220,7 +6220,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 746 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6223 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 747 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp58_ = pix;
@@ -6254,14 +6254,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 								if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6257 "Photo.c"
-									goto __catch272_g_error;
+									goto __catch269_g_error;
 								}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 								photo_notify_raw_development_modified (self);
 #line 6262 "Photo.c"
 							}
-							goto __finally272;
-							__catch272_g_error:
+							goto __finally269;
+							__catch269_g_error:
 							{
 								GError* e = NULL;
 								GError* _tmp62_ = NULL;
@@ -6280,11 +6280,11 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 								_g_error_free0 (e);
 #line 6282 "Photo.c"
 							}
-							__finally272:
+							__finally269:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6287 "Photo.c"
-								goto __catch269_g_error;
+								goto __catch266_g_error;
 							}
 						}
 					}
@@ -6315,7 +6315,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 753 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6318 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 753 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp70_ = _tmp64_;
@@ -6344,7 +6344,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 754 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6347 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 755 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp74_ = writer;
@@ -6365,7 +6365,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 755 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6368 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 759 "/home/jens/Source/shotwell/src/Photo.vala"
 				wrote_img_to_disk = TRUE;
@@ -6390,7 +6390,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 762 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6393 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 763 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp79_ = mwriter;
@@ -6413,7 +6413,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 763 "/home/jens/Source/shotwell/src/Photo.vala"
 					_media_metadata_unref0 (meta);
 #line 6416 "Photo.c"
-					goto __catch269_g_error;
+					goto __catch266_g_error;
 				}
 #line 734 "/home/jens/Source/shotwell/src/Photo.vala"
 				_photo_file_adapter_unref0 (mwriter);
@@ -6429,8 +6429,8 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				_media_metadata_unref0 (meta);
 #line 6431 "Photo.c"
 			}
-			goto __finally269;
-			__catch269_g_error:
+			goto __finally266;
+			__catch266_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp81_ = NULL;
@@ -6467,14 +6467,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6470 "Photo.c"
-								goto __catch273_g_error;
+								goto __catch270_g_error;
 							}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 							photo_notify_raw_development_modified (self);
 #line 6475 "Photo.c"
 						}
-						goto __finally273;
-						__catch273_g_error:
+						goto __finally270;
+						__catch270_g_error:
 						{
 							GError* e = NULL;
 							GError* _tmp86_ = NULL;
@@ -6493,7 +6493,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 							_g_error_free0 (e);
 #line 6495 "Photo.c"
 						}
-						__finally273:
+						__finally270:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6508,7 +6508,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 				return;
 #line 6510 "Photo.c"
 			}
-			__finally269:
+			__finally266:
 			{
 				gboolean _tmp88_ = FALSE;
 #line 768 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6528,14 +6528,14 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 #line 771 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6531 "Photo.c"
-							goto __catch274_g_error;
+							goto __catch271_g_error;
 						}
 #line 773 "/home/jens/Source/shotwell/src/Photo.vala"
 						photo_notify_raw_development_modified (self);
 #line 6536 "Photo.c"
 					}
-					goto __finally274;
-					__catch274_g_error:
+					goto __finally271;
+					__catch271_g_error:
 					{
 						GError* e = NULL;
 						GError* _tmp91_ = NULL;
@@ -6554,7 +6554,7 @@ static void photo_develop_photo (Photo* self, RawDeveloper d) {
 						_g_error_free0 (e);
 #line 6556 "Photo.c"
 					}
-					__finally274:
+					__finally271:
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 769 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6621,7 +6621,7 @@ void photo_set_default_raw_developer (Photo* self, RawDeveloper d) {
 			_tmp1_->developer = _tmp2_;
 #line 6623 "Photo.c"
 		}
-		__finally275:
+		__finally272:
 		{
 			PhotoRow* _tmp3_ = NULL;
 #line 789 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6754,11 +6754,11 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 #line 817 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6757 "Photo.c"
-						goto __catch277_g_error;
+						goto __catch274_g_error;
 					}
 				}
-				goto __finally277;
-				__catch277_g_error:
+				goto __finally274;
+				__catch274_g_error:
 				{
 					GError* e = NULL;
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -6780,7 +6780,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 					return;
 #line 6782 "Photo.c"
 				}
-				__finally277:
+				__finally274:
 #line 816 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6787 "Photo.c"
@@ -6889,11 +6889,11 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 #line 837 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6892 "Photo.c"
-					goto __catch278_g_error;
+					goto __catch275_g_error;
 				}
 			}
-			goto __finally278;
-			__catch278_g_error:
+			goto __finally275;
+			__catch275_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp38_ = NULL;
@@ -6912,7 +6912,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 				_g_error_free0 (e);
 #line 6914 "Photo.c"
 			}
-			__finally278:
+			__finally275:
 #line 836 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6919 "Photo.c"
@@ -6965,7 +6965,7 @@ void photo_set_raw_developer (Photo* self, RawDeveloper d) {
 #line 6966 "Photo.c"
 			}
 		}
-		__finally276:
+		__finally273:
 		{
 			GeeHashMap* _tmp47_ = NULL;
 #line 810 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7133,7 +7133,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 #line 882 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7136 "Photo.c"
-							goto __catch280_g_error;
+							goto __catch277_g_error;
 						}
 					} else {
 						GFile* _tmp20_ = NULL;
@@ -7144,12 +7144,12 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 #line 884 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7147 "Photo.c"
-							goto __catch280_g_error;
+							goto __catch277_g_error;
 						}
 					}
 				}
-				goto __finally280;
-				__catch280_g_error:
+				goto __finally277;
+				__catch277_g_error:
 				{
 					GError* e = NULL;
 					BackingPhotoRow* _tmp21_ = NULL;
@@ -7174,7 +7174,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 					_g_error_free0 (e);
 #line 7176 "Photo.c"
 				}
-				__finally280:
+				__finally277:
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 880 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7230,7 +7230,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 #line 892 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7233 "Photo.c"
-					goto __catch281_g_error;
+					goto __catch278_g_error;
 				}
 #line 893 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp30_ = backing_photo_table_get_instance ();
@@ -7247,11 +7247,11 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 #line 893 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7250 "Photo.c"
-					goto __catch281_g_error;
+					goto __catch278_g_error;
 				}
 			}
-			goto __finally281;
-			__catch281_g_error:
+			goto __finally278;
+			__catch278_g_error:
 			{
 				GError* e = NULL;
 				GError* _tmp34_ = NULL;
@@ -7270,7 +7270,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 				_g_error_free0 (e);
 #line 7272 "Photo.c"
 			}
-			__finally281:
+			__finally278:
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 891 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7306,7 +7306,7 @@ static gboolean photo_delete_raw_development (Photo* self, RawDeveloper d) {
 			_backing_photo_row_unref0 (bpr);
 #line 7308 "Photo.c"
 		}
-		__finally279:
+		__finally276:
 		{
 			GeeHashMap* _tmp40_ = NULL;
 #line 870 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7376,7 +7376,7 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d) {
 			photo_set_raw_developer (self, _tmp4_);
 #line 7378 "Photo.c"
 		}
-		__finally282:
+		__finally279:
 		{
 			GeeHashMap* _tmp5_ = NULL;
 #line 907 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7399,7 +7399,7 @@ void photo_redevelop_raw (Photo* self, RawDeveloper d) {
 }
 
 
-static void _vala_array_add251 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
+static void _vala_array_add85 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7416,7 +7416,7 @@ static void _vala_array_add251 (BackingFileState*** array, int* length, int* siz
 }
 
 
-static void _vala_array_add252 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
+static void _vala_array_add86 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7433,7 +7433,7 @@ static void _vala_array_add252 (BackingFileState*** array, int* length, int* siz
 }
 
 
-static void _vala_array_add253 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
+static void _vala_array_add87 (BackingFileState*** array, int* length, int* size, BackingFileState* value) {
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7503,7 +7503,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp7_ = backing_file_state_new_from_photo_row (_tmp4_, _tmp6_);
 #line 920 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add251 (&backing, &backing_length1, &_backing_size_, _tmp7_);
+			_vala_array_add85 (&backing, &backing_length1, &_backing_size_, _tmp7_);
 #line 921 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp8_ = photo_has_editable (self);
 #line 921 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7522,7 +7522,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp11_ = backing_file_state_new_from_photo_row (_tmp10_, NULL);
 #line 922 "/home/jens/Source/shotwell/src/Photo.vala"
-				_vala_array_add252 (&backing, &backing_length1, &_backing_size_, _tmp11_);
+				_vala_array_add86 (&backing, &backing_length1, &_backing_size_, _tmp11_);
 #line 7527 "Photo.c"
 			}
 #line 924 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7597,7 +7597,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp25_ = backing_file_state_new_from_photo_row (_tmp24_, NULL);
 #line 929 "/home/jens/Source/shotwell/src/Photo.vala"
-							_vala_array_add253 (&backing, &backing_length1, &_backing_size_, _tmp25_);
+							_vala_array_add87 (&backing, &backing_length1, &_backing_size_, _tmp25_);
 #line 927 "/home/jens/Source/shotwell/src/Photo.vala"
 							_backing_photo_row_unref0 (r);
 #line 7604 "Photo.c"
@@ -7612,7 +7612,7 @@ static BackingFileState** photo_real_get_backing_files_state (MediaSource* base,
 #line 7613 "Photo.c"
 			}
 		}
-		__finally283:
+		__finally280:
 		{
 			PhotoRow* _tmp26_ = NULL;
 #line 919 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7790,7 +7790,7 @@ static PhotoFileReader* photo_get_master_reader (Photo* self) {
 			return result;
 #line 7792 "Photo.c"
 		}
-		__finally284:
+		__finally281:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 961 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7848,7 +7848,7 @@ PhotoFileReader* photo_get_editable_reader (Photo* self) {
 			return result;
 #line 7850 "Photo.c"
 		}
-		__finally285:
+		__finally282:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 967 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -7972,7 +7972,7 @@ static PhotoFileReader* photo_get_baseline_reader (Photo* self) {
 			return result;
 #line 7974 "Photo.c"
 		}
-		__finally286:
+		__finally283:
 		{
 			PhotoBackingReaders* _tmp17_ = NULL;
 #line 974 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8096,7 +8096,7 @@ static PhotoFileReader* photo_get_source_reader (Photo* self) {
 			return result;
 #line 8098 "Photo.c"
 		}
-		__finally287:
+		__finally284:
 		{
 			PhotoBackingReaders* _tmp17_ = NULL;
 #line 987 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8154,7 +8154,7 @@ static PhotoFileReader* photo_get_raw_developer_reader (Photo* self) {
 			return result;
 #line 8156 "Photo.c"
 		}
-		__finally288:
+		__finally285:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 1000 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8209,7 +8209,7 @@ gboolean photo_is_developed (Photo* self) {
 			return result;
 #line 8211 "Photo.c"
 		}
-		__finally289:
+		__finally286:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1006 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8264,7 +8264,7 @@ gboolean photo_has_editable (Photo* self) {
 			return result;
 #line 8266 "Photo.c"
 		}
-		__finally290:
+		__finally287:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1012 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8322,7 +8322,7 @@ gboolean photo_does_master_exist (Photo* self) {
 			return result;
 #line 8324 "Photo.c"
 		}
-		__finally291:
+		__finally288:
 		{
 			PhotoBackingReaders* _tmp5_ = NULL;
 #line 1018 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8398,7 +8398,7 @@ gboolean photo_does_editable_exist (Photo* self) {
 			return result;
 #line 8400 "Photo.c"
 		}
-		__finally292:
+		__finally289:
 		{
 			PhotoBackingReaders* _tmp8_ = NULL;
 #line 1025 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8453,7 +8453,7 @@ gboolean photo_is_master_baseline (Photo* self) {
 			return result;
 #line 8455 "Photo.c"
 		}
-		__finally293:
+		__finally290:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1031 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8523,7 +8523,7 @@ gboolean photo_is_editable_baseline (Photo* self) {
 			return result;
 #line 8525 "Photo.c"
 		}
-		__finally294:
+		__finally291:
 		{
 			PhotoBackingReaders* _tmp4_ = NULL;
 #line 1041 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8596,7 +8596,7 @@ BackingPhotoRow* photo_get_master_photo_row (Photo* self) {
 			return result;
 #line 8598 "Photo.c"
 		}
-		__finally295:
+		__finally292:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 1051 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8676,7 +8676,7 @@ BackingPhotoRow* photo_get_editable_photo_row (Photo* self) {
 #line 8677 "Photo.c"
 			}
 		}
-		__finally296:
+		__finally293:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1057 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8753,7 +8753,7 @@ GeeCollection* photo_get_raw_development_photo_rows (Photo* self) {
 			return result;
 #line 8755 "Photo.c"
 		}
-		__finally297:
+		__finally294:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1067 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -8830,7 +8830,7 @@ BackingPhotoRow* photo_get_raw_development_photo_row (Photo* self, RawDeveloper 
 			return result;
 #line 8832 "Photo.c"
 		}
-		__finally298:
+		__finally295:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 1073 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9225,7 +9225,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 #line 1150 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 9226 "Photo.c"
-			goto __catch299_g_error;
+			goto __catch296_g_error;
 		}
 #line 1150 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp6_ = _tmp3_;
@@ -9239,8 +9239,8 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		_g_object_unref0 (_tmp3_);
 #line 9239 "Photo.c"
 	}
-	goto __finally299;
-	__catch299_g_error:
+	goto __finally296;
+	__catch296_g_error:
 	{
 		GError* err = NULL;
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9259,7 +9259,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		return result;
 #line 9259 "Photo.c"
 	}
-	__finally299:
+	__finally296:
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -9430,11 +9430,11 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 #line 1180 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 9431 "Photo.c"
-			goto __catch300_g_error;
+			goto __catch297_g_error;
 		}
 	}
-	goto __finally300;
-	__catch300_g_error:
+	goto __finally297;
+	__catch297_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp37_ = NULL;
@@ -9474,7 +9474,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 		return result;
 #line 9474 "Photo.c"
 	}
-	__finally300:
+	__finally297:
 #line 1179 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1179 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10071,11 +10071,11 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 #line 1262 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10072 "Photo.c"
-				goto __catch301_g_error;
+				goto __catch298_g_error;
 			}
 		}
-		goto __finally301;
-		__catch301_g_error:
+		goto __finally298;
+		__catch298_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp197_ = NULL;
@@ -10110,7 +10110,7 @@ ImportResult photo_prepare_for_import (PhotoImportParams* params) {
 			return result;
 #line 10110 "Photo.c"
 		}
-		__finally301:
+		__finally298:
 #line 1261 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1261 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10406,7 +10406,7 @@ void photo_create_pre_import (PhotoImportParams* params) {
 #line 1300 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10407 "Photo.c"
-			goto __catch302_g_error;
+			goto __catch299_g_error;
 		}
 #line 1301 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp57_ = photo_file_interrogator_get_detected_photo_information (interrogator);
@@ -10471,8 +10471,8 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		_detected_photo_information_unref0 (detected);
 #line 10471 "Photo.c"
 	}
-	goto __finally302;
-	__catch302_g_error:
+	goto __finally299;
+	__catch299_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp69_ = NULL;
@@ -10499,7 +10499,7 @@ void photo_create_pre_import (PhotoImportParams* params) {
 		_g_error_free0 (err);
 #line 10499 "Photo.c"
 	}
-	__finally302:
+	__finally299:
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1299 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10589,7 +10589,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 #line 1317 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10590 "Photo.c"
-			goto __catch303_g_error;
+			goto __catch300_g_error;
 		}
 #line 1317 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp4_ = _tmp1_;
@@ -10603,8 +10603,8 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		_g_object_unref0 (_tmp1_);
 #line 10603 "Photo.c"
 	}
-	goto __finally303;
-	__catch303_g_error:
+	goto __finally300;
+	__catch300_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp5_ = NULL;
@@ -10652,7 +10652,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 		return result;
 #line 10652 "Photo.c"
 	}
-	__finally303:
+	__finally300:
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1316 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10850,7 +10850,7 @@ BackingPhotoRow* photo_query_backing_photo_row (Photo* self, GFile* file, PhotoF
 }
 
 
-static void _vala_array_add254 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add88 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10867,7 +10867,7 @@ static void _vala_array_add254 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add255 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add89 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10884,7 +10884,7 @@ static void _vala_array_add255 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add256 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add90 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10901,7 +10901,7 @@ static void _vala_array_add256 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add257 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add91 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10918,7 +10918,7 @@ static void _vala_array_add257 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add258 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add92 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -10935,7 +10935,7 @@ static void _vala_array_add258 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add259 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add93 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11197,7 +11197,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 			updated_row = _tmp25_;
 #line 11197 "Photo.c"
 		}
-		__finally304:
+		__finally301:
 		{
 			PhotoRow* _tmp26_ = NULL;
 #line 1433 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11252,7 +11252,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp33_ = g_strdup ("metadata:md5");
 #line 1441 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add254 (&list, &list_length1, &_list_size_, _tmp33_);
+		_vala_array_add88 (&list, &list_length1, &_list_size_, _tmp33_);
 #line 11255 "Photo.c"
 	}
 #line 1443 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11282,7 +11282,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp40_ = g_strdup ("image:orientation");
 #line 1444 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add255 (&list, &list_length1, &_list_size_, _tmp40_);
+		_vala_array_add89 (&list, &list_length1, &_list_size_, _tmp40_);
 #line 1445 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp41_ = updated_row;
 #line 1445 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11373,7 +11373,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp57_ = g_strdup ("metadata:exposure-time");
 #line 1451 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add256 (&list, &list_length1, &_list_size_, _tmp57_);
+			_vala_array_add90 (&list, &list_length1, &_list_size_, _tmp57_);
 #line 11376 "Photo.c"
 		}
 #line 1453 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11405,7 +11405,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp66_ = g_strdup ("metadata:name");
 #line 1454 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add257 (&list, &list_length1, &_list_size_, _tmp66_);
+			_vala_array_add91 (&list, &list_length1, &_list_size_, _tmp66_);
 #line 11408 "Photo.c"
 		}
 #line 1456 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11437,7 +11437,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp75_ = g_strdup ("metadata:comment");
 #line 1457 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add258 (&list, &list_length1, &_list_size_, _tmp75_);
+			_vala_array_add92 (&list, &list_length1, &_list_size_, _tmp75_);
 #line 11440 "Photo.c"
 		}
 #line 1459 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11463,7 +11463,7 @@ gboolean photo_prepare_for_reimport_master (Photo* self, PhotoReimportMasterStat
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp82_ = g_strdup ("metadata:rating");
 #line 1460 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add259 (&list, &list_length1, &_list_size_, _tmp82_);
+			_vala_array_add93 (&list, &list_length1, &_list_size_, _tmp82_);
 #line 11466 "Photo.c"
 		}
 #line 1448 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11688,7 +11688,7 @@ static gpointer _photo_reimport_master_state_ref0 (gpointer self) {
 }
 
 
-static void _vala_array_add260 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add94 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11705,7 +11705,7 @@ static void _vala_array_add260 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add261 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add95 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11850,7 +11850,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 			_backing_photo_row_unref0 (original_master);
 #line 11850 "Photo.c"
 		}
-		__finally305:
+		__finally302:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 1494 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11911,7 +11911,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp24_ = g_strdup ("image:master");
 #line 1508 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add260 (&reimport_state->alterations, &reimport_state->alterations_length1, &reimport_state->_alterations_size_, _tmp24_);
+		_vala_array_add94 (&reimport_state->alterations, &reimport_state->alterations_length1, &reimport_state->_alterations_size_, _tmp24_);
 #line 1509 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp25_ = photo_is_master_baseline (self);
 #line 1509 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -11927,7 +11927,7 @@ void photo_finish_reimport_master (Photo* self, PhotoReimportMasterState* state,
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp27_ = g_strdup ("image:baseline");
 #line 1510 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add261 (&reimport_state->alterations, &reimport_state->alterations_length1, &reimport_state->_alterations_size_, _tmp27_);
+			_vala_array_add95 (&reimport_state->alterations, &reimport_state->alterations_length1, &reimport_state->_alterations_size_, _tmp27_);
 #line 11930 "Photo.c"
 		}
 	}
@@ -12449,7 +12449,7 @@ void photo_finish_reimport_editable (Photo* self, PhotoReimportEditableState* st
 				photo_internal_remove_all_transformations (self, FALSE);
 #line 12449 "Photo.c"
 			}
-			__finally306:
+			__finally303:
 			{
 				PhotoRow* _tmp17_ = NULL;
 #line 1575 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13058,7 +13058,7 @@ void photo_finish_reimport_raw_development (Photo* self, PhotoReimportRawDevelop
 #line 13057 "Photo.c"
 						}
 					}
-					__finally307:
+					__finally304:
 					{
 						PhotoRow* _tmp31_ = NULL;
 #line 1640 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13301,7 +13301,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 #line 1687 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 13302 "Photo.c"
-					goto __finally309;
+					goto __finally306;
 				}
 #line 1688 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp15_ = self->row;
@@ -13315,7 +13315,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 				_tmp16_->timestamp = (time_t) _tmp18_;
 #line 13315 "Photo.c"
 			}
-			__finally309:
+			__finally306:
 			{
 				PhotoRow* _tmp19_ = NULL;
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13329,7 +13329,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 13330 "Photo.c"
-					goto __catch308_database_error;
+					goto __catch305_database_error;
 				}
 #line 1683 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -13341,8 +13341,8 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 			}
 		}
 	}
-	goto __finally308;
-	__catch308_database_error:
+	goto __finally305;
+	__catch305_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp20_ = NULL;
@@ -13360,7 +13360,7 @@ void photo_set_master_timestamp (Photo* self, GFileInfo* info) {
 		return;
 #line 13360 "Photo.c"
 	}
-	__finally308:
+	__finally305:
 #line 1682 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1682 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -13492,7 +13492,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 #line 1709 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 13493 "Photo.c"
-					goto __finally310;
+					goto __finally307;
 				}
 #line 1711 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp16_ = self->priv->editable;
@@ -13507,7 +13507,7 @@ void photo_update_editable_modification_time (Photo* self, GFileInfo* info, GErr
 #line 13506 "Photo.c"
 			}
 		}
-		__finally310:
+		__finally307:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 1707 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14061,7 +14061,7 @@ static GFile* photo_real_get_file (MediaSource* base) {
 }
 
 
-static void _vala_array_add262 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add96 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14078,7 +14078,7 @@ static void _vala_array_add262 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add263 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add97 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14095,7 +14095,7 @@ static void _vala_array_add263 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add264 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add98 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14112,7 +14112,7 @@ static void _vala_array_add264 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add265 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add99 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14240,7 +14240,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1824 "/home/jens/Source/shotwell/src/Photo.vala"
 							if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14241 "Photo.c"
-								goto __finally313;
+								goto __finally310;
 							}
 #line 1826 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp14_ = self->row;
@@ -14332,7 +14332,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 14331 "Photo.c"
 						}
 					}
-					__finally313:
+					__finally310:
 					{
 						PhotoBackingReaders* _tmp38_ = NULL;
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14344,11 +14344,11 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1821 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14345 "Photo.c"
-						goto __finally312;
+						goto __finally309;
 					}
 				}
 			}
-			__finally312:
+			__finally309:
 			{
 				PhotoRow* _tmp39_ = NULL;
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14362,7 +14362,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 14363 "Photo.c"
-					goto __catch311_database_error;
+					goto __catch308_database_error;
 				}
 #line 1820 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (old_file);
@@ -14378,8 +14378,8 @@ void photo_set_master_file (Photo* self, GFile* file) {
 			}
 		}
 	}
-	goto __finally311;
-	__catch311_database_error:
+	goto __finally308;
+	__catch308_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp40_ = NULL;
@@ -14395,7 +14395,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 		_g_error_free0 (err);
 #line 14395 "Photo.c"
 	}
-	__finally311:
+	__finally308:
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1819 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14461,7 +14461,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp47_ = g_strdup ("backing:master");
 #line 1849 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add262 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp47_);
+		_vala_array_add96 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp47_);
 #line 1853 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp48_ = name_changed;
 #line 1853 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14477,7 +14477,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp50_ = g_strdup ("metadata:name");
 #line 1854 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add263 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp50_);
+			_vala_array_add97 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp50_);
 #line 14480 "Photo.c"
 		}
 #line 1856 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14495,7 +14495,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp53_ = g_strdup ("backing:source");
 #line 1857 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add264 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp53_);
+			_vala_array_add98 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp53_);
 #line 14498 "Photo.c"
 		}
 #line 1859 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14513,7 +14513,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp56_ = g_strdup ("backing:baseline");
 #line 1860 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add265 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp56_);
+			_vala_array_add99 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp56_);
 #line 14516 "Photo.c"
 		}
 #line 1862 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14540,7 +14540,7 @@ void photo_set_master_file (Photo* self, GFile* file) {
 }
 
 
-static void _vala_array_add266 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add100 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14557,7 +14557,7 @@ static void _vala_array_add266 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add267 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add101 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14574,7 +14574,7 @@ static void _vala_array_add267 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add268 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add102 (gchar*** array, int* length, int* size, gchar* value) {
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14736,7 +14736,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1880 "/home/jens/Source/shotwell/src/Photo.vala"
 								_g_object_unref0 (_tmp4_);
 #line 14737 "Photo.c"
-								goto __finally316;
+								goto __finally313;
 							}
 #line 1882 "/home/jens/Source/shotwell/src/Photo.vala"
 							_tmp21_ = self->priv->editable;
@@ -14778,7 +14778,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 						_g_object_unref0 (_tmp4_);
 #line 14778 "Photo.c"
 					}
-					__finally316:
+					__finally313:
 					{
 						PhotoBackingReaders* _tmp31_ = NULL;
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14790,11 +14790,11 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1877 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14791 "Photo.c"
-						goto __finally315;
+						goto __finally312;
 					}
 				}
 			}
-			__finally315:
+			__finally312:
 			{
 				PhotoRow* _tmp32_ = NULL;
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14808,7 +14808,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 14809 "Photo.c"
-					goto __catch314_database_error;
+					goto __catch311_database_error;
 				}
 #line 1876 "/home/jens/Source/shotwell/src/Photo.vala"
 				_g_object_unref0 (old_file);
@@ -14824,8 +14824,8 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 			}
 		}
 	}
-	goto __finally314;
-	__catch314_database_error:
+	goto __finally311;
+	__catch311_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp33_ = NULL;
@@ -14841,7 +14841,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 		_g_error_free0 (err);
 #line 14841 "Photo.c"
 	}
-	__finally314:
+	__finally311:
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1875 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14906,7 +14906,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp40_ = g_strdup ("backing:editable");
 #line 1902 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add266 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp40_);
+		_vala_array_add100 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp40_);
 #line 1904 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp41_ = is_baseline;
 #line 1904 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14922,7 +14922,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp43_ = g_strdup ("backing:baseline");
 #line 1905 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add267 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp43_);
+			_vala_array_add101 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp43_);
 #line 14925 "Photo.c"
 		}
 #line 1907 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -14940,7 +14940,7 @@ void photo_set_editable_file (Photo* self, GFile* file) {
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp46_ = g_strdup ("backing:source");
 #line 1908 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add268 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp46_);
+			_vala_array_add102 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp46_);
 #line 14943 "Photo.c"
 		}
 #line 1910 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15259,7 +15259,7 @@ GeeCollection* photo_get_raw_developer_files (Photo* self) {
 #line 15258 "Photo.c"
 			}
 		}
-		__finally317:
+		__finally314:
 		{
 			PhotoRow* _tmp18_ = NULL;
 #line 1946 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15350,7 +15350,7 @@ PhotoFileFormat photo_get_file_format (Photo* self) {
 			return result;
 #line 15350 "Photo.c"
 		}
-		__finally318:
+		__finally315:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1959 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15442,7 +15442,7 @@ PhotoFileFormat photo_get_master_file_format (Photo* self) {
 			return result;
 #line 15442 "Photo.c"
 		}
-		__finally319:
+		__finally316:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 1973 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15498,7 +15498,7 @@ static time_t photo_real_get_timestamp (MediaSource* base) {
 			return result;
 #line 15498 "Photo.c"
 		}
-		__finally320:
+		__finally317:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1979 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15552,7 +15552,7 @@ void photo_get_photo_id (Photo* self, PhotoID* result) {
 			return;
 #line 15552 "Photo.c"
 		}
-		__finally321:
+		__finally318:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 1985 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15646,7 +15646,7 @@ static void photo_real_get_import_id (MediaSource* base, ImportID* result) {
 			return;
 #line 15646 "Photo.c"
 		}
-		__finally322:
+		__finally319:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2001 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15700,7 +15700,7 @@ void photo_get_editable_id (Photo* self, BackingPhotoID* result) {
 			return;
 #line 15700 "Photo.c"
 		}
-		__finally323:
+		__finally320:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2007 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15759,7 +15759,7 @@ static gchar* photo_real_get_master_md5 (MediaSource* base) {
 			return result;
 #line 15759 "Photo.c"
 		}
-		__finally324:
+		__finally321:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2013 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15814,7 +15814,7 @@ guint64 photo_get_flags (Photo* self) {
 			return result;
 #line 15814 "Photo.c"
 		}
-		__finally325:
+		__finally322:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2021 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -15932,7 +15932,7 @@ guint64 photo_replace_flags (Photo* self, guint64 flags, Alteration* additional_
 #line 15931 "Photo.c"
 			}
 		}
-		__finally326:
+		__finally323:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2036 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16015,7 +16015,7 @@ gboolean photo_is_flag_set (Photo* self, guint64 mask) {
 			return result;
 #line 16015 "Photo.c"
 		}
-		__finally327:
+		__finally324:
 		{
 			PhotoRow* _tmp6_ = NULL;
 #line 2049 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16121,7 +16121,7 @@ guint64 photo_add_flags (Photo* self, guint64 mask, Alteration* additional_alter
 				}
 			}
 		}
-		__finally328:
+		__finally325:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2058 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16247,7 +16247,7 @@ guint64 photo_remove_flags (Photo* self, guint64 mask, Alteration* additional_al
 				}
 			}
 		}
-		__finally329:
+		__finally326:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2077 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16373,7 +16373,7 @@ guint64 photo_add_remove_flags (Photo* self, guint64 add, guint64 remove, Altera
 				}
 			}
 		}
-		__finally330:
+		__finally327:
 		{
 			PhotoRow* _tmp16_ = NULL;
 #line 2096 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16652,7 +16652,7 @@ guint64 photo_toggle_flags (Photo* self, guint64 mask, Alteration* additional_al
 				}
 			}
 		}
-		__finally331:
+		__finally328:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2133 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16727,7 +16727,7 @@ gboolean photo_is_master_metadata_dirty (Photo* self) {
 			return result;
 #line 16727 "Photo.c"
 		}
-		__finally332:
+		__finally329:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16797,7 +16797,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 #line 2158 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 16798 "Photo.c"
-					goto __finally333;
+					goto __finally330;
 				}
 #line 2159 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp8_ = self->row;
@@ -16810,7 +16810,7 @@ void photo_set_master_metadata_dirty (Photo* self, gboolean dirty, GError** erro
 #line 16809 "Photo.c"
 			}
 		}
-		__finally333:
+		__finally330:
 		{
 			PhotoRow* _tmp10_ = NULL;
 #line 2156 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -16895,7 +16895,7 @@ static Rating photo_real_get_rating (MediaSource* base) {
 			return result;
 #line 16895 "Photo.c"
 		}
-		__finally334:
+		__finally331:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2169 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17000,7 +17000,7 @@ static void photo_real_set_rating (MediaSource* base, Rating rating) {
 				}
 			}
 		}
-		__finally335:
+		__finally332:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2177 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17067,7 +17067,7 @@ static void photo_real_increase_rating (MediaSource* base) {
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
 #line 17067 "Photo.c"
 		}
-		__finally336:
+		__finally333:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2190 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17117,7 +17117,7 @@ static void photo_real_decrease_rating (MediaSource* base) {
 			media_source_set_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MEDIA_SOURCE, MediaSource), _tmp3_);
 #line 17117 "Photo.c"
 		}
-		__finally337:
+		__finally334:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2196 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17170,7 +17170,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 #line 2206 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 17171 "Photo.c"
-				goto __catch338_database_error;
+				goto __catch335_database_error;
 			}
 #line 2206 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17203,7 +17203,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 				_tmp5_->backlinks = _tmp7_;
 #line 17203 "Photo.c"
 			}
-			__finally339:
+			__finally336:
 			{
 				PhotoRow* _tmp8_ = NULL;
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17217,7 +17217,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 17218 "Photo.c"
-					goto __catch338_database_error;
+					goto __catch335_database_error;
 				}
 #line 2207 "/home/jens/Source/shotwell/src/Photo.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -17229,8 +17229,8 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 			}
 		}
 	}
-	goto __finally338;
-	__catch338_database_error:
+	goto __finally335;
+	__catch335_database_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp9_ = NULL;
@@ -17257,7 +17257,7 @@ static void photo_real_commit_backlinks (DataSource* base, SourceCollection* sou
 		_g_error_free0 (err);
 #line 17257 "Photo.c"
 	}
-	__finally338:
+	__finally335:
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2205 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17345,7 +17345,7 @@ static gboolean photo_real_set_event_id (MediaSource* base, EventID* event_id) {
 			return result;
 #line 17345 "Photo.c"
 		}
-		__finally340:
+		__finally337:
 		{
 			PhotoRow* _tmp12_ = NULL;
 #line 2220 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17595,7 +17595,7 @@ static void photo_file_exif_updated (Photo* self) {
 #line 2256 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 17596 "Photo.c"
-			goto __catch341_g_error;
+			goto __catch338_g_error;
 		}
 #line 2256 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = _tmp1_;
@@ -17609,8 +17609,8 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_object_unref0 (_tmp1_);
 #line 17609 "Photo.c"
 	}
-	goto __finally341;
-	__catch341_g_error:
+	goto __finally338;
+	__catch338_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp4_ = NULL;
@@ -17634,7 +17634,7 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_error_free0 (err);
 #line 17634 "Photo.c"
 	}
-	__finally341:
+	__finally338:
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2255 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17666,11 +17666,11 @@ static void photo_file_exif_updated (Photo* self) {
 #line 2267 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 17667 "Photo.c"
-			goto __catch342_g_error;
+			goto __catch339_g_error;
 		}
 	}
-	goto __finally342;
-	__catch342_g_error:
+	goto __finally339;
+	__catch339_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp10_ = NULL;
@@ -17697,7 +17697,7 @@ static void photo_file_exif_updated (Photo* self) {
 		_g_error_free0 (err);
 #line 17697 "Photo.c"
 	}
-	__finally342:
+	__finally339:
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2266 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17817,7 +17817,7 @@ static void photo_file_exif_updated (Photo* self) {
 			_database_table_unref0 (_tmp22_);
 #line 17817 "Photo.c"
 		}
-		__finally343:
+		__finally340:
 		{
 			PhotoRow* _tmp36_ = NULL;
 #line 2280 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17910,7 +17910,7 @@ static guint64 photo_real_get_filesize (MediaSource* base) {
 			return result;
 #line 17910 "Photo.c"
 		}
-		__finally344:
+		__finally341:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2292 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -17969,7 +17969,7 @@ static guint64 photo_real_get_master_filesize (MediaSource* base) {
 			return result;
 #line 17969 "Photo.c"
 		}
-		__finally345:
+		__finally342:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2298 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18024,7 +18024,7 @@ guint64 photo_get_editable_filesize (Photo* self) {
 			return result;
 #line 18024 "Photo.c"
 		}
-		__finally346:
+		__finally343:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2304 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18096,7 +18096,7 @@ static gchar* photo_real_get_basename (MediaSource* base) {
 			return result;
 #line 18096 "Photo.c"
 		}
-		__finally347:
+		__finally344:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2314 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18155,7 +18155,7 @@ static gchar* photo_real_get_title (MediaSource* base) {
 			return result;
 #line 18155 "Photo.c"
 		}
-		__finally348:
+		__finally345:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2320 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18214,7 +18214,7 @@ static gchar* photo_real_get_comment (MediaSource* base) {
 			return result;
 #line 18214 "Photo.c"
 		}
-		__finally349:
+		__finally346:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2326 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18331,7 +18331,7 @@ static void photo_real_set_title (MediaSource* base, const gchar* title) {
 #line 18330 "Photo.c"
 			}
 		}
-		__finally350:
+		__finally347:
 		{
 			PhotoRow* _tmp17_ = NULL;
 #line 2335 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18476,7 +18476,7 @@ static gboolean photo_real_set_comment (MediaSource* base, const gchar* comment)
 #line 18475 "Photo.c"
 			}
 		}
-		__finally351:
+		__finally348:
 		{
 			PhotoRow* _tmp17_ = NULL;
 #line 2352 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18578,7 +18578,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 #line 2371 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
 #line 18579 "Photo.c"
-						goto __catch353_database_error;
+						goto __catch350_database_error;
 					}
 					{
 						PhotoRow* _tmp6_ = NULL;
@@ -18606,8 +18606,8 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				_tmp7_->import_id = _tmp8_;
 #line 18606 "Photo.c"
 			}
-			goto __finally353;
-			__catch353_database_error:
+			goto __finally350;
+			__catch350_database_error:
 			{
 				GError* err = NULL;
 				GError* _tmp9_ = NULL;
@@ -18628,7 +18628,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 				_g_error_free0 (err);
 #line 18628 "Photo.c"
 			}
-			__finally353:
+			__finally350:
 #line 2370 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 18633 "Photo.c"
@@ -18651,7 +18651,7 @@ void photo_set_import_id (Photo* self, ImportID* import_id) {
 #line 18650 "Photo.c"
 			}
 		}
-		__finally352:
+		__finally349:
 		{
 			PhotoRow* _tmp12_ = NULL;
 #line 2369 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -18835,10 +18835,10 @@ void photo_set_title_persistent (Photo* self, const gchar* title, GError** error
 #line 2402 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 18836 "Photo.c"
-			goto __finally354;
+			goto __finally351;
 		}
 	}
-	__finally354:
+	__finally351:
 	{
 		PhotoFileReader* _tmp19_ = NULL;
 		GFile* _tmp20_ = NULL;
@@ -19006,10 +19006,10 @@ void photo_set_comment_persistent (Photo* self, const gchar* comment, GError** e
 #line 2430 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 19007 "Photo.c"
-			goto __finally355;
+			goto __finally352;
 		}
 	}
-	__finally355:
+	__finally352:
 	{
 		PhotoFileReader* _tmp19_ = NULL;
 		GFile* _tmp20_ = NULL;
@@ -19116,7 +19116,7 @@ static void photo_real_set_exposure_time (Dateable* base, time_t time) {
 #line 19115 "Photo.c"
 			}
 		}
-		__finally356:
+		__finally353:
 		{
 			PhotoRow* _tmp11_ = NULL;
 #line 2442 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19285,10 +19285,10 @@ void photo_set_exposure_time_persistent (Photo* self, time_t time, GError** erro
 #line 2472 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 19286 "Photo.c"
-			goto __finally357;
+			goto __finally354;
 		}
 	}
-	__finally357:
+	__finally354:
 	{
 		PhotoFileReader* _tmp21_ = NULL;
 		GFile* _tmp22_ = NULL;
@@ -19613,7 +19613,7 @@ PixelTransformationBundle* photo_get_color_adjustments (Photo* self) {
 			return result;
 #line 19613 "Photo.c"
 		}
-		__finally358:
+		__finally355:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2560 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19677,7 +19677,7 @@ PixelTransformer* photo_get_pixel_transformer (Photo* self) {
 			return result;
 #line 19677 "Photo.c"
 		}
-		__finally359:
+		__finally356:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 2569 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19786,7 +19786,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 				self->priv->transformer = NULL;
 #line 19786 "Photo.c"
 			}
-			__finally360:
+			__finally357:
 			{
 				PhotoRow* _tmp4_ = NULL;
 #line 2590 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -19984,7 +19984,7 @@ void photo_set_color_adjustments (Photo* self, PixelTransformationBundle* new_ad
 			committed = _tmp37_;
 #line 19984 "Photo.c"
 		}
-		__finally361:
+		__finally358:
 		{
 			PhotoRow* _tmp38_ = NULL;
 #line 2606 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20058,7 +20058,7 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 #line 2632 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 20059 "Photo.c"
-			goto __catch362_g_error;
+			goto __catch359_g_error;
 		}
 #line 2632 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp5_ = _tmp0_;
@@ -20072,8 +20072,8 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 		return result;
 #line 20072 "Photo.c"
 	}
-	goto __finally362;
-	__catch362_g_error:
+	goto __finally359;
+	__catch359_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -20096,7 +20096,7 @@ static PhotoMetadata* photo_real_get_metadata (PhotoSource* base) {
 		return result;
 #line 20096 "Photo.c"
 	}
-	__finally362:
+	__finally359:
 #line 2631 "/home/jens/Source/shotwell/src/Photo.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 2631 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20662,7 +20662,7 @@ void photo_get_raw_dimensions (Photo* self, Dimensions* result) {
 			return;
 #line 20662 "Photo.c"
 		}
-		__finally363:
+		__finally360:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2704 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20740,7 +20740,7 @@ gboolean photo_has_transformations (Photo* self) {
 			return result;
 #line 20740 "Photo.c"
 		}
-		__finally364:
+		__finally361:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2710 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -20887,7 +20887,7 @@ gboolean photo_only_metadata_changed (Photo* self) {
 			return result;
 #line 20887 "Photo.c"
 		}
-		__finally365:
+		__finally362:
 		{
 			PhotoRow* _tmp20_ = NULL;
 #line 2724 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21026,7 +21026,7 @@ gboolean photo_has_alterations (Photo* self) {
 #line 21025 "Photo.c"
 				}
 			}
-			__finally366:
+			__finally363:
 			{
 				PhotoRow* _tmp15_ = NULL;
 #line 2746 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21197,7 +21197,7 @@ gboolean photo_has_alterations (Photo* self) {
 			return result;
 #line 21197 "Photo.c"
 		}
-		__finally367:
+		__finally364:
 		{
 			PhotoRow* _tmp40_ = NULL;
 #line 2755 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21332,7 +21332,7 @@ PhotoTransformationState* photo_save_transformation_state (Photo* self) {
 			return result;
 #line 21332 "Photo.c"
 		}
-		__finally368:
+		__finally365:
 		{
 			PhotoRow* _tmp15_ = NULL;
 #line 2766 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21517,7 +21517,7 @@ gboolean photo_load_transformation_state (Photo* self, PhotoTransformationState*
 #line 21516 "Photo.c"
 			}
 		}
-		__finally369:
+		__finally366:
 		{
 			PhotoRow* _tmp29_ = NULL;
 #line 2785 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21692,7 +21692,7 @@ static void photo_internal_remove_all_transformations (Photo* self, gboolean not
 #line 21691 "Photo.c"
 			}
 		}
-		__finally370:
+		__finally367:
 		{
 			PhotoRow* _tmp20_ = NULL;
 #line 2808 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21781,7 +21781,7 @@ Orientation photo_get_original_orientation (Photo* self) {
 			return result;
 #line 21781 "Photo.c"
 		}
-		__finally371:
+		__finally368:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2828 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21836,7 +21836,7 @@ Orientation photo_get_orientation (Photo* self) {
 			return result;
 #line 21836 "Photo.c"
 		}
-		__finally372:
+		__finally369:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2834 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -21926,7 +21926,7 @@ gboolean photo_set_orientation (Photo* self, Orientation orientation) {
 				}
 			}
 		}
-		__finally373:
+		__finally370:
 		{
 			PhotoRow* _tmp13_ = NULL;
 #line 2841 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22009,7 +22009,7 @@ static void photo_real_rotate (Photo* self, Rotation rotation) {
 			photo_set_orientation (self, _tmp3_);
 #line 22009 "Photo.c"
 		}
-		__finally374:
+		__finally371:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 2860 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22102,7 +22102,7 @@ static gboolean photo_has_transformation (Photo* self, const gchar* name) {
 			return result;
 #line 22102 "Photo.c"
 		}
-		__finally375:
+		__finally372:
 		{
 			PhotoRow* _tmp9_ = NULL;
 #line 2866 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22186,7 +22186,7 @@ static KeyValueMap* photo_get_transformation (Photo* self, const gchar* name) {
 				}
 			}
 		}
-		__finally376:
+		__finally373:
 		{
 			PhotoRow* _tmp10_ = NULL;
 #line 2876 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22313,7 +22313,7 @@ static gboolean photo_set_transformation (Photo* self, KeyValueMap* trans) {
 			return result;
 #line 22313 "Photo.c"
 		}
-		__finally377:
+		__finally374:
 		{
 			PhotoRow* _tmp19_ = NULL;
 #line 2888 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -22429,7 +22429,7 @@ static gboolean photo_remove_transformation (Photo* self, const gchar* name) {
 			_database_table_unref0 (_tmp13_);
 #line 22429 "Photo.c"
 		}
-		__finally378:
+		__finally375:
 		{
 			PhotoRow* _tmp18_ = NULL;
 #line 2900 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -23310,7 +23310,7 @@ static gboolean photo_calculate_pixbuf_dimensions (Photo* self, Scaling* scaling
 			return result;
 #line 23310 "Photo.c"
 		}
-		__finally379:
+		__finally376:
 		{
 			PhotoRow* _tmp7_ = NULL;
 #line 3047 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24018,7 +24018,7 @@ static GdkPixbuf* photo_get_untransformed_pixbuf (Photo* self, Scaling* scaling,
 			original_orientation = _tmp4_;
 #line 24018 "Photo.c"
 		}
-		__finally380:
+		__finally377:
 		{
 			PhotoRow* _tmp5_ = NULL;
 #line 3207 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24387,7 +24387,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 #line 3288 "/home/jens/Source/shotwell/src/Photo.vala"
 					_photo_cached_pixbuf_unref0 (found);
 #line 24388 "Photo.c"
-					goto __finally381;
+					goto __finally378;
 				}
 #line 3287 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp38_ = locate;
@@ -24581,7 +24581,7 @@ static GdkPixbuf* photo_run_source_pixbuf_cache (Photo* locate, gboolean keep, G
 			return result;
 #line 24581 "Photo.c"
 		}
-		__finally381:
+		__finally378:
 		{
 			GeeLinkedList* _tmp75_ = NULL;
 #line 3253 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24614,11 +24614,11 @@ static gboolean photo_trim_source_pixbuf_cache (void) {
 #line 3330 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 24615 "Photo.c"
-			goto __catch382_g_error;
+			goto __catch379_g_error;
 		}
 	}
-	goto __finally382;
-	__catch382_g_error:
+	goto __finally379;
+	__catch379_g_error:
 	{
 		GError* err = NULL;
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24629,7 +24629,7 @@ static gboolean photo_trim_source_pixbuf_cache (void) {
 		_g_error_free0 (err);
 #line 24629 "Photo.c"
 	}
-	__finally382:
+	__finally379:
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3329 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24718,11 +24718,11 @@ void photo_discard_prefetched (Photo* self) {
 #line 3351 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 24719 "Photo.c"
-			goto __catch383_g_error;
+			goto __catch380_g_error;
 		}
 	}
-	goto __finally383;
-	__catch383_g_error:
+	goto __finally380;
+	__catch380_g_error:
 	{
 		GError* err = NULL;
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24733,7 +24733,7 @@ void photo_discard_prefetched (Photo* self) {
 		_g_error_free0 (err);
 #line 24733 "Photo.c"
 	}
-	__finally383:
+	__finally380:
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3350 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -24988,7 +24988,7 @@ GdkPixbuf* photo_get_pixbuf_with_options (Photo* self, Scaling* scaling, PhotoEx
 			orientation = _tmp31_;
 #line 24988 "Photo.c"
 		}
-		__finally384:
+		__finally381:
 		{
 			PhotoRow* _tmp32_ = NULL;
 #line 3398 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -25730,7 +25730,7 @@ static gboolean photo_export_fullsized_backing (Photo* self, GFile* file, gboole
 				}
 			}
 		}
-		__finally385:
+		__finally382:
 		{
 			PhotoBackingReaders* _tmp28_ = NULL;
 #line 3565 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -26879,7 +26879,7 @@ static GFile* photo_generate_new_editable_file (Photo* self, PhotoFileFormat* fi
 			backing = _tmp2_;
 #line 26878 "Photo.c"
 		}
-		__finally386:
+		__finally383:
 		{
 			PhotoRow* _tmp3_ = NULL;
 #line 3739 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27174,7 +27174,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 #line 3768 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 27174 "Photo.c"
-			goto __catch387_g_error;
+			goto __catch384_g_error;
 		}
 #line 3768 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp14_ = _tmp11_;
@@ -27188,8 +27188,8 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_object_unref0 (_tmp11_);
 #line 27187 "Photo.c"
 	}
-	goto __finally387;
-	__catch387_g_error:
+	goto __finally384;
+	__catch384_g_error:
 	{
 		GError* er = NULL;
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27204,7 +27204,7 @@ static gboolean photo_launch_editor (GFile* file, PhotoFileFormat file_format, G
 		_g_error_free0 (er);
 #line 27203 "Photo.c"
 	}
-	__finally387:
+	__finally384:
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3767 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27456,7 +27456,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 #line 3810 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 27456 "Photo.c"
-					goto __finally388;
+					goto __finally385;
 				}
 #line 3810 "/home/jens/Source/shotwell/src/Photo.vala"
 				_tmp10_ = _tmp7_;
@@ -27484,7 +27484,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 #line 27482 "Photo.c"
 			}
 		}
-		__finally388:
+		__finally385:
 		{
 			PhotoBackingReaders* _tmp14_ = NULL;
 #line 3805 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27612,11 +27612,11 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 #line 3826 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 27612 "Photo.c"
-				goto __catch389_g_error;
+				goto __catch386_g_error;
 			}
 		}
-		goto __finally389;
-		__catch389_g_error:
+		goto __finally386;
+		__catch386_g_error:
 		{
 			GError* err = NULL;
 			GError* _tmp38_ = NULL;
@@ -27635,11 +27635,11 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 #line 3831 "/home/jens/Source/shotwell/src/Photo.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 27635 "Photo.c"
-					goto __catch390_g_error;
+					goto __catch387_g_error;
 				}
 			}
-			goto __finally390;
-			__catch390_g_error:
+			goto __finally387;
+			__catch387_g_error:
 			{
 				GError* delete_err = NULL;
 				GFile* _tmp33_ = NULL;
@@ -27670,7 +27670,7 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 				_g_error_free0 (delete_err);
 #line 27668 "Photo.c"
 			}
-			__finally390:
+			__finally387:
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3830 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27698,9 +27698,9 @@ void photo_open_with_external_editor (Photo* self, GError** error) {
 #line 3838 "/home/jens/Source/shotwell/src/Photo.vala"
 			_g_error_free0 (err);
 #line 27697 "Photo.c"
-			goto __finally389;
+			goto __finally386;
 		}
-		__finally389:
+		__finally386:
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3825 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -27994,7 +27994,7 @@ void photo_reimport_editable (Photo* self, GError** error) {
 }
 
 
-static void _vala_array_add269 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add103 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28011,7 +28011,7 @@ static void _vala_array_add269 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add270 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add104 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28028,7 +28028,7 @@ static void _vala_array_add270 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add271 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add105 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28045,7 +28045,7 @@ static void _vala_array_add271 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add272 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add106 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28062,7 +28062,7 @@ static void _vala_array_add272 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add273 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add107 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28079,7 +28079,7 @@ static void _vala_array_add273 (gchar*** array, int* length, int* size, gchar* v
 }
 
 
-static void _vala_array_add274 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add108 (gchar*** array, int* length, int* size, gchar* value) {
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 	if ((*length) == (*size)) {
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28330,7 +28330,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 3936 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 28329 "Photo.c"
-						goto __finally391;
+						goto __finally388;
 					}
 #line 3937 "/home/jens/Source/shotwell/src/Photo.vala"
 					_tmp28_ = backing;
@@ -28356,7 +28356,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					photo_set_orientation (self, _tmp33_);
 #line 28354 "Photo.c"
 				}
-				__finally391:
+				__finally388:
 				{
 					PhotoRow* _tmp34_ = NULL;
 #line 3932 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28425,7 +28425,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 3951 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 28424 "Photo.c"
-				goto __catch392_g_error;
+				goto __catch389_g_error;
 			}
 #line 3951 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp40_ = _tmp37_;
@@ -28439,8 +28439,8 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			_g_object_unref0 (_tmp37_);
 #line 28437 "Photo.c"
 		}
-		goto __finally392;
-		__catch392_g_error:
+		goto __finally389;
+		__catch389_g_error:
 		{
 			GError* err = NULL;
 			gchar* _tmp41_ = NULL;
@@ -28483,7 +28483,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 			return;
 #line 28481 "Photo.c"
 		}
-		__finally392:
+		__finally389:
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3950 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28608,7 +28608,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_tmp66_->filesize = _tmp68_;
 #line 28606 "Photo.c"
 			}
-			__finally393:
+			__finally390:
 			{
 				PhotoRow* _tmp69_ = NULL;
 #line 3963 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28768,7 +28768,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 					photo_set_orientation (self, _tmp92_);
 #line 28766 "Photo.c"
 				}
-				__finally394:
+				__finally391:
 				{
 					PhotoRow* _tmp93_ = NULL;
 #line 3979 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28826,7 +28826,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 				_tmp96_->editable = _tmp98_;
 #line 28824 "Photo.c"
 			}
-			__finally395:
+			__finally392:
 			{
 				PhotoBackingReaders* _tmp99_ = NULL;
 #line 3992 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28964,7 +28964,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp115_ = g_strdup ("metadata:editable-timestamp");
 #line 4005 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add269 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp115_);
+		_vala_array_add103 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp115_);
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp116_ = alteration_list;
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28972,7 +28972,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp117_ = g_strdup ("metadata:baseline-timestamp");
 #line 4006 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add270 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp117_);
+		_vala_array_add104 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp117_);
 #line 4008 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp118_ = photo_is_editable_source (self);
 #line 4008 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -28988,7 +28988,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp120_ = g_strdup ("metadata:source-timestamp");
 #line 4009 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add271 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp120_);
+			_vala_array_add105 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp120_);
 #line 28989 "Photo.c"
 		}
 	}
@@ -29024,7 +29024,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp125_ = g_strdup ("image:editable");
 #line 4013 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add272 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp125_);
+		_vala_array_add106 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp125_);
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp126_ = alteration_list;
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29032,7 +29032,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp127_ = g_strdup ("image:baseline");
 #line 4014 "/home/jens/Source/shotwell/src/Photo.vala"
-		_vala_array_add273 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp127_);
+		_vala_array_add107 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp127_);
 #line 4016 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp128_ = photo_is_editable_source (self);
 #line 4016 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29048,7 +29048,7 @@ static void photo_update_editable (Photo* self, gboolean only_attributes, PhotoF
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
 			_tmp130_ = g_strdup ("image:source");
 #line 4017 "/home/jens/Source/shotwell/src/Photo.vala"
-			_vala_array_add274 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp130_);
+			_vala_array_add108 (&alteration_list, &alteration_list_length1, &_alteration_list_size_, _tmp130_);
 #line 29049 "Photo.c"
 		}
 	}
@@ -29156,7 +29156,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 #line 29153 "Photo.c"
 			}
 		}
-		__finally396:
+		__finally393:
 		{
 			PhotoBackingReaders* _tmp7_ = NULL;
 #line 4029 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29229,7 +29229,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 #line 4043 "/home/jens/Source/shotwell/src/Photo.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 29228 "Photo.c"
-							goto __finally398;
+							goto __finally395;
 						}
 					}
 #line 4044 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29244,7 +29244,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 					self->backing_photo_row = _tmp18_;
 #line 29242 "Photo.c"
 				}
-				__finally398:
+				__finally395:
 				{
 					PhotoRow* _tmp19_ = NULL;
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29258,7 +29258,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
 #line 29257 "Photo.c"
-						goto __catch397_database_error;
+						goto __catch394_database_error;
 					}
 #line 4040 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (editable_file);
@@ -29272,8 +29272,8 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 				}
 			}
 		}
-		goto __finally397;
-		__catch397_database_error:
+		goto __finally394;
+		__catch394_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp20_ = NULL;
@@ -29292,7 +29292,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_g_error_free0 (err);
 #line 29290 "Photo.c"
 		}
-		__finally397:
+		__finally394:
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4039 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29330,7 +29330,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 #line 4052 "/home/jens/Source/shotwell/src/Photo.vala"
 					if (_inner_error_->domain == DATABASE_ERROR) {
 #line 29329 "Photo.c"
-						goto __catch399_database_error;
+						goto __catch396_database_error;
 					}
 #line 4052 "/home/jens/Source/shotwell/src/Photo.vala"
 					_g_object_unref0 (editable_file);
@@ -29344,8 +29344,8 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 				}
 			}
 		}
-		goto __finally399;
-		__catch399_database_error:
+		goto __finally396;
+		__catch396_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp26_ = NULL;
@@ -29364,7 +29364,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_g_error_free0 (err);
 #line 29362 "Photo.c"
 		}
-		__finally399:
+		__finally396:
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4050 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29428,11 +29428,11 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 #line 4068 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 29427 "Photo.c"
-				goto __catch400_g_error;
+				goto __catch397_g_error;
 			}
 		}
-		goto __finally400;
-		__catch400_g_error:
+		goto __finally397;
+		__catch397_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp35_ = NULL;
@@ -29470,7 +29470,7 @@ static void photo_detach_editable (Photo* self, gboolean delete_editable, gboole
 			_g_error_free0 (err);
 #line 29468 "Photo.c"
 		}
-		__finally400:
+		__finally397:
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4067 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29625,7 +29625,7 @@ static void photo_on_editable_file_changed (Photo* self, GFile* file, GFile* oth
 #line 29622 "Photo.c"
 			}
 		}
-		__finally401:
+		__finally398:
 		{
 			PhotoBackingReaders* _tmp11_ = NULL;
 #line 4081 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29788,11 +29788,11 @@ static void photo_on_reimport_editable (Photo* self) {
 #line 4140 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 29787 "Photo.c"
-			goto __catch402_g_error;
+			goto __catch399_g_error;
 		}
 	}
-	goto __finally402;
-	__catch402_g_error:
+	goto __finally399;
+	__catch399_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp2_ = NULL;
@@ -29820,7 +29820,7 @@ static void photo_on_reimport_editable (Photo* self) {
 		_g_error_free0 (err);
 #line 29817 "Photo.c"
 	}
-	__finally402:
+	__finally399:
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4139 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -29855,11 +29855,11 @@ static void photo_on_update_editable_attributes (Photo* self) {
 #line 4150 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 29853 "Photo.c"
-			goto __catch403_g_error;
+			goto __catch400_g_error;
 		}
 	}
-	goto __finally403;
-	__catch403_g_error:
+	goto __finally400;
+	__catch400_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -29878,7 +29878,7 @@ static void photo_on_update_editable_attributes (Photo* self) {
 		_g_error_free0 (err);
 #line 29875 "Photo.c"
 	}
-	__finally403:
+	__finally400:
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4149 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31502,7 +31502,7 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 #line 4394 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 31500 "Photo.c"
-			goto __catch404_g_error;
+			goto __catch401_g_error;
 		}
 #line 4394 "/home/jens/Source/shotwell/src/Photo.vala"
 		_tmp3_ = _tmp0_;
@@ -31516,8 +31516,8 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		_g_object_unref0 (_tmp0_);
 #line 31513 "Photo.c"
 	}
-	goto __finally404;
-	__catch404_g_error:
+	goto __finally401;
+	__catch401_g_error:
 	{
 		GError* e = NULL;
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31536,7 +31536,7 @@ PixelTransformationBundle* photo_get_enhance_transformations (Photo* self) {
 		return result;
 #line 31533 "Photo.c"
 	}
-	__finally404:
+	__finally401:
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4393 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -31604,7 +31604,7 @@ gboolean photo_enhance (Photo* self) {
 			photo_set_color_adjustments (self, _tmp3_);
 #line 31601 "Photo.c"
 		}
-		__finally405:
+		__finally402:
 		{
 			PhotoRow* _tmp4_ = NULL;
 #line 4430 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -32962,7 +32962,7 @@ void photo_reimport_master_state_unref (gpointer instance) {
 }
 
 
-static gchar** _vala_array_dup29 (gchar** self, int length) {
+static gchar** _vala_array_dup28 (gchar** self, int length) {
 	gchar** result;
 	int i;
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -33020,7 +33020,7 @@ static PhotoReimportMasterStateImpl* photo_reimport_master_state_impl_construct 
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp4__length1 = alterations_length1;
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
-	_tmp5_ = (_tmp4_ != NULL) ? _vala_array_dup29 (_tmp4_, _tmp4__length1) : ((gpointer) _tmp4_);
+	_tmp5_ = (_tmp4_ != NULL) ? _vala_array_dup28 (_tmp4_, _tmp4__length1) : ((gpointer) _tmp4_);
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
 	_tmp5__length1 = _tmp4__length1;
 #line 1360 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -38999,7 +38999,7 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 #line 5046 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 38997 "Photo.c"
-				goto __catch406_database_error;
+				goto __catch403_database_error;
 			}
 #line 5046 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -39010,8 +39010,8 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 #line 39006 "Photo.c"
 		}
 	}
-	goto __finally406;
-	__catch406_database_error:
+	goto __finally403;
+	__catch403_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -39027,7 +39027,7 @@ void library_photo_import_failed (LibraryPhoto* photo) {
 		_g_error_free0 (err);
 #line 39024 "Photo.c"
 	}
-	__finally406:
+	__finally403:
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5045 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39144,11 +39144,11 @@ static void library_photo_generate_thumbnails (LibraryPhoto* self) {
 #line 5078 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 39142 "Photo.c"
-			goto __catch407_g_error;
+			goto __catch404_g_error;
 		}
 	}
-	goto __finally407;
-	__catch407_g_error:
+	goto __finally404;
+	__catch404_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp0_ = NULL;
@@ -39175,7 +39175,7 @@ static void library_photo_generate_thumbnails (LibraryPhoto* self) {
 		_g_error_free0 (err);
 #line 39172 "Photo.c"
 	}
-	__finally407:
+	__finally404:
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5077 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -39326,11 +39326,11 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 #line 5122 "/home/jens/Source/shotwell/src/Photo.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 39324 "Photo.c"
-			goto __catch408_g_error;
+			goto __catch405_g_error;
 		}
 	}
-	goto __finally408;
-	__catch408_g_error:
+	goto __finally405;
+	__catch405_g_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp2_ = NULL;
@@ -39357,7 +39357,7 @@ static void library_photo_real_rotate (Photo* base, Rotation rotation) {
 		_g_error_free0 (err);
 #line 39354 "Photo.c"
 	}
-	__finally408:
+	__finally405:
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5121 "/home/jens/Source/shotwell/src/Photo.vala"
@@ -40159,7 +40159,7 @@ static void library_photo_real_destroy (DataSource* base) {
 #line 5273 "/home/jens/Source/shotwell/src/Photo.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 40157 "Photo.c"
-				goto __catch409_database_error;
+				goto __catch406_database_error;
 			}
 #line 5273 "/home/jens/Source/shotwell/src/Photo.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -40170,8 +40170,8 @@ static void library_photo_real_destroy (DataSource* base) {
 #line 40166 "Photo.c"
 		}
 	}
-	goto __finally409;
-	__catch409_database_error:
+	goto __finally406;
+	__catch406_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -40187,7 +40187,7 @@ static void library_photo_real_destroy (DataSource* base) {
 		_g_error_free0 (err);
 #line 40184 "Photo.c"
 	}
-	__finally409:
+	__finally406:
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5272 "/home/jens/Source/shotwell/src/Photo.vala"

@@ -294,7 +294,7 @@ static gint you_tube_service_real_get_pluggable_interface (SpitPluggable* base, 
 static const gchar* you_tube_service_real_get_id (SpitPluggable* base);
 static const gchar* you_tube_service_real_get_pluggable_name (SpitPluggable* base);
 static void you_tube_service_real_get_info (SpitPluggable* base, SpitPluggableInfo* info);
-static GdkPixbuf** _vala_array_dup9 (GdkPixbuf** self, int length);
+static GdkPixbuf** _vala_array_dup10 (GdkPixbuf** self, int length);
 static SpitPublishingPublisher* you_tube_service_real_create_publisher (SpitPublishingService* base, SpitPublishingPluginHost* host);
 PublishingYouTubeYouTubePublisher* publishing_you_tube_you_tube_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host);
 PublishingYouTubeYouTubePublisher* publishing_you_tube_you_tube_publisher_construct (GType object_type, SpitPublishingService* service, SpitPublishingPluginHost* host);
@@ -438,8 +438,10 @@ enum  {
 PublishingYouTubeUploadTransaction* publishing_you_tube_upload_transaction_new (PublishingRESTSupportGoogleSession* session, PublishingYouTubePublishingParameters* parameters, SpitPublishingPublishable* publishable);
 PublishingYouTubeUploadTransaction* publishing_you_tube_upload_transaction_construct (GType object_type, PublishingRESTSupportGoogleSession* session, PublishingYouTubePublishingParameters* parameters, SpitPublishingPublishable* publishable);
 static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTSupportTransaction* base, GError** error);
+static guint8* _vala_array_dup11 (guint8* self, int length);
 static void _vala_SoupBuffer_free (SoupBuffer* self);
 static void _vala_SoupMultipart_free (SoupMultipart* self);
+static guint8* _vala_array_dup12 (guint8* self, int length);
 static void publishing_you_tube_upload_transaction_finalize (PublishingRESTSupportTransaction* obj);
 #define PUBLISHING_YOU_TUBE_UPLOADER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_YOU_TUBE_TYPE_UPLOADER, PublishingYouTubeUploaderPrivate))
 enum  {
@@ -465,7 +467,7 @@ YouTubeService* you_tube_service_construct (GType object_type, GFile* resource_d
 	_tmp0__length1 = you_tube_service_icon_pixbuf_set_length1;
 #line 13 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 447 "YouTubePublishing.c"
+#line 449 "YouTubePublishing.c"
 		gint _tmp1_ = 0;
 		GdkPixbuf** _tmp2_ = NULL;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -478,18 +480,18 @@ YouTubeService* you_tube_service_construct (GType object_type, GFile* resource_d
 		you_tube_service_icon_pixbuf_set_length1 = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_you_tube_service_icon_pixbuf_set_size_ = you_tube_service_icon_pixbuf_set_length1;
-#line 460 "YouTubePublishing.c"
+#line 462 "YouTubePublishing.c"
 	}
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 464 "YouTubePublishing.c"
+#line 466 "YouTubePublishing.c"
 }
 
 
 YouTubeService* you_tube_service_new (GFile* resource_directory) {
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return you_tube_service_construct (TYPE_YOU_TUBE_SERVICE, resource_directory);
-#line 471 "YouTubePublishing.c"
+#line 473 "YouTubePublishing.c"
 }
 
 
@@ -511,7 +513,7 @@ static gint you_tube_service_real_get_pluggable_interface (SpitPluggable* base, 
 	result = _tmp2_;
 #line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 493 "YouTubePublishing.c"
+#line 495 "YouTubePublishing.c"
 }
 
 
@@ -524,7 +526,7 @@ static const gchar* you_tube_service_real_get_id (SpitPluggable* base) {
 	result = "org.yorba.shotwell.publishing.youtube";
 #line 24 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 506 "YouTubePublishing.c"
+#line 508 "YouTubePublishing.c"
 }
 
 
@@ -537,35 +539,35 @@ static const gchar* you_tube_service_real_get_pluggable_name (SpitPluggable* bas
 	result = "YouTube";
 #line 28 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 519 "YouTubePublishing.c"
+#line 521 "YouTubePublishing.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 526 "YouTubePublishing.c"
+#line 528 "YouTubePublishing.c"
 }
 
 
-static GdkPixbuf** _vala_array_dup9 (GdkPixbuf** self, int length) {
+static GdkPixbuf** _vala_array_dup10 (GdkPixbuf** self, int length) {
 	GdkPixbuf** result;
 	int i;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	result = g_new0 (GdkPixbuf*, length + 1);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 537 "YouTubePublishing.c"
+#line 539 "YouTubePublishing.c"
 		GdkPixbuf* _tmp0_ = NULL;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		result[i] = _tmp0_;
-#line 543 "YouTubePublishing.c"
+#line 545 "YouTubePublishing.c"
 	}
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 547 "YouTubePublishing.c"
+#line 549 "YouTubePublishing.c"
 }
 
 
@@ -638,7 +640,7 @@ static void you_tube_service_real_get_info (SpitPluggable* base, SpitPluggableIn
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp8__length1 = you_tube_service_icon_pixbuf_set_length1;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp9_ = (_tmp8_ != NULL) ? _vala_array_dup9 (_tmp8_, _tmp8__length1) : ((gpointer) _tmp8_);
+	_tmp9_ = (_tmp8_ != NULL) ? _vala_array_dup10 (_tmp8_, _tmp8__length1) : ((gpointer) _tmp8_);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp9__length1 = _tmp8__length1;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -647,7 +649,7 @@ static void you_tube_service_real_get_info (SpitPluggable* base, SpitPluggableIn
 	(*info).icons = _tmp9_;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*info).icons_length1 = _tmp9__length1;
-#line 629 "YouTubePublishing.c"
+#line 631 "YouTubePublishing.c"
 }
 
 
@@ -668,7 +670,7 @@ static SpitPublishingPublisher* you_tube_service_real_create_publisher (SpitPubl
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher);
 #line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 650 "YouTubePublishing.c"
+#line 652 "YouTubePublishing.c"
 }
 
 
@@ -681,7 +683,7 @@ static SpitPublishingPublisherMediaType you_tube_service_real_get_supported_medi
 	result = SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO;
 #line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 663 "YouTubePublishing.c"
+#line 665 "YouTubePublishing.c"
 }
 
 
@@ -689,7 +691,7 @@ static void you_tube_service_real_activation (SpitPluggable* base, gboolean enab
 	YouTubeService * self;
 #line 51 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_YOU_TUBE_SERVICE, YouTubeService);
-#line 671 "YouTubePublishing.c"
+#line 673 "YouTubePublishing.c"
 }
 
 
@@ -698,7 +700,7 @@ static void you_tube_service_class_init (YouTubeServiceClass * klass) {
 	you_tube_service_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = you_tube_service_finalize;
-#line 680 "YouTubePublishing.c"
+#line 682 "YouTubePublishing.c"
 }
 
 
@@ -715,7 +717,7 @@ static void you_tube_service_spit_pluggable_interface_init (SpitPluggableIface *
 	iface->get_info = (void (*)(SpitPluggable*, SpitPluggableInfo*)) you_tube_service_real_get_info;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	iface->activation = (void (*)(SpitPluggable*, gboolean)) you_tube_service_real_activation;
-#line 697 "YouTubePublishing.c"
+#line 699 "YouTubePublishing.c"
 }
 
 
@@ -726,7 +728,7 @@ static void you_tube_service_spit_publishing_service_interface_init (SpitPublish
 	iface->create_publisher = (SpitPublishingPublisher* (*)(SpitPublishingService*, SpitPublishingPluginHost*)) you_tube_service_real_create_publisher;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	iface->get_supported_media = (SpitPublishingPublisherMediaType (*)(SpitPublishingService*)) you_tube_service_real_get_supported_media;
-#line 708 "YouTubePublishing.c"
+#line 710 "YouTubePublishing.c"
 }
 
 
@@ -740,7 +742,7 @@ static void you_tube_service_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_YOU_TUBE_SERVICE, YouTubeService);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	G_OBJECT_CLASS (you_tube_service_parent_class)->finalize (obj);
-#line 722 "YouTubePublishing.c"
+#line 724 "YouTubePublishing.c"
 }
 
 
@@ -788,14 +790,14 @@ PublishingYouTubePublishingParameters* publishing_you_tube_publishing_parameters
 	self->priv->user_name = NULL;
 #line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 770 "YouTubePublishing.c"
+#line 772 "YouTubePublishing.c"
 }
 
 
 PublishingYouTubePublishingParameters* publishing_you_tube_publishing_parameters_new (void) {
 #line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_publishing_parameters_construct (PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_PARAMETERS);
-#line 777 "YouTubePublishing.c"
+#line 779 "YouTubePublishing.c"
 }
 
 
@@ -810,7 +812,7 @@ PublishingYouTubePrivacySetting publishing_you_tube_publishing_parameters_get_pr
 	result = _tmp0_;
 #line 80 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 792 "YouTubePublishing.c"
+#line 794 "YouTubePublishing.c"
 }
 
 
@@ -822,7 +824,7 @@ void publishing_you_tube_publishing_parameters_set_privacy (PublishingYouTubePub
 	_tmp0_ = privacy;
 #line 84 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->privacy = _tmp0_;
-#line 804 "YouTubePublishing.c"
+#line 806 "YouTubePublishing.c"
 }
 
 
@@ -840,7 +842,7 @@ gchar* publishing_you_tube_publishing_parameters_get_channel_name (PublishingYou
 	result = _tmp1_;
 #line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 822 "YouTubePublishing.c"
+#line 824 "YouTubePublishing.c"
 }
 
 
@@ -857,7 +859,7 @@ void publishing_you_tube_publishing_parameters_set_channel_name (PublishingYouTu
 	_g_free0 (self->priv->channel_name);
 #line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->channel_name = _tmp1_;
-#line 839 "YouTubePublishing.c"
+#line 841 "YouTubePublishing.c"
 }
 
 
@@ -875,7 +877,7 @@ gchar* publishing_you_tube_publishing_parameters_get_user_name (PublishingYouTub
 	result = _tmp1_;
 #line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 857 "YouTubePublishing.c"
+#line 859 "YouTubePublishing.c"
 }
 
 
@@ -892,14 +894,14 @@ void publishing_you_tube_publishing_parameters_set_user_name (PublishingYouTubeP
 	_g_free0 (self->priv->user_name);
 #line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->user_name = _tmp1_;
-#line 874 "YouTubePublishing.c"
+#line 876 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_value_publishing_parameters_init (GValue* value) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 881 "YouTubePublishing.c"
+#line 883 "YouTubePublishing.c"
 }
 
 
@@ -908,7 +910,7 @@ static void publishing_you_tube_value_publishing_parameters_free_value (GValue* 
 	if (value->data[0].v_pointer) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_parameters_unref (value->data[0].v_pointer);
-#line 890 "YouTubePublishing.c"
+#line 892 "YouTubePublishing.c"
 	}
 }
 
@@ -918,11 +920,11 @@ static void publishing_you_tube_value_publishing_parameters_copy_value (const GV
 	if (src_value->data[0].v_pointer) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		dest_value->data[0].v_pointer = publishing_you_tube_publishing_parameters_ref (src_value->data[0].v_pointer);
-#line 900 "YouTubePublishing.c"
+#line 902 "YouTubePublishing.c"
 	} else {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 904 "YouTubePublishing.c"
+#line 906 "YouTubePublishing.c"
 	}
 }
 
@@ -930,37 +932,37 @@ static void publishing_you_tube_value_publishing_parameters_copy_value (const GV
 static gpointer publishing_you_tube_value_publishing_parameters_peek_pointer (const GValue* value) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return value->data[0].v_pointer;
-#line 912 "YouTubePublishing.c"
+#line 914 "YouTubePublishing.c"
 }
 
 
 static gchar* publishing_you_tube_value_publishing_parameters_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 919 "YouTubePublishing.c"
+#line 921 "YouTubePublishing.c"
 		PublishingYouTubePublishingParameters* object;
 		object = collect_values[0].v_pointer;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 926 "YouTubePublishing.c"
+#line 928 "YouTubePublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 930 "YouTubePublishing.c"
+#line 932 "YouTubePublishing.c"
 		}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = publishing_you_tube_publishing_parameters_ref (object);
-#line 934 "YouTubePublishing.c"
+#line 936 "YouTubePublishing.c"
 	} else {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 938 "YouTubePublishing.c"
+#line 940 "YouTubePublishing.c"
 	}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return NULL;
-#line 942 "YouTubePublishing.c"
+#line 944 "YouTubePublishing.c"
 }
 
 
@@ -971,25 +973,25 @@ static gchar* publishing_you_tube_value_publishing_parameters_lcopy_value (const
 	if (!object_p) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 953 "YouTubePublishing.c"
+#line 955 "YouTubePublishing.c"
 	}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (!value->data[0].v_pointer) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = NULL;
-#line 959 "YouTubePublishing.c"
+#line 961 "YouTubePublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 963 "YouTubePublishing.c"
+#line 965 "YouTubePublishing.c"
 	} else {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = publishing_you_tube_publishing_parameters_ref (value->data[0].v_pointer);
-#line 967 "YouTubePublishing.c"
+#line 969 "YouTubePublishing.c"
 	}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return NULL;
-#line 971 "YouTubePublishing.c"
+#line 973 "YouTubePublishing.c"
 }
 
 
@@ -1003,7 +1005,7 @@ GParamSpec* publishing_you_tube_param_spec_publishing_parameters (const gchar* n
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 985 "YouTubePublishing.c"
+#line 987 "YouTubePublishing.c"
 }
 
 
@@ -1012,7 +1014,7 @@ gpointer publishing_you_tube_value_get_publishing_parameters (const GValue* valu
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_PARAMETERS), NULL);
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return value->data[0].v_pointer;
-#line 994 "YouTubePublishing.c"
+#line 996 "YouTubePublishing.c"
 }
 
 
@@ -1032,17 +1034,17 @@ void publishing_you_tube_value_set_publishing_parameters (GValue* value, gpointe
 		value->data[0].v_pointer = v_object;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_parameters_ref (value->data[0].v_pointer);
-#line 1014 "YouTubePublishing.c"
+#line 1016 "YouTubePublishing.c"
 	} else {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1018 "YouTubePublishing.c"
+#line 1020 "YouTubePublishing.c"
 	}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (old) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_parameters_unref (old);
-#line 1024 "YouTubePublishing.c"
+#line 1026 "YouTubePublishing.c"
 	}
 }
 
@@ -1061,17 +1063,17 @@ void publishing_you_tube_value_take_publishing_parameters (GValue* value, gpoint
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1043 "YouTubePublishing.c"
+#line 1045 "YouTubePublishing.c"
 	} else {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1047 "YouTubePublishing.c"
+#line 1049 "YouTubePublishing.c"
 	}
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (old) {
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_parameters_unref (old);
-#line 1053 "YouTubePublishing.c"
+#line 1055 "YouTubePublishing.c"
 	}
 }
 
@@ -1083,7 +1085,7 @@ static void publishing_you_tube_publishing_parameters_class_init (PublishingYouT
 	((PublishingYouTubePublishingParametersClass *) klass)->finalize = publishing_you_tube_publishing_parameters_finalize;
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYouTubePublishingParametersPrivate));
-#line 1065 "YouTubePublishing.c"
+#line 1067 "YouTubePublishing.c"
 }
 
 
@@ -1092,7 +1094,7 @@ static void publishing_you_tube_publishing_parameters_instance_init (PublishingY
 	self->priv = PUBLISHING_YOU_TUBE_PUBLISHING_PARAMETERS_GET_PRIVATE (self);
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->ref_count = 1;
-#line 1074 "YouTubePublishing.c"
+#line 1076 "YouTubePublishing.c"
 }
 
 
@@ -1106,7 +1108,7 @@ static void publishing_you_tube_publishing_parameters_finalize (PublishingYouTub
 	_g_free0 (self->priv->channel_name);
 #line 71 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_g_free0 (self->priv->user_name);
-#line 1088 "YouTubePublishing.c"
+#line 1090 "YouTubePublishing.c"
 }
 
 
@@ -1131,7 +1133,7 @@ gpointer publishing_you_tube_publishing_parameters_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return instance;
-#line 1113 "YouTubePublishing.c"
+#line 1115 "YouTubePublishing.c"
 }
 
 
@@ -1144,7 +1146,7 @@ void publishing_you_tube_publishing_parameters_unref (gpointer instance) {
 		PUBLISHING_YOU_TUBE_PUBLISHING_PARAMETERS_GET_CLASS (self)->finalize (self);
 #line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1126 "YouTubePublishing.c"
+#line 1128 "YouTubePublishing.c"
 	}
 }
 
@@ -1198,14 +1200,14 @@ PublishingYouTubeYouTubePublisher* publishing_you_tube_you_tube_publisher_constr
 	self->priv->progress_reporter_target_destroy_notify = NULL;
 #line 127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 1180 "YouTubePublishing.c"
+#line 1182 "YouTubePublishing.c"
 }
 
 
 PublishingYouTubeYouTubePublisher* publishing_you_tube_you_tube_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host) {
 #line 127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_you_tube_publisher_construct (PUBLISHING_YOU_TUBE_TYPE_YOU_TUBE_PUBLISHER, service, host);
-#line 1187 "YouTubePublishing.c"
+#line 1189 "YouTubePublishing.c"
 }
 
 
@@ -1221,7 +1223,7 @@ static gboolean publishing_you_tube_you_tube_publisher_real_is_running (Publishi
 	result = _tmp0_;
 #line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 1203 "YouTubePublishing.c"
+#line 1205 "YouTubePublishing.c"
 }
 
 
@@ -1239,7 +1241,7 @@ static void publishing_you_tube_you_tube_publisher_real_start (PublishingRESTSup
 	if (_tmp0_) {
 #line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1221 "YouTubePublishing.c"
+#line 1223 "YouTubePublishing.c"
 	}
 #line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->running = TRUE;
@@ -1249,14 +1251,14 @@ static void publishing_you_tube_you_tube_publisher_real_start (PublishingRESTSup
 	if (_tmp1_ == NULL) {
 #line 149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_you_tube_publisher_do_show_service_welcome_pane (self);
-#line 1231 "YouTubePublishing.c"
+#line 1233 "YouTubePublishing.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 #line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp2_ = self->priv->refresh_token;
 #line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_rest_support_google_publisher_start_oauth_flow (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher), _tmp2_);
-#line 1238 "YouTubePublishing.c"
+#line 1240 "YouTubePublishing.c"
 	}
 }
 
@@ -1279,7 +1281,7 @@ static void publishing_you_tube_you_tube_publisher_real_stop (PublishingRESTSupp
 	publishing_rest_support_session_stop_transactions (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
 #line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 1261 "YouTubePublishing.c"
+#line 1263 "YouTubePublishing.c"
 }
 
 
@@ -1306,7 +1308,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 	_tmp2_ = _tmp1_->name;
 #line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (g_strcmp0 (_tmp2_, "feed") == 0) {
-#line 1288 "YouTubePublishing.c"
+#line 1290 "YouTubePublishing.c"
 		xmlNode* _tmp3_ = NULL;
 		xmlNode* _tmp4_ = NULL;
 #line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1315,7 +1317,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 		_tmp4_ = _tmp3_->children;
 #line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		doc_node_iter = _tmp4_;
-#line 1297 "YouTubePublishing.c"
+#line 1299 "YouTubePublishing.c"
 	} else {
 		xmlNode* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
@@ -1325,13 +1327,13 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 		_tmp6_ = _tmp5_->name;
 #line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (g_strcmp0 (_tmp6_, "entry") == 0) {
-#line 1307 "YouTubePublishing.c"
+#line 1309 "YouTubePublishing.c"
 			xmlNode* _tmp7_ = NULL;
 #line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_tmp7_ = document_root;
 #line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			doc_node_iter = _tmp7_;
-#line 1313 "YouTubePublishing.c"
+#line 1315 "YouTubePublishing.c"
 		} else {
 			GError* _tmp8_ = NULL;
 #line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1346,7 +1348,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 				_g_free0 (_result_);
 #line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				return NULL;
-#line 1328 "YouTubePublishing.c"
+#line 1330 "YouTubePublishing.c"
 			} else {
 #line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				_g_free0 (_result_);
@@ -1356,7 +1358,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 				g_clear_error (&_inner_error_);
 #line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				return NULL;
-#line 1338 "YouTubePublishing.c"
+#line 1340 "YouTubePublishing.c"
 			}
 		}
 	}
@@ -1366,7 +1368,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 		_tmp9_ = TRUE;
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		while (TRUE) {
-#line 1348 "YouTubePublishing.c"
+#line 1350 "YouTubePublishing.c"
 			xmlNode* _tmp12_ = NULL;
 			xmlNode* _tmp13_ = NULL;
 			const gchar* _tmp14_ = NULL;
@@ -1379,7 +1381,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 			gchar* _tmp33_ = NULL;
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			if (!_tmp9_) {
-#line 1361 "YouTubePublishing.c"
+#line 1363 "YouTubePublishing.c"
 				xmlNode* _tmp10_ = NULL;
 				xmlNode* _tmp11_ = NULL;
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1388,7 +1390,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 				_tmp11_ = _tmp10_->next;
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				doc_node_iter = _tmp11_;
-#line 1370 "YouTubePublishing.c"
+#line 1372 "YouTubePublishing.c"
 			}
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_tmp9_ = FALSE;
@@ -1398,7 +1400,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 			if (!(_tmp12_ != NULL)) {
 #line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				break;
-#line 1380 "YouTubePublishing.c"
+#line 1382 "YouTubePublishing.c"
 			}
 #line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_tmp13_ = doc_node_iter;
@@ -1408,7 +1410,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 			if (g_strcmp0 (_tmp14_, "entry") != 0) {
 #line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				continue;
-#line 1390 "YouTubePublishing.c"
+#line 1392 "YouTubePublishing.c"
 			}
 #line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			name_val = NULL;
@@ -1420,20 +1422,20 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 			_tmp16_ = _tmp15_->children;
 #line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			channel_node_iter = _tmp16_;
-#line 1402 "YouTubePublishing.c"
+#line 1404 "YouTubePublishing.c"
 			{
 				gboolean _tmp17_ = FALSE;
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				_tmp17_ = TRUE;
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				while (TRUE) {
-#line 1409 "YouTubePublishing.c"
+#line 1411 "YouTubePublishing.c"
 					xmlNode* _tmp20_ = NULL;
 					xmlNode* _tmp21_ = NULL;
 					const gchar* _tmp22_ = NULL;
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 					if (!_tmp17_) {
-#line 1415 "YouTubePublishing.c"
+#line 1417 "YouTubePublishing.c"
 						xmlNode* _tmp18_ = NULL;
 						xmlNode* _tmp19_ = NULL;
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1442,7 +1444,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 						_tmp19_ = _tmp18_->next;
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 						channel_node_iter = _tmp19_;
-#line 1424 "YouTubePublishing.c"
+#line 1426 "YouTubePublishing.c"
 					}
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 					_tmp17_ = FALSE;
@@ -1452,7 +1454,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 					if (!(_tmp20_ != NULL)) {
 #line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 						break;
-#line 1434 "YouTubePublishing.c"
+#line 1436 "YouTubePublishing.c"
 					}
 #line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 					_tmp21_ = channel_node_iter;
@@ -1460,7 +1462,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 					_tmp22_ = _tmp21_->name;
 #line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 					if (g_strcmp0 (_tmp22_, "title") == 0) {
-#line 1442 "YouTubePublishing.c"
+#line 1444 "YouTubePublishing.c"
 						xmlNode* _tmp23_ = NULL;
 						gchar* _tmp24_ = NULL;
 #line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1471,7 +1473,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 						_g_free0 (name_val);
 #line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 						name_val = _tmp24_;
-#line 1453 "YouTubePublishing.c"
+#line 1455 "YouTubePublishing.c"
 					} else {
 						xmlNode* _tmp25_ = NULL;
 						const gchar* _tmp26_ = NULL;
@@ -1481,7 +1483,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 						_tmp26_ = _tmp25_->name;
 #line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 						if (g_strcmp0 (_tmp26_, "id") == 0) {
-#line 1463 "YouTubePublishing.c"
+#line 1465 "YouTubePublishing.c"
 							xmlNode* _tmp27_ = NULL;
 							xmlNs* _tmp28_ = NULL;
 							const gchar* _tmp29_ = NULL;
@@ -1497,7 +1499,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 							if (_tmp29_ != NULL) {
 #line 190 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 								continue;
-#line 1479 "YouTubePublishing.c"
+#line 1481 "YouTubePublishing.c"
 							}
 #line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 							_tmp30_ = channel_node_iter;
@@ -1507,7 +1509,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 							_g_free0 (url_val);
 #line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 							url_val = _tmp31_;
-#line 1489 "YouTubePublishing.c"
+#line 1491 "YouTubePublishing.c"
 						}
 					}
 				}
@@ -1526,7 +1528,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 			_g_free0 (name_val);
 #line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			break;
-#line 1508 "YouTubePublishing.c"
+#line 1510 "YouTubePublishing.c"
 		}
 	}
 #line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -1538,7 +1540,7 @@ static gchar* publishing_you_tube_you_tube_publisher_extract_channel_name_helper
 	result = _result_;
 #line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 1519 "YouTubePublishing.c"
+#line 1521 "YouTubePublishing.c"
 }
 
 
@@ -1556,13 +1558,13 @@ static void publishing_you_tube_you_tube_publisher_on_service_welcome_login (Pub
 	if (!_tmp0_) {
 #line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1536 "YouTubePublishing.c"
+#line 1538 "YouTubePublishing.c"
 	}
 #line 210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp1_ = self->priv->refresh_token;
 #line 210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_rest_support_google_publisher_start_oauth_flow (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher), _tmp1_);
-#line 1542 "YouTubePublishing.c"
+#line 1544 "YouTubePublishing.c"
 }
 
 
@@ -1616,21 +1618,21 @@ static void publishing_you_tube_you_tube_publisher_real_on_login_flow_complete (
 	_publishing_rest_support_session_unref0 (_tmp7_);
 #line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_fetch_account_information (self);
-#line 1596 "YouTubePublishing.c"
+#line 1598 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
 #line 224 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_complete ((PublishingYouTubeYouTubePublisher*) self, _sender);
-#line 1603 "YouTubePublishing.c"
+#line 1605 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
 #line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_error ((PublishingYouTubeYouTubePublisher*) self, _sender, err);
-#line 1610 "YouTubePublishing.c"
+#line 1612 "YouTubePublishing.c"
 }
 
 
@@ -1666,13 +1668,13 @@ static void publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_comp
 	if (!_tmp4_) {
 #line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1645 "YouTubePublishing.c"
+#line 1647 "YouTubePublishing.c"
 	}
 #line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp5_ = txn;
 #line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_parse_and_display_account_information (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_TYPE_CHANNEL_DIRECTORY_TRANSACTION, PublishingYouTubeYouTubePublisherChannelDirectoryTransaction));
-#line 1651 "YouTubePublishing.c"
+#line 1653 "YouTubePublishing.c"
 }
 
 
@@ -1720,7 +1722,7 @@ static void publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_erro
 	if (!_tmp7_) {
 #line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1698 "YouTubePublishing.c"
+#line 1700 "YouTubePublishing.c"
 	}
 #line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp8_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
@@ -1728,7 +1730,7 @@ static void publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_erro
 	_tmp9_ = err;
 #line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp8_, _tmp9_);
-#line 1706 "YouTubePublishing.c"
+#line 1708 "YouTubePublishing.c"
 }
 
 
@@ -1745,11 +1747,11 @@ static void publishing_you_tube_you_tube_publisher_on_publishing_options_logout 
 	if (!_tmp0_) {
 #line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1722 "YouTubePublishing.c"
+#line 1724 "YouTubePublishing.c"
 	}
 #line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_rest_support_google_publisher_do_logout (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
-#line 1726 "YouTubePublishing.c"
+#line 1728 "YouTubePublishing.c"
 }
 
 
@@ -1766,11 +1768,11 @@ static void publishing_you_tube_you_tube_publisher_on_publishing_options_publish
 	if (!_tmp0_) {
 #line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1742 "YouTubePublishing.c"
+#line 1744 "YouTubePublishing.c"
 	}
 #line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_upload (self);
-#line 1746 "YouTubePublishing.c"
+#line 1748 "YouTubePublishing.c"
 }
 
 
@@ -1802,7 +1804,7 @@ static void publishing_you_tube_you_tube_publisher_on_upload_status_updated (Pub
 	if (!_tmp2_) {
 #line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1777 "YouTubePublishing.c"
+#line 1779 "YouTubePublishing.c"
 	}
 #line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp3_ = self->priv->progress_reporter;
@@ -1814,21 +1816,21 @@ static void publishing_you_tube_you_tube_publisher_on_upload_status_updated (Pub
 	_tmp5_ = completed_fraction;
 #line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp3_ (_tmp4_, _tmp5_, _tmp3__target);
-#line 1789 "YouTubePublishing.c"
+#line 1791 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete (PublishingRESTSupportBatchUploader* _sender, gint num_photos_published, gpointer self) {
 #line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_upload_complete ((PublishingYouTubeYouTubePublisher*) self, _sender, num_photos_published);
-#line 1796 "YouTubePublishing.c"
+#line 1798 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self) {
 #line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_upload_error ((PublishingYouTubeYouTubePublisher*) self, _sender, err);
-#line 1803 "YouTubePublishing.c"
+#line 1805 "YouTubePublishing.c"
 }
 
 
@@ -1866,11 +1868,11 @@ static void publishing_you_tube_you_tube_publisher_on_upload_complete (Publishin
 	if (!_tmp5_) {
 #line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1840 "YouTubePublishing.c"
+#line 1842 "YouTubePublishing.c"
 	}
 #line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_show_success_pane (self);
-#line 1844 "YouTubePublishing.c"
+#line 1846 "YouTubePublishing.c"
 }
 
 
@@ -1906,7 +1908,7 @@ static void publishing_you_tube_you_tube_publisher_on_upload_error (PublishingYo
 	if (!_tmp4_) {
 #line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 1880 "YouTubePublishing.c"
+#line 1882 "YouTubePublishing.c"
 	}
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp5_ = err;
@@ -1921,14 +1923,14 @@ static void publishing_you_tube_you_tube_publisher_on_upload_error (PublishingYo
 	_tmp8_ = err;
 #line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 1894 "YouTubePublishing.c"
+#line 1896 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_service_welcome_login_spit_publishing_login_callback (gpointer self) {
 #line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_service_welcome_login ((PublishingYouTubeYouTubePublisher*) self);
-#line 1901 "YouTubePublishing.c"
+#line 1903 "YouTubePublishing.c"
 }
 
 
@@ -1942,7 +1944,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_service_welcome_pane 
 	_tmp0_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	spit_publishing_plugin_host_install_welcome_pane (_tmp0_, PUBLISHING_YOU_TUBE_SERVICE_WELCOME_MESSAGE, _publishing_you_tube_you_tube_publisher_on_service_welcome_login_spit_publishing_login_callback, self);
-#line 1915 "YouTubePublishing.c"
+#line 1917 "YouTubePublishing.c"
 }
 
 
@@ -1983,7 +1985,7 @@ static void publishing_you_tube_you_tube_publisher_do_fetch_account_information 
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_error_publishing_rest_support_transaction_network_error, self, 0);
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_complete_publishing_rest_support_transaction_completed, self, 0);
-#line 1956 "YouTubePublishing.c"
+#line 1958 "YouTubePublishing.c"
 	{
 #line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
@@ -1991,7 +1993,7 @@ static void publishing_you_tube_you_tube_publisher_do_fetch_account_information 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 1964 "YouTubePublishing.c"
+#line 1966 "YouTubePublishing.c"
 				goto __catch27_spit_publishing_publishing_error;
 			}
 #line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2002,7 +2004,7 @@ static void publishing_you_tube_you_tube_publisher_do_fetch_account_information 
 			g_clear_error (&_inner_error_);
 #line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 1975 "YouTubePublishing.c"
+#line 1977 "YouTubePublishing.c"
 		}
 	}
 	goto __finally27;
@@ -2020,7 +2022,7 @@ static void publishing_you_tube_you_tube_publisher_do_fetch_account_information 
 		publishing_you_tube_you_tube_publisher_on_initial_channel_fetch_error (self, G_TYPE_CHECK_INSTANCE_CAST (directory_trans, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), _tmp6_);
 #line 321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_g_error_free0 (err);
-#line 1993 "YouTubePublishing.c"
+#line 1995 "YouTubePublishing.c"
 	}
 	__finally27:
 #line 321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2033,11 +2035,11 @@ static void publishing_you_tube_you_tube_publisher_do_fetch_account_information 
 		g_clear_error (&_inner_error_);
 #line 321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2006 "YouTubePublishing.c"
+#line 2008 "YouTubePublishing.c"
 	}
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_publishing_rest_support_transaction_unref0 (directory_trans);
-#line 2010 "YouTubePublishing.c"
+#line 2012 "YouTubePublishing.c"
 }
 
 
@@ -2046,7 +2048,7 @@ static gchar* _publishing_you_tube_you_tube_publisher_channel_directory_transact
 	result = publishing_you_tube_you_tube_publisher_channel_directory_transaction_validate_xml (doc);
 #line 333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 2019 "YouTubePublishing.c"
+#line 2021 "YouTubePublishing.c"
 }
 
 
@@ -2060,7 +2062,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 #line 329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_debug ("YouTubePublishing.vala:329: ACTION: extracting account and channel inf" \
 "ormation from body of server response");
-#line 2032 "YouTubePublishing.c"
+#line 2034 "YouTubePublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* _tmp0_ = NULL;
 		PublishingYouTubeYouTubePublisherChannelDirectoryTransaction* _tmp1_ = NULL;
@@ -2087,7 +2089,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2059 "YouTubePublishing.c"
+#line 2061 "YouTubePublishing.c"
 				goto __catch28_spit_publishing_publishing_error;
 			}
 #line 333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2098,7 +2100,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 			g_clear_error (&_inner_error_);
 #line 333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 2070 "YouTubePublishing.c"
+#line 2072 "YouTubePublishing.c"
 		}
 #line 333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp6_ = _tmp0_;
@@ -2110,7 +2112,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		response_doc = _tmp6_;
 #line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (_tmp0_);
-#line 2082 "YouTubePublishing.c"
+#line 2084 "YouTubePublishing.c"
 	}
 	goto __finally28;
 	__catch28_spit_publishing_publishing_error:
@@ -2134,7 +2136,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		_publishing_rest_support_xml_document_unref0 (response_doc);
 #line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2106 "YouTubePublishing.c"
+#line 2108 "YouTubePublishing.c"
 	}
 	__finally28:
 #line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2147,7 +2149,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		g_clear_error (&_inner_error_);
 #line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2119 "YouTubePublishing.c"
+#line 2121 "YouTubePublishing.c"
 	}
 	{
 		gchar* _tmp9_ = NULL;
@@ -2167,7 +2169,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2139 "YouTubePublishing.c"
+#line 2141 "YouTubePublishing.c"
 				goto __catch29_spit_publishing_publishing_error;
 			}
 #line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2178,7 +2180,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 			g_clear_error (&_inner_error_);
 #line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 2150 "YouTubePublishing.c"
+#line 2152 "YouTubePublishing.c"
 		}
 #line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp13_ = self->priv->publishing_parameters;
@@ -2186,7 +2188,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		publishing_you_tube_publishing_parameters_set_channel_name (_tmp13_, _tmp9_);
 #line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_g_free0 (_tmp9_);
-#line 2158 "YouTubePublishing.c"
+#line 2160 "YouTubePublishing.c"
 	}
 	goto __finally29;
 	__catch29_spit_publishing_publishing_error:
@@ -2210,7 +2212,7 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		_publishing_rest_support_xml_document_unref0 (response_doc);
 #line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2182 "YouTubePublishing.c"
+#line 2184 "YouTubePublishing.c"
 	}
 	__finally29:
 #line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2223,27 +2225,27 @@ static void publishing_you_tube_you_tube_publisher_do_parse_and_display_account_
 		g_clear_error (&_inner_error_);
 #line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2195 "YouTubePublishing.c"
+#line 2197 "YouTubePublishing.c"
 	}
 #line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_show_publishing_options_pane (self);
 #line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 2201 "YouTubePublishing.c"
+#line 2203 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_publishing_options_publish_publishing_you_tube_publishing_options_pane_publish (PublishingYouTubePublishingOptionsPane* _sender, gpointer self) {
 #line 369 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_publishing_options_publish ((PublishingYouTubeYouTubePublisher*) self);
-#line 2208 "YouTubePublishing.c"
+#line 2210 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_publishing_options_logout_publishing_you_tube_publishing_options_pane_logout (PublishingYouTubePublishingOptionsPane* _sender, gpointer self) {
 #line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_publishing_options_logout ((PublishingYouTubeYouTubePublisher*) self);
-#line 2215 "YouTubePublishing.c"
+#line 2217 "YouTubePublishing.c"
 }
 
 
@@ -2269,7 +2271,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 	_tmp0_ = gtk_builder_new ();
 #line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	builder = _tmp0_;
-#line 2241 "YouTubePublishing.c"
+#line 2243 "YouTubePublishing.c"
 	{
 		GtkBuilder* _tmp1_ = NULL;
 #line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2278,7 +2280,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 		gtk_builder_add_from_resource (_tmp1_, PLUGIN_RESOURCE_PATH "/youtube_publishing_options_pane.ui", &_inner_error_);
 #line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2250 "YouTubePublishing.c"
+#line 2252 "YouTubePublishing.c"
 			goto __catch30_g_error;
 		}
 	}
@@ -2321,7 +2323,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 		_g_object_unref0 (builder);
 #line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2292 "YouTubePublishing.c"
+#line 2294 "YouTubePublishing.c"
 	}
 	__finally30:
 #line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2334,7 +2336,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 		g_clear_error (&_inner_error_);
 #line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2305 "YouTubePublishing.c"
+#line 2307 "YouTubePublishing.c"
 	}
 #line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp8_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
@@ -2368,14 +2370,14 @@ static void publishing_you_tube_you_tube_publisher_do_show_publishing_options_pa
 	_g_object_unref0 (opts_pane);
 #line 351 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_g_object_unref0 (builder);
-#line 2339 "YouTubePublishing.c"
+#line 2341 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_you_tube_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
 #line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_on_upload_status_updated ((PublishingYouTubeYouTubePublisher*) self, file_number, fraction_complete);
-#line 2346 "YouTubePublishing.c"
+#line 2348 "YouTubePublishing.c"
 }
 
 
@@ -2441,7 +2443,7 @@ static void publishing_you_tube_you_tube_publisher_do_upload (PublishingYouTubeY
 	if (!_tmp6_) {
 #line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return;
-#line 2411 "YouTubePublishing.c"
+#line 2413 "YouTubePublishing.c"
 	}
 #line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp7_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
@@ -2487,7 +2489,7 @@ static void publishing_you_tube_you_tube_publisher_do_upload (PublishingYouTubeY
 	_publishing_rest_support_batch_uploader_unref0 (uploader);
 #line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2457 "YouTubePublishing.c"
+#line 2459 "YouTubePublishing.c"
 }
 
 
@@ -2506,7 +2508,7 @@ static void publishing_you_tube_you_tube_publisher_do_show_success_pane (Publish
 	_tmp1_ = publishing_rest_support_google_publisher_get_host (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_PUBLISHER, PublishingRESTSupportGooglePublisher));
 #line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp1_);
-#line 2476 "YouTubePublishing.c"
+#line 2478 "YouTubePublishing.c"
 }
 
 
@@ -2537,7 +2539,7 @@ static void publishing_you_tube_you_tube_publisher_real_do_logout (PublishingRES
 	spit_host_interface_unset_config_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "refresh_token");
 #line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_do_show_service_welcome_pane (self);
-#line 2507 "YouTubePublishing.c"
+#line 2509 "YouTubePublishing.c"
 }
 
 
@@ -2552,14 +2554,14 @@ static PublishingYouTubeYouTubePublisherChannelDirectoryTransaction* publishing_
 	self = (PublishingYouTubeYouTubePublisherChannelDirectoryTransaction*) publishing_rest_support_google_publisher_authenticated_transaction_construct (object_type, _tmp0_, PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_CHANNEL_DIRECTORY_TRANSACTION_ENDPOINT_URL, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
 #line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 2522 "YouTubePublishing.c"
+#line 2524 "YouTubePublishing.c"
 }
 
 
 static PublishingYouTubeYouTubePublisherChannelDirectoryTransaction* publishing_you_tube_you_tube_publisher_channel_directory_transaction_new (PublishingRESTSupportGoogleSession* session) {
 #line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_you_tube_publisher_channel_directory_transaction_construct (PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_TYPE_CHANNEL_DIRECTORY_TRANSACTION, session);
-#line 2529 "YouTubePublishing.c"
+#line 2531 "YouTubePublishing.c"
 }
 
 
@@ -2587,7 +2589,7 @@ static gchar* publishing_you_tube_you_tube_publisher_channel_directory_transacti
 	if (g_strcmp0 (_tmp4_, "feed") == 0) {
 #line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp2_ = TRUE;
-#line 2557 "YouTubePublishing.c"
+#line 2559 "YouTubePublishing.c"
 	} else {
 		xmlNode* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
@@ -2597,7 +2599,7 @@ static gchar* publishing_you_tube_you_tube_publisher_channel_directory_transacti
 		_tmp6_ = _tmp5_->name;
 #line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp2_ = g_strcmp0 (_tmp6_, "entry") == 0;
-#line 2567 "YouTubePublishing.c"
+#line 2569 "YouTubePublishing.c"
 	}
 #line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (_tmp2_) {
@@ -2605,7 +2607,7 @@ static gchar* publishing_you_tube_you_tube_publisher_channel_directory_transacti
 		result = NULL;
 #line 116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return result;
-#line 2575 "YouTubePublishing.c"
+#line 2577 "YouTubePublishing.c"
 	} else {
 		gchar* _tmp7_ = NULL;
 #line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -2614,7 +2616,7 @@ static gchar* publishing_you_tube_you_tube_publisher_channel_directory_transacti
 		result = _tmp7_;
 #line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return result;
-#line 2584 "YouTubePublishing.c"
+#line 2586 "YouTubePublishing.c"
 	}
 }
 
@@ -2622,7 +2624,7 @@ static gchar* publishing_you_tube_you_tube_publisher_channel_directory_transacti
 static void publishing_you_tube_you_tube_publisher_channel_directory_transaction_class_init (PublishingYouTubeYouTubePublisherChannelDirectoryTransactionClass * klass) {
 #line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_you_tube_publisher_channel_directory_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 2592 "YouTubePublishing.c"
+#line 2594 "YouTubePublishing.c"
 }
 
 
@@ -2659,14 +2661,14 @@ static void publishing_you_tube_you_tube_publisher_class_init (PublishingYouTube
 	((PublishingRESTSupportGooglePublisherClass *) klass)->do_logout = publishing_you_tube_you_tube_publisher_real_do_logout;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_you_tube_you_tube_publisher_finalize;
-#line 2629 "YouTubePublishing.c"
+#line 2631 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_you_tube_publisher_instance_init (PublishingYouTubeYouTubePublisher * self) {
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv = PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_GET_PRIVATE (self);
-#line 2636 "YouTubePublishing.c"
+#line 2638 "YouTubePublishing.c"
 }
 
 
@@ -2688,7 +2690,7 @@ static void publishing_you_tube_you_tube_publisher_finalize (GObject* obj) {
 	self->priv->progress_reporter_target_destroy_notify = NULL;
 #line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	G_OBJECT_CLASS (publishing_you_tube_you_tube_publisher_parent_class)->finalize (obj);
-#line 2658 "YouTubePublishing.c"
+#line 2660 "YouTubePublishing.c"
 }
 
 
@@ -2707,28 +2709,28 @@ GType publishing_you_tube_you_tube_publisher_get_type (void) {
 static gpointer _publishing_you_tube_publishing_parameters_ref0 (gpointer self) {
 #line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self ? publishing_you_tube_publishing_parameters_ref (self) : NULL;
-#line 2677 "YouTubePublishing.c"
+#line 2679 "YouTubePublishing.c"
 }
 
 
 static gpointer _publishing_you_tube_publishing_options_pane_privacy_description_ref0 (gpointer self) {
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self ? publishing_you_tube_publishing_options_pane_privacy_description_ref (self) : NULL;
-#line 2684 "YouTubePublishing.c"
+#line 2686 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_publishing_options_pane_on_logout_clicked ((PublishingYouTubePublishingOptionsPane*) self);
-#line 2691 "YouTubePublishing.c"
+#line 2693 "YouTubePublishing.c"
 }
 
 
 static void _publishing_you_tube_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_publishing_options_pane_on_publish_clicked ((PublishingYouTubePublishingOptionsPane*) self);
-#line 2698 "YouTubePublishing.c"
+#line 2700 "YouTubePublishing.c"
 }
 
 
@@ -2951,7 +2953,7 @@ PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_p
 	_tmp46_ = self->priv->privacy_descriptions;
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp46__length1 = self->priv->privacy_descriptions_length1;
-#line 2921 "YouTubePublishing.c"
+#line 2923 "YouTubePublishing.c"
 	{
 		PublishingYouTubePublishingOptionsPanePrivacyDescription** desc_collection = NULL;
 		gint desc_collection_length1 = 0;
@@ -2963,14 +2965,14 @@ PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_p
 		desc_collection_length1 = _tmp46__length1;
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		for (desc_it = 0; desc_it < _tmp46__length1; desc_it = desc_it + 1) {
-#line 2933 "YouTubePublishing.c"
+#line 2935 "YouTubePublishing.c"
 			PublishingYouTubePublishingOptionsPanePrivacyDescription* _tmp47_ = NULL;
 			PublishingYouTubePublishingOptionsPanePrivacyDescription* desc = NULL;
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_tmp47_ = _publishing_you_tube_publishing_options_pane_privacy_description_ref0 (desc_collection[desc_it]);
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			desc = _tmp47_;
-#line 2940 "YouTubePublishing.c"
+#line 2942 "YouTubePublishing.c"
 			{
 				GtkComboBoxText* _tmp48_ = NULL;
 				PublishingYouTubePublishingOptionsPanePrivacyDescription* _tmp49_ = NULL;
@@ -2985,7 +2987,7 @@ PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_p
 				gtk_combo_box_text_append_text (_tmp48_, _tmp50_);
 #line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 				_publishing_you_tube_publishing_options_pane_privacy_description_unref0 (desc);
-#line 2955 "YouTubePublishing.c"
+#line 2957 "YouTubePublishing.c"
 			}
 		}
 	}
@@ -3009,14 +3011,14 @@ PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_p
 	g_signal_connect_object (_tmp55_, "clicked", (GCallback) _publishing_you_tube_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
 #line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 2979 "YouTubePublishing.c"
+#line 2981 "YouTubePublishing.c"
 }
 
 
 PublishingYouTubePublishingOptionsPane* publishing_you_tube_publishing_options_pane_new (SpitPublishingPluginHost* host, GtkBuilder* builder, PublishingYouTubePublishingParameters* publishing_parameters) {
 #line 445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_publishing_options_pane_construct (PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_OPTIONS_PANE, host, builder, publishing_parameters);
-#line 2986 "YouTubePublishing.c"
+#line 2988 "YouTubePublishing.c"
 }
 
 
@@ -3048,7 +3050,7 @@ static void publishing_you_tube_publishing_options_pane_on_publish_clicked (Publ
 	publishing_you_tube_publishing_parameters_set_privacy (_tmp0_, _tmp5_);
 #line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_signal_emit_by_name (self, "publish");
-#line 3018 "YouTubePublishing.c"
+#line 3020 "YouTubePublishing.c"
 }
 
 
@@ -3057,7 +3059,7 @@ static void publishing_you_tube_publishing_options_pane_on_logout_clicked (Publi
 	g_return_if_fail (PUBLISHING_YOU_TUBE_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 3027 "YouTubePublishing.c"
+#line 3029 "YouTubePublishing.c"
 }
 
 
@@ -3069,7 +3071,7 @@ static void publishing_you_tube_publishing_options_pane_update_publish_button_se
 	_tmp0_ = self->priv->publish_button;
 #line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 3039 "YouTubePublishing.c"
+#line 3041 "YouTubePublishing.c"
 }
 
 
@@ -3080,13 +3082,13 @@ static void _vala_array_add31 (PublishingYouTubePublishingOptionsPanePrivacyDesc
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*array = g_renew (PublishingYouTubePublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 3050 "YouTubePublishing.c"
+#line 3052 "YouTubePublishing.c"
 	}
 #line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[(*length)++] = value;
 #line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[*length] = NULL;
-#line 3056 "YouTubePublishing.c"
+#line 3058 "YouTubePublishing.c"
 }
 
 
@@ -3097,13 +3099,13 @@ static void _vala_array_add32 (PublishingYouTubePublishingOptionsPanePrivacyDesc
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*array = g_renew (PublishingYouTubePublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 3067 "YouTubePublishing.c"
+#line 3069 "YouTubePublishing.c"
 	}
 #line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[(*length)++] = value;
 #line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[*length] = NULL;
-#line 3073 "YouTubePublishing.c"
+#line 3075 "YouTubePublishing.c"
 }
 
 
@@ -3114,13 +3116,13 @@ static void _vala_array_add33 (PublishingYouTubePublishingOptionsPanePrivacyDesc
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*array = g_renew (PublishingYouTubePublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 3084 "YouTubePublishing.c"
+#line 3086 "YouTubePublishing.c"
 	}
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[(*length)++] = value;
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	(*array)[*length] = NULL;
-#line 3090 "YouTubePublishing.c"
+#line 3092 "YouTubePublishing.c"
 }
 
 
@@ -3192,13 +3194,13 @@ static PublishingYouTubePublishingOptionsPanePrivacyDescription** publishing_you
 	if (result_length1) {
 #line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*result_length1 = _tmp10__length1;
-#line 3162 "YouTubePublishing.c"
+#line 3164 "YouTubePublishing.c"
 	}
 #line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	result = _tmp10_;
 #line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 3168 "YouTubePublishing.c"
+#line 3170 "YouTubePublishing.c"
 }
 
 
@@ -3222,7 +3224,7 @@ static GtkWidget* publishing_you_tube_publishing_options_pane_real_get_widget (S
 	result = _tmp2_;
 #line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 3192 "YouTubePublishing.c"
+#line 3194 "YouTubePublishing.c"
 }
 
 
@@ -3235,7 +3237,7 @@ static SpitPublishingDialogPaneGeometryOptions publishing_you_tube_publishing_op
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
 #line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 3205 "YouTubePublishing.c"
+#line 3207 "YouTubePublishing.c"
 }
 
 
@@ -3245,7 +3247,7 @@ static void publishing_you_tube_publishing_options_pane_real_on_pane_installed (
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYouTubePublishingOptionsPane);
 #line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_publishing_options_pane_update_publish_button_sensitivity (self);
-#line 3215 "YouTubePublishing.c"
+#line 3217 "YouTubePublishing.c"
 }
 
 
@@ -3253,7 +3255,7 @@ static void publishing_you_tube_publishing_options_pane_real_on_pane_uninstalled
 	PublishingYouTubePublishingOptionsPane * self;
 #line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingYouTubePublishingOptionsPane);
-#line 3223 "YouTubePublishing.c"
+#line 3225 "YouTubePublishing.c"
 }
 
 
@@ -3280,21 +3282,21 @@ static PublishingYouTubePublishingOptionsPanePrivacyDescription* publishing_you_
 	self->privacy_setting = _tmp2_;
 #line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 3250 "YouTubePublishing.c"
+#line 3252 "YouTubePublishing.c"
 }
 
 
 static PublishingYouTubePublishingOptionsPanePrivacyDescription* publishing_you_tube_publishing_options_pane_privacy_description_new (const gchar* description, PublishingYouTubePrivacySetting privacy_setting) {
 #line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_publishing_options_pane_privacy_description_construct (PUBLISHING_YOU_TUBE_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION, description, privacy_setting);
-#line 3257 "YouTubePublishing.c"
+#line 3259 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_publishing_options_pane_value_privacy_description_init (GValue* value) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 3264 "YouTubePublishing.c"
+#line 3266 "YouTubePublishing.c"
 }
 
 
@@ -3303,7 +3305,7 @@ static void publishing_you_tube_publishing_options_pane_value_privacy_descriptio
 	if (value->data[0].v_pointer) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_options_pane_privacy_description_unref (value->data[0].v_pointer);
-#line 3273 "YouTubePublishing.c"
+#line 3275 "YouTubePublishing.c"
 	}
 }
 
@@ -3313,11 +3315,11 @@ static void publishing_you_tube_publishing_options_pane_value_privacy_descriptio
 	if (src_value->data[0].v_pointer) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		dest_value->data[0].v_pointer = publishing_you_tube_publishing_options_pane_privacy_description_ref (src_value->data[0].v_pointer);
-#line 3283 "YouTubePublishing.c"
+#line 3285 "YouTubePublishing.c"
 	} else {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3287 "YouTubePublishing.c"
+#line 3289 "YouTubePublishing.c"
 	}
 }
 
@@ -3325,37 +3327,37 @@ static void publishing_you_tube_publishing_options_pane_value_privacy_descriptio
 static gpointer publishing_you_tube_publishing_options_pane_value_privacy_description_peek_pointer (const GValue* value) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return value->data[0].v_pointer;
-#line 3295 "YouTubePublishing.c"
+#line 3297 "YouTubePublishing.c"
 }
 
 
 static gchar* publishing_you_tube_publishing_options_pane_value_privacy_description_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 3302 "YouTubePublishing.c"
+#line 3304 "YouTubePublishing.c"
 		PublishingYouTubePublishingOptionsPanePrivacyDescription* object;
 		object = collect_values[0].v_pointer;
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3309 "YouTubePublishing.c"
+#line 3311 "YouTubePublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3313 "YouTubePublishing.c"
+#line 3315 "YouTubePublishing.c"
 		}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = publishing_you_tube_publishing_options_pane_privacy_description_ref (object);
-#line 3317 "YouTubePublishing.c"
+#line 3319 "YouTubePublishing.c"
 	} else {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3321 "YouTubePublishing.c"
+#line 3323 "YouTubePublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return NULL;
-#line 3325 "YouTubePublishing.c"
+#line 3327 "YouTubePublishing.c"
 }
 
 
@@ -3366,25 +3368,25 @@ static gchar* publishing_you_tube_publishing_options_pane_value_privacy_descript
 	if (!object_p) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3336 "YouTubePublishing.c"
+#line 3338 "YouTubePublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (!value->data[0].v_pointer) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = NULL;
-#line 3342 "YouTubePublishing.c"
+#line 3344 "YouTubePublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3346 "YouTubePublishing.c"
+#line 3348 "YouTubePublishing.c"
 	} else {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		*object_p = publishing_you_tube_publishing_options_pane_privacy_description_ref (value->data[0].v_pointer);
-#line 3350 "YouTubePublishing.c"
+#line 3352 "YouTubePublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return NULL;
-#line 3354 "YouTubePublishing.c"
+#line 3356 "YouTubePublishing.c"
 }
 
 
@@ -3398,7 +3400,7 @@ static GParamSpec* publishing_you_tube_publishing_options_pane_param_spec_privac
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 3368 "YouTubePublishing.c"
+#line 3370 "YouTubePublishing.c"
 }
 
 
@@ -3407,7 +3409,7 @@ static gpointer publishing_you_tube_publishing_options_pane_value_get_privacy_de
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_YOU_TUBE_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION), NULL);
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return value->data[0].v_pointer;
-#line 3377 "YouTubePublishing.c"
+#line 3379 "YouTubePublishing.c"
 }
 
 
@@ -3427,17 +3429,17 @@ static void publishing_you_tube_publishing_options_pane_value_set_privacy_descri
 		value->data[0].v_pointer = v_object;
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_options_pane_privacy_description_ref (value->data[0].v_pointer);
-#line 3397 "YouTubePublishing.c"
+#line 3399 "YouTubePublishing.c"
 	} else {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3401 "YouTubePublishing.c"
+#line 3403 "YouTubePublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (old) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_options_pane_privacy_description_unref (old);
-#line 3407 "YouTubePublishing.c"
+#line 3409 "YouTubePublishing.c"
 	}
 }
 
@@ -3456,17 +3458,17 @@ static void publishing_you_tube_publishing_options_pane_value_take_privacy_descr
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 3426 "YouTubePublishing.c"
+#line 3428 "YouTubePublishing.c"
 	} else {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 3430 "YouTubePublishing.c"
+#line 3432 "YouTubePublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (old) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		publishing_you_tube_publishing_options_pane_privacy_description_unref (old);
-#line 3436 "YouTubePublishing.c"
+#line 3438 "YouTubePublishing.c"
 	}
 }
 
@@ -3476,14 +3478,14 @@ static void publishing_you_tube_publishing_options_pane_privacy_description_clas
 	publishing_you_tube_publishing_options_pane_privacy_description_parent_class = g_type_class_peek_parent (klass);
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	((PublishingYouTubePublishingOptionsPanePrivacyDescriptionClass *) klass)->finalize = publishing_you_tube_publishing_options_pane_privacy_description_finalize;
-#line 3446 "YouTubePublishing.c"
+#line 3448 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_publishing_options_pane_privacy_description_instance_init (PublishingYouTubePublishingOptionsPanePrivacyDescription * self) {
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->ref_count = 1;
-#line 3453 "YouTubePublishing.c"
+#line 3455 "YouTubePublishing.c"
 }
 
 
@@ -3495,7 +3497,7 @@ static void publishing_you_tube_publishing_options_pane_privacy_description_fina
 	g_signal_handlers_destroy (self);
 #line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_g_free0 (self->description);
-#line 3465 "YouTubePublishing.c"
+#line 3467 "YouTubePublishing.c"
 }
 
 
@@ -3520,7 +3522,7 @@ static gpointer publishing_you_tube_publishing_options_pane_privacy_description_
 	g_atomic_int_inc (&self->ref_count);
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return instance;
-#line 3490 "YouTubePublishing.c"
+#line 3492 "YouTubePublishing.c"
 }
 
 
@@ -3533,7 +3535,7 @@ static void publishing_you_tube_publishing_options_pane_privacy_description_unre
 		PUBLISHING_YOU_TUBE_PUBLISHING_OPTIONS_PANE_PRIVACY_DESCRIPTION_GET_CLASS (self)->finalize (self);
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3503 "YouTubePublishing.c"
+#line 3505 "YouTubePublishing.c"
 	}
 }
 
@@ -3549,7 +3551,7 @@ static void publishing_you_tube_publishing_options_pane_class_init (PublishingYo
 	g_signal_new ("publish", PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_signal_new ("logout", PUBLISHING_YOU_TUBE_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 3519 "YouTubePublishing.c"
+#line 3521 "YouTubePublishing.c"
 }
 
 
@@ -3564,7 +3566,7 @@ static void publishing_you_tube_publishing_options_pane_spit_publishing_dialog_p
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_you_tube_publishing_options_pane_real_on_pane_installed;
 #line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_you_tube_publishing_options_pane_real_on_pane_uninstalled;
-#line 3534 "YouTubePublishing.c"
+#line 3536 "YouTubePublishing.c"
 }
 
 
@@ -3587,7 +3589,7 @@ static void publishing_you_tube_publishing_options_pane_instance_init (Publishin
 	self->priv->builder = NULL;
 #line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->privacy_label = NULL;
-#line 3557 "YouTubePublishing.c"
+#line 3559 "YouTubePublishing.c"
 }
 
 
@@ -3617,7 +3619,7 @@ static void publishing_you_tube_publishing_options_pane_finalize (GObject* obj) 
 	_publishing_you_tube_publishing_parameters_unref0 (self->priv->publishing_parameters);
 #line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	G_OBJECT_CLASS (publishing_you_tube_publishing_options_pane_parent_class)->finalize (obj);
-#line 3587 "YouTubePublishing.c"
+#line 3589 "YouTubePublishing.c"
 }
 
 
@@ -3638,7 +3640,7 @@ GType publishing_you_tube_publishing_options_pane_get_type (void) {
 static gpointer _publishing_rest_support_session_ref0 (gpointer self) {
 #line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self ? publishing_rest_support_session_ref (self) : NULL;
-#line 3608 "YouTubePublishing.c"
+#line 3610 "YouTubePublishing.c"
 }
 
 
@@ -3695,14 +3697,14 @@ PublishingYouTubeUploadTransaction* publishing_you_tube_upload_transaction_const
 	self->priv->publishable = _tmp8_;
 #line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 3665 "YouTubePublishing.c"
+#line 3667 "YouTubePublishing.c"
 }
 
 
 PublishingYouTubeUploadTransaction* publishing_you_tube_upload_transaction_new (PublishingRESTSupportGoogleSession* session, PublishingYouTubePublishingParameters* parameters, SpitPublishingPublishable* publishable) {
 #line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_upload_transaction_construct (PUBLISHING_YOU_TUBE_TYPE_UPLOAD_TRANSACTION, session, parameters, publishable);
-#line 3672 "YouTubePublishing.c"
+#line 3674 "YouTubePublishing.c"
 }
 
 
@@ -3746,27 +3748,41 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 3716 "YouTubePublishing.c"
+#line 3718 "YouTubePublishing.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 3722 "YouTubePublishing.c"
+#line 3724 "YouTubePublishing.c"
+}
+
+
+static guint8* _vala_array_dup11 (guint8* self, int length) {
+#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	return g_memdup (self, length * sizeof (guint8));
+#line 3731 "YouTubePublishing.c"
 }
 
 
 static void _vala_SoupBuffer_free (SoupBuffer* self) {
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_boxed_free (soup_buffer_get_type (), self);
-#line 3729 "YouTubePublishing.c"
+#line 3738 "YouTubePublishing.c"
 }
 
 
 static void _vala_SoupMultipart_free (SoupMultipart* self) {
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_boxed_free (soup_multipart_get_type (), self);
-#line 3736 "YouTubePublishing.c"
+#line 3745 "YouTubePublishing.c"
+}
+
+
+static guint8* _vala_array_dup12 (guint8* self, int length) {
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	return g_memdup (self, length * sizeof (guint8));
+#line 3752 "YouTubePublishing.c"
 }
 
 
@@ -3802,44 +3818,47 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	gint _tmp22__length1 = 0;
 	guint8* _tmp23_ = NULL;
 	gint _tmp23__length1 = 0;
-	SoupBuffer* _tmp24_ = NULL;
-	SoupMultipart* _tmp25_ = NULL;
-	SoupBuffer* _tmp26_ = NULL;
+	guint8* _tmp24_ = NULL;
+	gint _tmp24__length1 = 0;
+	SoupBuffer* _tmp25_ = NULL;
+	SoupMultipart* _tmp26_ = NULL;
+	SoupBuffer* _tmp27_ = NULL;
 	gchar* video_data = NULL;
 	gsize data_length = 0UL;
 	SoupBuffer* bindable_data = NULL;
-	const gchar* _tmp46_ = NULL;
-	guint8* _tmp47_ = NULL;
-	gint _tmp47__length1 = 0;
+	const gchar* _tmp47_ = NULL;
 	guint8* _tmp48_ = NULL;
 	gint _tmp48__length1 = 0;
-	gsize _tmp49_ = 0UL;
-	SoupBuffer* _tmp50_ = NULL;
-	SoupMultipart* _tmp51_ = NULL;
-	SpitPublishingPublishable* _tmp52_ = NULL;
-	GFile* _tmp53_ = NULL;
+	guint8* _tmp49_ = NULL;
+	gint _tmp49__length1 = 0;
+	guint8* _tmp50_ = NULL;
+	gint _tmp50__length1 = 0;
+	SoupBuffer* _tmp51_ = NULL;
+	SoupMultipart* _tmp52_ = NULL;
+	SpitPublishingPublishable* _tmp53_ = NULL;
 	GFile* _tmp54_ = NULL;
-	gchar* _tmp55_ = NULL;
+	GFile* _tmp55_ = NULL;
 	gchar* _tmp56_ = NULL;
-	SoupMessage* outbound_message = NULL;
 	gchar* _tmp57_ = NULL;
+	SoupMessage* outbound_message = NULL;
 	gchar* _tmp58_ = NULL;
-	SoupMultipart* _tmp59_ = NULL;
-	SoupMessage* _tmp60_ = NULL;
+	gchar* _tmp59_ = NULL;
+	SoupMultipart* _tmp60_ = NULL;
 	SoupMessage* _tmp61_ = NULL;
-	SoupMessageHeaders* _tmp62_ = NULL;
-	gchar* _tmp63_ = NULL;
+	SoupMessage* _tmp62_ = NULL;
+	SoupMessageHeaders* _tmp63_ = NULL;
 	gchar* _tmp64_ = NULL;
-	SoupMessageHeaders* _tmp65_ = NULL;
-	SpitPublishingPublishable* _tmp66_ = NULL;
-	gchar* _tmp67_ = NULL;
+	gchar* _tmp65_ = NULL;
+	SoupMessageHeaders* _tmp66_ = NULL;
+	SpitPublishingPublishable* _tmp67_ = NULL;
 	gchar* _tmp68_ = NULL;
-	SoupMessageHeaders* _tmp69_ = NULL;
-	PublishingRESTSupportGoogleSession* _tmp70_ = NULL;
-	gchar* _tmp71_ = NULL;
+	gchar* _tmp69_ = NULL;
+	SoupMessageHeaders* _tmp70_ = NULL;
+	PublishingRESTSupportGoogleSession* _tmp71_ = NULL;
 	gchar* _tmp72_ = NULL;
 	gchar* _tmp73_ = NULL;
 	gchar* _tmp74_ = NULL;
+	gchar* _tmp75_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YOU_TUBE_TYPE_UPLOAD_TRANSACTION, PublishingYouTubeUploadTransaction);
@@ -3855,11 +3874,11 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	if (_tmp3_ == PUBLISHING_YOU_TUBE_PRIVACY_SETTING_UNLISTED) {
 #line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp1_ = PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_UNLISTED_XML;
-#line 3825 "YouTubePublishing.c"
+#line 3844 "YouTubePublishing.c"
 	} else {
 #line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp1_ = "";
-#line 3829 "YouTubePublishing.c"
+#line 3848 "YouTubePublishing.c"
 	}
 #line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp4_ = g_strdup (_tmp1_);
@@ -3873,11 +3892,11 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	if (_tmp7_ == PUBLISHING_YOU_TUBE_PRIVACY_SETTING_PRIVATE) {
 #line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp5_ = PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_PRIVATE_XML;
-#line 3843 "YouTubePublishing.c"
+#line 3862 "YouTubePublishing.c"
 	} else {
 #line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp5_ = "";
-#line 3847 "YouTubePublishing.c"
+#line 3866 "YouTubePublishing.c"
 	}
 #line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp8_ = g_strdup (_tmp5_);
@@ -3893,7 +3912,7 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	_tmp11_ = title;
 #line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (g_strcmp0 (_tmp11_, "") == 0) {
-#line 3863 "YouTubePublishing.c"
+#line 3882 "YouTubePublishing.c"
 		SpitPublishingPublishable* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
 #line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -3904,7 +3923,7 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 		_g_free0 (title);
 #line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		title = _tmp13_;
-#line 3874 "YouTubePublishing.c"
+#line 3893 "YouTubePublishing.c"
 	}
 #line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp14_ = title;
@@ -3933,51 +3952,55 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 #line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp23__length1 = _tmp22__length1;
 #line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp24_ = soup_buffer_new (SOUP_MEMORY_COPY, _tmp23_, _tmp23__length1);
+	_tmp24_ = (_tmp23_ != NULL) ? _vala_array_dup11 (_tmp23_, _tmp23__length1) : ((gpointer) _tmp23_);
 #line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	metadata_buffer = _tmp24_;
+	_tmp24__length1 = _tmp23__length1;
+#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp25_ = soup_buffer_new_take (_tmp24_, _tmp24__length1);
+#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	metadata_buffer = _tmp25_;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp25_ = message_parts;
+	_tmp26_ = message_parts;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp26_ = metadata_buffer;
+	_tmp27_ = metadata_buffer;
 #line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	soup_multipart_append_form_file (_tmp25_, "", "", "application/atom+xml", _tmp26_);
-#line 3912 "YouTubePublishing.c"
+	soup_multipart_append_form_file (_tmp26_, "", "", "application/atom+xml", _tmp27_);
+#line 3935 "YouTubePublishing.c"
 	{
-		SpitPublishingPublishable* _tmp27_ = NULL;
-		GFile* _tmp28_ = NULL;
+		SpitPublishingPublishable* _tmp28_ = NULL;
 		GFile* _tmp29_ = NULL;
-		gchar* _tmp30_ = NULL;
+		GFile* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
 		gchar* _tmp32_ = NULL;
-		gsize _tmp33_ = 0UL;
+		gchar* _tmp33_ = NULL;
+		gsize _tmp34_ = 0UL;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp27_ = self->priv->publishable;
+		_tmp28_ = self->priv->publishable;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp28_ = spit_publishing_publishable_get_serialized_file (_tmp27_);
+		_tmp29_ = spit_publishing_publishable_get_serialized_file (_tmp28_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp29_ = _tmp28_;
+		_tmp30_ = _tmp29_;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp30_ = g_file_get_path (_tmp29_);
+		_tmp31_ = g_file_get_path (_tmp30_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp31_ = _tmp30_;
+		_tmp32_ = _tmp31_;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		g_file_get_contents (_tmp31_, &_tmp32_, &_tmp33_, &_inner_error_);
+		g_file_get_contents (_tmp32_, &_tmp33_, &_tmp34_, &_inner_error_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_g_free0 (video_data);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		video_data = _tmp32_;
+		video_data = _tmp33_;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		data_length = _tmp33_;
+		data_length = _tmp34_;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_g_free0 (_tmp31_);
+		_g_free0 (_tmp32_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_g_object_unref0 (_tmp29_);
+		_g_object_unref0 (_tmp30_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 3947 "YouTubePublishing.c"
+#line 3970 "YouTubePublishing.c"
 				goto __catch31_g_file_error;
 			}
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -4000,7 +4023,7 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 			g_clear_error (&_inner_error_);
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 3970 "YouTubePublishing.c"
+#line 3993 "YouTubePublishing.c"
 		}
 	}
 	goto __finally31;
@@ -4008,61 +4031,61 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	{
 		GError* e = NULL;
 		gchar* msg = NULL;
-		SpitPublishingPublishable* _tmp34_ = NULL;
-		GFile* _tmp35_ = NULL;
+		SpitPublishingPublishable* _tmp35_ = NULL;
 		GFile* _tmp36_ = NULL;
-		gchar* _tmp37_ = NULL;
+		GFile* _tmp37_ = NULL;
 		gchar* _tmp38_ = NULL;
-		GError* _tmp39_ = NULL;
-		const gchar* _tmp40_ = NULL;
-		gchar* _tmp41_ = NULL;
+		gchar* _tmp39_ = NULL;
+		GError* _tmp40_ = NULL;
+		const gchar* _tmp41_ = NULL;
 		gchar* _tmp42_ = NULL;
-		const gchar* _tmp43_ = NULL;
+		gchar* _tmp43_ = NULL;
 		const gchar* _tmp44_ = NULL;
-		GError* _tmp45_ = NULL;
+		const gchar* _tmp45_ = NULL;
+		GError* _tmp46_ = NULL;
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		e = _inner_error_;
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_inner_error_ = NULL;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp34_ = self->priv->publishable;
+		_tmp35_ = self->priv->publishable;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp35_ = spit_publishing_publishable_get_serialized_file (_tmp34_);
+		_tmp36_ = spit_publishing_publishable_get_serialized_file (_tmp35_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp36_ = _tmp35_;
+		_tmp37_ = _tmp36_;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp37_ = g_file_get_path (_tmp36_);
+		_tmp38_ = g_file_get_path (_tmp37_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp38_ = _tmp37_;
+		_tmp39_ = _tmp38_;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp39_ = e;
+		_tmp40_ = e;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp40_ = _tmp39_->message;
+		_tmp41_ = _tmp40_->message;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp41_ = g_strdup_printf ("YouTube: couldn't read data from %s: %s", _tmp38_, _tmp40_);
+		_tmp42_ = g_strdup_printf ("YouTube: couldn't read data from %s: %s", _tmp39_, _tmp41_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp42_ = _tmp41_;
+		_tmp43_ = _tmp42_;
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_g_free0 (_tmp38_);
+		_g_free0 (_tmp39_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_g_object_unref0 (_tmp36_);
+		_g_object_unref0 (_tmp37_);
 #line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		msg = _tmp42_;
+		msg = _tmp43_;
 #line 580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp43_ = msg;
-#line 580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		g_warning ("YouTubePublishing.vala:580: %s", _tmp43_);
-#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_tmp44_ = msg;
+#line 580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+		g_warning ("YouTubePublishing.vala:580: %s", _tmp44_);
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_tmp45_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp44_);
+		_tmp45_ = msg;
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-		_inner_error_ = _tmp45_;
+		_tmp46_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp45_);
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+		_inner_error_ = _tmp46_;
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_g_free0 (msg);
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		_g_error_free0 (e);
-#line 4032 "YouTubePublishing.c"
+#line 4055 "YouTubePublishing.c"
 		goto __finally31;
 	}
 	__finally31:
@@ -4088,7 +4111,7 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 			__vala_SoupMultipart_free0 (message_parts);
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 4058 "YouTubePublishing.c"
+#line 4081 "YouTubePublishing.c"
 		} else {
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (video_data);
@@ -4110,154 +4133,156 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 			g_clear_error (&_inner_error_);
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 4080 "YouTubePublishing.c"
+#line 4103 "YouTubePublishing.c"
 		}
 	}
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp46_ = video_data;
+	_tmp47_ = video_data;
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp47_ = string_get_data (_tmp46_, &_tmp47__length1);
+	_tmp48_ = string_get_data (_tmp47_, &_tmp48__length1);
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp48_ = _tmp47_;
+	_tmp49_ = _tmp48_;
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp48__length1 = _tmp47__length1;
+	_tmp49__length1 = _tmp48__length1;
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp49_ = data_length;
+	_tmp50_ = (_tmp49_ != NULL) ? _vala_array_dup12 (_tmp49_, _tmp49__length1) : ((gpointer) _tmp49_);
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp50_ = soup_buffer_new (SOUP_MEMORY_COPY, _tmp48_ + 0, ((gint) _tmp49_) - 0);
+	_tmp50__length1 = _tmp49__length1;
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	bindable_data = _tmp50_;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp51_ = message_parts;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp52_ = self->priv->publishable;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp53_ = spit_publishing_publishable_get_serialized_file (_tmp52_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp54_ = _tmp53_;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp55_ = g_file_get_path (_tmp54_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp56_ = _tmp55_;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	soup_multipart_append_form_file (_tmp51_, "", _tmp56_, "video/mpeg", bindable_data);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp56_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_object_unref0 (_tmp54_);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp57_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp58_ = _tmp57_;
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp59_ = message_parts;
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp60_ = soup_form_request_new_from_multipart (_tmp58_, _tmp59_);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp61_ = _tmp60_;
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp58_);
-#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	outbound_message = _tmp61_;
+	_tmp51_ = soup_buffer_new_take (_tmp50_, _tmp50__length1);
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	bindable_data = _tmp51_;
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp52_ = message_parts;
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp53_ = self->priv->publishable;
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp54_ = spit_publishing_publishable_get_serialized_file (_tmp53_);
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp55_ = _tmp54_;
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp56_ = g_file_get_path (_tmp55_);
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp57_ = _tmp56_;
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	soup_multipart_append_form_file (_tmp52_, "", _tmp57_, "video/mpeg", bindable_data);
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp57_);
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_object_unref0 (_tmp55_);
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp58_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp59_ = _tmp58_;
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp60_ = message_parts;
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp61_ = soup_form_request_new_from_multipart (_tmp59_, _tmp60_);
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp62_ = _tmp61_;
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp59_);
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	outbound_message = _tmp62_;
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp63_ = outbound_message->request_headers;
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp64_ = g_strdup_printf ("key=%s", PUBLISHING_YOU_TUBE_DEVELOPER_KEY);
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp65_ = _tmp64_;
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	soup_message_headers_append (_tmp63_, "X-GData-Key", _tmp65_);
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp65_);
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp62_ = outbound_message->request_headers;
+	_tmp66_ = outbound_message->request_headers;
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp63_ = g_strdup_printf ("key=%s", PUBLISHING_YOU_TUBE_DEVELOPER_KEY);
+	_tmp67_ = self->priv->publishable;
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp64_ = _tmp63_;
+	_tmp68_ = spit_publishing_publishable_get_param_string (_tmp67_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	soup_message_headers_append (_tmp62_, "X-GData-Key", _tmp64_);
+	_tmp69_ = _tmp68_;
 #line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp64_);
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp65_ = outbound_message->request_headers;
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp66_ = self->priv->publishable;
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp67_ = spit_publishing_publishable_get_param_string (_tmp66_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp68_ = _tmp67_;
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	soup_message_headers_append (_tmp65_, "Slug", _tmp68_);
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp68_);
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp69_ = outbound_message->request_headers;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp70_ = self->priv->session;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp71_ = publishing_rest_support_google_session_get_access_token (_tmp70_);
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp72_ = _tmp71_;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp73_ = g_strconcat ("Bearer ", _tmp72_, NULL);
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_tmp74_ = _tmp73_;
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	soup_message_headers_append (_tmp69_, "Authorization", _tmp74_);
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp74_);
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_g_free0 (_tmp72_);
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	soup_message_headers_append (_tmp66_, "Slug", _tmp69_);
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp69_);
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp70_ = outbound_message->request_headers;
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp71_ = self->priv->session;
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp72_ = publishing_rest_support_google_session_get_access_token (_tmp71_);
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp73_ = _tmp72_;
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp74_ = g_strconcat ("Bearer ", _tmp73_, NULL);
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_tmp75_ = _tmp74_;
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	soup_message_headers_append (_tmp70_, "Authorization", _tmp75_);
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp75_);
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_g_free0 (_tmp73_);
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_rest_support_transaction_set_message (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), outbound_message);
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_rest_support_transaction_set_is_executed (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), TRUE);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_rest_support_transaction_send (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_object_unref0 (outbound_message);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupBuffer_free0 (bindable_data);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (video_data);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupBuffer_free0 (metadata_buffer);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (metadata);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (title);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (private_video);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (unlisted_video);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 4201 "YouTubePublishing.c"
+#line 4226 "YouTubePublishing.c"
 		} else {
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_object_unref0 (outbound_message);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupBuffer_free0 (bindable_data);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (video_data);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupBuffer_free0 (metadata_buffer);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (metadata);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (title);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (private_video);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			_g_free0 (unlisted_video);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			__vala_SoupMultipart_free0 (message_parts);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 			return;
-#line 4227 "YouTubePublishing.c"
+#line 4252 "YouTubePublishing.c"
 		}
 	}
 #line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
@@ -4278,7 +4303,7 @@ static void publishing_you_tube_upload_transaction_real_execute (PublishingRESTS
 	_g_free0 (unlisted_video);
 #line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	__vala_SoupMultipart_free0 (message_parts);
-#line 4248 "YouTubePublishing.c"
+#line 4273 "YouTubePublishing.c"
 }
 
 
@@ -4291,14 +4316,14 @@ static void publishing_you_tube_upload_transaction_class_init (PublishingYouTube
 	g_type_class_add_private (klass, sizeof (PublishingYouTubeUploadTransactionPrivate));
 #line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_you_tube_upload_transaction_real_execute;
-#line 4261 "YouTubePublishing.c"
+#line 4286 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_upload_transaction_instance_init (PublishingYouTubeUploadTransaction * self) {
 #line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv = PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_GET_PRIVATE (self);
-#line 4268 "YouTubePublishing.c"
+#line 4293 "YouTubePublishing.c"
 }
 
 
@@ -4314,7 +4339,7 @@ static void publishing_you_tube_upload_transaction_finalize (PublishingRESTSuppo
 	_g_object_unref0 (self->priv->publishable);
 #line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_you_tube_upload_transaction_parent_class)->finalize (obj);
-#line 4284 "YouTubePublishing.c"
+#line 4309 "YouTubePublishing.c"
 }
 
 
@@ -4337,36 +4362,36 @@ PublishingYouTubeUploader* publishing_you_tube_uploader_construct (GType object_
 	gint _tmp1__length1 = 0;
 	PublishingYouTubePublishingParameters* _tmp2_ = NULL;
 	PublishingYouTubePublishingParameters* _tmp3_ = NULL;
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_GOOGLE_SESSION (session), NULL);
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_YOU_TUBE_IS_PUBLISHING_PARAMETERS (parameters), NULL);
-#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp0_ = session;
-#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp1_ = publishables;
-#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp1__length1 = publishables_length1;
-#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = (PublishingYouTubeUploader*) publishing_rest_support_batch_uploader_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp1__length1);
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp2_ = parameters;
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp3_ = _publishing_you_tube_publishing_parameters_ref0 (_tmp2_);
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_publishing_you_tube_publishing_parameters_unref0 (self->priv->parameters);
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv->parameters = _tmp3_;
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return self;
-#line 4329 "YouTubePublishing.c"
+#line 4354 "YouTubePublishing.c"
 }
 
 
 PublishingYouTubeUploader* publishing_you_tube_uploader_new (PublishingRESTSupportGoogleSession* session, SpitPublishingPublishable** publishables, int publishables_length1, PublishingYouTubePublishingParameters* parameters) {
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return publishing_you_tube_uploader_construct (PUBLISHING_YOU_TUBE_TYPE_UPLOADER, session, publishables, publishables_length1, parameters);
-#line 4336 "YouTubePublishing.c"
+#line 4361 "YouTubePublishing.c"
 }
 
 
@@ -4380,65 +4405,65 @@ static PublishingRESTSupportTransaction* publishing_you_tube_uploader_real_creat
 	SpitPublishingPublishable* _tmp4_ = NULL;
 	PublishingYouTubeUploadTransaction* _tmp5_ = NULL;
 	PublishingRESTSupportTransaction* _tmp6_ = NULL;
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 619 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_YOU_TUBE_TYPE_UPLOADER, PublishingYouTubeUploader);
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 619 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp0_ = publishing_rest_support_batch_uploader_get_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_GOOGLE_SESSION, PublishingRESTSupportGoogleSession);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp2_ = self->priv->parameters;
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp3_ = publishing_rest_support_batch_uploader_get_current_publishable (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp5_ = publishing_you_tube_upload_transaction_new (_tmp1_, _tmp2_, _tmp4_);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_g_object_unref0 (_tmp4_);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	result = _tmp6_;
-#line 622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	return result;
-#line 4376 "YouTubePublishing.c"
+#line 4401 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_uploader_class_init (PublishingYouTubeUploaderClass * klass) {
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	publishing_you_tube_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->finalize = publishing_you_tube_uploader_finalize;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingYouTubeUploaderPrivate));
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_you_tube_uploader_real_create_transaction;
-#line 4389 "YouTubePublishing.c"
+#line 4414 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_uploader_instance_init (PublishingYouTubeUploader * self) {
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self->priv = PUBLISHING_YOU_TUBE_UPLOADER_GET_PRIVATE (self);
-#line 4396 "YouTubePublishing.c"
+#line 4421 "YouTubePublishing.c"
 }
 
 
 static void publishing_you_tube_uploader_finalize (PublishingRESTSupportBatchUploader* obj) {
 	PublishingYouTubeUploader * self;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_YOU_TUBE_TYPE_UPLOADER, PublishingYouTubeUploader);
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
-	_publishing_you_tube_publishing_parameters_unref0 (self->priv->parameters);
 #line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
+	_publishing_you_tube_publishing_parameters_unref0 (self->priv->parameters);
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/YouTubePublishing.vala"
 	PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_CLASS (publishing_you_tube_uploader_parent_class)->finalize (obj);
-#line 4408 "YouTubePublishing.c"
+#line 4433 "YouTubePublishing.c"
 }
 
 

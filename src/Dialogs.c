@@ -882,7 +882,6 @@ struct _TextEntryDialogPrivate {
 	GtkBuilder* builder;
 	GtkButton* button1;
 	GtkButton* button2;
-	GtkButtonBox* action_area_box;
 };
 
 struct _MultiTextEntryDialog {
@@ -901,7 +900,6 @@ struct _MultiTextEntryDialogPrivate {
 	GtkBuilder* builder;
 	GtkButton* button1;
 	GtkButton* button2;
-	GtkButtonBox* action_area_box;
 };
 
 struct _EventRenameDialog {
@@ -1575,13 +1573,13 @@ GFile* app_dirs_get_import_dir (void);
 static void welcome_dialog_install_import_content (WelcomeDialog* self);
 void spit_data_imports_welcome_import_meta_host_start (SpitDataImportsWelcomeImportMetaHost* self);
 void welcome_dialog_install_service_entry (WelcomeDialog* self, WelcomeServiceEntry* entry);
-static void _vala_array_add275 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value);
-static void _vala_array_add276 (GtkCheckButton*** array, int* length, int* size, GtkCheckButton* value);
+static void _vala_array_add109 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value);
+static void _vala_array_add110 (GtkCheckButton*** array, int* length, int* size, GtkCheckButton* value);
 static void welcome_dialog_on_dismiss (WelcomeDialog* self, gint resp);
 gboolean welcome_dialog_execute (WelcomeDialog* self, WelcomeServiceEntry*** selected_import_entries, int* selected_import_entries_length1, gboolean* do_system_pictures_import);
 static void _welcome_dialog_on_dismiss_gtk_dialog_response (GtkDialog* _sender, gint response_id, gpointer self);
-static void _vala_array_add277 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value);
-static WelcomeServiceEntry** _vala_array_dup30 (WelcomeServiceEntry** self, int length);
+static void _vala_array_add111 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value);
+static WelcomeServiceEntry** _vala_array_dup29 (WelcomeServiceEntry** self, int length);
 static void welcome_dialog_finalize (GObject* obj);
 gpointer preferences_dialog_ref (gpointer instance);
 void preferences_dialog_unref (gpointer instance);
@@ -1752,7 +1750,7 @@ gboolean dialogs_confirm_delete_tag (Tag* tag) {
 		result = TRUE;
 #line 14 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 1756 "Dialogs.c"
+#line 1754 "Dialogs.c"
 	}
 #line 15 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = count;
@@ -1788,7 +1786,7 @@ gboolean dialogs_confirm_delete_tag (Tag* tag) {
 	_g_free0 (msg);
 #line 20 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 1792 "Dialogs.c"
+#line 1790 "Dialogs.c"
 }
 
 
@@ -1834,7 +1832,7 @@ gboolean dialogs_confirm_delete_saved_search (SavedSearch* search) {
 	_g_free0 (msg);
 #line 28 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 1838 "Dialogs.c"
+#line 1836 "Dialogs.c"
 }
 
 
@@ -1888,7 +1886,7 @@ gboolean dialogs_confirm_warn_developer_changed (gint number) {
 	_g_object_unref0 (dialog);
 #line 46 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 1890 "Dialogs.c"
+#line 1888 "Dialogs.c"
 }
 
 
@@ -1924,7 +1922,7 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 	_tmp0_ = export_ui_current_export_dir;
 #line 55 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == NULL) {
-#line 1926 "Dialogs.c"
+#line 1924 "Dialogs.c"
 		const gchar* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
 #line 56 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -1935,7 +1933,7 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 		_g_object_unref0 (export_ui_current_export_dir);
 #line 56 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		export_ui_current_export_dir = _tmp2_;
-#line 1937 "Dialogs.c"
+#line 1935 "Dialogs.c"
 	}
 #line 58 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = current_file_basename;
@@ -1943,20 +1941,20 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 	_tmp5_ = video_reader_is_supported_video_filename (_tmp4_);
 #line 58 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_) {
-#line 1945 "Dialogs.c"
+#line 1943 "Dialogs.c"
 		const gchar* _tmp6_ = NULL;
 #line 59 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = _ ("Export Video");
 #line 59 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = _tmp6_;
-#line 1951 "Dialogs.c"
+#line 1949 "Dialogs.c"
 	} else {
 		const gchar* _tmp7_ = NULL;
 #line 59 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _ ("Export Photo");
 #line 59 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = _tmp7_;
-#line 1958 "Dialogs.c"
+#line 1956 "Dialogs.c"
 	}
 #line 58 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = g_strdup (_tmp3_);
@@ -2012,7 +2010,7 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 	_tmp23_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_dialog_get_type (), GtkDialog));
 #line 70 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp23_ == ((gint) GTK_RESPONSE_ACCEPT)) {
-#line 2014 "Dialogs.c"
+#line 2012 "Dialogs.c"
 		GtkFileChooserDialog* _tmp24_ = NULL;
 		gchar* _tmp25_ = NULL;
 		gchar* _tmp26_ = NULL;
@@ -2041,7 +2039,7 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 		_g_object_unref0 (export_ui_current_export_dir);
 #line 72 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		export_ui_current_export_dir = _tmp29_;
-#line 2043 "Dialogs.c"
+#line 2041 "Dialogs.c"
 	}
 #line 74 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp30_ = chooser;
@@ -2055,14 +2053,14 @@ GFile* export_ui_choose_file (const gchar* current_file_basename) {
 	_g_free0 (file_chooser_title);
 #line 76 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 2057 "Dialogs.c"
+#line 2055 "Dialogs.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 95 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2064 "Dialogs.c"
+#line 2062 "Dialogs.c"
 }
 
 
@@ -2089,7 +2087,7 @@ GFile* export_ui_choose_dir (const gchar* user_title) {
 	_tmp0_ = export_ui_current_export_dir;
 #line 80 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == NULL) {
-#line 2091 "Dialogs.c"
+#line 2089 "Dialogs.c"
 		const gchar* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
 #line 81 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -2100,19 +2098,19 @@ GFile* export_ui_choose_dir (const gchar* user_title) {
 		_g_object_unref0 (export_ui_current_export_dir);
 #line 81 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		export_ui_current_export_dir = _tmp2_;
-#line 2102 "Dialogs.c"
+#line 2100 "Dialogs.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = user_title;
 #line 83 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_ == NULL) {
-#line 2108 "Dialogs.c"
+#line 2106 "Dialogs.c"
 		const gchar* _tmp4_ = NULL;
 #line 84 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _ ("Export Photos");
 #line 84 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		user_title = _tmp4_;
-#line 2114 "Dialogs.c"
+#line 2112 "Dialogs.c"
 	}
 #line 86 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = user_title;
@@ -2154,7 +2152,7 @@ GFile* export_ui_choose_dir (const gchar* user_title) {
 	_tmp16_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_dialog_get_type (), GtkDialog));
 #line 93 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp16_ == ((gint) GTK_RESPONSE_ACCEPT)) {
-#line 2156 "Dialogs.c"
+#line 2154 "Dialogs.c"
 		GtkFileChooserDialog* _tmp17_ = NULL;
 		gchar* _tmp18_ = NULL;
 		gchar* _tmp19_ = NULL;
@@ -2183,7 +2181,7 @@ GFile* export_ui_choose_dir (const gchar* user_title) {
 		_g_object_unref0 (export_ui_current_export_dir);
 #line 95 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		export_ui_current_export_dir = _tmp22_;
-#line 2185 "Dialogs.c"
+#line 2183 "Dialogs.c"
 	}
 #line 98 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = chooser;
@@ -2195,7 +2193,7 @@ GFile* export_ui_choose_dir (const gchar* user_title) {
 	_g_object_unref0 (chooser);
 #line 100 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 2197 "Dialogs.c"
+#line 2195 "Dialogs.c"
 }
 
 
@@ -2210,18 +2208,18 @@ void open_external_editor_error_dialog (GError* err, Photo* photo) {
 	if (g_error_matches (_tmp1_, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED)) {
 #line 109 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = TRUE;
-#line 2212 "Dialogs.c"
+#line 2210 "Dialogs.c"
 	} else {
 		GError* _tmp2_ = NULL;
 #line 109 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = err;
 #line 109 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = g_error_matches (_tmp2_, G_FILE_ERROR, G_FILE_ERROR_PERM);
-#line 2219 "Dialogs.c"
+#line 2217 "Dialogs.c"
 	}
 #line 109 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 2223 "Dialogs.c"
+#line 2221 "Dialogs.c"
 		const gchar* _tmp3_ = NULL;
 		Photo* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
@@ -2263,7 +2261,7 @@ void open_external_editor_error_dialog (GError* err, Photo* photo) {
 		_g_object_unref0 (_tmp8_);
 #line 111 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp6_);
-#line 2264 "Dialogs.c"
+#line 2262 "Dialogs.c"
 	} else {
 		GError* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
@@ -2278,7 +2276,7 @@ void open_external_editor_error_dialog (GError* err, Photo* photo) {
 		app_window_error_message (_tmp15_, NULL);
 #line 116 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp15_);
-#line 2279 "Dialogs.c"
+#line 2277 "Dialogs.c"
 	}
 }
 
@@ -2318,7 +2316,7 @@ GtkResponseType export_error_dialog (GFile* dest, gboolean photos_remaining) {
 	_tmp6_ = photos_remaining;
 #line 126 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp6_) {
-#line 2319 "Dialogs.c"
+#line 2317 "Dialogs.c"
 		const gchar* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
@@ -2343,14 +2341,14 @@ GtkResponseType export_error_dialog (GFile* dest, gboolean photos_remaining) {
 		_tmp12_ = app_window_affirm_cancel_question (_tmp10_, _tmp11_, NULL, NULL);
 #line 128 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		response = _tmp12_;
-#line 2344 "Dialogs.c"
+#line 2342 "Dialogs.c"
 	} else {
 		const gchar* _tmp13_ = NULL;
 #line 130 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = message;
 #line 130 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		app_window_error_message (_tmp13_, NULL);
-#line 2351 "Dialogs.c"
+#line 2349 "Dialogs.c"
 	}
 #line 133 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = response;
@@ -2358,42 +2356,42 @@ GtkResponseType export_error_dialog (GFile* dest, gboolean photos_remaining) {
 	_g_free0 (message);
 #line 133 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 2359 "Dialogs.c"
+#line 2357 "Dialogs.c"
 }
 
 
 static void _export_dialog_on_constraint_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
 #line 214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_on_constraint_changed ((ExportDialog*) self);
-#line 2366 "Dialogs.c"
+#line 2364 "Dialogs.c"
 }
 
 
 static void _export_dialog_on_format_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
 #line 215 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_on_format_changed ((ExportDialog*) self);
-#line 2373 "Dialogs.c"
+#line 2371 "Dialogs.c"
 }
 
 
 static void _export_dialog_on_pixels_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
 #line 216 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_on_pixels_changed ((ExportDialog*) self);
-#line 2380 "Dialogs.c"
+#line 2378 "Dialogs.c"
 }
 
 
 static void _export_dialog_on_pixels_insert_text_gtk_editable_insert_text (GtkEditable* _sender, const gchar* new_text, gint new_text_length, gint* position, gpointer self) {
 #line 217 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_on_pixels_insert_text ((ExportDialog*) self, new_text, new_text_length, position);
-#line 2387 "Dialogs.c"
+#line 2385 "Dialogs.c"
 }
 
 
 static void _export_dialog_on_activate_gtk_entry_activate (GtkEntry* _sender, gpointer self) {
 #line 218 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_on_activate ((ExportDialog*) self);
-#line 2394 "Dialogs.c"
+#line 2392 "Dialogs.c"
 }
 
 
@@ -2477,11 +2475,11 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	if (_tmp2_) {
 #line 170 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 1;
-#line 2478 "Dialogs.c"
+#line 2476 "Dialogs.c"
 	} else {
 #line 170 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 0;
-#line 2482 "Dialogs.c"
+#line 2480 "Dialogs.c"
 	}
 #line 170 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (ExportDialog*) g_object_new (object_type, "use-header-bar", _tmp1_, NULL);
@@ -2541,7 +2539,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	self->priv->quality_combo = _tmp17_;
 #line 185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	ctr = 0;
-#line 2542 "Dialogs.c"
+#line 2540 "Dialogs.c"
 	{
 		JpegQuality* quality_collection = NULL;
 		gint quality_collection_length1 = 0;
@@ -2553,11 +2551,11 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 		quality_collection_length1 = G_N_ELEMENTS (EXPORT_DIALOG_QUALITY_ARRAY);
 #line 186 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		for (quality_it = 0; quality_it < G_N_ELEMENTS (EXPORT_DIALOG_QUALITY_ARRAY); quality_it = quality_it + 1) {
-#line 2554 "Dialogs.c"
+#line 2552 "Dialogs.c"
 			JpegQuality quality = 0;
 #line 186 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			quality = quality_collection[quality_it];
-#line 2558 "Dialogs.c"
+#line 2556 "Dialogs.c"
 			{
 				GtkComboBoxText* _tmp18_ = NULL;
 				JpegQuality _tmp19_ = 0;
@@ -2587,7 +2585,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 				_tmp24_ = _tmp23_.quality;
 #line 188 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp22_ == _tmp24_) {
-#line 2588 "Dialogs.c"
+#line 2586 "Dialogs.c"
 					GtkComboBoxText* _tmp25_ = NULL;
 					gint _tmp26_ = 0;
 #line 189 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -2596,13 +2594,13 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 					_tmp26_ = ctr;
 #line 189 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_combo_box_get_type (), GtkComboBox), _tmp26_);
-#line 2597 "Dialogs.c"
+#line 2595 "Dialogs.c"
 				}
 #line 190 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp27_ = ctr;
 #line 190 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				ctr = _tmp27_ + 1;
-#line 2603 "Dialogs.c"
+#line 2601 "Dialogs.c"
 			}
 		}
 	}
@@ -2616,7 +2614,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	self->priv->constraint_combo = _tmp28_;
 #line 194 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	ctr = 0;
-#line 2617 "Dialogs.c"
+#line 2615 "Dialogs.c"
 	{
 		ScaleConstraint* constraint_collection = NULL;
 		gint constraint_collection_length1 = 0;
@@ -2628,11 +2626,11 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 		constraint_collection_length1 = G_N_ELEMENTS (EXPORT_DIALOG_CONSTRAINT_ARRAY);
 #line 195 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		for (constraint_it = 0; constraint_it < G_N_ELEMENTS (EXPORT_DIALOG_CONSTRAINT_ARRAY); constraint_it = constraint_it + 1) {
-#line 2629 "Dialogs.c"
+#line 2627 "Dialogs.c"
 			ScaleConstraint constraint = 0;
 #line 195 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			constraint = constraint_collection[constraint_it];
-#line 2633 "Dialogs.c"
+#line 2631 "Dialogs.c"
 			{
 				GtkComboBoxText* _tmp29_ = NULL;
 				ScaleConstraint _tmp30_ = 0;
@@ -2659,7 +2657,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 				_tmp34_ = export_dialog_current_constraint;
 #line 197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp33_ == _tmp34_) {
-#line 2660 "Dialogs.c"
+#line 2658 "Dialogs.c"
 					GtkComboBoxText* _tmp35_ = NULL;
 					gint _tmp36_ = 0;
 #line 198 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -2668,13 +2666,13 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 					_tmp36_ = ctr;
 #line 198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_combo_box_get_type (), GtkComboBox), _tmp36_);
-#line 2669 "Dialogs.c"
+#line 2667 "Dialogs.c"
 				}
 #line 199 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp37_ = ctr;
 #line 199 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				ctr = _tmp37_ + 1;
-#line 2675 "Dialogs.c"
+#line 2673 "Dialogs.c"
 			}
 		}
 	}
@@ -2692,7 +2690,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	export_dialog_format_add_option (self, EXPORT_DIALOG_CURRENT_FORMAT_LABEL);
 #line 205 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp40_ = photo_file_format_get_writeable (&_tmp39_);
-#line 2693 "Dialogs.c"
+#line 2691 "Dialogs.c"
 	{
 		PhotoFileFormat* format_collection = NULL;
 		gint format_collection_length1 = 0;
@@ -2704,11 +2702,11 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 		format_collection_length1 = _tmp39_;
 #line 205 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		for (format_it = 0; format_it < _tmp39_; format_it = format_it + 1) {
-#line 2705 "Dialogs.c"
+#line 2703 "Dialogs.c"
 			PhotoFileFormat format = 0;
 #line 205 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			format = format_collection[format_it];
-#line 2709 "Dialogs.c"
+#line 2707 "Dialogs.c"
 			{
 				PhotoFileFormat _tmp41_ = 0;
 				PhotoFileFormatProperties* _tmp42_ = NULL;
@@ -2731,12 +2729,12 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 				_g_free0 (_tmp45_);
 #line 206 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_photo_file_format_properties_unref0 (_tmp43_);
-#line 2732 "Dialogs.c"
+#line 2730 "Dialogs.c"
 			}
 		}
 #line 205 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		format_collection = (g_free (format_collection), NULL);
-#line 2737 "Dialogs.c"
+#line 2735 "Dialogs.c"
 	}
 #line 209 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp46_ = (GtkEntry*) gtk_entry_new ();
@@ -2894,7 +2892,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	_tmp85_ = export_dialog_current_constraint;
 #line 254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp85_ == SCALE_CONSTRAINT_ORIGINAL) {
-#line 2895 "Dialogs.c"
+#line 2893 "Dialogs.c"
 		GtkEntry* _tmp86_ = NULL;
 		GtkComboBoxText* _tmp87_ = NULL;
 #line 255 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -2905,7 +2903,7 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 		_tmp87_ = self->priv->quality_combo;
 #line 256 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 2906 "Dialogs.c"
+#line 2904 "Dialogs.c"
 	}
 #line 259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp88_ = self->priv->ok_button;
@@ -2915,14 +2913,14 @@ ExportDialog* export_dialog_construct (GType object_type, const gchar* title) {
 	_g_object_unref0 (config);
 #line 167 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 2916 "Dialogs.c"
+#line 2914 "Dialogs.c"
 }
 
 
 ExportDialog* export_dialog_new (const gchar* title) {
 #line 167 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return export_dialog_construct (TYPE_EXPORT_DIALOG, title);
-#line 2923 "Dialogs.c"
+#line 2921 "Dialogs.c"
 }
 
 
@@ -2947,7 +2945,7 @@ static void export_dialog_format_add_option (ExportDialog* self, const gchar* fo
 	_tmp3_ = format_name;
 #line 264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_combo_box_text_append_text (_tmp2_, _tmp3_);
-#line 2948 "Dialogs.c"
+#line 2946 "Dialogs.c"
 }
 
 
@@ -2960,7 +2958,7 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 	g_return_if_fail (text != NULL);
 #line 268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	selection_ticker = 0;
-#line 2961 "Dialogs.c"
+#line 2959 "Dialogs.c"
 	{
 		GeeArrayList* _current_text_list = NULL;
 		GeeArrayList* _tmp0_ = NULL;
@@ -2988,7 +2986,7 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 		_current_text_index = -1;
 #line 270 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 2989 "Dialogs.c"
+#line 2987 "Dialogs.c"
 			gint _tmp5_ = 0;
 			gint _tmp6_ = 0;
 			gint _tmp7_ = 0;
@@ -3011,7 +3009,7 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 			if (!(_tmp6_ < _tmp7_)) {
 #line 270 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 3012 "Dialogs.c"
+#line 3010 "Dialogs.c"
 			}
 #line 270 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp8_ = _current_text_list;
@@ -3027,7 +3025,7 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 			_tmp12_ = text;
 #line 271 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (g_strcmp0 (_tmp11_, _tmp12_) == 0) {
-#line 3028 "Dialogs.c"
+#line 3026 "Dialogs.c"
 				GtkComboBoxText* _tmp13_ = NULL;
 				gint _tmp14_ = 0;
 #line 272 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3042,7 +3040,7 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 				_g_object_unref0 (_current_text_list);
 #line 273 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return;
-#line 3043 "Dialogs.c"
+#line 3041 "Dialogs.c"
 			}
 #line 275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp15_ = selection_ticker;
@@ -3050,17 +3048,17 @@ static void export_dialog_format_set_active_text (ExportDialog* self, const gcha
 			selection_ticker = _tmp15_ + 1;
 #line 270 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (current_text);
-#line 3051 "Dialogs.c"
+#line 3049 "Dialogs.c"
 		}
 #line 270 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_current_text_list);
-#line 3055 "Dialogs.c"
+#line 3053 "Dialogs.c"
 	}
 #line 278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = text;
 #line 278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_error ("Dialogs.vala:278: format_set_active_text: text '%s' isn't in combo box", _tmp16_);
-#line 3061 "Dialogs.c"
+#line 3059 "Dialogs.c"
 }
 
 
@@ -3092,7 +3090,7 @@ static PhotoFileFormat export_dialog_get_specified_format (ExportDialog* self) {
 	if (_tmp2_ < EXPORT_DIALOG_NUM_SPECIAL_FORMATS) {
 #line 284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		index = EXPORT_DIALOG_NUM_SPECIAL_FORMATS;
-#line 3093 "Dialogs.c"
+#line 3091 "Dialogs.c"
 	}
 #line 286 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = index;
@@ -3116,7 +3114,7 @@ static PhotoFileFormat export_dialog_get_specified_format (ExportDialog* self) {
 	writeable_formats = (g_free (writeable_formats), NULL);
 #line 288 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 3117 "Dialogs.c"
+#line 3115 "Dialogs.c"
 }
 
 
@@ -3136,7 +3134,7 @@ static gchar* export_dialog_get_label_for_parameters (ExportDialog* self, Export
 	switch (_tmp1_) {
 #line 292 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		case EXPORT_FORMAT_MODE_UNMODIFIED:
-#line 3137 "Dialogs.c"
+#line 3135 "Dialogs.c"
 		{
 			gchar* _tmp2_ = NULL;
 #line 294 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3145,11 +3143,11 @@ static gchar* export_dialog_get_label_for_parameters (ExportDialog* self, Export
 			result = _tmp2_;
 #line 294 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return result;
-#line 3146 "Dialogs.c"
+#line 3144 "Dialogs.c"
 		}
 #line 292 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		case EXPORT_FORMAT_MODE_CURRENT:
-#line 3150 "Dialogs.c"
+#line 3148 "Dialogs.c"
 		{
 			gchar* _tmp3_ = NULL;
 #line 297 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3158,11 +3156,11 @@ static gchar* export_dialog_get_label_for_parameters (ExportDialog* self, Export
 			result = _tmp3_;
 #line 297 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return result;
-#line 3159 "Dialogs.c"
+#line 3157 "Dialogs.c"
 		}
 #line 292 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		case EXPORT_FORMAT_MODE_SPECIFIED:
-#line 3163 "Dialogs.c"
+#line 3161 "Dialogs.c"
 		{
 			ExportFormatParameters _tmp4_ = {0};
 			PhotoFileFormat _tmp5_ = 0;
@@ -3188,14 +3186,14 @@ static gchar* export_dialog_get_label_for_parameters (ExportDialog* self, Export
 			result = _tmp9_;
 #line 300 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return result;
-#line 3189 "Dialogs.c"
+#line 3187 "Dialogs.c"
 		}
 		default:
 		{
 #line 303 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			g_error ("Dialogs.vala:303: get_label_for_parameters: unrecognized export format" \
 " mode");
-#line 3195 "Dialogs.c"
+#line 3193 "Dialogs.c"
 		}
 	}
 }
@@ -3227,7 +3225,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 	_tmp1_ = _tmp0_.mode;
 #line 316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ != EXPORT_FORMAT_MODE_LAST) {
-#line 3227 "Dialogs.c"
+#line 3225 "Dialogs.c"
 		ScaleConstraint _tmp2_ = 0;
 		GtkComboBoxText* _tmp3_ = NULL;
 #line 317 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3240,7 +3238,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		_tmp3_ = self->priv->constraint_combo;
 #line 318 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 3240 "Dialogs.c"
+#line 3238 "Dialogs.c"
 	}
 #line 321 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = *parameters;
@@ -3248,13 +3246,13 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 	_tmp5_ = _tmp4_.mode;
 #line 321 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_ == EXPORT_FORMAT_MODE_LAST) {
-#line 3248 "Dialogs.c"
+#line 3246 "Dialogs.c"
 		ExportFormatParameters _tmp6_ = {0};
 #line 322 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = export_dialog_current_parameters;
 #line 322 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*parameters = _tmp6_;
-#line 3254 "Dialogs.c"
+#line 3252 "Dialogs.c"
 	} else {
 		gboolean _tmp7_ = FALSE;
 		ExportFormatParameters _tmp8_ = {0};
@@ -3265,7 +3263,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		_tmp9_ = _tmp8_.mode;
 #line 323 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp9_ == EXPORT_FORMAT_MODE_SPECIFIED) {
-#line 3265 "Dialogs.c"
+#line 3263 "Dialogs.c"
 			ExportFormatParameters _tmp10_ = {0};
 			PhotoFileFormat _tmp11_ = 0;
 			gboolean _tmp12_ = FALSE;
@@ -3277,21 +3275,21 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 			_tmp12_ = photo_file_format_can_write (_tmp11_);
 #line 323 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp7_ = !_tmp12_;
-#line 3277 "Dialogs.c"
+#line 3275 "Dialogs.c"
 		} else {
 #line 323 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp7_ = FALSE;
-#line 3281 "Dialogs.c"
+#line 3279 "Dialogs.c"
 		}
 #line 323 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp7_) {
-#line 3285 "Dialogs.c"
+#line 3283 "Dialogs.c"
 			PhotoFileFormat _tmp13_ = 0;
 #line 324 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp13_ = photo_file_format_get_system_default_format ();
 #line 324 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			(*parameters).specified_format = _tmp13_;
-#line 3291 "Dialogs.c"
+#line 3289 "Dialogs.c"
 		}
 	}
 #line 326 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3314,7 +3312,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 	_tmp18_ = ok;
 #line 330 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp18_) {
-#line 3314 "Dialogs.c"
+#line 3312 "Dialogs.c"
 		gint index = 0;
 		GtkComboBoxText* _tmp19_ = NULL;
 		gint _tmp20_ = 0;
@@ -3385,13 +3383,13 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		_tmp28_ = _vala_constraint;
 #line 337 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp28_ != SCALE_CONSTRAINT_ORIGINAL) {
-#line 3385 "Dialogs.c"
+#line 3383 "Dialogs.c"
 			gint _tmp29_ = 0;
 #line 338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp29_ = _vala_scale;
 #line 338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_vala_assert (_tmp29_ > 0, "scale > 0");
-#line 3391 "Dialogs.c"
+#line 3389 "Dialogs.c"
 		}
 #line 339 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp30_ = _vala_scale;
@@ -3405,7 +3403,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		_tmp34_ = _tmp33_;
 #line 341 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp34_) {
-#line 3405 "Dialogs.c"
+#line 3403 "Dialogs.c"
 			GtkSwitch* _tmp35_ = NULL;
 			gboolean _tmp36_ = FALSE;
 			gboolean _tmp37_ = FALSE;
@@ -3417,11 +3415,11 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 			_tmp37_ = _tmp36_;
 #line 341 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp31_ = _tmp37_;
-#line 3417 "Dialogs.c"
+#line 3415 "Dialogs.c"
 		} else {
 #line 341 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp31_ = FALSE;
-#line 3421 "Dialogs.c"
+#line 3419 "Dialogs.c"
 		}
 #line 341 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		(*parameters).export_metadata = _tmp31_;
@@ -3437,7 +3435,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		_g_free0 (_tmp40_);
 #line 343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp41_) {
-#line 3437 "Dialogs.c"
+#line 3435 "Dialogs.c"
 			ExportFormatMode _tmp42_ = 0;
 #line 344 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			export_dialog_current_parameters.mode = EXPORT_FORMAT_MODE_UNMODIFIED;
@@ -3445,7 +3443,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 			_tmp42_ = export_dialog_current_parameters.mode;
 #line 344 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			(*parameters).mode = _tmp42_;
-#line 3445 "Dialogs.c"
+#line 3443 "Dialogs.c"
 		} else {
 			GtkComboBoxText* _tmp43_ = NULL;
 			gchar* _tmp44_ = NULL;
@@ -3463,7 +3461,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 			_g_free0 (_tmp45_);
 #line 345 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp46_) {
-#line 3463 "Dialogs.c"
+#line 3461 "Dialogs.c"
 				ExportFormatMode _tmp47_ = 0;
 #line 346 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				export_dialog_current_parameters.mode = EXPORT_FORMAT_MODE_CURRENT;
@@ -3471,7 +3469,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 				_tmp47_ = export_dialog_current_parameters.mode;
 #line 346 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				(*parameters).mode = _tmp47_;
-#line 3471 "Dialogs.c"
+#line 3469 "Dialogs.c"
 			} else {
 				ExportFormatMode _tmp48_ = 0;
 				PhotoFileFormat _tmp49_ = 0;
@@ -3498,7 +3496,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 				_tmp52_ = _tmp51_.specified_format;
 #line 350 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp52_ == PHOTO_FILE_FORMAT_JFIF) {
-#line 3498 "Dialogs.c"
+#line 3496 "Dialogs.c"
 					GtkComboBoxText* _tmp53_ = NULL;
 					gint _tmp54_ = 0;
 					JpegQuality _tmp55_ = 0;
@@ -3515,7 +3513,7 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 					_tmp56_ = export_dialog_current_parameters.quality;
 #line 351 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					(*parameters).quality = _tmp56_;
-#line 3515 "Dialogs.c"
+#line 3513 "Dialogs.c"
 				}
 			}
 		}
@@ -3569,13 +3567,13 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 		configuration_facade_set_export_scale (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp73_);
 #line 330 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (config);
-#line 3569 "Dialogs.c"
+#line 3567 "Dialogs.c"
 	} else {
 #line 363 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_scale = 0;
 #line 364 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_constraint = SCALE_CONSTRAINT_ORIGINAL;
-#line 3575 "Dialogs.c"
+#line 3573 "Dialogs.c"
 	}
 #line 367 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
@@ -3585,17 +3583,17 @@ gboolean export_dialog_execute (ExportDialog* self, gint* scale, ScaleConstraint
 	if (scale) {
 #line 369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*scale = _vala_scale;
-#line 3585 "Dialogs.c"
+#line 3583 "Dialogs.c"
 	}
 #line 369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (constraint) {
 #line 369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*constraint = _vala_constraint;
-#line 3591 "Dialogs.c"
+#line 3589 "Dialogs.c"
 	}
 #line 369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 3595 "Dialogs.c"
+#line 3593 "Dialogs.c"
 }
 
 
@@ -3641,7 +3639,7 @@ static void export_dialog_add_label (ExportDialog* self, const gchar* text, gint
 	_tmp5_ = widget;
 #line 378 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_ != NULL) {
-#line 3641 "Dialogs.c"
+#line 3639 "Dialogs.c"
 		GtkLabel* _tmp6_ = NULL;
 		GtkWidget* _tmp7_ = NULL;
 #line 379 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -3650,7 +3648,7 @@ static void export_dialog_add_label (ExportDialog* self, const gchar* text, gint
 		_tmp7_ = widget;
 #line 379 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_label_set_mnemonic_widget (_tmp6_, _tmp7_);
-#line 3650 "Dialogs.c"
+#line 3648 "Dialogs.c"
 	}
 #line 381 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = self->priv->table;
@@ -3664,7 +3662,7 @@ static void export_dialog_add_label (ExportDialog* self, const gchar* text, gint
 	gtk_grid_attach (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), _tmp10_, _tmp11_, 1, 1);
 #line 372 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (new_label);
-#line 3664 "Dialogs.c"
+#line 3662 "Dialogs.c"
 }
 
 
@@ -3707,7 +3705,7 @@ static void export_dialog_add_control (ExportDialog* self, GtkWidget* widget, gi
 	_tmp7_ = y;
 #line 390 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_grid_attach (_tmp4_, _tmp5_, _tmp6_, _tmp7_, 1, 1);
-#line 3707 "Dialogs.c"
+#line 3705 "Dialogs.c"
 }
 
 
@@ -3775,17 +3773,17 @@ static void export_dialog_on_constraint_changed (ExportDialog* self) {
 	_tmp14_ = original;
 #line 398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp14_) {
-#line 3775 "Dialogs.c"
+#line 3773 "Dialogs.c"
 		gboolean _tmp15_ = FALSE;
 #line 398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = jpeg;
 #line 398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = _tmp15_;
-#line 3781 "Dialogs.c"
+#line 3779 "Dialogs.c"
 	} else {
 #line 398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = FALSE;
-#line 3785 "Dialogs.c"
+#line 3783 "Dialogs.c"
 	}
 #line 398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = self->priv->quality_combo;
@@ -3795,17 +3793,17 @@ static void export_dialog_on_constraint_changed (ExportDialog* self) {
 	_tmp17_ = original;
 #line 399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp17_) {
-#line 3795 "Dialogs.c"
+#line 3793 "Dialogs.c"
 		GtkWidget* _tmp18_ = NULL;
 #line 400 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = self->priv->ok_button;
 #line 400 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (_tmp18_, TRUE);
-#line 3801 "Dialogs.c"
+#line 3799 "Dialogs.c"
 	} else {
 #line 402 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		export_dialog_on_pixels_changed (self);
-#line 3805 "Dialogs.c"
+#line 3803 "Dialogs.c"
 	}
 }
 
@@ -3841,7 +3839,7 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 	_g_free0 (_tmp5_);
 #line 408 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp6_) {
-#line 3841 "Dialogs.c"
+#line 3839 "Dialogs.c"
 		GtkComboBoxText* _tmp7_ = NULL;
 		GtkComboBoxText* _tmp8_ = NULL;
 		GtkComboBoxText* _tmp9_ = NULL;
@@ -3872,7 +3870,7 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 		_tmp12_ = self->priv->export_metadata;
 #line 418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 3872 "Dialogs.c"
+#line 3870 "Dialogs.c"
 	} else {
 		GtkComboBoxText* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
@@ -3890,7 +3888,7 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 		_g_free0 (_tmp15_);
 #line 419 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp16_) {
-#line 3890 "Dialogs.c"
+#line 3888 "Dialogs.c"
 			GtkComboBoxText* _tmp17_ = NULL;
 			GtkComboBoxText* _tmp18_ = NULL;
 			GtkEntry* _tmp19_ = NULL;
@@ -3914,7 +3912,7 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 			_tmp21_ = self->priv->export_metadata;
 #line 429 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 3914 "Dialogs.c"
+#line 3912 "Dialogs.c"
 		} else {
 			GtkComboBoxText* _tmp22_ = NULL;
 			gboolean jpeg = FALSE;
@@ -3935,17 +3933,17 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 			_tmp25_ = original;
 #line 436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (!_tmp25_) {
-#line 3935 "Dialogs.c"
+#line 3933 "Dialogs.c"
 				gboolean _tmp26_ = FALSE;
 #line 436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp26_ = jpeg;
 #line 436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp24_ = _tmp26_;
-#line 3941 "Dialogs.c"
+#line 3939 "Dialogs.c"
 			} else {
 #line 436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp24_ = FALSE;
-#line 3945 "Dialogs.c"
+#line 3943 "Dialogs.c"
 			}
 #line 436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp27_ = self->priv->quality_combo;
@@ -3955,7 +3953,7 @@ static void export_dialog_on_format_changed (ExportDialog* self) {
 			_tmp28_ = self->priv->export_metadata;
 #line 437 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 3955 "Dialogs.c"
+#line 3953 "Dialogs.c"
 		}
 	}
 }
@@ -3966,7 +3964,7 @@ static void export_dialog_on_activate (ExportDialog* self) {
 	g_return_if_fail (IS_EXPORT_DIALOG (self));
 #line 442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK);
-#line 3966 "Dialogs.c"
+#line 3964 "Dialogs.c"
 }
 
 
@@ -3983,7 +3981,7 @@ static void export_dialog_on_pixels_changed (ExportDialog* self) {
 	_tmp2_ = gtk_entry_get_text_length (_tmp1_);
 #line 446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (((gint) _tmp2_) > 0) {
-#line 3983 "Dialogs.c"
+#line 3981 "Dialogs.c"
 		GtkEntry* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
 		gint _tmp5_ = 0;
@@ -3995,17 +3993,17 @@ static void export_dialog_on_pixels_changed (ExportDialog* self) {
 		_tmp5_ = atoi (_tmp4_);
 #line 446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp5_ > 0;
-#line 3995 "Dialogs.c"
+#line 3993 "Dialogs.c"
 	} else {
 #line 446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = FALSE;
-#line 3999 "Dialogs.c"
+#line 3997 "Dialogs.c"
 	}
 #line 446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = self->priv->ok_button;
 #line 446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_sensitive (_tmp6_, _tmp0_);
-#line 4005 "Dialogs.c"
+#line 4003 "Dialogs.c"
 }
 
 
@@ -4023,7 +4021,7 @@ static gchar string_get (const gchar* self, glong index) {
 	result = _tmp1_;
 #line 1087 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 4023 "Dialogs.c"
+#line 4021 "Dialogs.c"
 }
 
 
@@ -4046,7 +4044,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 	if (_tmp0_) {
 #line 452 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 4046 "Dialogs.c"
+#line 4044 "Dialogs.c"
 	}
 #line 454 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->in_insert = TRUE;
@@ -4054,7 +4052,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 	_tmp1_ = length;
 #line 456 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ == -1) {
-#line 4054 "Dialogs.c"
+#line 4052 "Dialogs.c"
 		const gchar* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
@@ -4066,25 +4064,25 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 		_tmp4_ = _tmp3_;
 #line 457 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		length = (gint) _tmp4_;
-#line 4066 "Dialogs.c"
+#line 4064 "Dialogs.c"
 	}
 #line 460 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = g_strdup ("");
 #line 460 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	new_text = _tmp5_;
-#line 4072 "Dialogs.c"
+#line 4070 "Dialogs.c"
 	{
 		gint ctr = 0;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		ctr = 0;
-#line 4077 "Dialogs.c"
+#line 4075 "Dialogs.c"
 		{
 			gboolean _tmp6_ = FALSE;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp6_ = TRUE;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 4084 "Dialogs.c"
+#line 4082 "Dialogs.c"
 				gint _tmp8_ = 0;
 				gint _tmp9_ = 0;
 				const gchar* _tmp10_ = NULL;
@@ -4093,13 +4091,13 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 				gboolean _tmp13_ = FALSE;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp6_) {
-#line 4093 "Dialogs.c"
+#line 4091 "Dialogs.c"
 					gint _tmp7_ = 0;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp7_ = ctr;
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					ctr = _tmp7_ + 1;
-#line 4099 "Dialogs.c"
+#line 4097 "Dialogs.c"
 				}
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = FALSE;
@@ -4111,7 +4109,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 				if (!(_tmp8_ < _tmp9_)) {
 #line 461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 4111 "Dialogs.c"
+#line 4109 "Dialogs.c"
 				}
 #line 462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp10_ = text;
@@ -4123,7 +4121,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 				_tmp13_ = g_ascii_isdigit (_tmp12_);
 #line 462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp13_) {
-#line 4123 "Dialogs.c"
+#line 4121 "Dialogs.c"
 					const gchar* _tmp14_ = NULL;
 					const gchar* _tmp15_ = NULL;
 					gint _tmp16_ = 0;
@@ -4151,7 +4149,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 					new_text = _tmp20_;
 #line 463 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_g_free0 (_tmp19_);
-#line 4151 "Dialogs.c"
+#line 4149 "Dialogs.c"
 				}
 			}
 		}
@@ -4164,7 +4162,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 	_tmp23_ = _tmp22_;
 #line 467 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp23_ > 0) {
-#line 4164 "Dialogs.c"
+#line 4162 "Dialogs.c"
 		GtkEntry* _tmp24_ = NULL;
 		const gchar* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
@@ -4182,7 +4180,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 		_tmp28_ = _tmp27_;
 #line 468 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_editable_insert_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, GTK_TYPE_EDITABLE, GtkEditable), _tmp25_, (gint) _tmp28_, position);
-#line 4182 "Dialogs.c"
+#line 4180 "Dialogs.c"
 	}
 #line 470 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp29_ = self->priv->pixels_entry;
@@ -4192,7 +4190,7 @@ static void export_dialog_on_pixels_insert_text (ExportDialog* self, const gchar
 	self->priv->in_insert = FALSE;
 #line 449 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (new_text);
-#line 4192 "Dialogs.c"
+#line 4190 "Dialogs.c"
 }
 
 
@@ -4210,7 +4208,7 @@ static void export_dialog_class_init (ExportDialogClass * klass) {
 	export_dialog_current_parameters = _tmp0_;
 #line 155 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	export_dialog_current_scale = EXPORT_DIALOG_DEFAULT_SCALE;
-#line 4210 "Dialogs.c"
+#line 4208 "Dialogs.c"
 }
 
 
@@ -4231,7 +4229,7 @@ static void export_dialog_instance_init (ExportDialog * self) {
 	self->priv->format_options = _tmp1_;
 #line 165 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->in_insert = FALSE;
-#line 4231 "Dialogs.c"
+#line 4229 "Dialogs.c"
 }
 
 
@@ -4257,7 +4255,7 @@ static void export_dialog_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->ok_button);
 #line 137 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (export_dialog_parent_class)->finalize (obj);
-#line 4257 "Dialogs.c"
+#line 4255 "Dialogs.c"
 }
 
 
@@ -4299,25 +4297,25 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 		result = NULL;
 #line 484 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 4299 "Dialogs.c"
+#line 4297 "Dialogs.c"
 	}
 #line 486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = g_strdup ("");
 #line 486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	list = _tmp3_;
-#line 4305 "Dialogs.c"
+#line 4303 "Dialogs.c"
 	{
 		gint ctr = 0;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		ctr = 0;
-#line 4310 "Dialogs.c"
+#line 4308 "Dialogs.c"
 		{
 			gboolean _tmp4_ = FALSE;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp4_ = TRUE;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 4317 "Dialogs.c"
+#line 4315 "Dialogs.c"
 				gboolean _tmp6_ = FALSE;
 				gint _tmp7_ = 0;
 				const gchar* _tmp12_ = NULL;
@@ -4328,13 +4326,13 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 				gchar* _tmp27_ = NULL;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp4_) {
-#line 4328 "Dialogs.c"
+#line 4326 "Dialogs.c"
 					gint _tmp5_ = 0;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp5_ = ctr;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					ctr = _tmp5_ + 1;
-#line 4334 "Dialogs.c"
+#line 4332 "Dialogs.c"
 				}
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp4_ = FALSE;
@@ -4342,7 +4340,7 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 				_tmp7_ = ctr;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp7_ < IMPORT_UI_REPORT_FAILURE_COUNT) {
-#line 4342 "Dialogs.c"
+#line 4340 "Dialogs.c"
 					gint _tmp8_ = 0;
 					GeeList* _tmp9_ = NULL;
 					gint _tmp10_ = 0;
@@ -4357,23 +4355,23 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 					_tmp11_ = _tmp10_;
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp6_ = _tmp8_ < _tmp11_;
-#line 4357 "Dialogs.c"
+#line 4355 "Dialogs.c"
 				} else {
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp6_ = FALSE;
-#line 4361 "Dialogs.c"
+#line 4359 "Dialogs.c"
 				}
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp6_) {
 #line 487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 4367 "Dialogs.c"
+#line 4365 "Dialogs.c"
 				}
 #line 488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = show_dest_id;
 #line 488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp13_) {
-#line 4373 "Dialogs.c"
+#line 4371 "Dialogs.c"
 					GeeList* _tmp14_ = NULL;
 					gint _tmp15_ = 0;
 					gpointer _tmp16_ = NULL;
@@ -4393,7 +4391,7 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 					_tmp12_ = _tmp18_;
 #line 488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_batch_import_result_unref0 (_tmp17_);
-#line 4393 "Dialogs.c"
+#line 4391 "Dialogs.c"
 				} else {
 					GeeList* _tmp19_ = NULL;
 					gint _tmp20_ = 0;
@@ -4414,7 +4412,7 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 					_tmp12_ = _tmp23_;
 #line 489 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_batch_import_result_unref0 (_tmp22_);
-#line 4414 "Dialogs.c"
+#line 4412 "Dialogs.c"
 				}
 #line 488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp24_ = list;
@@ -4430,7 +4428,7 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 				list = _tmp27_;
 #line 488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (_tmp26_);
-#line 4430 "Dialogs.c"
+#line 4428 "Dialogs.c"
 			}
 		}
 	}
@@ -4446,7 +4444,7 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 	_tmp31_ = remaining;
 #line 493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp31_ > 0) {
-#line 4446 "Dialogs.c"
+#line 4444 "Dialogs.c"
 		const gchar* _tmp32_ = NULL;
 		const gchar* _tmp33_ = NULL;
 		gint _tmp34_ = 0;
@@ -4471,13 +4469,13 @@ gchar* import_ui_generate_import_failure_list (GeeList* failed, gboolean show_de
 		list = _tmp37_;
 #line 494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp36_);
-#line 4471 "Dialogs.c"
+#line 4469 "Dialogs.c"
 	}
 #line 496 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = list;
 #line 496 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 4477 "Dialogs.c"
+#line 4475 "Dialogs.c"
 }
 
 
@@ -4523,21 +4521,21 @@ ImportUIQuestionParams* import_ui_question_params_construct (GType object_type, 
 	self->no_button = _tmp5_;
 #line 504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 4523 "Dialogs.c"
+#line 4521 "Dialogs.c"
 }
 
 
 ImportUIQuestionParams* import_ui_question_params_new (const gchar* question, const gchar* yes_button, const gchar* no_button) {
 #line 504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return import_ui_question_params_construct (IMPORT_UI_TYPE_QUESTION_PARAMS, question, yes_button, no_button);
-#line 4530 "Dialogs.c"
+#line 4528 "Dialogs.c"
 }
 
 
 static void import_ui_value_question_params_init (GValue* value) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 4537 "Dialogs.c"
+#line 4535 "Dialogs.c"
 }
 
 
@@ -4546,7 +4544,7 @@ static void import_ui_value_question_params_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		import_ui_question_params_unref (value->data[0].v_pointer);
-#line 4546 "Dialogs.c"
+#line 4544 "Dialogs.c"
 	}
 }
 
@@ -4556,11 +4554,11 @@ static void import_ui_value_question_params_copy_value (const GValue* src_value,
 	if (src_value->data[0].v_pointer) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = import_ui_question_params_ref (src_value->data[0].v_pointer);
-#line 4556 "Dialogs.c"
+#line 4554 "Dialogs.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 4560 "Dialogs.c"
+#line 4558 "Dialogs.c"
 	}
 }
 
@@ -4568,37 +4566,37 @@ static void import_ui_value_question_params_copy_value (const GValue* src_value,
 static gpointer import_ui_value_question_params_peek_pointer (const GValue* value) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 4568 "Dialogs.c"
+#line 4566 "Dialogs.c"
 }
 
 
 static gchar* import_ui_value_question_params_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 4575 "Dialogs.c"
+#line 4573 "Dialogs.c"
 		ImportUIQuestionParams* object;
 		object = collect_values[0].v_pointer;
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4582 "Dialogs.c"
+#line 4580 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 4586 "Dialogs.c"
+#line 4584 "Dialogs.c"
 		}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = import_ui_question_params_ref (object);
-#line 4590 "Dialogs.c"
+#line 4588 "Dialogs.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 4594 "Dialogs.c"
+#line 4592 "Dialogs.c"
 	}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 4598 "Dialogs.c"
+#line 4596 "Dialogs.c"
 }
 
 
@@ -4609,25 +4607,25 @@ static gchar* import_ui_value_question_params_lcopy_value (const GValue* value, 
 	if (!object_p) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 4609 "Dialogs.c"
+#line 4607 "Dialogs.c"
 	}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 4615 "Dialogs.c"
+#line 4613 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 4619 "Dialogs.c"
+#line 4617 "Dialogs.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = import_ui_question_params_ref (value->data[0].v_pointer);
-#line 4623 "Dialogs.c"
+#line 4621 "Dialogs.c"
 	}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 4627 "Dialogs.c"
+#line 4625 "Dialogs.c"
 }
 
 
@@ -4641,7 +4639,7 @@ GParamSpec* import_ui_param_spec_question_params (const gchar* name, const gchar
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 4641 "Dialogs.c"
+#line 4639 "Dialogs.c"
 }
 
 
@@ -4650,7 +4648,7 @@ gpointer import_ui_value_get_question_params (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, IMPORT_UI_TYPE_QUESTION_PARAMS), NULL);
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 4650 "Dialogs.c"
+#line 4648 "Dialogs.c"
 }
 
 
@@ -4670,17 +4668,17 @@ void import_ui_value_set_question_params (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		import_ui_question_params_ref (value->data[0].v_pointer);
-#line 4670 "Dialogs.c"
+#line 4668 "Dialogs.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 4674 "Dialogs.c"
+#line 4672 "Dialogs.c"
 	}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		import_ui_question_params_unref (old);
-#line 4680 "Dialogs.c"
+#line 4678 "Dialogs.c"
 	}
 }
 
@@ -4699,17 +4697,17 @@ void import_ui_value_take_question_params (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 4699 "Dialogs.c"
+#line 4697 "Dialogs.c"
 	} else {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 4703 "Dialogs.c"
+#line 4701 "Dialogs.c"
 	}
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		import_ui_question_params_unref (old);
-#line 4709 "Dialogs.c"
+#line 4707 "Dialogs.c"
 	}
 }
 
@@ -4719,14 +4717,14 @@ static void import_ui_question_params_class_init (ImportUIQuestionParamsClass * 
 	import_ui_question_params_parent_class = g_type_class_peek_parent (klass);
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((ImportUIQuestionParamsClass *) klass)->finalize = import_ui_question_params_finalize;
-#line 4719 "Dialogs.c"
+#line 4717 "Dialogs.c"
 }
 
 
 static void import_ui_question_params_instance_init (ImportUIQuestionParams * self) {
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 4726 "Dialogs.c"
+#line 4724 "Dialogs.c"
 }
 
 
@@ -4742,7 +4740,7 @@ static void import_ui_question_params_finalize (ImportUIQuestionParams* obj) {
 	_g_free0 (self->yes_button);
 #line 502 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->no_button);
-#line 4742 "Dialogs.c"
+#line 4740 "Dialogs.c"
 }
 
 
@@ -4767,7 +4765,7 @@ gpointer import_ui_question_params_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 4767 "Dialogs.c"
+#line 4765 "Dialogs.c"
 }
 
 
@@ -4780,7 +4778,7 @@ void import_ui_question_params_unref (gpointer instance) {
 		IMPORT_UI_QUESTION_PARAMS_GET_CLASS (self)->finalize (self);
 #line 499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 4780 "Dialogs.c"
+#line 4778 "Dialogs.c"
 	}
 }
 
@@ -4789,7 +4787,7 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 	gboolean result = FALSE;
 #line 511 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (import_collection), FALSE);
-#line 4789 "Dialogs.c"
+#line 4787 "Dialogs.c"
 	{
 		GeeIterator* _current_result_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
@@ -4802,7 +4800,7 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 		_current_result_it = _tmp1_;
 #line 512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 4802 "Dialogs.c"
+#line 4800 "Dialogs.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			BatchImportResult* current_result = NULL;
@@ -4819,7 +4817,7 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 			if (!_tmp3_) {
 #line 512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 4819 "Dialogs.c"
+#line 4817 "Dialogs.c"
 			}
 #line 512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp4_ = _current_result_it;
@@ -4833,7 +4831,7 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 			_tmp8_ = _tmp7_->file;
 #line 513 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp8_ != NULL) {
-#line 4833 "Dialogs.c"
+#line 4831 "Dialogs.c"
 				BatchImportResult* _tmp9_ = NULL;
 				GFile* _tmp10_ = NULL;
 				PhotoFileFormat _tmp11_ = 0;
@@ -4845,11 +4843,11 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 				_tmp11_ = photo_file_format_get_by_file_extension (_tmp10_);
 #line 514 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = _tmp11_ != PHOTO_FILE_FORMAT_UNKNOWN;
-#line 4845 "Dialogs.c"
+#line 4843 "Dialogs.c"
 			} else {
 #line 513 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = FALSE;
-#line 4849 "Dialogs.c"
+#line 4847 "Dialogs.c"
 			}
 #line 513 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp6_) {
@@ -4861,21 +4859,21 @@ gboolean import_ui_import_has_photos (GeeCollection* import_collection) {
 				_g_object_unref0 (_current_result_it);
 #line 515 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return result;
-#line 4861 "Dialogs.c"
+#line 4859 "Dialogs.c"
 			}
 #line 512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_batch_import_result_unref0 (current_result);
-#line 4865 "Dialogs.c"
+#line 4863 "Dialogs.c"
 		}
 #line 512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_current_result_it);
-#line 4869 "Dialogs.c"
+#line 4867 "Dialogs.c"
 	}
 #line 518 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = FALSE;
 #line 518 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 4875 "Dialogs.c"
+#line 4873 "Dialogs.c"
 }
 
 
@@ -4883,7 +4881,7 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 	gboolean result = FALSE;
 #line 521 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (import_collection), FALSE);
-#line 4883 "Dialogs.c"
+#line 4881 "Dialogs.c"
 	{
 		GeeIterator* _current_result_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
@@ -4896,7 +4894,7 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 		_current_result_it = _tmp1_;
 #line 522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 4896 "Dialogs.c"
+#line 4894 "Dialogs.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			BatchImportResult* current_result = NULL;
@@ -4913,7 +4911,7 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 			if (!_tmp3_) {
 #line 522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 4913 "Dialogs.c"
+#line 4911 "Dialogs.c"
 			}
 #line 522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp4_ = _current_result_it;
@@ -4927,7 +4925,7 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 			_tmp8_ = _tmp7_->file;
 #line 523 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp8_ != NULL) {
-#line 4927 "Dialogs.c"
+#line 4925 "Dialogs.c"
 				BatchImportResult* _tmp9_ = NULL;
 				GFile* _tmp10_ = NULL;
 				gboolean _tmp11_ = FALSE;
@@ -4939,11 +4937,11 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 				_tmp11_ = video_reader_is_supported_video_file (_tmp10_);
 #line 523 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = _tmp11_;
-#line 4939 "Dialogs.c"
+#line 4937 "Dialogs.c"
 			} else {
 #line 523 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = FALSE;
-#line 4943 "Dialogs.c"
+#line 4941 "Dialogs.c"
 			}
 #line 523 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp6_) {
@@ -4955,21 +4953,21 @@ gboolean import_ui_import_has_videos (GeeCollection* import_collection) {
 				_g_object_unref0 (_current_result_it);
 #line 524 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return result;
-#line 4955 "Dialogs.c"
+#line 4953 "Dialogs.c"
 			}
 #line 522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_batch_import_result_unref0 (current_result);
-#line 4959 "Dialogs.c"
+#line 4957 "Dialogs.c"
 		}
 #line 522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_current_result_it);
-#line 4963 "Dialogs.c"
+#line 4961 "Dialogs.c"
 	}
 #line 526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = FALSE;
 #line 526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 4969 "Dialogs.c"
+#line 4967 "Dialogs.c"
 }
 
 
@@ -5009,21 +5007,21 @@ gchar* import_ui_get_media_specific_string (GeeCollection* import_collection, co
 	_tmp5_ = has_photos;
 #line 534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_) {
-#line 5009 "Dialogs.c"
+#line 5007 "Dialogs.c"
 		gboolean _tmp6_ = FALSE;
 #line 534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = has_videos;
 #line 534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _tmp6_;
-#line 5015 "Dialogs.c"
+#line 5013 "Dialogs.c"
 	} else {
 #line 534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = FALSE;
-#line 5019 "Dialogs.c"
+#line 5017 "Dialogs.c"
 	}
 #line 534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_) {
-#line 5023 "Dialogs.c"
+#line 5021 "Dialogs.c"
 		const gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 #line 535 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5034,14 +5032,14 @@ gchar* import_ui_get_media_specific_string (GeeCollection* import_collection, co
 		result = _tmp8_;
 #line 535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 5034 "Dialogs.c"
+#line 5032 "Dialogs.c"
 	} else {
 		gboolean _tmp9_ = FALSE;
 #line 536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = has_photos;
 #line 536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp9_) {
-#line 5041 "Dialogs.c"
+#line 5039 "Dialogs.c"
 			const gchar* _tmp10_ = NULL;
 			gchar* _tmp11_ = NULL;
 #line 537 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5052,14 +5050,14 @@ gchar* import_ui_get_media_specific_string (GeeCollection* import_collection, co
 			result = _tmp11_;
 #line 537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return result;
-#line 5052 "Dialogs.c"
+#line 5050 "Dialogs.c"
 		} else {
 			gboolean _tmp12_ = FALSE;
 #line 538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = has_videos;
 #line 538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp12_) {
-#line 5059 "Dialogs.c"
+#line 5057 "Dialogs.c"
 				const gchar* _tmp13_ = NULL;
 				gchar* _tmp14_ = NULL;
 #line 539 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5070,7 +5068,7 @@ gchar* import_ui_get_media_specific_string (GeeCollection* import_collection, co
 				result = _tmp14_;
 #line 539 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return result;
-#line 5070 "Dialogs.c"
+#line 5068 "Dialogs.c"
 			} else {
 				const gchar* _tmp15_ = NULL;
 				gchar* _tmp16_ = NULL;
@@ -5082,7 +5080,7 @@ gchar* import_ui_get_media_specific_string (GeeCollection* import_collection, co
 				result = _tmp16_;
 #line 541 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return result;
-#line 5082 "Dialogs.c"
+#line 5080 "Dialogs.c"
 			}
 		}
 	}
@@ -5315,7 +5313,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp50_ = _tmp49_;
 #line 565 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp50_ > 0) {
-#line 5315 "Dialogs.c"
+#line 5313 "Dialogs.c"
 		GString* _tmp51_ = NULL;
 		const gchar* _tmp52_ = NULL;
 		gchar* _tmp53_ = NULL;
@@ -5332,7 +5330,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp51_, _tmp54_);
 #line 566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp54_);
-#line 5332 "Dialogs.c"
+#line 5330 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp55_ = NULL;
@@ -5363,7 +5361,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 5363 "Dialogs.c"
+#line 5361 "Dialogs.c"
 				gint _tmp61_ = 0;
 				gint _tmp62_ = 0;
 				gint _tmp63_ = 0;
@@ -5403,7 +5401,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp62_ < _tmp63_)) {
 #line 568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 5403 "Dialogs.c"
+#line 5401 "Dialogs.c"
 				}
 #line 568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp64_ = _result_list;
@@ -5473,11 +5471,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp85_, _tmp86_);
 #line 568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 5473 "Dialogs.c"
+#line 5471 "Dialogs.c"
 			}
 #line 568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 5477 "Dialogs.c"
+#line 5475 "Dialogs.c"
 		}
 	}
 #line 580 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5490,7 +5488,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp90_ = _tmp89_;
 #line 580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp90_ > 0) {
-#line 5490 "Dialogs.c"
+#line 5488 "Dialogs.c"
 		GString* _tmp91_ = NULL;
 		const gchar* _tmp92_ = NULL;
 		gchar* _tmp93_ = NULL;
@@ -5507,7 +5505,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp91_, _tmp94_);
 #line 581 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp94_);
-#line 5507 "Dialogs.c"
+#line 5505 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp95_ = NULL;
@@ -5538,7 +5536,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 5538 "Dialogs.c"
+#line 5536 "Dialogs.c"
 				gint _tmp101_ = 0;
 				gint _tmp102_ = 0;
 				gint _tmp103_ = 0;
@@ -5574,7 +5572,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp102_ < _tmp103_)) {
 #line 583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 5574 "Dialogs.c"
+#line 5572 "Dialogs.c"
 				}
 #line 583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp104_ = _result_list;
@@ -5632,11 +5630,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp121_, _tmp122_);
 #line 583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 5632 "Dialogs.c"
+#line 5630 "Dialogs.c"
 			}
 #line 583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 5636 "Dialogs.c"
+#line 5634 "Dialogs.c"
 		}
 	}
 #line 594 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5649,7 +5647,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp126_ = _tmp125_;
 #line 594 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp126_ > 0) {
-#line 5649 "Dialogs.c"
+#line 5647 "Dialogs.c"
 		GString* _tmp127_ = NULL;
 		const gchar* _tmp128_ = NULL;
 		gchar* _tmp129_ = NULL;
@@ -5667,7 +5665,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp127_, _tmp130_);
 #line 595 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp130_);
-#line 5666 "Dialogs.c"
+#line 5664 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp131_ = NULL;
@@ -5698,7 +5696,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 5697 "Dialogs.c"
+#line 5695 "Dialogs.c"
 				gint _tmp137_ = 0;
 				gint _tmp138_ = 0;
 				gint _tmp139_ = 0;
@@ -5734,7 +5732,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp138_ < _tmp139_)) {
 #line 598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 5733 "Dialogs.c"
+#line 5731 "Dialogs.c"
 				}
 #line 598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp140_ = _result_list;
@@ -5792,11 +5790,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp157_, _tmp158_);
 #line 598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 5791 "Dialogs.c"
+#line 5789 "Dialogs.c"
 			}
 #line 598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 5795 "Dialogs.c"
+#line 5793 "Dialogs.c"
 		}
 	}
 #line 609 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5809,7 +5807,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp162_ = _tmp161_;
 #line 609 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp162_ > 0) {
-#line 5808 "Dialogs.c"
+#line 5806 "Dialogs.c"
 		GString* _tmp163_ = NULL;
 		const gchar* _tmp164_ = NULL;
 		gchar* _tmp165_ = NULL;
@@ -5827,7 +5825,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp163_, _tmp166_);
 #line 610 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp166_);
-#line 5825 "Dialogs.c"
+#line 5823 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp167_ = NULL;
@@ -5858,7 +5856,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 5856 "Dialogs.c"
+#line 5854 "Dialogs.c"
 				gint _tmp173_ = 0;
 				gint _tmp174_ = 0;
 				gint _tmp175_ = 0;
@@ -5894,7 +5892,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp174_ < _tmp175_)) {
 #line 613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 5892 "Dialogs.c"
+#line 5890 "Dialogs.c"
 				}
 #line 613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp176_ = _result_list;
@@ -5952,11 +5950,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp193_, _tmp194_);
 #line 613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 5950 "Dialogs.c"
+#line 5948 "Dialogs.c"
 			}
 #line 613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 5954 "Dialogs.c"
+#line 5952 "Dialogs.c"
 		}
 	}
 #line 624 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -5969,7 +5967,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp198_ = _tmp197_;
 #line 624 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp198_ > 0) {
-#line 5967 "Dialogs.c"
+#line 5965 "Dialogs.c"
 		GString* _tmp199_ = NULL;
 		const gchar* _tmp200_ = NULL;
 		gchar* _tmp201_ = NULL;
@@ -5987,7 +5985,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp199_, _tmp202_);
 #line 625 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp202_);
-#line 5984 "Dialogs.c"
+#line 5982 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp203_ = NULL;
@@ -6018,7 +6016,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 6015 "Dialogs.c"
+#line 6013 "Dialogs.c"
 				gint _tmp209_ = 0;
 				gint _tmp210_ = 0;
 				gint _tmp211_ = 0;
@@ -6059,7 +6057,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp210_ < _tmp211_)) {
 #line 628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 6056 "Dialogs.c"
+#line 6054 "Dialogs.c"
 				}
 #line 628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp212_ = _result_list;
@@ -6129,11 +6127,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp234_, _tmp235_);
 #line 628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 6126 "Dialogs.c"
+#line 6124 "Dialogs.c"
 			}
 #line 628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 6130 "Dialogs.c"
+#line 6128 "Dialogs.c"
 		}
 	}
 #line 640 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -6146,7 +6144,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp239_ = _tmp238_;
 #line 640 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp239_ > 0) {
-#line 6143 "Dialogs.c"
+#line 6141 "Dialogs.c"
 		GString* _tmp240_ = NULL;
 		const gchar* _tmp241_ = NULL;
 		gchar* _tmp242_ = NULL;
@@ -6163,7 +6161,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp240_, _tmp243_);
 #line 641 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp243_);
-#line 6160 "Dialogs.c"
+#line 6158 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp244_ = NULL;
@@ -6194,7 +6192,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 644 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 6191 "Dialogs.c"
+#line 6189 "Dialogs.c"
 				gint _tmp250_ = 0;
 				gint _tmp251_ = 0;
 				gint _tmp252_ = 0;
@@ -6230,7 +6228,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp251_ < _tmp252_)) {
 #line 644 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 6227 "Dialogs.c"
+#line 6225 "Dialogs.c"
 				}
 #line 644 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp253_ = _result_list;
@@ -6288,11 +6286,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp270_, _tmp271_);
 #line 644 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 6285 "Dialogs.c"
+#line 6283 "Dialogs.c"
 			}
 #line 644 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 6289 "Dialogs.c"
+#line 6287 "Dialogs.c"
 		}
 	}
 #line 655 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -6305,7 +6303,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_tmp275_ = _tmp274_;
 #line 655 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp275_ > 0) {
-#line 6302 "Dialogs.c"
+#line 6300 "Dialogs.c"
 		GString* _tmp276_ = NULL;
 		const gchar* _tmp277_ = NULL;
 		gchar* _tmp278_ = NULL;
@@ -6322,7 +6320,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 		g_string_append (_tmp276_, _tmp279_);
 #line 656 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp279_);
-#line 6319 "Dialogs.c"
+#line 6317 "Dialogs.c"
 		{
 			GeeList* _result_list = NULL;
 			ImportManifest* _tmp280_ = NULL;
@@ -6353,7 +6351,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 			_result_index = -1;
 #line 658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 6350 "Dialogs.c"
+#line 6348 "Dialogs.c"
 				gint _tmp286_ = 0;
 				gint _tmp287_ = 0;
 				gint _tmp288_ = 0;
@@ -6389,7 +6387,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				if (!(_tmp287_ < _tmp288_)) {
 #line 658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 6386 "Dialogs.c"
+#line 6384 "Dialogs.c"
 				}
 #line 658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp289_ = _result_list;
@@ -6447,11 +6445,11 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 				g_string_append (_tmp306_, _tmp307_);
 #line 658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_batch_import_result_unref0 (_result_);
-#line 6444 "Dialogs.c"
+#line 6442 "Dialogs.c"
 			}
 #line 658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_result_list);
-#line 6448 "Dialogs.c"
+#line 6446 "Dialogs.c"
 		}
 	}
 #line 666 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -6472,7 +6470,7 @@ gchar* import_ui_create_result_report_from_manifest (ImportManifest* manifest) {
 	_g_string_free0 (builder);
 #line 666 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 6469 "Dialogs.c"
+#line 6467 "Dialogs.c"
 }
 
 
@@ -6581,7 +6579,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp4_ = _tmp3_;
 #line 675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_ > 0) {
-#line 6578 "Dialogs.c"
+#line 6576 "Dialogs.c"
 		gchar* photos_message = NULL;
 		ImportManifest* _tmp5_ = NULL;
 		GeeList* _tmp6_ = NULL;
@@ -6750,7 +6748,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 6747 "Dialogs.c"
+#line 6745 "Dialogs.c"
 	}
 #line 692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp52_ = manifest;
@@ -6762,7 +6760,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp55_ = _tmp54_;
 #line 692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp55_ > 0) {
-#line 6759 "Dialogs.c"
+#line 6757 "Dialogs.c"
 		const gchar* _tmp56_ = NULL;
 		gint _tmp57_ = 0;
 		gint _tmp58_ = 0;
@@ -6835,7 +6833,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp58_ = _tmp57_;
 #line 693 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp58_ > 0) {
-#line 6832 "Dialogs.c"
+#line 6830 "Dialogs.c"
 			const gchar* _tmp59_ = NULL;
 			gchar* _tmp60_ = NULL;
 #line 694 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -6846,7 +6844,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 694 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp60_;
-#line 6843 "Dialogs.c"
+#line 6841 "Dialogs.c"
 		}
 #line 696 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp61_ = manifest;
@@ -6990,7 +6988,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 6987 "Dialogs.c"
+#line 6985 "Dialogs.c"
 	}
 #line 715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp118_ = manifest;
@@ -7002,7 +7000,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp121_ = _tmp120_;
 #line 715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp121_ > 0) {
-#line 6999 "Dialogs.c"
+#line 6997 "Dialogs.c"
 		const gchar* _tmp122_ = NULL;
 		gint _tmp123_ = 0;
 		gint _tmp124_ = 0;
@@ -7075,7 +7073,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp124_ = _tmp123_;
 #line 716 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp124_ > 0) {
-#line 7072 "Dialogs.c"
+#line 7070 "Dialogs.c"
 			const gchar* _tmp125_ = NULL;
 			gchar* _tmp126_ = NULL;
 #line 717 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -7086,7 +7084,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp126_;
-#line 7083 "Dialogs.c"
+#line 7081 "Dialogs.c"
 		}
 #line 719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp127_ = manifest;
@@ -7238,7 +7236,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 7227 "Dialogs.c"
+#line 7225 "Dialogs.c"
 	}
 #line 738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp184_ = manifest;
@@ -7250,7 +7248,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp187_ = _tmp186_;
 #line 738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp187_ > 0) {
-#line 7239 "Dialogs.c"
+#line 7237 "Dialogs.c"
 		const gchar* _tmp188_ = NULL;
 		gint _tmp189_ = 0;
 		gint _tmp190_ = 0;
@@ -7323,7 +7321,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp190_ = _tmp189_;
 #line 739 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp190_ > 0) {
-#line 7312 "Dialogs.c"
+#line 7310 "Dialogs.c"
 			const gchar* _tmp191_ = NULL;
 			gchar* _tmp192_ = NULL;
 #line 740 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -7334,7 +7332,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 740 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp192_;
-#line 7323 "Dialogs.c"
+#line 7321 "Dialogs.c"
 		}
 #line 742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp193_ = manifest;
@@ -7478,7 +7476,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 7467 "Dialogs.c"
+#line 7465 "Dialogs.c"
 	}
 #line 761 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp250_ = manifest;
@@ -7490,7 +7488,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp253_ = _tmp252_;
 #line 761 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp253_ > 0) {
-#line 7479 "Dialogs.c"
+#line 7477 "Dialogs.c"
 		const gchar* _tmp254_ = NULL;
 		gint _tmp255_ = 0;
 		gint _tmp256_ = 0;
@@ -7563,7 +7561,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp256_ = _tmp255_;
 #line 762 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp256_ > 0) {
-#line 7552 "Dialogs.c"
+#line 7550 "Dialogs.c"
 			const gchar* _tmp257_ = NULL;
 			gchar* _tmp258_ = NULL;
 #line 763 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -7574,7 +7572,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp258_;
-#line 7563 "Dialogs.c"
+#line 7561 "Dialogs.c"
 		}
 #line 765 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp259_ = manifest;
@@ -7718,7 +7716,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 761 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 7707 "Dialogs.c"
+#line 7705 "Dialogs.c"
 	}
 #line 784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp316_ = manifest;
@@ -7730,7 +7728,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp319_ = _tmp318_;
 #line 784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp319_ > 0) {
-#line 7719 "Dialogs.c"
+#line 7717 "Dialogs.c"
 		const gchar* _tmp320_ = NULL;
 		gint _tmp321_ = 0;
 		gint _tmp322_ = 0;
@@ -7763,7 +7761,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp322_ = _tmp321_;
 #line 785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp322_ > 0) {
-#line 7752 "Dialogs.c"
+#line 7750 "Dialogs.c"
 			const gchar* _tmp323_ = NULL;
 			gchar* _tmp324_ = NULL;
 #line 786 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -7774,7 +7772,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 786 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp324_;
-#line 7763 "Dialogs.c"
+#line 7761 "Dialogs.c"
 		}
 #line 791 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp325_ = manifest;
@@ -7830,7 +7828,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (_tmp343_);
 #line 784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (skipped_photos_message);
-#line 7819 "Dialogs.c"
+#line 7817 "Dialogs.c"
 	}
 #line 800 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp345_ = manifest;
@@ -7842,7 +7840,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp348_ = _tmp347_;
 #line 800 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp348_ > 0) {
-#line 7831 "Dialogs.c"
+#line 7829 "Dialogs.c"
 		const gchar* _tmp349_ = NULL;
 		gint _tmp350_ = 0;
 		gint _tmp351_ = 0;
@@ -7868,7 +7866,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp351_ = _tmp350_;
 #line 801 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp351_ > 0) {
-#line 7857 "Dialogs.c"
+#line 7855 "Dialogs.c"
 			const gchar* _tmp352_ = NULL;
 			gchar* _tmp353_ = NULL;
 #line 802 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -7879,7 +7877,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 802 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp353_;
-#line 7868 "Dialogs.c"
+#line 7866 "Dialogs.c"
 		}
 #line 806 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp354_ = manifest;
@@ -7915,7 +7913,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		message = _tmp366_;
 #line 800 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (skipped_files_message);
-#line 7904 "Dialogs.c"
+#line 7902 "Dialogs.c"
 	}
 #line 813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp367_ = manifest;
@@ -7927,7 +7925,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp370_ = _tmp369_;
 #line 813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp370_ > 0) {
-#line 7916 "Dialogs.c"
+#line 7914 "Dialogs.c"
 		const gchar* _tmp371_ = NULL;
 		gint _tmp372_ = 0;
 		gint _tmp373_ = 0;
@@ -8000,7 +7998,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp373_ = _tmp372_;
 #line 814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp373_ > 0) {
-#line 7989 "Dialogs.c"
+#line 7987 "Dialogs.c"
 			const gchar* _tmp374_ = NULL;
 			gchar* _tmp375_ = NULL;
 #line 815 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -8011,7 +8009,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 815 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp375_;
-#line 8000 "Dialogs.c"
+#line 7998 "Dialogs.c"
 		}
 #line 817 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp376_ = manifest;
@@ -8155,7 +8153,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 8144 "Dialogs.c"
+#line 8142 "Dialogs.c"
 	}
 #line 836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp433_ = manifest;
@@ -8167,7 +8165,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp436_ = _tmp435_;
 #line 836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp436_ > 0) {
-#line 8156 "Dialogs.c"
+#line 8154 "Dialogs.c"
 		const gchar* _tmp437_ = NULL;
 		gint _tmp438_ = 0;
 		gint _tmp439_ = 0;
@@ -8221,7 +8219,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp439_ = _tmp438_;
 #line 837 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp439_ > 0) {
-#line 8210 "Dialogs.c"
+#line 8208 "Dialogs.c"
 			const gchar* _tmp440_ = NULL;
 			gchar* _tmp441_ = NULL;
 #line 838 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -8232,7 +8230,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_g_free0 (message);
 #line 838 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			message = _tmp441_;
-#line 8221 "Dialogs.c"
+#line 8219 "Dialogs.c"
 		}
 #line 840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp442_ = manifest;
@@ -8330,7 +8328,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (videos_message);
 #line 836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (photos_message);
-#line 8319 "Dialogs.c"
+#line 8317 "Dialogs.c"
 	}
 #line 854 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp481_ = manifest;
@@ -8422,7 +8420,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp522_ = total;
 #line 861 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp522_ == 0) {
-#line 8411 "Dialogs.c"
+#line 8409 "Dialogs.c"
 		const gchar* _tmp523_ = NULL;
 		const gchar* _tmp524_ = NULL;
 		gchar* _tmp525_ = NULL;
@@ -8436,7 +8434,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_free0 (message);
 #line 862 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		message = _tmp525_;
-#line 8425 "Dialogs.c"
+#line 8423 "Dialogs.c"
 	}
 #line 864 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = NULL;
@@ -8446,7 +8444,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_tmp526_ = question;
 #line 866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp526_ == NULL) {
-#line 8435 "Dialogs.c"
+#line 8433 "Dialogs.c"
 		AppWindow* _tmp527_ = NULL;
 		AppWindow* _tmp528_ = NULL;
 		const gchar* _tmp529_ = NULL;
@@ -8566,7 +8564,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_tmp556_ = dialog_response;
 #line 880 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp556_ == IMPORT_UI_SAVE_RESULTS_RESPONSE_ID) {
-#line 8555 "Dialogs.c"
+#line 8553 "Dialogs.c"
 			GtkWindow* _tmp557_ = NULL;
 			ImportManifest* _tmp558_ = NULL;
 			gchar* _tmp559_ = NULL;
@@ -8583,7 +8581,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			import_ui_save_import_results (_tmp557_, _tmp560_);
 #line 881 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (_tmp560_);
-#line 8572 "Dialogs.c"
+#line 8570 "Dialogs.c"
 		}
 #line 866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (dialog_parent);
@@ -8591,7 +8589,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_object_unref0 (ok_button);
 #line 866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (save_results_button);
-#line 8580 "Dialogs.c"
+#line 8578 "Dialogs.c"
 	} else {
 		const gchar* _tmp561_ = NULL;
 		ImportUIQuestionParams* _tmp562_ = NULL;
@@ -8735,7 +8733,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		dialog_response = _tmp596_;
 #line 897 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 8724 "Dialogs.c"
+#line 8722 "Dialogs.c"
 			gint _tmp597_ = 0;
 			GtkMessageDialog* _tmp598_ = NULL;
 			ImportManifest* _tmp599_ = NULL;
@@ -8749,7 +8747,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			if (!(_tmp597_ == IMPORT_UI_SAVE_RESULTS_RESPONSE_ID)) {
 #line 897 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 8738 "Dialogs.c"
+#line 8736 "Dialogs.c"
 			}
 #line 898 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp598_ = dialog;
@@ -8769,7 +8767,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 			_tmp603_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp602_, gtk_dialog_get_type (), GtkDialog));
 #line 899 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			dialog_response = _tmp603_;
-#line 8758 "Dialogs.c"
+#line 8756 "Dialogs.c"
 		}
 #line 902 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp604_ = dialog;
@@ -8783,7 +8781,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 		_g_object_unref0 (no_button);
 #line 866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (save_results_button);
-#line 8772 "Dialogs.c"
+#line 8770 "Dialogs.c"
 	}
 #line 906 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp606_ = dialog_response;
@@ -8795,7 +8793,7 @@ gboolean import_ui_report_manifest (ImportManifest* manifest, gboolean show_dest
 	_g_free0 (message);
 #line 906 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 8784 "Dialogs.c"
+#line 8782 "Dialogs.c"
 }
 
 
@@ -8839,13 +8837,13 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 8828 "Dialogs.c"
+#line 8826 "Dialogs.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 8834 "Dialogs.c"
+#line 8832 "Dialogs.c"
 }
 
 
@@ -8923,21 +8921,21 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 	_tmp14_ = dialog_result;
 #line 923 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp14_ == ((gint) GTK_RESPONSE_ACCEPT)) {
-#line 8912 "Dialogs.c"
+#line 8910 "Dialogs.c"
 		GFile* _tmp15_ = NULL;
 #line 923 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = chosen_file;
 #line 923 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = _tmp15_ != NULL;
-#line 8918 "Dialogs.c"
+#line 8916 "Dialogs.c"
 	} else {
 #line 923 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = FALSE;
-#line 8922 "Dialogs.c"
+#line 8920 "Dialogs.c"
 	}
 #line 923 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp13_) {
-#line 8926 "Dialogs.c"
+#line 8924 "Dialogs.c"
 		{
 			GFileOutputStream* outstream = NULL;
 			GFile* _tmp16_ = NULL;
@@ -8957,8 +8955,8 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			outstream = _tmp17_;
 #line 925 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 8946 "Dialogs.c"
-				goto __catch424_g_error;
+#line 8944 "Dialogs.c"
+				goto __catch421_g_error;
 			}
 #line 926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = outstream;
@@ -8976,8 +8974,8 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (outstream);
-#line 8965 "Dialogs.c"
-				goto __catch424_g_error;
+#line 8963 "Dialogs.c"
+				goto __catch421_g_error;
 			}
 #line 927 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = outstream;
@@ -8987,15 +8985,15 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 927 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (outstream);
-#line 8976 "Dialogs.c"
-				goto __catch424_g_error;
+#line 8974 "Dialogs.c"
+				goto __catch421_g_error;
 			}
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (outstream);
-#line 8981 "Dialogs.c"
+#line 8979 "Dialogs.c"
 		}
-		goto __finally424;
-		__catch424_g_error:
+		goto __finally421;
+		__catch421_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp23_ = NULL;
@@ -9023,9 +9021,9 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			_g_free0 (_tmp25_);
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_error_free0 (err);
-#line 9012 "Dialogs.c"
+#line 9010 "Dialogs.c"
 		}
-		__finally424:
+		__finally421:
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -9038,14 +9036,14 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			g_clear_error (&_inner_error_);
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return;
-#line 9027 "Dialogs.c"
+#line 9025 "Dialogs.c"
 		}
 	}
 #line 909 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (chosen_file);
 #line 909 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (chooser_dialog);
-#line 9034 "Dialogs.c"
+#line 9032 "Dialogs.c"
 }
 
 
@@ -9054,7 +9052,7 @@ static gboolean _text_entry_dialog_mediator_on_modify_validate_text_entry_dialog
 	result = text_entry_dialog_mediator_on_modify_validate ((TextEntryDialogMediator*) self, text);
 #line 946 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9043 "Dialogs.c"
+#line 9041 "Dialogs.c"
 }
 
 
@@ -9123,7 +9121,7 @@ TextEntryDialogMediator* text_entry_dialog_mediator_construct (GType object_type
 	_g_object_unref0 (builder);
 #line 940 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 9112 "Dialogs.c"
+#line 9110 "Dialogs.c"
 }
 
 
@@ -9135,7 +9133,7 @@ static gboolean text_entry_dialog_mediator_real_on_modify_validate (TextEntryDia
 	result = TRUE;
 #line 950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9124 "Dialogs.c"
+#line 9122 "Dialogs.c"
 }
 
 
@@ -9144,7 +9142,7 @@ gboolean text_entry_dialog_mediator_on_modify_validate (TextEntryDialogMediator*
 	g_return_val_if_fail (IS_TEXT_ENTRY_DIALOG_MEDIATOR (self), FALSE);
 #line 949 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return TEXT_ENTRY_DIALOG_MEDIATOR_GET_CLASS (self)->on_modify_validate (self, text);
-#line 9133 "Dialogs.c"
+#line 9131 "Dialogs.c"
 }
 
 
@@ -9162,14 +9160,14 @@ gchar* _text_entry_dialog_mediator_execute (TextEntryDialogMediator* self) {
 	result = _tmp1_;
 #line 954 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9151 "Dialogs.c"
+#line 9149 "Dialogs.c"
 }
 
 
 static void value_text_entry_dialog_mediator_init (GValue* value) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 9158 "Dialogs.c"
+#line 9156 "Dialogs.c"
 }
 
 
@@ -9178,7 +9176,7 @@ static void value_text_entry_dialog_mediator_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text_entry_dialog_mediator_unref (value->data[0].v_pointer);
-#line 9167 "Dialogs.c"
+#line 9165 "Dialogs.c"
 	}
 }
 
@@ -9188,11 +9186,11 @@ static void value_text_entry_dialog_mediator_copy_value (const GValue* src_value
 	if (src_value->data[0].v_pointer) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = text_entry_dialog_mediator_ref (src_value->data[0].v_pointer);
-#line 9177 "Dialogs.c"
+#line 9175 "Dialogs.c"
 	} else {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 9181 "Dialogs.c"
+#line 9179 "Dialogs.c"
 	}
 }
 
@@ -9200,37 +9198,37 @@ static void value_text_entry_dialog_mediator_copy_value (const GValue* src_value
 static gpointer value_text_entry_dialog_mediator_peek_pointer (const GValue* value) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 9189 "Dialogs.c"
+#line 9187 "Dialogs.c"
 }
 
 
 static gchar* value_text_entry_dialog_mediator_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 9196 "Dialogs.c"
+#line 9194 "Dialogs.c"
 		TextEntryDialogMediator* object;
 		object = collect_values[0].v_pointer;
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9203 "Dialogs.c"
+#line 9201 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9207 "Dialogs.c"
+#line 9205 "Dialogs.c"
 		}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = text_entry_dialog_mediator_ref (object);
-#line 9211 "Dialogs.c"
+#line 9209 "Dialogs.c"
 	} else {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9215 "Dialogs.c"
+#line 9213 "Dialogs.c"
 	}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 9219 "Dialogs.c"
+#line 9217 "Dialogs.c"
 }
 
 
@@ -9241,25 +9239,25 @@ static gchar* value_text_entry_dialog_mediator_lcopy_value (const GValue* value,
 	if (!object_p) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9230 "Dialogs.c"
+#line 9228 "Dialogs.c"
 	}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 9236 "Dialogs.c"
+#line 9234 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 9240 "Dialogs.c"
+#line 9238 "Dialogs.c"
 	} else {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = text_entry_dialog_mediator_ref (value->data[0].v_pointer);
-#line 9244 "Dialogs.c"
+#line 9242 "Dialogs.c"
 	}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 9248 "Dialogs.c"
+#line 9246 "Dialogs.c"
 }
 
 
@@ -9273,7 +9271,7 @@ GParamSpec* param_spec_text_entry_dialog_mediator (const gchar* name, const gcha
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 9262 "Dialogs.c"
+#line 9260 "Dialogs.c"
 }
 
 
@@ -9282,7 +9280,7 @@ gpointer value_get_text_entry_dialog_mediator (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_TEXT_ENTRY_DIALOG_MEDIATOR), NULL);
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 9271 "Dialogs.c"
+#line 9269 "Dialogs.c"
 }
 
 
@@ -9302,17 +9300,17 @@ void value_set_text_entry_dialog_mediator (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text_entry_dialog_mediator_ref (value->data[0].v_pointer);
-#line 9291 "Dialogs.c"
+#line 9289 "Dialogs.c"
 	} else {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9295 "Dialogs.c"
+#line 9293 "Dialogs.c"
 	}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text_entry_dialog_mediator_unref (old);
-#line 9301 "Dialogs.c"
+#line 9299 "Dialogs.c"
 	}
 }
 
@@ -9331,17 +9329,17 @@ void value_take_text_entry_dialog_mediator (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 9320 "Dialogs.c"
+#line 9318 "Dialogs.c"
 	} else {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9324 "Dialogs.c"
+#line 9322 "Dialogs.c"
 	}
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text_entry_dialog_mediator_unref (old);
-#line 9330 "Dialogs.c"
+#line 9328 "Dialogs.c"
 	}
 }
 
@@ -9355,7 +9353,7 @@ static void text_entry_dialog_mediator_class_init (TextEntryDialogMediatorClass 
 	g_type_class_add_private (klass, sizeof (TextEntryDialogMediatorPrivate));
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((TextEntryDialogMediatorClass *) klass)->on_modify_validate = text_entry_dialog_mediator_real_on_modify_validate;
-#line 9344 "Dialogs.c"
+#line 9342 "Dialogs.c"
 }
 
 
@@ -9364,7 +9362,7 @@ static void text_entry_dialog_mediator_instance_init (TextEntryDialogMediator * 
 	self->priv = TEXT_ENTRY_DIALOG_MEDIATOR_GET_PRIVATE (self);
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 9353 "Dialogs.c"
+#line 9351 "Dialogs.c"
 }
 
 
@@ -9376,7 +9374,7 @@ static void text_entry_dialog_mediator_finalize (TextEntryDialogMediator* obj) {
 	g_signal_handlers_destroy (self);
 #line 938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->dialog);
-#line 9365 "Dialogs.c"
+#line 9363 "Dialogs.c"
 }
 
 
@@ -9401,7 +9399,7 @@ gpointer text_entry_dialog_mediator_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 9390 "Dialogs.c"
+#line 9388 "Dialogs.c"
 }
 
 
@@ -9414,7 +9412,7 @@ void text_entry_dialog_mediator_unref (gpointer instance) {
 		TEXT_ENTRY_DIALOG_MEDIATOR_GET_CLASS (self)->finalize (self);
 #line 937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9403 "Dialogs.c"
+#line 9401 "Dialogs.c"
 	}
 }
 
@@ -9424,7 +9422,7 @@ static gboolean _multi_text_entry_dialog_mediator_on_modify_validate_multi_text_
 	result = multi_text_entry_dialog_mediator_on_modify_validate ((MultiTextEntryDialogMediator*) self, text);
 #line 966 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9413 "Dialogs.c"
+#line 9411 "Dialogs.c"
 }
 
 
@@ -9485,7 +9483,7 @@ MultiTextEntryDialogMediator* multi_text_entry_dialog_mediator_construct (GType 
 	_g_object_unref0 (builder);
 #line 961 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 9474 "Dialogs.c"
+#line 9472 "Dialogs.c"
 }
 
 
@@ -9497,7 +9495,7 @@ static gboolean multi_text_entry_dialog_mediator_real_on_modify_validate (MultiT
 	result = TRUE;
 #line 970 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9486 "Dialogs.c"
+#line 9484 "Dialogs.c"
 }
 
 
@@ -9506,7 +9504,7 @@ gboolean multi_text_entry_dialog_mediator_on_modify_validate (MultiTextEntryDial
 	g_return_val_if_fail (IS_MULTI_TEXT_ENTRY_DIALOG_MEDIATOR (self), FALSE);
 #line 969 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return MULTI_TEXT_ENTRY_DIALOG_MEDIATOR_GET_CLASS (self)->on_modify_validate (self, text);
-#line 9495 "Dialogs.c"
+#line 9493 "Dialogs.c"
 }
 
 
@@ -9524,14 +9522,14 @@ gchar* _multi_text_entry_dialog_mediator_execute (MultiTextEntryDialogMediator* 
 	result = _tmp1_;
 #line 974 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9513 "Dialogs.c"
+#line 9511 "Dialogs.c"
 }
 
 
 static void value_multi_text_entry_dialog_mediator_init (GValue* value) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 9520 "Dialogs.c"
+#line 9518 "Dialogs.c"
 }
 
 
@@ -9540,7 +9538,7 @@ static void value_multi_text_entry_dialog_mediator_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		multi_text_entry_dialog_mediator_unref (value->data[0].v_pointer);
-#line 9529 "Dialogs.c"
+#line 9527 "Dialogs.c"
 	}
 }
 
@@ -9550,11 +9548,11 @@ static void value_multi_text_entry_dialog_mediator_copy_value (const GValue* src
 	if (src_value->data[0].v_pointer) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = multi_text_entry_dialog_mediator_ref (src_value->data[0].v_pointer);
-#line 9539 "Dialogs.c"
+#line 9537 "Dialogs.c"
 	} else {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 9543 "Dialogs.c"
+#line 9541 "Dialogs.c"
 	}
 }
 
@@ -9562,37 +9560,37 @@ static void value_multi_text_entry_dialog_mediator_copy_value (const GValue* src
 static gpointer value_multi_text_entry_dialog_mediator_peek_pointer (const GValue* value) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 9551 "Dialogs.c"
+#line 9549 "Dialogs.c"
 }
 
 
 static gchar* value_multi_text_entry_dialog_mediator_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 9558 "Dialogs.c"
+#line 9556 "Dialogs.c"
 		MultiTextEntryDialogMediator* object;
 		object = collect_values[0].v_pointer;
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9565 "Dialogs.c"
+#line 9563 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9569 "Dialogs.c"
+#line 9567 "Dialogs.c"
 		}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = multi_text_entry_dialog_mediator_ref (object);
-#line 9573 "Dialogs.c"
+#line 9571 "Dialogs.c"
 	} else {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9577 "Dialogs.c"
+#line 9575 "Dialogs.c"
 	}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 9581 "Dialogs.c"
+#line 9579 "Dialogs.c"
 }
 
 
@@ -9603,25 +9601,25 @@ static gchar* value_multi_text_entry_dialog_mediator_lcopy_value (const GValue* 
 	if (!object_p) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9592 "Dialogs.c"
+#line 9590 "Dialogs.c"
 	}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 9598 "Dialogs.c"
+#line 9596 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 9602 "Dialogs.c"
+#line 9600 "Dialogs.c"
 	} else {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = multi_text_entry_dialog_mediator_ref (value->data[0].v_pointer);
-#line 9606 "Dialogs.c"
+#line 9604 "Dialogs.c"
 	}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 9610 "Dialogs.c"
+#line 9608 "Dialogs.c"
 }
 
 
@@ -9635,7 +9633,7 @@ GParamSpec* param_spec_multi_text_entry_dialog_mediator (const gchar* name, cons
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 9624 "Dialogs.c"
+#line 9622 "Dialogs.c"
 }
 
 
@@ -9644,7 +9642,7 @@ gpointer value_get_multi_text_entry_dialog_mediator (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_MULTI_TEXT_ENTRY_DIALOG_MEDIATOR), NULL);
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 9633 "Dialogs.c"
+#line 9631 "Dialogs.c"
 }
 
 
@@ -9664,17 +9662,17 @@ void value_set_multi_text_entry_dialog_mediator (GValue* value, gpointer v_objec
 		value->data[0].v_pointer = v_object;
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		multi_text_entry_dialog_mediator_ref (value->data[0].v_pointer);
-#line 9653 "Dialogs.c"
+#line 9651 "Dialogs.c"
 	} else {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9657 "Dialogs.c"
+#line 9655 "Dialogs.c"
 	}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		multi_text_entry_dialog_mediator_unref (old);
-#line 9663 "Dialogs.c"
+#line 9661 "Dialogs.c"
 	}
 }
 
@@ -9693,17 +9691,17 @@ void value_take_multi_text_entry_dialog_mediator (GValue* value, gpointer v_obje
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 9682 "Dialogs.c"
+#line 9680 "Dialogs.c"
 	} else {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 9686 "Dialogs.c"
+#line 9684 "Dialogs.c"
 	}
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		multi_text_entry_dialog_mediator_unref (old);
-#line 9692 "Dialogs.c"
+#line 9690 "Dialogs.c"
 	}
 }
 
@@ -9717,7 +9715,7 @@ static void multi_text_entry_dialog_mediator_class_init (MultiTextEntryDialogMed
 	g_type_class_add_private (klass, sizeof (MultiTextEntryDialogMediatorPrivate));
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((MultiTextEntryDialogMediatorClass *) klass)->on_modify_validate = multi_text_entry_dialog_mediator_real_on_modify_validate;
-#line 9706 "Dialogs.c"
+#line 9704 "Dialogs.c"
 }
 
 
@@ -9726,7 +9724,7 @@ static void multi_text_entry_dialog_mediator_instance_init (MultiTextEntryDialog
 	self->priv = MULTI_TEXT_ENTRY_DIALOG_MEDIATOR_GET_PRIVATE (self);
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 9715 "Dialogs.c"
+#line 9713 "Dialogs.c"
 }
 
 
@@ -9738,7 +9736,7 @@ static void multi_text_entry_dialog_mediator_finalize (MultiTextEntryDialogMedia
 	g_signal_handlers_destroy (self);
 #line 959 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->dialog);
-#line 9727 "Dialogs.c"
+#line 9725 "Dialogs.c"
 }
 
 
@@ -9763,7 +9761,7 @@ gpointer multi_text_entry_dialog_mediator_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 9752 "Dialogs.c"
+#line 9750 "Dialogs.c"
 }
 
 
@@ -9776,7 +9774,7 @@ void multi_text_entry_dialog_mediator_unref (gpointer instance) {
 		MULTI_TEXT_ENTRY_DIALOG_MEDIATOR_GET_CLASS (self)->finalize (self);
 #line 958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9765 "Dialogs.c"
+#line 9763 "Dialogs.c"
 	}
 }
 
@@ -9794,7 +9792,7 @@ gchar* build_alert_body_text (const gchar* primary_text, const gchar* secondary_
 	_tmp0_ = should_escape;
 #line 983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 9783 "Dialogs.c"
+#line 9781 "Dialogs.c"
 		const gchar* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
@@ -9827,7 +9825,7 @@ gchar* build_alert_body_text (const gchar* primary_text, const gchar* secondary_
 		result = _tmp8_;
 #line 984 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 9816 "Dialogs.c"
+#line 9814 "Dialogs.c"
 	}
 #line 988 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = primary_text;
@@ -9847,7 +9845,7 @@ gchar* build_alert_body_text (const gchar* primary_text, const gchar* secondary_
 	result = _tmp14_;
 #line 988 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9836 "Dialogs.c"
+#line 9834 "Dialogs.c"
 }
 
 
@@ -9856,7 +9854,7 @@ static gboolean _entry_multi_completion_match_func_gtk_entry_completion_match_fu
 	result = entry_multi_completion_match_func ((EntryMultiCompletion*) self, completion, key, iter);
 #line 1003 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9845 "Dialogs.c"
+#line 9843 "Dialogs.c"
 }
 
 
@@ -9879,7 +9877,7 @@ EntryMultiCompletion* entry_multi_completion_construct (GType object_type, GeeCo
 	if (_tmp1_ == NULL) {
 #line 998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = TRUE;
-#line 9868 "Dialogs.c"
+#line 9866 "Dialogs.c"
 	} else {
 		const gchar* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
@@ -9892,7 +9890,7 @@ EntryMultiCompletion* entry_multi_completion_construct (GType object_type, GeeCo
 		_tmp4_ = _tmp3_;
 #line 998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp4_ == 1;
-#line 9881 "Dialogs.c"
+#line 9879 "Dialogs.c"
 	}
 #line 998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_assert (_tmp0_, "delimiter == null || delimiter.length == 1");
@@ -9920,14 +9918,14 @@ EntryMultiCompletion* entry_multi_completion_construct (GType object_type, GeeCo
 	gtk_entry_completion_set_match_func (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_entry_completion_get_type (), GtkEntryCompletion), _entry_multi_completion_match_func_gtk_entry_completion_match_func, g_object_ref (self), g_object_unref);
 #line 997 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 9909 "Dialogs.c"
+#line 9907 "Dialogs.c"
 }
 
 
 EntryMultiCompletion* entry_multi_completion_new (GeeCollection* completion_list, const gchar* delimiter) {
 #line 997 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return entry_multi_completion_construct (TYPE_ENTRY_MULTI_COMPLETION, completion_list, delimiter);
-#line 9916 "Dialogs.c"
+#line 9914 "Dialogs.c"
 }
 
 
@@ -9953,7 +9951,7 @@ static GtkListStore* entry_multi_completion_create_completion_store (GeeCollecti
 	completion_iter = _tmp2_;
 #line 1010 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	while (TRUE) {
-#line 9942 "Dialogs.c"
+#line 9940 "Dialogs.c"
 		GeeIterator* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
 		GtkListStore* _tmp5_ = NULL;
@@ -9971,7 +9969,7 @@ static GtkListStore* entry_multi_completion_create_completion_store (GeeCollecti
 		if (!_tmp4_) {
 #line 1010 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			break;
-#line 9960 "Dialogs.c"
+#line 9958 "Dialogs.c"
 		}
 #line 1011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = completion_store;
@@ -9993,7 +9991,7 @@ static GtkListStore* entry_multi_completion_create_completion_store (GeeCollecti
 		gtk_list_store_set (_tmp7_, &_tmp8_, 0, _tmp11_, -1, -1);
 #line 1012 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp11_);
-#line 9982 "Dialogs.c"
+#line 9980 "Dialogs.c"
 	}
 #line 1015 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = completion_store;
@@ -10001,7 +9999,7 @@ static GtkListStore* entry_multi_completion_create_completion_store (GeeCollecti
 	_g_object_unref0 (completion_iter);
 #line 1015 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 9990 "Dialogs.c"
+#line 9988 "Dialogs.c"
 }
 
 
@@ -10024,7 +10022,7 @@ static gchar* string_strip (const gchar* self) {
 	result = _result_;
 #line 1210 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 10013 "Dialogs.c"
+#line 10011 "Dialogs.c"
 }
 
 
@@ -10044,7 +10042,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 10033 "Dialogs.c"
+#line 10031 "Dialogs.c"
 }
 
 
@@ -10069,7 +10067,7 @@ static gint string_last_index_of_char (const gchar* self, gunichar c, gint start
 	_tmp3_ = _result_;
 #line 1020 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ != NULL) {
-#line 10058 "Dialogs.c"
+#line 10056 "Dialogs.c"
 		gchar* _tmp4_ = NULL;
 #line 1021 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = _result_;
@@ -10077,13 +10075,13 @@ static gint string_last_index_of_char (const gchar* self, gunichar c, gint start
 		result = (gint) (_tmp4_ - ((gchar*) self));
 #line 1021 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 10066 "Dialogs.c"
+#line 10064 "Dialogs.c"
 	} else {
 #line 1023 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		result = -1;
 #line 1023 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 10072 "Dialogs.c"
+#line 10070 "Dialogs.c"
 	}
 }
 
@@ -10151,7 +10149,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 	_tmp11_ = self->priv->delimiter;
 #line 1030 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp11_ == NULL) {
-#line 10140 "Dialogs.c"
+#line 10138 "Dialogs.c"
 		const gchar* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
@@ -10182,7 +10180,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 		_g_object_unref0 (model);
 #line 1031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 10171 "Dialogs.c"
+#line 10169 "Dialogs.c"
 	} else {
 		const gchar* _tmp18_ = NULL;
 		const gchar* _tmp19_ = NULL;
@@ -10211,7 +10209,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 		_tmp20_ = string_contains (_tmp18_, _tmp19_);
 #line 1033 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp20_) {
-#line 10200 "Dialogs.c"
+#line 10198 "Dialogs.c"
 			gint offset = 0;
 			const gchar* _tmp21_ = NULL;
 			const gchar* _tmp22_ = NULL;
@@ -10260,7 +10258,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 				_g_object_unref0 (model);
 #line 1038 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return result;
-#line 10249 "Dialogs.c"
+#line 10247 "Dialogs.c"
 			}
 		}
 #line 1041 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -10299,7 +10297,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 			_g_object_unref0 (model);
 #line 1044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return result;
-#line 10288 "Dialogs.c"
+#line 10286 "Dialogs.c"
 		}
 #line 1046 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp40_ = possible_match;
@@ -10327,7 +10325,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 		_g_object_unref0 (model);
 #line 1046 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 10316 "Dialogs.c"
+#line 10314 "Dialogs.c"
 	}
 #line 1018 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (normed_key);
@@ -10335,7 +10333,7 @@ static gboolean entry_multi_completion_match_func (EntryMultiCompletion* self, G
 	_g_free0 (possible_match);
 #line 1018 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (model);
-#line 10324 "Dialogs.c"
+#line 10322 "Dialogs.c"
 }
 
 
@@ -10358,7 +10356,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 10347 "Dialogs.c"
+#line 10345 "Dialogs.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -10366,7 +10364,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 10355 "Dialogs.c"
+#line 10353 "Dialogs.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -10378,7 +10376,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 10367 "Dialogs.c"
+#line 10365 "Dialogs.c"
 	}
 }
 
@@ -10402,21 +10400,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 10391 "Dialogs.c"
+#line 10389 "Dialogs.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 10397 "Dialogs.c"
+#line 10395 "Dialogs.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 10401 "Dialogs.c"
+#line 10399 "Dialogs.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 10405 "Dialogs.c"
+#line 10403 "Dialogs.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -10428,7 +10426,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 10417 "Dialogs.c"
+#line 10415 "Dialogs.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -10438,13 +10436,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 10427 "Dialogs.c"
+#line 10425 "Dialogs.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 10433 "Dialogs.c"
+#line 10431 "Dialogs.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -10458,7 +10456,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 10447 "Dialogs.c"
+#line 10445 "Dialogs.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -10468,13 +10466,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 10457 "Dialogs.c"
+#line 10455 "Dialogs.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 10463 "Dialogs.c"
+#line 10461 "Dialogs.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -10483,7 +10481,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 10472 "Dialogs.c"
+#line 10470 "Dialogs.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -10503,7 +10501,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 10492 "Dialogs.c"
+#line 10490 "Dialogs.c"
 }
 
 
@@ -10573,7 +10571,7 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 	_tmp9_ = _tmp8_;
 #line 1057 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp9_ > 0) {
-#line 10562 "Dialogs.c"
+#line 10560 "Dialogs.c"
 		const gchar* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		gboolean _tmp12_ = FALSE;
@@ -10585,7 +10583,7 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 		_tmp12_ = string_contains (_tmp10_, _tmp11_);
 #line 1058 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp12_) {
-#line 10574 "Dialogs.c"
+#line 10572 "Dialogs.c"
 			const gchar* _tmp13_ = NULL;
 			const gchar* _tmp14_ = NULL;
 			const gchar* _tmp15_ = NULL;
@@ -10602,11 +10600,11 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 			if (g_strcmp0 (_tmp14_, " ") != 0) {
 #line 1059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = " ";
-#line 10591 "Dialogs.c"
+#line 10589 "Dialogs.c"
 			} else {
 #line 1059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = "";
-#line 10595 "Dialogs.c"
+#line 10593 "Dialogs.c"
 			}
 #line 1059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp15_ = old_text;
@@ -10630,7 +10628,7 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 			old_text = _tmp22_;
 #line 1059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (_tmp21_);
-#line 10619 "Dialogs.c"
+#line 10617 "Dialogs.c"
 		} else {
 			gchar* _tmp23_ = NULL;
 #line 1061 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -10639,7 +10637,7 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 			_g_free0 (old_text);
 #line 1061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			old_text = _tmp23_;
-#line 10628 "Dialogs.c"
+#line 10626 "Dialogs.c"
 		}
 	}
 #line 1064 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -10648,11 +10646,11 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 	if (g_strcmp0 (_tmp25_, " ") != 0) {
 #line 1064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = " ";
-#line 10637 "Dialogs.c"
+#line 10635 "Dialogs.c"
 	} else {
 #line 1064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = "";
-#line 10641 "Dialogs.c"
+#line 10639 "Dialogs.c"
 	}
 #line 1064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp26_ = old_text;
@@ -10702,7 +10700,7 @@ static gboolean entry_multi_completion_real_match_selected (GtkEntryCompletion* 
 	_g_free0 (match);
 #line 1068 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 10691 "Dialogs.c"
+#line 10689 "Dialogs.c"
 }
 
 
@@ -10740,7 +10738,7 @@ static gchar* entry_multi_completion_get_last_part (const gchar* s, const gchar*
 	_tmp5__length1 = split_length1;
 #line 1075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_ != NULL) {
-#line 10729 "Dialogs.c"
+#line 10727 "Dialogs.c"
 		gchar** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
 		const gchar* _tmp7_ = NULL;
@@ -10752,15 +10750,15 @@ static gchar* entry_multi_completion_get_last_part (const gchar* s, const gchar*
 		_tmp7_ = _tmp6_[0];
 #line 1075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _tmp7_ != NULL;
-#line 10741 "Dialogs.c"
+#line 10739 "Dialogs.c"
 	} else {
 #line 1075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = FALSE;
-#line 10745 "Dialogs.c"
+#line 10743 "Dialogs.c"
 	}
 #line 1075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_) {
-#line 10749 "Dialogs.c"
+#line 10747 "Dialogs.c"
 		gchar** _tmp8_ = NULL;
 		gint _tmp8__length1 = 0;
 		gchar** _tmp9_ = NULL;
@@ -10785,7 +10783,7 @@ static gchar* entry_multi_completion_get_last_part (const gchar* s, const gchar*
 		split = (_vala_array_free (split, split_length1, (GDestroyNotify) g_free), NULL);
 #line 1076 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 10774 "Dialogs.c"
+#line 10772 "Dialogs.c"
 	} else {
 		gchar* _tmp12_ = NULL;
 #line 1078 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -10796,11 +10794,11 @@ static gchar* entry_multi_completion_get_last_part (const gchar* s, const gchar*
 		split = (_vala_array_free (split, split_length1, (GDestroyNotify) g_free), NULL);
 #line 1078 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 10785 "Dialogs.c"
+#line 10783 "Dialogs.c"
 	}
 #line 1072 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	split = (_vala_array_free (split, split_length1, (GDestroyNotify) g_free), NULL);
-#line 10789 "Dialogs.c"
+#line 10787 "Dialogs.c"
 }
 
 
@@ -10813,14 +10811,14 @@ static void entry_multi_completion_class_init (EntryMultiCompletionClass * klass
 	((GtkEntryCompletionClass *) klass)->match_selected = entry_multi_completion_real_match_selected;
 #line 994 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = entry_multi_completion_finalize;
-#line 10802 "Dialogs.c"
+#line 10800 "Dialogs.c"
 }
 
 
 static void entry_multi_completion_instance_init (EntryMultiCompletion * self) {
 #line 994 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = ENTRY_MULTI_COMPLETION_GET_PRIVATE (self);
-#line 10809 "Dialogs.c"
+#line 10807 "Dialogs.c"
 }
 
 
@@ -10832,7 +10830,7 @@ static void entry_multi_completion_finalize (GObject* obj) {
 	_g_free0 (self->priv->delimiter);
 #line 994 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (entry_multi_completion_parent_class)->finalize (obj);
-#line 10821 "Dialogs.c"
+#line 10819 "Dialogs.c"
 }
 
 
@@ -10851,7 +10849,7 @@ GType entry_multi_completion_get_type (void) {
 static void _set_background_dialog_on_checkbox_clicked_gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self) {
 #line 1102 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	set_background_dialog_on_checkbox_clicked ((SetBackgroundDialog*) self);
-#line 10840 "Dialogs.c"
+#line 10838 "Dialogs.c"
 }
 
 
@@ -10980,7 +10978,7 @@ SetBackgroundDialog* set_background_dialog_construct (GType object_type, GtkBuil
 	self->ok_button = _tmp26_;
 #line 1092 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 10969 "Dialogs.c"
+#line 10967 "Dialogs.c"
 }
 
 
@@ -11015,34 +11013,34 @@ void set_background_dialog_on_checkbox_clicked (SetBackgroundDialog* self) {
 	_tmp7_ = self->desktop;
 #line 1114 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp7_) {
-#line 11004 "Dialogs.c"
+#line 11002 "Dialogs.c"
 		gboolean _tmp8_ = FALSE;
 #line 1114 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = self->screensaver;
 #line 1114 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = !_tmp8_;
-#line 11010 "Dialogs.c"
+#line 11008 "Dialogs.c"
 	} else {
 #line 1114 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = FALSE;
-#line 11014 "Dialogs.c"
+#line 11012 "Dialogs.c"
 	}
 #line 1114 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp6_) {
-#line 11018 "Dialogs.c"
+#line 11016 "Dialogs.c"
 		GtkButton* _tmp9_ = NULL;
 #line 1115 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = self->ok_button;
 #line 1115 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 11024 "Dialogs.c"
+#line 11022 "Dialogs.c"
 	} else {
 		GtkButton* _tmp10_ = NULL;
 #line 1117 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = self->ok_button;
 #line 1117 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 11031 "Dialogs.c"
+#line 11029 "Dialogs.c"
 	}
 }
 
@@ -11074,14 +11072,14 @@ gboolean set_background_dialog_execute_base (SetBackgroundDialog* self) {
 	result = _result_;
 #line 1126 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 11063 "Dialogs.c"
+#line 11061 "Dialogs.c"
 }
 
 
 static void value_set_background_dialog_init (GValue* value) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 11070 "Dialogs.c"
+#line 11068 "Dialogs.c"
 }
 
 
@@ -11090,7 +11088,7 @@ static void value_set_background_dialog_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		set_background_dialog_unref (value->data[0].v_pointer);
-#line 11079 "Dialogs.c"
+#line 11077 "Dialogs.c"
 	}
 }
 
@@ -11100,11 +11098,11 @@ static void value_set_background_dialog_copy_value (const GValue* src_value, GVa
 	if (src_value->data[0].v_pointer) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = set_background_dialog_ref (src_value->data[0].v_pointer);
-#line 11089 "Dialogs.c"
+#line 11087 "Dialogs.c"
 	} else {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 11093 "Dialogs.c"
+#line 11091 "Dialogs.c"
 	}
 }
 
@@ -11112,37 +11110,37 @@ static void value_set_background_dialog_copy_value (const GValue* src_value, GVa
 static gpointer value_set_background_dialog_peek_pointer (const GValue* value) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 11101 "Dialogs.c"
+#line 11099 "Dialogs.c"
 }
 
 
 static gchar* value_set_background_dialog_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 11108 "Dialogs.c"
+#line 11106 "Dialogs.c"
 		SetBackgroundDialog* object;
 		object = collect_values[0].v_pointer;
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11115 "Dialogs.c"
+#line 11113 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11119 "Dialogs.c"
+#line 11117 "Dialogs.c"
 		}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = set_background_dialog_ref (object);
-#line 11123 "Dialogs.c"
+#line 11121 "Dialogs.c"
 	} else {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 11127 "Dialogs.c"
+#line 11125 "Dialogs.c"
 	}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 11131 "Dialogs.c"
+#line 11129 "Dialogs.c"
 }
 
 
@@ -11153,25 +11151,25 @@ static gchar* value_set_background_dialog_lcopy_value (const GValue* value, guin
 	if (!object_p) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 11142 "Dialogs.c"
+#line 11140 "Dialogs.c"
 	}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 11148 "Dialogs.c"
+#line 11146 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 11152 "Dialogs.c"
+#line 11150 "Dialogs.c"
 	} else {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = set_background_dialog_ref (value->data[0].v_pointer);
-#line 11156 "Dialogs.c"
+#line 11154 "Dialogs.c"
 	}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 11160 "Dialogs.c"
+#line 11158 "Dialogs.c"
 }
 
 
@@ -11185,7 +11183,7 @@ GParamSpec* param_spec_set_background_dialog (const gchar* name, const gchar* ni
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 11174 "Dialogs.c"
+#line 11172 "Dialogs.c"
 }
 
 
@@ -11194,7 +11192,7 @@ gpointer value_get_set_background_dialog (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_SET_BACKGROUND_DIALOG), NULL);
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 11183 "Dialogs.c"
+#line 11181 "Dialogs.c"
 }
 
 
@@ -11214,17 +11212,17 @@ void value_set_set_background_dialog (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		set_background_dialog_ref (value->data[0].v_pointer);
-#line 11203 "Dialogs.c"
+#line 11201 "Dialogs.c"
 	} else {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 11207 "Dialogs.c"
+#line 11205 "Dialogs.c"
 	}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		set_background_dialog_unref (old);
-#line 11213 "Dialogs.c"
+#line 11211 "Dialogs.c"
 	}
 }
 
@@ -11243,17 +11241,17 @@ void value_take_set_background_dialog (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 11232 "Dialogs.c"
+#line 11230 "Dialogs.c"
 	} else {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 11236 "Dialogs.c"
+#line 11234 "Dialogs.c"
 	}
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		set_background_dialog_unref (old);
-#line 11242 "Dialogs.c"
+#line 11240 "Dialogs.c"
 	}
 }
 
@@ -11263,7 +11261,7 @@ static void set_background_dialog_class_init (SetBackgroundDialogClass * klass) 
 	set_background_dialog_parent_class = g_type_class_peek_parent (klass);
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((SetBackgroundDialogClass *) klass)->finalize = set_background_dialog_finalize;
-#line 11252 "Dialogs.c"
+#line 11250 "Dialogs.c"
 }
 
 
@@ -11274,7 +11272,7 @@ static void set_background_dialog_instance_init (SetBackgroundDialog * self) {
 	self->screensaver = FALSE;
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 11263 "Dialogs.c"
+#line 11261 "Dialogs.c"
 }
 
 
@@ -11292,7 +11290,7 @@ static void set_background_dialog_finalize (SetBackgroundDialog* obj) {
 	_g_object_unref0 (self->screensaver_button);
 #line 1087 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->ok_button);
-#line 11281 "Dialogs.c"
+#line 11279 "Dialogs.c"
 }
 
 
@@ -11317,7 +11315,7 @@ gpointer set_background_dialog_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 11306 "Dialogs.c"
+#line 11304 "Dialogs.c"
 }
 
 
@@ -11330,7 +11328,7 @@ void set_background_dialog_unref (gpointer instance) {
 		SET_BACKGROUND_DIALOG_GET_CLASS (self)->finalize (self);
 #line 1083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 11319 "Dialogs.c"
+#line 11317 "Dialogs.c"
 	}
 }
 
@@ -11349,14 +11347,14 @@ SetBackgroundPhotoDialog* set_background_photo_dialog_construct (GType object_ty
 	_g_object_unref0 (builder);
 #line 1132 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 11338 "Dialogs.c"
+#line 11336 "Dialogs.c"
 }
 
 
 SetBackgroundPhotoDialog* set_background_photo_dialog_new (void) {
 #line 1132 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return set_background_photo_dialog_construct (TYPE_SET_BACKGROUND_PHOTO_DIALOG);
-#line 11345 "Dialogs.c"
+#line 11343 "Dialogs.c"
 }
 
 
@@ -11388,24 +11386,24 @@ gboolean set_background_photo_dialog_execute (SetBackgroundPhotoDialog* self, gb
 	if (desktop_background) {
 #line 1143 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*desktop_background = _vala_desktop_background;
-#line 11377 "Dialogs.c"
+#line 11375 "Dialogs.c"
 	}
 #line 1143 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (screensaver) {
 #line 1143 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*screensaver = _vala_screensaver;
-#line 11383 "Dialogs.c"
+#line 11381 "Dialogs.c"
 	}
 #line 1143 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 11387 "Dialogs.c"
+#line 11385 "Dialogs.c"
 }
 
 
 static void set_background_photo_dialog_class_init (SetBackgroundPhotoDialogClass * klass) {
 #line 1130 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	set_background_photo_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 11394 "Dialogs.c"
+#line 11392 "Dialogs.c"
 }
 
 
@@ -11428,7 +11426,7 @@ GType set_background_photo_dialog_get_type (void) {
 static void _set_background_slideshow_dialog_on_delay_scale_value_changed_gtk_range_value_changed (GtkRange* _sender, gpointer self) {
 #line 1159 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	set_background_slideshow_dialog_on_delay_scale_value_changed ((SetBackgroundSlideshowDialog*) self);
-#line 11417 "Dialogs.c"
+#line 11415 "Dialogs.c"
 }
 
 
@@ -11482,14 +11480,14 @@ SetBackgroundSlideshowDialog* set_background_slideshow_dialog_construct (GType o
 	_g_object_unref0 (builder);
 #line 1152 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 11471 "Dialogs.c"
+#line 11469 "Dialogs.c"
 }
 
 
 SetBackgroundSlideshowDialog* set_background_slideshow_dialog_new (void) {
 #line 1152 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return set_background_slideshow_dialog_construct (TYPE_SET_BACKGROUND_SLIDESHOW_DIALOG);
-#line 11478 "Dialogs.c"
+#line 11476 "Dialogs.c"
 }
 
 
@@ -11533,7 +11531,7 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 	_tmp8_ = self->priv->delay_value;
 #line 1173 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp8_ < 60) {
-#line 11522 "Dialogs.c"
+#line 11520 "Dialogs.c"
 		gint _tmp9_ = 0;
 		const gchar* _tmp10_ = NULL;
 		gint _tmp11_ = 0;
@@ -11550,14 +11548,14 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 		_g_free0 (text);
 #line 1174 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text = _tmp12_;
-#line 11539 "Dialogs.c"
+#line 11537 "Dialogs.c"
 	} else {
 		gint _tmp13_ = 0;
 #line 1175 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = self->priv->delay_value;
 #line 1175 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp13_ < (60 * 60)) {
-#line 11546 "Dialogs.c"
+#line 11544 "Dialogs.c"
 			gint minutes = 0;
 			gint _tmp14_ = 0;
 			gint _tmp15_ = 0;
@@ -11585,14 +11583,14 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 			_tmp19_ = minutes;
 #line 1178 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			self->priv->delay_value = _tmp19_ * 60;
-#line 11574 "Dialogs.c"
+#line 11572 "Dialogs.c"
 		} else {
 			gint _tmp20_ = 0;
 #line 1179 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp20_ = self->priv->delay_value;
 #line 1179 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp20_ < ((60 * 60) * 24)) {
-#line 11581 "Dialogs.c"
+#line 11579 "Dialogs.c"
 				gint hours = 0;
 				gint _tmp21_ = 0;
 				gint _tmp22_ = 0;
@@ -11620,7 +11618,7 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 				_tmp26_ = hours;
 #line 1182 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				self->priv->delay_value = _tmp26_ * (60 * 60);
-#line 11609 "Dialogs.c"
+#line 11607 "Dialogs.c"
 			} else {
 				const gchar* _tmp27_ = NULL;
 				gchar* _tmp28_ = NULL;
@@ -11634,7 +11632,7 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 				text = _tmp28_;
 #line 1185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				self->priv->delay_value = (60 * 60) * 24;
-#line 11623 "Dialogs.c"
+#line 11621 "Dialogs.c"
 			}
 		}
 	}
@@ -11646,7 +11644,7 @@ static void set_background_slideshow_dialog_on_delay_scale_value_changed (SetBac
 	gtk_label_set_label (_tmp29_, _tmp30_);
 #line 1163 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (text);
-#line 11635 "Dialogs.c"
+#line 11633 "Dialogs.c"
 }
 
 
@@ -11684,23 +11682,23 @@ gboolean set_background_slideshow_dialog_execute (SetBackgroundSlideshowDialog* 
 	if (delay_value) {
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*delay_value = _vala_delay_value;
-#line 11673 "Dialogs.c"
+#line 11671 "Dialogs.c"
 	}
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (desktop_background) {
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*desktop_background = _vala_desktop_background;
-#line 11679 "Dialogs.c"
+#line 11677 "Dialogs.c"
 	}
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (screensaver) {
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*screensaver = _vala_screensaver;
-#line 11685 "Dialogs.c"
+#line 11683 "Dialogs.c"
 	}
 #line 1198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 11689 "Dialogs.c"
+#line 11687 "Dialogs.c"
 }
 
 
@@ -11711,7 +11709,7 @@ static void set_background_slideshow_dialog_class_init (SetBackgroundSlideshowDi
 	((SetBackgroundDialogClass *) klass)->finalize = set_background_slideshow_dialog_finalize;
 #line 1147 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (SetBackgroundSlideshowDialogPrivate));
-#line 11700 "Dialogs.c"
+#line 11698 "Dialogs.c"
 }
 
 
@@ -11720,7 +11718,7 @@ static void set_background_slideshow_dialog_instance_init (SetBackgroundSlidesho
 	self->priv = SET_BACKGROUND_SLIDESHOW_DIALOG_GET_PRIVATE (self);
 #line 1150 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->delay_value = 0;
-#line 11709 "Dialogs.c"
+#line 11707 "Dialogs.c"
 }
 
 
@@ -11734,7 +11732,7 @@ static void set_background_slideshow_dialog_finalize (SetBackgroundDialog* obj) 
 	_g_object_unref0 (self->priv->delay_scale);
 #line 1147 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	SET_BACKGROUND_DIALOG_CLASS (set_background_slideshow_dialog_parent_class)->finalize (obj);
-#line 11723 "Dialogs.c"
+#line 11721 "Dialogs.c"
 }
 
 
@@ -11756,60 +11754,60 @@ TextEntryDialog* text_entry_dialog_construct (GType object_type) {
 	GtkSettings* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
 	gboolean _tmp2_ = FALSE;
-#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1213 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = gtk_settings_get_default ();
-#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1213 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
-#line 1215 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = use_header;
-#line 1215 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_) {
-#line 1215 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 1;
-#line 11755 "Dialogs.c"
+#line 11753 "Dialogs.c"
 	} else {
-#line 1215 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 0;
-#line 11759 "Dialogs.c"
+#line 11757 "Dialogs.c"
 	}
-#line 1215 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1214 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (TextEntryDialog*) g_object_new (object_type, "use-header-bar", _tmp1_, NULL);
-#line 1212 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1211 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 11765 "Dialogs.c"
+#line 11763 "Dialogs.c"
 }
 
 
 TextEntryDialog* text_entry_dialog_new (void) {
-#line 1212 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1211 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return text_entry_dialog_construct (TYPE_TEXT_ENTRY_DIALOG);
-#line 11772 "Dialogs.c"
+#line 11770 "Dialogs.c"
 }
 
 
 void text_entry_dialog_set_builder (TextEntryDialog* self, GtkBuilder* builder) {
 	GtkBuilder* _tmp0_ = NULL;
 	GtkBuilder* _tmp1_ = NULL;
-#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1217 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_TEXT_ENTRY_DIALOG (self));
-#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1217 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GTK_IS_BUILDER (builder));
-#line 1219 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = builder;
-#line 1219 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1219 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 1219 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1218 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->builder = _tmp1_;
-#line 11791 "Dialogs.c"
+#line 11789 "Dialogs.c"
 }
 
 
 static void _text_entry_dialog_on_entry_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 1236 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1235 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text_entry_dialog_on_entry_changed ((TextEntryDialog*) self);
-#line 11798 "Dialogs.c"
+#line 11796 "Dialogs.c"
 }
 
 
@@ -11837,171 +11835,154 @@ void text_entry_dialog_setup (TextEntryDialog* self, TextEntryDialogOnModifyVali
 	GtkEntry* _tmp19_ = NULL;
 	GtkEntry* _tmp20_ = NULL;
 	GtkWidget* _tmp21_ = NULL;
-	GtkButtonBox* _tmp22_ = NULL;
-	GtkButtonBox* _tmp23_ = NULL;
-	GtkWidget* _tmp24_ = NULL;
-	GtkButton* _tmp25_ = NULL;
-	GtkWidget* _tmp26_ = NULL;
-	GtkButton* _tmp27_ = NULL;
-	GeeCollection* _tmp28_ = NULL;
-#line 1222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	GtkButton* _tmp22_ = NULL;
+	GtkWidget* _tmp23_ = NULL;
+	GtkButton* _tmp24_ = NULL;
+	GeeCollection* _tmp25_ = NULL;
+#line 1221 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_TEXT_ENTRY_DIALOG (self));
-#line 1222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1221 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (title != NULL);
-#line 1222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1221 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (label != NULL);
-#line 1222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1221 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail ((completion_list == NULL) || GEE_IS_COLLECTION (completion_list));
-#line 1224 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1223 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = title;
-#line 1224 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1223 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp0_);
-#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1224 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = app_window_get_instance ();
-#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_;
-#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_widget_get_parent_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_parent_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp3_);
-#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1225 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp2_);
-#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = app_window_get_instance ();
-#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_window_get_type (), GtkWindow));
-#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1226 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp5_);
-#line 1228 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = modify_validate;
-#line 1228 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6__target = modify_validate_target;
-#line 1228 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->on_modify_validate = _tmp6_;
-#line 1228 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1227 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->on_modify_validate_target = _tmp6__target;
-#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = self->priv->builder;
-#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = gtk_builder_get_object (_tmp7_, "label");
-#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp8_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp8_) : NULL);
-#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	name_label = _tmp9_;
-#line 1231 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = name_label;
-#line 1231 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = label;
-#line 1231 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1230 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_label_set_text (_tmp10_, _tmp11_);
-#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1232 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = self->priv->builder;
-#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1232 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = gtk_builder_get_object (_tmp12_, "entry");
-#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1232 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp13_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp13_) : NULL);
-#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1232 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->entry);
-#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1232 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->entry = _tmp14_;
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = initial_text;
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp16_ != NULL) {
-#line 11901 "Dialogs.c"
+#line 11896 "Dialogs.c"
 		const gchar* _tmp17_ = NULL;
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = initial_text;
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = _tmp17_;
-#line 11907 "Dialogs.c"
+#line 11902 "Dialogs.c"
 	} else {
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = "";
-#line 11911 "Dialogs.c"
+#line 11906 "Dialogs.c"
 	}
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = self->priv->entry;
-#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_text (_tmp18_, _tmp15_);
-#line 1235 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = self->priv->entry;
-#line 1235 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1234 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget));
-#line 1236 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1235 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = self->priv->entry;
-#line 1236 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1235 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _text_entry_dialog_on_entry_changed_gtk_editable_changed, self, 0);
-#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp21_ = gtk_dialog_get_action_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_button_box_get_type (), GtkButtonBox));
-#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->action_area_box);
-#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->action_area_box = _tmp22_;
-#line 1239 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp23_ = self->priv->action_area_box;
-#line 1239 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_button_box_set_layout (_tmp23_, GTK_BUTTONBOX_END);
-#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp24_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_CANCEL_LABEL, (gint) GTK_RESPONSE_CANCEL);
-#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp25_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_button_get_type (), GtkButton));
-#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp21_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_CANCEL_LABEL, (gint) GTK_RESPONSE_CANCEL);
+#line 1237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_button_get_type (), GtkButton));
+#line 1237 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->button1);
-#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->button1 = _tmp25_;
-#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp26_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_SAVE_LABEL, (gint) GTK_RESPONSE_OK);
-#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp27_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_button_get_type (), GtkButton));
-#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->button1 = _tmp22_;
+#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp23_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_SAVE_LABEL, (gint) GTK_RESPONSE_OK);
+#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_button_get_type (), GtkButton));
+#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->button2);
-#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->button2 = _tmp27_;
-#line 1243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1238 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->button2 = _tmp24_;
+#line 1239 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_default_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK);
-#line 1245 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp28_ = completion_list;
-#line 1245 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp28_ != NULL) {
-#line 11959 "Dialogs.c"
+#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp25_ = completion_list;
+#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	if (_tmp25_ != NULL) {
+#line 11942 "Dialogs.c"
 		EntryMultiCompletion* completion = NULL;
-		GeeCollection* _tmp29_ = NULL;
-		const gchar* _tmp30_ = NULL;
-		EntryMultiCompletion* _tmp31_ = NULL;
-		GtkEntry* _tmp32_ = NULL;
-		EntryMultiCompletion* _tmp33_ = NULL;
-#line 1246 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp29_ = completion_list;
-#line 1246 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp30_ = completion_delimiter;
-#line 1246 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp31_ = entry_multi_completion_new (_tmp29_, _tmp30_);
-#line 1246 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		completion = _tmp31_;
-#line 1248 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp32_ = self->priv->entry;
-#line 1248 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp33_ = completion;
-#line 1248 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_entry_set_completion (_tmp32_, G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_entry_completion_get_type (), GtkEntryCompletion));
-#line 1245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		GeeCollection* _tmp26_ = NULL;
+		const gchar* _tmp27_ = NULL;
+		EntryMultiCompletion* _tmp28_ = NULL;
+		GtkEntry* _tmp29_ = NULL;
+		EntryMultiCompletion* _tmp30_ = NULL;
+#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp26_ = completion_list;
+#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp27_ = completion_delimiter;
+#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp28_ = entry_multi_completion_new (_tmp26_, _tmp27_);
+#line 1242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		completion = _tmp28_;
+#line 1244 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp29_ = self->priv->entry;
+#line 1244 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp30_ = completion;
+#line 1244 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_entry_set_completion (_tmp29_, G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_entry_completion_get_type (), GtkEntryCompletion));
+#line 1241 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (completion);
-#line 11982 "Dialogs.c"
+#line 11965 "Dialogs.c"
 	}
-#line 1251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_default_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK);
-#line 1252 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_window_set_has_resize_grip (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 1222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1221 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (name_label);
-#line 11990 "Dialogs.c"
+#line 11971 "Dialogs.c"
 }
 
 
@@ -12016,57 +11997,57 @@ gchar* text_entry_dialog_execute (TextEntryDialog* self) {
 	gint _tmp4_ = 0;
 	GtkEntry* _tmp8_ = NULL;
 	guint _tmp9_ = 0U;
-#line 1255 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1250 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_TEXT_ENTRY_DIALOG (self), NULL);
-#line 1256 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1251 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text = NULL;
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->on_modify_validate;
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0__target = self->priv->on_modify_validate_target;
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->entry;
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_entry_get_text (_tmp1_);
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp0_ (_tmp2_, _tmp0__target);
-#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_response_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK, _tmp3_);
-#line 1261 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1256 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1263 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1258 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1263 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1258 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_ == ((gint) GTK_RESPONSE_OK)) {
-#line 12027 "Dialogs.c"
+#line 12008 "Dialogs.c"
 		GtkEntry* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
-#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = self->priv->entry;
-#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = gtk_entry_get_text (_tmp5_);
-#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = g_strdup (_tmp6_);
-#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (text);
-#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text = _tmp7_;
-#line 12041 "Dialogs.c"
+#line 12022 "Dialogs.c"
 	}
-#line 1266 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = self->priv->entry;
-#line 1266 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_parse_name ("changed", GTK_TYPE_EDITABLE, &_tmp9_, NULL, FALSE);
-#line 1266 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GTK_TYPE_EDITABLE, GtkEditable), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _text_entry_dialog_on_entry_changed_gtk_editable_changed, self);
-#line 1267 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1262 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1269 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = text;
-#line 1269 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12055 "Dialogs.c"
+#line 12036 "Dialogs.c"
 }
 
 
@@ -12076,21 +12057,21 @@ void text_entry_dialog_on_entry_changed (TextEntryDialog* self) {
 	GtkEntry* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_TEXT_ENTRY_DIALOG (self));
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->on_modify_validate;
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0__target = self->priv->on_modify_validate_target;
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->entry;
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_entry_get_text (_tmp1_);
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp0_ (_tmp2_, _tmp0__target);
-#line 1273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1268 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_response_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK, _tmp3_);
-#line 12079 "Dialogs.c"
+#line 12060 "Dialogs.c"
 }
 
 
@@ -12101,14 +12082,14 @@ static void text_entry_dialog_class_init (TextEntryDialogClass * klass) {
 	g_type_class_add_private (klass, sizeof (TextEntryDialogPrivate));
 #line 1202 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = text_entry_dialog_finalize;
-#line 12090 "Dialogs.c"
+#line 12071 "Dialogs.c"
 }
 
 
 static void text_entry_dialog_instance_init (TextEntryDialog * self) {
 #line 1202 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = TEXT_ENTRY_DIALOG_GET_PRIVATE (self);
-#line 12097 "Dialogs.c"
+#line 12078 "Dialogs.c"
 }
 
 
@@ -12124,11 +12105,9 @@ static void text_entry_dialog_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->button1);
 #line 1209 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->button2);
-#line 1210 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->action_area_box);
 #line 1202 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (text_entry_dialog_parent_class)->finalize (obj);
-#line 12117 "Dialogs.c"
+#line 12096 "Dialogs.c"
 }
 
 
@@ -12150,53 +12129,53 @@ MultiTextEntryDialog* multi_text_entry_dialog_construct (GType object_type) {
 	GtkSettings* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
 	gboolean _tmp2_ = FALSE;
-#line 1289 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1283 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = gtk_settings_get_default ();
-#line 1289 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1283 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
-#line 1290 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = use_header;
-#line 1290 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_) {
-#line 1290 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 1;
-#line 12149 "Dialogs.c"
+#line 12128 "Dialogs.c"
 	} else {
-#line 1290 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = 0;
-#line 12153 "Dialogs.c"
+#line 12132 "Dialogs.c"
 	}
-#line 1290 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (MultiTextEntryDialog*) g_object_new (object_type, "use-header-bar", _tmp1_, NULL);
-#line 1287 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 12159 "Dialogs.c"
+#line 12138 "Dialogs.c"
 }
 
 
 MultiTextEntryDialog* multi_text_entry_dialog_new (void) {
-#line 1287 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return multi_text_entry_dialog_construct (TYPE_MULTI_TEXT_ENTRY_DIALOG);
-#line 12166 "Dialogs.c"
+#line 12145 "Dialogs.c"
 }
 
 
 void multi_text_entry_dialog_set_builder (MultiTextEntryDialog* self, GtkBuilder* builder) {
 	GtkBuilder* _tmp0_ = NULL;
 	GtkBuilder* _tmp1_ = NULL;
-#line 1293 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_MULTI_TEXT_ENTRY_DIALOG (self));
-#line 1293 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GTK_IS_BUILDER (builder));
-#line 1294 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = builder;
-#line 1294 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1294 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 1294 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->builder = _tmp1_;
-#line 12185 "Dialogs.c"
+#line 12164 "Dialogs.c"
 }
 
 
@@ -12223,137 +12202,120 @@ void multi_text_entry_dialog_setup (MultiTextEntryDialog* self, MultiTextEntryDi
 	GtkTextBuffer* _tmp19_ = NULL;
 	GtkTextView* _tmp20_ = NULL;
 	GtkWidget* _tmp21_ = NULL;
-	GtkButtonBox* _tmp22_ = NULL;
-	GtkButtonBox* _tmp23_ = NULL;
-	GtkWidget* _tmp24_ = NULL;
-	GtkButton* _tmp25_ = NULL;
-	GtkWidget* _tmp26_ = NULL;
-	GtkButton* _tmp27_ = NULL;
-#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	GtkButton* _tmp22_ = NULL;
+	GtkWidget* _tmp23_ = NULL;
+	GtkButton* _tmp24_ = NULL;
+#line 1291 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_MULTI_TEXT_ENTRY_DIALOG (self));
-#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1291 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (title != NULL);
-#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1291 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (label != NULL);
-#line 1298 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1292 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = title;
-#line 1298 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1292 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp0_);
-#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1293 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 1300 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1294 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_default_size (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), 500, 300);
-#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = app_window_get_instance ();
-#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_;
-#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_widget_get_parent_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_parent_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp3_);
-#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp2_);
-#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = app_window_get_instance ();
-#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_window_get_type (), GtkWindow));
-#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp5_);
-#line 1303 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = modify_validate;
-#line 1303 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6__target = modify_validate_target;
-#line 1303 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->on_modify_validate = _tmp6_;
-#line 1303 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1297 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->on_modify_validate_target = _tmp6__target;
-#line 1305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = self->priv->builder;
-#line 1305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = gtk_builder_get_object (_tmp7_, "textview1");
-#line 1305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp8_, gtk_text_view_get_type ()) ? ((GtkTextView*) _tmp8_) : NULL);
-#line 1305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->entry);
-#line 1305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->entry = _tmp9_;
-#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = self->priv->entry;
-#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_text_view_set_wrap_mode (_tmp10_, GTK_WRAP_WORD);
-#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = self->priv->entry;
-#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = gtk_text_buffer_new (NULL);
-#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = _tmp12_;
-#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_text_view_set_buffer (_tmp11_, _tmp13_);
-#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp13_);
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = initial_text;
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp15_ != NULL) {
-#line 12286 "Dialogs.c"
+#line 12262 "Dialogs.c"
 		const gchar* _tmp16_ = NULL;
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = initial_text;
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = _tmp16_;
-#line 12292 "Dialogs.c"
+#line 12268 "Dialogs.c"
 	} else {
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = "";
-#line 12296 "Dialogs.c"
+#line 12272 "Dialogs.c"
 	}
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = self->priv->entry;
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = gtk_text_view_get_buffer (_tmp17_);
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = _tmp18_;
-#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1302 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_set (_tmp19_, "text", _tmp14_, NULL);
-#line 1310 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1304 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = self->priv->entry;
-#line 1310 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1304 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget));
-#line 1312 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp21_ = gtk_dialog_get_action_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1312 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_button_box_get_type (), GtkButtonBox));
-#line 1312 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->action_area_box);
-#line 1312 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->action_area_box = _tmp22_;
-#line 1313 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp23_ = self->priv->action_area_box;
-#line 1313 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_button_box_set_layout (_tmp23_, GTK_BUTTONBOX_END);
-#line 1315 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp24_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_CANCEL_LABEL, (gint) GTK_RESPONSE_CANCEL);
-#line 1315 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp25_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_button_get_type (), GtkButton));
-#line 1315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp21_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_CANCEL_LABEL, (gint) GTK_RESPONSE_CANCEL);
+#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_button_get_type (), GtkButton));
+#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->button1);
-#line 1315 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->button1 = _tmp25_;
-#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp26_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_SAVE_LABEL, (gint) GTK_RESPONSE_OK);
-#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp27_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_button_get_type (), GtkButton));
-#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->button1 = _tmp22_;
+#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp23_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_SAVE_LABEL, (gint) GTK_RESPONSE_OK);
+#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_button_get_type (), GtkButton));
+#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->button2);
-#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->button2 = _tmp27_;
-#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->button2 = _tmp24_;
+#line 1308 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_default_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK);
-#line 1319 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_window_set_has_resize_grip (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 12342 "Dialogs.c"
+#line 12304 "Dialogs.c"
 }
 
 
@@ -12361,83 +12323,81 @@ gchar* multi_text_entry_dialog_execute (MultiTextEntryDialog* self) {
 	gchar* result = NULL;
 	gchar* text = NULL;
 	gint _tmp0_ = 0;
-#line 1322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1311 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_MULTI_TEXT_ENTRY_DIALOG (self), NULL);
-#line 1323 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1312 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text = NULL;
-#line 1325 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1314 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == ((gint) GTK_RESPONSE_OK)) {
-#line 12360 "Dialogs.c"
+#line 12322 "Dialogs.c"
 		GtkTextView* _tmp1_ = NULL;
 		GtkTextBuffer* _tmp2_ = NULL;
 		GtkTextBuffer* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = self->priv->entry;
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = gtk_text_view_get_buffer (_tmp1_);
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = _tmp2_;
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_get (_tmp3_, "text", &_tmp4_, NULL);
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = _tmp4_;
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (text);
-#line 1328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		text = _tmp5_;
-#line 12380 "Dialogs.c"
+#line 12342 "Dialogs.c"
 	}
-#line 1330 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1319 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1321 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = text;
-#line 1332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1321 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12388 "Dialogs.c"
+#line 12350 "Dialogs.c"
 }
 
 
 static void multi_text_entry_dialog_class_init (MultiTextEntryDialogClass * klass) {
-#line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	multi_text_entry_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (MultiTextEntryDialogPrivate));
-#line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = multi_text_entry_dialog_finalize;
-#line 12399 "Dialogs.c"
+#line 12361 "Dialogs.c"
 }
 
 
 static void multi_text_entry_dialog_instance_init (MultiTextEntryDialog * self) {
-#line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = MULTI_TEXT_ENTRY_DIALOG_GET_PRIVATE (self);
-#line 12406 "Dialogs.c"
+#line 12368 "Dialogs.c"
 }
 
 
 static void multi_text_entry_dialog_finalize (GObject* obj) {
 	MultiTextEntryDialog * self;
-#line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_MULTI_TEXT_ENTRY_DIALOG, MultiTextEntryDialog);
-#line 1281 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1276 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->entry);
-#line 1282 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->builder);
-#line 1283 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->button1);
-#line 1284 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->button2);
-#line 1285 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->action_area_box);
 #line 1277 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->builder);
+#line 1278 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->button1);
+#line 1279 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->button2);
+#line 1272 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (multi_text_entry_dialog_parent_class)->finalize (obj);
-#line 12426 "Dialogs.c"
+#line 12386 "Dialogs.c"
 }
 
 
@@ -12458,24 +12418,24 @@ EventRenameDialog* event_rename_dialog_construct (GType object_type, const gchar
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _ ("Rename Event");
-#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _ ("Name:");
-#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = event_name;
-#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1327 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (EventRenameDialog*) text_entry_dialog_mediator_construct (object_type, _tmp0_, _tmp1_, _tmp2_, NULL, NULL);
-#line 1337 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1326 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 12457 "Dialogs.c"
+#line 12417 "Dialogs.c"
 }
 
 
 EventRenameDialog* event_rename_dialog_new (const gchar* event_name) {
-#line 1337 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1326 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return event_rename_dialog_construct (TYPE_EVENT_RENAME_DIALOG, event_name);
-#line 12464 "Dialogs.c"
+#line 12424 "Dialogs.c"
 }
 
 
@@ -12485,39 +12445,39 @@ static gchar* event_rename_dialog_real_execute (EventRenameDialog* self) {
 	gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _text_entry_dialog_mediator_execute (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_TEXT_ENTRY_DIALOG_MEDIATOR, TextEntryDialogMediator));
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = event_prep_event_name (_tmp1_);
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp1_);
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp3_;
-#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12488 "Dialogs.c"
+#line 12448 "Dialogs.c"
 }
 
 
 gchar* event_rename_dialog_execute (EventRenameDialog* self) {
-#line 1341 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1330 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_EVENT_RENAME_DIALOG (self), NULL);
-#line 1341 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1330 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return EVENT_RENAME_DIALOG_GET_CLASS (self)->execute (self);
-#line 12497 "Dialogs.c"
+#line 12457 "Dialogs.c"
 }
 
 
 static void event_rename_dialog_class_init (EventRenameDialogClass * klass) {
-#line 1336 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1325 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	event_rename_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1336 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1325 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((EventRenameDialogClass *) klass)->execute = event_rename_dialog_real_execute;
-#line 12506 "Dialogs.c"
+#line 12466 "Dialogs.c"
 }
 
 
@@ -12542,24 +12502,24 @@ EditTitleDialog* edit_title_dialog_construct (GType object_type, const gchar* ph
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 1349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = C_ ("Dialog Title", "Edit Title");
-#line 1349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _ ("Title:");
-#line 1349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = photo_title;
-#line 1349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (EditTitleDialog*) text_entry_dialog_mediator_construct (object_type, _tmp0_, _tmp1_, _tmp2_, NULL, NULL);
-#line 1347 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1336 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 12541 "Dialogs.c"
+#line 12501 "Dialogs.c"
 }
 
 
 EditTitleDialog* edit_title_dialog_new (const gchar* photo_title) {
-#line 1347 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1336 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return edit_title_dialog_construct (TYPE_EDIT_TITLE_DIALOG, photo_title);
-#line 12548 "Dialogs.c"
+#line 12508 "Dialogs.c"
 }
 
 
@@ -12569,56 +12529,56 @@ static gchar* edit_title_dialog_real_execute (EditTitleDialog* self) {
 	gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _text_entry_dialog_mediator_execute (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_TEXT_ENTRY_DIALOG_MEDIATOR, TextEntryDialogMediator));
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = media_source_prep_title (_tmp1_);
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp1_);
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp3_;
-#line 1354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1343 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12572 "Dialogs.c"
+#line 12532 "Dialogs.c"
 }
 
 
 gchar* edit_title_dialog_execute (EditTitleDialog* self) {
-#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_EDIT_TITLE_DIALOG (self), NULL);
-#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return EDIT_TITLE_DIALOG_GET_CLASS (self)->execute (self);
-#line 12581 "Dialogs.c"
+#line 12541 "Dialogs.c"
 }
 
 
 static gboolean edit_title_dialog_real_on_modify_validate (TextEntryDialogMediator* base, const gchar* text) {
 	EditTitleDialog * self;
 	gboolean result = FALSE;
-#line 1357 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1346 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EDIT_TITLE_DIALOG, EditTitleDialog);
-#line 1357 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1346 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (text != NULL, FALSE);
-#line 1358 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1347 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = TRUE;
-#line 1358 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1347 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12596 "Dialogs.c"
+#line 12556 "Dialogs.c"
 }
 
 
 static void edit_title_dialog_class_init (EditTitleDialogClass * klass) {
-#line 1346 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1335 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	edit_title_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1346 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1335 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((EditTitleDialogClass *) klass)->execute = edit_title_dialog_real_execute;
-#line 1346 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1335 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((TextEntryDialogMediatorClass *) klass)->on_modify_validate = edit_title_dialog_real_on_modify_validate;
-#line 12607 "Dialogs.c"
+#line 12567 "Dialogs.c"
 }
 
 
@@ -12646,47 +12606,47 @@ EditCommentDialog* edit_comment_dialog_construct (GType object_type, const gchar
 	gchar* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
-#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = is_event;
-#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_) {
-#line 12639 "Dialogs.c"
+#line 12599 "Dialogs.c"
 		const gchar* _tmp2_ = NULL;
-#line 1366 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1355 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = _ ("Edit Event Comment");
-#line 1366 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1355 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp2_;
-#line 12645 "Dialogs.c"
+#line 12605 "Dialogs.c"
 	} else {
 		const gchar* _tmp3_ = NULL;
-#line 1367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1356 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = _ ("Edit Photo/Video Comment");
-#line 1367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1356 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp3_;
-#line 12652 "Dialogs.c"
+#line 12612 "Dialogs.c"
 	}
-#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = g_strdup (_tmp0_);
-#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1353 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	title_tmp = _tmp4_;
-#line 1368 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1357 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _ ("Comment:");
-#line 1368 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1357 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = comment;
-#line 1368 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1357 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (EditCommentDialog*) multi_text_entry_dialog_mediator_construct (object_type, title_tmp, _tmp5_, _tmp6_);
-#line 1363 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1352 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (title_tmp);
-#line 1363 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1352 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 12668 "Dialogs.c"
+#line 12628 "Dialogs.c"
 }
 
 
 EditCommentDialog* edit_comment_dialog_new (const gchar* comment, gboolean is_event) {
-#line 1363 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1352 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return edit_comment_dialog_construct (TYPE_EDIT_COMMENT_DIALOG, comment, is_event);
-#line 12675 "Dialogs.c"
+#line 12635 "Dialogs.c"
 }
 
 
@@ -12696,56 +12656,56 @@ static gchar* edit_comment_dialog_real_execute (EditCommentDialog* self) {
 	gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _multi_text_entry_dialog_mediator_execute (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_MULTI_TEXT_ENTRY_DIALOG_MEDIATOR, MultiTextEntryDialogMediator));
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = media_source_prep_comment (_tmp1_);
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp1_);
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp3_;
-#line 1372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12699 "Dialogs.c"
+#line 12659 "Dialogs.c"
 }
 
 
 gchar* edit_comment_dialog_execute (EditCommentDialog* self) {
-#line 1371 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1360 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_EDIT_COMMENT_DIALOG (self), NULL);
-#line 1371 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1360 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return EDIT_COMMENT_DIALOG_GET_CLASS (self)->execute (self);
-#line 12708 "Dialogs.c"
+#line 12668 "Dialogs.c"
 }
 
 
 static gboolean edit_comment_dialog_real_on_modify_validate (MultiTextEntryDialogMediator* base, const gchar* text) {
 	EditCommentDialog * self;
 	gboolean result = FALSE;
-#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_EDIT_COMMENT_DIALOG, EditCommentDialog);
-#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1364 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (text != NULL, FALSE);
-#line 1376 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = TRUE;
-#line 1376 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12723 "Dialogs.c"
+#line 12683 "Dialogs.c"
 }
 
 
 static void edit_comment_dialog_class_init (EditCommentDialogClass * klass) {
-#line 1362 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1351 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	edit_comment_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1362 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1351 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((EditCommentDialogClass *) klass)->execute = edit_comment_dialog_real_execute;
-#line 1362 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1351 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((MultiTextEntryDialogMediatorClass *) klass)->on_modify_validate = edit_comment_dialog_real_on_modify_validate;
-#line 12734 "Dialogs.c"
+#line 12694 "Dialogs.c"
 }
 
 
@@ -12782,63 +12742,63 @@ GtkResponseType remove_from_library_dialog (GtkWindow* owner, const gchar* title
 	gchar* _tmp10_ = NULL;
 	GtkResponseType _result_ = 0;
 	gint _tmp11_ = 0;
-#line 1382 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1371 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), 0);
-#line 1382 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1371 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (title != NULL, 0);
-#line 1382 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1371 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (user_message != NULL, 0);
-#line 1384 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1373 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = count;
-#line 1384 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1373 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = ngettext ("Remove and _Trash File", "Remove and _Trash Files", (gulong) _tmp0_);
-#line 1384 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1373 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1384 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1373 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	trash_action = _tmp2_;
-#line 1386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = owner;
-#line 1386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = user_message;
-#line 1386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp3_, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CANCEL, "%s", _tmp4_);
-#line 1386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp5_);
-#line 1386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp5_;
-#line 1388 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1377 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _ ("_Remove From Library");
-#line 1388 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1377 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp6_, (gint) GTK_RESPONSE_NO);
-#line 1389 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1378 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), trash_action, (gint) GTK_RESPONSE_YES);
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = title;
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = user_message;
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = build_alert_body_text (_tmp7_, _tmp8_, TRUE);
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_message_dialog_set_markup (dialog, _tmp10_);
-#line 1394 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1383 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp10_);
-#line 1396 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 1396 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = (GtkResponseType) _tmp11_;
-#line 1398 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1387 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 1400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _result_;
-#line 1400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 1400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (trash_action);
-#line 1400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12827 "Dialogs.c"
+#line 12787 "Dialogs.c"
 }
 
 
@@ -12856,57 +12816,57 @@ GtkResponseType remove_from_filesystem_dialog (GtkWindow* owner, const gchar* ti
 	gchar* _tmp8_ = NULL;
 	GtkResponseType _result_ = 0;
 	gint _tmp9_ = 0;
-#line 1404 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), 0);
-#line 1404 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (title != NULL, 0);
-#line 1404 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (user_message != NULL, 0);
-#line 1406 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = owner;
-#line 1406 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = user_message;
-#line 1406 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", _tmp1_);
-#line 1406 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp2_);
-#line 1406 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp2_;
-#line 1408 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1397 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _ ("_Keep");
-#line 1408 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1397 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp3_, (gint) GTK_RESPONSE_NO);
-#line 1409 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _ ("_Delete");
-#line 1409 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1398 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp4_, (gint) GTK_RESPONSE_YES);
-#line 1410 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_default_response (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_NO);
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = title;
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = user_message;
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = build_alert_body_text (_tmp5_, _tmp6_, TRUE);
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _tmp7_;
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_message_dialog_set_markup (dialog, _tmp8_);
-#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp8_);
-#line 1414 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1403 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 1414 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1403 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = (GtkResponseType) _tmp9_;
-#line 1416 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1405 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 1418 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1407 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _result_;
-#line 1418 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1407 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 1418 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1407 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 12895 "Dialogs.c"
+#line 12855 "Dialogs.c"
 }
 
 
@@ -12945,26 +12905,26 @@ gboolean revert_editable_dialog (GtkWindow* owner, GeeCollection* photos) {
 	gint _tmp37_ = 0;
 	GtkMessageDialog* _tmp38_ = NULL;
 	GtkResponseType _tmp39_ = 0;
-#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), FALSE);
-#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (photos), FALSE);
-#line 1422 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	count = 0;
-#line 12940 "Dialogs.c"
+#line 12900 "Dialogs.c"
 	{
 		GeeIterator* _photo_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
 		GeeIterator* _tmp1_ = NULL;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = photos;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_photo_it = _tmp1_;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 12953 "Dialogs.c"
+#line 12913 "Dialogs.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			Photo* photo = NULL;
@@ -12972,171 +12932,171 @@ gboolean revert_editable_dialog (GtkWindow* owner, GeeCollection* photos) {
 			gpointer _tmp5_ = NULL;
 			Photo* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp2_ = _photo_it;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp3_ = gee_iterator_next (_tmp2_);
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (!_tmp3_) {
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 12969 "Dialogs.c"
+#line 12929 "Dialogs.c"
 			}
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp4_ = _photo_it;
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp5_ = gee_iterator_get (_tmp4_);
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			photo = (Photo*) _tmp5_;
-#line 1424 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1413 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp6_ = photo;
-#line 1424 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1413 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp7_ = photo_has_editable (_tmp6_);
-#line 1424 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1413 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp7_) {
-#line 12983 "Dialogs.c"
+#line 12943 "Dialogs.c"
 				gint _tmp8_ = 0;
-#line 1425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1414 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp8_ = count;
-#line 1425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1414 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				count = _tmp8_ + 1;
-#line 12989 "Dialogs.c"
+#line 12949 "Dialogs.c"
 			}
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (photo);
-#line 12993 "Dialogs.c"
+#line 12953 "Dialogs.c"
 		}
-#line 1423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1412 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_photo_it);
-#line 12997 "Dialogs.c"
+#line 12957 "Dialogs.c"
 	}
-#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1417 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = count;
-#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1417 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp9_ == 0) {
-#line 1429 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 1429 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 13007 "Dialogs.c"
+#line 12967 "Dialogs.c"
 	}
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = count;
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp11_ == 1) {
-#line 13013 "Dialogs.c"
+#line 12973 "Dialogs.c"
 		const gchar* _tmp12_ = NULL;
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = _ ("Revert External Edit?");
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp12_;
-#line 13019 "Dialogs.c"
+#line 12979 "Dialogs.c"
 	} else {
 		const gchar* _tmp13_ = NULL;
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = _ ("Revert External Edits?");
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp13_;
-#line 13026 "Dialogs.c"
+#line 12986 "Dialogs.c"
 	}
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = g_strdup (_tmp10_);
-#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	headline = _tmp14_;
-#line 1432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = count;
-#line 1432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = ngettext ("This will destroy all changes made to the external file. Continue?", "This will destroy all changes made to %d external files. Continue?", (gulong) _tmp15_);
-#line 1432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = count;
-#line 1432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = g_strdup_printf (_tmp16_, _tmp17_);
-#line 1432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	msg = _tmp18_;
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = count;
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp20_ == 1) {
-#line 13046 "Dialogs.c"
+#line 13006 "Dialogs.c"
 		const gchar* _tmp21_ = NULL;
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = _ ("Re_vert External Edit");
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = _tmp21_;
-#line 13052 "Dialogs.c"
+#line 13012 "Dialogs.c"
 	} else {
 		const gchar* _tmp22_ = NULL;
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp22_ = _ ("Re_vert External Edits");
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = _tmp22_;
-#line 13059 "Dialogs.c"
+#line 13019 "Dialogs.c"
 	}
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = g_strdup (_tmp19_);
-#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1426 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	action = _tmp23_;
-#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp24_ = owner;
-#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp25_ = msg;
-#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp26_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp24_, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", _tmp25_);
-#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp26_);
-#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp26_;
-#line 1441 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1430 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp27_ = dialog;
-#line 1441 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1430 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp28_ = _ ("_Cancel");
-#line 1441 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1430 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_dialog_get_type (), GtkDialog), _tmp28_, (gint) GTK_RESPONSE_CANCEL);
-#line 1442 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp29_ = dialog;
-#line 1442 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp30_ = action;
-#line 1442 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_dialog_get_type (), GtkDialog), _tmp30_, (gint) GTK_RESPONSE_YES);
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp31_ = dialog;
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp32_ = headline;
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp33_ = msg;
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp34_ = build_alert_body_text (_tmp32_, _tmp33_, TRUE);
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp35_ = _tmp34_;
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_message_dialog_set_markup (_tmp31_, _tmp35_);
-#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp35_);
-#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1435 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp36_ = dialog;
-#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1435 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp37_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_dialog_get_type (), GtkDialog));
-#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1435 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = (GtkResponseType) _tmp37_;
-#line 1448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp38_ = dialog;
-#line 1448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1437 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_widget_get_type (), GtkWidget));
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp39_ = _result_;
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp39_ == GTK_RESPONSE_YES;
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (action);
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (msg);
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (headline);
-#line 1450 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1439 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13125 "Dialogs.c"
+#line 13085 "Dialogs.c"
 }
 
 
@@ -13164,110 +13124,110 @@ gboolean remove_offline_dialog (GtkWindow* owner, gint count) {
 	gint _tmp18_ = 0;
 	GtkMessageDialog* _tmp19_ = NULL;
 	GtkResponseType _tmp20_ = 0;
-#line 1453 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), FALSE);
-#line 1454 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1443 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = count;
-#line 1454 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1443 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == 0) {
-#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1444 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 13163 "Dialogs.c"
+#line 13123 "Dialogs.c"
 	}
-#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = count;
-#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = ngettext ("This will remove the photo from the library. Continue?", "This will remove %d photos from the library. Continue?", (gulong) _tmp1_);
-#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = count;
-#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = g_strdup_printf (_tmp2_, _tmp3_);
-#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	msg = _tmp4_;
-#line 1462 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = owner;
-#line 1462 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = msg;
-#line 1462 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp5_, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE, "%s", _tmp6_);
-#line 1462 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp7_);
-#line 1462 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp7_;
-#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1453 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = dialog;
-#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1453 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _ ("_Cancel");
-#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1453 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_dialog_get_type (), GtkDialog), _tmp9_, (gint) GTK_RESPONSE_CANCEL);
-#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = dialog;
-#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = _ ("_Remove");
-#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_dialog_get_type (), GtkDialog), _tmp11_, (gint) GTK_RESPONSE_OK);
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = count;
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp13_ == 1) {
-#line 13201 "Dialogs.c"
+#line 13161 "Dialogs.c"
 		const gchar* _tmp14_ = NULL;
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = _ ("Remove Photo From Library");
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = _tmp14_;
-#line 13207 "Dialogs.c"
+#line 13167 "Dialogs.c"
 	} else {
 		const gchar* _tmp15_ = NULL;
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = _ ("Remove Photos From Library");
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = _tmp15_;
-#line 13214 "Dialogs.c"
+#line 13174 "Dialogs.c"
 	}
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = dialog;
-#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_window_get_type (), GtkWindow), _tmp12_);
-#line 1468 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = dialog;
-#line 1468 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_dialog_get_type (), GtkDialog));
-#line 1468 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = (GtkResponseType) _tmp18_;
-#line 1470 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = dialog;
-#line 1470 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget));
-#line 1472 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = _result_;
-#line 1472 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp20_ == GTK_RESPONSE_OK;
-#line 1472 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 1472 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (msg);
-#line 1472 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13240 "Dialogs.c"
+#line 13200 "Dialogs.c"
 }
 
 
 static void _progress_dialog_on_cancel_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1505 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress_dialog_on_cancel ((ProgressDialog*) self);
-#line 13247 "Dialogs.c"
+#line 13207 "Dialogs.c"
 }
 
 
 static gboolean _progress_dialog_on_window_closed_gtk_widget_delete_event (GtkWidget* _sender, GdkEventAny* event, gpointer self) {
 	gboolean result;
 	result = progress_dialog_on_window_closed ((ProgressDialog*) self);
-#line 1506 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1495 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13256 "Dialogs.c"
+#line 13216 "Dialogs.c"
 }
 
 
@@ -13297,204 +13257,208 @@ ProgressDialog* progress_dialog_construct (GType object_type, GtkWindow* owner, 
 	GtkBox* vbox = NULL;
 	GtkBox* _tmp23_ = NULL;
 	GtkBox* _tmp24_ = NULL;
-	GtkAlignment* alignment = NULL;
-	GtkAlignment* _tmp25_ = NULL;
-	gulong _tmp26_ = 0UL;
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gulong _tmp25_ = 0UL;
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail ((owner == NULL) || GTK_IS_WINDOW (owner), NULL);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (text != NULL, NULL);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail ((cancellable == NULL) || G_IS_CANCELLABLE (cancellable), NULL);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (ProgressDialog*) g_object_new (object_type, NULL);
-#line 1488 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = cancellable;
-#line 1488 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1488 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->cancellable);
-#line 1488 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->cancellable = _tmp1_;
-#line 1490 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1479 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = text;
-#line 1490 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1479 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp2_);
-#line 1491 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1480 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 1492 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1481 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = owner;
-#line 1492 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1481 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_ != NULL) {
-#line 13315 "Dialogs.c"
+#line 13273 "Dialogs.c"
 		GtkWindow* _tmp4_ = NULL;
-#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = owner;
-#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp4_);
-#line 13321 "Dialogs.c"
+#line 13279 "Dialogs.c"
 	}
-#line 1494 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1483 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 1495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1484 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_type_hint (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GDK_WINDOW_TYPE_HINT_DIALOG);
-#line 1497 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->progress_bar;
-#line 1497 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), 300, -1);
-#line 1498 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = self->priv->progress_bar;
-#line 1498 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_progress_bar_set_show_text (_tmp6_, TRUE);
-#line 1500 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1489 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 1500 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1489 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp7_);
-#line 1500 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1489 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	vbox_bar = _tmp7_;
-#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1490 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = vbox_bar;
-#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1490 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = self->priv->progress_bar;
-#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1490 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1503 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = cancellable;
-#line 1503 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp10_ != NULL) {
-#line 13351 "Dialogs.c"
+#line 13309 "Dialogs.c"
 		GtkButton* _tmp11_ = NULL;
 		GtkButton* _tmp12_ = NULL;
-#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = (GtkButton*) gtk_button_new_with_mnemonic (RESOURCES_CANCEL_LABEL);
-#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp11_);
-#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->cancel_button);
-#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->cancel_button = _tmp11_;
-#line 1505 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = self->priv->cancel_button;
-#line 1505 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_signal_connect_object (_tmp12_, "clicked", (GCallback) _progress_dialog_on_cancel_gtk_button_clicked, self, 0);
-#line 1506 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1495 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "delete-event", (GCallback) _progress_dialog_on_window_closed_gtk_widget_delete_event, self, 0);
-#line 13368 "Dialogs.c"
+#line 13326 "Dialogs.c"
 	}
-#line 1509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-#line 1509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp13_);
-#line 1509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	hbox = _tmp13_;
-#line 1510 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = hbox;
-#line 1510 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = vbox_bar;
-#line 1510 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp14_, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1511 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1500 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = self->priv->cancel_button;
-#line 1511 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1500 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp16_ != NULL) {
-#line 13386 "Dialogs.c"
+#line 13344 "Dialogs.c"
 		GtkBox* _tmp17_ = NULL;
 		GtkButton* _tmp18_ = NULL;
-#line 1512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = hbox;
-#line 1512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = self->priv->cancel_button;
-#line 1512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1501 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_box_pack_end (_tmp17_, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 13395 "Dialogs.c"
+#line 13353 "Dialogs.c"
 	}
-#line 1514 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1503 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = (GtkLabel*) gtk_label_new ("");
-#line 1514 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1503 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp19_);
-#line 1514 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1503 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	primary_text_label = _tmp19_;
-#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = text;
-#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp21_ = g_strdup_printf ("<span weight=\"bold\">%s</span>", _tmp20_);
-#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = _tmp21_;
-#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_label_set_markup (primary_text_label, _tmp22_);
-#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1504 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp22_);
-#line 1516 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (primary_text_label, gtk_misc_get_type (), GtkMisc), (gfloat) 0, 0.5f);
-#line 1518 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1505 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_xalign (primary_text_label, 0.0f);
+#line 1506 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_yalign (primary_text_label, 0.5f);
+#line 1508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-#line 1518 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp23_);
-#line 1518 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	vbox = _tmp23_;
-#line 1519 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1509 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (vbox, G_TYPE_CHECK_INSTANCE_CAST (primary_text_label, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1520 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1510 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp24_ = hbox;
-#line 1520 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1510 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (vbox, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
+#line 1511 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 1512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 1513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 1514 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 1515 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), 12);
+#line 1516 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), 12);
+#line 1517 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), 12);
+#line 1518 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget), 12);
+#line 1520 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget));
 #line 1522 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp25_ = (GtkAlignment*) gtk_alignment_new (0.5f, 0.5f, 1.0f, 1.0f);
+	_tmp25_ = now_ms ();
 #line 1522 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp25_);
-#line 1522 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	alignment = _tmp25_;
-#line 1523 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_alignment_set_padding (alignment, (guint) 12, (guint) 12, (guint) 12, (guint) 12);
-#line 1524 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (vbox, gtk_widget_get_type (), GtkWidget));
-#line 1526 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_widget_get_type (), GtkWidget));
-#line 1528 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp26_ = now_ms ();
-#line 1528 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->time_started = _tmp26_;
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (alignment);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->time_started = _tmp25_;
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (vbox);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (primary_text_label);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (hbox);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (vbox_bar);
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 13455 "Dialogs.c"
+#line 13419 "Dialogs.c"
 }
 
 
 ProgressDialog* progress_dialog_new (GtkWindow* owner, const gchar* text, GCancellable* cancellable) {
-#line 1487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return progress_dialog_construct (TYPE_PROGRESS_DIALOG, owner, text, cancellable);
-#line 13462 "Dialogs.c"
+#line 13426 "Dialogs.c"
 }
 
 
 static void progress_dialog_real_realize (GtkWidget* base) {
 	ProgressDialog * self;
 	GCancellable* _tmp0_ = NULL;
-#line 1531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1525 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PROGRESS_DIALOG, ProgressDialog);
-#line 1532 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	GTK_WIDGET_CLASS (progress_dialog_parent_class)->realize (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget));
-#line 1535 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1529 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->cancellable;
-#line 1535 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1529 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == NULL) {
-#line 13477 "Dialogs.c"
+#line 13441 "Dialogs.c"
 		GdkWindow* _tmp1_ = NULL;
-#line 1536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gdk_window_set_functions (_tmp1_, GDK_FUNC_MOVE);
-#line 13483 "Dialogs.c"
+#line 13447 "Dialogs.c"
 	}
 }
 
@@ -13502,44 +13466,44 @@ static void progress_dialog_real_realize (GtkWidget* base) {
 void progress_dialog_update_display_every (ProgressDialog* self, gint update_every) {
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 1539 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1533 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1540 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = update_every;
-#line 1540 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_assert (_tmp0_ >= 1, "update_every >= 1");
-#line 1542 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = update_every;
-#line 1542 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->update_every = _tmp1_;
-#line 13501 "Dialogs.c"
+#line 13465 "Dialogs.c"
 }
 
 
 void progress_dialog_set_minimum_on_screen_time_msec (ProgressDialog* self, gint minimum_on_screen_time_msec) {
 	gint _tmp0_ = 0;
-#line 1545 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1546 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = minimum_on_screen_time_msec;
-#line 1546 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->minimum_on_screen_time_msec = _tmp0_;
-#line 13513 "Dialogs.c"
+#line 13477 "Dialogs.c"
 }
 
 
 void progress_dialog_set_fraction (ProgressDialog* self, gint current, gint total) {
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 1549 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1543 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1544 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = current;
-#line 1550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1544 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = total;
-#line 1550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1544 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress_dialog_set_percentage (self, ((gdouble) _tmp0_) / ((gdouble) _tmp1_));
-#line 13528 "Dialogs.c"
+#line 13492 "Dialogs.c"
 }
 
 
@@ -13554,58 +13518,58 @@ void progress_dialog_set_percentage (ProgressDialog* self, gdouble pct) {
 	gdouble _tmp7_ = 0.0;
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
-#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1554 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1548 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = pct;
-#line 1554 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1548 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = CLAMP (_tmp0_, 0.0, 1.0);
-#line 1554 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1548 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	pct = _tmp1_;
-#line 1556 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1550 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = pct;
-#line 1556 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1550 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress_dialog_maybe_show_all (self, _tmp2_);
-#line 1558 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = self->priv->progress_bar;
-#line 1558 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = pct;
-#line 1558 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_progress_bar_set_fraction (_tmp3_, _tmp4_);
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->progress_bar;
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _ ("%d%%");
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = pct;
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = g_strdup_printf (_tmp6_, (gint) (_tmp7_ * 100.0));
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _tmp8_;
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_progress_bar_set_text (_tmp5_, _tmp9_);
-#line 1559 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp9_);
-#line 13575 "Dialogs.c"
+#line 13539 "Dialogs.c"
 }
 
 
 void progress_dialog_set_status (ProgressDialog* self, const gchar* text) {
 	GtkProgressBar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 1567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (text != NULL);
-#line 1568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->progress_bar;
-#line 1568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = text;
-#line 1568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_progress_bar_set_text (_tmp0_, _tmp1_);
-#line 1574 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1568 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 13594 "Dialogs.c"
+#line 13558 "Dialogs.c"
 }
 
 
@@ -13617,131 +13581,131 @@ gboolean progress_dialog_monitor (ProgressDialog* self, guint64 count, guint64 t
 	GCancellable* _tmp9_ = NULL;
 	gboolean keep_going = FALSE;
 	gboolean _tmp12_ = FALSE;
-#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1572 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PROGRESS_DIALOG (self), FALSE);
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->last_count;
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ == G_MAXUINT64) {
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = TRUE;
-#line 13614 "Dialogs.c"
+#line 13578 "Dialogs.c"
 	} else {
 		guint64 _tmp2_ = 0ULL;
 		guint64 _tmp3_ = 0ULL;
 		gint _tmp4_ = 0;
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = count;
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = self->priv->last_count;
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = self->priv->update_every;
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = (_tmp2_ - _tmp3_) >= ((guint64) _tmp4_);
-#line 13627 "Dialogs.c"
+#line 13591 "Dialogs.c"
 	}
-#line 1579 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 13631 "Dialogs.c"
+#line 13595 "Dialogs.c"
 		guint64 _tmp5_ = 0ULL;
 		guint64 _tmp6_ = 0ULL;
 		guint64 _tmp7_ = 0ULL;
-#line 1580 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1574 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = count;
-#line 1580 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1574 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = total;
-#line 1580 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1574 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		progress_dialog_set_percentage (self, ((gdouble) _tmp5_) / ((gdouble) _tmp6_));
-#line 1581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = count;
-#line 1581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->last_count = _tmp7_;
-#line 13645 "Dialogs.c"
+#line 13609 "Dialogs.c"
 	}
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = self->priv->cancellable;
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp9_ != NULL) {
-#line 13651 "Dialogs.c"
+#line 13615 "Dialogs.c"
 		GCancellable* _tmp10_ = NULL;
 		gboolean _tmp11_ = FALSE;
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = self->priv->cancellable;
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = g_cancellable_is_cancelled (_tmp10_);
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = !_tmp11_;
-#line 13660 "Dialogs.c"
+#line 13624 "Dialogs.c"
 	} else {
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = TRUE;
-#line 13664 "Dialogs.c"
+#line 13628 "Dialogs.c"
 	}
-#line 1584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1578 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	keep_going = _tmp8_;
-#line 1592 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1586 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = do_event_loop;
-#line 1592 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1586 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp12_) {
-#line 1593 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1587 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		spin_event_loop ();
-#line 13674 "Dialogs.c"
+#line 13638 "Dialogs.c"
 	}
-#line 1595 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1589 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = keep_going;
-#line 1595 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1589 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13680 "Dialogs.c"
+#line 13644 "Dialogs.c"
 }
 
 
 void progress_dialog_close (ProgressDialog* self) {
-#line 1598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1592 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1603 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1604 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 13691 "Dialogs.c"
+#line 13655 "Dialogs.c"
 }
 
 
 static gboolean progress_dialog_on_window_closed (ProgressDialog* self) {
 	gboolean result = FALSE;
-#line 1607 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PROGRESS_DIALOG (self), FALSE);
-#line 1608 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1602 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress_dialog_on_cancel (self);
-#line 1609 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = FALSE;
-#line 1609 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13705 "Dialogs.c"
+#line 13669 "Dialogs.c"
 }
 
 
 static void progress_dialog_on_cancel (ProgressDialog* self) {
 	GCancellable* _tmp0_ = NULL;
 	GtkButton* _tmp2_ = NULL;
-#line 1613 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1607 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1614 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->cancellable;
-#line 1614 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ != NULL) {
-#line 13718 "Dialogs.c"
+#line 13682 "Dialogs.c"
 		GCancellable* _tmp1_ = NULL;
-#line 1615 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1609 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = self->priv->cancellable;
-#line 1615 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1609 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_cancellable_cancel (_tmp1_);
-#line 13724 "Dialogs.c"
+#line 13688 "Dialogs.c"
 	}
-#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1611 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->cancel_button;
-#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1611 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 13730 "Dialogs.c"
+#line 13694 "Dialogs.c"
 }
 
 
@@ -13749,35 +13713,35 @@ static void progress_dialog_maybe_show_all (ProgressDialog* self, gdouble pct) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 1620 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1614 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PROGRESS_DIALOG (self));
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_;
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp2_) {
-#line 13746 "Dialogs.c"
+#line 13710 "Dialogs.c"
 		gulong _tmp3_ = 0UL;
 		gulong _tmp4_ = 0UL;
 		gint _tmp5_ = 0;
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = now_ms ();
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = self->priv->time_started;
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = self->priv->minimum_on_screen_time_msec;
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = (_tmp3_ - _tmp4_) > ((gulong) _tmp5_);
-#line 13758 "Dialogs.c"
+#line 13722 "Dialogs.c"
 	} else {
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = FALSE;
-#line 13762 "Dialogs.c"
+#line 13726 "Dialogs.c"
 	}
-#line 1623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 13766 "Dialogs.c"
+#line 13730 "Dialogs.c"
 		gdouble pps = 0.0;
 		gdouble _tmp6_ = 0.0;
 		gint _tmp7_ = 0;
@@ -13785,80 +13749,80 @@ static void progress_dialog_maybe_show_all (ProgressDialog* self, gdouble pct) {
 		gdouble _tmp8_ = 0.0;
 		gdouble _tmp9_ = 0.0;
 		gint _tmp10_ = 0;
-#line 1625 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = pct;
-#line 1625 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = self->priv->minimum_on_screen_time_msec;
-#line 1625 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		pps = (_tmp6_ * 100.0) / _tmp7_;
-#line 1627 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1621 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = pps;
-#line 1627 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1621 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		ttc = 100.0 / _tmp8_;
-#line 1630 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1624 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = ttc;
-#line 1630 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1624 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = self->priv->minimum_on_screen_time_msec;
-#line 1630 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1624 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp9_ > ((gdouble) _tmp10_)) {
-#line 1635 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1629 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1630 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			spin_event_loop ();
-#line 13794 "Dialogs.c"
+#line 13758 "Dialogs.c"
 		}
 	}
 }
 
 
 static void progress_dialog_class_init (ProgressDialogClass * klass) {
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (ProgressDialogPrivate));
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((GtkWidgetClass *) klass)->realize = progress_dialog_real_realize;
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = progress_dialog_finalize;
-#line 13809 "Dialogs.c"
+#line 13773 "Dialogs.c"
 }
 
 
 static void progress_dialog_instance_init (ProgressDialog * self) {
 	GtkProgressBar* _tmp0_ = NULL;
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = PROGRESS_DIALOG_GET_PRIVATE (self);
-#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = (GtkProgressBar*) gtk_progress_bar_new ();
-#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp0_);
-#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->progress_bar = _tmp0_;
-#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->cancel_button = NULL;
-#line 1479 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1468 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->last_count = G_MAXUINT64;
-#line 1480 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1469 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->update_every = 1;
-#line 1481 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1470 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->minimum_on_screen_time_msec = 500;
-#line 13831 "Dialogs.c"
+#line 13795 "Dialogs.c"
 }
 
 
 static void progress_dialog_finalize (GObject* obj) {
 	ProgressDialog * self;
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PROGRESS_DIALOG, ProgressDialog);
-#line 1476 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->progress_bar);
-#line 1477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1466 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->cancel_button);
-#line 1478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1467 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->cancellable);
-#line 1475 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (progress_dialog_parent_class)->finalize (obj);
-#line 13847 "Dialogs.c"
+#line 13811 "Dialogs.c"
 }
 
 
@@ -13887,53 +13851,53 @@ static GType adjust_date_time_dialog_time_system_get_type (void) {
 
 
 static void _adjust_date_time_dialog_on_time_changed_gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self) {
-#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1682 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed ((AdjustDateTimeDialog*) self);
-#line 13878 "Dialogs.c"
+#line 13842 "Dialogs.c"
 }
 
 
 static void _adjust_date_time_dialog_on_time_changed_gtk_calendar_month_changed (GtkCalendar* _sender, gpointer self) {
-#line 1689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1683 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed ((AdjustDateTimeDialog*) self);
-#line 13885 "Dialogs.c"
+#line 13849 "Dialogs.c"
 }
 
 
 static void _adjust_date_time_dialog_on_time_changed_gtk_calendar_next_year (GtkCalendar* _sender, gpointer self) {
-#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed ((AdjustDateTimeDialog*) self);
-#line 13892 "Dialogs.c"
+#line 13856 "Dialogs.c"
 }
 
 
 static void _adjust_date_time_dialog_on_time_changed_gtk_calendar_prev_year (GtkCalendar* _sender, gpointer self) {
-#line 1691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed ((AdjustDateTimeDialog*) self);
-#line 13899 "Dialogs.c"
+#line 13863 "Dialogs.c"
 }
 
 
 static gboolean _adjust_date_time_dialog_on_spin_button_output_gtk_spin_button_output (GtkSpinButton* _sender, gpointer self) {
 	gboolean result;
 	result = adjust_date_time_dialog_on_spin_button_output ((AdjustDateTimeDialog*) self, _sender);
-#line 1698 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 13908 "Dialogs.c"
+#line 13872 "Dialogs.c"
 }
 
 
 static void _adjust_date_time_dialog_on_time_system_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_system_changed ((AdjustDateTimeDialog*) self);
-#line 13915 "Dialogs.c"
+#line 13879 "Dialogs.c"
 }
 
 
 static void _adjust_date_time_dialog_on_time_changed_gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self) {
-#line 1738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed ((AdjustDateTimeDialog*) self);
-#line 13922 "Dialogs.c"
+#line 13886 "Dialogs.c"
 }
 
 
@@ -13948,7 +13912,7 @@ static void g_time_local (time_t time, struct tm* result) {
 	*result = _result_;
 #line 2751 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return;
-#line 13937 "Dialogs.c"
+#line 13901 "Dialogs.c"
 }
 
 
@@ -14064,812 +14028,806 @@ AdjustDateTimeDialog* adjust_date_time_dialog_construct (GType object_type, Date
 	GtkBox* _tmp137_ = NULL;
 	GtkBox* _tmp138_ = NULL;
 	GtkBox* _tmp139_ = NULL;
-	GtkAlignment* hbox_alignment = NULL;
-	GtkAlignment* _tmp140_ = NULL;
-	GtkAlignment* _tmp141_ = NULL;
+	GtkBox* _tmp140_ = NULL;
+	GtkBox* _tmp141_ = NULL;
 	GtkBox* _tmp142_ = NULL;
 	GtkBox* _tmp143_ = NULL;
-	GtkAlignment* _tmp144_ = NULL;
-	GtkLabel* _tmp145_ = NULL;
+	GtkBox* _tmp144_ = NULL;
+	GtkBox* _tmp145_ = NULL;
 	GtkLabel* _tmp146_ = NULL;
 	GtkLabel* _tmp147_ = NULL;
-	GtkBox* _tmp148_ = NULL;
-	GtkLabel* _tmp149_ = NULL;
-	Dateable* _tmp150_ = NULL;
-	time_t _tmp151_ = 0;
+	GtkLabel* _tmp148_ = NULL;
+	GtkBox* _tmp149_ = NULL;
+	GtkLabel* _tmp150_ = NULL;
+	Dateable* _tmp151_ = NULL;
 	time_t _tmp152_ = 0;
-	time_t _tmp154_ = 0;
-	struct tm _tmp155_ = {0};
-	ConfigFacade* _tmp156_ = NULL;
+	time_t _tmp153_ = 0;
+	time_t _tmp155_ = 0;
+	struct tm _tmp156_ = {0};
 	ConfigFacade* _tmp157_ = NULL;
-	gboolean _tmp158_ = FALSE;
+	ConfigFacade* _tmp158_ = NULL;
+	gboolean _tmp159_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_DATEABLE (source), NULL);
-#line 1673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1667 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = source;
-#line 1673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1667 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_assert (_tmp0_ != NULL, "source != null");
-#line 1676 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1670 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_settings_get_default ();
-#line 1676 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1670 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
-#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = use_header;
-#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_) {
-#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = 1;
-#line 14089 "Dialogs.c"
+#line 14053 "Dialogs.c"
 	} else {
-#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = 0;
-#line 14093 "Dialogs.c"
+#line 14057 "Dialogs.c"
 	}
-#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (AdjustDateTimeDialog*) g_object_new (object_type, "use-header-bar", _tmp2_, NULL);
-#line 1679 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 1680 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1674 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = app_window_get_instance ();
-#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_window_get_type (), GtkWindow));
-#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp5_);
-#line 1683 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1677 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_buttons (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_CANCEL_LABEL, GTK_RESPONSE_CANCEL, RESOURCES_OK_LABEL, GTK_RESPONSE_OK, NULL);
-#line 1685 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1679 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), RESOURCES_ADJUST_DATE_TIME_LABEL);
-#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = (GtkCalendar*) gtk_calendar_new ();
-#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp6_);
-#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->calendar);
-#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->calendar = _tmp6_;
-#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1682 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = self->priv->calendar;
-#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1682 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp7_, "day-selected", (GCallback) _adjust_date_time_dialog_on_time_changed_gtk_calendar_day_selected, self, 0);
-#line 1689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1683 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = self->priv->calendar;
-#line 1689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1683 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp8_, "month-changed", (GCallback) _adjust_date_time_dialog_on_time_changed_gtk_calendar_month_changed, self, 0);
-#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = self->priv->calendar;
-#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp9_, "next-year", (GCallback) _adjust_date_time_dialog_on_time_changed_gtk_calendar_next_year, self, 0);
-#line 1691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = self->priv->calendar;
-#line 1691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp10_, "prev-year", (GCallback) _adjust_date_time_dialog_on_time_changed_gtk_calendar_prev_year, self, 0);
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = config_facade_get_instance ();
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = _tmp11_;
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = configuration_facade_get_use_24_hour_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = _tmp13_;
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp12_);
-#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1687 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp14_) {
-#line 14149 "Dialogs.c"
+#line 14113 "Dialogs.c"
 		GtkSpinButton* _tmp15_ = NULL;
-#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = (GtkSpinButton*) gtk_spin_button_new_with_range ((gdouble) 0, (gdouble) 23, (gdouble) 1);
-#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp15_);
-#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->hour);
-#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->hour = _tmp15_;
-#line 14159 "Dialogs.c"
+#line 14123 "Dialogs.c"
 	} else {
 		GtkSpinButton* _tmp16_ = NULL;
-#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = (GtkSpinButton*) gtk_spin_button_new_with_range ((gdouble) 1, (gdouble) 12, (gdouble) 1);
-#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp16_);
-#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->hour);
-#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1690 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->hour = _tmp16_;
-#line 14170 "Dialogs.c"
+#line 14134 "Dialogs.c"
 	}
-#line 1698 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = self->priv->hour;
-#line 1698 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp17_, "output", (GCallback) _adjust_date_time_dialog_on_spin_button_output_gtk_spin_button_output, self, 0);
-#line 1699 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = self->priv->hour;
-#line 1699 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1693 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1700 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = self->priv->hour;
-#line 1700 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1694 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_max_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = (GtkSpinButton*) gtk_spin_button_new_with_range ((gdouble) 0, (gdouble) 59, (gdouble) 1);
-#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp20_);
-#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->minute);
-#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1696 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->minute = _tmp20_;
-#line 1703 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1697 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp21_ = self->priv->minute;
-#line 1703 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1697 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1704 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1698 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = self->priv->minute;
-#line 1704 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1698 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_max_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1699 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = self->priv->minute;
-#line 1705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1699 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp23_, "output", (GCallback) _adjust_date_time_dialog_on_spin_button_output_gtk_spin_button_output, self, 0);
-#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1701 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp24_ = (GtkSpinButton*) gtk_spin_button_new_with_range ((gdouble) 0, (gdouble) 59, (gdouble) 1);
-#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1701 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp24_);
-#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1701 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->second);
-#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1701 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->second = _tmp24_;
-#line 1708 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp25_ = self->priv->second;
-#line 1708 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1702 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1709 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1703 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp26_ = self->priv->second;
-#line 1709 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1703 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_max_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_entry_get_type (), GtkEntry), 2);
-#line 1710 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp27_ = self->priv->second;
-#line 1710 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (_tmp27_, "output", (GCallback) _adjust_date_time_dialog_on_spin_button_output_gtk_spin_button_output, self, 0);
-#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp28_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp28_);
-#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->system);
-#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->system = _tmp28_;
-#line 1713 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp29_ = self->priv->system;
-#line 1713 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp30_ = _ ("AM");
-#line 1713 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_combo_box_text_append_text (_tmp29_, _tmp30_);
-#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp31_ = self->priv->system;
-#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp32_ = _ ("PM");
-#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_combo_box_text_append_text (_tmp31_, _tmp32_);
-#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1709 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp33_ = self->priv->system;
-#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1709 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp34_ = _ ("24 Hr");
-#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1709 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_combo_box_text_append_text (_tmp33_, _tmp34_);
-#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp35_ = self->priv->system;
-#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _adjust_date_time_dialog_on_time_system_changed_gtk_combo_box_changed, self, 0);
-#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp36_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp36_);
-#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1712 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	clock = _tmp36_;
-#line 1720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp37_ = clock;
-#line 1720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp38_ = self->priv->hour;
-#line 1720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1714 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp37_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp39_ = clock;
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp40_ = (GtkLabel*) gtk_label_new (":");
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp40_);
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp41_ = _tmp40_;
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp41_);
-#line 1722 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp42_ = clock;
-#line 1722 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp43_ = self->priv->minute;
-#line 1722 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp42_, G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp44_ = clock;
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp45_ = (GtkLabel*) gtk_label_new (":");
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp45_);
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp46_ = _tmp45_;
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp44_, G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1717 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp46_);
-#line 1724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp47_ = clock;
-#line 1724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp48_ = self->priv->second;
-#line 1724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1718 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp47_, G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp49_ = clock;
-#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp50_ = self->priv->system;
-#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp49_, G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1727 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1721 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_set_default_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_OK);
-#line 1729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp51_ = _ ("_Shift photos/videos by the same amount");
-#line 1729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp52_ = (GtkRadioButton*) gtk_radio_button_new_with_mnemonic (NULL, _tmp51_);
-#line 1729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp52_);
-#line 1729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->relativity_radio_button);
-#line 1729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->relativity_radio_button = _tmp52_;
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp53_ = self->priv->relativity_radio_button;
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp54_ = config_facade_get_instance ();
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp55_ = _tmp54_;
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp56_ = configuration_facade_get_keep_relativity (G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp56_);
-#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp55_);
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp58_ = display_options;
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp58_) {
-#line 14336 "Dialogs.c"
+#line 14300 "Dialogs.c"
 		gint _tmp59_ = 0;
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp59_ = photo_count;
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp57_ = _tmp59_ > 1;
-#line 14342 "Dialogs.c"
+#line 14306 "Dialogs.c"
 	} else {
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp57_ = FALSE;
-#line 14346 "Dialogs.c"
+#line 14310 "Dialogs.c"
 	}
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp60_ = self->priv->relativity_radio_button;
-#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_widget_get_type (), GtkWidget), _tmp57_);
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp61_ = self->priv->relativity_radio_button;
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp62_ = gtk_radio_button_get_group (_tmp61_);
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp63_ = _ ("Set _all photos/videos to this time");
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp64_ = (GtkRadioButton*) gtk_radio_button_new_with_mnemonic (_tmp62_, _tmp63_);
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp64_);
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->batch_radio_button);
-#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->batch_radio_button = _tmp64_;
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp65_ = self->priv->batch_radio_button;
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp66_ = config_facade_get_instance ();
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp67_ = _tmp66_;
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp68_ = configuration_facade_get_keep_relativity (G_TYPE_CHECK_INSTANCE_CAST (_tmp67_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, gtk_toggle_button_get_type (), GtkToggleButton), !_tmp68_);
-#line 1736 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp67_);
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp70_ = display_options;
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp70_) {
-#line 14382 "Dialogs.c"
+#line 14346 "Dialogs.c"
 		gint _tmp71_ = 0;
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp71_ = photo_count;
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp69_ = _tmp71_ > 1;
-#line 14388 "Dialogs.c"
+#line 14352 "Dialogs.c"
 	} else {
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp69_ = FALSE;
-#line 14392 "Dialogs.c"
+#line 14356 "Dialogs.c"
 	}
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp72_ = self->priv->batch_radio_button;
-#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1731 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, gtk_widget_get_type (), GtkWidget), _tmp69_);
-#line 1738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp73_ = self->priv->batch_radio_button;
-#line 1738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1732 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_toggle_button_get_type (), GtkToggleButton), "toggled", (GCallback) _adjust_date_time_dialog_on_time_changed_gtk_toggle_button_toggled, self, 0);
-#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp74_ = contains_video;
-#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp74_) {
-#line 14406 "Dialogs.c"
-		const gchar* _tmp75_ = NULL;
-		gint _tmp76_ = 0;
+#line 14370 "Dialogs.c"
+		gchar* text = NULL;
+		gint _tmp75_ = 0;
+		const gchar* _tmp76_ = NULL;
+		gchar* _tmp77_ = NULL;
+		const gchar* _tmp78_ = NULL;
 		GtkCheckButton* _tmp79_ = NULL;
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp76_ = photo_count;
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		if (_tmp76_ == 1) {
-#line 14414 "Dialogs.c"
-			const gchar* _tmp77_ = NULL;
-#line 1742 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp77_ = _ ("_Modify original photo file");
-#line 1742 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp75_ = _tmp77_;
-#line 14420 "Dialogs.c"
-		} else {
-			const gchar* _tmp78_ = NULL;
-#line 1742 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp78_ = _ ("_Modify original photo files");
-#line 1742 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp75_ = _tmp78_;
-#line 14427 "Dialogs.c"
-		}
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp79_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp75_);
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp75_ = photo_count;
+#line 1735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp76_ = ngettext ("_Modify original photo file", "_Modify original photo files", (gulong) _tmp75_);
+#line 1735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp77_ = g_strdup (_tmp76_);
+#line 1735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		text = _tmp77_;
+#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp78_ = text;
+#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp79_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp78_);
+#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp79_);
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->modify_originals_check_button);
-#line 1741 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->modify_originals_check_button = _tmp79_;
-#line 14437 "Dialogs.c"
+#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (text);
+#line 14397 "Dialogs.c"
 	} else {
-		const gchar* _tmp80_ = NULL;
-		gint _tmp81_ = 0;
+		gchar* text = NULL;
+		gint _tmp80_ = 0;
+		const gchar* _tmp81_ = NULL;
+		gchar* _tmp82_ = NULL;
+		const gchar* _tmp83_ = NULL;
 		GtkCheckButton* _tmp84_ = NULL;
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp81_ = photo_count;
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		if (_tmp81_ == 1) {
-#line 14446 "Dialogs.c"
-			const gchar* _tmp82_ = NULL;
-#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp82_ = _ ("_Modify original file");
-#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp80_ = _tmp82_;
-#line 14452 "Dialogs.c"
-		} else {
-			const gchar* _tmp83_ = NULL;
-#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp83_ = _ ("_Modify original files");
-#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
-			_tmp80_ = _tmp83_;
-#line 14459 "Dialogs.c"
-		}
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp84_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp80_);
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp80_ = photo_count;
+#line 1739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp81_ = ngettext ("_Modify original file", "_Modify original files", (gulong) _tmp80_);
+#line 1739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp82_ = g_strdup (_tmp81_);
+#line 1739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		text = _tmp82_;
+#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp83_ = text;
+#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp84_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp83_);
+#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp84_);
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->modify_originals_check_button);
-#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1740 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->modify_originals_check_button = _tmp84_;
-#line 14469 "Dialogs.c"
+#line 1734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (text);
+#line 14425 "Dialogs.c"
 	}
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp86_ = config_facade_get_instance ();
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp87_ = _tmp86_;
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp88_ = configuration_facade_get_commit_metadata_to_masters (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp89_ = _tmp88_;
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp87_);
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp89_) {
-#line 14483 "Dialogs.c"
+#line 14439 "Dialogs.c"
 		gboolean _tmp90_ = FALSE;
-#line 1749 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp90_ = display_options;
-#line 1749 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp85_ = _tmp90_;
-#line 14489 "Dialogs.c"
+#line 14445 "Dialogs.c"
 	} else {
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp85_ = FALSE;
-#line 14493 "Dialogs.c"
+#line 14449 "Dialogs.c"
 	}
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp91_ = self->priv->modify_originals_check_button;
-#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp91_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp85_);
-#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp93_ = only_video;
-#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp93_) {
-#line 14503 "Dialogs.c"
+#line 14459 "Dialogs.c"
 		gboolean _tmp94_ = FALSE;
 		ConfigFacade* _tmp95_ = NULL;
 		ConfigFacade* _tmp96_ = NULL;
 		gboolean _tmp97_ = FALSE;
 		gboolean _tmp98_ = FALSE;
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp95_ = config_facade_get_instance ();
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp96_ = _tmp95_;
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp97_ = configuration_facade_get_commit_metadata_to_masters (G_TYPE_CHECK_INSTANCE_CAST (_tmp96_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp98_ = !_tmp97_;
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp96_);
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp98_) {
-#line 14521 "Dialogs.c"
+#line 14477 "Dialogs.c"
 			gboolean _tmp99_ = FALSE;
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp99_ = display_options;
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp94_ = _tmp99_;
-#line 14527 "Dialogs.c"
+#line 14483 "Dialogs.c"
 		} else {
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp94_ = FALSE;
-#line 14531 "Dialogs.c"
+#line 14487 "Dialogs.c"
 		}
-#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp92_ = _tmp94_;
-#line 14535 "Dialogs.c"
+#line 14491 "Dialogs.c"
 	} else {
-#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp92_ = FALSE;
-#line 14539 "Dialogs.c"
+#line 14495 "Dialogs.c"
 	}
-#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp100_ = self->priv->modify_originals_check_button;
-#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1745 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp100_, gtk_widget_get_type (), GtkWidget), _tmp92_);
-#line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp101_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-#line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp101_);
-#line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1748 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time_content = _tmp101_;
-#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp102_ = time_content;
-#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp103_ = self->priv->calendar;
-#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp102_, G_TYPE_CHECK_INSTANCE_CAST (_tmp103_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp104_ = time_content;
-#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp105_ = clock;
-#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp104_, G_TYPE_CHECK_INSTANCE_CAST (_tmp105_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1758 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp106_ = display_options;
-#line 1758 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp106_) {
-#line 14567 "Dialogs.c"
+#line 14523 "Dialogs.c"
 		GtkBox* _tmp107_ = NULL;
 		GtkRadioButton* _tmp108_ = NULL;
 		GtkBox* _tmp109_ = NULL;
 		GtkRadioButton* _tmp110_ = NULL;
 		GtkBox* _tmp111_ = NULL;
 		GtkCheckButton* _tmp112_ = NULL;
-#line 1759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp107_ = time_content;
-#line 1759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp108_ = self->priv->relativity_radio_button;
-#line 1759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_box_pack_start (_tmp107_, G_TYPE_CHECK_INSTANCE_CAST (_tmp108_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp109_ = time_content;
-#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp110_ = self->priv->batch_radio_button;
-#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_box_pack_start (_tmp109_, G_TYPE_CHECK_INSTANCE_CAST (_tmp110_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp111_ = time_content;
-#line 1761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp112_ = self->priv->modify_originals_check_button;
-#line 1761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1756 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_box_pack_start (_tmp111_, G_TYPE_CHECK_INSTANCE_CAST (_tmp112_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 14592 "Dialogs.c"
+#line 14548 "Dialogs.c"
 	}
-#line 1764 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preview = NULL;
-#line 14596 "Dialogs.c"
+#line 14552 "Dialogs.c"
 	{
 		GdkPixbuf* _tmp113_ = NULL;
 		Dateable* _tmp114_ = NULL;
 		GdkPixbuf* _tmp115_ = NULL;
 		GdkPixbuf* _tmp116_ = NULL;
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp114_ = source;
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp115_ = thumbnail_source_get_thumbnail (G_TYPE_CHECK_INSTANCE_CAST (_tmp114_, TYPE_THUMBNAIL_SOURCE, ThumbnailSource), ADJUST_DATE_TIME_DIALOG_CALENDAR_THUMBNAIL_SCALE, &_inner_error_);
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp113_ = _tmp115_;
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 14610 "Dialogs.c"
-			goto __catch425_g_error;
+#line 14566 "Dialogs.c"
+			goto __catch422_g_error;
 		}
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp116_ = _tmp113_;
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp113_ = NULL;
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (preview);
-#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preview = _tmp116_;
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp113_);
-#line 14623 "Dialogs.c"
+#line 14579 "Dialogs.c"
 	}
-	goto __finally425;
-	__catch425_g_error:
+	goto __finally422;
+	__catch422_g_error:
 	{
 		GError* err = NULL;
 		Dateable* _tmp117_ = NULL;
 		gchar* _tmp118_ = NULL;
 		gchar* _tmp119_ = NULL;
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		err = _inner_error_;
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_inner_error_ = NULL;
-#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp117_ = source;
-#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp118_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp117_, TYPE_DATA_OBJECT, DataObject));
-#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp119_ = _tmp118_;
-#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		g_warning ("Dialogs.vala:1770: Unable to fetch preview for %s", _tmp119_);
-#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		g_warning ("Dialogs.vala:1765: Unable to fetch preview for %s", _tmp119_);
+#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp119_);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_error_free0 (err);
-#line 14648 "Dialogs.c"
+#line 14604 "Dialogs.c"
 	}
-	__finally425:
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	__finally422:
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (preview);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (time_content);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (clock);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_clear_error (&_inner_error_);
-#line 1765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return NULL;
-#line 14665 "Dialogs.c"
+#line 14621 "Dialogs.c"
 	}
-#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp120_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp120_);
-#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	image_content = _tmp120_;
-#line 1774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1769 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp121_ = image_content;
-#line 1774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1769 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
-#line 1775 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp122_ = image_content;
-#line 1775 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1770 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_set_homogeneous (_tmp122_, TRUE);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp124_ = preview;
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp124_ != NULL) {
-#line 14685 "Dialogs.c"
+#line 14641 "Dialogs.c"
 		GdkPixbuf* _tmp125_ = NULL;
 		GtkImage* _tmp126_ = NULL;
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp125_ = preview;
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp126_ = (GtkImage*) gtk_image_new_from_pixbuf (_tmp125_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp126_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp123_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp123_ = _tmp126_;
-#line 14698 "Dialogs.c"
+#line 14654 "Dialogs.c"
 	} else {
 		GtkImage* _tmp127_ = NULL;
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp127_ = (GtkImage*) gtk_image_new ();
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp127_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp123_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp123_ = _tmp127_;
-#line 14709 "Dialogs.c"
+#line 14665 "Dialogs.c"
 	}
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp128_ = _g_object_ref0 (_tmp123_);
-#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	image = _tmp128_;
-#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp129_ = (GtkLabel*) gtk_label_new (NULL);
-#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp129_);
-#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->original_time_label);
-#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->original_time_label = _tmp129_;
-#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp130_ = image_content;
-#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp131_ = image;
-#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp130_, G_TYPE_CHECK_INSTANCE_CAST (_tmp131_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp132_ = image_content;
-#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp133_ = self->priv->original_time_label;
-#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp132_, G_TYPE_CHECK_INSTANCE_CAST (_tmp133_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp134_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-#line 1781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp134_);
-#line 1781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1776 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	hbox = _tmp134_;
-#line 1782 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp135_ = hbox;
-#line 1782 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp135_, gtk_container_get_type (), GtkContainer), (guint) 3);
-#line 1783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp136_ = hbox;
-#line 1783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp137_ = image_content;
-#line 1783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp136_, G_TYPE_CHECK_INSTANCE_CAST (_tmp137_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1784 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp138_ = hbox;
-#line 1784 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp139_ = time_content;
-#line 1784 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1779 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp138_, G_TYPE_CHECK_INSTANCE_CAST (_tmp139_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1786 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp140_ = (GtkAlignment*) gtk_alignment_new (0.5f, 0.5f, (gfloat) 0, (gfloat) 0);
-#line 1786 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp140_);
-#line 1786 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	hbox_alignment = _tmp140_;
-#line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp141_ = hbox_alignment;
-#line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1780 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp140_ = hbox;
+#line 1780 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp140_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 1781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp141_ = hbox;
+#line 1781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp141_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 1782 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp142_ = hbox;
+#line 1782 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp142_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 1783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp143_ = hbox;
+#line 1783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp143_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 1785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp144_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 1785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp145_ = hbox;
+#line 1785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp144_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (_tmp145_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
 #line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp141_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp142_, gtk_widget_get_type (), GtkWidget));
-#line 1789 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp143_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1789 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp144_ = hbox_alignment;
-#line 1789 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp143_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (_tmp144_, gtk_widget_get_type (), GtkWidget), TRUE, FALSE, (guint) 0);
-#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp145_ = (GtkLabel*) gtk_label_new ("");
-#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp145_);
-#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp146_ = (GtkLabel*) gtk_label_new ("");
+#line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp146_);
+#line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->notification);
-#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->notification = _tmp145_;
-#line 1792 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp146_ = self->priv->notification;
-#line 1792 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_label_set_line_wrap (_tmp146_, TRUE);
-#line 1793 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1787 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->notification = _tmp146_;
+#line 1788 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp147_ = self->priv->notification;
+#line 1788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_line_wrap (_tmp147_, TRUE);
+#line 1789 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp148_ = self->priv->notification;
+#line 1789 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_justify (_tmp148_, GTK_JUSTIFY_CENTER);
+#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp149_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp150_ = self->priv->notification;
+#line 1791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp149_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (_tmp150_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 1793 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_label_set_justify (_tmp147_, GTK_JUSTIFY_CENTER);
+	_tmp151_ = source;
+#line 1793 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp152_ = dateable_get_exposure_time (_tmp151_);
+#line 1793 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->original_time = _tmp152_;
 #line 1795 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp148_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+	_tmp153_ = self->priv->original_time;
 #line 1795 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp149_ = self->priv->notification;
-#line 1795 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp148_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (_tmp149_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	if (_tmp153_ == ((time_t) 0)) {
+#line 14767 "Dialogs.c"
+		time_t _tmp154_ = 0;
+#line 1796 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp154_ = time (NULL);
+#line 1796 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		self->priv->original_time = _tmp154_;
 #line 1797 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp150_ = source;
-#line 1797 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp151_ = dateable_get_exposure_time (_tmp150_);
-#line 1797 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->original_time = _tmp151_;
-#line 1799 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp152_ = self->priv->original_time;
-#line 1799 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp152_ == ((time_t) 0)) {
-#line 14807 "Dialogs.c"
-		time_t _tmp153_ = 0;
-#line 1800 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp153_ = time (NULL);
-#line 1800 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		self->priv->original_time = _tmp153_;
-#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->no_original_time = TRUE;
-#line 14815 "Dialogs.c"
+#line 14775 "Dialogs.c"
 	}
-#line 1804 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp154_ = self->priv->original_time;
-#line 1804 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_time_local (_tmp154_, &_tmp155_);
-#line 1804 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	adjust_date_time_dialog_set_time (self, &_tmp155_);
-#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp156_ = config_facade_get_instance ();
-#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp157_ = _tmp156_;
-#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp158_ = configuration_facade_get_use_24_hour_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp157_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	adjust_date_time_dialog_set_original_time_label (self, _tmp158_);
-#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp157_);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (hbox_alignment);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1800 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp155_ = self->priv->original_time;
+#line 1800 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_time_local (_tmp155_, &_tmp156_);
+#line 1800 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	adjust_date_time_dialog_set_time (self, &_tmp156_);
+#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp157_ = config_facade_get_instance ();
+#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp158_ = _tmp157_;
+#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp159_ = configuration_facade_get_use_24_hour_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp158_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
+#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	adjust_date_time_dialog_set_original_time_label (self, _tmp159_);
+#line 1801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp158_);
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (hbox);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (image);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp123_);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (image_content);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (preview);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (time_content);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (clock);
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 14851 "Dialogs.c"
+#line 14809 "Dialogs.c"
 }
 
 
 AdjustDateTimeDialog* adjust_date_time_dialog_new (Dateable* source, gint photo_count, gboolean display_options, gboolean contains_video, gboolean only_video) {
-#line 1671 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return adjust_date_time_dialog_construct (TYPE_ADJUST_DATE_TIME_DIALOG, source, photo_count, display_options, contains_video, only_video);
-#line 14858 "Dialogs.c"
+#line 14816 "Dialogs.c"
 }
 
 
@@ -14894,60 +14852,60 @@ static void adjust_date_time_dialog_set_time (AdjustDateTimeDialog* self, struct
 	gint _tmp31_ = 0;
 	GtkComboBoxText* _tmp32_ = NULL;
 	gint _tmp33_ = 0;
-#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1804 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self));
-#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1804 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (time != NULL);
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->calendar;
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = *time;
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_.tm_mon;
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = *time;
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_.tm_year;
-#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1805 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_calendar_select_month (_tmp0_, (guint) _tmp2_, (guint) (_tmp4_ + ADJUST_DATE_TIME_DIALOG_YEAR_OFFSET));
-#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->calendar;
-#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = *time;
-#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _tmp6_.tm_mday;
-#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_calendar_select_day (_tmp5_, (guint) _tmp7_);
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = config_facade_get_instance ();
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _tmp8_;
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = configuration_facade_get_use_24_hour_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = _tmp10_;
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp9_);
-#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1808 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp11_) {
-#line 14919 "Dialogs.c"
+#line 14877 "Dialogs.c"
 		GtkComboBoxText* _tmp12_ = NULL;
 		GtkSpinButton* _tmp13_ = NULL;
 		struct tm _tmp14_ = {0};
 		gint _tmp15_ = 0;
-#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = self->priv->system;
-#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1809 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_combo_box_get_type (), GtkComboBox), (gint) ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_24HR);
-#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = self->priv->hour;
-#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = *time;
-#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = _tmp14_.tm_hour;
-#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1810 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_value (_tmp13_, (gdouble) _tmp15_);
-#line 14936 "Dialogs.c"
+#line 14894 "Dialogs.c"
 	} else {
 		gint AMPM_hour = 0;
 		struct tm _tmp16_ = {0};
@@ -14959,74 +14917,74 @@ static void adjust_date_time_dialog_set_time (AdjustDateTimeDialog* self, struct
 		struct tm _tmp23_ = {0};
 		gint _tmp24_ = 0;
 		GtkComboBoxText* _tmp25_ = NULL;
-#line 1816 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = *time;
-#line 1816 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = _tmp16_.tm_hour;
-#line 1816 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1812 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		AMPM_hour = _tmp17_ % 12;
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = AMPM_hour;
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp19_ == 0) {
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = 12;
-#line 14960 "Dialogs.c"
+#line 14918 "Dialogs.c"
 		} else {
 			gint _tmp20_ = 0;
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp20_ = AMPM_hour;
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = _tmp20_;
-#line 14967 "Dialogs.c"
+#line 14925 "Dialogs.c"
 		}
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = self->priv->hour;
-#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1813 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_value (_tmp21_, (gdouble) _tmp18_);
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp23_ = *time;
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = _tmp23_.tm_hour;
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp24_ >= 12) {
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_PM;
-#line 14981 "Dialogs.c"
+#line 14939 "Dialogs.c"
 		} else {
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_AM;
-#line 14985 "Dialogs.c"
+#line 14943 "Dialogs.c"
 		}
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp25_ = self->priv->system;
-#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_combo_box_get_type (), GtkComboBox), (gint) _tmp22_);
-#line 14991 "Dialogs.c"
+#line 14949 "Dialogs.c"
 	}
-#line 1821 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp26_ = self->priv->minute;
-#line 1821 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp27_ = *time;
-#line 1821 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp28_ = _tmp27_.tm_min;
-#line 1821 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1817 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_spin_button_set_value (_tmp26_, (gdouble) _tmp28_);
-#line 1822 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp29_ = self->priv->second;
-#line 1822 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp30_ = *time;
-#line 1822 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp31_ = _tmp30_.tm_sec;
-#line 1822 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_spin_button_set_value (_tmp29_, (gdouble) _tmp31_);
-#line 1824 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1820 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp32_ = self->priv->system;
-#line 1824 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1820 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp33_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1824 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1820 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->previous_time_system = (AdjustDateTimeDialogTimeSystem) _tmp33_;
-#line 15015 "Dialogs.c"
+#line 14973 "Dialogs.c"
 }
 
 
@@ -15072,7 +15030,7 @@ static gchar* g_time_format (struct tm *self, const gchar* format) {
 	buffer = (g_free (buffer), NULL);
 #line 2761 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 15061 "Dialogs.c"
+#line 15019 "Dialogs.c"
 }
 
 
@@ -15088,58 +15046,58 @@ static void adjust_date_time_dialog_set_original_time_label (AdjustDateTimeDialo
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
 	gchar* _tmp12_ = NULL;
-#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1823 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self));
-#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1824 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->no_original_time;
-#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1824 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 1829 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 15085 "Dialogs.c"
+#line 15043 "Dialogs.c"
 	}
-#line 1832 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = use_24_hr_format;
-#line 1832 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_) {
-#line 15091 "Dialogs.c"
+#line 15049 "Dialogs.c"
 		const gchar* _tmp3_ = NULL;
-#line 1832 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = _ ("%m/%d/%Y, %H:%M:%S");
-#line 1832 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = _tmp3_;
-#line 15097 "Dialogs.c"
+#line 15055 "Dialogs.c"
 	} else {
 		const gchar* _tmp4_ = NULL;
-#line 1833 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _ ("%m/%d/%Y, %I:%M:%S %p");
-#line 1833 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = _tmp4_;
-#line 15104 "Dialogs.c"
+#line 15062 "Dialogs.c"
 	}
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->original_time_label;
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _ ("Original: ");
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = self->priv->original_time;
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_time_local (_tmp7_, &_tmp8_);
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = g_time_format (&_tmp8_, _tmp1_);
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = g_strconcat (_tmp6_, _tmp10_, NULL);
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = _tmp11_;
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_label_set_text (_tmp5_, _tmp12_);
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp12_);
-#line 1831 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1827 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp10_);
-#line 15128 "Dialogs.c"
+#line 15086 "Dialogs.c"
 }
 
 
@@ -15168,105 +15126,105 @@ static time_t adjust_date_time_dialog_get_time (AdjustDateTimeDialog* self) {
 	guint _tmp18_ = 0U;
 	guint _tmp19_ = 0U;
 	time_t _tmp20_ = 0;
-#line 1836 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1832 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self), 0);
-#line 1837 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1833 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	memset (&time, 0, sizeof (struct tm));
-#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->second;
-#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_spin_button_get_value (_tmp0_);
-#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_sec = (gint) _tmp1_;
-#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->minute;
-#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_spin_button_get_value (_tmp2_);
-#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1836 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_min = (gint) _tmp3_;
-#line 1843 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = self->priv->hour;
-#line 1843 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = gtk_spin_button_get_value (_tmp4_);
-#line 1843 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1839 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	hour = (gint) _tmp5_;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = hour;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp8_ == 12) {
-#line 15183 "Dialogs.c"
+#line 15141 "Dialogs.c"
 		GtkComboBoxText* _tmp9_ = NULL;
 		gint _tmp10_ = 0;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = self->priv->system;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _tmp10_ != ((gint) ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_24HR);
-#line 15192 "Dialogs.c"
+#line 15150 "Dialogs.c"
 	} else {
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = FALSE;
-#line 15196 "Dialogs.c"
+#line 15154 "Dialogs.c"
 	}
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp7_) {
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = 0;
-#line 15202 "Dialogs.c"
+#line 15160 "Dialogs.c"
 	} else {
 		gint _tmp11_ = 0;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = hour;
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = _tmp11_;
-#line 15209 "Dialogs.c"
+#line 15167 "Dialogs.c"
 	}
-#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1840 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_hour = _tmp6_;
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = self->priv->system;
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp14_ == ((gint) ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_PM)) {
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = 12;
-#line 15221 "Dialogs.c"
+#line 15179 "Dialogs.c"
 	} else {
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = 0;
-#line 15225 "Dialogs.c"
+#line 15183 "Dialogs.c"
 	}
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = time.tm_hour;
-#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_hour = _tmp15_ + _tmp12_;
-#line 1848 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = self->priv->calendar;
-#line 1848 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_calendar_get_date (_tmp16_, &_tmp17_, &_tmp18_, &_tmp19_);
-#line 1848 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	year = _tmp17_;
-#line 1848 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	month = _tmp18_;
-#line 1848 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	day = _tmp19_;
-#line 1849 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1845 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_year = ((gint) year) - ADJUST_DATE_TIME_DIALOG_YEAR_OFFSET;
-#line 1850 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1846 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_mon = (gint) month;
-#line 1851 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1847 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_mday = (gint) day;
-#line 1853 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1849 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time.tm_isdst = -1;
-#line 1855 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = mktime (&time);
-#line 1855 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp20_;
-#line 1855 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 15255 "Dialogs.c"
+#line 15213 "Dialogs.c"
 }
 
 
@@ -15277,17 +15235,17 @@ gboolean adjust_date_time_dialog_execute (AdjustDateTimeDialog* self, gint64* ti
 	gboolean result = FALSE;
 	gboolean response = FALSE;
 	gint _tmp0_ = 0;
-#line 1858 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1854 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self), FALSE);
-#line 1860 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1856 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1862 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1858 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	response = FALSE;
-#line 1864 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 1864 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == ((gint) GTK_RESPONSE_OK)) {
-#line 15276 "Dialogs.c"
+#line 15234 "Dialogs.c"
 		gboolean _tmp1_ = FALSE;
 		GtkRadioButton* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
@@ -15299,125 +15257,125 @@ gboolean adjust_date_time_dialog_execute (AdjustDateTimeDialog* self, gint64* ti
 		GtkCheckButton* _tmp15_ = NULL;
 		gboolean _tmp16_ = FALSE;
 		gboolean _tmp17_ = FALSE;
-#line 1865 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1861 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = self->priv->no_original_time;
-#line 1865 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1861 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp1_) {
-#line 15292 "Dialogs.c"
+#line 15250 "Dialogs.c"
 			time_t _tmp2_ = 0;
-#line 1866 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp2_ = adjust_date_time_dialog_get_time (self);
-#line 1866 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_vala_time_shift = (gint64) _tmp2_;
-#line 15298 "Dialogs.c"
+#line 15256 "Dialogs.c"
 		} else {
 			time_t _tmp3_ = 0;
 			time_t _tmp4_ = 0;
-#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp3_ = adjust_date_time_dialog_get_time (self);
-#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp4_ = self->priv->original_time;
-#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_vala_time_shift = (gint64) (_tmp3_ - _tmp4_);
-#line 15308 "Dialogs.c"
+#line 15266 "Dialogs.c"
 		}
-#line 1870 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = self->priv->relativity_radio_button;
-#line 1870 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1870 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_keep_relativity = _tmp6_;
-#line 1872 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = self->priv->relativity_radio_button;
-#line 1872 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = gtk_widget_get_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 1872 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = _tmp8_;
-#line 1872 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1868 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp9_) {
-#line 15324 "Dialogs.c"
+#line 15282 "Dialogs.c"
 			ConfigFacade* _tmp10_ = NULL;
 			ConfigFacade* _tmp11_ = NULL;
 			gboolean _tmp12_ = FALSE;
-#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp10_ = config_facade_get_instance ();
-#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp11_ = _tmp10_;
-#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = _vala_keep_relativity;
-#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			configuration_facade_set_keep_relativity (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp12_);
-#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_tmp11_);
-#line 15338 "Dialogs.c"
+#line 15296 "Dialogs.c"
 		}
-#line 1875 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1871 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = self->priv->modify_originals_check_button;
-#line 1875 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1871 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1875 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1871 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_modify_originals = _tmp14_;
-#line 1877 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = self->priv->modify_originals_check_button;
-#line 1877 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = gtk_widget_get_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget));
-#line 1877 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = _tmp16_;
-#line 1877 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp17_) {
-#line 15354 "Dialogs.c"
+#line 15312 "Dialogs.c"
 			ConfigFacade* _tmp18_ = NULL;
 			ConfigFacade* _tmp19_ = NULL;
 			gboolean _tmp20_ = FALSE;
-#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = config_facade_get_instance ();
-#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp19_ = _tmp18_;
-#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp20_ = _vala_modify_originals;
-#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			configuration_facade_set_modify_originals (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp20_);
-#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_tmp19_);
-#line 15368 "Dialogs.c"
+#line 15326 "Dialogs.c"
 		}
-#line 1880 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1876 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		response = TRUE;
-#line 15372 "Dialogs.c"
+#line 15330 "Dialogs.c"
 	} else {
-#line 1882 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1878 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_time_shift = (gint64) 0;
-#line 1883 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_keep_relativity = TRUE;
-#line 1884 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1880 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_modify_originals = FALSE;
-#line 15380 "Dialogs.c"
+#line 15338 "Dialogs.c"
 	}
-#line 1887 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = response;
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (time_shift) {
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*time_shift = _vala_time_shift;
-#line 15390 "Dialogs.c"
+#line 15348 "Dialogs.c"
 	}
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (keep_relativity) {
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*keep_relativity = _vala_keep_relativity;
-#line 15396 "Dialogs.c"
+#line 15354 "Dialogs.c"
 	}
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (modify_originals) {
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*modify_originals = _vala_modify_originals;
-#line 15402 "Dialogs.c"
+#line 15360 "Dialogs.c"
 	}
-#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1885 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 15406 "Dialogs.c"
+#line 15364 "Dialogs.c"
 }
 
 
@@ -15428,31 +15386,31 @@ static gboolean adjust_date_time_dialog_on_spin_button_output (AdjustDateTimeDia
 	gdouble _tmp2_ = 0.0;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 1892 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1888 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self), FALSE);
-#line 1892 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1888 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_SPIN_BUTTON (button), FALSE);
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = button;
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = button;
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_spin_button_get_value (_tmp1_);
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = g_strdup_printf ("%02d", (gint) _tmp2_);
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_;
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_entry_set_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_entry_get_type (), GtkEntry), _tmp4_);
-#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1889 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp4_);
-#line 1895 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1891 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed (self);
-#line 1897 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = TRUE;
-#line 1897 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1893 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 15441 "Dialogs.c"
+#line 15399 "Dialogs.c"
 }
 
 
@@ -15465,81 +15423,81 @@ static void adjust_date_time_dialog_on_time_changed (AdjustDateTimeDialog* self)
 	gboolean _tmp4_ = FALSE;
 	gboolean _tmp5_ = FALSE;
 	gint64 _tmp6_ = 0LL;
-#line 1900 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1896 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self));
-#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1897 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = adjust_date_time_dialog_get_time (self);
-#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1897 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->original_time;
-#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1897 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	time_shift = ((gint64) _tmp0_) - ((gint64) _tmp1_);
-#line 1903 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->system;
-#line 1903 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1903 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->previous_time_system = (AdjustDateTimeDialogTimeSystem) _tmp3_;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = time_shift;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp6_ == ((gint64) 0)) {
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = TRUE;
-#line 15474 "Dialogs.c"
+#line 15432 "Dialogs.c"
 	} else {
 		gboolean _tmp7_ = FALSE;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = self->priv->no_original_time;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = _tmp7_;
-#line 15481 "Dialogs.c"
+#line 15439 "Dialogs.c"
 	}
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_) {
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = TRUE;
-#line 15487 "Dialogs.c"
+#line 15445 "Dialogs.c"
 	} else {
 		gboolean _tmp8_ = FALSE;
 		GtkRadioButton* _tmp9_ = NULL;
 		gboolean _tmp10_ = FALSE;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = self->priv->batch_radio_button;
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp10_) {
-#line 15498 "Dialogs.c"
+#line 15456 "Dialogs.c"
 			GtkRadioButton* _tmp11_ = NULL;
 			gboolean _tmp12_ = FALSE;
 			gboolean _tmp13_ = FALSE;
-#line 1906 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1902 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp11_ = self->priv->batch_radio_button;
-#line 1906 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1902 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = gtk_widget_get_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget));
-#line 1906 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1902 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp13_ = _tmp12_;
-#line 1906 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1902 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp8_ = _tmp13_;
-#line 15510 "Dialogs.c"
+#line 15468 "Dialogs.c"
 		} else {
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp8_ = FALSE;
-#line 15514 "Dialogs.c"
+#line 15472 "Dialogs.c"
 		}
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _tmp8_;
-#line 15518 "Dialogs.c"
+#line 15476 "Dialogs.c"
 	}
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_) {
-#line 15522 "Dialogs.c"
+#line 15480 "Dialogs.c"
 		GtkLabel* _tmp14_ = NULL;
-#line 1907 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1903 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = self->priv->notification;
-#line 1907 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1903 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget));
-#line 15528 "Dialogs.c"
+#line 15486 "Dialogs.c"
 	} else {
 		gboolean forward = FALSE;
 		gint64 _tmp15_ = 0LL;
@@ -15576,108 +15534,108 @@ static void adjust_date_time_dialog_on_time_changed (AdjustDateTimeDialog* self)
 		gchar* _tmp43_ = NULL;
 		gchar* _tmp44_ = NULL;
 		GtkLabel* _tmp45_ = NULL;
-#line 1909 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = time_shift;
-#line 1909 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		forward = _tmp15_ > ((gint64) 0);
-#line 1912 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1908 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = time_shift;
-#line 1912 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1908 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = llabs (_tmp16_);
-#line 1912 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1908 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		time_shift = _tmp17_;
-#line 1914 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1910 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = time_shift;
-#line 1914 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1910 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		days = (gint) (_tmp18_ / ADJUST_DATE_TIME_DIALOG_SECONDS_IN_DAY);
-#line 1915 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = time_shift;
-#line 1915 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		time_shift = _tmp19_ % ADJUST_DATE_TIME_DIALOG_SECONDS_IN_DAY;
-#line 1916 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1912 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp20_ = time_shift;
-#line 1916 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1912 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		hours = (gint) (_tmp20_ / ADJUST_DATE_TIME_DIALOG_SECONDS_IN_HOUR);
-#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1913 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = time_shift;
-#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1913 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		time_shift = _tmp21_ % ADJUST_DATE_TIME_DIALOG_SECONDS_IN_HOUR;
-#line 1918 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1914 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp22_ = time_shift;
-#line 1918 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1914 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		minutes = (gint) (_tmp22_ / ADJUST_DATE_TIME_DIALOG_SECONDS_IN_MINUTE);
-#line 1919 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1915 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp23_ = time_shift;
-#line 1919 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1915 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		seconds = (gint) (_tmp23_ % ADJUST_DATE_TIME_DIALOG_SECONDS_IN_MINUTE);
-#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp25_ = forward;
-#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp25_) {
-#line 15603 "Dialogs.c"
+#line 15561 "Dialogs.c"
 			const gchar* _tmp26_ = NULL;
-#line 1922 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp26_ = _ ("Exposure time will be shifted forward by\n" \
 "%d %s, %d %s, %d %s, and %d %s.");
-#line 1922 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp24_ = _tmp26_;
-#line 15609 "Dialogs.c"
+#line 15567 "Dialogs.c"
 		} else {
 			const gchar* _tmp27_ = NULL;
-#line 1923 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1919 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp27_ = _ ("Exposure time will be shifted backward by\n" \
 "%d %s, %d %s, %d %s, and %d %s.");
-#line 1923 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1919 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp24_ = _tmp27_;
-#line 15616 "Dialogs.c"
+#line 15574 "Dialogs.c"
 		}
-#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp28_ = g_strdup (_tmp24_);
-#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		shift_status = _tmp28_;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp29_ = self->priv->notification;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp30_ = shift_status;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp31_ = days;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp32_ = days;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp33_ = ngettext ("day", "days", (gulong) _tmp32_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp34_ = hours;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp35_ = hours;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp36_ = ngettext ("hour", "hours", (gulong) _tmp35_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp37_ = minutes;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp38_ = minutes;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp39_ = ngettext ("minute", "minutes", (gulong) _tmp38_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp40_ = seconds;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp41_ = seconds;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp42_ = ngettext ("second", "seconds", (gulong) _tmp41_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp43_ = g_strdup_printf (_tmp30_, _tmp31_, _tmp33_, _tmp34_, _tmp36_, _tmp37_, _tmp39_, _tmp40_, _tmp42_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp44_ = _tmp43_;
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_label_set_text (_tmp29_, _tmp44_);
-#line 1925 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp44_);
-#line 1930 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp45_ = self->priv->notification;
-#line 1930 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_widget_get_type (), GtkWidget));
-#line 1905 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (shift_status);
-#line 15664 "Dialogs.c"
+#line 15622 "Dialogs.c"
 	}
 }
 
@@ -15692,39 +15650,39 @@ static void adjust_date_time_dialog_on_time_system_changed (AdjustDateTimeDialog
 	gint _tmp6_ = 0;
 	GtkComboBoxText* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
-#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_ADJUST_DATE_TIME_DIALOG (self));
-#line 1935 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->previous_time_system;
-#line 1935 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->system;
-#line 1935 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1935 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == _tmp2_) {
-#line 1936 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1932 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 15691 "Dialogs.c"
+#line 15649 "Dialogs.c"
 	}
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = config_facade_get_instance ();
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_;
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->system;
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	configuration_facade_set_use_24_hour_time (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp6_ == ((gint) ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_24HR));
-#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp4_);
-#line 1940 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = self->priv->system;
-#line 1940 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1940 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp8_ == ((gint) ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_24HR)) {
-#line 15711 "Dialogs.c"
+#line 15669 "Dialogs.c"
 		gint _tmp9_ = 0;
 		GtkSpinButton* _tmp10_ = NULL;
 		gdouble _tmp11_ = 0.0;
@@ -15735,57 +15693,57 @@ static void adjust_date_time_dialog_on_time_system_changed (AdjustDateTimeDialog
 		GtkSpinButton* _tmp17_ = NULL;
 		GtkSpinButton* _tmp18_ = NULL;
 		gint _tmp19_ = 0;
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = self->priv->hour;
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = gtk_spin_button_get_value (_tmp10_);
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp11_ == 12.0) {
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp9_ = 0;
-#line 15730 "Dialogs.c"
+#line 15688 "Dialogs.c"
 		} else {
 			GtkSpinButton* _tmp12_ = NULL;
 			gdouble _tmp13_ = 0.0;
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = self->priv->hour;
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp13_ = gtk_spin_button_get_value (_tmp12_);
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp9_ = (gint) _tmp13_;
-#line 15740 "Dialogs.c"
+#line 15698 "Dialogs.c"
 		}
-#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		time = _tmp9_;
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = self->priv->previous_time_system;
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp15_ == ADJUST_DATE_TIME_DIALOG_TIME_SYSTEM_PM) {
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp14_ = 12;
-#line 15750 "Dialogs.c"
+#line 15708 "Dialogs.c"
 		} else {
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp14_ = 0;
-#line 15754 "Dialogs.c"
+#line 15712 "Dialogs.c"
 		}
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = time;
-#line 1942 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1938 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		time = _tmp16_ + _tmp14_;
-#line 1944 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1940 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = self->priv->hour;
-#line 1944 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1940 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_range (_tmp17_, (gdouble) 0, (gdouble) 23);
-#line 1945 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1941 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		adjust_date_time_dialog_set_original_time_label (self, TRUE);
-#line 1947 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = self->priv->hour;
-#line 1947 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = time;
-#line 1947 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_value (_tmp18_, (gdouble) _tmp19_);
-#line 15772 "Dialogs.c"
+#line 15730 "Dialogs.c"
 	} else {
 		gint AMPM_hour = 0;
 		GtkSpinButton* _tmp20_ = NULL;
@@ -15794,92 +15752,92 @@ static void adjust_date_time_dialog_on_time_system_changed (AdjustDateTimeDialog
 		gint _tmp23_ = 0;
 		gint _tmp24_ = 0;
 		GtkSpinButton* _tmp26_ = NULL;
-#line 1949 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1945 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp20_ = self->priv->hour;
-#line 1949 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1945 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = gtk_spin_button_get_value (_tmp20_);
-#line 1949 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1945 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		AMPM_hour = ((gint) _tmp21_) % 12;
-#line 1951 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1947 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp22_ = self->priv->hour;
-#line 1951 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1947 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_range (_tmp22_, (gdouble) 1, (gdouble) 12);
-#line 1952 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1948 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		adjust_date_time_dialog_set_original_time_label (self, FALSE);
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = AMPM_hour;
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp24_ == 0) {
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp23_ = 12;
-#line 15799 "Dialogs.c"
+#line 15757 "Dialogs.c"
 		} else {
 			gint _tmp25_ = 0;
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp25_ = AMPM_hour;
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp23_ = _tmp25_;
-#line 15806 "Dialogs.c"
+#line 15764 "Dialogs.c"
 		}
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp26_ = self->priv->hour;
-#line 1954 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_spin_button_set_value (_tmp26_, (gdouble) _tmp23_);
-#line 15812 "Dialogs.c"
+#line 15770 "Dialogs.c"
 	}
-#line 1957 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1953 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_on_time_changed (self);
-#line 15816 "Dialogs.c"
+#line 15774 "Dialogs.c"
 }
 
 
 static void adjust_date_time_dialog_class_init (AdjustDateTimeDialogClass * klass) {
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	adjust_date_time_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (AdjustDateTimeDialogPrivate));
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = adjust_date_time_dialog_finalize;
-#line 15827 "Dialogs.c"
+#line 15785 "Dialogs.c"
 }
 
 
 static void adjust_date_time_dialog_instance_init (AdjustDateTimeDialog * self) {
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = ADJUST_DATE_TIME_DIALOG_GET_PRIVATE (self);
-#line 1647 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1641 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->no_original_time = FALSE;
-#line 15836 "Dialogs.c"
+#line 15794 "Dialogs.c"
 }
 
 
 static void adjust_date_time_dialog_finalize (GObject* obj) {
 	AdjustDateTimeDialog * self;
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_ADJUST_DATE_TIME_DIALOG, AdjustDateTimeDialog);
-#line 1652 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1646 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->original_time_label);
-#line 1653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1647 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->calendar);
-#line 1654 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->hour);
-#line 1655 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1649 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->minute);
-#line 1656 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1650 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->second);
-#line 1657 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1651 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->system);
-#line 1658 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1652 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->relativity_radio_button);
-#line 1659 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1653 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->batch_radio_button);
-#line 1660 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1654 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->modify_originals_check_button);
-#line 1661 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1655 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->notification);
-#line 1642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (adjust_date_time_dialog_parent_class)->finalize (obj);
-#line 15866 "Dialogs.c"
+#line 15824 "Dialogs.c"
 }
 
 
@@ -15911,31 +15869,31 @@ void multiple_object_error_dialog (GeeArrayList* objects, const gchar* message, 
 	GtkMessageDialog* _tmp34_ = NULL;
 	GtkMessageDialog* _tmp35_ = NULL;
 	const gchar* _tmp36_ = NULL;
-#line 1962 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GEE_IS_ARRAY_LIST (objects));
-#line 1962 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (message != NULL);
-#line 1962 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (title != NULL);
-#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1960 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = message;
-#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1960 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_strconcat (_tmp0_, "\n", NULL);
-#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1960 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog_message = _tmp1_;
-#line 15910 "Dialogs.c"
+#line 15868 "Dialogs.c"
 	{
 		gint i = 0;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		i = 0;
-#line 15915 "Dialogs.c"
+#line 15873 "Dialogs.c"
 		{
 			gboolean _tmp2_ = FALSE;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp2_ = TRUE;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 15922 "Dialogs.c"
+#line 15880 "Dialogs.c"
 				gboolean _tmp4_ = FALSE;
 				gint _tmp5_ = 0;
 				const gchar* _tmp10_ = NULL;
@@ -15948,96 +15906,96 @@ void multiple_object_error_dialog (GeeArrayList* objects, const gchar* message, 
 				gchar* _tmp17_ = NULL;
 				gchar* _tmp18_ = NULL;
 				gchar* _tmp19_ = NULL;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp2_) {
-#line 15937 "Dialogs.c"
+#line 15895 "Dialogs.c"
 					gint _tmp3_ = 0;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp3_ = i;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					i = _tmp3_ + 1;
-#line 15943 "Dialogs.c"
+#line 15901 "Dialogs.c"
 				}
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp2_ = FALSE;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp5_ = i;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp5_ < MAX_OBJECTS_DISPLAYED) {
-#line 15951 "Dialogs.c"
+#line 15909 "Dialogs.c"
 					GeeArrayList* _tmp6_ = NULL;
 					gint _tmp7_ = 0;
 					gint _tmp8_ = 0;
 					gint _tmp9_ = 0;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp6_ = objects;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp7_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp8_ = _tmp7_;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp9_ = i;
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp4_ = _tmp8_ > _tmp9_;
-#line 15966 "Dialogs.c"
+#line 15924 "Dialogs.c"
 				} else {
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp4_ = FALSE;
-#line 15970 "Dialogs.c"
+#line 15928 "Dialogs.c"
 				}
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp4_) {
-#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 15976 "Dialogs.c"
+#line 15934 "Dialogs.c"
 				}
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp10_ = dialog_message;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp11_ = objects;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp12_ = i;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp12_);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp14_ = (DataObject*) _tmp13_;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp15_ = data_object_to_string (_tmp14_);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp16_ = _tmp15_;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp17_ = g_strconcat ("\n", _tmp16_, NULL);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp18_ = _tmp17_;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp19_ = g_strconcat (_tmp10_, _tmp18_, NULL);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (dialog_message);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				dialog_message = _tmp19_;
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (_tmp18_);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (_tmp16_);
-#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (_tmp14_);
-#line 16008 "Dialogs.c"
+#line 15966 "Dialogs.c"
 			}
 		}
 	}
-#line 1970 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1966 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = objects;
-#line 1970 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1966 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp21_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1970 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1966 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = _tmp21_;
-#line 1970 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1966 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	remainder = _tmp22_ - MAX_OBJECTS_DISPLAYED;
-#line 1971 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = remainder;
-#line 1971 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1967 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp23_ > 0) {
-#line 16024 "Dialogs.c"
+#line 15982 "Dialogs.c"
 		const gchar* _tmp24_ = NULL;
 		gint _tmp25_ = 0;
 		const gchar* _tmp26_ = NULL;
@@ -16045,57 +16003,57 @@ void multiple_object_error_dialog (GeeArrayList* objects, const gchar* message, 
 		gchar* _tmp28_ = NULL;
 		gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = dialog_message;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp25_ = remainder;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp26_ = ngettext ("\n\nAnd %d other.", "\n\nAnd %d others.", (gulong) _tmp25_);
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp27_ = remainder;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp28_ = g_strdup_printf (_tmp26_, _tmp27_);
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp29_ = _tmp28_;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp30_ = g_strconcat (_tmp24_, _tmp29_, NULL);
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (dialog_message);
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dialog_message = _tmp30_;
-#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (_tmp29_);
-#line 16052 "Dialogs.c"
+#line 16010 "Dialogs.c"
 	}
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp31_ = app_window_get_instance ();
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp32_ = _tmp31_;
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp33_ = dialog_message;
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp34_ = (GtkMessageDialog*) gtk_message_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_window_get_type (), GtkWindow), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", _tmp33_);
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp34_);
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp35_ = _tmp34_;
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp32_);
-#line 1976 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1972 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp35_;
-#line 1979 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1975 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp36_ = title;
-#line 1979 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1975 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_window_get_type (), GtkWindow), _tmp36_);
-#line 1981 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1977 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 1982 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1978 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 1962 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 1962 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1958 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (dialog_message);
-#line 16082 "Dialogs.c"
+#line 16040 "Dialogs.c"
 }
 
 
@@ -16108,40 +16066,40 @@ TagsDialog* tags_dialog_construct (GType object_type, const gchar* title, const 
 	HierarchicalTagIndex* _tmp4_ = NULL;
 	GeeCollection* _tmp5_ = NULL;
 	GeeCollection* _tmp6_ = NULL;
-#line 1986 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1982 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (title != NULL, NULL);
-#line 1986 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1982 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (label != NULL, NULL);
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = title;
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = label;
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = initial_text;
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = hierarchical_tag_index_get_global_index ();
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_;
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = hierarchical_tag_index_get_all_tags (_tmp4_);
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _tmp5_;
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (TagsDialog*) text_entry_dialog_mediator_construct (object_type, _tmp0_, _tmp1_, _tmp2_, _tmp6_, ",");
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp6_);
-#line 1987 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1983 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_hierarchical_tag_index_unref0 (_tmp4_);
-#line 1986 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1982 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 16121 "Dialogs.c"
+#line 16079 "Dialogs.c"
 }
 
 
 static void tags_dialog_class_init (TagsDialogClass * klass) {
-#line 1985 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1981 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tags_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 16128 "Dialogs.c"
+#line 16086 "Dialogs.c"
 }
 
 
@@ -16167,28 +16125,28 @@ AddTagsDialog* add_tags_dialog_construct (GType object_type) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 1994 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1990 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = g_dpgettext2 (NULL, "Dialog Title", RESOURCES_ADD_TAGS_TITLE);
-#line 1994 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1990 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1994 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1990 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	title = _tmp1_;
-#line 1996 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1992 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _ ("Tags (separated by commas):");
-#line 1996 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1992 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (AddTagsDialog*) tags_dialog_construct (object_type, title, _tmp2_, NULL);
-#line 1993 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1989 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (title);
-#line 1993 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1989 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 16168 "Dialogs.c"
+#line 16126 "Dialogs.c"
 }
 
 
 AddTagsDialog* add_tags_dialog_new (void) {
-#line 1993 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1989 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return add_tags_dialog_construct (TYPE_ADD_TAGS_DIALOG);
-#line 16175 "Dialogs.c"
+#line 16133 "Dialogs.c"
 }
 
 
@@ -16208,70 +16166,70 @@ gchar** add_tags_dialog_execute (AddTagsDialog* self, int* result_length1) {
 	gint _tmp9__length1 = 0;
 	gchar** _tmp10_ = NULL;
 	gint _tmp10__length1 = 0;
-#line 1999 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1995 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_ADD_TAGS_DIALOG (self), NULL);
-#line 2000 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1996 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _text_entry_dialog_mediator_execute (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_TEXT_ENTRY_DIALOG_MEDIATOR, TextEntryDialogMediator));
-#line 2000 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1996 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text = _tmp0_;
-#line 2001 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1997 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = text;
-#line 2001 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1997 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ == NULL) {
-#line 16205 "Dialogs.c"
+#line 16163 "Dialogs.c"
 		gchar** _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = NULL;
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2__length1 = 0;
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (result_length1) {
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			*result_length1 = _tmp2__length1;
-#line 16216 "Dialogs.c"
+#line 16174 "Dialogs.c"
 		}
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = _tmp2_;
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (text);
-#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 16224 "Dialogs.c"
+#line 16182 "Dialogs.c"
 	}
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = text;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_ = g_strsplit (_tmp3_, ",", 0);
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _tmp5_;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6__length1 = _vala_array_length (_tmp4_);
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = tag_prep_tag_names (_tmp6_, _vala_array_length (_tmp4_), &_tmp7_);
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = _tmp8_;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9__length1 = _tmp7_;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = (_vala_array_free (_tmp6_, _tmp6__length1, (GDestroyNotify) g_free), NULL);
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10__length1 = _tmp9__length1;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (result_length1) {
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*result_length1 = _tmp10__length1;
-#line 16250 "Dialogs.c"
+#line 16208 "Dialogs.c"
 	}
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp10_;
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (text);
-#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2002 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 16258 "Dialogs.c"
+#line 16216 "Dialogs.c"
 }
 
 
@@ -16294,64 +16252,64 @@ static gboolean add_tags_dialog_real_on_modify_validate (TextEntryDialogMediator
 	gint _names_size_ = 0;
 	gchar** _tmp9_ = NULL;
 	gint _tmp9__length1 = 0;
-#line 2009 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2005 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_ADD_TAGS_DIALOG, AddTagsDialog);
-#line 2009 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2005 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (text != NULL, FALSE);
-#line 2010 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = text;
-#line 2010 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = string_contains (_tmp0_, TAG_PATH_SEPARATOR_STRING);
-#line 2010 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2006 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_) {
-#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2007 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2007 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 16295 "Dialogs.c"
+#line 16253 "Dialogs.c"
 	}
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = text;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_ = g_strsplit (_tmp2_, ",", 0);
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5__length1 = _vala_array_length (_tmp3_);
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = tag_prep_tag_names (_tmp5_, _vala_array_length (_tmp3_), &_tmp6_);
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _tmp7_;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8__length1 = _tmp6_;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = (_vala_array_free (_tmp5_, _tmp5__length1, (GDestroyNotify) g_free), NULL);
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	names = _tmp8_;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	names_length1 = _tmp8__length1;
-#line 2015 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_names_size_ = names_length1;
-#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2013 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = names;
-#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2013 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9__length1 = names_length1;
-#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2013 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp9__length1 > 0;
-#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2013 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	names = (_vala_array_free (names, names_length1, (GDestroyNotify) g_free), NULL);
-#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2013 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 16329 "Dialogs.c"
+#line 16287 "Dialogs.c"
 }
 
 
 static void add_tags_dialog_class_init (AddTagsDialogClass * klass) {
-#line 1992 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1988 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	add_tags_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 1992 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 1988 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((TextEntryDialogMediatorClass *) klass)->on_modify_validate = add_tags_dialog_real_on_modify_validate;
-#line 16338 "Dialogs.c"
+#line 16296 "Dialogs.c"
 }
 
 
@@ -16377,30 +16335,30 @@ ModifyTagsDialog* modify_tags_dialog_construct (GType object_type, MediaSource* 
 	MediaSource* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 2022 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2018 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_MEDIA_SOURCE (source), NULL);
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _ ("Tags (separated by commas):");
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = source;
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = modify_tags_dialog_get_initial_text (_tmp1_);
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (ModifyTagsDialog*) tags_dialog_construct (object_type, RESOURCES_MODIFY_TAGS_LABEL, _tmp0_, _tmp3_);
-#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2019 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp3_);
-#line 2022 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2018 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 16380 "Dialogs.c"
+#line 16338 "Dialogs.c"
 }
 
 
 ModifyTagsDialog* modify_tags_dialog_new (MediaSource* source) {
-#line 2022 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2018 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return modify_tags_dialog_construct (TYPE_MODIFY_TAGS_DIALOG, source);
-#line 16387 "Dialogs.c"
+#line 16345 "Dialogs.c"
 }
 
 
@@ -16417,52 +16375,52 @@ static gchar* modify_tags_dialog_get_initial_text (MediaSource* source) {
 	GeeSortedSet* tag_basenames = NULL;
 	GeeTreeSet* _tmp6_ = NULL;
 	gchar* text = NULL;
-#line 2027 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2023 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_MEDIA_SOURCE (source), NULL);
-#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = tag_global;
-#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = source;
-#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = tag_source_collection_fetch_for_source (_tmp0_, _tmp1_);
-#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	source_tags = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 2029 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2025 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = source_tags;
-#line 2029 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2025 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_ == NULL) {
-#line 2030 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2026 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = NULL;
-#line 2030 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2026 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (source_tags);
-#line 2030 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2026 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 16424 "Dialogs.c"
+#line 16382 "Dialogs.c"
 	}
-#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = source_tags;
-#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = tag_get_terminal_tags (_tmp4_);
-#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2028 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	terminal_tags = _tmp5_;
-#line 2034 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2030 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = gee_tree_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 2034 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2030 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_basenames = G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_SORTED_SET, GeeSortedSet);
-#line 16436 "Dialogs.c"
+#line 16394 "Dialogs.c"
 	{
 		GeeIterator* _tag_it = NULL;
 		GeeCollection* _tmp7_ = NULL;
 		GeeIterator* _tmp8_ = NULL;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = terminal_tags;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tag_it = _tmp8_;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 16449 "Dialogs.c"
+#line 16407 "Dialogs.c"
 			GeeIterator* _tmp9_ = NULL;
 			gboolean _tmp10_ = FALSE;
 			Tag* tag = NULL;
@@ -16474,64 +16432,64 @@ static gchar* modify_tags_dialog_get_initial_text (MediaSource* source) {
 			gchar* _tmp16_ = NULL;
 			gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp9_ = _tag_it;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp10_ = gee_iterator_next (_tmp9_);
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (!_tmp10_) {
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 16469 "Dialogs.c"
+#line 16427 "Dialogs.c"
 			}
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp11_ = _tag_it;
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = gee_iterator_get (_tmp11_);
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			tag = (Tag*) _tmp12_;
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp13_ = tag_basenames;
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp14_ = tag;
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp15_ = tag_get_path (_tmp14_);
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp16_ = _tmp15_;
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp17_ = hierarchical_tag_utilities_get_basename (_tmp16_);
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = _tmp17_;
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_COLLECTION, GeeCollection), _tmp18_);
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (_tmp18_);
-#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (_tmp16_);
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (tag);
-#line 16497 "Dialogs.c"
+#line 16455 "Dialogs.c"
 		}
-#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2031 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tag_it);
-#line 16501 "Dialogs.c"
+#line 16459 "Dialogs.c"
 	}
-#line 2038 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2034 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text = NULL;
-#line 16505 "Dialogs.c"
+#line 16463 "Dialogs.c"
 	{
 		GeeIterator* _name_it = NULL;
 		GeeSortedSet* _tmp19_ = NULL;
 		GeeIterator* _tmp20_ = NULL;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = tag_basenames;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp20_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_name_it = _tmp20_;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 16518 "Dialogs.c"
+#line 16476 "Dialogs.c"
 			GeeIterator* _tmp21_ = NULL;
 			gboolean _tmp22_ = FALSE;
 			gchar* name = NULL;
@@ -16541,77 +16499,77 @@ static gchar* modify_tags_dialog_get_initial_text (MediaSource* source) {
 			const gchar* _tmp29_ = NULL;
 			const gchar* _tmp30_ = NULL;
 			gchar* _tmp31_ = NULL;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp21_ = _name_it;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = gee_iterator_next (_tmp21_);
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (!_tmp22_) {
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 16536 "Dialogs.c"
+#line 16494 "Dialogs.c"
 			}
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp23_ = _name_it;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp24_ = gee_iterator_get (_tmp23_);
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			name = (gchar*) _tmp24_;
-#line 2040 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp25_ = text;
-#line 2040 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp25_ == NULL) {
-#line 16548 "Dialogs.c"
+#line 16506 "Dialogs.c"
 				gchar* _tmp26_ = NULL;
-#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2037 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp26_ = g_strdup ("");
-#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2037 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (text);
-#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2037 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				text = _tmp26_;
-#line 16556 "Dialogs.c"
+#line 16514 "Dialogs.c"
 			} else {
 				const gchar* _tmp27_ = NULL;
 				gchar* _tmp28_ = NULL;
-#line 2043 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp27_ = text;
-#line 2043 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp28_ = g_strconcat (_tmp27_, ", ", NULL);
-#line 2043 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (text);
-#line 2043 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				text = _tmp28_;
-#line 16568 "Dialogs.c"
+#line 16526 "Dialogs.c"
 			}
-#line 2045 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp29_ = text;
-#line 2045 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp30_ = name;
-#line 2045 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp31_ = g_strconcat (_tmp29_, _tmp30_, NULL);
-#line 2045 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (text);
-#line 2045 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			text = _tmp31_;
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (name);
-#line 16582 "Dialogs.c"
+#line 16540 "Dialogs.c"
 		}
-#line 2039 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_name_it);
-#line 16586 "Dialogs.c"
+#line 16544 "Dialogs.c"
 	}
-#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = text;
-#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (tag_basenames);
-#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (terminal_tags);
-#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (source_tags);
-#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 16598 "Dialogs.c"
+#line 16556 "Dialogs.c"
 }
 
 
@@ -16644,140 +16602,140 @@ GeeArrayList* modify_tags_dialog_execute (ModifyTagsDialog* self) {
 	gchar** _tmp16_ = NULL;
 	gchar** _tmp17_ = NULL;
 	gint _tmp17__length1 = 0;
-#line 2051 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_MODIFY_TAGS_DIALOG (self), NULL);
-#line 2052 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _text_entry_dialog_mediator_execute (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_TEXT_ENTRY_DIALOG_MEDIATOR, TextEntryDialogMediator));
-#line 2052 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2048 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text = _tmp0_;
-#line 2053 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = text;
-#line 2053 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ == NULL) {
-#line 2054 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2050 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = NULL;
-#line 2054 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2050 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (text);
-#line 2054 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2050 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 16647 "Dialogs.c"
+#line 16605 "Dialogs.c"
 	}
-#line 2056 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2052 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gee_array_list_new (TYPE_TAG, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2056 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2052 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	new_tags = _tmp2_;
-#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = text;
-#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = is_string_empty (_tmp3_);
-#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp4_) {
-#line 2060 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2056 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = new_tags;
-#line 2060 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2056 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (text);
-#line 2060 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2056 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 16665 "Dialogs.c"
+#line 16623 "Dialogs.c"
 	}
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = text;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _tmp6_ = g_strsplit (_tmp5_, ",", 0);
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _tmp7_;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8__length1 = _vala_array_length (_tmp6_);
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = tag_prep_tag_names (_tmp8_, _vala_array_length (_tmp6_), &_tmp9_);
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = _tmp10_;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11__length1 = _tmp9_;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = (_vala_array_free (_tmp8_, _tmp8__length1, (GDestroyNotify) g_free), NULL);
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names = _tmp11_;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names_length1 = _tmp11__length1;
-#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2059 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tag_names_size_ = tag_names_length1;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = hierarchical_tag_index_get_global_index ();
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = _tmp12_;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = tag_names;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14__length1 = tag_names_length1;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = hierarchical_tag_index_get_paths_for_names_array (_tmp13_, _tmp14_, _tmp14__length1, &_tmp15_);
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names = (_vala_array_free (tag_names, tag_names_length1, (GDestroyNotify) g_free), NULL);
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names = _tmp16_;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names_length1 = _tmp15_;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tag_names_size_ = tag_names_length1;
-#line 2065 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_hierarchical_tag_index_unref0 (_tmp13_);
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = tag_names;
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17__length1 = tag_names_length1;
-#line 16713 "Dialogs.c"
+#line 16671 "Dialogs.c"
 	{
 		gchar** name_collection = NULL;
 		gint name_collection_length1 = 0;
 		gint _name_collection_size_ = 0;
 		gint name_it = 0;
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		name_collection = _tmp17_;
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		name_collection_length1 = _tmp17__length1;
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		for (name_it = 0; name_it < _tmp17__length1; name_it = name_it + 1) {
-#line 16725 "Dialogs.c"
+#line 16683 "Dialogs.c"
 			gchar* _tmp18_ = NULL;
 			gchar* name = NULL;
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = g_strdup (name_collection[name_it]);
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			name = _tmp18_;
-#line 16732 "Dialogs.c"
+#line 16690 "Dialogs.c"
 			{
 				GeeArrayList* _tmp19_ = NULL;
 				const gchar* _tmp20_ = NULL;
 				Tag* _tmp21_ = NULL;
 				Tag* _tmp22_ = NULL;
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp19_ = new_tags;
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp20_ = name;
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp21_ = tag_for_path (_tmp20_);
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp22_ = _tmp21_;
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp22_);
-#line 2068 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2064 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (_tmp22_);
-#line 2067 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (name);
-#line 16752 "Dialogs.c"
+#line 16710 "Dialogs.c"
 			}
 		}
 	}
-#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2066 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = new_tags;
-#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2066 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	tag_names = (_vala_array_free (tag_names, tag_names_length1, (GDestroyNotify) g_free), NULL);
-#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2066 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (text);
-#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2066 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 16764 "Dialogs.c"
+#line 16722 "Dialogs.c"
 }
 
 
@@ -16786,28 +16744,28 @@ static gboolean modify_tags_dialog_real_on_modify_validate (TextEntryDialogMedia
 	gboolean result = FALSE;
 	const gchar* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 2073 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2069 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_MODIFY_TAGS_DIALOG, ModifyTagsDialog);
-#line 2073 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2069 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (text != NULL, FALSE);
-#line 2074 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = text;
-#line 2074 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = string_contains (_tmp0_, TAG_PATH_SEPARATOR_STRING);
-#line 2074 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = !_tmp1_;
-#line 2074 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 16785 "Dialogs.c"
+#line 16743 "Dialogs.c"
 }
 
 
 static void modify_tags_dialog_class_init (ModifyTagsDialogClass * klass) {
-#line 2021 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	modify_tags_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 2021 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2017 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((TextEntryDialogMediatorClass *) klass)->on_modify_validate = modify_tags_dialog_real_on_modify_validate;
-#line 16794 "Dialogs.c"
+#line 16752 "Dialogs.c"
 }
 
 
@@ -16828,31 +16786,31 @@ GType modify_tags_dialog_get_type (void) {
 
 
 gchar* welcome_service_entry_get_service_name (WelcomeServiceEntry* self) {
-#line 2080 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2076 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_WELCOME_SERVICE_ENTRY (self), NULL);
-#line 2080 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2076 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return WELCOME_SERVICE_ENTRY_GET_INTERFACE (self)->get_service_name (self);
-#line 16819 "Dialogs.c"
+#line 16777 "Dialogs.c"
 }
 
 
 void welcome_service_entry_execute (WelcomeServiceEntry* self) {
-#line 2082 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_WELCOME_SERVICE_ENTRY (self));
-#line 2082 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	WELCOME_SERVICE_ENTRY_GET_INTERFACE (self)->execute (self);
-#line 16828 "Dialogs.c"
+#line 16786 "Dialogs.c"
 }
 
 
 static void welcome_service_entry_base_init (WelcomeServiceEntryIface * iface) {
-#line 2079 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	static gboolean initialized = FALSE;
-#line 2079 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!initialized) {
-#line 2079 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2075 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		initialized = TRUE;
-#line 16839 "Dialogs.c"
+#line 16797 "Dialogs.c"
 	}
 }
 
@@ -16889,485 +16847,505 @@ WelcomeDialog* welcome_dialog_construct (GType object_type, GtkWindow* owner) {
 	GtkLabel* _tmp11_ = NULL;
 	GtkLabel* _tmp12_ = NULL;
 	GtkLabel* _tmp13_ = NULL;
-	const gchar* _tmp14_ = NULL;
-	gchar* _tmp15_ = NULL;
+	GtkLabel* _tmp14_ = NULL;
+	const gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-	GtkLabel* _tmp17_ = NULL;
+	gchar* _tmp17_ = NULL;
+	GtkLabel* _tmp18_ = NULL;
+	GtkLabel* _tmp19_ = NULL;
 	GtkImage* image = NULL;
-	GtkImage* _tmp18_ = NULL;
+	GtkImage* _tmp20_ = NULL;
 	GtkBox* header_text = NULL;
-	GtkBox* _tmp19_ = NULL;
-	GtkBox* _tmp20_ = NULL;
-	GtkLabel* _tmp21_ = NULL;
+	GtkBox* _tmp21_ = NULL;
 	GtkBox* _tmp22_ = NULL;
 	GtkLabel* _tmp23_ = NULL;
-	GtkBox* header_content = NULL;
 	GtkBox* _tmp24_ = NULL;
-	GtkBox* _tmp25_ = NULL;
-	GtkImage* _tmp26_ = NULL;
+	GtkLabel* _tmp25_ = NULL;
+	GtkBox* header_content = NULL;
+	GtkBox* _tmp26_ = NULL;
 	GtkBox* _tmp27_ = NULL;
-	GtkBox* _tmp28_ = NULL;
+	GtkImage* _tmp28_ = NULL;
+	GtkBox* _tmp29_ = NULL;
+	GtkBox* _tmp30_ = NULL;
 	GtkLabel* instructions = NULL;
-	GtkLabel* _tmp29_ = NULL;
+	GtkLabel* _tmp31_ = NULL;
 	gchar* indent_prefix = NULL;
-	gchar* _tmp30_ = NULL;
-	const gchar* _tmp31_ = NULL;
-	GtkTextDirection _tmp32_ = 0;
+	gchar* _tmp32_ = NULL;
+	const gchar* _tmp33_ = NULL;
+	GtkTextDirection _tmp34_ = 0;
 	gchar* arrow_glyph = NULL;
-	gchar* _tmp33_ = NULL;
-	GtkLabel* _tmp34_ = NULL;
-	const gchar* _tmp35_ = NULL;
-	gchar* _tmp36_ = NULL;
-	gchar* _tmp37_ = NULL;
-	const gchar* _tmp38_ = NULL;
+	gchar* _tmp35_ = NULL;
+	GtkLabel* _tmp36_ = NULL;
+	const gchar* _tmp37_ = NULL;
+	gchar* _tmp38_ = NULL;
 	gchar* _tmp39_ = NULL;
-	gchar* _tmp40_ = NULL;
+	const gchar* _tmp40_ = NULL;
 	gchar* _tmp41_ = NULL;
 	gchar* _tmp42_ = NULL;
-	const gchar* _tmp43_ = NULL;
+	gchar* _tmp43_ = NULL;
 	gchar* _tmp44_ = NULL;
-	gchar* _tmp45_ = NULL;
+	const gchar* _tmp45_ = NULL;
 	gchar* _tmp46_ = NULL;
 	gchar* _tmp47_ = NULL;
-	const gchar* _tmp48_ = NULL;
-	const gchar* _tmp49_ = NULL;
-	gchar* _tmp50_ = NULL;
-	gchar* _tmp51_ = NULL;
-	const gchar* _tmp52_ = NULL;
-	const gchar* _tmp53_ = NULL;
-	gchar* _tmp54_ = NULL;
-	gchar* _tmp55_ = NULL;
-	GtkLabel* _tmp56_ = NULL;
-	GtkBox* _tmp57_ = NULL;
-	GtkBox* _tmp58_ = NULL;
-	GtkBox* _tmp59_ = NULL;
+	gchar* _tmp48_ = NULL;
+	gchar* _tmp49_ = NULL;
+	const gchar* _tmp50_ = NULL;
+	const gchar* _tmp51_ = NULL;
+	gchar* _tmp52_ = NULL;
+	gchar* _tmp53_ = NULL;
+	const gchar* _tmp54_ = NULL;
+	const gchar* _tmp55_ = NULL;
+	gchar* _tmp56_ = NULL;
+	gchar* _tmp57_ = NULL;
+	GtkLabel* _tmp58_ = NULL;
+	GtkLabel* _tmp59_ = NULL;
 	GtkBox* _tmp60_ = NULL;
-	gboolean _tmp61_ = FALSE;
-	const gchar* _tmp73_ = NULL;
-	GtkLabel* _tmp74_ = NULL;
-	GtkLabel* _tmp75_ = NULL;
-	GtkLabel* _tmp76_ = NULL;
+	GtkBox* _tmp61_ = NULL;
+	GtkBox* _tmp62_ = NULL;
+	GtkBox* _tmp63_ = NULL;
+	gboolean _tmp64_ = FALSE;
+	const gchar* _tmp76_ = NULL;
+	GtkLabel* _tmp77_ = NULL;
+	GtkLabel* _tmp78_ = NULL;
+	GtkLabel* _tmp79_ = NULL;
+	GtkLabel* _tmp80_ = NULL;
 	GtkBox* content = NULL;
-	GtkBox* _tmp77_ = NULL;
-	GtkBox* _tmp78_ = NULL;
-	GtkBox* _tmp79_ = NULL;
-	GtkBox* _tmp80_ = NULL;
-	GtkLabel* _tmp81_ = NULL;
-	const gchar* _tmp82_ = NULL;
-	GtkCheckButton* _tmp83_ = NULL;
-	GtkCheckButton* _tmp84_ = NULL;
-	GtkCheckButton* _tmp85_ = NULL;
-	GtkAlignment* alignment = NULL;
-	GtkAlignment* _tmp86_ = NULL;
-	GtkBox* _tmp87_ = NULL;
-	GtkWidget* _tmp88_ = NULL;
-	SpitDataImportsWelcomeImportMetaHost* _tmp89_ = NULL;
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	GtkBox* _tmp81_ = NULL;
+	GtkBox* _tmp82_ = NULL;
+	GtkBox* _tmp83_ = NULL;
+	GtkBox* _tmp84_ = NULL;
+	GtkLabel* _tmp85_ = NULL;
+	const gchar* _tmp86_ = NULL;
+	GtkCheckButton* _tmp87_ = NULL;
+	GtkCheckButton* _tmp88_ = NULL;
+	GtkCheckButton* _tmp89_ = NULL;
+	GtkBox* _tmp90_ = NULL;
+	GtkWidget* _tmp91_ = NULL;
+	SpitDataImportsWelcomeImportMetaHost* _tmp92_ = NULL;
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (GTK_IS_WINDOW (owner), NULL);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (WelcomeDialog*) g_object_new (object_type, NULL);
-#line 2100 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2096 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = spit_data_imports_welcome_import_meta_host_new (self);
-#line 2100 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2096 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->import_meta_host);
-#line 2100 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2096 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->import_meta_host = _tmp0_;
-#line 2101 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2097 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = welcome_dialog_is_system_pictures_import_possible ();
-#line 2101 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2097 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	show_system_pictures_import = _tmp1_;
-#line 2102 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2098 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), RESOURCES_OK_LABEL, (gint) GTK_RESPONSE_OK);
-#line 2102 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2098 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 2102 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2098 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	ok_button = _tmp3_;
-#line 2103 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _ ("Welcome!");
-#line 2103 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp4_);
-#line 2104 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2100 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2101 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_type_hint (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), GDK_WINDOW_TYPE_HINT_DIALOG);
-#line 2106 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2102 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = owner;
-#line 2106 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2102 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp5_);
-#line 2108 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2104 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = (GtkLabel*) gtk_label_new ("");
-#line 2108 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2104 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp6_);
-#line 2108 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2104 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	primary_text = _tmp6_;
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = primary_text;
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _ ("Welcome to Shotwell!");
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = g_strdup_printf ("<span size=\"large\" weight=\"bold\">%s</span>", _tmp8_);
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_label_set_markup (_tmp7_, _tmp10_);
-#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp10_);
-#line 2111 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2107 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = primary_text;
-#line 2111 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_misc_get_type (), GtkMisc), (gfloat) 0, 0.5f);
-#line 2112 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp12_ = (GtkLabel*) gtk_label_new ("");
-#line 2112 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp12_);
-#line 2112 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2107 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_xalign (_tmp11_, 0.0f);
+#line 2108 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp12_ = primary_text;
+#line 2108 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_yalign (_tmp12_, 0.5f);
+#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp13_ = (GtkLabel*) gtk_label_new ("");
+#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp13_);
+#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->secondary_text);
+#line 2109 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->secondary_text = _tmp13_;
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp14_ = self->priv->secondary_text;
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp15_ = _ ("To get started, import photos in any of these ways:");
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp16_ = g_strdup_printf ("<span weight=\"normal\">%s</span>", _tmp15_);
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp17_ = _tmp16_;
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_markup (_tmp14_, _tmp17_);
+#line 2110 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp17_);
 #line 2112 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->secondary_text = _tmp12_;
+	_tmp18_ = self->priv->secondary_text;
+#line 2112 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_xalign (_tmp18_, 0.0f);
 #line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp13_ = self->priv->secondary_text;
+	_tmp19_ = self->priv->secondary_text;
 #line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp14_ = _ ("To get started, import photos in any of these ways:");
-#line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp15_ = g_strdup_printf ("<span weight=\"normal\">%s</span>", _tmp14_);
-#line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp16_ = _tmp15_;
-#line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_label_set_markup (_tmp13_, _tmp16_);
-#line 2113 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp16_);
-#line 2115 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp17_ = self->priv->secondary_text;
-#line 2115 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_misc_get_type (), GtkMisc), (gfloat) 0, 0.5f);
+	gtk_label_set_yalign (_tmp19_, 0.5f);
+#line 2114 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp20_ = (GtkImage*) gtk_image_new_from_icon_name ("shotwell", GTK_ICON_SIZE_DIALOG);
+#line 2114 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp20_);
+#line 2114 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	image = _tmp20_;
 #line 2116 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp18_ = (GtkImage*) gtk_image_new_from_icon_name ("shotwell", GTK_ICON_SIZE_DIALOG);
+	_tmp21_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 #line 2116 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp18_);
+	g_object_ref_sink (_tmp21_);
 #line 2116 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	image = _tmp18_;
-#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp19_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp19_);
-#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	header_text = _tmp19_;
-#line 2119 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp20_ = header_text;
-#line 2119 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp21_ = primary_text;
-#line 2119 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (_tmp20_, G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 5);
-#line 2120 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	header_text = _tmp21_;
+#line 2117 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = header_text;
+#line 2117 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp23_ = primary_text;
+#line 2117 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_box_pack_start (_tmp22_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 5);
+#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp24_ = header_text;
+#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp25_ = self->priv->secondary_text;
+#line 2118 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
 #line 2120 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp23_ = self->priv->secondary_text;
+	_tmp26_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
 #line 2120 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (_tmp22_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp24_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp24_);
-#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	header_content = _tmp24_;
-#line 2123 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp25_ = header_content;
-#line 2123 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp26_ = image;
-#line 2123 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (_tmp25_, G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp26_);
+#line 2120 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	header_content = _tmp26_;
+#line 2121 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp27_ = header_content;
-#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp28_ = header_text;
-#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2121 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp28_ = image;
+#line 2121 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_box_pack_start (_tmp27_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 2126 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp29_ = (GtkLabel*) gtk_label_new ("");
-#line 2126 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp29_);
-#line 2126 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	instructions = _tmp29_;
+#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp29_ = header_content;
+#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp30_ = header_text;
+#line 2122 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_box_pack_start (_tmp29_, G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp31_ = (GtkLabel*) gtk_label_new ("");
+#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp31_);
+#line 2124 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	instructions = _tmp31_;
+#line 2125 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp32_ = g_strdup ("   ");
+#line 2125 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	indent_prefix = _tmp32_;
 #line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp30_ = g_strdup ("   ");
+	_tmp34_ = gtk_widget_get_direction (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
 #line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	indent_prefix = _tmp30_;
-#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp32_ = gtk_widget_get_direction (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp32_ == GTK_TEXT_DIR_RTL) {
-#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp31_ = "◂";
-#line 17085 "Dialogs.c"
+	if (_tmp34_ == GTK_TEXT_DIR_RTL) {
+#line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp33_ = "◂";
+#line 17053 "Dialogs.c"
 	} else {
-#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp31_ = "▸";
-#line 17089 "Dialogs.c"
+#line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp33_ = "▸";
+#line 17057 "Dialogs.c"
 	}
+#line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp35_ = g_strdup (_tmp33_);
+#line 2127 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	arrow_glyph = _tmp35_;
 #line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp33_ = g_strdup (_tmp31_);
+	_tmp36_ = instructions;
 #line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	arrow_glyph = _tmp33_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp34_ = instructions;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp35_ = indent_prefix;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp36_ = g_strconcat (_tmp35_, "&#8226; %s\n", NULL);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp37_ = _tmp36_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp38_ = indent_prefix;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp39_ = g_strconcat (_tmp38_, "&#8226; %s\n", NULL);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp40_ = _tmp39_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp41_ = g_strconcat (_tmp37_, _tmp40_, NULL);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp37_ = indent_prefix;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp38_ = g_strconcat (_tmp37_, "&#8226; %s\n", NULL);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp39_ = _tmp38_;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp40_ = indent_prefix;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp41_ = g_strconcat (_tmp40_, "&#8226; %s\n", NULL);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp42_ = _tmp41_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp43_ = indent_prefix;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp44_ = g_strconcat (_tmp43_, "&#8226; %s", NULL);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp45_ = _tmp44_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp46_ = g_strconcat (_tmp42_, _tmp45_, NULL);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp43_ = g_strconcat (_tmp39_, _tmp42_, NULL);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp44_ = _tmp43_;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp45_ = indent_prefix;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp46_ = g_strconcat (_tmp45_, "&#8226; %s", NULL);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp47_ = _tmp46_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp48_ = _ ("Choose <span weight=\"bold\">File %s Import From Folder</span>");
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp49_ = arrow_glyph;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp50_ = g_strdup_printf (_tmp48_, _tmp49_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp51_ = _tmp50_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp52_ = _ ("Drag and drop photos onto the Shotwell window");
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp53_ = _ ("Connect a camera to your computer and import");
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp54_ = g_strdup_printf (_tmp47_, _tmp51_, _tmp52_, _tmp53_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp55_ = _tmp54_;
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_label_set_markup (_tmp34_, _tmp55_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp55_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp51_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp48_ = g_strconcat (_tmp44_, _tmp47_, NULL);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp49_ = _tmp48_;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp50_ = _ ("Choose <span weight=\"bold\">File %s Import From Folder</span>");
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp51_ = arrow_glyph;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp52_ = g_strdup_printf (_tmp50_, _tmp51_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp53_ = _tmp52_;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp54_ = _ ("Drag and drop photos onto the Shotwell window");
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp55_ = _ ("Connect a camera to your computer and import");
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp56_ = g_strdup_printf (_tmp49_, _tmp53_, _tmp54_, _tmp55_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp57_ = _tmp56_;
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_markup (_tmp36_, _tmp57_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp57_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp53_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp49_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp47_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp45_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp44_);
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp42_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp40_);
-#line 2131 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp37_);
-#line 2136 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp56_ = instructions;
-#line 2136 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, gtk_misc_get_type (), GtkMisc), (gfloat) 0, 0.5f);
-#line 2138 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp57_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-#line 2138 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp57_);
-#line 2138 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2129 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp39_);
+#line 2134 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp58_ = instructions;
+#line 2134 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_xalign (_tmp58_, 0.0f);
+#line 2135 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp59_ = instructions;
+#line 2135 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_yalign (_tmp59_, 0.5f);
+#line 2137 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp60_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+#line 2137 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp60_);
+#line 2137 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->import_action_checkbox_packer);
-#line 2138 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->import_action_checkbox_packer = _tmp57_;
-#line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp58_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-#line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp58_);
-#line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2137 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->import_action_checkbox_packer = _tmp60_;
+#line 2139 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp61_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+#line 2139 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp61_);
+#line 2139 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->external_import_action_checkbox_packer);
+#line 2139 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->external_import_action_checkbox_packer = _tmp61_;
 #line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->external_import_action_checkbox_packer = _tmp58_;
-#line 2141 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp59_ = self->priv->import_action_checkbox_packer;
-#line 2141 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp60_ = self->priv->external_import_action_checkbox_packer;
-#line 2141 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_widget_get_type (), GtkWidget));
-#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp61_ = show_system_pictures_import;
-#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp61_) {
-#line 17185 "Dialogs.c"
-		const gchar* _tmp62_ = NULL;
-		GFile* _tmp63_ = NULL;
-		GFile* _tmp64_ = NULL;
-		gchar* _tmp65_ = NULL;
-		gchar* _tmp66_ = NULL;
-		gchar* _tmp67_ = NULL;
+	_tmp62_ = self->priv->import_action_checkbox_packer;
+#line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp63_ = self->priv->external_import_action_checkbox_packer;
+#line 2140 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, gtk_widget_get_type (), GtkWidget));
+#line 2142 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp64_ = show_system_pictures_import;
+#line 2142 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	if (_tmp64_) {
+#line 17157 "Dialogs.c"
+		const gchar* _tmp65_ = NULL;
+		GFile* _tmp66_ = NULL;
+		GFile* _tmp67_ = NULL;
 		gchar* _tmp68_ = NULL;
-		GtkCheckButton* _tmp69_ = NULL;
-		GtkBox* _tmp70_ = NULL;
-		GtkCheckButton* _tmp71_ = NULL;
+		gchar* _tmp69_ = NULL;
+		gchar* _tmp70_ = NULL;
+		gchar* _tmp71_ = NULL;
 		GtkCheckButton* _tmp72_ = NULL;
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp62_ = _ ("_Import photos from your %s folder");
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp63_ = app_dirs_get_import_dir ();
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp64_ = _tmp63_;
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp65_ = get_display_pathname (_tmp64_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp66_ = _tmp65_;
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp67_ = g_strdup_printf (_tmp62_, _tmp66_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp68_ = _tmp67_;
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp69_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp68_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		g_object_ref_sink (_tmp69_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		GtkBox* _tmp73_ = NULL;
+		GtkCheckButton* _tmp74_ = NULL;
+		GtkCheckButton* _tmp75_ = NULL;
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp65_ = _ ("_Import photos from your %s folder");
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp66_ = app_dirs_get_import_dir ();
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp67_ = _tmp66_;
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp68_ = get_display_pathname (_tmp67_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp69_ = _tmp68_;
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp70_ = g_strdup_printf (_tmp65_, _tmp69_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp71_ = _tmp70_;
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp72_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp71_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		g_object_ref_sink (_tmp72_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (self->priv->system_pictures_import_check);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		self->priv->system_pictures_import_check = _tmp69_;
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp68_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp66_);
-#line 2144 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_object_unref0 (_tmp64_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		self->priv->system_pictures_import_check = _tmp72_;
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp71_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp69_);
+#line 2143 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_object_unref0 (_tmp67_);
+#line 2146 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp73_ = self->priv->import_action_checkbox_packer;
+#line 2146 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp74_ = self->priv->system_pictures_import_check;
+#line 2146 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, gtk_widget_get_type (), GtkWidget));
 #line 2147 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp70_ = self->priv->import_action_checkbox_packer;
+		_tmp75_ = self->priv->system_pictures_import_check;
 #line 2147 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp71_ = self->priv->system_pictures_import_check;
-#line 2147 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, gtk_widget_get_type (), GtkWidget));
-#line 2148 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp72_ = self->priv->system_pictures_import_check;
-#line 2148 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
-#line 17235 "Dialogs.c"
+		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 17207 "Dialogs.c"
 	}
-#line 2151 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp73_ = _ ("You can also import photos in any of these ways:");
-#line 2151 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp74_ = (GtkLabel*) gtk_label_new (_tmp73_);
-#line 2151 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp74_);
-#line 2151 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->instruction_header);
-#line 2151 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->instruction_header = _tmp74_;
-#line 2153 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp75_ = self->priv->instruction_header;
-#line 2153 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_misc_set_alignment (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, gtk_misc_get_type (), GtkMisc), 0.0f, 0.5f);
-#line 2154 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp76_ = self->priv->instruction_header;
-#line 2154 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_widget_get_type (), GtkWidget), 20);
-#line 2156 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp77_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 16);
-#line 2156 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2150 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp76_ = _ ("You can also import photos in any of these ways:");
+#line 2150 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp77_ = (GtkLabel*) gtk_label_new (_tmp76_);
+#line 2150 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp77_);
+#line 2150 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->instruction_header);
+#line 2150 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->instruction_header = _tmp77_;
+#line 2152 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp78_ = self->priv->instruction_header;
+#line 2152 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_xalign (_tmp78_, 0.0f);
+#line 2153 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp79_ = self->priv->instruction_header;
+#line 2153 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_yalign (_tmp79_, 0.5f);
+#line 2154 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp80_ = self->priv->instruction_header;
+#line 2154 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget), 20);
 #line 2156 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	content = _tmp77_;
+	_tmp81_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 16);
+#line 2156 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_object_ref_sink (_tmp81_);
+#line 2156 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	content = _tmp81_;
 #line 2157 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp78_ = header_content;
+	_tmp82_ = header_content;
 #line 2157 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 2158 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp79_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+	_tmp83_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
 #line 2158 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp79_);
+	g_object_ref_sink (_tmp83_);
 #line 2158 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->import_content);
 #line 2158 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->import_content = _tmp79_;
+	self->priv->import_content = _tmp83_;
 #line 2159 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp80_ = self->priv->import_content;
+	_tmp84_ = self->priv->import_content;
 #line 2159 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget));
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, gtk_widget_get_type (), GtkWidget));
 #line 2160 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp81_ = instructions;
+	_tmp85_ = instructions;
 #line 2160 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp81_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp85_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
 #line 2162 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp82_ = _ ("_Don’t show this message again");
+	_tmp86_ = _ ("_Don’t show this message again");
 #line 2162 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp83_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp82_);
+	_tmp87_ = (GtkCheckButton*) gtk_check_button_new_with_mnemonic (_tmp86_);
 #line 2162 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp83_);
+	g_object_ref_sink (_tmp87_);
 #line 2162 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->hide_button);
 #line 2162 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->hide_button = _tmp83_;
+	self->priv->hide_button = _tmp87_;
 #line 2163 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp84_ = self->priv->hide_button;
+	_tmp88_ = self->priv->hide_button;
 #line 2163 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp88_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 2164 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp85_ = self->priv->hide_button;
+	_tmp89_ = self->priv->hide_button;
 #line 2164 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp85_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 6);
+	gtk_box_pack_start (content, G_TYPE_CHECK_INSTANCE_CAST (_tmp89_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 6);
+#line 2165 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
 #line 2166 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp86_ = (GtkAlignment*) gtk_alignment_new ((gfloat) 0, (gfloat) 0, (gfloat) 0, (gfloat) 0);
-#line 2166 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp86_);
-#line 2166 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	alignment = _tmp86_;
+	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
 #line 2167 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_alignment_set_padding (alignment, (guint) 12, (guint) 0, (guint) 12, (guint) 12);
+	gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), FALSE);
 #line 2168 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget));
+	gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 2169 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_top (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), 12);
 #line 2170 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp87_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 2170 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (alignment, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+	gtk_widget_set_margin_bottom (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), 0);
+#line 2171 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), 12);
 #line 2172 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_window_set_has_resize_grip (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
+	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), 12);
 #line 2174 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp88_ = ok_button;
+	_tmp90_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
 #line 2174 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_widget_grab_focus (_tmp88_);
+	gtk_box_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, gtk_box_get_type (), GtkBox), G_TYPE_CHECK_INSTANCE_CAST (content, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
 #line 2176 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp91_ = ok_button;
+#line 2176 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_grab_focus (_tmp91_);
+#line 2178 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	welcome_dialog_install_import_content (self);
-#line 2178 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp89_ = self->priv->import_meta_host;
-#line 2178 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	spit_data_imports_welcome_import_meta_host_start (_tmp89_);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (alignment);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2180 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp92_ = self->priv->import_meta_host;
+#line 2180 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	spit_data_imports_welcome_import_meta_host_start (_tmp92_);
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (content);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (arrow_glyph);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (indent_prefix);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (instructions);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (header_content);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (header_text);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (image);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (primary_text);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (ok_button);
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 17347 "Dialogs.c"
+#line 17325 "Dialogs.c"
 }
 
 
 WelcomeDialog* welcome_dialog_new (GtkWindow* owner) {
-#line 2099 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return welcome_dialog_construct (TYPE_WELCOME_DIALOG, owner);
-#line 17354 "Dialogs.c"
+#line 17332 "Dialogs.c"
 }
 
 
@@ -17376,101 +17354,101 @@ static void welcome_dialog_install_import_content (WelcomeDialog* self) {
 	gboolean _tmp1_ = FALSE;
 	GtkCheckButton** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 2181 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_WELCOME_DIALOG (self));
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->external_import_checks;
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2__length1 = self->priv->external_import_checks_length1;
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2__length1 > 0) {
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = TRUE;
-#line 17373 "Dialogs.c"
+#line 17351 "Dialogs.c"
 	} else {
 		GtkCheckButton* _tmp3_ = NULL;
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = self->priv->system_pictures_import_check;
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 17380 "Dialogs.c"
+#line 17358 "Dialogs.c"
 	}
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_) {
-#line 17384 "Dialogs.c"
+#line 17362 "Dialogs.c"
 		gboolean _tmp4_ = FALSE;
-#line 2184 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2186 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = self->priv->import_content_already_installed;
-#line 2184 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2186 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp4_ == FALSE;
-#line 17390 "Dialogs.c"
+#line 17368 "Dialogs.c"
 	} else {
-#line 2183 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2185 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = FALSE;
-#line 17394 "Dialogs.c"
+#line 17372 "Dialogs.c"
 	}
-#line 2182 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2184 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 17398 "Dialogs.c"
+#line 17376 "Dialogs.c"
 		GtkLabel* _tmp5_ = NULL;
 		GtkBox* _tmp6_ = NULL;
 		GtkBox* _tmp7_ = NULL;
 		GtkBox* _tmp8_ = NULL;
 		GtkLabel* _tmp9_ = NULL;
-#line 2186 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = self->priv->secondary_text;
-#line 2186 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_label_set_markup (_tmp5_, "");
-#line 2187 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp6_ = self->priv->import_content;
-#line 2187 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp7_ = self->priv->import_action_checkbox_packer;
-#line 2187 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 2188 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp8_ = self->priv->import_content;
-#line 2188 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp9_ = self->priv->instruction_header;
-#line 2188 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
 #line 2189 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp6_ = self->priv->import_content;
+#line 2189 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp7_ = self->priv->import_action_checkbox_packer;
+#line 2189 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
+#line 2190 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp8_ = self->priv->import_content;
+#line 2190 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp9_ = self->priv->instruction_header;
+#line 2190 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
+#line 2191 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		self->priv->import_content_already_installed = TRUE;
-#line 17422 "Dialogs.c"
+#line 17400 "Dialogs.c"
 	}
 }
 
 
-static void _vala_array_add275 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value) {
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+static void _vala_array_add109 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value) {
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if ((*length) == (*size)) {
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*array = g_renew (WelcomeServiceEntry*, *array, (*size) + 1);
-#line 17434 "Dialogs.c"
+#line 17412 "Dialogs.c"
 	}
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[(*length)++] = value;
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[*length] = NULL;
-#line 17440 "Dialogs.c"
+#line 17418 "Dialogs.c"
 }
 
 
-static void _vala_array_add276 (GtkCheckButton*** array, int* length, int* size, GtkCheckButton* value) {
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+static void _vala_array_add110 (GtkCheckButton*** array, int* length, int* size, GtkCheckButton* value) {
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if ((*length) == (*size)) {
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*array = g_renew (GtkCheckButton*, *array, (*size) + 1);
-#line 17451 "Dialogs.c"
+#line 17429 "Dialogs.c"
 	}
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[(*length)++] = value;
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[*length] = NULL;
-#line 17457 "Dialogs.c"
+#line 17435 "Dialogs.c"
 }
 
 
@@ -17497,79 +17475,79 @@ void welcome_dialog_install_service_entry (WelcomeDialog* self, WelcomeServiceEn
 	gint _tmp16__length1 = 0;
 	GtkCheckButton* _tmp17_ = NULL;
 	GtkBox* _tmp18_ = NULL;
-#line 2193 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_WELCOME_DIALOG (self));
-#line 2193 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_WELCOME_SERVICE_ENTRY (entry));
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = entry;
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = welcome_service_entry_get_service_name (_tmp0_);
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_;
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = g_strdup_printf ("WelcomeDialog: Installing service entry for %s", _tmp2_);
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_;
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_debug ("Dialogs.vala:2194: %s", _tmp4_);
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_debug ("Dialogs.vala:2196: %s", _tmp4_);
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp4_);
-#line 2194 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp2_);
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = self->priv->external_import_entries;
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5__length1 = self->priv->external_import_entries_length1;
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = entry;
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _g_object_ref0 (_tmp6_);
-#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_vala_array_add275 (&self->priv->external_import_entries, &self->priv->external_import_entries_length1, &self->priv->_external_import_entries_size_, _tmp7_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2197 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_vala_array_add109 (&self->priv->external_import_entries, &self->priv->external_import_entries_length1, &self->priv->_external_import_entries_size_, _tmp7_);
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _ ("Import photos from your %s library");
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = entry;
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = welcome_service_entry_get_service_name (_tmp9_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = _tmp10_;
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = g_strdup_printf (_tmp8_, _tmp11_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = _tmp12_;
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = (GtkCheckButton*) gtk_check_button_new_with_label (_tmp13_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp14_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = _tmp14_;
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp13_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp11_);
-#line 2196 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	entry_check = _tmp15_;
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = self->priv->external_import_checks;
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16__length1 = self->priv->external_import_checks_length1;
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = _g_object_ref0 (entry_check);
-#line 2198 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_vala_array_add276 (&self->priv->external_import_checks, &self->priv->external_import_checks_length1, &self->priv->_external_import_checks_size_, _tmp17_);
-#line 2199 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (entry_check, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp18_ = self->priv->external_import_action_checkbox_packer;
-#line 2200 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (entry_check, gtk_widget_get_type (), GtkWidget));
+	_vala_array_add110 (&self->priv->external_import_checks, &self->priv->external_import_checks_length1, &self->priv->_external_import_checks_size_, _tmp17_);
 #line 2201 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (entry_check, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 2202 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp18_ = self->priv->external_import_action_checkbox_packer;
+#line 2202 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (entry_check, gtk_widget_get_type (), GtkWidget));
+#line 2203 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	welcome_dialog_install_import_content (self);
-#line 2193 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2195 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (entry_check);
-#line 17556 "Dialogs.c"
+#line 17534 "Dialogs.c"
 }
 
 
@@ -17580,66 +17558,66 @@ void welcome_dialog_install_service_entry (WelcomeDialog* self, WelcomeServiceEn
      */
 static void welcome_dialog_on_dismiss (WelcomeDialog* self, gint resp) {
 	gint _tmp0_ = 0;
-#line 2209 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_return_if_fail (IS_WELCOME_DIALOG (self));
-#line 2210 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp0_ = resp;
-#line 2210 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp0_ == ((gint) GTK_RESPONSE_OK)) {
 #line 2211 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		self->priv->ok_clicked = TRUE;
-#line 17575 "Dialogs.c"
-	}
+	g_return_if_fail (IS_WELCOME_DIALOG (self));
+#line 2212 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp0_ = resp;
+#line 2212 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	if (_tmp0_ == ((gint) GTK_RESPONSE_OK)) {
 #line 2213 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		self->priv->ok_clicked = TRUE;
+#line 17553 "Dialogs.c"
+	}
+#line 2215 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2214 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2216 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_main_quit ();
-#line 17581 "Dialogs.c"
+#line 17559 "Dialogs.c"
 }
 
 
 static void _welcome_dialog_on_dismiss_gtk_dialog_response (GtkDialog* _sender, gint response_id, gpointer self) {
-#line 2220 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2222 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	welcome_dialog_on_dismiss ((WelcomeDialog*) self, response_id);
-#line 17588 "Dialogs.c"
+#line 17566 "Dialogs.c"
 }
 
 
-static void _vala_array_add277 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value) {
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+static void _vala_array_add111 (WelcomeServiceEntry*** array, int* length, int* size, WelcomeServiceEntry* value) {
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if ((*length) == (*size)) {
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*array = g_renew (WelcomeServiceEntry*, *array, (*size) + 1);
-#line 17599 "Dialogs.c"
+#line 17577 "Dialogs.c"
 	}
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[(*length)++] = value;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(*array)[*length] = NULL;
-#line 17605 "Dialogs.c"
+#line 17583 "Dialogs.c"
 }
 
 
-static WelcomeServiceEntry** _vala_array_dup30 (WelcomeServiceEntry** self, int length) {
+static WelcomeServiceEntry** _vala_array_dup29 (WelcomeServiceEntry** self, int length) {
 	WelcomeServiceEntry** result;
 	int i;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = g_new0 (WelcomeServiceEntry*, length + 1);
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	for (i = 0; i < length; i++) {
-#line 17616 "Dialogs.c"
+#line 17594 "Dialogs.c"
 		WelcomeServiceEntry* _tmp0_ = NULL;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result[i] = _tmp0_;
-#line 17622 "Dialogs.c"
+#line 17600 "Dialogs.c"
 	}
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 17626 "Dialogs.c"
+#line 17604 "Dialogs.c"
 }
 
 
@@ -17663,62 +17641,62 @@ gboolean welcome_dialog_execute (WelcomeDialog* self, WelcomeServiceEntry*** sel
 	gint _tmp20__length1 = 0;
 	gboolean _tmp21_ = FALSE;
 	GtkCheckButton* _tmp22_ = NULL;
-#line 2217 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2219 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_WELCOME_DIALOG (self), FALSE);
-#line 2220 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), "response", (GCallback) _welcome_dialog_on_dismiss_gtk_dialog_response, self, 0);
-#line 2221 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
 #line 2222 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), "response", (GCallback) _welcome_dialog_on_dismiss_gtk_dialog_response, self, 0);
+#line 2223 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 2224 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2227 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2229 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_main ();
-#line 2231 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_parse_name ("response", gtk_dialog_get_type (), &_tmp0_, NULL, FALSE);
-#line 2231 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2233 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp0_, 0, NULL, (GCallback) _welcome_dialog_on_dismiss_gtk_dialog_response, self);
-#line 2233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->ok_clicked;
-#line 2233 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	ok = _tmp1_;
-#line 2234 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2236 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	show_dialog = TRUE;
-#line 2236 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2238 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = ok;
-#line 2236 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2238 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_) {
-#line 17674 "Dialogs.c"
+#line 17652 "Dialogs.c"
 		GtkCheckButton* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 2237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = self->priv->hide_button;
-#line 2237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2237 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		show_dialog = !_tmp4_;
-#line 17683 "Dialogs.c"
+#line 17661 "Dialogs.c"
 	}
-#line 2240 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = g_new0 (WelcomeServiceEntry*, 0 + 1);
-#line 2240 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = _tmp5_;
-#line 2240 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result__length1 = 0;
-#line 2240 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	__result__size_ = _result__length1;
-#line 17693 "Dialogs.c"
+#line 17671 "Dialogs.c"
 	{
 		gint i = 0;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		i = 0;
-#line 17698 "Dialogs.c"
+#line 17676 "Dialogs.c"
 		{
 			gboolean _tmp6_ = FALSE;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp6_ = TRUE;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 17705 "Dialogs.c"
+#line 17683 "Dialogs.c"
 				gint _tmp8_ = 0;
 				WelcomeServiceEntry** _tmp9_ = NULL;
 				gint _tmp9__length1 = 0;
@@ -17727,43 +17705,43 @@ gboolean welcome_dialog_execute (WelcomeDialog* self, WelcomeServiceEntry*** sel
 				gint _tmp11_ = 0;
 				GtkCheckButton* _tmp12_ = NULL;
 				gboolean _tmp13_ = FALSE;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!_tmp6_) {
-#line 17716 "Dialogs.c"
+#line 17694 "Dialogs.c"
 					gint _tmp7_ = 0;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp7_ = i;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					i = _tmp7_ + 1;
-#line 17722 "Dialogs.c"
+#line 17700 "Dialogs.c"
 				}
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp6_ = FALSE;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp8_ = i;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp9_ = self->priv->external_import_entries;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp9__length1 = self->priv->external_import_entries_length1;
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!(_tmp8_ < _tmp9__length1)) {
-#line 2241 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 17736 "Dialogs.c"
+#line 17714 "Dialogs.c"
 				}
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp10_ = self->priv->external_import_checks;
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp10__length1 = self->priv->external_import_checks_length1;
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp11_ = i;
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp12_ = _tmp10_[_tmp11_];
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2242 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (_tmp13_ == TRUE) {
-#line 17750 "Dialogs.c"
+#line 17728 "Dialogs.c"
 					WelcomeServiceEntry** _tmp14_ = NULL;
 					gint _tmp14__length1 = 0;
 					WelcomeServiceEntry** _tmp15_ = NULL;
@@ -17771,93 +17749,93 @@ gboolean welcome_dialog_execute (WelcomeDialog* self, WelcomeServiceEntry*** sel
 					gint _tmp16_ = 0;
 					WelcomeServiceEntry* _tmp17_ = NULL;
 					WelcomeServiceEntry* _tmp18_ = NULL;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp14_ = _result_;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp14__length1 = _result__length1;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp15_ = self->priv->external_import_entries;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp15__length1 = self->priv->external_import_entries_length1;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp16_ = i;
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp17_ = _tmp15_[_tmp16_];
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp18_ = _g_object_ref0 (_tmp17_);
-#line 2243 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_vala_array_add277 (&_result_, &_result__length1, &__result__size_, _tmp18_);
-#line 17774 "Dialogs.c"
+#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_vala_array_add111 (&_result_, &_result__length1, &__result__size_, _tmp18_);
+#line 17752 "Dialogs.c"
 				}
 			}
 		}
 	}
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = _result_;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19__length1 = _result__length1;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp20_ = (_tmp19_ != NULL) ? _vala_array_dup30 (_tmp19_, _tmp19__length1) : ((gpointer) _tmp19_);
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp20_ = (_tmp19_ != NULL) ? _vala_array_dup29 (_tmp19_, _tmp19__length1) : ((gpointer) _tmp19_);
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20__length1 = _tmp19__length1;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_selected_import_entries = (_vala_array_free (_vala_selected_import_entries, _vala_selected_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_selected_import_entries = _tmp20_;
-#line 2245 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_selected_import_entries_length1 = _tmp20__length1;
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = self->priv->system_pictures_import_check;
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp22_ != NULL) {
-#line 17797 "Dialogs.c"
+#line 17775 "Dialogs.c"
 		GtkCheckButton* _tmp23_ = NULL;
 		gboolean _tmp24_ = FALSE;
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp23_ = self->priv->system_pictures_import_check;
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp24_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp21_ = _tmp24_;
-#line 17806 "Dialogs.c"
-	} else {
-#line 2247 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp21_ = FALSE;
-#line 17810 "Dialogs.c"
-	}
-#line 2246 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_vala_do_system_pictures_import = _tmp21_;
 #line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	result = show_dialog;
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_result_ = (_vala_array_free (_result_, _result__length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (selected_import_entries) {
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		*selected_import_entries = _vala_selected_import_entries;
-#line 17824 "Dialogs.c"
+		_tmp23_ = self->priv->system_pictures_import_check;
+#line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp24_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_toggle_button_get_type (), GtkToggleButton));
+#line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp21_ = _tmp24_;
+#line 17784 "Dialogs.c"
 	} else {
+#line 2249 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp21_ = FALSE;
+#line 17788 "Dialogs.c"
+	}
+#line 2248 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_vala_do_system_pictures_import = _tmp21_;
 #line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	result = show_dialog;
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_result_ = (_vala_array_free (_result_, _result__length1, (GDestroyNotify) g_object_unref), NULL);
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	if (selected_import_entries) {
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		*selected_import_entries = _vala_selected_import_entries;
+#line 17802 "Dialogs.c"
+	} else {
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_vala_selected_import_entries = (_vala_array_free (_vala_selected_import_entries, _vala_selected_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 17828 "Dialogs.c"
+#line 17806 "Dialogs.c"
 	}
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (selected_import_entries_length1) {
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*selected_import_entries_length1 = _vala_selected_import_entries_length1;
-#line 17834 "Dialogs.c"
+#line 17812 "Dialogs.c"
 	}
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (do_system_pictures_import) {
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*do_system_pictures_import = _vala_do_system_pictures_import;
-#line 17840 "Dialogs.c"
+#line 17818 "Dialogs.c"
 	}
-#line 2251 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 17844 "Dialogs.c"
+#line 17822 "Dialogs.c"
 }
 
 
@@ -17870,37 +17848,37 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 	GFile* _tmp3_ = NULL;
 	GFileType _tmp4_ = 0;
 	GError * _inner_error_ = NULL;
-#line 2255 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = app_dirs_get_import_dir ();
-#line 2255 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	system_pictures = _tmp0_;
-#line 2256 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = system_pictures;
-#line 2256 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = g_file_query_exists (_tmp1_, NULL);
-#line 2256 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp2_) {
-#line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (system_pictures);
-#line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 17873 "Dialogs.c"
+#line 17851 "Dialogs.c"
 	}
-#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = system_pictures;
-#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = g_file_query_file_type (_tmp3_, G_FILE_QUERY_INFO_NONE, NULL);
-#line 2259 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2261 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!(_tmp4_ == G_FILE_TYPE_DIRECTORY)) {
-#line 2260 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 2260 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (system_pictures);
-#line 2260 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 17887 "Dialogs.c"
+#line 17865 "Dialogs.c"
 	}
 	{
 		GFileEnumerator* syspics_child_enum = NULL;
@@ -17912,152 +17890,152 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 		GFileInfo* _tmp10_ = NULL;
 		GFileInfo* _tmp11_ = NULL;
 		gboolean _tmp12_ = FALSE;
-#line 2263 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = system_pictures;
-#line 2263 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = g_file_enumerate_children (_tmp5_, "standard::*", G_FILE_QUERY_INFO_NONE, NULL, &_inner_error_);
-#line 2263 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		syspics_child_enum = _tmp6_;
-#line 2263 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 17907 "Dialogs.c"
-			goto __catch426_g_error;
-		}
 #line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 17885 "Dialogs.c"
+			goto __catch423_g_error;
+		}
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = syspics_child_enum;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = g_file_enumerator_next_file (_tmp8_, NULL, &_inner_error_);
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _tmp9_;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (syspics_child_enum);
-#line 17920 "Dialogs.c"
-			goto __catch426_g_error;
+#line 17898 "Dialogs.c"
+			goto __catch423_g_error;
 		}
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp7_;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = NULL;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = _tmp10_;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = _tmp11_ != NULL;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp11_);
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = _tmp12_;
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp7_);
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (syspics_child_enum);
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (system_pictures);
-#line 2265 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 17943 "Dialogs.c"
+#line 17921 "Dialogs.c"
 	}
-	goto __finally426;
-	__catch426_g_error:
+	goto __finally423;
+	__catch423_g_error:
 	{
 		GError* e = NULL;
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		e = _inner_error_;
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_inner_error_ = NULL;
-#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2269 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = FALSE;
-#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2269 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_error_free0 (e);
-#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2269 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (system_pictures);
-#line 2267 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2269 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 17961 "Dialogs.c"
+#line 17939 "Dialogs.c"
 	}
-	__finally426:
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	__finally423:
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (system_pictures);
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_clear_error (&_inner_error_);
-#line 2262 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2264 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return FALSE;
-#line 17972 "Dialogs.c"
+#line 17950 "Dialogs.c"
 }
 
 
 static void welcome_dialog_class_init (WelcomeDialogClass * klass) {
-#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	welcome_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (WelcomeDialogPrivate));
-#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (klass)->finalize = welcome_dialog_finalize;
-#line 17983 "Dialogs.c"
+#line 17961 "Dialogs.c"
 }
 
 
 static void welcome_dialog_instance_init (WelcomeDialog * self) {
 	GtkCheckButton** _tmp0_ = NULL;
 	WelcomeServiceEntry** _tmp1_ = NULL;
-#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = WELCOME_DIALOG_GET_PRIVATE (self);
-#line 2087 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->system_pictures_import_check = NULL;
-#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = g_new0 (GtkCheckButton*, 0 + 1);
-#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_import_checks = _tmp0_;
-#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_import_checks_length1 = 0;
-#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->_external_import_checks_size_ = self->priv->external_import_checks_length1;
-#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_new0 (WelcomeServiceEntry*, 0 + 1);
-#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_import_entries = _tmp1_;
-#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_import_entries_length1 = 0;
-#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->_external_import_entries_size_ = self->priv->external_import_entries_length1;
-#line 2096 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2092 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->import_content_already_installed = FALSE;
-#line 2097 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2093 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->ok_clicked = FALSE;
-#line 18014 "Dialogs.c"
+#line 17992 "Dialogs.c"
 }
 
 
 static void welcome_dialog_finalize (GObject* obj) {
 	WelcomeDialog * self;
-#line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_WELCOME_DIALOG, WelcomeDialog);
-#line 2086 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2082 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->hide_button);
-#line 2087 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2083 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->system_pictures_import_check);
-#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_import_checks = (_vala_array_free (self->priv->external_import_checks, self->priv->external_import_checks_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->external_import_entries = (_vala_array_free (self->priv->external_import_entries, self->priv->external_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2090 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->secondary_text);
-#line 2091 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->instruction_header);
-#line 2092 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->import_content);
-#line 2093 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->import_action_checkbox_packer);
-#line 2094 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->external_import_action_checkbox_packer);
-#line 2095 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->import_meta_host);
 #line 2085 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->external_import_entries = (_vala_array_free (self->priv->external_import_entries, self->priv->external_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
+#line 2086 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->secondary_text);
+#line 2087 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->instruction_header);
+#line 2088 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->import_content);
+#line 2089 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->import_action_checkbox_packer);
+#line 2090 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->external_import_action_checkbox_packer);
+#line 2091 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->import_meta_host);
+#line 2081 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_OBJECT_CLASS (welcome_dialog_parent_class)->finalize (obj);
-#line 18044 "Dialogs.c"
+#line 18022 "Dialogs.c"
 }
 
 
@@ -18076,92 +18054,92 @@ GType welcome_dialog_get_type (void) {
 static gboolean _preferences_dialog_on_delete_gtk_widget_delete_event (GtkWidget* _sender, GdkEventAny* event, gpointer self) {
 	gboolean result;
 	result = preferences_dialog_on_delete ((PreferencesDialog*) self);
-#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2318 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 18065 "Dialogs.c"
+#line 18043 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_close_gtk_dialog_response (GtkDialog* _sender, gint response_id, gpointer self) {
-#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2319 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_close ((PreferencesDialog*) self);
-#line 18072 "Dialogs.c"
+#line 18050 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_value_changed_gtk_adjustment_value_changed (GtkAdjustment* _sender, gpointer self) {
-#line 2323 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2324 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_value_changed ((PreferencesDialog*) self);
-#line 18079 "Dialogs.c"
+#line 18057 "Dialogs.c"
 }
 
 
 static gboolean _preferences_dialog_on_bg_color_reset_gtk_widget_button_press_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = preferences_dialog_on_bg_color_reset ((PreferencesDialog*) self, event);
-#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2327 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 18088 "Dialogs.c"
+#line 18066 "Dialogs.c"
 }
 
 
 static gboolean _preferences_dialog_on_local_pattern_help_gtk_label_activate_link (GtkLabel* _sender, const gchar* uri, gpointer self) {
 	gboolean result;
 	result = preferences_dialog_on_local_pattern_help ((PreferencesDialog*) self, uri);
-#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2350 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 18097 "Dialogs.c"
+#line 18075 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_dir_pattern_combo_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 2365 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2364 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_dir_pattern_combo_changed ((PreferencesDialog*) self);
-#line 18104 "Dialogs.c"
+#line 18082 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_dir_pattern_entry_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 2366 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2365 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_dir_pattern_entry_changed ((PreferencesDialog*) self);
-#line 18111 "Dialogs.c"
+#line 18089 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_lowercase_toggled_gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self) {
-#line 2371 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_lowercase_toggled ((PreferencesDialog*) self);
-#line 18118 "Dialogs.c"
+#line 18096 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_photo_editor_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 2378 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2377 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_photo_editor_changed ((PreferencesDialog*) self);
-#line 18125 "Dialogs.c"
+#line 18103 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_raw_editor_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 2379 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2378 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_raw_editor_changed ((PreferencesDialog*) self);
-#line 18132 "Dialogs.c"
+#line 18110 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_default_raw_developer_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 2391 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_default_raw_developer_changed ((PreferencesDialog*) self);
-#line 18139 "Dialogs.c"
+#line 18117 "Dialogs.c"
 }
 
 
 static gboolean _preferences_dialog_map_event_gtk_widget_map_event (GtkWidget* _sender, GdkEventAny* event, gpointer self) {
 	gboolean result;
 	result = preferences_dialog_map_event ((PreferencesDialog*) self);
-#line 2393 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2392 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 18148 "Dialogs.c"
+#line 18126 "Dialogs.c"
 }
 
 
@@ -18183,50 +18161,49 @@ static PreferencesDialog* preferences_dialog_construct (GType object_type) {
 	AppWindow* _tmp14_ = NULL;
 	GtkDialog* _tmp15_ = NULL;
 	GtkDialog* _tmp16_ = NULL;
-	GtkDialog* _tmp17_ = NULL;
-	GtkBuilder* _tmp18_ = NULL;
-	GObject* _tmp19_ = NULL;
+	GtkBuilder* _tmp17_ = NULL;
+	GObject* _tmp18_ = NULL;
+	GtkAdjustment* _tmp19_ = NULL;
 	GtkAdjustment* _tmp20_ = NULL;
 	GtkAdjustment* _tmp21_ = NULL;
-	GtkAdjustment* _tmp22_ = NULL;
-	gdouble _tmp23_ = 0.0;
+	gdouble _tmp22_ = 0.0;
+	ConfigFacade* _tmp23_ = NULL;
 	ConfigFacade* _tmp24_ = NULL;
-	ConfigFacade* _tmp25_ = NULL;
-	GdkRGBA _tmp26_ = {0};
-	gdouble _tmp27_ = 0.0;
-	GtkAdjustment* _tmp28_ = NULL;
-	GtkBuilder* _tmp29_ = NULL;
-	GObject* _tmp30_ = NULL;
+	GdkRGBA _tmp25_ = {0};
+	gdouble _tmp26_ = 0.0;
+	GtkAdjustment* _tmp27_ = NULL;
+	GtkBuilder* _tmp28_ = NULL;
+	GObject* _tmp29_ = NULL;
+	GtkScale* _tmp30_ = NULL;
 	GtkScale* _tmp31_ = NULL;
-	GtkScale* _tmp32_ = NULL;
-	GtkBuilder* _tmp33_ = NULL;
-	GObject* _tmp34_ = NULL;
-	GtkFileChooserButton* _tmp35_ = NULL;
-	GtkBuilder* _tmp36_ = NULL;
-	GObject* _tmp37_ = NULL;
-	GtkComboBox* _tmp38_ = NULL;
-	GtkBuilder* _tmp39_ = NULL;
-	GObject* _tmp40_ = NULL;
-	GtkComboBox* _tmp41_ = NULL;
+	GtkBuilder* _tmp32_ = NULL;
+	GObject* _tmp33_ = NULL;
+	GtkFileChooserButton* _tmp34_ = NULL;
+	GtkBuilder* _tmp35_ = NULL;
+	GObject* _tmp36_ = NULL;
+	GtkComboBox* _tmp37_ = NULL;
+	GtkBuilder* _tmp38_ = NULL;
+	GObject* _tmp39_ = NULL;
+	GtkComboBox* _tmp40_ = NULL;
 	GtkLabel* pattern_help = NULL;
-	GtkBuilder* _tmp42_ = NULL;
-	GObject* _tmp43_ = NULL;
-	GtkLabel* _tmp44_ = NULL;
+	GtkBuilder* _tmp41_ = NULL;
+	GObject* _tmp42_ = NULL;
+	GtkLabel* _tmp43_ = NULL;
 	gchar* help_path = NULL;
-	gchar* _tmp45_ = NULL;
-	const gchar* _tmp46_ = NULL;
-	GtkComboBoxText* _tmp60_ = NULL;
-	GtkAlignment* dir_choser_align = NULL;
-	GtkBuilder* _tmp61_ = NULL;
-	GObject* _tmp62_ = NULL;
-	GtkAlignment* _tmp63_ = NULL;
-	GtkComboBoxText* _tmp64_ = NULL;
+	gchar* _tmp44_ = NULL;
+	const gchar* _tmp45_ = NULL;
+	GtkBuilder* _tmp59_ = NULL;
+	GObject* _tmp60_ = NULL;
+	GtkComboBoxText* _tmp61_ = NULL;
+	GtkBuilder* _tmp62_ = NULL;
+	GObject* _tmp63_ = NULL;
+	GtkEntry* _tmp64_ = NULL;
 	GtkBuilder* _tmp65_ = NULL;
 	GObject* _tmp66_ = NULL;
-	GtkEntry* _tmp67_ = NULL;
-	GtkBuilder* _tmp68_ = NULL;
-	GObject* _tmp69_ = NULL;
-	GtkLabel* _tmp70_ = NULL;
+	GtkLabel* _tmp67_ = NULL;
+	const gchar* _tmp68_ = NULL;
+	gchar* _tmp69_ = NULL;
+	gchar* _tmp70_ = NULL;
 	const gchar* _tmp71_ = NULL;
 	gchar* _tmp72_ = NULL;
 	gchar* _tmp73_ = NULL;
@@ -18234,522 +18211,506 @@ static PreferencesDialog* preferences_dialog_construct (GType object_type) {
 	gchar* _tmp75_ = NULL;
 	gchar* _tmp76_ = NULL;
 	const gchar* _tmp77_ = NULL;
-	gchar* _tmp78_ = NULL;
-	gchar* _tmp79_ = NULL;
-	const gchar* _tmp80_ = NULL;
-	const gchar* _tmp81_ = NULL;
-	GtkComboBoxText* _tmp82_ = NULL;
-	GtkEntry* _tmp83_ = NULL;
+	const gchar* _tmp78_ = NULL;
+	GtkComboBoxText* _tmp79_ = NULL;
+	GtkEntry* _tmp80_ = NULL;
+	GtkBuilder* _tmp81_ = NULL;
+	GObject* _tmp82_ = NULL;
+	GtkComboBoxText* _tmp83_ = NULL;
 	GtkBuilder* _tmp84_ = NULL;
 	GObject* _tmp85_ = NULL;
-	GtkComboBoxText* _tmp86_ = NULL;
-	GtkBuilder* _tmp87_ = NULL;
-	GObject* _tmp88_ = NULL;
-	GtkCheckButton* _tmp89_ = NULL;
-	GtkCheckButton* _tmp90_ = NULL;
-	GtkBin* plugin_manifest_container = NULL;
-	GtkBuilder* _tmp91_ = NULL;
-	GObject* _tmp92_ = NULL;
-	GtkBin* _tmp93_ = NULL;
-	PluginsManifestWidgetMediator* _tmp94_ = NULL;
-	GtkWidget* _tmp95_ = NULL;
-	GtkWidget* _tmp96_ = NULL;
-	GtkComboBox* _tmp97_ = NULL;
-	GtkComboBox* _tmp98_ = NULL;
+	GtkCheckButton* _tmp86_ = NULL;
+	GtkCheckButton* _tmp87_ = NULL;
+	GtkNotebook* notebook = NULL;
+	GtkBuilder* _tmp88_ = NULL;
+	GObject* _tmp89_ = NULL;
+	GtkNotebook* _tmp90_ = NULL;
+	GtkWidget* _tmp91_ = NULL;
+	PluginsManifestWidgetMediator* _tmp92_ = NULL;
+	GtkWidget* _tmp93_ = NULL;
+	GtkWidget* _tmp94_ = NULL;
+	GtkComboBox* _tmp95_ = NULL;
+	GtkComboBox* _tmp96_ = NULL;
 	GtkCheckButton* auto_import_button = NULL;
-	GtkBuilder* _tmp99_ = NULL;
-	GObject* _tmp100_ = NULL;
-	GtkCheckButton* _tmp101_ = NULL;
-	ConfigFacade* _tmp102_ = NULL;
-	ConfigFacade* _tmp103_ = NULL;
-	gboolean _tmp104_ = FALSE;
+	GtkBuilder* _tmp97_ = NULL;
+	GObject* _tmp98_ = NULL;
+	GtkCheckButton* _tmp99_ = NULL;
+	ConfigFacade* _tmp100_ = NULL;
+	ConfigFacade* _tmp101_ = NULL;
+	gboolean _tmp102_ = FALSE;
 	GtkCheckButton* commit_metadata_button = NULL;
-	GtkBuilder* _tmp105_ = NULL;
-	GObject* _tmp106_ = NULL;
-	GtkCheckButton* _tmp107_ = NULL;
-	ConfigFacade* _tmp108_ = NULL;
-	ConfigFacade* _tmp109_ = NULL;
-	gboolean _tmp110_ = FALSE;
-	GtkBuilder* _tmp111_ = NULL;
-	GObject* _tmp112_ = NULL;
-	GtkComboBoxText* _tmp113_ = NULL;
-	GtkComboBoxText* _tmp114_ = NULL;
-	gchar* _tmp115_ = NULL;
+	GtkBuilder* _tmp103_ = NULL;
+	GObject* _tmp104_ = NULL;
+	GtkCheckButton* _tmp105_ = NULL;
+	ConfigFacade* _tmp106_ = NULL;
+	ConfigFacade* _tmp107_ = NULL;
+	gboolean _tmp108_ = FALSE;
+	GtkBuilder* _tmp109_ = NULL;
+	GObject* _tmp110_ = NULL;
+	GtkComboBoxText* _tmp111_ = NULL;
+	GtkComboBoxText* _tmp112_ = NULL;
+	gchar* _tmp113_ = NULL;
+	gchar* _tmp114_ = NULL;
+	GtkComboBoxText* _tmp115_ = NULL;
 	gchar* _tmp116_ = NULL;
-	GtkComboBoxText* _tmp117_ = NULL;
-	gchar* _tmp118_ = NULL;
-	gchar* _tmp119_ = NULL;
-	ConfigFacade* _tmp120_ = NULL;
-	ConfigFacade* _tmp121_ = NULL;
-	RawDeveloper _tmp122_ = 0;
-	GtkComboBoxText* _tmp123_ = NULL;
-	GtkDialog* _tmp124_ = NULL;
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gchar* _tmp117_ = NULL;
+	ConfigFacade* _tmp118_ = NULL;
+	ConfigFacade* _tmp119_ = NULL;
+	RawDeveloper _tmp120_ = 0;
+	GtkComboBoxText* _tmp121_ = NULL;
+	GtkDialog* _tmp122_ = NULL;
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (PreferencesDialog*) g_type_create_instance (object_type);
-#line 2305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = app_window_create_builder ("shotwell.ui", NULL);
-#line 2305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 2305 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->builder = _tmp0_;
-#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->builder;
-#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_builder_get_object (_tmp1_, "preferences_dialog");
-#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, gtk_dialog_get_type ()) ? ((GtkDialog*) _tmp2_) : NULL);
-#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->dialog);
-#line 2307 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->dialog = _tmp3_;
-#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2311 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gtk_settings_get_default ();
-#line 2309 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2311 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, G_TYPE_OBJECT, GObject), "gtk-dialogs-use-header", &use_header, NULL);
-#line 2310 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = use_header;
-#line 2310 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp5_) {
-#line 18297 "Dialogs.c"
+#line 18272 "Dialogs.c"
 		GtkWidget* null_titlebar = NULL;
 		GtkDialog* _tmp6_ = NULL;
 		GtkWidget* _tmp7_ = NULL;
-#line 2311 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2313 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		null_titlebar = NULL;
-#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = self->priv->dialog;
-#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = null_titlebar;
-#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_window_set_titlebar (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_window_get_type (), GtkWindow), _tmp7_);
-#line 2310 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2312 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (null_titlebar);
-#line 18311 "Dialogs.c"
+#line 18286 "Dialogs.c"
 	}
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = self->priv->dialog;
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = app_window_get_instance ();
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = gtk_widget_get_parent_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget));
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_set_parent_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), _tmp11_);
-#line 2314 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp10_);
-#line 2315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = self->priv->dialog;
-#line 2315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = app_window_get_instance ();
-#line 2315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = _tmp13_;
-#line 2315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_window_get_type (), GtkWindow));
-#line 2315 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp14_);
-#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2318 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = self->priv->dialog;
-#line 2316 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2318 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), "delete-event", (GCallback) _preferences_dialog_on_delete_gtk_widget_delete_event, self);
-#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2319 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = self->priv->dialog;
-#line 2317 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2319 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect (_tmp16_, "response", (GCallback) _preferences_dialog_on_close_gtk_dialog_response, self);
-#line 2318 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp17_ = self->priv->dialog;
-#line 2318 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_window_set_has_resize_grip (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2320 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp18_ = self->priv->builder;
-#line 2320 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp19_ = gtk_builder_get_object (_tmp18_, "bg_color_adjustment");
-#line 2320 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp20_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp19_, gtk_adjustment_get_type ()) ? ((GtkAdjustment*) _tmp19_) : NULL);
-#line 2320 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp17_ = self->priv->builder;
+#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp18_ = gtk_builder_get_object (_tmp17_, "bg_color_adjustment");
+#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp19_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp18_, gtk_adjustment_get_type ()) ? ((GtkAdjustment*) _tmp18_) : NULL);
+#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->bg_color_adjustment);
-#line 2320 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->bg_color_adjustment = _tmp20_;
 #line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->bg_color_adjustment = _tmp19_;
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp20_ = self->priv->bg_color_adjustment;
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp21_ = self->priv->bg_color_adjustment;
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp22_ = self->priv->bg_color_adjustment;
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp23_ = gtk_adjustment_get_upper (_tmp22_);
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp24_ = config_facade_get_instance ();
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp25_ = _tmp24_;
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	config_facade_get_bg_color (_tmp25_, &_tmp26_);
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp27_ = _tmp26_.red;
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_adjustment_set_value (_tmp21_, _tmp23_ - (_tmp27_ * 65535.0));
-#line 2321 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp25_);
-#line 2323 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp28_ = self->priv->bg_color_adjustment;
-#line 2323 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (_tmp28_, "value-changed", (GCallback) _preferences_dialog_on_value_changed_gtk_adjustment_value_changed, self);
-#line 2325 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp29_ = self->priv->builder;
-#line 2325 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp30_ = gtk_builder_get_object (_tmp29_, "bg_color_slider");
-#line 2325 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp31_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp30_, gtk_scale_get_type ()) ? ((GtkScale*) _tmp30_) : NULL);
-#line 2325 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp22_ = gtk_adjustment_get_upper (_tmp21_);
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp23_ = config_facade_get_instance ();
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp24_ = _tmp23_;
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	config_facade_get_bg_color (_tmp24_, &_tmp25_);
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp26_ = _tmp25_.red;
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_adjustment_set_value (_tmp20_, _tmp22_ - (_tmp26_ * 65535.0));
+#line 2322 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp24_);
+#line 2324 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp27_ = self->priv->bg_color_adjustment;
+#line 2324 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (_tmp27_, "value-changed", (GCallback) _preferences_dialog_on_value_changed_gtk_adjustment_value_changed, self);
+#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp28_ = self->priv->builder;
+#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp29_ = gtk_builder_get_object (_tmp28_, "bg_color_slider");
+#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp29_, gtk_scale_get_type ()) ? ((GtkScale*) _tmp29_) : NULL);
+#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->bg_color_slider);
-#line 2325 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->bg_color_slider = _tmp31_;
 #line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp32_ = self->priv->bg_color_slider;
-#line 2326 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _preferences_dialog_on_bg_color_reset_gtk_widget_button_press_event, self);
-#line 2328 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp33_ = self->priv->builder;
-#line 2328 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp34_ = gtk_builder_get_object (_tmp33_, "library_dir_button");
-#line 2328 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp35_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp34_, gtk_file_chooser_button_get_type ()) ? ((GtkFileChooserButton*) _tmp34_) : NULL);
-#line 2328 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->bg_color_slider = _tmp30_;
+#line 2327 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp31_ = self->priv->bg_color_slider;
+#line 2327 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), "button-press-event", (GCallback) _preferences_dialog_on_bg_color_reset_gtk_widget_button_press_event, self);
+#line 2329 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp32_ = self->priv->builder;
+#line 2329 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp33_ = gtk_builder_get_object (_tmp32_, "library_dir_button");
+#line 2329 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp34_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp33_, gtk_file_chooser_button_get_type ()) ? ((GtkFileChooserButton*) _tmp33_) : NULL);
+#line 2329 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->library_dir_button);
-#line 2328 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->library_dir_button = _tmp35_;
-#line 2330 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp36_ = self->priv->builder;
-#line 2330 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp37_ = gtk_builder_get_object (_tmp36_, "external_photo_editor_combo");
-#line 2330 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp38_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp37_, gtk_combo_box_get_type ()) ? ((GtkComboBox*) _tmp37_) : NULL);
-#line 2330 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2329 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->library_dir_button = _tmp34_;
+#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp35_ = self->priv->builder;
+#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp36_ = gtk_builder_get_object (_tmp35_, "external_photo_editor_combo");
+#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp37_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp36_, gtk_combo_box_get_type ()) ? ((GtkComboBox*) _tmp36_) : NULL);
+#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->photo_editor_combo);
-#line 2330 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->photo_editor_combo = _tmp38_;
 #line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp39_ = self->priv->builder;
-#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp40_ = gtk_builder_get_object (_tmp39_, "external_raw_editor_combo");
-#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp41_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp40_, gtk_combo_box_get_type ()) ? ((GtkComboBox*) _tmp40_) : NULL);
-#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->photo_editor_combo = _tmp37_;
+#line 2332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp38_ = self->priv->builder;
+#line 2332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp39_ = gtk_builder_get_object (_tmp38_, "external_raw_editor_combo");
+#line 2332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp40_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp39_, gtk_combo_box_get_type ()) ? ((GtkComboBox*) _tmp39_) : NULL);
+#line 2332 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->raw_editor_combo);
-#line 2331 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->raw_editor_combo = _tmp41_;
-#line 2333 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp42_ = self->priv->builder;
-#line 2333 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp43_ = gtk_builder_get_object (_tmp42_, "pattern_help");
-#line 2333 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp44_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp43_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp43_) : NULL);
-#line 2333 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	pattern_help = _tmp44_;
-#line 2340 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp45_ = resources_get_help_path ();
-#line 2340 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	help_path = _tmp45_;
-#line 2342 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp46_ = help_path;
-#line 2342 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	if (_tmp46_ == NULL) {
-#line 18439 "Dialogs.c"
-		GtkLabel* _tmp47_ = NULL;
-		const gchar* _tmp48_ = NULL;
+#line 2332 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->raw_editor_combo = _tmp40_;
+#line 2334 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp41_ = self->priv->builder;
+#line 2334 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp42_ = gtk_builder_get_object (_tmp41_, "pattern_help");
+#line 2334 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp43_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp42_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp42_) : NULL);
+#line 2334 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	pattern_help = _tmp43_;
+#line 2341 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp44_ = resources_get_help_path ();
+#line 2341 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	help_path = _tmp44_;
+#line 2343 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp45_ = help_path;
+#line 2343 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	if (_tmp45_ == NULL) {
+#line 18410 "Dialogs.c"
+		GtkLabel* _tmp46_ = NULL;
+		const gchar* _tmp47_ = NULL;
+		gchar* _tmp48_ = NULL;
 		gchar* _tmp49_ = NULL;
 		gchar* _tmp50_ = NULL;
 		gchar* _tmp51_ = NULL;
-		gchar* _tmp52_ = NULL;
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp47_ = pattern_help;
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp48_ = _ ("(Help)");
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp49_ = g_strconcat ("<a href=\"" RESOURCES_DIR_PATTERN_URI_SYSWIDE "\">", _tmp48_, NULL);
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp50_ = _tmp49_;
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp51_ = g_strconcat (_tmp50_, "</a>", NULL);
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp52_ = _tmp51_;
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_label_set_markup (_tmp47_, _tmp52_);
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp52_);
-#line 2344 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp50_);
-#line 18464 "Dialogs.c"
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp46_ = pattern_help;
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp47_ = _ ("(Help)");
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp48_ = g_strconcat ("<a href=\"" RESOURCES_DIR_PATTERN_URI_SYSWIDE "\">", _tmp47_, NULL);
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp49_ = _tmp48_;
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp50_ = g_strconcat (_tmp49_, "</a>", NULL);
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp51_ = _tmp50_;
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_label_set_markup (_tmp46_, _tmp51_);
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp51_);
+#line 2345 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp49_);
+#line 18435 "Dialogs.c"
 	} else {
-		GtkLabel* _tmp53_ = NULL;
-		const gchar* _tmp54_ = NULL;
+		GtkLabel* _tmp52_ = NULL;
+		const gchar* _tmp53_ = NULL;
+		gchar* _tmp54_ = NULL;
 		gchar* _tmp55_ = NULL;
 		gchar* _tmp56_ = NULL;
 		gchar* _tmp57_ = NULL;
-		gchar* _tmp58_ = NULL;
-		GtkLabel* _tmp59_ = NULL;
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp53_ = pattern_help;
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp54_ = _ ("(Help)");
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp55_ = g_strconcat ("<a href=\"dummy:\">", _tmp54_, NULL);
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp56_ = _tmp55_;
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp57_ = g_strconcat (_tmp56_, "</a>", NULL);
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp58_ = _tmp57_;
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		gtk_label_set_markup (_tmp53_, _tmp58_);
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp58_);
-#line 2348 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_g_free0 (_tmp56_);
+		GtkLabel* _tmp58_ = NULL;
 #line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp59_ = pattern_help;
+		_tmp52_ = pattern_help;
 #line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		g_signal_connect (_tmp59_, "activate-link", (GCallback) _preferences_dialog_on_local_pattern_help_gtk_label_activate_link, self);
-#line 18495 "Dialogs.c"
+		_tmp53_ = _ ("(Help)");
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp54_ = g_strconcat ("<a href=\"dummy:\">", _tmp53_, NULL);
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp55_ = _tmp54_;
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp56_ = g_strconcat (_tmp55_, "</a>", NULL);
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp57_ = _tmp56_;
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		gtk_label_set_markup (_tmp52_, _tmp57_);
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp57_);
+#line 2349 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_g_free0 (_tmp55_);
+#line 2350 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp58_ = pattern_help;
+#line 2350 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		g_signal_connect (_tmp58_, "activate-link", (GCallback) _preferences_dialog_on_local_pattern_help_gtk_label_activate_link, self);
+#line 18466 "Dialogs.c"
 	}
-#line 2352 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp60_ = (GtkComboBoxText*) gtk_combo_box_text_new ();
-#line 2352 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_object_ref_sink (_tmp60_);
-#line 2352 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp59_ = self->priv->builder;
+#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp60_ = gtk_builder_get_object (_tmp59_, "dir choser");
+#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp61_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp60_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp60_) : NULL);
+#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->dir_pattern_combo);
-#line 2352 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->dir_pattern_combo = _tmp60_;
 #line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp61_ = self->priv->builder;
-#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp62_ = gtk_builder_get_object (_tmp61_, "dir choser");
-#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp63_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp62_, gtk_alignment_get_type ()) ? ((GtkAlignment*) _tmp62_) : NULL);
-#line 2353 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	dir_choser_align = _tmp63_;
+	self->priv->dir_pattern_combo = _tmp61_;
 #line 2354 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp64_ = self->priv->dir_pattern_combo;
+	_tmp62_ = self->priv->builder;
 #line 2354 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (dir_choser_align, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_widget_get_type (), GtkWidget));
+	_tmp63_ = gtk_builder_get_object (_tmp62_, "dir_pattern_entry");
+#line 2354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp64_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp63_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp63_) : NULL);
+#line 2354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->dir_pattern_entry);
+#line 2354 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->dir_pattern_entry = _tmp64_;
 #line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp65_ = self->priv->builder;
 #line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp66_ = gtk_builder_get_object (_tmp65_, "dir_pattern_entry");
+	_tmp66_ = gtk_builder_get_object (_tmp65_, "dynamic example");
 #line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp67_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp66_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp66_) : NULL);
+	_tmp67_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp66_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp66_) : NULL);
 #line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->dir_pattern_entry);
-#line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->dir_pattern_entry = _tmp67_;
-#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp68_ = self->priv->builder;
-#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp69_ = gtk_builder_get_object (_tmp68_, "dynamic example");
-#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp70_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp69_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp69_) : NULL);
-#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->dir_pattern_example);
+#line 2355 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->dir_pattern_example = _tmp67_;
 #line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->dir_pattern_example = _tmp70_;
-#line 2357 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp71_ = _ ("Year%sMonth%sDay");
-#line 2357 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp72_ = g_strdup_printf (_tmp71_, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
-#line 2357 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp68_ = _ ("Year%sMonth%sDay");
+#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp69_ = g_strdup_printf (_tmp68_, G_DIR_SEPARATOR_S, G_DIR_SEPARATOR_S);
+#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp70_ = _tmp69_;
+#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	preferences_dialog_add_to_dir_formats (self, _tmp70_, "%Y" G_DIR_SEPARATOR_S "%m" G_DIR_SEPARATOR_S "%d");
+#line 2356 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp70_);
+#line 2358 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp71_ = _ ("Year%sMonth");
+#line 2358 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp72_ = g_strdup_printf (_tmp71_, G_DIR_SEPARATOR_S);
+#line 2358 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp73_ = _tmp72_;
-#line 2357 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_add_to_dir_formats (self, _tmp73_, "%Y" G_DIR_SEPARATOR_S "%m" G_DIR_SEPARATOR_S "%d");
-#line 2357 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2358 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	preferences_dialog_add_to_dir_formats (self, _tmp73_, "%Y" G_DIR_SEPARATOR_S "%m");
+#line 2358 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp73_);
-#line 2359 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp74_ = _ ("Year%sMonth");
-#line 2359 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2360 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp74_ = _ ("Year%sMonth-Day");
+#line 2360 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp75_ = g_strdup_printf (_tmp74_, G_DIR_SEPARATOR_S);
-#line 2359 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2360 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp76_ = _tmp75_;
-#line 2359 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_add_to_dir_formats (self, _tmp76_, "%Y" G_DIR_SEPARATOR_S "%m");
-#line 2359 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2360 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	preferences_dialog_add_to_dir_formats (self, _tmp76_, "%Y" G_DIR_SEPARATOR_S "%m-%d");
+#line 2360 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp76_);
-#line 2361 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp77_ = _ ("Year%sMonth-Day");
-#line 2361 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp78_ = g_strdup_printf (_tmp77_, G_DIR_SEPARATOR_S);
-#line 2361 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp79_ = _tmp78_;
-#line 2361 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_add_to_dir_formats (self, _tmp79_, "%Y" G_DIR_SEPARATOR_S "%m-%d");
-#line 2361 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp79_);
+#line 2362 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp77_ = _ ("Year-Month-Day");
+#line 2362 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	preferences_dialog_add_to_dir_formats (self, _tmp77_, "%Y-%m-%d");
 #line 2363 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp80_ = _ ("Year-Month-Day");
+	_tmp78_ = _ ("Custom");
 #line 2363 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_add_to_dir_formats (self, _tmp80_, "%Y-%m-%d");
+	preferences_dialog_add_to_dir_formats (self, _tmp78_, NULL);
 #line 2364 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp81_ = _ ("Custom");
+	_tmp79_ = self->priv->dir_pattern_combo;
 #line 2364 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_add_to_dir_formats (self, _tmp81_, NULL);
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp79_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _preferences_dialog_on_dir_pattern_combo_changed_gtk_combo_box_changed, self);
 #line 2365 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp82_ = self->priv->dir_pattern_combo;
+	_tmp80_ = self->priv->dir_pattern_entry;
 #line 2365 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _preferences_dialog_on_dir_pattern_combo_changed_gtk_combo_box_changed, self);
-#line 2366 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp83_ = self->priv->dir_pattern_entry;
-#line 2366 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _preferences_dialog_on_dir_pattern_entry_changed_gtk_editable_changed, self);
-#line 2368 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _preferences_dialog_on_dir_pattern_entry_changed_gtk_editable_changed, self);
+#line 2367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp81_ = self->priv->builder;
+#line 2367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp82_ = gtk_builder_get_object (_tmp81_, "dir_structure_label");
+#line 2367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp83_ = self->priv->dir_pattern_combo;
+#line 2367 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_label_set_mnemonic_widget (G_TYPE_CHECK_INSTANCE_TYPE (_tmp82_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp82_) : NULL, G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, gtk_widget_get_type (), GtkWidget));
+#line 2369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp84_ = self->priv->builder;
-#line 2368 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp85_ = gtk_builder_get_object (_tmp84_, "dir_structure_label");
-#line 2368 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp86_ = self->priv->dir_pattern_combo;
-#line 2368 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_label_set_mnemonic_widget (G_TYPE_CHECK_INSTANCE_TYPE (_tmp85_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp85_) : NULL, G_TYPE_CHECK_INSTANCE_CAST (_tmp86_, gtk_widget_get_type (), GtkWidget));
-#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp87_ = self->priv->builder;
-#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp88_ = gtk_builder_get_object (_tmp87_, "lowercase");
-#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp89_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp88_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp88_) : NULL);
-#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp85_ = gtk_builder_get_object (_tmp84_, "lowercase");
+#line 2369 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp86_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp85_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp85_) : NULL);
+#line 2369 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->lowercase);
+#line 2369 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->lowercase = _tmp86_;
 #line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->lowercase = _tmp89_;
-#line 2371 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp90_ = self->priv->lowercase;
-#line 2371 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, gtk_toggle_button_get_type (), GtkToggleButton), "toggled", (GCallback) _preferences_dialog_on_lowercase_toggled_gtk_toggle_button_toggled, self);
+	_tmp87_ = self->priv->lowercase;
+#line 2370 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_toggle_button_get_type (), GtkToggleButton), "toggled", (GCallback) _preferences_dialog_on_lowercase_toggled_gtk_toggle_button_toggled, self);
+#line 2372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp88_ = self->priv->builder;
+#line 2372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp89_ = gtk_builder_get_object (_tmp88_, "preferences-notebook");
+#line 2372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp90_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp89_, gtk_notebook_get_type ()) ? ((GtkNotebook*) _tmp89_) : NULL);
+#line 2372 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	notebook = _tmp90_;
 #line 2373 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp91_ = self->priv->builder;
+	_tmp91_ = gtk_notebook_get_nth_page (notebook, 2);
 #line 2373 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp92_ = gtk_builder_get_object (_tmp91_, "plugin-manifest-bin");
+	_tmp92_ = self->priv->plugins_mediator;
 #line 2373 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp93_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp92_, gtk_bin_get_type ()) ? ((GtkBin*) _tmp92_) : NULL);
+	_tmp93_ = plugins_manifest_widget_mediator_get_widget (_tmp92_);
 #line 2373 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	plugin_manifest_container = _tmp93_;
-#line 2374 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp94_ = self->priv->plugins_mediator;
-#line 2374 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp95_ = plugins_manifest_widget_mediator_get_widget (_tmp94_);
-#line 2374 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp96_ = _tmp95_;
-#line 2374 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (plugin_manifest_container, gtk_container_get_type (), GtkContainer), _tmp96_);
-#line 2376 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp94_ = _tmp93_;
+#line 2373 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_TYPE (_tmp91_, gtk_container_get_type ()) ? ((GtkContainer*) _tmp91_) : NULL, _tmp94_);
+#line 2375 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_populate_preference_options (self);
+#line 2377 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp95_ = self->priv->photo_editor_combo;
+#line 2377 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (_tmp95_, "changed", (GCallback) _preferences_dialog_on_photo_editor_changed_gtk_combo_box_changed, self);
 #line 2378 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp97_ = self->priv->photo_editor_combo;
+	_tmp96_ = self->priv->raw_editor_combo;
 #line 2378 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (_tmp97_, "changed", (GCallback) _preferences_dialog_on_photo_editor_changed_gtk_combo_box_changed, self);
-#line 2379 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp98_ = self->priv->raw_editor_combo;
-#line 2379 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (_tmp98_, "changed", (GCallback) _preferences_dialog_on_raw_editor_changed_gtk_combo_box_changed, self);
+	g_signal_connect (_tmp96_, "changed", (GCallback) _preferences_dialog_on_raw_editor_changed_gtk_combo_box_changed, self);
+#line 2380 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp97_ = self->priv->builder;
+#line 2380 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp98_ = gtk_builder_get_object (_tmp97_, "autoimport");
+#line 2380 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp99_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp98_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp98_) : NULL);
+#line 2380 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	auto_import_button = _tmp99_;
 #line 2381 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp99_ = self->priv->builder;
+	_tmp100_ = config_facade_get_instance ();
 #line 2381 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp100_ = gtk_builder_get_object (_tmp99_, "autoimport");
+	_tmp101_ = _tmp100_;
 #line 2381 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp101_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp100_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp100_) : NULL);
+	_tmp102_ = configuration_facade_get_auto_import_from_library (G_TYPE_CHECK_INSTANCE_CAST (_tmp101_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
 #line 2381 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	auto_import_button = _tmp101_;
-#line 2382 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp102_ = config_facade_get_instance ();
-#line 2382 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp103_ = _tmp102_;
-#line 2382 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp104_ = configuration_facade_get_auto_import_from_library (G_TYPE_CHECK_INSTANCE_CAST (_tmp103_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2382 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (auto_import_button, gtk_toggle_button_get_type (), GtkToggleButton), _tmp104_);
-#line 2382 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp103_);
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (auto_import_button, gtk_toggle_button_get_type (), GtkToggleButton), _tmp102_);
+#line 2381 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp101_);
+#line 2383 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp103_ = self->priv->builder;
+#line 2383 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp104_ = gtk_builder_get_object (_tmp103_, "write_metadata");
+#line 2383 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp105_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp104_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp104_) : NULL);
+#line 2383 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	commit_metadata_button = _tmp105_;
 #line 2384 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp105_ = self->priv->builder;
+	_tmp106_ = config_facade_get_instance ();
 #line 2384 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp106_ = gtk_builder_get_object (_tmp105_, "write_metadata");
+	_tmp107_ = _tmp106_;
 #line 2384 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp107_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp106_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp106_) : NULL);
+	_tmp108_ = configuration_facade_get_commit_metadata_to_masters (G_TYPE_CHECK_INSTANCE_CAST (_tmp107_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
 #line 2384 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	commit_metadata_button = _tmp107_;
-#line 2385 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp108_ = config_facade_get_instance ();
-#line 2385 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp109_ = _tmp108_;
-#line 2385 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp110_ = configuration_facade_get_commit_metadata_to_masters (G_TYPE_CHECK_INSTANCE_CAST (_tmp109_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2385 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (commit_metadata_button, gtk_toggle_button_get_type (), GtkToggleButton), _tmp110_);
-#line 2385 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp109_);
-#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp111_ = self->priv->builder;
-#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp112_ = gtk_builder_get_object (_tmp111_, "default_raw_developer");
-#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp113_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp112_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp112_) : NULL);
-#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (commit_metadata_button, gtk_toggle_button_get_type (), GtkToggleButton), _tmp108_);
+#line 2384 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp107_);
+#line 2386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp109_ = self->priv->builder;
+#line 2386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp110_ = gtk_builder_get_object (_tmp109_, "default_raw_developer");
+#line 2386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp111_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp110_, gtk_combo_box_text_get_type ()) ? ((GtkComboBoxText*) _tmp110_) : NULL);
+#line 2386 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->default_raw_developer_combo);
+#line 2386 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	self->priv->default_raw_developer_combo = _tmp111_;
 #line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	self->priv->default_raw_developer_combo = _tmp113_;
+	_tmp112_ = self->priv->default_raw_developer_combo;
+#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp113_ = raw_developer_get_label (RAW_DEVELOPER_CAMERA);
+#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp114_ = _tmp113_;
+#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_combo_box_text_append_text (_tmp112_, _tmp114_);
+#line 2387 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp114_);
 #line 2388 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp114_ = self->priv->default_raw_developer_combo;
+	_tmp115_ = self->priv->default_raw_developer_combo;
 #line 2388 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp115_ = raw_developer_get_label (RAW_DEVELOPER_CAMERA);
+	_tmp116_ = raw_developer_get_label (RAW_DEVELOPER_SHOTWELL);
 #line 2388 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp116_ = _tmp115_;
+	_tmp117_ = _tmp116_;
 #line 2388 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_combo_box_text_append_text (_tmp114_, _tmp116_);
+	gtk_combo_box_text_append_text (_tmp115_, _tmp117_);
 #line 2388 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp116_);
+	_g_free0 (_tmp117_);
 #line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp117_ = self->priv->default_raw_developer_combo;
-#line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp118_ = raw_developer_get_label (RAW_DEVELOPER_SHOTWELL);
+	_tmp118_ = config_facade_get_instance ();
 #line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp119_ = _tmp118_;
 #line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_combo_box_text_append_text (_tmp117_, _tmp119_);
+	_tmp120_ = configuration_facade_get_default_raw_developer (G_TYPE_CHECK_INSTANCE_CAST (_tmp119_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
 #line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp119_);
+	preferences_dialog_set_raw_developer_combo (self, _tmp120_);
+#line 2389 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp119_);
 #line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp120_ = config_facade_get_instance ();
+	_tmp121_ = self->priv->default_raw_developer_combo;
 #line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp121_ = _tmp120_;
-#line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp122_ = configuration_facade_get_default_raw_developer (G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	preferences_dialog_set_raw_developer_combo (self, _tmp122_);
-#line 2390 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp121_);
-#line 2391 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp123_ = self->priv->default_raw_developer_combo;
-#line 2391 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp123_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _preferences_dialog_on_default_raw_developer_changed_gtk_combo_box_changed, self);
-#line 2393 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp124_ = self->priv->dialog;
-#line 2393 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp124_, gtk_widget_get_type (), GtkWidget), "map-event", (GCallback) _preferences_dialog_map_event_gtk_widget_map_event, self);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _preferences_dialog_on_default_raw_developer_changed_gtk_combo_box_changed, self);
+#line 2392 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp122_ = self->priv->dialog;
+#line 2392 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp122_, gtk_widget_get_type (), GtkWidget), "map-event", (GCallback) _preferences_dialog_map_event_gtk_widget_map_event, self);
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (commit_metadata_button);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (auto_import_button);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (plugin_manifest_container);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (dir_choser_align);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (notebook);
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (help_path);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (pattern_help);
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 18729 "Dialogs.c"
+#line 18690 "Dialogs.c"
 }
 
 
 static PreferencesDialog* preferences_dialog_new (void) {
-#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2306 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return preferences_dialog_construct (TYPE_PREFERENCES_DIALOG);
-#line 18736 "Dialogs.c"
+#line 18697 "Dialogs.c"
 }
 
 
@@ -18780,150 +18741,150 @@ void preferences_dialog_populate_preference_options (PreferencesDialog* self) {
 	ConfigFacade* _tmp21_ = NULL;
 	ConfigFacade* _tmp22_ = NULL;
 	gboolean _tmp23_ = FALSE;
-#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2395 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->photo_editor_combo;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = photo_file_format_get_editable_mime_types (&_tmp1_);
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3__length1 = _tmp1_;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = config_facade_get_instance ();
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = configuration_facade_get_external_photo_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _tmp6_;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_populate_app_combo_box (self, _tmp0_, _tmp3_, _tmp1_, _tmp7_, &_tmp8_);
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->external_photo_apps);
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_photo_apps = _tmp8_;
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp7_);
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp5_);
-#line 2397 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = (_vala_array_free (_tmp3_, _tmp3__length1, (GDestroyNotify) g_free), NULL);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = self->priv->raw_editor_combo;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = photo_file_format_get_mime_types (PHOTO_FILE_FORMAT_RAW, &_tmp10_);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = _tmp11_;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12__length1 = _tmp10_;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = config_facade_get_instance ();
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = _tmp13_;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = configuration_facade_get_external_raw_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = _tmp15_;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_populate_app_combo_box (self, _tmp9_, _tmp12_, _tmp10_, _tmp16_, &_tmp17_);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->external_raw_apps);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->external_raw_apps = _tmp17_;
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp16_);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp14_);
-#line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2399 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = (_vala_array_free (_tmp12_, _tmp12__length1, (GDestroyNotify) g_free), NULL);
-#line 2403 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2402 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp18_ = self->priv->dir_pattern_combo;
-#line 2403 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2402 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp19_ = self->priv->dir_pattern_entry;
-#line 2403 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2402 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_setup_dir_pattern (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox), _tmp19_);
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = self->priv->lowercase;
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp21_ = config_facade_get_instance ();
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = _tmp21_;
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = configuration_facade_get_use_lowercase_filenames (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp23_);
-#line 2405 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2404 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp22_);
-#line 18843 "Dialogs.c"
+#line 18804 "Dialogs.c"
 }
 
 
 static gboolean preferences_dialog_on_local_pattern_help (PreferencesDialog* self, const gchar* ignore) {
 	gboolean result = FALSE;
 	GError * _inner_error_ = NULL;
-#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), FALSE);
-#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (ignore != NULL, FALSE);
-#line 18854 "Dialogs.c"
+#line 18815 "Dialogs.c"
 	{
 		AppWindow* _tmp0_ = NULL;
 		AppWindow* _tmp1_ = NULL;
 		GdkScreen* _tmp2_ = NULL;
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = app_window_get_instance ();
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = _tmp0_;
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_window_get_type (), GtkWindow));
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		resources_launch_help (_tmp2_, "other-files.page", &_inner_error_);
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp1_);
-#line 2412 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 18871 "Dialogs.c"
-			goto __catch427_g_error;
+#line 18832 "Dialogs.c"
+			goto __catch424_g_error;
 		}
 	}
-	goto __finally427;
-	__catch427_g_error:
+	goto __finally424;
+	__catch424_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		e = _inner_error_;
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_inner_error_ = NULL;
-#line 2414 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp3_ = e;
-#line 2414 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _tmp3_->message;
-#line 2414 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		g_message ("Dialogs.vala:2414: Unable to launch help: %s", _tmp4_);
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		g_message ("Dialogs.vala:2413: Unable to launch help: %s", _tmp4_);
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_error_free0 (e);
-#line 18893 "Dialogs.c"
+#line 18854 "Dialogs.c"
 	}
-	__finally427:
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	__finally424:
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_clear_error (&_inner_error_);
-#line 2411 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2410 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return FALSE;
-#line 18904 "Dialogs.c"
+#line 18865 "Dialogs.c"
 	}
-#line 2416 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2415 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = TRUE;
-#line 2416 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2415 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 18910 "Dialogs.c"
+#line 18871 "Dialogs.c"
 }
 
 
@@ -18958,110 +18919,110 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 	GtkListStore* _tmp68_ = NULL;
 	gint _tmp69_ = 0;
 	GError * _inner_error_ = NULL;
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (current_app_executable != NULL);
-#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = mime_types;
-#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0__length1 = mime_types_length1;
-#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2421 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_assert (_tmp0__length1 != 0, "mime_types.length != 0");
-#line 2423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = mime_types;
-#line 2423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1__length1 = mime_types_length1;
-#line 2423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = desktop_integration_get_apps_for_mime_types (_tmp1_, _tmp1__length1);
-#line 2423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_vala_external_apps);
-#line 2423 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_vala_external_apps = _tmp2_;
-#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2424 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _vala_external_apps;
-#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2424 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2424 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2424 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_ == 0) {
-#line 2426 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (external_apps) {
-#line 2426 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			*external_apps = _vala_external_apps;
-#line 18979 "Dialogs.c"
+#line 18940 "Dialogs.c"
 		} else {
-#line 2426 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_vala_external_apps);
-#line 18983 "Dialogs.c"
+#line 18944 "Dialogs.c"
 		}
-#line 2426 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2425 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 18987 "Dialogs.c"
+#line 18948 "Dialogs.c"
 	}
-#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = (GtkCellRendererPixbuf*) gtk_cell_renderer_pixbuf_new ();
-#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp6_);
-#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2428 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	pixbuf_renderer = _tmp6_;
-#line 2430 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = (GtkCellRendererText*) gtk_cell_renderer_text_new ();
-#line 2430 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp7_);
-#line 2430 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2429 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	text_renderer = _tmp7_;
-#line 2431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2430 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = combo_box;
-#line 2431 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2430 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_cell_layout_clear (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout));
-#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = combo_box;
-#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = pixbuf_renderer;
-#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2431 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_cell_renderer_get_type (), GtkCellRenderer), FALSE);
-#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = combo_box;
-#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = text_renderer;
-#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_cell_renderer_get_type (), GtkCellRenderer), FALSE);
-#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = combo_box;
-#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = pixbuf_renderer;
-#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2433 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_cell_renderer_get_type (), GtkCellRenderer), "pixbuf", 0);
-#line 2435 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp15_ = combo_box;
-#line 2435 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp16_ = text_renderer;
-#line 2435 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2434 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_cell_renderer_get_type (), GtkCellRenderer), "text", 1);
-#line 2438 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2437 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp17_ = gtk_list_store_new (2, gdk_pixbuf_get_type (), G_TYPE_STRING, -1);
-#line 2438 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2437 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	combo_store = _tmp17_;
-#line 2441 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2440 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	current_app = -1;
-#line 19035 "Dialogs.c"
+#line 18996 "Dialogs.c"
 	{
 		GeeIterator* _app_it = NULL;
 		SortedList* _tmp18_ = NULL;
 		GeeIterator* _tmp19_ = NULL;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = _vala_external_apps;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_app_it = _tmp19_;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		while (TRUE) {
-#line 19048 "Dialogs.c"
+#line 19009 "Dialogs.c"
 			GeeIterator* _tmp20_ = NULL;
 			gboolean _tmp21_ = FALSE;
 			GAppInfo* app = NULL;
@@ -19081,44 +19042,44 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 			GAppInfo* _tmp61_ = NULL;
 			const gchar* _tmp62_ = NULL;
 			const gchar* _tmp63_ = NULL;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp20_ = _app_it;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp21_ = gee_iterator_next (_tmp20_);
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (!_tmp21_) {
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				break;
-#line 19076 "Dialogs.c"
+#line 19037 "Dialogs.c"
 			}
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = _app_it;
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp23_ = gee_iterator_get (_tmp22_);
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			app = (GAppInfo*) _tmp23_;
-#line 2444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp24_ = combo_store;
-#line 2444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_list_store_append (_tmp24_, &_tmp25_);
-#line 2444 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			iter = _tmp25_;
-#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp26_ = app;
-#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp27_ = g_app_info_get_icon (_tmp26_);
-#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp28_ = _g_object_ref0 (_tmp27_);
-#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			app_icon = _tmp28_;
-#line 19098 "Dialogs.c"
+#line 19059 "Dialogs.c"
 			{
 				GIcon* _tmp29_ = NULL;
-#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp29_ = app_icon;
-#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp29_, g_file_icon_get_type ())) {
-#line 19105 "Dialogs.c"
+#line 19066 "Dialogs.c"
 					GdkPixbuf* _tmp30_ = NULL;
 					GIcon* _tmp31_ = NULL;
 					GFile* _tmp32_ = NULL;
@@ -19130,51 +19091,51 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 					GtkTreeIter _tmp38_ = {0};
 					GdkPixbuf* _tmp39_ = NULL;
 					GValue _tmp40_ = {0};
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp31_ = app_icon;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp32_ = g_file_icon_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, g_file_icon_get_type (), GFileIcon));
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp33_ = g_file_get_path (_tmp32_);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp34_ = _tmp33_;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp35_ = gdk_pixbuf_new_from_file (_tmp34_, &_inner_error_);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp36_ = _tmp35_;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_g_free0 (_tmp34_);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp30_ = _tmp36_;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 19135 "Dialogs.c"
-						goto __catch428_g_error;
-					}
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp37_ = combo_store;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp38_ = iter;
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					_tmp39_ = scale_pixbuf (_tmp30_, RESOURCES_DEFAULT_ICON_SCALE, GDK_INTERP_BILINEAR, FALSE);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					g_value_init (&_tmp40_, gdk_pixbuf_get_type ());
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					g_value_take_object (&_tmp40_, _tmp39_);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					gtk_list_store_set_value (_tmp37_, &_tmp38_, 0, &_tmp40_);
-#line 2449 "/home/jens/Source/shotwell/src/Dialogs.vala"
-					G_IS_VALUE (&_tmp40_) ? (g_value_unset (&_tmp40_), NULL) : NULL;
 #line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp31_ = app_icon;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp32_ = g_file_icon_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, g_file_icon_get_type (), GFileIcon));
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp33_ = g_file_get_path (_tmp32_);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp34_ = _tmp33_;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp35_ = gdk_pixbuf_new_from_file (_tmp34_, &_inner_error_);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp36_ = _tmp35_;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_g_free0 (_tmp34_);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp30_ = _tmp36_;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 19096 "Dialogs.c"
+						goto __catch425_g_error;
+					}
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp37_ = combo_store;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp38_ = iter;
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					_tmp39_ = scale_pixbuf (_tmp30_, RESOURCES_DEFAULT_ICON_SCALE, GDK_INTERP_BILINEAR, FALSE);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					g_value_init (&_tmp40_, gdk_pixbuf_get_type ());
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					g_value_take_object (&_tmp40_, _tmp39_);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					gtk_list_store_set_value (_tmp37_, &_tmp38_, 0, &_tmp40_);
+#line 2448 "/home/jens/Source/shotwell/src/Dialogs.vala"
+					G_IS_VALUE (&_tmp40_) ? (g_value_unset (&_tmp40_), NULL) : NULL;
+#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_g_object_unref0 (_tmp30_);
-#line 19154 "Dialogs.c"
+#line 19115 "Dialogs.c"
 				} else {
 					GIcon* _tmp41_ = NULL;
-#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp41_ = app_icon;
-#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp41_, g_themed_icon_get_type ())) {
-#line 19161 "Dialogs.c"
+#line 19122 "Dialogs.c"
 						GdkPixbuf* icon_pixbuf = NULL;
 						GtkIconTheme* _tmp42_ = NULL;
 						GIcon* _tmp43_ = NULL;
@@ -19186,178 +19147,178 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 						GtkTreeIter _tmp49_ = {0};
 						GdkPixbuf* _tmp50_ = NULL;
 						GValue _tmp51_ = {0};
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp42_ = gtk_icon_theme_get_default ();
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp43_ = app_icon;
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp45_ = _tmp44_ = g_themed_icon_get_names (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, g_themed_icon_get_type (), GThemedIcon));
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp46_ = _tmp45_[0];
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp47_ = gtk_icon_theme_load_icon (_tmp42_, _tmp46_, RESOURCES_DEFAULT_ICON_SCALE, GTK_ICON_LOOKUP_FORCE_SIZE, &_inner_error_);
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						icon_pixbuf = _tmp47_;
-#line 2453 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 19187 "Dialogs.c"
-							goto __catch428_g_error;
-						}
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp48_ = combo_store;
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp49_ = iter;
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						_tmp50_ = icon_pixbuf;
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						g_value_init (&_tmp51_, gdk_pixbuf_get_type ());
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						g_value_set_object (&_tmp51_, _tmp50_);
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						gtk_list_store_set_value (_tmp48_, &_tmp49_, 0, &_tmp51_);
-#line 2457 "/home/jens/Source/shotwell/src/Dialogs.vala"
-						G_IS_VALUE (&_tmp51_) ? (g_value_unset (&_tmp51_), NULL) : NULL;
 #line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp42_ = gtk_icon_theme_get_default ();
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp43_ = app_icon;
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp45_ = _tmp44_ = g_themed_icon_get_names (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, g_themed_icon_get_type (), GThemedIcon));
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp46_ = _tmp45_[0];
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp47_ = gtk_icon_theme_load_icon (_tmp42_, _tmp46_, RESOURCES_DEFAULT_ICON_SCALE, GTK_ICON_LOOKUP_FORCE_SIZE, &_inner_error_);
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						icon_pixbuf = _tmp47_;
+#line 2452 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 19148 "Dialogs.c"
+							goto __catch425_g_error;
+						}
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp48_ = combo_store;
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp49_ = iter;
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						_tmp50_ = icon_pixbuf;
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						g_value_init (&_tmp51_, gdk_pixbuf_get_type ());
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						g_value_set_object (&_tmp51_, _tmp50_);
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						gtk_list_store_set_value (_tmp48_, &_tmp49_, 0, &_tmp51_);
+#line 2456 "/home/jens/Source/shotwell/src/Dialogs.vala"
+						G_IS_VALUE (&_tmp51_) ? (g_value_unset (&_tmp51_), NULL) : NULL;
+#line 2451 "/home/jens/Source/shotwell/src/Dialogs.vala"
 						_g_object_unref0 (icon_pixbuf);
-#line 19206 "Dialogs.c"
+#line 19167 "Dialogs.c"
 					}
 				}
 			}
-			goto __finally428;
-			__catch428_g_error:
+			goto __finally425;
+			__catch425_g_error:
 			{
 				GError* _error_ = NULL;
 				GError* _tmp52_ = NULL;
 				const gchar* _tmp53_ = NULL;
 				gchar* _tmp54_ = NULL;
 				gchar* _tmp55_ = NULL;
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_error_ = _inner_error_;
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_inner_error_ = NULL;
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp52_ = _error_;
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp53_ = _tmp52_->message;
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp54_ = g_strconcat ("Error loading icon pixbuf: ", _tmp53_, NULL);
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp55_ = _tmp54_;
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
-				g_warning ("Dialogs.vala:2460: %s", _tmp55_);
-#line 2460 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
+				g_warning ("Dialogs.vala:2459: %s", _tmp55_);
+#line 2459 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (_tmp55_);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_error_free0 (_error_);
-#line 19236 "Dialogs.c"
+#line 19197 "Dialogs.c"
 			}
-			__finally428:
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+			__finally425:
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (app_icon);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (app);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (_app_it);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (combo_store);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (text_renderer);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (pixbuf_renderer);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				g_clear_error (&_inner_error_);
-#line 2447 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				return;
-#line 19259 "Dialogs.c"
+#line 19220 "Dialogs.c"
 			}
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp56_ = combo_store;
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp57_ = iter;
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp58_ = app;
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp59_ = g_app_info_get_name (_tmp58_);
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			g_value_init (&_tmp60_, G_TYPE_STRING);
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			g_value_set_string (&_tmp60_, _tmp59_);
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_list_store_set_value (_tmp56_, &_tmp57_, 1, &_tmp60_);
-#line 2463 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			G_IS_VALUE (&_tmp60_) ? (g_value_unset (&_tmp60_), NULL) : NULL;
-#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp61_ = app;
-#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp62_ = g_app_info_get_commandline (_tmp61_);
-#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp63_ = current_app_executable;
-#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (g_strcmp0 (_tmp62_, _tmp63_) == 0) {
-#line 19285 "Dialogs.c"
+#line 19246 "Dialogs.c"
 				SortedList* _tmp64_ = NULL;
 				GAppInfo* _tmp65_ = NULL;
 				gint _tmp66_ = 0;
-#line 2466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp64_ = _vala_external_apps;
-#line 2466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp65_ = app;
-#line 2466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp66_ = sorted_list_index_of (_tmp64_, _tmp65_);
-#line 2466 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2465 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				current_app = _tmp66_;
-#line 19297 "Dialogs.c"
+#line 19258 "Dialogs.c"
 			}
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (app_icon);
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (app);
-#line 19303 "Dialogs.c"
+#line 19264 "Dialogs.c"
 		}
-#line 2443 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_app_it);
-#line 19307 "Dialogs.c"
+#line 19268 "Dialogs.c"
 	}
-#line 2471 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2470 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp67_ = combo_box;
-#line 2471 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2470 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp68_ = combo_store;
-#line 2471 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2470 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_combo_box_set_model (_tmp67_, G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, GTK_TYPE_TREE_MODEL, GtkTreeModel));
-#line 2473 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2472 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp69_ = current_app;
-#line 2473 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2472 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp69_ != -1) {
-#line 19319 "Dialogs.c"
+#line 19280 "Dialogs.c"
 		GtkComboBox* _tmp70_ = NULL;
 		gint _tmp71_ = 0;
-#line 2474 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp70_ = combo_box;
-#line 2474 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp71_ = current_app;
-#line 2474 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (_tmp70_, _tmp71_);
-#line 19328 "Dialogs.c"
+#line 19289 "Dialogs.c"
 	}
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (combo_store);
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (text_renderer);
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (pixbuf_renderer);
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (external_apps) {
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*external_apps = _vala_external_apps;
-#line 19340 "Dialogs.c"
+#line 19301 "Dialogs.c"
 	} else {
-#line 2419 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_vala_external_apps);
-#line 19344 "Dialogs.c"
+#line 19305 "Dialogs.c"
 	}
 }
 
@@ -19371,35 +19332,35 @@ static void preferences_dialog_setup_dir_pattern (PreferencesDialog* self, GtkCo
 	gboolean found = FALSE;
 	const gchar* _tmp4_ = NULL;
 	gboolean _tmp32_ = FALSE;
-#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GTK_IS_ENTRY (entry));
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = configuration_facade_get_directory_pattern (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	pattern = _tmp3_;
-#line 2479 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2478 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	found = FALSE;
-#line 2480 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2479 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = pattern;
-#line 2480 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2479 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (NULL != _tmp4_) {
-#line 19382 "Dialogs.c"
+#line 19343 "Dialogs.c"
 		gint i = 0;
-#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2481 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		i = 0;
-#line 19386 "Dialogs.c"
+#line 19347 "Dialogs.c"
 		{
 			GeeArrayList* _pf_list = NULL;
 			GeeArrayList* _tmp5_ = NULL;
@@ -19409,25 +19370,25 @@ static void preferences_dialog_setup_dir_pattern (PreferencesDialog* self, GtkCo
 			gint _tmp8_ = 0;
 			gint _tmp9_ = 0;
 			gint _pf_index = 0;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp5_ = self->priv->path_formats;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp6_ = _g_object_ref0 (_tmp5_);
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_pf_list = _tmp6_;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp7_ = _pf_list;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp8_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp9_ = _tmp8_;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_pf_size = _tmp9_;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_pf_index = -1;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			while (TRUE) {
-#line 19414 "Dialogs.c"
+#line 19375 "Dialogs.c"
 				gint _tmp10_ = 0;
 				gint _tmp11_ = 0;
 				gint _tmp12_ = 0;
@@ -19439,64 +19400,64 @@ static void preferences_dialog_setup_dir_pattern (PreferencesDialog* self, GtkCo
 				const gchar* _tmp17_ = NULL;
 				const gchar* _tmp18_ = NULL;
 				gint _tmp21_ = 0;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp10_ = _pf_index;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_pf_index = _tmp10_ + 1;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp11_ = _pf_index;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp12_ = _pf_size;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (!(_tmp11_ < _tmp12_)) {
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 19438 "Dialogs.c"
+#line 19399 "Dialogs.c"
 				}
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp13_ = _pf_list;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp14_ = _pf_index;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp15_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp14_);
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				pf = (PreferencesDialogPathFormat*) _tmp15_;
-#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp16_ = pf;
-#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp17_ = _tmp16_->pattern;
-#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp18_ = pattern;
-#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				if (g_strcmp0 (_tmp17_, _tmp18_) == 0) {
-#line 19456 "Dialogs.c"
+#line 19417 "Dialogs.c"
 					GtkComboBox* _tmp19_ = NULL;
 					gint _tmp20_ = 0;
-#line 2485 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp19_ = combo_box;
-#line 2485 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp20_ = i;
-#line 2485 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2484 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					gtk_combo_box_set_active (_tmp19_, _tmp20_);
-#line 2486 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					found = TRUE;
-#line 2487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_preferences_dialog_path_format_unref0 (pf);
-#line 2487 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2486 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					break;
-#line 19471 "Dialogs.c"
+#line 19432 "Dialogs.c"
 				}
-#line 2489 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp21_ = i;
-#line 2489 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2488 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				i = _tmp21_ + 1;
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_preferences_dialog_path_format_unref0 (pf);
-#line 19479 "Dialogs.c"
+#line 19440 "Dialogs.c"
 			}
-#line 2483 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (_pf_list);
-#line 19483 "Dialogs.c"
+#line 19444 "Dialogs.c"
 		}
 	} else {
 		gchar* s = NULL;
@@ -19506,64 +19467,64 @@ static void preferences_dialog_setup_dir_pattern (PreferencesDialog* self, GtkCo
 		gchar* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
 		gboolean _tmp27_ = FALSE;
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp22_ = config_facade_get_instance ();
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp23_ = _tmp22_;
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = configuration_facade_get_directory_pattern_custom (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp25_ = _tmp24_;
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp23_);
-#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2492 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		s = _tmp25_;
-#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp26_ = s;
-#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp27_ = is_string_empty (_tmp26_);
-#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2493 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (!_tmp27_) {
-#line 19511 "Dialogs.c"
+#line 19472 "Dialogs.c"
 			GtkComboBox* _tmp28_ = NULL;
 			GeeArrayList* _tmp29_ = NULL;
 			gint _tmp30_ = 0;
 			gint _tmp31_ = 0;
-#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp28_ = combo_box;
-#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp29_ = self->priv->path_formats;
-#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp30_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp31_ = _tmp30_;
-#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			gtk_combo_box_set_active (_tmp28_, _tmp31_ - 1);
-#line 2496 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2495 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			found = TRUE;
-#line 19528 "Dialogs.c"
+#line 19489 "Dialogs.c"
 		}
-#line 2480 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2479 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (s);
-#line 19532 "Dialogs.c"
+#line 19493 "Dialogs.c"
 	}
-#line 2500 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp32_ = found;
-#line 2500 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2499 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp32_) {
-#line 19538 "Dialogs.c"
+#line 19499 "Dialogs.c"
 		GtkComboBox* _tmp33_ = NULL;
-#line 2501 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2500 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp33_ = combo_box;
-#line 2501 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2500 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (_tmp33_, 0);
-#line 19544 "Dialogs.c"
+#line 19505 "Dialogs.c"
 	}
-#line 2504 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2503 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_dir_pattern_combo_changed (self);
-#line 2477 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2476 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (pattern);
-#line 19550 "Dialogs.c"
+#line 19511 "Dialogs.c"
 }
 
 
@@ -19580,55 +19541,55 @@ void preferences_dialog_show (void) {
 	gchar* _tmp10_ = NULL;
 	PreferencesDialog* _tmp11_ = NULL;
 	GtkDialog* _tmp12_ = NULL;
-#line 2508 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2507 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = preferences_dialog_preferences_dialog;
-#line 2508 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2507 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == NULL) {
-#line 19571 "Dialogs.c"
+#line 19532 "Dialogs.c"
 		PreferencesDialog* _tmp1_ = NULL;
-#line 2509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = preferences_dialog_new ();
-#line 2509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_preferences_dialog_unref0 (preferences_dialog_preferences_dialog);
-#line 2509 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2508 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_preferences_dialog = _tmp1_;
-#line 19579 "Dialogs.c"
+#line 19540 "Dialogs.c"
 	}
-#line 2511 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2510 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = preferences_dialog_preferences_dialog;
-#line 2511 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2510 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_populate_preference_options (_tmp2_);
-#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2511 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = preferences_dialog_preferences_dialog;
-#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2511 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _tmp3_->priv->dialog;
-#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2511 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget));
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = preferences_dialog_preferences_dialog;
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _tmp5_->priv->library_dir_button;
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = app_dirs_get_import_dir ();
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _tmp7_;
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = g_file_get_path (_tmp8_);
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = _tmp9_;
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_file_chooser_set_current_folder (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), _tmp10_);
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (_tmp10_);
-#line 2513 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp8_);
-#line 2517 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = preferences_dialog_preferences_dialog;
-#line 2517 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = _tmp11_->priv->dialog;
-#line 2517 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_present (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_window_get_type (), GtkWindow));
-#line 19615 "Dialogs.c"
+#line 19576 "Dialogs.c"
 }
 
 
@@ -19653,113 +19614,113 @@ static void preferences_dialog_commit_on_close (PreferencesDialog* self) {
 	gpointer _tmp25_ = NULL;
 	PreferencesDialogPathFormat* _tmp26_ = NULL;
 	const gchar* _tmp27_ = NULL;
-#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2523 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 2523 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 2523 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	config_facade_commit_bg_color (_tmp1_);
-#line 2523 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->builder;
-#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_builder_get_object (_tmp2_, "autoimport");
-#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp3_) : NULL);
-#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	autoimport = _tmp4_;
-#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = autoimport;
-#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_ != NULL) {
-#line 19662 "Dialogs.c"
+#line 19623 "Dialogs.c"
 		ConfigFacade* _tmp6_ = NULL;
 		ConfigFacade* _tmp7_ = NULL;
 		GtkCheckButton* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 		gboolean _tmp10_ = FALSE;
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = config_facade_get_instance ();
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _tmp6_;
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = autoimport;
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp9_;
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		configuration_facade_set_auto_import_from_library (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp10_);
-#line 2527 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2526 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp7_);
-#line 19682 "Dialogs.c"
+#line 19643 "Dialogs.c"
 	}
-#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = self->priv->builder;
-#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp12_ = gtk_builder_get_object (_tmp11_, "write_metadata");
-#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp13_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp12_, gtk_check_button_get_type ()) ? ((GtkCheckButton*) _tmp12_) : NULL);
-#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	commit_metadata = _tmp13_;
-#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp14_ = commit_metadata;
-#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2529 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp14_ != NULL) {
-#line 19696 "Dialogs.c"
+#line 19657 "Dialogs.c"
 		ConfigFacade* _tmp15_ = NULL;
 		ConfigFacade* _tmp16_ = NULL;
 		GtkCheckButton* _tmp17_ = NULL;
 		gboolean _tmp18_ = FALSE;
 		gboolean _tmp19_ = FALSE;
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = config_facade_get_instance ();
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = _tmp15_;
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = commit_metadata;
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = _tmp18_;
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		configuration_facade_set_commit_metadata_to_masters (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp19_);
-#line 2531 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2530 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp16_);
-#line 19716 "Dialogs.c"
+#line 19677 "Dialogs.c"
 	}
-#line 2533 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2532 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp20_ = self->priv->lib_dir;
-#line 2533 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2532 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp20_ != NULL) {
-#line 19722 "Dialogs.c"
+#line 19683 "Dialogs.c"
 		const gchar* _tmp21_ = NULL;
-#line 2534 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2533 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = self->priv->lib_dir;
-#line 2534 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2533 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		app_dirs_set_import_dir (_tmp21_);
-#line 19728 "Dialogs.c"
+#line 19689 "Dialogs.c"
 	}
-#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp22_ = self->priv->path_formats;
-#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp23_ = self->priv->dir_pattern_combo;
-#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp24_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_combo_box_get_type (), GtkComboBox));
-#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp25_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp24_);
-#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2535 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	pf = (PreferencesDialogPathFormat*) _tmp25_;
-#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp26_ = pf;
-#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp27_ = _tmp26_->pattern;
-#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2536 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (NULL == _tmp27_) {
-#line 19746 "Dialogs.c"
+#line 19707 "Dialogs.c"
 		ConfigFacade* _tmp28_ = NULL;
 		ConfigFacade* _tmp29_ = NULL;
 		GtkEntry* _tmp30_ = NULL;
@@ -19767,55 +19728,55 @@ static void preferences_dialog_commit_on_close (PreferencesDialog* self) {
 		const gchar* _tmp32_ = NULL;
 		ConfigFacade* _tmp33_ = NULL;
 		ConfigFacade* _tmp34_ = NULL;
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp28_ = config_facade_get_instance ();
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp29_ = _tmp28_;
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp30_ = self->priv->dir_pattern_entry;
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp31_ = gtk_entry_get_text (_tmp30_);
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp32_ = _tmp31_;
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		configuration_facade_set_directory_pattern_custom (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp32_);
-#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp29_);
-#line 2539 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp33_ = config_facade_get_instance ();
-#line 2539 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp34_ = _tmp33_;
-#line 2539 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		configuration_facade_set_directory_pattern (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), NULL);
-#line 2539 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp34_);
-#line 19776 "Dialogs.c"
+#line 19737 "Dialogs.c"
 	} else {
 		ConfigFacade* _tmp35_ = NULL;
 		ConfigFacade* _tmp36_ = NULL;
 		PreferencesDialogPathFormat* _tmp37_ = NULL;
 		const gchar* _tmp38_ = NULL;
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp35_ = config_facade_get_instance ();
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp36_ = _tmp35_;
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp37_ = pf;
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp38_ = _tmp37_->pattern;
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		configuration_facade_set_directory_pattern (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp38_);
-#line 2541 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2540 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp36_);
-#line 19794 "Dialogs.c"
+#line 19755 "Dialogs.c"
 	}
-#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_preferences_dialog_path_format_unref0 (pf);
-#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (commit_metadata);
-#line 2522 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (autoimport);
-#line 19802 "Dialogs.c"
+#line 19763 "Dialogs.c"
 }
 
 
@@ -19824,52 +19785,52 @@ static gboolean preferences_dialog_on_delete (PreferencesDialog* self) {
 	gboolean _tmp0_ = FALSE;
 	GtkDialog* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 2545 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2544 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), FALSE);
-#line 2546 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = preferences_dialog_get_allow_closing (self);
-#line 2546 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp0_) {
-#line 2547 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = TRUE;
-#line 2547 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 19821 "Dialogs.c"
+#line 19782 "Dialogs.c"
 	}
-#line 2549 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2548 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_commit_on_close (self);
-#line 2550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2549 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->dialog;
-#line 2550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2549 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_widget_hide_on_delete (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 2550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2549 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp2_;
-#line 2550 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2549 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 19833 "Dialogs.c"
+#line 19794 "Dialogs.c"
 }
 
 
 static void preferences_dialog_on_close (PreferencesDialog* self) {
 	gboolean _tmp0_ = FALSE;
 	GtkDialog* _tmp1_ = NULL;
-#line 2553 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2552 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2554 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = preferences_dialog_get_allow_closing (self);
-#line 2554 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2553 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp0_) {
-#line 2555 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2554 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 19848 "Dialogs.c"
+#line 19809 "Dialogs.c"
 	}
-#line 2557 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2556 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->dialog;
-#line 2557 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2556 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 2558 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_commit_on_close (self);
-#line 19856 "Dialogs.c"
+#line 19817 "Dialogs.c"
 }
 
 
@@ -19878,19 +19839,19 @@ static void preferences_dialog_on_value_changed (PreferencesDialog* self) {
 	gdouble _tmp1_ = 0.0;
 	GtkAdjustment* _tmp2_ = NULL;
 	gdouble _tmp3_ = 0.0;
-#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2560 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2562 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->bg_color_adjustment;
-#line 2562 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_adjustment_get_upper (_tmp0_);
-#line 2562 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->bg_color_adjustment;
-#line 2562 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_adjustment_get_value (_tmp2_);
-#line 2562 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2561 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_set_background_color (self, ((gdouble) (_tmp1_ - _tmp3_)) / 65535.0);
-#line 19877 "Dialogs.c"
+#line 19838 "Dialogs.c"
 }
 
 
@@ -19900,84 +19861,84 @@ static gboolean preferences_dialog_on_bg_color_reset (PreferencesDialog* self, G
 	gboolean _tmp1_ = FALSE;
 	GdkEventButton* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
-#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), FALSE);
-#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = event;
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_->button;
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_ == ((guint) 1)) {
-#line 19897 "Dialogs.c"
+#line 19858 "Dialogs.c"
 		GdkEventButton* _tmp4_ = NULL;
 		GdkEventType _tmp5_ = 0;
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = event;
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = _tmp4_->type;
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = _tmp5_ == GDK_BUTTON_PRESS;
-#line 19906 "Dialogs.c"
+#line 19867 "Dialogs.c"
 	} else {
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = FALSE;
-#line 19910 "Dialogs.c"
+#line 19871 "Dialogs.c"
 	}
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_) {
-#line 19914 "Dialogs.c"
+#line 19875 "Dialogs.c"
 		GdkEventButton* _tmp6_ = NULL;
 		GdkModifierType _tmp7_ = 0;
 		gboolean _tmp8_ = FALSE;
-#line 2568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = event;
-#line 2568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _tmp6_->state;
-#line 2568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = has_only_key_modifier (_tmp7_, GDK_CONTROL_MASK);
-#line 2568 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp8_;
-#line 19926 "Dialogs.c"
+#line 19887 "Dialogs.c"
 	} else {
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = FALSE;
-#line 19930 "Dialogs.c"
+#line 19891 "Dialogs.c"
 	}
-#line 2567 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_) {
-#line 19934 "Dialogs.c"
+#line 19895 "Dialogs.c"
 		GtkScale* _tmp9_ = NULL;
 		GtkAdjustment* _tmp10_ = NULL;
 		gdouble _tmp11_ = 0.0;
 		GdkRGBA _tmp12_ = {0};
 		gdouble _tmp13_ = 0.0;
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = self->priv->bg_color_slider;
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = self->priv->bg_color_adjustment;
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = gtk_adjustment_get_upper (_tmp10_);
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		parse_color (CONFIG_FACADE_DEFAULT_BG_COLOR, &_tmp12_);
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = _tmp12_.red;
-#line 2570 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_range_set_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_range_get_type (), GtkRange), _tmp11_ - (_tmp13_ * 65536.0f));
-#line 2572 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2571 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_on_value_changed (self);
-#line 2574 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = TRUE;
-#line 2574 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2573 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 19958 "Dialogs.c"
+#line 19919 "Dialogs.c"
 	}
-#line 2577 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2576 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = FALSE;
-#line 2577 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2576 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 19964 "Dialogs.c"
+#line 19925 "Dialogs.c"
 }
 
 
@@ -19989,25 +19950,25 @@ static void preferences_dialog_on_dir_pattern_combo_changed (PreferencesDialog* 
 	gpointer _tmp3_ = NULL;
 	PreferencesDialogPathFormat* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2579 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->path_formats;
-#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->dir_pattern_combo;
-#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _tmp2_);
-#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	pf = (PreferencesDialogPathFormat*) _tmp3_;
-#line 2582 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = pf;
-#line 2582 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_->pattern;
-#line 2582 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (NULL == _tmp5_) {
-#line 19994 "Dialogs.c"
+#line 19955 "Dialogs.c"
 		gchar* dir_pattern = NULL;
 		ConfigFacade* _tmp6_ = NULL;
 		ConfigFacade* _tmp7_ = NULL;
@@ -20019,78 +19980,78 @@ static void preferences_dialog_on_dir_pattern_combo_changed (PreferencesDialog* 
 		const gchar* _tmp14_ = NULL;
 		GtkEntry* _tmp15_ = NULL;
 		GtkEntry* _tmp16_ = NULL;
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = config_facade_get_instance ();
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = _tmp6_;
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = configuration_facade_get_directory_pattern_custom (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = _tmp8_;
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp7_);
-#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dir_pattern = _tmp9_;
-#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = dir_pattern;
-#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = is_string_empty (_tmp10_);
-#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2584 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (_tmp11_) {
-#line 20024 "Dialogs.c"
+#line 19985 "Dialogs.c"
 			gchar* _tmp12_ = NULL;
-#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp12_ = g_strdup ("");
-#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (dir_pattern);
-#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			dir_pattern = _tmp12_;
-#line 20032 "Dialogs.c"
+#line 19993 "Dialogs.c"
 		}
-#line 2587 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = self->priv->dir_pattern_entry;
-#line 2587 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = dir_pattern;
-#line 2587 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2586 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_entry_set_text (_tmp13_, _tmp14_);
-#line 2588 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = self->priv->dir_pattern_entry;
-#line 2588 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_set (_tmp15_, "editable", TRUE, NULL);
-#line 2589 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2588 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = self->priv->dir_pattern_entry;
-#line 2589 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2588 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 2582 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2581 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (dir_pattern);
-#line 20050 "Dialogs.c"
+#line 20011 "Dialogs.c"
 	} else {
 		GtkEntry* _tmp17_ = NULL;
 		PreferencesDialogPathFormat* _tmp18_ = NULL;
 		const gchar* _tmp19_ = NULL;
 		GtkEntry* _tmp20_ = NULL;
 		GtkEntry* _tmp21_ = NULL;
-#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = self->priv->dir_pattern_entry;
-#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = pf;
-#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = _tmp18_->pattern;
-#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_entry_set_text (_tmp17_, _tmp19_);
-#line 2592 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp20_ = self->priv->dir_pattern_entry;
-#line 2592 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2591 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_set (_tmp20_, "editable", FALSE, NULL);
-#line 2593 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2592 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = self->priv->dir_pattern_entry;
-#line 2593 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2592 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 20073 "Dialogs.c"
+#line 20034 "Dialogs.c"
 	}
-#line 2580 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2579 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_preferences_dialog_path_format_unref0 (pf);
-#line 20077 "Dialogs.c"
+#line 20038 "Dialogs.c"
 }
 
 
@@ -20104,92 +20065,92 @@ static void preferences_dialog_on_dir_pattern_entry_changed (PreferencesDialog* 
 	gboolean _tmp5_ = FALSE;
 	const gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->example_date;
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->dir_pattern_entry;
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_entry_get_text (_tmp1_);
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = g_date_time_format (_tmp0_, _tmp3_);
-#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	example = _tmp4_;
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = example;
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = is_string_empty (_tmp6_);
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp7_) {
-#line 20111 "Dialogs.c"
+#line 20072 "Dialogs.c"
 		GtkEntry* _tmp8_ = NULL;
 		const gchar* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		gboolean _tmp11_ = FALSE;
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = self->priv->dir_pattern_entry;
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp9_ = gtk_entry_get_text (_tmp8_);
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp9_;
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp11_ = is_string_empty (_tmp10_);
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = !_tmp11_;
-#line 20126 "Dialogs.c"
+#line 20087 "Dialogs.c"
 	} else {
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = FALSE;
-#line 20130 "Dialogs.c"
+#line 20091 "Dialogs.c"
 	}
-#line 2599 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2598 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp5_) {
-#line 20134 "Dialogs.c"
+#line 20095 "Dialogs.c"
 		GtkLabel* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
 		GtkEntry* _tmp14_ = NULL;
 		GtkEntry* _tmp15_ = NULL;
-#line 2601 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2600 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = self->priv->dir_pattern_example;
-#line 2601 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2600 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = _ ("Invalid pattern");
-#line 2601 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2600 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_label_set_text (_tmp12_, _tmp13_);
-#line 2602 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = self->priv->dir_pattern_entry;
-#line 2602 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_entry_set_icon_from_icon_name (_tmp14_, GTK_ENTRY_ICON_SECONDARY, "dialog-error");
-#line 2603 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = self->priv->dir_pattern_entry;
-#line 2603 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_entry_set_icon_activatable (_tmp15_, GTK_ENTRY_ICON_SECONDARY, FALSE);
-#line 2604 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2603 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_set_allow_closing (self, FALSE);
-#line 20155 "Dialogs.c"
+#line 20116 "Dialogs.c"
 	} else {
 		GtkLabel* _tmp16_ = NULL;
 		const gchar* _tmp17_ = NULL;
 		GtkEntry* _tmp18_ = NULL;
-#line 2607 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2606 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = self->priv->dir_pattern_example;
-#line 2607 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2606 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = example;
-#line 2607 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2606 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_label_set_text (_tmp16_, _tmp17_);
-#line 2608 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2607 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = self->priv->dir_pattern_entry;
-#line 2608 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2607 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_entry_set_icon_from_icon_name (_tmp18_, GTK_ENTRY_ICON_SECONDARY, NULL);
-#line 2609 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_set_allow_closing (self, TRUE);
-#line 20172 "Dialogs.c"
+#line 20133 "Dialogs.c"
 	}
-#line 2597 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (example);
-#line 20176 "Dialogs.c"
+#line 20137 "Dialogs.c"
 }
 
 
@@ -20197,34 +20158,34 @@ static void preferences_dialog_set_allow_closing (PreferencesDialog* self, gbool
 	GtkDialog* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 2613 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2612 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2614 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->dialog;
-#line 2614 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = allow;
-#line 2614 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_deletable (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_window_get_type (), GtkWindow), _tmp1_);
-#line 2615 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2614 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = allow;
-#line 2615 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2614 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->allow_closing = _tmp2_;
-#line 20196 "Dialogs.c"
+#line 20157 "Dialogs.c"
 }
 
 
 static gboolean preferences_dialog_get_allow_closing (PreferencesDialog* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 2618 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2617 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), FALSE);
-#line 2619 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->allow_closing;
-#line 2619 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _tmp0_;
-#line 2619 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 20211 "Dialogs.c"
+#line 20172 "Dialogs.c"
 }
 
 
@@ -20233,21 +20194,21 @@ static void preferences_dialog_set_background_color (PreferencesDialog* self, gd
 	ConfigFacade* _tmp1_ = NULL;
 	gdouble _tmp2_ = 0.0;
 	GdkRGBA _tmp3_ = {0};
-#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2621 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = bg_color_value;
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_to_grayscale (self, _tmp2_, &_tmp3_);
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	config_facade_set_bg_color (_tmp1_, &_tmp3_);
-#line 2623 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2622 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 20234 "Dialogs.c"
+#line 20195 "Dialogs.c"
 }
 
 
@@ -20256,29 +20217,29 @@ static void preferences_dialog_to_grayscale (PreferencesDialog* self, gdouble co
 	gdouble _tmp0_ = 0.0;
 	gdouble _tmp1_ = 0.0;
 	gdouble _tmp2_ = 0.0;
-#line 2626 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2625 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2627 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2626 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	memset (&color, 0, sizeof (GdkRGBA));
-#line 2629 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = color_value;
-#line 2629 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2628 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	color.red = _tmp0_;
-#line 2630 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2629 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = color_value;
-#line 2630 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2629 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	color.green = _tmp1_;
-#line 2631 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = color_value;
-#line 2631 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	color.blue = _tmp2_;
-#line 2632 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2631 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	color.alpha = 1.0;
-#line 2634 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2633 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	*result = color;
-#line 2634 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2633 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return;
-#line 20265 "Dialogs.c"
+#line 20226 "Dialogs.c"
 }
 
 
@@ -20299,77 +20260,77 @@ static void preferences_dialog_on_photo_editor_changed (PreferencesDialog* self)
 	gchar* _tmp16_ = NULL;
 	gchar* _tmp17_ = NULL;
 	gchar* _tmp18_ = NULL;
-#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->photo_editor_combo;
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_combo_box_get_active (_tmp1_);
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = self->priv->external_photo_apps;
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_ < _tmp5_) {
-#line 20300 "Dialogs.c"
+#line 20261 "Dialogs.c"
 		GtkComboBox* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = self->priv->photo_editor_combo;
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = gtk_combo_box_get_active (_tmp6_);
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp7_;
-#line 20309 "Dialogs.c"
+#line 20270 "Dialogs.c"
 	} else {
 		SortedList* _tmp8_ = NULL;
 		gint _tmp9_ = 0;
 		gint _tmp10_ = 0;
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp8_ = self->priv->external_photo_apps;
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp9_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp10_ = _tmp9_;
-#line 2639 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp0_ = _tmp10_;
-#line 20322 "Dialogs.c"
-	}
 #line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	photo_app_choice_index = _tmp0_;
-#line 2641 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp11_ = self->priv->external_photo_apps;
-#line 2641 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp12_ = sorted_list_get_at (_tmp11_, photo_app_choice_index);
-#line 2641 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	app = (GAppInfo*) _tmp12_;
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp13_ = config_facade_get_instance ();
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp14_ = _tmp13_;
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp15_ = desktop_integration_get_app_open_command (app);
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp16_ = _tmp15_;
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	configuration_facade_set_external_photo_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp16_);
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp16_);
-#line 2643 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp14_);
-#line 2645 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp17_ = desktop_integration_get_app_open_command (app);
-#line 2645 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp18_ = _tmp17_;
-#line 2645 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_debug ("Dialogs.vala:2645: setting external photo editor to: %s", _tmp18_);
-#line 2645 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (_tmp18_);
+		_tmp8_ = self->priv->external_photo_apps;
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp9_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp10_ = _tmp9_;
+#line 2638 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp0_ = _tmp10_;
+#line 20283 "Dialogs.c"
+	}
 #line 2637 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	photo_app_choice_index = _tmp0_;
+#line 2640 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp11_ = self->priv->external_photo_apps;
+#line 2640 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp12_ = sorted_list_get_at (_tmp11_, photo_app_choice_index);
+#line 2640 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	app = (GAppInfo*) _tmp12_;
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp13_ = config_facade_get_instance ();
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp14_ = _tmp13_;
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp15_ = desktop_integration_get_app_open_command (app);
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp16_ = _tmp15_;
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	configuration_facade_set_external_photo_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp16_);
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp16_);
+#line 2642 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp14_);
+#line 2644 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp17_ = desktop_integration_get_app_open_command (app);
+#line 2644 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp18_ = _tmp17_;
+#line 2644 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_debug ("Dialogs.vala:2644: setting external photo editor to: %s", _tmp18_);
+#line 2644 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_free0 (_tmp18_);
+#line 2636 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (app);
-#line 20356 "Dialogs.c"
+#line 20317 "Dialogs.c"
 }
 
 
@@ -20388,69 +20349,69 @@ static void preferences_dialog_on_raw_editor_changed (PreferencesDialog* self) {
 	ConfigFacade* _tmp14_ = NULL;
 	const gchar* _tmp15_ = NULL;
 	const gchar* _tmp16_ = NULL;
-#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2647 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = self->priv->raw_editor_combo;
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gtk_combo_box_get_active (_tmp1_);
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = self->priv->external_raw_apps;
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_ < _tmp5_) {
-#line 20389 "Dialogs.c"
+#line 20350 "Dialogs.c"
 		GtkComboBox* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp6_ = self->priv->raw_editor_combo;
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp7_ = gtk_combo_box_get_active (_tmp6_);
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp7_;
-#line 20398 "Dialogs.c"
+#line 20359 "Dialogs.c"
 	} else {
 		SortedList* _tmp8_ = NULL;
 		gint _tmp9_ = 0;
 		gint _tmp10_ = 0;
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp8_ = self->priv->external_raw_apps;
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp9_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp10_ = _tmp9_;
-#line 2650 "/home/jens/Source/shotwell/src/Dialogs.vala"
-		_tmp0_ = _tmp10_;
-#line 20411 "Dialogs.c"
-	}
 #line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	raw_app_choice_index = _tmp0_;
-#line 2652 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp11_ = self->priv->external_raw_apps;
-#line 2652 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp12_ = sorted_list_get_at (_tmp11_, raw_app_choice_index);
-#line 2652 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	app = (GAppInfo*) _tmp12_;
-#line 2654 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp13_ = config_facade_get_instance ();
-#line 2654 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp14_ = _tmp13_;
-#line 2654 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp15_ = g_app_info_get_commandline (app);
-#line 2654 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	configuration_facade_set_external_raw_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp15_);
-#line 2654 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (_tmp14_);
-#line 2656 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp16_ = g_app_info_get_commandline (app);
-#line 2656 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	g_debug ("Dialogs.vala:2656: setting external raw editor to: %s", _tmp16_);
+		_tmp8_ = self->priv->external_raw_apps;
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp9_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp10_ = _tmp9_;
+#line 2649 "/home/jens/Source/shotwell/src/Dialogs.vala"
+		_tmp0_ = _tmp10_;
+#line 20372 "Dialogs.c"
+	}
 #line 2648 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	raw_app_choice_index = _tmp0_;
+#line 2651 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp11_ = self->priv->external_raw_apps;
+#line 2651 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp12_ = sorted_list_get_at (_tmp11_, raw_app_choice_index);
+#line 2651 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	app = (GAppInfo*) _tmp12_;
+#line 2653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp13_ = config_facade_get_instance ();
+#line 2653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp14_ = _tmp13_;
+#line 2653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp15_ = g_app_info_get_commandline (app);
+#line 2653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	configuration_facade_set_external_raw_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp15_);
+#line 2653 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (_tmp14_);
+#line 2655 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp16_ = g_app_info_get_commandline (app);
+#line 2655 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	g_debug ("Dialogs.vala:2655: setting external raw editor to: %s", _tmp16_);
+#line 2647 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (app);
-#line 20437 "Dialogs.c"
+#line 20398 "Dialogs.c"
 }
 
 
@@ -20458,50 +20419,50 @@ static RawDeveloper preferences_dialog_raw_developer_from_combo (PreferencesDial
 	RawDeveloper result = 0;
 	GtkComboBoxText* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 2659 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2658 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), 0);
-#line 2660 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2659 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->default_raw_developer_combo;
-#line 2660 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2659 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_combo_box_get_type (), GtkComboBox));
-#line 2660 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2659 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp1_ == 0) {
-#line 2661 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2660 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result = RAW_DEVELOPER_CAMERA;
-#line 2661 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2660 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return result;
-#line 20457 "Dialogs.c"
+#line 20418 "Dialogs.c"
 	}
-#line 2662 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2661 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = RAW_DEVELOPER_SHOTWELL;
-#line 2662 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2661 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 20463 "Dialogs.c"
+#line 20424 "Dialogs.c"
 }
 
 
 static void preferences_dialog_set_raw_developer_combo (PreferencesDialog* self, RawDeveloper d) {
 	RawDeveloper _tmp0_ = 0;
-#line 2665 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2664 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2666 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = d;
-#line 2666 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2665 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp0_ == RAW_DEVELOPER_CAMERA) {
-#line 20475 "Dialogs.c"
+#line 20436 "Dialogs.c"
 		GtkComboBoxText* _tmp1_ = NULL;
-#line 2667 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2666 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp1_ = self->priv->default_raw_developer_combo;
-#line 2667 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2666 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 20481 "Dialogs.c"
+#line 20442 "Dialogs.c"
 	} else {
 		GtkComboBoxText* _tmp2_ = NULL;
-#line 2669 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2668 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp2_ = self->priv->default_raw_developer_combo;
-#line 2669 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2668 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox), 1);
-#line 20488 "Dialogs.c"
+#line 20449 "Dialogs.c"
 	}
 }
 
@@ -20510,60 +20471,60 @@ static void preferences_dialog_on_default_raw_developer_changed (PreferencesDial
 	ConfigFacade* _tmp0_ = NULL;
 	ConfigFacade* _tmp1_ = NULL;
 	RawDeveloper _tmp2_ = 0;
-#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2671 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 2673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 2673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = preferences_dialog_raw_developer_from_combo (self);
-#line 2673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	configuration_facade_set_default_raw_developer (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_);
-#line 2673 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2672 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 20509 "Dialogs.c"
+#line 20470 "Dialogs.c"
 }
 
 
 static void preferences_dialog_on_current_folder_changed (PreferencesDialog* self) {
 	GtkFileChooserButton* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 2676 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2675 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2676 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->library_dir_button;
-#line 2677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2676 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gtk_file_chooser_get_filename (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser));
-#line 2677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2676 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->priv->lib_dir);
-#line 2677 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2676 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->lib_dir = _tmp1_;
-#line 20526 "Dialogs.c"
+#line 20487 "Dialogs.c"
 }
 
 
 static void _preferences_dialog_on_current_folder_changed_gtk_file_chooser_current_folder_changed (GtkFileChooser* _sender, gpointer self) {
-#line 2685 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_on_current_folder_changed ((PreferencesDialog*) self);
-#line 20533 "Dialogs.c"
+#line 20494 "Dialogs.c"
 }
 
 
 static gboolean preferences_dialog_map_event (PreferencesDialog* self) {
 	gboolean result = FALSE;
 	GtkFileChooserButton* _tmp0_ = NULL;
-#line 2680 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2679 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (IS_PREFERENCES_DIALOG (self), FALSE);
-#line 2685 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = self->priv->library_dir_button;
-#line 2685 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2684 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), "current-folder-changed", (GCallback) _preferences_dialog_on_current_folder_changed_gtk_file_chooser_current_folder_changed, self);
-#line 2686 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2685 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = TRUE;
-#line 2686 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2685 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 20550 "Dialogs.c"
+#line 20511 "Dialogs.c"
 }
 
 
@@ -20575,31 +20536,31 @@ static void preferences_dialog_add_to_dir_formats (PreferencesDialog* self, cons
 	GeeArrayList* _tmp3_ = NULL;
 	GtkComboBoxText* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (name != NULL);
-#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp0_ = name;
-#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp1_ = pattern;
-#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp2_ = preferences_dialog_path_format_new (_tmp0_, _tmp1_);
-#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	pf = _tmp2_;
-#line 2691 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp3_ = self->priv->path_formats;
-#line 2691 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), pf);
-#line 2692 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp4_ = self->priv->dir_pattern_combo;
-#line 2692 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_tmp5_ = name;
-#line 2692 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	gtk_combo_box_text_append_text (_tmp4_, _tmp5_);
 #line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp0_ = name;
+#line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp1_ = pattern;
+#line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp2_ = preferences_dialog_path_format_new (_tmp0_, _tmp1_);
+#line 2689 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	pf = _tmp2_;
+#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp3_ = self->priv->path_formats;
+#line 2690 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), pf);
+#line 2691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp4_ = self->priv->dir_pattern_combo;
+#line 2691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_tmp5_ = name;
+#line 2691 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	gtk_combo_box_text_append_text (_tmp4_, _tmp5_);
+#line 2688 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_preferences_dialog_path_format_unref0 (pf);
-#line 20586 "Dialogs.c"
+#line 20547 "Dialogs.c"
 }
 
 
@@ -20608,21 +20569,21 @@ static void preferences_dialog_on_lowercase_toggled (PreferencesDialog* self) {
 	ConfigFacade* _tmp1_ = NULL;
 	GtkCheckButton* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2694 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (IS_PREFERENCES_DIALOG (self));
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = _tmp0_;
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = self->priv->lowercase;
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	configuration_facade_set_use_lowercase_filenames (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp3_);
-#line 2696 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2695 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 20609 "Dialogs.c"
+#line 20570 "Dialogs.c"
 }
 
 
@@ -20632,246 +20593,246 @@ static PreferencesDialogPathFormat* preferences_dialog_path_format_construct (GT
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = (PreferencesDialogPathFormat*) g_type_create_instance (object_type);
-#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = name;
-#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->name);
-#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->name = _tmp1_;
-#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = pattern;
-#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->pattern);
-#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2278 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->pattern = _tmp3_;
-#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return self;
-#line 20641 "Dialogs.c"
+#line 20602 "Dialogs.c"
 }
 
 
 static PreferencesDialogPathFormat* preferences_dialog_path_format_new (const gchar* name, const gchar* pattern) {
-#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return preferences_dialog_path_format_construct (PREFERENCES_DIALOG_TYPE_PATH_FORMAT, name, pattern);
-#line 20648 "Dialogs.c"
+#line 20609 "Dialogs.c"
 }
 
 
 static void preferences_dialog_value_path_format_init (GValue* value) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 20655 "Dialogs.c"
+#line 20616 "Dialogs.c"
 }
 
 
 static void preferences_dialog_value_path_format_free_value (GValue* value) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (value->data[0].v_pointer) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_path_format_unref (value->data[0].v_pointer);
-#line 20664 "Dialogs.c"
+#line 20625 "Dialogs.c"
 	}
 }
 
 
 static void preferences_dialog_value_path_format_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (src_value->data[0].v_pointer) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = preferences_dialog_path_format_ref (src_value->data[0].v_pointer);
-#line 20674 "Dialogs.c"
+#line 20635 "Dialogs.c"
 	} else {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 20678 "Dialogs.c"
+#line 20639 "Dialogs.c"
 	}
 }
 
 
 static gpointer preferences_dialog_value_path_format_peek_pointer (const GValue* value) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 20686 "Dialogs.c"
+#line 20647 "Dialogs.c"
 }
 
 
 static gchar* preferences_dialog_value_path_format_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 20693 "Dialogs.c"
+#line 20654 "Dialogs.c"
 		PreferencesDialogPathFormat* object;
 		object = collect_values[0].v_pointer;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 20700 "Dialogs.c"
+#line 20661 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 20704 "Dialogs.c"
+#line 20665 "Dialogs.c"
 		}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = preferences_dialog_path_format_ref (object);
-#line 20708 "Dialogs.c"
+#line 20669 "Dialogs.c"
 	} else {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 20712 "Dialogs.c"
+#line 20673 "Dialogs.c"
 	}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 20716 "Dialogs.c"
+#line 20677 "Dialogs.c"
 }
 
 
 static gchar* preferences_dialog_value_path_format_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PreferencesDialogPathFormat** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!object_p) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 20727 "Dialogs.c"
+#line 20688 "Dialogs.c"
 	}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 20733 "Dialogs.c"
+#line 20694 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 20737 "Dialogs.c"
+#line 20698 "Dialogs.c"
 	} else {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = preferences_dialog_path_format_ref (value->data[0].v_pointer);
-#line 20741 "Dialogs.c"
+#line 20702 "Dialogs.c"
 	}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 20745 "Dialogs.c"
+#line 20706 "Dialogs.c"
 }
 
 
 static GParamSpec* preferences_dialog_param_spec_path_format (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PreferencesDialogParamSpecPathFormat* spec;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PREFERENCES_DIALOG_TYPE_PATH_FORMAT), NULL);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 20759 "Dialogs.c"
+#line 20720 "Dialogs.c"
 }
 
 
 static gpointer preferences_dialog_value_get_path_format (const GValue* value) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PREFERENCES_DIALOG_TYPE_PATH_FORMAT), NULL);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 20768 "Dialogs.c"
+#line 20729 "Dialogs.c"
 }
 
 
 static void preferences_dialog_value_set_path_format (GValue* value, gpointer v_object) {
 	PreferencesDialogPathFormat* old;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PREFERENCES_DIALOG_TYPE_PATH_FORMAT));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	old = value->data[0].v_pointer;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (v_object) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PREFERENCES_DIALOG_TYPE_PATH_FORMAT));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_path_format_ref (value->data[0].v_pointer);
-#line 20788 "Dialogs.c"
+#line 20749 "Dialogs.c"
 	} else {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 20792 "Dialogs.c"
+#line 20753 "Dialogs.c"
 	}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_path_format_unref (old);
-#line 20798 "Dialogs.c"
+#line 20759 "Dialogs.c"
 	}
 }
 
 
 static void preferences_dialog_value_take_path_format (GValue* value, gpointer v_object) {
 	PreferencesDialogPathFormat* old;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PREFERENCES_DIALOG_TYPE_PATH_FORMAT));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	old = value->data[0].v_pointer;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (v_object) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PREFERENCES_DIALOG_TYPE_PATH_FORMAT));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 20817 "Dialogs.c"
+#line 20778 "Dialogs.c"
 	} else {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 20821 "Dialogs.c"
+#line 20782 "Dialogs.c"
 	}
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_path_format_unref (old);
-#line 20827 "Dialogs.c"
+#line 20788 "Dialogs.c"
 	}
 }
 
 
 static void preferences_dialog_path_format_class_init (PreferencesDialogPathFormatClass * klass) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_path_format_parent_class = g_type_class_peek_parent (klass);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((PreferencesDialogPathFormatClass *) klass)->finalize = preferences_dialog_path_format_finalize;
-#line 20837 "Dialogs.c"
+#line 20798 "Dialogs.c"
 }
 
 
 static void preferences_dialog_path_format_instance_init (PreferencesDialogPathFormat * self) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 20844 "Dialogs.c"
+#line 20805 "Dialogs.c"
 }
 
 
 static void preferences_dialog_path_format_finalize (PreferencesDialogPathFormat* obj) {
 	PreferencesDialogPathFormat * self;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PREFERENCES_DIALOG_TYPE_PATH_FORMAT, PreferencesDialogPathFormat);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_handlers_destroy (self);
-#line 2278 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2280 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->name);
-#line 2279 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2281 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (self->pattern);
-#line 20858 "Dialogs.c"
+#line 20819 "Dialogs.c"
 }
 
 
@@ -20892,216 +20853,216 @@ static GType preferences_dialog_path_format_get_type (void) {
 static gpointer preferences_dialog_path_format_ref (gpointer instance) {
 	PreferencesDialogPathFormat* self;
 	self = instance;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 20883 "Dialogs.c"
+#line 20844 "Dialogs.c"
 }
 
 
 static void preferences_dialog_path_format_unref (gpointer instance) {
 	PreferencesDialogPathFormat* self;
 	self = instance;
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		PREFERENCES_DIALOG_PATH_FORMAT_GET_CLASS (self)->finalize (self);
-#line 2273 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2275 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 20896 "Dialogs.c"
+#line 20857 "Dialogs.c"
 	}
 }
 
 
 static void value_preferences_dialog_init (GValue* value) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	value->data[0].v_pointer = NULL;
-#line 20904 "Dialogs.c"
+#line 20865 "Dialogs.c"
 }
 
 
 static void value_preferences_dialog_free_value (GValue* value) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (value->data[0].v_pointer) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_unref (value->data[0].v_pointer);
-#line 20913 "Dialogs.c"
+#line 20874 "Dialogs.c"
 	}
 }
 
 
 static void value_preferences_dialog_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (src_value->data[0].v_pointer) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = preferences_dialog_ref (src_value->data[0].v_pointer);
-#line 20923 "Dialogs.c"
+#line 20884 "Dialogs.c"
 	} else {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 20927 "Dialogs.c"
+#line 20888 "Dialogs.c"
 	}
 }
 
 
 static gpointer value_preferences_dialog_peek_pointer (const GValue* value) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 20935 "Dialogs.c"
+#line 20896 "Dialogs.c"
 }
 
 
 static gchar* value_preferences_dialog_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (collect_values[0].v_pointer) {
-#line 20942 "Dialogs.c"
+#line 20903 "Dialogs.c"
 		PreferencesDialog* object;
 		object = collect_values[0].v_pointer;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 20949 "Dialogs.c"
+#line 20910 "Dialogs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 20953 "Dialogs.c"
+#line 20914 "Dialogs.c"
 		}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = preferences_dialog_ref (object);
-#line 20957 "Dialogs.c"
+#line 20918 "Dialogs.c"
 	} else {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 20961 "Dialogs.c"
+#line 20922 "Dialogs.c"
 	}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 20965 "Dialogs.c"
+#line 20926 "Dialogs.c"
 }
 
 
 static gchar* value_preferences_dialog_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PreferencesDialog** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!object_p) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 20976 "Dialogs.c"
+#line 20937 "Dialogs.c"
 	}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!value->data[0].v_pointer) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = NULL;
-#line 20982 "Dialogs.c"
+#line 20943 "Dialogs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 20986 "Dialogs.c"
+#line 20947 "Dialogs.c"
 	} else {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		*object_p = preferences_dialog_ref (value->data[0].v_pointer);
-#line 20990 "Dialogs.c"
+#line 20951 "Dialogs.c"
 	}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return NULL;
-#line 20994 "Dialogs.c"
+#line 20955 "Dialogs.c"
 }
 
 
 GParamSpec* param_spec_preferences_dialog (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecPreferencesDialog* spec;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_PREFERENCES_DIALOG), NULL);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return G_PARAM_SPEC (spec);
-#line 21008 "Dialogs.c"
+#line 20969 "Dialogs.c"
 }
 
 
 gpointer value_get_preferences_dialog (const GValue* value) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PREFERENCES_DIALOG), NULL);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return value->data[0].v_pointer;
-#line 21017 "Dialogs.c"
+#line 20978 "Dialogs.c"
 }
 
 
 void value_set_preferences_dialog (GValue* value, gpointer v_object) {
 	PreferencesDialog* old;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PREFERENCES_DIALOG));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	old = value->data[0].v_pointer;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (v_object) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PREFERENCES_DIALOG));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_ref (value->data[0].v_pointer);
-#line 21037 "Dialogs.c"
+#line 20998 "Dialogs.c"
 	} else {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 21041 "Dialogs.c"
+#line 21002 "Dialogs.c"
 	}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_unref (old);
-#line 21047 "Dialogs.c"
+#line 21008 "Dialogs.c"
 	}
 }
 
 
 void value_take_preferences_dialog (GValue* value, gpointer v_object) {
 	PreferencesDialog* old;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PREFERENCES_DIALOG));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	old = value->data[0].v_pointer;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (v_object) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_PREFERENCES_DIALOG));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = v_object;
-#line 21066 "Dialogs.c"
+#line 21027 "Dialogs.c"
 	} else {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		value->data[0].v_pointer = NULL;
-#line 21070 "Dialogs.c"
+#line 21031 "Dialogs.c"
 	}
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (old) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		preferences_dialog_unref (old);
-#line 21076 "Dialogs.c"
+#line 21037 "Dialogs.c"
 	}
 }
 
 
 static void preferences_dialog_class_init (PreferencesDialogClass * klass) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	preferences_dialog_parent_class = g_type_class_peek_parent (klass);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	((PreferencesDialogClass *) klass)->finalize = preferences_dialog_finalize;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_type_class_add_private (klass, sizeof (PreferencesDialogPrivate));
-#line 21088 "Dialogs.c"
+#line 21049 "Dialogs.c"
 }
 
 
@@ -21109,73 +21070,73 @@ static void preferences_dialog_instance_init (PreferencesDialog * self) {
 	GeeArrayList* _tmp0_ = NULL;
 	GDateTime* _tmp1_ = NULL;
 	PluginsManifestWidgetMediator* _tmp2_ = NULL;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv = PREFERENCES_DIALOG_GET_PRIVATE (self);
-#line 2296 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2298 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->allow_closing = FALSE;
-#line 2297 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2299 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->lib_dir = NULL;
-#line 2298 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = gee_array_list_new (PREFERENCES_DIALOG_TYPE_PATH_FORMAT, (GBoxedCopyFunc) preferences_dialog_path_format_ref, preferences_dialog_path_format_unref, NULL, NULL, NULL);
-#line 2298 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->path_formats = _tmp0_;
-#line 2299 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_date_time_new_local (2009, 3, 10, 18, 16, (gdouble) 11);
-#line 2299 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2301 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->example_date = _tmp1_;
-#line 2301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2303 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = plugins_manifest_widget_mediator_new ();
-#line 2301 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2303 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->priv->plugins_mediator = _tmp2_;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self->ref_count = 1;
-#line 21116 "Dialogs.c"
+#line 21077 "Dialogs.c"
 }
 
 
 static void preferences_dialog_finalize (PreferencesDialog* obj) {
 	PreferencesDialog * self;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PREFERENCES_DIALOG, PreferencesDialog);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_signal_handlers_destroy (self);
-#line 2284 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->dialog);
-#line 2285 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->builder);
 #line 2286 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->bg_color_adjustment);
+	_g_object_unref0 (self->priv->dialog);
 #line 2287 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->bg_color_slider);
+	_g_object_unref0 (self->priv->builder);
 #line 2288 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->photo_editor_combo);
+	_g_object_unref0 (self->priv->bg_color_adjustment);
 #line 2289 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->raw_editor_combo);
+	_g_object_unref0 (self->priv->bg_color_slider);
 #line 2290 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->external_raw_apps);
+	_g_object_unref0 (self->priv->photo_editor_combo);
 #line 2291 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->external_photo_apps);
+	_g_object_unref0 (self->priv->raw_editor_combo);
 #line 2292 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->library_dir_button);
+	_g_object_unref0 (self->priv->external_raw_apps);
 #line 2293 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->dir_pattern_combo);
+	_g_object_unref0 (self->priv->external_photo_apps);
 #line 2294 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->dir_pattern_entry);
+	_g_object_unref0 (self->priv->library_dir_button);
 #line 2295 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->dir_pattern_example);
+	_g_object_unref0 (self->priv->dir_pattern_combo);
+#line 2296 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->dir_pattern_entry);
 #line 2297 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_free0 (self->priv->lib_dir);
-#line 2298 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->path_formats);
+	_g_object_unref0 (self->priv->dir_pattern_example);
 #line 2299 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_date_time_unref0 (self->priv->example_date);
+	_g_free0 (self->priv->lib_dir);
 #line 2300 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_g_object_unref0 (self->priv->lowercase);
+	_g_object_unref0 (self->priv->path_formats);
 #line 2301 "/home/jens/Source/shotwell/src/Dialogs.vala"
-	_plugins_manifest_widget_mediator_unref0 (self->priv->plugins_mediator);
+	_g_date_time_unref0 (self->priv->example_date);
 #line 2302 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_g_object_unref0 (self->priv->lowercase);
+#line 2303 "/home/jens/Source/shotwell/src/Dialogs.vala"
+	_plugins_manifest_widget_mediator_unref0 (self->priv->plugins_mediator);
+#line 2304 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (self->priv->default_raw_developer_combo);
-#line 21162 "Dialogs.c"
+#line 21123 "Dialogs.c"
 }
 
 
@@ -21196,24 +21157,24 @@ GType preferences_dialog_get_type (void) {
 gpointer preferences_dialog_ref (gpointer instance) {
 	PreferencesDialog* self;
 	self = instance;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return instance;
-#line 21187 "Dialogs.c"
+#line 21148 "Dialogs.c"
 }
 
 
 void preferences_dialog_unref (gpointer instance) {
 	PreferencesDialog* self;
 	self = instance;
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		PREFERENCES_DIALOG_GET_CLASS (self)->finalize (self);
-#line 2272 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2274 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 21200 "Dialogs.c"
+#line 21161 "Dialogs.c"
 	}
 }
 
@@ -21233,54 +21194,54 @@ GtkResponseType copy_files_dialog (void) {
 	const gchar* _tmp8_ = NULL;
 	GtkResponseType _result_ = 0;
 	gint _tmp9_ = 0;
-#line 2703 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2702 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = _ ("Shotwell can copy the photos into your library folder or it can import" \
 " them without copying.");
-#line 2703 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2702 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 2703 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2702 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	msg = _tmp1_;
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = app_window_get_instance ();
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = (GtkMessageDialog*) gtk_message_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_window_get_type (), GtkWindow), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_CANCEL, "%s", msg);
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_object_ref_sink (_tmp4_);
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = _tmp4_;
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp3_);
-#line 2705 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2704 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	dialog = _tmp5_;
-#line 2708 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2707 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = _ ("Co_py Photos");
-#line 2708 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2707 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp6_, (gint) GTK_RESPONSE_ACCEPT);
-#line 2709 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2708 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _ ("_Import in Place");
-#line 2709 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2708 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp7_, (gint) GTK_RESPONSE_REJECT);
-#line 2710 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2709 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp8_ = _ ("Import to Library");
-#line 2710 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2709 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_window_get_type (), GtkWindow), _tmp8_);
-#line 2712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2711 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 2712 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2711 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = (GtkResponseType) _tmp9_;
-#line 2714 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2713 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 2716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	result = _result_;
-#line 2716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (dialog);
-#line 2716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (msg);
-#line 2716 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2715 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 21266 "Dialogs.c"
+#line 21227 "Dialogs.c"
 }
 
 
@@ -21291,47 +21252,47 @@ void remove_photos_from_library (GeeCollection* photos) {
 	gint _tmp3_ = 0;
 	GeeCollection* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
-#line 2719 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2718 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (photos));
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = photos;
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = gee_collection_get_size (_tmp1_);
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = _tmp2_;
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp3_ == 1) {
-#line 21287 "Dialogs.c"
+#line 21248 "Dialogs.c"
 		const gchar* _tmp4_ = NULL;
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp4_ = _ ("Removing Photo From Library");
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp4_;
-#line 21293 "Dialogs.c"
+#line 21254 "Dialogs.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp5_ = _ ("Removing Photos From Library");
-#line 2721 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp0_ = _tmp5_;
-#line 21300 "Dialogs.c"
+#line 21261 "Dialogs.c"
 	}
-#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = photos;
-#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = _ ("Remove From Library");
-#line 2720 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2719 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	remove_from_app (_tmp6_, _tmp7_, _tmp0_);
-#line 21308 "Dialogs.c"
+#line 21269 "Dialogs.c"
 }
 
 
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self) {
 	gboolean result;
 	result = progress_dialog_monitor ((ProgressDialog*) self, current, total, do_event_loop);
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	return result;
-#line 21317 "Dialogs.c"
+#line 21278 "Dialogs.c"
 }
 
 
@@ -21402,71 +21363,71 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 	ProgressDialog* _tmp122_ = NULL;
 	AppWindow* _tmp124_ = NULL;
 	AppWindow* _tmp125_ = NULL;
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (sources));
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (dialog_title != NULL);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	g_return_if_fail (progress_dialog_text != NULL);
-#line 2726 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp0_ = sources;
-#line 2726 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp1_ = gee_collection_get_size (_tmp0_);
-#line 2726 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp2_ = _tmp1_;
-#line 2726 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2725 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp2_ == 0) {
-#line 2727 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2726 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 21404 "Dialogs.c"
+#line 21365 "Dialogs.c"
 	}
-#line 2729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp3_ = gee_array_list_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2729 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2728 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	photos = _tmp3_;
-#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2729 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp4_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2729 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	videos = _tmp4_;
-#line 2731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp5_ = sources;
-#line 2731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp6_ = photos;
-#line 2731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp7_ = videos;
-#line 2731 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2730 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	media_source_collection_filter_media (_tmp5_, G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2732 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	user_message = NULL;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp9_ = photos;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp10_ = gee_collection_get_is_empty (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp11_ = _tmp10_;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (!_tmp11_) {
-#line 21432 "Dialogs.c"
+#line 21393 "Dialogs.c"
 		GeeArrayList* _tmp12_ = NULL;
 		gboolean _tmp13_ = FALSE;
 		gboolean _tmp14_ = FALSE;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp12_ = videos;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp13_ = gee_collection_get_is_empty (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp14_ = _tmp13_;
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = !_tmp14_;
-#line 21444 "Dialogs.c"
+#line 21405 "Dialogs.c"
 	} else {
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = FALSE;
-#line 21448 "Dialogs.c"
+#line 21409 "Dialogs.c"
 	}
-#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2733 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp8_) {
-#line 21452 "Dialogs.c"
+#line 21413 "Dialogs.c"
 		GeeCollection* _tmp15_ = NULL;
 		gint _tmp16_ = 0;
 		gint _tmp17_ = 0;
@@ -21475,13 +21436,13 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 		gint _tmp20_ = 0;
 		gint _tmp21_ = 0;
 		gchar* _tmp22_ = NULL;
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp15_ = sources;
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp16_ = gee_collection_get_size (_tmp15_);
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp17_ = _tmp16_;
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp18_ = ngettext ("This will remove the photo/video from your Shotwell library. Would you" \
 " also like to move the file to your desktop trash?\n" \
 "\n" \
@@ -21489,32 +21450,32 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 "u also like to move the files to your desktop trash?\n" \
 "\n" \
 "This action cannot be undone.", (gulong) _tmp17_);
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp19_ = sources;
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp20_ = gee_collection_get_size (_tmp19_);
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp21_ = _tmp20_;
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp22_ = g_strdup_printf (_tmp18_, _tmp21_);
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (user_message);
-#line 2735 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2734 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		user_message = _tmp22_;
-#line 21481 "Dialogs.c"
+#line 21442 "Dialogs.c"
 	} else {
 		GeeArrayList* _tmp23_ = NULL;
 		gboolean _tmp24_ = FALSE;
 		gboolean _tmp25_ = FALSE;
-#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp23_ = videos;
-#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp24_ = gee_collection_get_is_empty (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp25_ = _tmp24_;
-#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2737 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (!_tmp25_) {
-#line 21494 "Dialogs.c"
+#line 21455 "Dialogs.c"
 			GeeCollection* _tmp26_ = NULL;
 			gint _tmp27_ = 0;
 			gint _tmp28_ = 0;
@@ -21523,13 +21484,13 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 			gint _tmp31_ = 0;
 			gint _tmp32_ = 0;
 			gchar* _tmp33_ = NULL;
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp26_ = sources;
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp27_ = gee_collection_get_size (_tmp26_);
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp28_ = _tmp27_;
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp29_ = ngettext ("This will remove the video from your Shotwell library. Would you also " \
 "like to move the file to your desktop trash?\n" \
 "\n" \
@@ -21537,19 +21498,19 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 "like to move the files to your desktop trash?\n" \
 "\n" \
 "This action cannot be undone.", (gulong) _tmp28_);
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp30_ = sources;
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp31_ = gee_collection_get_size (_tmp30_);
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp32_ = _tmp31_;
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp33_ = g_strdup_printf (_tmp29_, _tmp32_);
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (user_message);
-#line 2739 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2738 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			user_message = _tmp33_;
-#line 21523 "Dialogs.c"
+#line 21484 "Dialogs.c"
 		} else {
 			GeeCollection* _tmp34_ = NULL;
 			gint _tmp35_ = 0;
@@ -21559,13 +21520,13 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 			gint _tmp39_ = 0;
 			gint _tmp40_ = 0;
 			gchar* _tmp41_ = NULL;
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp34_ = sources;
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp35_ = gee_collection_get_size (_tmp34_);
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp36_ = _tmp35_;
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp37_ = ngettext ("This will remove the photo from your Shotwell library. Would you also " \
 "like to move the file to your desktop trash?\n" \
 "\n" \
@@ -21573,208 +21534,208 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 "like to move the files to your desktop trash?\n" \
 "\n" \
 "This action cannot be undone.", (gulong) _tmp36_);
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp38_ = sources;
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp39_ = gee_collection_get_size (_tmp38_);
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp40_ = _tmp39_;
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp41_ = g_strdup_printf (_tmp37_, _tmp40_);
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_free0 (user_message);
-#line 2743 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2742 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			user_message = _tmp41_;
-#line 21553 "Dialogs.c"
+#line 21514 "Dialogs.c"
 		}
 	}
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp42_ = app_window_get_instance ();
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp43_ = _tmp42_;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp44_ = dialog_title;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp45_ = user_message;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp46_ = sources;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp47_ = gee_collection_get_size (_tmp46_);
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp48_ = _tmp47_;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp49_ = remove_from_library_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_window_get_type (), GtkWindow), _tmp44_, _tmp45_, _tmp48_);
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp50_ = _tmp49_;
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp43_);
-#line 2748 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2747 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_result_ = _tmp50_;
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp52_ = _result_;
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp52_ != GTK_RESPONSE_YES) {
-#line 21582 "Dialogs.c"
+#line 21543 "Dialogs.c"
 		GtkResponseType _tmp53_ = 0;
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp53_ = _result_;
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp51_ = _tmp53_ != GTK_RESPONSE_NO;
-#line 21588 "Dialogs.c"
+#line 21549 "Dialogs.c"
 	} else {
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp51_ = FALSE;
-#line 21592 "Dialogs.c"
+#line 21553 "Dialogs.c"
 	}
-#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2749 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp51_) {
-#line 2751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (user_message);
-#line 2751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (videos);
-#line 2751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (photos);
-#line 2751 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		return;
-#line 21604 "Dialogs.c"
+#line 21565 "Dialogs.c"
 	}
-#line 2753 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2752 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp54_ = _result_;
-#line 2753 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2752 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	delete_backing = _tmp54_ == GTK_RESPONSE_YES;
-#line 2755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp55_ = app_window_get_instance ();
-#line 2755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp56_ = _tmp55_;
-#line 2755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	page_window_set_busy_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, TYPE_PAGE_WINDOW, PageWindow));
-#line 2755 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2754 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp56_);
-#line 2757 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2756 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	progress = NULL;
-#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2757 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor = NULL;
-#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2757 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor_target = NULL;
-#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2757 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor_target_destroy_notify = NULL;
-#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp57_ = sources;
-#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp58_ = gee_collection_get_size (_tmp57_);
-#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp59_ = _tmp58_;
-#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2758 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp59_ >= 20) {
-#line 21634 "Dialogs.c"
+#line 21595 "Dialogs.c"
 		AppWindow* _tmp60_ = NULL;
 		AppWindow* _tmp61_ = NULL;
 		const gchar* _tmp62_ = NULL;
 		ProgressDialog* _tmp63_ = NULL;
 		ProgressDialog* _tmp64_ = NULL;
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp60_ = app_window_get_instance ();
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp61_ = _tmp60_;
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp62_ = progress_dialog_text;
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp63_ = progress_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_window_get_type (), GtkWindow), _tmp62_, NULL);
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		g_object_ref_sink (_tmp63_);
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (progress);
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		progress = _tmp63_;
-#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2759 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp61_);
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp64_ = progress;
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		(monitor_target_destroy_notify == NULL) ? NULL : (monitor_target_destroy_notify (monitor_target), NULL);
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor = NULL;
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor_target = NULL;
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor_target_destroy_notify = NULL;
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor = _progress_dialog_monitor_progress_monitor;
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor_target = g_object_ref (_tmp64_);
-#line 2761 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2760 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		monitor_target_destroy_notify = g_object_unref;
-#line 21672 "Dialogs.c"
+#line 21633 "Dialogs.c"
 	}
-#line 2764 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp65_ = gee_array_list_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2764 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2763 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	not_removed_photos = _tmp65_;
-#line 2765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2764 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp66_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2765 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2764 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	not_removed_videos = _tmp66_;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp67_ = library_photo_global;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp68_ = photos;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp69_ = delete_backing;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp70_ = monitor;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp70__target = monitor_target;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp71_ = not_removed_photos;
-#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2767 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp67_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, GEE_TYPE_COLLECTION, GeeCollection), _tmp69_, _tmp70_, _tmp70__target, G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, GEE_TYPE_LIST, GeeList));
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp72_ = video_global;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp73_ = videos;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp74_ = delete_backing;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp75_ = monitor;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp75__target = monitor_target;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp76_ = not_removed_videos;
-#line 2769 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2768 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	media_source_collection_remove_from_app (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, GEE_TYPE_COLLECTION, GeeCollection), _tmp74_, _tmp75_, _tmp75__target, G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, GEE_TYPE_LIST, GeeList));
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp77_ = not_removed_photos;
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp78_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp79_ = _tmp78_;
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp80_ = not_removed_videos;
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp81_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp82_ = _tmp81_;
-#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2771 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	num_not_removed = _tmp79_ + _tmp82_;
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp84_ = delete_backing;
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp84_) {
-#line 21728 "Dialogs.c"
+#line 21689 "Dialogs.c"
 		gint _tmp85_ = 0;
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp85_ = num_not_removed;
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp83_ = _tmp85_ > 0;
-#line 21734 "Dialogs.c"
+#line 21695 "Dialogs.c"
 	} else {
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp83_ = FALSE;
-#line 21738 "Dialogs.c"
+#line 21699 "Dialogs.c"
 	}
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp83_) {
-#line 21742 "Dialogs.c"
+#line 21703 "Dialogs.c"
 		gchar* not_deleted_message = NULL;
 		gint _tmp86_ = 0;
 		const gchar* _tmp87_ = NULL;
@@ -21788,39 +21749,39 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 		GtkResponseType _tmp94_ = 0;
 		GtkResponseType _tmp95_ = 0;
 		GtkResponseType _tmp96_ = 0;
-#line 2774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp86_ = num_not_removed;
-#line 2774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp87_ = ngettext ("The photo or video cannot be moved to your desktop trash. Delete this " \
 "file?", "%d photos/videos cannot be moved to your desktop trash. Delete these f" \
 "iles?", (gulong) _tmp86_);
-#line 2774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp88_ = num_not_removed;
-#line 2774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp89_ = g_strdup_printf (_tmp87_, _tmp88_);
-#line 2774 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		not_deleted_message = _tmp89_;
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp90_ = app_window_get_instance ();
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp91_ = _tmp90_;
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp92_ = dialog_title;
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp93_ = not_deleted_message;
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp94_ = remove_from_filesystem_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp91_, gtk_window_get_type (), GtkWindow), _tmp92_, _tmp93_);
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp95_ = _tmp94_;
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_object_unref0 (_tmp91_);
-#line 2778 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2777 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		result_delete = _tmp95_;
-#line 2781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2780 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp96_ = result_delete;
-#line 2781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2780 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (GTK_RESPONSE_YES == _tmp96_) {
-#line 21786 "Dialogs.c"
+#line 21747 "Dialogs.c"
 			GeeArrayList* not_deleted_photos = NULL;
 			GeeArrayList* _tmp97_ = NULL;
 			GeeArrayList* not_deleted_videos = NULL;
@@ -21843,57 +21804,57 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 			gint _tmp111_ = 0;
 			gint _tmp112_ = 0;
 			gint _tmp113_ = 0;
-#line 2783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2782 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp97_ = gee_array_list_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2783 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2782 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			not_deleted_photos = _tmp97_;
-#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2783 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp98_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2783 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			not_deleted_videos = _tmp98_;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp99_ = library_photo_global;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp100_ = not_removed_photos;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp101_ = monitor;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp101__target = monitor_target;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp102_ = not_deleted_photos;
-#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2784 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			media_source_collection_delete_backing_files (G_TYPE_CHECK_INSTANCE_CAST (_tmp99_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp100_, GEE_TYPE_COLLECTION, GeeCollection), _tmp101_, _tmp101__target, G_TYPE_CHECK_INSTANCE_CAST (_tmp102_, GEE_TYPE_LIST, GeeList));
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp103_ = video_global;
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp104_ = not_removed_videos;
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp105_ = monitor;
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp105__target = monitor_target;
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp106_ = not_deleted_videos;
-#line 2786 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2785 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			media_source_collection_delete_backing_files (G_TYPE_CHECK_INSTANCE_CAST (_tmp103_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp104_, GEE_TYPE_COLLECTION, GeeCollection), _tmp105_, _tmp105__target, G_TYPE_CHECK_INSTANCE_CAST (_tmp106_, GEE_TYPE_LIST, GeeList));
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp107_ = not_deleted_photos;
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp108_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp107_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp109_ = _tmp108_;
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp110_ = not_deleted_videos;
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp111_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp110_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp112_ = _tmp111_;
-#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2787 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			num_not_deleted = _tmp109_ + _tmp112_;
-#line 2789 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp113_ = num_not_deleted;
-#line 2789 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (_tmp113_ > 0) {
-#line 21859 "Dialogs.c"
+#line 21820 "Dialogs.c"
 				gchar* delete_failed_message = NULL;
 				gint _tmp114_ = 0;
 				const gchar* _tmp115_ = NULL;
@@ -21903,83 +21864,83 @@ void remove_from_app (GeeCollection* sources, const gchar* dialog_title, const g
 				const gchar* _tmp119_ = NULL;
 				AppWindow* _tmp120_ = NULL;
 				AppWindow* _tmp121_ = NULL;
-#line 2791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2790 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp114_ = num_not_deleted;
-#line 2791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2790 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp115_ = ngettext ("The photo or video cannot be deleted.", "%d photos/videos cannot be deleted.", (gulong) _tmp114_);
-#line 2791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2790 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp116_ = num_not_deleted;
-#line 2791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2790 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp117_ = g_strdup_printf (_tmp115_, _tmp116_);
-#line 2791 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2790 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				delete_failed_message = _tmp117_;
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp118_ = dialog_title;
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp119_ = delete_failed_message;
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp120_ = app_window_get_instance ();
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_tmp121_ = _tmp120_;
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				app_window_error_message_with_title (_tmp118_, _tmp119_, G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, gtk_window_get_type (), GtkWindow), TRUE);
-#line 2795 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2794 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (_tmp121_);
-#line 2789 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2788 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_free0 (delete_failed_message);
-#line 21893 "Dialogs.c"
+#line 21854 "Dialogs.c"
 			}
-#line 2781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2780 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (not_deleted_videos);
-#line 2781 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2780 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (not_deleted_photos);
-#line 21899 "Dialogs.c"
+#line 21860 "Dialogs.c"
 		}
-#line 2773 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2772 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_g_free0 (not_deleted_message);
-#line 21903 "Dialogs.c"
+#line 21864 "Dialogs.c"
 	}
-#line 2800 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2799 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp122_ = progress;
-#line 2800 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2799 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (_tmp122_ != NULL) {
-#line 21909 "Dialogs.c"
+#line 21870 "Dialogs.c"
 		ProgressDialog* _tmp123_ = NULL;
-#line 2801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2800 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp123_ = progress;
-#line 2801 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2800 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		progress_dialog_close (_tmp123_);
-#line 21915 "Dialogs.c"
+#line 21876 "Dialogs.c"
 	}
-#line 2803 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2802 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp124_ = app_window_get_instance ();
-#line 2803 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2802 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_tmp125_ = _tmp124_;
-#line 2803 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2802 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	page_window_set_normal_cursor (G_TYPE_CHECK_INSTANCE_CAST (_tmp125_, TYPE_PAGE_WINDOW, PageWindow));
-#line 2803 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2802 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (_tmp125_);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (not_removed_videos);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (not_removed_photos);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	(monitor_target_destroy_notify == NULL) ? NULL : (monitor_target_destroy_notify (monitor_target), NULL);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor = NULL;
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor_target = NULL;
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	monitor_target_destroy_notify = NULL;
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (progress);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_free0 (user_message);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (videos);
-#line 2724 "/home/jens/Source/shotwell/src/Dialogs.vala"
+#line 2723 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (photos);
-#line 21945 "Dialogs.c"
+#line 21906 "Dialogs.c"
 }
 
 

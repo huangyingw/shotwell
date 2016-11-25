@@ -742,10 +742,10 @@ enum  {
 };
 SearchConditionSearchType* search_condition_search_type_as_array (int* result_length1);
 void search_condition_search_type_sort_array (SearchConditionSearchType** array, int* array_length1);
-static gint __lambda10_ (void* a, void* b);
+static gint __lambda11_ (void* a, void* b);
 gint utf8_cs_compare (void* a, void* b);
 gchar* search_condition_search_type_display_text (SearchConditionSearchType self);
-static gint ___lambda10____compar_fn_t (void* key1, void* key2);
+static gint ___lambda11____compar_fn_t (void* key1, void* key2);
 gchar* search_condition_search_type_to_string (SearchConditionSearchType self);
 SearchConditionSearchType search_condition_search_type_from_string (const gchar* str);
 gboolean search_condition_predicate (SearchCondition* self, MediaSource* source);
@@ -1156,7 +1156,7 @@ SearchConditionSearchType* search_condition_search_type_as_array (int* result_le
 }
 
 
-static gint __lambda10_ (void* a, void* b) {
+static gint __lambda11_ (void* a, void* b) {
 	gint result = 0;
 	void* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
@@ -1181,9 +1181,9 @@ static gint __lambda10_ (void* a, void* b) {
 }
 
 
-static gint ___lambda10____compar_fn_t (void* key1, void* key2) {
+static gint ___lambda11____compar_fn_t (void* key1, void* key2) {
 	gint result;
-	result = __lambda10_ (key1, key2);
+	result = __lambda11_ (key1, key2);
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	return result;
 #line 1190 "SearchBoolean.c"
@@ -1204,7 +1204,7 @@ void search_condition_search_type_sort_array (SearchConditionSearchType** array,
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	_tmp1__length1 = *array_length1;
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
-	qsort (_tmp0_, (gsize) _tmp1__length1, (gsize) sizeof (SearchConditionSearchType), ___lambda10____compar_fn_t);
+	qsort (_tmp0_, (gsize) _tmp1__length1, (gsize) sizeof (SearchConditionSearchType), ___lambda11____compar_fn_t);
 #line 1209 "SearchBoolean.c"
 }
 
@@ -5691,7 +5691,7 @@ void saved_search_reconstitute (SavedSearch* self) {
 #line 847 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5684 "SearchBoolean.c"
-				goto __catch75_database_error;
+				goto __catch74_database_error;
 			}
 #line 847 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5707,8 +5707,8 @@ void saved_search_reconstitute (SavedSearch* self) {
 		_tmp6_->search_id = _tmp0_;
 #line 5699 "SearchBoolean.c"
 	}
-	goto __finally75;
-	__catch75_database_error:
+	goto __finally74;
+	__catch74_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -5724,7 +5724,7 @@ void saved_search_reconstitute (SavedSearch* self) {
 		_g_error_free0 (err);
 #line 5716 "SearchBoolean.c"
 	}
-	__finally75:
+	__finally74:
 #line 846 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 846 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
@@ -5835,7 +5835,7 @@ gboolean saved_search_rename (SavedSearch* self, const gchar* new_name) {
 #line 865 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5828 "SearchBoolean.c"
-				goto __catch76_database_error;
+				goto __catch75_database_error;
 			}
 #line 865 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5846,8 +5846,8 @@ gboolean saved_search_rename (SavedSearch* self, const gchar* new_name) {
 #line 5837 "SearchBoolean.c"
 		}
 	}
-	goto __finally76;
-	__catch76_database_error:
+	goto __finally75;
+	__catch75_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp12_ = NULL;
@@ -5867,7 +5867,7 @@ gboolean saved_search_rename (SavedSearch* self, const gchar* new_name) {
 		return result;
 #line 5859 "SearchBoolean.c"
 	}
-	__finally76:
+	__finally75:
 #line 864 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 864 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
@@ -6041,7 +6041,7 @@ static SavedSearchTable* saved_search_table_construct (GType object_type) {
 #line 900 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6034 "SearchBoolean.c"
-				goto __catch77_database_error;
+				goto __catch76_database_error;
 			}
 #line 900 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6132,8 +6132,8 @@ static SavedSearchTable* saved_search_table_construct (GType object_type) {
 		_g_object_unref0 (_tmp0_);
 #line 6124 "SearchBoolean.c"
 	}
-	goto __finally77;
-	__catch77_database_error:
+	goto __finally76;
+	__catch76_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp18_ = NULL;
@@ -6149,7 +6149,7 @@ static SavedSearchTable* saved_search_table_construct (GType object_type) {
 		_g_error_free0 (err);
 #line 6141 "SearchBoolean.c"
 	}
-	__finally77:
+	__finally76:
 #line 899 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 899 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
@@ -6282,7 +6282,7 @@ SavedSearch* saved_search_table_create (SavedSearchTable* self, const gchar* nam
 #line 926 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6275 "SearchBoolean.c"
-				goto __catch78_database_error;
+				goto __catch77_database_error;
 			}
 #line 926 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			_g_object_unref0 (search);
@@ -6304,8 +6304,8 @@ SavedSearch* saved_search_table_create (SavedSearchTable* self, const gchar* nam
 		_saved_search_row_unref0 (_tmp0_);
 #line 6296 "SearchBoolean.c"
 	}
-	goto __finally78;
-	__catch78_database_error:
+	goto __finally77;
+	__catch77_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -6321,7 +6321,7 @@ SavedSearch* saved_search_table_create (SavedSearchTable* self, const gchar* nam
 		_g_error_free0 (err);
 #line 6313 "SearchBoolean.c"
 	}
-	__finally78:
+	__finally77:
 #line 925 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 925 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
@@ -6386,7 +6386,7 @@ void saved_search_table_remove (SavedSearchTable* self, SavedSearch* search) {
 #line 940 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 6379 "SearchBoolean.c"
-				goto __catch79_database_error;
+				goto __catch78_database_error;
 			}
 #line 940 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6397,8 +6397,8 @@ void saved_search_table_remove (SavedSearchTable* self, SavedSearch* search) {
 #line 6388 "SearchBoolean.c"
 		}
 	}
-	goto __finally79;
-	__catch79_database_error:
+	goto __finally78;
+	__catch78_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -6414,7 +6414,7 @@ void saved_search_table_remove (SavedSearchTable* self, SavedSearch* search) {
 		_g_error_free0 (err);
 #line 6406 "SearchBoolean.c"
 	}
-	__finally79:
+	__finally78:
 #line 939 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 939 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"

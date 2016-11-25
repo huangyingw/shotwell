@@ -143,6 +143,19 @@ namespace Shotwell {
 	namespace Plugins {
 		namespace Common {
 			[CCode (cheader_filename = "shotwell-plugin-common.h")]
+			public abstract class BuilderPane : Spit.Publishing.DialogPane, GLib.Object {
+				public BuilderPane ();
+				public override void constructed ();
+				public Gtk.Builder get_builder ();
+				public virtual Gtk.Widget get_default_widget ();
+				public virtual void on_pane_installed ();
+				public virtual void on_pane_uninstalled ();
+				public bool connect_signals { get; construct; }
+				public string default_id { owned get; construct; }
+				public Spit.Publishing.DialogPane.GeometryOptions preferred_geometry { get; construct; }
+				public string resource_path { owned get; construct; }
+			}
+			[CCode (cheader_filename = "shotwell-plugin-common.h")]
 			public abstract class WebAuthenticationPane : Spit.Publishing.DialogPane, GLib.Object {
 				public WebAuthenticationPane ();
 				public override void constructed ();

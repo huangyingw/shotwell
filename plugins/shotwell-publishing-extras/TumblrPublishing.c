@@ -2364,11 +2364,11 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_auth_req
 	gint _key_value_pairs_size_ = 0;
 	gchar** _tmp4_ = NULL;
 	gint _tmp4__length1 = 0;
-	gboolean _tmp24_ = FALSE;
-	const gchar* _tmp25_ = NULL;
-	PublishingTumblrTumblrPublisherSession* _tmp31_ = NULL;
-	const gchar* _tmp32_ = NULL;
-	const gchar* _tmp33_ = NULL;
+	gboolean _tmp25_ = FALSE;
+	const gchar* _tmp26_ = NULL;
+	PublishingTumblrTumblrPublisherSession* _tmp33_ = NULL;
+	const gchar* _tmp34_ = NULL;
+	const gchar* _tmp35_ = NULL;
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_IS_TUMBLR_PUBLISHER (self));
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2425,9 +2425,9 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_auth_req
 				gint _split_pair_size_ = 0;
 				gchar** _tmp9_ = NULL;
 				gint _tmp9__length1 = 0;
-				gchar** _tmp14_ = NULL;
-				gint _tmp14__length1 = 0;
-				const gchar* _tmp15_ = NULL;
+				gchar** _tmp15_ = NULL;
+				gint _tmp15__length1 = 0;
+				const gchar* _tmp16_ = NULL;
 #line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp6_ = pair;
 #line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2447,139 +2447,145 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_auth_req
 #line 2444 "TumblrPublishing.c"
 					SpitPublishingPluginHost* _tmp10_ = NULL;
 					const gchar* _tmp11_ = NULL;
-					GError* _tmp12_ = NULL;
+					const gchar* _tmp12_ = NULL;
 					GError* _tmp13_ = NULL;
+					GError* _tmp14_ = NULL;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp10_ = self->priv->host;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp11_ = _ ("“%s” isn’t a valid response to an OAuth authentication request");
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp12_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp11_);
+					_tmp12_ = response;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp13_ = _tmp12_;
+					_tmp13_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp11_, _tmp12_);
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					spit_publishing_plugin_host_post_error (_tmp10_, _tmp13_);
+					_tmp14_ = _tmp13_;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_g_error_free0 (_tmp13_);
-#line 2461 "TumblrPublishing.c"
+					spit_publishing_plugin_host_post_error (_tmp10_, _tmp14_);
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					_g_error_free0 (_tmp14_);
+#line 2464 "TumblrPublishing.c"
 				}
 #line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp14_ = split_pair;
+				_tmp15_ = split_pair;
 #line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp14__length1 = split_pair_length1;
+				_tmp15__length1 = split_pair_length1;
 #line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp15_ = _tmp14_[0];
+				_tmp16_ = _tmp15_[0];
 #line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				if (g_strcmp0 (_tmp15_, "oauth_token") == 0) {
-#line 2471 "TumblrPublishing.c"
-					gchar** _tmp16_ = NULL;
-					gint _tmp16__length1 = 0;
-					const gchar* _tmp17_ = NULL;
-					gchar* _tmp18_ = NULL;
+				if (g_strcmp0 (_tmp16_, "oauth_token") == 0) {
+#line 2474 "TumblrPublishing.c"
+					gchar** _tmp17_ = NULL;
+					gint _tmp17__length1 = 0;
+					const gchar* _tmp18_ = NULL;
+					gchar* _tmp19_ = NULL;
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp16_ = split_pair;
+					_tmp17_ = split_pair;
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp16__length1 = split_pair_length1;
+					_tmp17__length1 = split_pair_length1;
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp17_ = _tmp16_[1];
+					_tmp18_ = _tmp17_[1];
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp18_ = g_strdup (_tmp17_);
+					_tmp19_ = g_strdup (_tmp18_);
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_g_free0 (oauth_token);
 #line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					oauth_token = _tmp18_;
-#line 2488 "TumblrPublishing.c"
+					oauth_token = _tmp19_;
+#line 2491 "TumblrPublishing.c"
 				} else {
-					gchar** _tmp19_ = NULL;
-					gint _tmp19__length1 = 0;
-					const gchar* _tmp20_ = NULL;
+					gchar** _tmp20_ = NULL;
+					gint _tmp20__length1 = 0;
+					const gchar* _tmp21_ = NULL;
 #line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp19_ = split_pair;
+					_tmp20_ = split_pair;
 #line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp19__length1 = split_pair_length1;
+					_tmp20__length1 = split_pair_length1;
 #line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp20_ = _tmp19_[0];
+					_tmp21_ = _tmp20_[0];
 #line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					if (g_strcmp0 (_tmp20_, "oauth_token_secret") == 0) {
-#line 2501 "TumblrPublishing.c"
-						gchar** _tmp21_ = NULL;
-						gint _tmp21__length1 = 0;
-						const gchar* _tmp22_ = NULL;
-						gchar* _tmp23_ = NULL;
+					if (g_strcmp0 (_tmp21_, "oauth_token_secret") == 0) {
+#line 2504 "TumblrPublishing.c"
+						gchar** _tmp22_ = NULL;
+						gint _tmp22__length1 = 0;
+						const gchar* _tmp23_ = NULL;
+						gchar* _tmp24_ = NULL;
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-						_tmp21_ = split_pair;
+						_tmp22_ = split_pair;
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-						_tmp21__length1 = split_pair_length1;
+						_tmp22__length1 = split_pair_length1;
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-						_tmp22_ = _tmp21_[1];
+						_tmp23_ = _tmp22_[1];
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-						_tmp23_ = g_strdup (_tmp22_);
+						_tmp24_ = g_strdup (_tmp23_);
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 						_g_free0 (oauth_token_secret);
 #line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-						oauth_token_secret = _tmp23_;
-#line 2518 "TumblrPublishing.c"
+						oauth_token_secret = _tmp24_;
+#line 2521 "TumblrPublishing.c"
 					}
 				}
 #line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				split_pair = (_vala_array_free (split_pair, split_pair_length1, (GDestroyNotify) g_free), NULL);
 #line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (pair);
-#line 2525 "TumblrPublishing.c"
+#line 2528 "TumblrPublishing.c"
 			}
 		}
 	}
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp25_ = oauth_token;
+	_tmp26_ = oauth_token;
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	if (_tmp25_ == NULL) {
+	if (_tmp26_ == NULL) {
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp24_ = TRUE;
-#line 2535 "TumblrPublishing.c"
+		_tmp25_ = TRUE;
+#line 2538 "TumblrPublishing.c"
 	} else {
-		const gchar* _tmp26_ = NULL;
+		const gchar* _tmp27_ = NULL;
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp26_ = oauth_token_secret;
+		_tmp27_ = oauth_token_secret;
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp24_ = _tmp26_ == NULL;
-#line 2542 "TumblrPublishing.c"
+		_tmp25_ = _tmp27_ == NULL;
+#line 2545 "TumblrPublishing.c"
 	}
 #line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	if (_tmp24_) {
-#line 2546 "TumblrPublishing.c"
-		SpitPublishingPluginHost* _tmp27_ = NULL;
-		const gchar* _tmp28_ = NULL;
-		GError* _tmp29_ = NULL;
-		GError* _tmp30_ = NULL;
+	if (_tmp25_) {
+#line 2549 "TumblrPublishing.c"
+		SpitPublishingPluginHost* _tmp28_ = NULL;
+		const gchar* _tmp29_ = NULL;
+		const gchar* _tmp30_ = NULL;
+		GError* _tmp31_ = NULL;
+		GError* _tmp32_ = NULL;
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp27_ = self->priv->host;
+		_tmp28_ = self->priv->host;
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp28_ = _ ("“%s” isn’t a valid response to an OAuth authentication request");
+		_tmp29_ = _ ("“%s” isn’t a valid response to an OAuth authentication request");
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp29_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp28_);
+		_tmp30_ = response;
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp30_ = _tmp29_;
+		_tmp31_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp29_, _tmp30_);
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp27_, _tmp30_);
+		_tmp32_ = _tmp31_;
 #line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_g_error_free0 (_tmp30_);
-#line 2563 "TumblrPublishing.c"
+		spit_publishing_plugin_host_post_error (_tmp28_, _tmp32_);
+#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_g_error_free0 (_tmp32_);
+#line 2569 "TumblrPublishing.c"
 	}
 #line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp31_ = self->priv->session;
+	_tmp33_ = self->priv->session;
 #line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp32_ = oauth_token;
+	_tmp34_ = oauth_token;
 #line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp33_ = oauth_token_secret;
+	_tmp35_ = oauth_token_secret;
 #line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_tumblr_tumblr_publisher_session_set_access_phase_credentials (_tmp31_, _tmp32_, _tmp33_);
+	publishing_tumblr_tumblr_publisher_session_set_access_phase_credentials (_tmp33_, _tmp34_, _tmp35_);
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	key_value_pairs = (_vala_array_free (key_value_pairs, key_value_pairs_length1, (GDestroyNotify) g_free), NULL);
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (oauth_token_secret);
 #line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (oauth_token);
-#line 2579 "TumblrPublishing.c"
+#line 2585 "TumblrPublishing.c"
 }
 
 
@@ -2599,7 +2605,7 @@ static void publishing_tumblr_tumblr_publisher_on_session_authenticated (Publish
 	if (!_tmp0_) {
 #line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 2599 "TumblrPublishing.c"
+#line 2605 "TumblrPublishing.c"
 	}
 #line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:332: EVENT: a fully authenticated session has be" \
@@ -2626,21 +2632,21 @@ static void publishing_tumblr_tumblr_publisher_on_session_authenticated (Publish
 	_g_free0 (_tmp6_);
 #line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_do_get_blogs (self);
-#line 2625 "TumblrPublishing.c"
+#line 2631 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_info_request_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
 #line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_info_request_txn_completed ((PublishingTumblrTumblrPublisher*) self, _sender);
-#line 2632 "TumblrPublishing.c"
+#line 2638 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_info_request_txn_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
 #line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_info_request_txn_error ((PublishingTumblrTumblrPublisher*) self, _sender, err);
-#line 2639 "TumblrPublishing.c"
+#line 2645 "TumblrPublishing.c"
 }
 
 
@@ -2663,7 +2669,7 @@ static void publishing_tumblr_tumblr_publisher_do_get_blogs (PublishingTumblrTum
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_tumblr_tumblr_publisher_on_info_request_txn_completed_publishing_rest_support_transaction_completed, self, 0);
 #line 343 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_tumblr_tumblr_publisher_on_info_request_txn_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 2662 "TumblrPublishing.c"
+#line 2668 "TumblrPublishing.c"
 	{
 #line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
@@ -2671,7 +2677,7 @@ static void publishing_tumblr_tumblr_publisher_do_get_blogs (PublishingTumblrTum
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2670 "TumblrPublishing.c"
+#line 2676 "TumblrPublishing.c"
 				goto __catch33_spit_publishing_publishing_error;
 			}
 #line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2682,7 +2688,7 @@ static void publishing_tumblr_tumblr_publisher_do_get_blogs (PublishingTumblrTum
 			g_clear_error (&_inner_error_);
 #line 346 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 2681 "TumblrPublishing.c"
+#line 2687 "TumblrPublishing.c"
 		}
 	}
 	goto __finally33;
@@ -2703,7 +2709,7 @@ static void publishing_tumblr_tumblr_publisher_do_get_blogs (PublishingTumblrTum
 		spit_publishing_plugin_host_post_error (_tmp2_, _tmp3_);
 #line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_error_free0 (err);
-#line 2702 "TumblrPublishing.c"
+#line 2708 "TumblrPublishing.c"
 	}
 	__finally33:
 #line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -2716,11 +2722,11 @@ static void publishing_tumblr_tumblr_publisher_do_get_blogs (PublishingTumblrTum
 		g_clear_error (&_inner_error_);
 #line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 2715 "TumblrPublishing.c"
+#line 2721 "TumblrPublishing.c"
 	}
 #line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (txn);
-#line 2719 "TumblrPublishing.c"
+#line 2725 "TumblrPublishing.c"
 }
 
 
@@ -2758,7 +2764,7 @@ static void publishing_tumblr_tumblr_publisher_on_info_request_txn_completed (Pu
 	if (!_tmp4_) {
 #line 360 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 2757 "TumblrPublishing.c"
+#line 2763 "TumblrPublishing.c"
 	}
 #line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = txn;
@@ -2783,14 +2789,14 @@ static void publishing_tumblr_tumblr_publisher_on_info_request_txn_completed (Pu
 	_g_free0 (_tmp10_);
 #line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_do_show_publishing_options_pane (self);
-#line 2781 "TumblrPublishing.c"
+#line 2787 "TumblrPublishing.c"
 }
 
 
 static gpointer _json_object_ref0 (gpointer self) {
 #line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? json_object_ref (self) : NULL;
-#line 2788 "TumblrPublishing.c"
+#line 2794 "TumblrPublishing.c"
 }
 
 
@@ -2803,7 +2809,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 2801 "TumblrPublishing.c"
+#line 2807 "TumblrPublishing.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -2834,7 +2840,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 2832 "TumblrPublishing.c"
+#line 2838 "TumblrPublishing.c"
 				goto __catch35_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2843,7 +2849,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 2841 "TumblrPublishing.c"
+#line 2847 "TumblrPublishing.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -2859,7 +2865,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 2857 "TumblrPublishing.c"
+#line 2863 "TumblrPublishing.c"
 				goto __catch35_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2870,7 +2876,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 2868 "TumblrPublishing.c"
+#line 2874 "TumblrPublishing.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -2884,7 +2890,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 2882 "TumblrPublishing.c"
+#line 2888 "TumblrPublishing.c"
 	}
 	goto __finally35;
 	__catch35_g_regex_error:
@@ -2898,7 +2904,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 2896 "TumblrPublishing.c"
+#line 2902 "TumblrPublishing.c"
 	}
 	__finally35:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2909,7 +2915,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 2907 "TumblrPublishing.c"
+#line 2913 "TumblrPublishing.c"
 	}
 }
 
@@ -2921,13 +2927,13 @@ static void _vala_array_add21 (PublishingTumblrBlogEntry*** array, int* length, 
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*array = g_renew (PublishingTumblrBlogEntry*, *array, (*size) + 1);
-#line 2919 "TumblrPublishing.c"
+#line 2925 "TumblrPublishing.c"
 	}
 #line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[(*length)++] = value;
 #line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 2925 "TumblrPublishing.c"
+#line 2931 "TumblrPublishing.c"
 }
 
 
@@ -2943,7 +2949,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 #line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:370: ACTION: parsing info request response '%s' " \
 "into list of available blogs", _tmp0_);
-#line 2940 "TumblrPublishing.c"
+#line 2946 "TumblrPublishing.c"
 	{
 		JsonParser* parser = NULL;
 		JsonParser* _tmp1_ = NULL;
@@ -2975,7 +2981,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_object_unref0 (parser);
-#line 2972 "TumblrPublishing.c"
+#line 2978 "TumblrPublishing.c"
 			goto __catch34_g_error;
 		}
 #line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -3014,7 +3020,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 		_tmp15_ = json_object_get_array_member (_tmp14_, "blogs");
 #line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp16_ = json_array_get_elements (_tmp15_);
-#line 3011 "TumblrPublishing.c"
+#line 3017 "TumblrPublishing.c"
 		{
 			GList* blognode_collection = NULL;
 			GList* blognode_it = NULL;
@@ -3022,11 +3028,11 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 			blognode_collection = _tmp16_;
 #line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			for (blognode_it = blognode_collection; blognode_it != NULL; blognode_it = blognode_it->next) {
-#line 3019 "TumblrPublishing.c"
+#line 3025 "TumblrPublishing.c"
 				JsonNode* blognode = NULL;
 #line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				blognode = (JsonNode*) blognode_it->data;
-#line 3023 "TumblrPublishing.c"
+#line 3029 "TumblrPublishing.c"
 				{
 					JsonObject* blog = NULL;
 					JsonNode* _tmp17_ = NULL;
@@ -3106,18 +3112,18 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 					_g_free0 (name);
 #line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_json_object_unref0 (blog);
-#line 3103 "TumblrPublishing.c"
+#line 3109 "TumblrPublishing.c"
 				}
 			}
 #line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_list_free0 (blognode_collection);
-#line 3108 "TumblrPublishing.c"
+#line 3114 "TumblrPublishing.c"
 		}
 #line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_json_object_unref0 (root_object);
 #line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (parser);
-#line 3114 "TumblrPublishing.c"
+#line 3120 "TumblrPublishing.c"
 	}
 	goto __finally34;
 	__catch34_g_error:
@@ -3137,7 +3143,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 		spit_publishing_plugin_host_post_error (_tmp35_, _tmp36_);
 #line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_error_free0 (err);
-#line 3134 "TumblrPublishing.c"
+#line 3140 "TumblrPublishing.c"
 	}
 	__finally34:
 #line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -3148,7 +3154,7 @@ static void publishing_tumblr_tumblr_publisher_do_parse_token_info_from_user_req
 		g_clear_error (&_inner_error_);
 #line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3145 "TumblrPublishing.c"
+#line 3151 "TumblrPublishing.c"
 	}
 }
 
@@ -3184,7 +3190,7 @@ static void publishing_tumblr_tumblr_publisher_on_info_request_txn_error (Publis
 	if (!_tmp4_) {
 #line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3181 "TumblrPublishing.c"
+#line 3187 "TumblrPublishing.c"
 	}
 #line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = self->priv->session;
@@ -3201,21 +3207,21 @@ static void publishing_tumblr_tumblr_publisher_on_info_request_txn_error (Publis
 	_tmp7_ = err;
 #line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp6_, _tmp7_);
-#line 3197 "TumblrPublishing.c"
+#line 3203 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_publishing_options_pane_publish_publishing_tumblr_tumblr_publisher_publishing_options_pane_publish (PublishingTumblrTumblrPublisherPublishingOptionsPane* _sender, gpointer self) {
 #line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_publishing_options_pane_publish ((PublishingTumblrTumblrPublisher*) self);
-#line 3204 "TumblrPublishing.c"
+#line 3210 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout (PublishingTumblrTumblrPublisherPublishingOptionsPane* _sender, gpointer self) {
 #line 409 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout ((PublishingTumblrTumblrPublisher*) self);
-#line 3211 "TumblrPublishing.c"
+#line 3217 "TumblrPublishing.c"
 }
 
 
@@ -3267,7 +3273,7 @@ static void publishing_tumblr_tumblr_publisher_do_show_publishing_options_pane (
 	spit_publishing_plugin_host_install_dialog_pane (_tmp7_, G_TYPE_CHECK_INSTANCE_CAST (publishing_options_pane, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
 #line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (publishing_options_pane);
-#line 3263 "TumblrPublishing.c"
+#line 3269 "TumblrPublishing.c"
 }
 
 
@@ -3280,7 +3286,7 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_publis
 	_tmp0_ = self->priv->publishing_options_pane;
 #line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 3276 "TumblrPublishing.c"
+#line 3282 "TumblrPublishing.c"
 		PublishingTumblrTumblrPublisherPublishingOptionsPane* _tmp1_ = NULL;
 		guint _tmp2_ = 0U;
 		PublishingTumblrTumblrPublisherPublishingOptionsPane* _tmp3_ = NULL;
@@ -3297,7 +3303,7 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_publis
 		g_signal_parse_name ("logout", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp4_, NULL, FALSE);
 #line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout, self);
-#line 3293 "TumblrPublishing.c"
+#line 3299 "TumblrPublishing.c"
 	}
 #line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
@@ -3305,14 +3311,14 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_publis
 	if (!_tmp5_) {
 #line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3301 "TumblrPublishing.c"
+#line 3307 "TumblrPublishing.c"
 	}
 #line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:424: EVENT: user clicked the 'Publish' button in" \
 " the publishing options pane");
 #line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_do_publish (self);
-#line 3307 "TumblrPublishing.c"
+#line 3313 "TumblrPublishing.c"
 }
 
 
@@ -3325,7 +3331,7 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout
 	_tmp0_ = self->priv->publishing_options_pane;
 #line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 3320 "TumblrPublishing.c"
+#line 3326 "TumblrPublishing.c"
 		PublishingTumblrTumblrPublisherPublishingOptionsPane* _tmp1_ = NULL;
 		guint _tmp2_ = 0U;
 		PublishingTumblrTumblrPublisherPublishingOptionsPane* _tmp3_ = NULL;
@@ -3342,7 +3348,7 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout
 		g_signal_parse_name ("logout", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp4_, NULL, FALSE);
 #line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout, self);
-#line 3337 "TumblrPublishing.c"
+#line 3343 "TumblrPublishing.c"
 	}
 #line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
@@ -3350,14 +3356,14 @@ static void publishing_tumblr_tumblr_publisher_on_publishing_options_pane_logout
 	if (!_tmp5_) {
 #line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3345 "TumblrPublishing.c"
+#line 3351 "TumblrPublishing.c"
 	}
 #line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:437: EVENT: user clicked the 'Logout' button in " \
 "the publishing options pane");
 #line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_do_logout (self);
-#line 3351 "TumblrPublishing.c"
+#line 3357 "TumblrPublishing.c"
 }
 
 
@@ -3399,7 +3405,7 @@ gint publishing_tumblr_tumblr_publisher_tumblr_date_time_compare_func (SpitPubli
 	result = _tmp7_;
 #line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 3393 "TumblrPublishing.c"
+#line 3399 "TumblrPublishing.c"
 }
 
 
@@ -3408,28 +3414,28 @@ static gint _publishing_tumblr_tumblr_publisher_tumblr_date_time_compare_func_gc
 	result = publishing_tumblr_tumblr_publisher_tumblr_date_time_compare_func ((SpitPublishingPublishable*) a, (SpitPublishingPublishable*) b);
 #line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 3402 "TumblrPublishing.c"
+#line 3408 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete (PublishingRESTSupportBatchUploader* _sender, gint num_photos_published, gpointer self) {
 #line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_upload_complete ((PublishingTumblrTumblrPublisher*) self, _sender, num_photos_published);
-#line 3409 "TumblrPublishing.c"
+#line 3415 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self) {
 #line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_upload_error ((PublishingTumblrTumblrPublisher*) self, _sender, err);
-#line 3416 "TumblrPublishing.c"
+#line 3422 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
 #line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_on_upload_status_updated ((PublishingTumblrTumblrPublisher*) self, file_number, fraction_complete);
-#line 3423 "TumblrPublishing.c"
+#line 3429 "TumblrPublishing.c"
 }
 
 
@@ -3519,7 +3525,7 @@ static void publishing_tumblr_tumblr_publisher_do_publish (PublishingTumblrTumbl
 	if (!_tmp9_) {
 #line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3512 "TumblrPublishing.c"
+#line 3518 "TumblrPublishing.c"
 	}
 #line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp10_ = self->priv->host;
@@ -3539,7 +3545,7 @@ static void publishing_tumblr_tumblr_publisher_do_publish (PublishingTumblrTumbl
 	_tmp14_ = publishables;
 #line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp14__length1 = publishables_length1;
-#line 3532 "TumblrPublishing.c"
+#line 3538 "TumblrPublishing.c"
 	{
 		SpitPublishingPublishable** p_collection = NULL;
 		gint p_collection_length1 = 0;
@@ -3551,14 +3557,14 @@ static void publishing_tumblr_tumblr_publisher_do_publish (PublishingTumblrTumbl
 		p_collection_length1 = _tmp14__length1;
 #line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		for (p_it = 0; p_it < _tmp14__length1; p_it = p_it + 1) {
-#line 3544 "TumblrPublishing.c"
+#line 3550 "TumblrPublishing.c"
 			SpitPublishingPublishable* _tmp15_ = NULL;
 			SpitPublishingPublishable* p = NULL;
 #line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp15_ = _g_object_ref0 (p_collection[p_it]);
 #line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			p = _tmp15_;
-#line 3551 "TumblrPublishing.c"
+#line 3557 "TumblrPublishing.c"
 			{
 				GeeArrayList* _tmp16_ = NULL;
 				SpitPublishingPublishable* _tmp17_ = NULL;
@@ -3572,7 +3578,7 @@ static void publishing_tumblr_tumblr_publisher_do_publish (PublishingTumblrTumbl
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp17_);
 #line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_object_unref0 (p);
-#line 3565 "TumblrPublishing.c"
+#line 3571 "TumblrPublishing.c"
 			}
 		}
 	}
@@ -3634,7 +3640,7 @@ static void publishing_tumblr_tumblr_publisher_do_publish (PublishingTumblrTumbl
 	_g_object_unref0 (sorted_list);
 #line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 3627 "TumblrPublishing.c"
+#line 3633 "TumblrPublishing.c"
 }
 
 
@@ -3653,7 +3659,7 @@ static void publishing_tumblr_tumblr_publisher_do_show_success_pane (PublishingT
 	_tmp1_ = self->priv->host;
 #line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp1_);
-#line 3646 "TumblrPublishing.c"
+#line 3652 "TumblrPublishing.c"
 }
 
 
@@ -3674,7 +3680,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_status_updated (Publish
 	if (!_tmp0_) {
 #line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3667 "TumblrPublishing.c"
+#line 3673 "TumblrPublishing.c"
 	}
 #line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = completed_fraction;
@@ -3697,7 +3703,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_status_updated (Publish
 	_tmp5_ = completed_fraction;
 #line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ (_tmp4_, _tmp5_, _tmp3__target);
-#line 3689 "TumblrPublishing.c"
+#line 3695 "TumblrPublishing.c"
 }
 
 
@@ -3718,7 +3724,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_complete (PublishingTum
 	if (!_tmp0_) {
 #line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3710 "TumblrPublishing.c"
+#line 3716 "TumblrPublishing.c"
 	}
 #line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = num_published;
@@ -3739,7 +3745,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_complete (PublishingTum
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_tumblr_tumblr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
 #line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_do_show_success_pane (self);
-#line 3730 "TumblrPublishing.c"
+#line 3736 "TumblrPublishing.c"
 }
 
 
@@ -3763,7 +3769,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_error (PublishingTumblr
 	if (!_tmp0_) {
 #line 513 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3754 "TumblrPublishing.c"
+#line 3760 "TumblrPublishing.c"
 	}
 #line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = err;
@@ -3790,7 +3796,7 @@ static void publishing_tumblr_tumblr_publisher_on_upload_error (PublishingTumblr
 	_tmp8_ = err;
 #line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 3780 "TumblrPublishing.c"
+#line 3786 "TumblrPublishing.c"
 }
 
 
@@ -3811,7 +3817,7 @@ static void publishing_tumblr_tumblr_publisher_do_logout (PublishingTumblrTumblr
 	self->priv->running = FALSE;
 #line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_attempt_start (self);
-#line 3800 "TumblrPublishing.c"
+#line 3806 "TumblrPublishing.c"
 }
 
 
@@ -3826,7 +3832,7 @@ void publishing_tumblr_tumblr_publisher_attempt_start (PublishingTumblrTumblrPub
 	if (_tmp0_) {
 #line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3815 "TumblrPublishing.c"
+#line 3821 "TumblrPublishing.c"
 	}
 #line 539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:539: TumblrPublisher: starting interaction.");
@@ -3836,7 +3842,7 @@ void publishing_tumblr_tumblr_publisher_attempt_start (PublishingTumblrTumblrPub
 	_tmp1_ = publishing_tumblr_tumblr_publisher_is_persistent_session_valid (self);
 #line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp1_) {
-#line 3825 "TumblrPublishing.c"
+#line 3831 "TumblrPublishing.c"
 		PublishingTumblrTumblrPublisherSession* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
@@ -3861,14 +3867,14 @@ void publishing_tumblr_tumblr_publisher_attempt_start (PublishingTumblrTumblrPub
 		_g_free0 (_tmp6_);
 #line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp4_);
-#line 3849 "TumblrPublishing.c"
+#line 3855 "TumblrPublishing.c"
 	} else {
 #line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_debug ("TumblrPublishing.vala:548: attempt start: no persistent session availa" \
 "ble; showing login welcome pane");
 #line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_tumblr_tumblr_publisher_do_show_authentication_pane (self, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_AUTHENTICATION_PANE_MODE_INTRO);
-#line 3855 "TumblrPublishing.c"
+#line 3861 "TumblrPublishing.c"
 	}
 }
 
@@ -3885,26 +3891,26 @@ static void publishing_tumblr_tumblr_publisher_real_start (SpitPublishingPublish
 	if (_tmp0_) {
 #line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return;
-#line 3872 "TumblrPublishing.c"
+#line 3878 "TumblrPublishing.c"
 	}
 #line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->was_started;
 #line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp1_) {
-#line 3878 "TumblrPublishing.c"
+#line 3884 "TumblrPublishing.c"
 		const gchar* _tmp2_ = NULL;
 #line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp2_ = _ ("TumblrPublisher: start( ): can’t start; this publisher is not restarta" \
 "ble.");
 #line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_error ("TumblrPublishing.vala:559: %s", _tmp2_);
-#line 3884 "TumblrPublishing.c"
+#line 3890 "TumblrPublishing.c"
 	}
 #line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_debug ("TumblrPublishing.vala:561: TumblrPublisher: starting interaction.");
 #line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_attempt_start (self);
-#line 3890 "TumblrPublishing.c"
+#line 3896 "TumblrPublishing.c"
 }
 
 
@@ -3916,7 +3922,7 @@ static void publishing_tumblr_tumblr_publisher_real_stop (SpitPublishingPublishe
 	g_debug ("TumblrPublishing.vala:567: TumblrPublisher: stop( ) invoked.");
 #line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->running = FALSE;
-#line 3902 "TumblrPublishing.c"
+#line 3908 "TumblrPublishing.c"
 }
 
 
@@ -3935,21 +3941,21 @@ GType publishing_tumblr_tumblr_publisher_authentication_pane_mode_get_type (void
 static void _publishing_tumblr_tumblr_publisher_authentication_pane_on_user_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
 #line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_on_user_changed ((PublishingTumblrTumblrPublisherAuthenticationPane*) self);
-#line 3921 "TumblrPublishing.c"
+#line 3927 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_authentication_pane_on_password_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
 #line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_on_password_changed ((PublishingTumblrTumblrPublisherAuthenticationPane*) self);
-#line 3928 "TumblrPublishing.c"
+#line 3934 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_authentication_pane_on_login_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_on_login_button_clicked ((PublishingTumblrTumblrPublisherAuthenticationPane*) self);
-#line 3935 "TumblrPublishing.c"
+#line 3941 "TumblrPublishing.c"
 }
 
 
@@ -3969,15 +3975,15 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 	_g_object_unref0 (self->priv->pane_widget);
 #line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->pane_widget = _tmp0_;
-#line 3955 "TumblrPublishing.c"
+#line 3961 "TumblrPublishing.c"
 	{
 		GtkBuilder* _tmp1_ = NULL;
 		GtkBuilder* _tmp2_ = NULL;
 		GtkBuilder* _tmp3_ = NULL;
-		GtkAlignment* align = NULL;
+		GtkWidget* content = NULL;
 		GtkBuilder* _tmp4_ = NULL;
 		GObject* _tmp5_ = NULL;
-		GtkAlignment* _tmp6_ = NULL;
+		GtkWidget* _tmp6_ = NULL;
 		GtkLabel* message_label = NULL;
 		GtkBuilder* _tmp7_ = NULL;
 		GObject* _tmp8_ = NULL;
@@ -3995,12 +4001,16 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 		GtkEntry* _tmp27_ = NULL;
 		GtkEntry* _tmp28_ = NULL;
 		GtkButton* _tmp29_ = NULL;
-		GtkAlignment* _tmp30_ = NULL;
-		GtkBox* _tmp31_ = NULL;
-		PublishingTumblrTumblrPublisher* _tmp32_ = NULL;
-		SpitPublishingPluginHost* _tmp33_ = NULL;
-		SpitPublishingPluginHost* _tmp34_ = NULL;
-		GtkButton* _tmp35_ = NULL;
+		GtkWidget* _tmp30_ = NULL;
+		GtkContainer* _tmp31_ = NULL;
+		GtkContainer* _tmp32_ = NULL;
+		GtkWidget* _tmp33_ = NULL;
+		GtkBox* _tmp34_ = NULL;
+		GtkWidget* _tmp35_ = NULL;
+		PublishingTumblrTumblrPublisher* _tmp36_ = NULL;
+		SpitPublishingPluginHost* _tmp37_ = NULL;
+		SpitPublishingPluginHost* _tmp38_ = NULL;
+		GtkButton* _tmp39_ = NULL;
 #line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp1_ = gtk_builder_new ();
 #line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -4013,7 +4023,7 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 		gtk_builder_add_from_resource (_tmp2_, PLUGIN_RESOURCE_PATH "/tumblr_authentication_pane.ui", &_inner_error_);
 #line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3999 "TumblrPublishing.c"
+#line 4009 "TumblrPublishing.c"
 			goto __catch36_g_error;
 		}
 #line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -4023,11 +4033,11 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 #line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp4_ = self->priv->builder;
 #line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp5_ = gtk_builder_get_object (_tmp4_, "alignment");
+		_tmp5_ = gtk_builder_get_object (_tmp4_, "content");
 #line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_alignment_get_type ()) ? ((GtkAlignment*) _tmp5_) : NULL);
+		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_widget_get_type ()) ? ((GtkWidget*) _tmp5_) : NULL);
 #line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		align = _tmp6_;
+		content = _tmp6_;
 #line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp7_ = self->priv->builder;
 #line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -4042,7 +4052,7 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 		switch (_tmp10_) {
 #line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			case PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_AUTHENTICATION_PANE_MODE_INTRO:
-#line 4028 "TumblrPublishing.c"
+#line 4038 "TumblrPublishing.c"
 			{
 				GtkLabel* _tmp11_ = NULL;
 				const gchar* _tmp12_ = NULL;
@@ -4054,11 +4064,11 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 				gtk_label_set_text (_tmp11_, _tmp12_);
 #line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				break;
-#line 4040 "TumblrPublishing.c"
+#line 4050 "TumblrPublishing.c"
 			}
 #line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			case PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_AUTHENTICATION_PANE_MODE_FAILED_RETRY_USER:
-#line 4044 "TumblrPublishing.c"
+#line 4054 "TumblrPublishing.c"
 			{
 				GtkLabel* _tmp13_ = NULL;
 				const gchar* _tmp14_ = NULL;
@@ -4081,12 +4091,12 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 				_g_free0 (_tmp17_);
 #line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				break;
-#line 4067 "TumblrPublishing.c"
+#line 4077 "TumblrPublishing.c"
 			}
 			default:
 #line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			break;
-#line 4072 "TumblrPublishing.c"
+#line 4082 "TumblrPublishing.c"
 		}
 #line 619 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp18_ = self->priv->builder;
@@ -4131,51 +4141,61 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 #line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_connect_object (_tmp29_, "clicked", (GCallback) _publishing_tumblr_tumblr_publisher_authentication_pane_on_login_button_clicked_gtk_button_clicked, self, 0);
 #line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp30_ = align;
+		_tmp30_ = content;
 #line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp31_ = self->priv->pane_widget;
+		_tmp31_ = gtk_widget_get_parent (_tmp30_);
 #line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		gtk_widget_reparent (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_widget_get_type (), GtkWidget), G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget));
+		_tmp32_ = _tmp31_;
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp33_ = content;
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		gtk_container_remove (_tmp32_, _tmp33_);
 #line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp32_ = publisher;
+		_tmp34_ = self->priv->pane_widget;
 #line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp33_ = publishing_tumblr_tumblr_publisher_get_host (_tmp32_);
+		_tmp35_ = content;
 #line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp34_ = _tmp33_;
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp35_ = self->priv->login_button;
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		spit_publishing_plugin_host_set_dialog_default_widget (_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_widget_get_type (), GtkWidget));
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_g_object_unref0 (_tmp34_);
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_container_get_type (), GtkContainer), _tmp35_);
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp36_ = publisher;
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp37_ = publishing_tumblr_tumblr_publisher_get_host (_tmp36_);
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp38_ = _tmp37_;
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp39_ = self->priv->login_button;
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		spit_publishing_plugin_host_set_dialog_default_widget (_tmp38_, G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_widget_get_type (), GtkWidget));
+#line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_g_object_unref0 (_tmp38_);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (message_label);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_g_object_unref0 (align);
-#line 4138 "TumblrPublishing.c"
+		_g_object_unref0 (content);
+#line 4158 "TumblrPublishing.c"
 	}
 	goto __finally36;
 	__catch36_g_error:
 	{
 		GError* e = NULL;
-		const gchar* _tmp36_ = NULL;
-		GError* _tmp37_ = NULL;
-		const gchar* _tmp38_ = NULL;
+		const gchar* _tmp40_ = NULL;
+		GError* _tmp41_ = NULL;
+		const gchar* _tmp42_ = NULL;
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		e = _inner_error_;
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_inner_error_ = NULL;
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp36_ = _ ("Could not load UI: %s");
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp37_ = e;
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp38_ = _tmp37_->message;
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		g_warning (_tmp36_, _tmp38_);
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp40_ = _ ("Could not load UI: %s");
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp41_ = e;
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp42_ = _tmp41_->message;
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		g_warning (_tmp40_, _tmp42_);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_error_free0 (e);
-#line 4161 "TumblrPublishing.c"
+#line 4181 "TumblrPublishing.c"
 	}
 	__finally36:
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
@@ -4186,18 +4206,18 @@ PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publ
 		g_clear_error (&_inner_error_);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return NULL;
-#line 4172 "TumblrPublishing.c"
+#line 4192 "TumblrPublishing.c"
 	}
 #line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 4176 "TumblrPublishing.c"
+#line 4196 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherAuthenticationPane* publishing_tumblr_tumblr_publisher_authentication_pane_new (PublishingTumblrTumblrPublisher* publisher, PublishingTumblrTumblrPublisherAuthenticationPaneMode mode) {
 #line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_authentication_pane_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_AUTHENTICATION_PANE, publisher, mode);
-#line 4183 "TumblrPublishing.c"
+#line 4203 "TumblrPublishing.c"
 }
 
 
@@ -4205,17 +4225,17 @@ GtkWidget* publishing_tumblr_tumblr_publisher_authentication_pane_get_default_wi
 	GtkWidget* result = NULL;
 	GtkButton* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self), NULL);
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->login_button;
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp1_;
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 4201 "TumblrPublishing.c"
+#line 4221 "TumblrPublishing.c"
 }
 
 
@@ -4224,37 +4244,37 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_on_login_butt
 	const gchar* _tmp1_ = NULL;
 	GtkEntry* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
-#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->username_entry;
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = gtk_entry_get_text (_tmp0_);
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = self->priv->password_entry;
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = gtk_entry_get_text (_tmp2_);
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (self, "login", _tmp1_, _tmp3_);
-#line 4222 "TumblrPublishing.c"
+#line 4242 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_authentication_pane_on_user_changed (PublishingTumblrTumblrPublisherAuthenticationPane* self) {
-#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
 #line 649 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_update_login_button_sensitivity (self);
-#line 4231 "TumblrPublishing.c"
+#line 4251 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_authentication_pane_on_password_changed (PublishingTumblrTumblrPublisherAuthenticationPane* self) {
-#line 652 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
 #line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_update_login_button_sensitivity (self);
-#line 4240 "TumblrPublishing.c"
+#line 4260 "TumblrPublishing.c"
 }
 
 
@@ -4264,39 +4284,39 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_update_login_
 	guint _tmp2_ = 0U;
 	guint _tmp3_ = 0U;
 	GtkButton* _tmp7_ = NULL;
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_AUTHENTICATION_PANE (self));
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->username_entry;
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = gtk_entry_get_text_length (_tmp1_);
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp3_ > ((guint) 0)) {
-#line 4260 "TumblrPublishing.c"
+#line 4280 "TumblrPublishing.c"
 		GtkEntry* _tmp4_ = NULL;
 		guint _tmp5_ = 0U;
 		guint _tmp6_ = 0U;
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp4_ = self->priv->password_entry;
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp5_ = gtk_entry_get_text_length (_tmp4_);
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp6_ = _tmp5_;
-#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = _tmp6_ > ((guint) 0);
-#line 4272 "TumblrPublishing.c"
+#line 4292 "TumblrPublishing.c"
 	} else {
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = FALSE;
-#line 4276 "TumblrPublishing.c"
+#line 4296 "TumblrPublishing.c"
 	}
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7_ = self->priv->login_button;
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), _tmp0_);
-#line 4282 "TumblrPublishing.c"
+#line 4302 "TumblrPublishing.c"
 }
 
 
@@ -4305,30 +4325,30 @@ static GtkWidget* publishing_tumblr_tumblr_publisher_authentication_pane_real_ge
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_AUTHENTICATION_PANE, PublishingTumblrTumblrPublisherAuthenticationPane);
-#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp1_;
-#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 4301 "TumblrPublishing.c"
+#line 4321 "TumblrPublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_tumblr_tumblr_publisher_authentication_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingTumblrTumblrPublisherAuthenticationPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 665 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_AUTHENTICATION_PANE, PublishingTumblrTumblrPublisherAuthenticationPane);
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 4314 "TumblrPublishing.c"
+#line 4334 "TumblrPublishing.c"
 }
 
 
@@ -4337,31 +4357,31 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_real_on_pane_
 	GtkEntry* _tmp0_ = NULL;
 	GtkEntry* _tmp1_ = NULL;
 	GtkButton* _tmp2_ = NULL;
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_AUTHENTICATION_PANE, PublishingTumblrTumblrPublisherAuthenticationPane);
-#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->username_entry;
-#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->password_entry;
-#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	gtk_entry_set_activates_default (_tmp1_, TRUE);
-#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp2_ = self->priv->login_button;
-#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp2_ = self->priv->login_button;
+#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_update_login_button_sensitivity (self);
-#line 4339 "TumblrPublishing.c"
+#line 4359 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_authentication_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
 	PublishingTumblrTumblrPublisherAuthenticationPane * self;
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 677 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_AUTHENTICATION_PANE, PublishingTumblrTumblrPublisherAuthenticationPane);
-#line 4347 "TumblrPublishing.c"
+#line 4367 "TumblrPublishing.c"
 }
 
 
@@ -4380,19 +4400,19 @@ static void g_cclosure_user_marshal_VOID__STRING_STRING (GClosure * closure, GVa
 		data1 = closure->data;
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 4366 "TumblrPublishing.c"
+#line 4386 "TumblrPublishing.c"
 	} else {
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		data2 = closure->data;
-#line 4372 "TumblrPublishing.c"
+#line 4392 "TumblrPublishing.c"
 	}
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	callback = (GMarshalFunc_VOID__STRING_STRING) (marshal_data ? marshal_data : cc->callback);
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	callback (data1, g_value_get_string (param_values + 1), g_value_get_string (param_values + 2), data2);
-#line 4378 "TumblrPublishing.c"
+#line 4398 "TumblrPublishing.c"
 }
 
 
@@ -4421,7 +4441,7 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_class_init (P
 	_tmp3_ = g_strdup (_tmp2_);
 #line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_authentication_pane_FAILED_RETRY_USER_MESSAGE = _tmp3_;
-#line 4407 "TumblrPublishing.c"
+#line 4427 "TumblrPublishing.c"
 }
 
 
@@ -4436,7 +4456,7 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_spit_publishi
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_authentication_pane_real_on_pane_installed;
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_authentication_pane_real_on_pane_uninstalled;
-#line 4422 "TumblrPublishing.c"
+#line 4442 "TumblrPublishing.c"
 }
 
 
@@ -4445,7 +4465,7 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_instance_init
 	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_AUTHENTICATION_PANE_GET_PRIVATE (self);
 #line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->pane_widget = NULL;
-#line 4431 "TumblrPublishing.c"
+#line 4451 "TumblrPublishing.c"
 }
 
 
@@ -4465,7 +4485,7 @@ static void publishing_tumblr_tumblr_publisher_authentication_pane_finalize (GOb
 	_g_object_unref0 (self->priv->login_button);
 #line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	G_OBJECT_CLASS (publishing_tumblr_tumblr_publisher_authentication_pane_parent_class)->finalize (obj);
-#line 4451 "TumblrPublishing.c"
+#line 4471 "TumblrPublishing.c"
 }
 
 
@@ -4488,86 +4508,86 @@ GType publishing_tumblr_tumblr_publisher_authentication_pane_get_type (void) {
 
 
 static gpointer _publishing_tumblr_size_entry_ref0 (gpointer self) {
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? publishing_tumblr_size_entry_ref (self) : NULL;
-#line 4476 "TumblrPublishing.c"
+#line 4496 "TumblrPublishing.c"
 }
 
 
 static PublishingTumblrSizeEntry** _vala_array_dup7 (PublishingTumblrSizeEntry** self, int length) {
 	PublishingTumblrSizeEntry** result;
 	int i;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = g_new0 (PublishingTumblrSizeEntry*, length + 1);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 4487 "TumblrPublishing.c"
+#line 4507 "TumblrPublishing.c"
 		PublishingTumblrSizeEntry* _tmp0_ = NULL;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = _publishing_tumblr_size_entry_ref0 (self[i]);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		result[i] = _tmp0_;
-#line 4493 "TumblrPublishing.c"
+#line 4513 "TumblrPublishing.c"
 	}
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 4497 "TumblrPublishing.c"
+#line 4517 "TumblrPublishing.c"
 }
 
 
 static gpointer _publishing_tumblr_blog_entry_ref0 (gpointer self) {
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? publishing_tumblr_blog_entry_ref (self) : NULL;
-#line 4504 "TumblrPublishing.c"
+#line 4524 "TumblrPublishing.c"
 }
 
 
 static PublishingTumblrBlogEntry** _vala_array_dup8 (PublishingTumblrBlogEntry** self, int length) {
 	PublishingTumblrBlogEntry** result;
 	int i;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = g_new0 (PublishingTumblrBlogEntry*, length + 1);
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 4515 "TumblrPublishing.c"
+#line 4535 "TumblrPublishing.c"
 		PublishingTumblrBlogEntry* _tmp0_ = NULL;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = _publishing_tumblr_blog_entry_ref0 (self[i]);
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		result[i] = _tmp0_;
-#line 4521 "TumblrPublishing.c"
+#line 4541 "TumblrPublishing.c"
 	}
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 4525 "TumblrPublishing.c"
+#line 4545 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_blog_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_on_blog_changed ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 4532 "TumblrPublishing.c"
+#line 4552 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_size_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_on_size_changed ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 4539 "TumblrPublishing.c"
+#line 4559 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_on_logout_clicked ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 4546 "TumblrPublishing.c"
+#line 4566 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_on_publish_clicked ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 4553 "TumblrPublishing.c"
+#line 4573 "TumblrPublishing.c"
 }
 
 
@@ -4588,73 +4608,73 @@ PublishingTumblrTumblrPublisherPublishingOptionsPane* publishing_tumblr_tumblr_p
 	PublishingTumblrBlogEntry** _tmp9_ = NULL;
 	gint _tmp9__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_IS_TUMBLR_PUBLISHER (publisher), NULL);
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (username != NULL, NULL);
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherPublishingOptionsPane*) g_object_new (object_type, NULL);
-#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_object_ref_sink (_tmp0_);
-#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->pane_widget = _tmp0_;
-#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = username;
-#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->username);
-#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->username = _tmp2_;
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = publisher;
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = _g_object_ref0 (_tmp3_);
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->publisher = _tmp4_;
-#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = media_type;
-#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->media_type = _tmp5_;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = sizes;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6__length1 = sizes_length1;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7_ = (_tmp6_ != NULL) ? _vala_array_dup7 (_tmp6_, _tmp6__length1) : ((gpointer) _tmp6_);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7__length1 = _tmp6__length1;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_tumblr_size_entry_unref), NULL);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->sizes = _tmp7_;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->sizes_length1 = _tmp7__length1;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->_sizes_size_ = self->priv->sizes_length1;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp8_ = blogs;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp8__length1 = blogs_length1;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp9_ = (_tmp8_ != NULL) ? _vala_array_dup8 (_tmp8_, _tmp8__length1) : ((gpointer) _tmp8_);
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp9__length1 = _tmp8__length1;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blogs = (_vala_array_free (self->priv->blogs, self->priv->blogs_length1, (GDestroyNotify) publishing_tumblr_blog_entry_unref), NULL);
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blogs = _tmp9_;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blogs_length1 = _tmp9__length1;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->_blogs_size_ = self->priv->blogs_length1;
-#line 4640 "TumblrPublishing.c"
+#line 4660 "TumblrPublishing.c"
 	{
 		GtkBuilder* _tmp10_ = NULL;
 		GtkBuilder* _tmp11_ = NULL;
@@ -4693,162 +4713,162 @@ PublishingTumblrTumblrPublisherPublishingOptionsPane* publishing_tumblr_tumblr_p
 		SpitPublishingPublisherMediaType _tmp43_ = 0;
 		GtkButton* _tmp47_ = NULL;
 		GtkButton* _tmp48_ = NULL;
-#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp10_ = gtk_builder_new ();
-#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->builder);
-#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->builder = _tmp10_;
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp11_ = self->priv->builder;
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		gtk_builder_add_from_resource (_tmp11_, PLUGIN_RESOURCE_PATH "/tumblr_publishing_options_pane.ui", &_inner_error_);
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 720 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4691 "TumblrPublishing.c"
+#line 4711 "TumblrPublishing.c"
 			goto __catch37_g_error;
 		}
-#line 721 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 722 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp12_ = self->priv->builder;
-#line 721 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 722 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		gtk_builder_connect_signals (_tmp12_, NULL);
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp13_ = self->priv->builder;
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp14_ = gtk_builder_get_object (_tmp13_, "tumblr_pane");
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp15_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_box_get_type (), GtkBox));
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->pane_widget);
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->pane_widget = _tmp15_;
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp16_ = self->priv->builder;
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp17_ = gtk_builder_get_object (_tmp16_, "upload_info_label");
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_label_get_type (), GtkLabel));
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->upload_info_label);
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->upload_info_label = _tmp18_;
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp19_ = self->priv->builder;
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp20_ = gtk_builder_get_object (_tmp19_, "logout_button");
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_button_get_type (), GtkButton));
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->logout_button);
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->logout_button = _tmp21_;
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp22_ = self->priv->builder;
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp23_ = gtk_builder_get_object (_tmp22_, "publish_button");
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_button_get_type (), GtkButton));
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->publish_button);
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->publish_button = _tmp24_;
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp25_ = self->priv->builder;
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp26_ = gtk_builder_get_object (_tmp25_, "size_combo");
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp27_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->size_combo);
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->size_combo = _tmp27_;
-#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp28_ = self->priv->builder;
-#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp29_ = gtk_builder_get_object (_tmp28_, "size_label");
-#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_label_get_type (), GtkLabel));
-#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->size_label);
-#line 729 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->size_label = _tmp30_;
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp31_ = self->priv->builder;
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp32_ = gtk_builder_get_object (_tmp31_, "blog_combo");
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp33_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->blog_combo);
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->blog_combo = _tmp33_;
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp34_ = self->priv->builder;
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp35_ = gtk_builder_get_object (_tmp34_, "blog_label");
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp36_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_label_get_type (), GtkLabel));
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (self->priv->blog_label);
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		self->priv->blog_label = _tmp36_;
-#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp37_ = _ ("You are logged into Tumblr as %s.\n\n");
-#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp38_ = self->priv->username;
-#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp39_ = g_strdup_printf (_tmp37_, _tmp38_);
-#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		upload_label_text = _tmp39_;
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp40_ = self->priv->upload_info_label;
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp41_ = upload_label_text;
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		gtk_label_set_label (_tmp40_, _tmp41_);
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_tumblr_tumblr_publisher_publishing_options_pane_populate_blog_combo (self);
-#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp42_ = self->priv->blog_combo;
-#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_blog_changed_gtk_combo_box_changed, self, 0);
-#line 740 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp43_ = media_type;
-#line 740 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		if (_tmp43_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 4802 "TumblrPublishing.c"
-			GtkComboBoxText* _tmp44_ = NULL;
 #line 741 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp43_ = media_type;
+#line 741 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		if (_tmp43_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
+#line 4822 "TumblrPublishing.c"
+			GtkComboBoxText* _tmp44_ = NULL;
+#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			publishing_tumblr_tumblr_publisher_publishing_options_pane_populate_size_combo (self);
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp44_ = self->priv->size_combo;
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_size_changed_gtk_combo_box_changed, self, 0);
-#line 4810 "TumblrPublishing.c"
+#line 4830 "TumblrPublishing.c"
 		} else {
 			GtkComboBoxText* _tmp45_ = NULL;
 			GtkLabel* _tmp46_ = NULL;
-#line 745 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp45_ = self->priv->size_combo;
-#line 745 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp46_ = self->priv->size_label;
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 4822 "TumblrPublishing.c"
+#line 4842 "TumblrPublishing.c"
 		}
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp47_ = self->priv->logout_button;
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_connect_object (_tmp47_, "clicked", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_logout_clicked_gtk_button_clicked, self, 0);
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp48_ = self->priv->publish_button;
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_signal_connect_object (_tmp48_, "clicked", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (upload_label_text);
-#line 4834 "TumblrPublishing.c"
+#line 4854 "TumblrPublishing.c"
 	}
 	goto __finally37;
 	__catch37_g_error:
@@ -4857,132 +4877,132 @@ PublishingTumblrTumblrPublisherPublishingOptionsPane* publishing_tumblr_tumblr_p
 		const gchar* _tmp49_ = NULL;
 		GError* _tmp50_ = NULL;
 		const gchar* _tmp51_ = NULL;
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		e = _inner_error_;
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_inner_error_ = NULL;
-#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp49_ = _ ("Could not load UI: %s");
-#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp50_ = e;
-#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp51_ = _tmp50_->message;
-#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_warning (_tmp49_, _tmp51_);
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_error_free0 (e);
-#line 4857 "TumblrPublishing.c"
+#line 4877 "TumblrPublishing.c"
 	}
 	__finally37:
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		return NULL;
-#line 4868 "TumblrPublishing.c"
+#line 4888 "TumblrPublishing.c"
 	}
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 4872 "TumblrPublishing.c"
+#line 4892 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherPublishingOptionsPane* publishing_tumblr_tumblr_publisher_publishing_options_pane_new (PublishingTumblrTumblrPublisher* publisher, SpitPublishingPublisherMediaType media_type, PublishingTumblrSizeEntry** sizes, int sizes_length1, PublishingTumblrBlogEntry** blogs, int blogs_length1, const gchar* username) {
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_publishing_options_pane_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, publisher, media_type, sizes, sizes_length1, blogs, blogs_length1, username);
-#line 4879 "TumblrPublishing.c"
+#line 4899 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_on_logout_clicked (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
+#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 4888 "TumblrPublishing.c"
+#line 4908 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_on_publish_clicked (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
-#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (self, "publish");
-#line 4897 "TumblrPublishing.c"
+#line 4917 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_populate_blog_combo (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
 	PublishingTumblrBlogEntry** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 771 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->blogs;
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0__length1 = self->priv->blogs_length1;
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 4912 "TumblrPublishing.c"
+#line 4932 "TumblrPublishing.c"
 		PublishingTumblrBlogEntry** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		GtkComboBoxText* _tmp6_ = NULL;
 		PublishingTumblrTumblrPublisher* _tmp7_ = NULL;
 		gint _tmp8_ = 0;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp1_ = self->priv->blogs;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp1__length1 = self->priv->blogs_length1;
-#line 4922 "TumblrPublishing.c"
+#line 4942 "TumblrPublishing.c"
 		{
 			PublishingTumblrBlogEntry** b_collection = NULL;
 			gint b_collection_length1 = 0;
 			gint _b_collection_size_ = 0;
 			gint b_it = 0;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			b_collection = _tmp1_;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			b_collection_length1 = _tmp1__length1;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			for (b_it = 0; b_it < _tmp1__length1; b_it = b_it + 1) {
-#line 4934 "TumblrPublishing.c"
+#line 4954 "TumblrPublishing.c"
 				PublishingTumblrBlogEntry* _tmp2_ = NULL;
 				PublishingTumblrBlogEntry* b = NULL;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp2_ = _publishing_tumblr_blog_entry_ref0 (b_collection[b_it]);
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				b = _tmp2_;
-#line 4941 "TumblrPublishing.c"
+#line 4961 "TumblrPublishing.c"
 				{
 					GtkComboBoxText* _tmp3_ = NULL;
 					PublishingTumblrBlogEntry* _tmp4_ = NULL;
 					const gchar* _tmp5_ = NULL;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp3_ = self->priv->blog_combo;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp4_ = b;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp5_ = _tmp4_->blog;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					gtk_combo_box_text_append_text (_tmp3_, _tmp5_);
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_publishing_tumblr_blog_entry_unref0 (b);
-#line 4956 "TumblrPublishing.c"
+#line 4976 "TumblrPublishing.c"
 				}
 			}
 		}
-#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp6_ = self->priv->blog_combo;
-#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp7_ = self->priv->publisher;
-#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp8_ = publishing_tumblr_tumblr_publisher_get_persistent_default_blog (_tmp7_);
-#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_combo_box_get_type (), GtkComboBox), _tmp8_);
-#line 4968 "TumblrPublishing.c"
+#line 4988 "TumblrPublishing.c"
 	}
 }
 
@@ -4991,88 +5011,88 @@ static void publishing_tumblr_tumblr_publisher_publishing_options_pane_on_blog_c
 	PublishingTumblrTumblrPublisher* _tmp0_ = NULL;
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->publisher;
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->blog_combo;
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_set_persistent_default_blog (_tmp0_, _tmp2_);
-#line 4987 "TumblrPublishing.c"
+#line 5007 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_populate_size_combo (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
 	PublishingTumblrSizeEntry** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->sizes;
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0__length1 = self->priv->sizes_length1;
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 5002 "TumblrPublishing.c"
+#line 5022 "TumblrPublishing.c"
 		PublishingTumblrSizeEntry** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		GtkComboBoxText* _tmp6_ = NULL;
 		PublishingTumblrTumblrPublisher* _tmp7_ = NULL;
 		gint _tmp8_ = 0;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp1_ = self->priv->sizes;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp1__length1 = self->priv->sizes_length1;
-#line 5012 "TumblrPublishing.c"
+#line 5032 "TumblrPublishing.c"
 		{
 			PublishingTumblrSizeEntry** e_collection = NULL;
 			gint e_collection_length1 = 0;
 			gint _e_collection_size_ = 0;
 			gint e_it = 0;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			e_collection = _tmp1_;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			e_collection_length1 = _tmp1__length1;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			for (e_it = 0; e_it < _tmp1__length1; e_it = e_it + 1) {
-#line 5024 "TumblrPublishing.c"
+#line 5044 "TumblrPublishing.c"
 				PublishingTumblrSizeEntry* _tmp2_ = NULL;
 				PublishingTumblrSizeEntry* e = NULL;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp2_ = _publishing_tumblr_size_entry_ref0 (e_collection[e_it]);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				e = _tmp2_;
-#line 5031 "TumblrPublishing.c"
+#line 5051 "TumblrPublishing.c"
 				{
 					GtkComboBoxText* _tmp3_ = NULL;
 					PublishingTumblrSizeEntry* _tmp4_ = NULL;
 					const gchar* _tmp5_ = NULL;
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp3_ = self->priv->size_combo;
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp4_ = e;
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp5_ = _tmp4_->title;
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					gtk_combo_box_text_append_text (_tmp3_, _tmp5_);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_publishing_tumblr_size_entry_unref0 (e);
-#line 5046 "TumblrPublishing.c"
+#line 5066 "TumblrPublishing.c"
 				}
 			}
 		}
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp6_ = self->priv->size_combo;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp7_ = self->priv->publisher;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp8_ = publishing_tumblr_tumblr_publisher_get_persistent_default_size (_tmp7_);
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 788 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_combo_box_get_type (), GtkComboBox), _tmp8_);
-#line 5058 "TumblrPublishing.c"
+#line 5078 "TumblrPublishing.c"
 	}
 }
 
@@ -5081,35 +5101,35 @@ static void publishing_tumblr_tumblr_publisher_publishing_options_pane_on_size_c
 	PublishingTumblrTumblrPublisher* _tmp0_ = NULL;
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 791 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->publisher;
-#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->size_combo;
-#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_set_persistent_default_size (_tmp0_, _tmp2_);
-#line 5077 "TumblrPublishing.c"
+#line 5097 "TumblrPublishing.c"
 }
 
 
 void publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
-#line 796 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (self, "publish");
-#line 5086 "TumblrPublishing.c"
+#line 5106 "TumblrPublishing.c"
 }
 
 
 void publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_logout (PublishingTumblrTumblrPublisherPublishingOptionsPane* self) {
-#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
 #line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_PUBLISHING_OPTIONS_PANE (self));
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 5095 "TumblrPublishing.c"
+#line 5115 "TumblrPublishing.c"
 }
 
 
@@ -5118,56 +5138,56 @@ static GtkWidget* publishing_tumblr_tumblr_publisher_publishing_options_pane_rea
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp1_;
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 5114 "TumblrPublishing.c"
+#line 5134 "TumblrPublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_tumblr_tumblr_publisher_publishing_options_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingTumblrTumblrPublisherPublishingOptionsPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
-#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 5127 "TumblrPublishing.c"
+#line 5147 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish_publishing_tumblr_tumblr_publisher_publishing_options_pane_publish (PublishingTumblrTumblrPublisherPublishingOptionsPane* _sender, gpointer self) {
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 5134 "TumblrPublishing.c"
+#line 5154 "TumblrPublishing.c"
 }
 
 
 static void _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout (PublishingTumblrTumblrPublisherPublishingOptionsPane* _sender, gpointer self) {
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 815 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_logout ((PublishingTumblrTumblrPublisherPublishingOptionsPane*) self);
-#line 5141 "TumblrPublishing.c"
+#line 5161 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
 	PublishingTumblrTumblrPublisherPublishingOptionsPane * self;
-#line 812 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
 #line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_signal_connect_object (self, "publish", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish_publishing_tumblr_tumblr_publisher_publishing_options_pane_publish, self, 0);
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
 #line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_signal_connect_object (self, "publish", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish_publishing_tumblr_tumblr_publisher_publishing_options_pane_publish, self, 0);
+#line 815 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_connect_object (self, "logout", (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout, self, 0);
-#line 5153 "TumblrPublishing.c"
+#line 5173 "TumblrPublishing.c"
 }
 
 
@@ -5175,125 +5195,125 @@ static void publishing_tumblr_tumblr_publisher_publishing_options_pane_real_on_p
 	PublishingTumblrTumblrPublisherPublishingOptionsPane * self;
 	guint _tmp0_ = 0U;
 	guint _tmp1_ = 0U;
-#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 818 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
-#line 818 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp0_, NULL, FALSE);
-#line 818 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp0_, 0, NULL, (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_publish_publishing_tumblr_tumblr_publisher_publishing_options_pane_publish, self);
-#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_tumblr_tumblr_publisher_publishing_options_pane_notify_logout_publishing_tumblr_tumblr_publisher_publishing_options_pane_logout, self);
-#line 5171 "TumblrPublishing.c"
+#line 5191 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_class_init (PublishingTumblrTumblrPublisherPublishingOptionsPaneClass * klass) {
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_parent_class = g_type_class_peek_parent (klass);
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingTumblrTumblrPublisherPublishingOptionsPanePrivate));
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_tumblr_tumblr_publisher_publishing_options_pane_finalize;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_new ("publish", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_new ("logout", PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 5186 "TumblrPublishing.c"
+#line 5206 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_publishing_options_pane_real_get_widget;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_publishing_options_pane_real_get_preferred_geometry;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_publishing_options_pane_real_on_pane_installed;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_tumblr_tumblr_publisher_publishing_options_pane_real_on_pane_uninstalled;
-#line 5201 "TumblrPublishing.c"
+#line 5221 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_instance_init (PublishingTumblrTumblrPublisherPublishingOptionsPane * self) {
 	gchar* _tmp0_ = NULL;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_PUBLISHING_OPTIONS_PANE_GET_PRIVATE (self);
-#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->pane_widget = NULL;
 #line 692 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->upload_info_label = NULL;
+	self->priv->pane_widget = NULL;
 #line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->size_label = NULL;
+	self->priv->upload_info_label = NULL;
 #line 694 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->blog_label = NULL;
+	self->priv->size_label = NULL;
 #line 695 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->logout_button = NULL;
+	self->priv->blog_label = NULL;
 #line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->publish_button = NULL;
+	self->priv->logout_button = NULL;
 #line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->size_combo = NULL;
+	self->priv->publish_button = NULL;
 #line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	self->priv->size_combo = NULL;
+#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blog_combo = NULL;
-#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->sizes = NULL;
-#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->sizes_length1 = 0;
-#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->_sizes_size_ = self->priv->sizes_length1;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blogs = NULL;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blogs_length1 = 0;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->_blogs_size_ = self->priv->blogs_length1;
-#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp0_ = g_strdup ("");
-#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->username = _tmp0_;
 #line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp0_ = g_strdup ("");
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	self->priv->username = _tmp0_;
+#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->publisher = NULL;
-#line 5243 "TumblrPublishing.c"
+#line 5263 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_publishing_options_pane_finalize (GObject* obj) {
 	PublishingTumblrTumblrPublisherPublishingOptionsPane * self;
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_PUBLISHING_OPTIONS_PANE, PublishingTumblrTumblrPublisherPublishingOptionsPane);
-#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->builder);
 #line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
+	_g_object_unref0 (self->priv->builder);
 #line 692 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->upload_info_label);
+	_g_object_unref0 (self->priv->pane_widget);
 #line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->size_label);
+	_g_object_unref0 (self->priv->upload_info_label);
 #line 694 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->blog_label);
+	_g_object_unref0 (self->priv->size_label);
 #line 695 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->logout_button);
+	_g_object_unref0 (self->priv->blog_label);
 #line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->publish_button);
+	_g_object_unref0 (self->priv->logout_button);
 #line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->size_combo);
+	_g_object_unref0 (self->priv->publish_button);
 #line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_object_unref0 (self->priv->blog_combo);
+	_g_object_unref0 (self->priv->size_combo);
 #line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_tumblr_size_entry_unref), NULL);
+	_g_object_unref0 (self->priv->blog_combo);
 #line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->blogs = (_vala_array_free (self->priv->blogs, self->priv->blogs_length1, (GDestroyNotify) publishing_tumblr_blog_entry_unref), NULL);
+	self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_tumblr_size_entry_unref), NULL);
 #line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (self->priv->username);
+	self->priv->blogs = (_vala_array_free (self->priv->blogs, self->priv->blogs_length1, (GDestroyNotify) publishing_tumblr_blog_entry_unref), NULL);
 #line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (self->priv->username);
+#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	G_OBJECT_CLASS (publishing_tumblr_tumblr_publisher_publishing_options_pane_parent_class)->finalize (obj);
-#line 5279 "TumblrPublishing.c"
+#line 5299 "TumblrPublishing.c"
 }
 
 
@@ -5318,24 +5338,24 @@ PublishingTumblrTumblrPublisherTransaction* publishing_tumblr_tumblr_publisher_t
 	PublishingTumblrTumblrPublisherTransaction* self = NULL;
 	PublishingTumblrTumblrPublisherSession* _tmp0_ = NULL;
 	PublishingRESTSupportHttpMethod _tmp1_ = 0;
-#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = method;
-#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherTransaction*) publishing_rest_support_transaction_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_);
-#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 5314 "TumblrPublishing.c"
+#line 5334 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherTransaction* publishing_tumblr_tumblr_publisher_transaction_new (PublishingTumblrTumblrPublisherSession* session, PublishingRESTSupportHttpMethod method) {
-#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_transaction_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_TRANSACTION, session, method);
-#line 5321 "TumblrPublishing.c"
+#line 5341 "TumblrPublishing.c"
 }
 
 
@@ -5354,82 +5374,82 @@ PublishingTumblrTumblrPublisherTransaction* publishing_tumblr_tumblr_publisher_t
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
 	gboolean _tmp12_ = FALSE;
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (uri != NULL, NULL);
-#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = uri;
-#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = method;
-#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp2_);
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp3_ = session;
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp4_ = publishing_tumblr_tumblr_publisher_session_get_oauth_nonce (_tmp3_);
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp5_ = _tmp4_;
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_nonce", _tmp5_);
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (_tmp5_);
 #line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_signature_method", "HMAC-SHA1");
+	_tmp3_ = session;
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp4_ = publishing_tumblr_tumblr_publisher_session_get_oauth_nonce (_tmp3_);
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp5_ = _tmp4_;
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_nonce", _tmp5_);
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (_tmp5_);
 #line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_signature_method", "HMAC-SHA1");
+#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_version", "1.0");
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp6_ = session;
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp7_ = publishing_tumblr_tumblr_publisher_session_get_oauth_timestamp (_tmp6_);
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp8_ = _tmp7_;
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_timestamp", _tmp8_);
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (_tmp8_);
 #line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp6_ = session;
+#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp7_ = publishing_tumblr_tumblr_publisher_session_get_oauth_timestamp (_tmp6_);
+#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp8_ = _tmp7_;
+#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_timestamp", _tmp8_);
+#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (_tmp8_);
+#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_consumer_key", PUBLISHING_TUMBLR_API_KEY);
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp9_ = session;
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp10_ = publishing_tumblr_tumblr_publisher_session_get_access_phase_token (_tmp9_);
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp11_ = _tmp10_;
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp12_ = _tmp11_ != NULL;
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp11_);
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp12_) {
-#line 5390 "TumblrPublishing.c"
+#line 5410 "TumblrPublishing.c"
 		PublishingTumblrTumblrPublisherSession* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
-#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp13_ = session;
-#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp14_ = publishing_tumblr_tumblr_publisher_session_get_access_phase_token (_tmp13_);
-#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp15_ = _tmp14_;
-#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_token", _tmp15_);
-#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp15_);
-#line 5404 "TumblrPublishing.c"
+#line 5424 "TumblrPublishing.c"
 	}
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 5408 "TumblrPublishing.c"
+#line 5428 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherTransaction* publishing_tumblr_tumblr_publisher_transaction_new_with_uri (PublishingTumblrTumblrPublisherSession* session, const gchar* uri, PublishingRESTSupportHttpMethod method) {
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_transaction_construct_with_uri (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_TRANSACTION, session, uri, method);
-#line 5415 "TumblrPublishing.c"
+#line 5435 "TumblrPublishing.c"
 }
 
 
@@ -5438,46 +5458,46 @@ static void publishing_tumblr_tumblr_publisher_transaction_real_execute (Publish
 	PublishingRESTSupportSession* _tmp0_ = NULL;
 	PublishingTumblrTumblrPublisherSession* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_TRANSACTION, PublishingTumblrTumblrPublisherTransaction);
-#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_parent_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION, PublishingTumblrTumblrPublisherSession);
-#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_session_sign_transaction (_tmp1_, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_tumblr_tumblr_publisher_transaction_parent_class)->execute (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 5444 "TumblrPublishing.c"
+#line 5464 "TumblrPublishing.c"
 		} else {
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 5452 "TumblrPublishing.c"
+#line 5472 "TumblrPublishing.c"
 		}
 	}
 }
 
 
 static void publishing_tumblr_tumblr_publisher_transaction_class_init (PublishingTumblrTumblrPublisherTransactionClass * klass) {
-#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_tumblr_tumblr_publisher_transaction_real_execute;
-#line 5463 "TumblrPublishing.c"
+#line 5483 "TumblrPublishing.c"
 }
 
 
@@ -5504,49 +5524,49 @@ PublishingTumblrTumblrPublisherAccessTokenFetchTransaction* publishing_tumblr_tu
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (username != NULL, NULL);
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (password != NULL, NULL);
-#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherAccessTokenFetchTransaction*) publishing_tumblr_tumblr_publisher_transaction_construct_with_uri (object_type, _tmp0_, "https://www.tumblr.com/oauth/access_token", PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = username;
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = soup_uri_encode (_tmp1_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "x_auth_username", _tmp3_);
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp3_);
-#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp4_ = password;
-#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "x_auth_password", _tmp4_);
 #line 861 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp4_ = password;
+#line 861 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "x_auth_password", _tmp4_);
+#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "x_auth_mode", "client_auth");
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 5518 "TumblrPublishing.c"
+#line 5538 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherAccessTokenFetchTransaction* publishing_tumblr_tumblr_publisher_access_token_fetch_transaction_new (PublishingTumblrTumblrPublisherSession* session, const gchar* username, const gchar* password) {
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_access_token_fetch_transaction_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION, session, username, password);
-#line 5525 "TumblrPublishing.c"
+#line 5545 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_access_token_fetch_transaction_class_init (PublishingTumblrTumblrPublisherAccessTokenFetchTransactionClass * klass) {
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_access_token_fetch_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 5532 "TumblrPublishing.c"
+#line 5552 "TumblrPublishing.c"
 }
 
 
@@ -5569,29 +5589,29 @@ GType publishing_tumblr_tumblr_publisher_access_token_fetch_transaction_get_type
 PublishingTumblrTumblrPublisherUserInfoFetchTransaction* publishing_tumblr_tumblr_publisher_user_info_fetch_transaction_construct (GType object_type, PublishingTumblrTumblrPublisherSession* session) {
 	PublishingTumblrTumblrPublisherUserInfoFetchTransaction* self = NULL;
 	PublishingTumblrTumblrPublisherSession* _tmp0_ = NULL;
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherUserInfoFetchTransaction*) publishing_tumblr_tumblr_publisher_transaction_construct_with_uri (object_type, _tmp0_, "http://api.tumblr.com/v2/user/info", PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 5563 "TumblrPublishing.c"
+#line 5583 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherUserInfoFetchTransaction* publishing_tumblr_tumblr_publisher_user_info_fetch_transaction_new (PublishingTumblrTumblrPublisherSession* session) {
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_user_info_fetch_transaction_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_USER_INFO_FETCH_TRANSACTION, session);
-#line 5570 "TumblrPublishing.c"
+#line 5590 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_user_info_fetch_transaction_class_init (PublishingTumblrTumblrPublisherUserInfoFetchTransactionClass * klass) {
-#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_user_info_fetch_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 5577 "TumblrPublishing.c"
+#line 5597 "TumblrPublishing.c"
 }
 
 
@@ -5627,62 +5647,62 @@ static gchar* publishing_tumblr_tumblr_publisher_upload_transaction_encode (Publ
 	GString* _tmp14_ = NULL;
 	const gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = g_string_new ("");
-#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	s = _tmp0_;
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_new0 (gchar, 2);
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	bytes = _tmp1_;
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	bytes_length1 = 2;
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_bytes_size_ = bytes_length1;
-#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = bytes;
-#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2__length1 = bytes_length1;
-#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_[1] = (gchar) 0;
-#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = _tmp2_[1];
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = data;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4__length1 = data_length1;
-#line 5639 "TumblrPublishing.c"
+#line 5659 "TumblrPublishing.c"
 	{
 		guint8* byte_collection = NULL;
 		gint byte_collection_length1 = 0;
 		gint _byte_collection_size_ = 0;
 		gint byte_it = 0;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		byte_collection = _tmp4_;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		byte_collection_length1 = _tmp4__length1;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		for (byte_it = 0; byte_it < _tmp4__length1; byte_it = byte_it + 1) {
-#line 5651 "TumblrPublishing.c"
+#line 5671 "TumblrPublishing.c"
 			guint8 byte = 0U;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			byte = byte_collection[byte_it];
-#line 5655 "TumblrPublishing.c"
+#line 5675 "TumblrPublishing.c"
 			{
 				guint8 _tmp5_ = 0U;
-#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp5_ = byte;
-#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (((gint) _tmp5_) == 0) {
-#line 5662 "TumblrPublishing.c"
+#line 5682 "TumblrPublishing.c"
 					GString* _tmp6_ = NULL;
-#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp6_ = s;
-#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					g_string_append (_tmp6_, "%00");
-#line 5668 "TumblrPublishing.c"
+#line 5688 "TumblrPublishing.c"
 				} else {
 					gchar* _tmp7_ = NULL;
 					gint _tmp7__length1 = 0;
@@ -5693,57 +5713,57 @@ static gchar* publishing_tumblr_tumblr_publisher_upload_transaction_encode (Publ
 					gint _tmp11__length1 = 0;
 					gchar* _tmp12_ = NULL;
 					gchar* _tmp13_ = NULL;
-#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp7_ = bytes;
-#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp7__length1 = bytes_length1;
-#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp8_ = byte;
-#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp7_[0] = (gchar) _tmp8_;
-#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp9_ = _tmp7_[0];
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp10_ = s;
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp11_ = bytes;
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp11__length1 = bytes_length1;
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp12_ = soup_uri_encode ((const gchar*) _tmp11_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp13_ = _tmp12_;
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					g_string_append (_tmp10_, _tmp13_);
-#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_g_free0 (_tmp13_);
-#line 5703 "TumblrPublishing.c"
+#line 5723 "TumblrPublishing.c"
 				}
 			}
 		}
 	}
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp14_ = s;
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp15_ = _tmp14_->str;
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp16_ = g_strdup (_tmp15_);
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp16_;
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	bytes = (g_free (bytes), NULL);
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_string_free0 (s);
-#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 893 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 5722 "TumblrPublishing.c"
+#line 5742 "TumblrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_session_ref0 (gpointer self) {
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? publishing_rest_support_session_ref (self) : NULL;
-#line 5729 "TumblrPublishing.c"
+#line 5749 "TumblrPublishing.c"
 }
 
 
@@ -5756,63 +5776,63 @@ PublishingTumblrTumblrPublisherUploadTransaction* publishing_tumblr_tumblr_publi
 	gchar* _tmp4_ = NULL;
 	PublishingTumblrTumblrPublisherSession* _tmp5_ = NULL;
 	PublishingTumblrTumblrPublisherSession* _tmp6_ = NULL;
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_val_if_fail (blog_url != NULL, NULL);
 #line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:897: Init upload transaction");
+	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_return_val_if_fail (blog_url != NULL, NULL);
 #line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:898: Init upload transaction");
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = publishable;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = blog_url;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = g_strdup_printf ("http://api.tumblr.com/v2/blog/%s/post", _tmp2_);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherUploadTransaction*) publishing_rest_support_upload_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp4_);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp4_);
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = session;
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = _publishing_rest_support_session_ref0 (_tmp5_);
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->session = _tmp6_;
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 5774 "TumblrPublishing.c"
+#line 5794 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherUploadTransaction* publishing_tumblr_tumblr_publisher_upload_transaction_new (PublishingTumblrTumblrPublisherSession* session, SpitPublishingPublishable* publishable, const gchar* blog_url) {
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_upload_transaction_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOAD_TRANSACTION, session, publishable, blog_url);
-#line 5781 "TumblrPublishing.c"
+#line 5801 "TumblrPublishing.c"
 }
 
 
 static void _vala_array_add22 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*array = g_renew (PublishingRESTSupportArgument*, *array, (*size) + 1);
-#line 5792 "TumblrPublishing.c"
+#line 5812 "TumblrPublishing.c"
 	}
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5798 "TumblrPublishing.c"
+#line 5818 "TumblrPublishing.c"
 }
 
 
@@ -5822,53 +5842,53 @@ void publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_hea
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	PublishingRESTSupportArgument* _tmp3_ = NULL;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_UPLOAD_TRANSACTION (self));
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (key != NULL);
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (value != NULL);
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->auth_header_fields;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0__length1 = self->priv->auth_header_fields_length1;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = key;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = value;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = publishing_rest_support_argument_new (_tmp1_, _tmp2_);
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_vala_array_add22 (&self->priv->auth_header_fields, &self->priv->auth_header_fields_length1, &self->priv->_auth_header_fields_size_, _tmp3_);
-#line 5826 "TumblrPublishing.c"
+#line 5846 "TumblrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_argument_ref0 (gpointer self) {
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? publishing_rest_support_argument_ref (self) : NULL;
-#line 5833 "TumblrPublishing.c"
+#line 5853 "TumblrPublishing.c"
 }
 
 
 static PublishingRESTSupportArgument** _vala_array_dup9 (PublishingRESTSupportArgument** self, int length) {
 	PublishingRESTSupportArgument** result;
 	int i;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = g_new0 (PublishingRESTSupportArgument*, length + 1);
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 5844 "TumblrPublishing.c"
+#line 5864 "TumblrPublishing.c"
 		PublishingRESTSupportArgument* _tmp0_ = NULL;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = _publishing_rest_support_argument_ref0 (self[i]);
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		result[i] = _tmp0_;
-#line 5850 "TumblrPublishing.c"
+#line 5870 "TumblrPublishing.c"
 	}
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 5854 "TumblrPublishing.c"
+#line 5874 "TumblrPublishing.c"
 }
 
 
@@ -5880,31 +5900,31 @@ PublishingRESTSupportArgument** publishing_tumblr_tumblr_publisher_upload_transa
 	gint _tmp1__length1 = 0;
 	PublishingRESTSupportArgument** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->auth_header_fields;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0__length1 = self->priv->auth_header_fields_length1;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup9 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2__length1 = _tmp1__length1;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (result_length1) {
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*result_length1 = _tmp2__length1;
-#line 5884 "TumblrPublishing.c"
+#line 5904 "TumblrPublishing.c"
 	}
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp2_;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 5890 "TumblrPublishing.c"
+#line 5910 "TumblrPublishing.c"
 }
 
 
@@ -5912,25 +5932,25 @@ gchar* publishing_tumblr_tumblr_publisher_upload_transaction_get_authorization_h
 	gchar* result = NULL;
 	gchar* _result_ = NULL;
 	gchar* _tmp0_ = NULL;
-#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = g_strdup ("OAuth ");
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_result_ = _tmp0_;
-#line 5904 "TumblrPublishing.c"
+#line 5924 "TumblrPublishing.c"
 	{
 		gint i = 0;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		i = 0;
-#line 5909 "TumblrPublishing.c"
+#line 5929 "TumblrPublishing.c"
 		{
 			gboolean _tmp1_ = FALSE;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp1_ = TRUE;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			while (TRUE) {
-#line 5916 "TumblrPublishing.c"
+#line 5936 "TumblrPublishing.c"
 				gint _tmp3_ = 0;
 				PublishingRESTSupportArgument** _tmp4_ = NULL;
 				gint _tmp4__length1 = 0;
@@ -5957,115 +5977,115 @@ gchar* publishing_tumblr_tumblr_publisher_upload_transaction_get_authorization_h
 				gint _tmp23_ = 0;
 				PublishingRESTSupportArgument** _tmp24_ = NULL;
 				gint _tmp24__length1 = 0;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (!_tmp1_) {
-#line 5945 "TumblrPublishing.c"
-					gint _tmp2_ = 0;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp2_ = i;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					i = _tmp2_ + 1;
-#line 5951 "TumblrPublishing.c"
-				}
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp1_ = FALSE;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp3_ = i;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp4_ = self->priv->auth_header_fields;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp4__length1 = self->priv->auth_header_fields_length1;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				if (!(_tmp3_ < _tmp4__length1)) {
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					break;
 #line 5965 "TumblrPublishing.c"
+					gint _tmp2_ = 0;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					_tmp2_ = i;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					i = _tmp2_ + 1;
+#line 5971 "TumblrPublishing.c"
 				}
 #line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp1_ = FALSE;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp3_ = i;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp4_ = self->priv->auth_header_fields;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp4__length1 = self->priv->auth_header_fields_length1;
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				if (!(_tmp3_ < _tmp4__length1)) {
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					break;
+#line 5985 "TumblrPublishing.c"
+				}
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp5_ = _result_;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp6_ = self->priv->auth_header_fields;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp6__length1 = self->priv->auth_header_fields_length1;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp7_ = i;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp8_ = _tmp6_[_tmp7_];
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp9_ = _tmp8_->key;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp10_ = g_strconcat (_tmp5_, _tmp9_, NULL);
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_result_);
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_result_ = _tmp10_;
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp11_ = _result_;
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp12_ = g_strconcat (_tmp11_, "=", NULL);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_result_);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_result_ = _tmp12_;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp13_ = _result_;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp14_ = self->priv->auth_header_fields;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp14__length1 = self->priv->auth_header_fields_length1;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp15_ = i;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp16_ = _tmp14_[_tmp15_];
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp17_ = _tmp16_->value;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp18_ = g_strconcat ("\"", _tmp17_, NULL);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp19_ = _tmp18_;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp20_ = g_strconcat (_tmp19_, "\"", NULL);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp21_ = _tmp20_;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp22_ = g_strconcat (_tmp13_, _tmp21_, NULL);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_result_);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_result_ = _tmp22_;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp21_);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp19_);
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp23_ = i;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp24_ = self->priv->auth_header_fields;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp24__length1 = self->priv->auth_header_fields_length1;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (_tmp23_ < (_tmp24__length1 - 1)) {
-#line 6031 "TumblrPublishing.c"
+#line 6051 "TumblrPublishing.c"
 					const gchar* _tmp25_ = NULL;
 					gchar* _tmp26_ = NULL;
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp25_ = _result_;
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp26_ = g_strconcat (_tmp25_, ", ", NULL);
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_g_free0 (_result_);
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_result_ = _tmp26_;
-#line 6042 "TumblrPublishing.c"
+#line 6062 "TumblrPublishing.c"
 				}
 			}
 		}
 	}
-#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _result_;
-#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 6051 "TumblrPublishing.c"
+#line 6071 "TumblrPublishing.c"
 }
 
 
@@ -6109,13 +6129,13 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 6095 "TumblrPublishing.c"
+#line 6115 "TumblrPublishing.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 6101 "TumblrPublishing.c"
+#line 6121 "TumblrPublishing.c"
 }
 
 
@@ -6132,7 +6152,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 	if (_tmp0_ == NULL) {
 #line 1055 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		separator = "";
-#line 6118 "TumblrPublishing.c"
+#line 6138 "TumblrPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp3_ = str_array;
@@ -6142,7 +6162,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 	if (_tmp3_ != NULL) {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = TRUE;
-#line 6128 "TumblrPublishing.c"
+#line 6148 "TumblrPublishing.c"
 	} else {
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
@@ -6152,13 +6172,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp4__length1 = str_array_length1;
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = _tmp4__length1 > 0;
-#line 6138 "TumblrPublishing.c"
+#line 6158 "TumblrPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp2_) {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp1_ = TRUE;
-#line 6144 "TumblrPublishing.c"
+#line 6164 "TumblrPublishing.c"
 	} else {
 		gboolean _tmp5_ = FALSE;
 		gchar** _tmp6_ = NULL;
@@ -6169,7 +6189,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp6__length1 = str_array_length1;
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		if (_tmp6__length1 == -1) {
-#line 6155 "TumblrPublishing.c"
+#line 6175 "TumblrPublishing.c"
 			gchar** _tmp7_ = NULL;
 			gint _tmp7__length1 = 0;
 			const gchar* _tmp8_ = NULL;
@@ -6181,19 +6201,19 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp8_ = _tmp7_[0];
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp5_ = _tmp8_ != NULL;
-#line 6167 "TumblrPublishing.c"
+#line 6187 "TumblrPublishing.c"
 		} else {
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp5_ = FALSE;
-#line 6171 "TumblrPublishing.c"
+#line 6191 "TumblrPublishing.c"
 		}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp1_ = _tmp5_;
-#line 6175 "TumblrPublishing.c"
+#line 6195 "TumblrPublishing.c"
 	}
 #line 1057 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_) {
-#line 6179 "TumblrPublishing.c"
+#line 6199 "TumblrPublishing.c"
 		gint i = 0;
 		gsize len = 0UL;
 		gint _tmp31_ = 0;
@@ -6216,7 +6236,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		const gchar* _tmp62_ = NULL;
 #line 1059 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = (gsize) 1;
-#line 6202 "TumblrPublishing.c"
+#line 6222 "TumblrPublishing.c"
 		{
 			gboolean _tmp9_ = FALSE;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6225,7 +6245,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp9_ = TRUE;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			while (TRUE) {
-#line 6211 "TumblrPublishing.c"
+#line 6231 "TumblrPublishing.c"
 				gboolean _tmp11_ = FALSE;
 				gboolean _tmp12_ = FALSE;
 				gchar** _tmp13_ = NULL;
@@ -6238,13 +6258,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				gsize _tmp30_ = 0UL;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp9_) {
-#line 6224 "TumblrPublishing.c"
+#line 6244 "TumblrPublishing.c"
 					gint _tmp10_ = 0;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp10_ = i;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					i = _tmp10_ + 1;
-#line 6230 "TumblrPublishing.c"
+#line 6250 "TumblrPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp9_ = FALSE;
@@ -6254,7 +6274,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp13__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp13__length1 != -1) {
-#line 6240 "TumblrPublishing.c"
+#line 6260 "TumblrPublishing.c"
 					gint _tmp14_ = 0;
 					gchar** _tmp15_ = NULL;
 					gint _tmp15__length1 = 0;
@@ -6266,17 +6286,17 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp15__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp12_ = _tmp14_ < _tmp15__length1;
-#line 6252 "TumblrPublishing.c"
+#line 6272 "TumblrPublishing.c"
 				} else {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp12_ = FALSE;
-#line 6256 "TumblrPublishing.c"
+#line 6276 "TumblrPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp12_) {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp11_ = TRUE;
-#line 6262 "TumblrPublishing.c"
+#line 6282 "TumblrPublishing.c"
 				} else {
 					gboolean _tmp16_ = FALSE;
 					gchar** _tmp17_ = NULL;
@@ -6287,7 +6307,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp17__length1 = str_array_length1;
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					if (_tmp17__length1 == -1) {
-#line 6273 "TumblrPublishing.c"
+#line 6293 "TumblrPublishing.c"
 						gchar** _tmp18_ = NULL;
 						gint _tmp18__length1 = 0;
 						gint _tmp19_ = 0;
@@ -6302,21 +6322,21 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 						_tmp20_ = _tmp18_[_tmp19_];
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 						_tmp16_ = _tmp20_ != NULL;
-#line 6288 "TumblrPublishing.c"
+#line 6308 "TumblrPublishing.c"
 					} else {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 						_tmp16_ = FALSE;
-#line 6292 "TumblrPublishing.c"
+#line 6312 "TumblrPublishing.c"
 					}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp11_ = _tmp16_;
-#line 6296 "TumblrPublishing.c"
+#line 6316 "TumblrPublishing.c"
 				}
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp11_) {
 #line 1060 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					break;
-#line 6302 "TumblrPublishing.c"
+#line 6322 "TumblrPublishing.c"
 				}
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp22_ = str_array;
@@ -6328,7 +6348,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp24_ = _tmp22_[_tmp23_];
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp24_ != NULL) {
-#line 6314 "TumblrPublishing.c"
+#line 6334 "TumblrPublishing.c"
 					gchar** _tmp25_ = NULL;
 					gint _tmp25__length1 = 0;
 					gint _tmp26_ = 0;
@@ -6349,24 +6369,24 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp29_ = _tmp28_;
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp21_ = _tmp29_;
-#line 6335 "TumblrPublishing.c"
+#line 6355 "TumblrPublishing.c"
 				} else {
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp21_ = 0;
-#line 6339 "TumblrPublishing.c"
+#line 6359 "TumblrPublishing.c"
 				}
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp30_ = len;
 #line 1061 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				len = _tmp30_ + _tmp21_;
-#line 6345 "TumblrPublishing.c"
+#line 6365 "TumblrPublishing.c"
 			}
 		}
 #line 1063 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp31_ = i;
 #line 1063 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		if (_tmp31_ == 0) {
-#line 6352 "TumblrPublishing.c"
+#line 6372 "TumblrPublishing.c"
 			gchar* _tmp32_ = NULL;
 #line 1064 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_tmp32_ = g_strdup ("");
@@ -6374,7 +6394,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			result = _tmp32_;
 #line 1064 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return result;
-#line 6360 "TumblrPublishing.c"
+#line 6380 "TumblrPublishing.c"
 		}
 #line 1066 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp33_ = i;
@@ -6412,7 +6432,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		_tmp45_ = g_stpcpy ((void*) _tmp42_, (const gchar*) _tmp44_);
 #line 1070 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		ptr = _tmp45_;
-#line 6398 "TumblrPublishing.c"
+#line 6418 "TumblrPublishing.c"
 		{
 			gboolean _tmp46_ = FALSE;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6421,7 +6441,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 			_tmp46_ = TRUE;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			while (TRUE) {
-#line 6407 "TumblrPublishing.c"
+#line 6427 "TumblrPublishing.c"
 				gint _tmp48_ = 0;
 				gchar** _tmp49_ = NULL;
 				gint _tmp49__length1 = 0;
@@ -6437,13 +6457,13 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				void* _tmp61_ = NULL;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (!_tmp46_) {
-#line 6423 "TumblrPublishing.c"
+#line 6443 "TumblrPublishing.c"
 					gint _tmp47_ = 0;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp47_ = i;
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					i = _tmp47_ + 1;
-#line 6429 "TumblrPublishing.c"
+#line 6449 "TumblrPublishing.c"
 				}
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp46_ = FALSE;
@@ -6457,7 +6477,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				if (!(_tmp48_ < _tmp49__length1)) {
 #line 1071 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					break;
-#line 6443 "TumblrPublishing.c"
+#line 6463 "TumblrPublishing.c"
 				}
 #line 1072 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp50_ = ptr;
@@ -6477,7 +6497,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp56_ = _tmp54_[_tmp55_];
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				if (_tmp56_ != NULL) {
-#line 6463 "TumblrPublishing.c"
+#line 6483 "TumblrPublishing.c"
 					gchar** _tmp57_ = NULL;
 					gint _tmp57__length1 = 0;
 					gint _tmp58_ = 0;
@@ -6492,11 +6512,11 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 					_tmp59_ = _tmp57_[_tmp58_];
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp53_ = (const gchar*) _tmp59_;
-#line 6478 "TumblrPublishing.c"
+#line 6498 "TumblrPublishing.c"
 				} else {
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 					_tmp53_ = "";
-#line 6482 "TumblrPublishing.c"
+#line 6502 "TumblrPublishing.c"
 				}
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				_tmp60_ = ptr;
@@ -6504,7 +6524,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 				_tmp61_ = g_stpcpy (_tmp60_, _tmp53_);
 #line 1073 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 				ptr = _tmp61_;
-#line 6490 "TumblrPublishing.c"
+#line 6510 "TumblrPublishing.c"
 			}
 		}
 #line 1076 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6515,7 +6535,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		result = (gchar*) _tmp62_;
 #line 1076 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 6501 "TumblrPublishing.c"
+#line 6521 "TumblrPublishing.c"
 	} else {
 		gchar* _tmp63_ = NULL;
 #line 1078 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -6524,7 +6544,7 @@ static gchar* _vala_g_strjoinv (const gchar* separator, gchar** str_array, int s
 		result = _tmp63_;
 #line 1078 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 6510 "TumblrPublishing.c"
+#line 6530 "TumblrPublishing.c"
 	}
 }
 
@@ -6575,45 +6595,45 @@ static void publishing_tumblr_tumblr_publisher_upload_transaction_real_execute (
 	gboolean _tmp75_ = FALSE;
 	SoupMessage* _tmp87_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOAD_TRANSACTION, PublishingTumblrTumblrPublisherUploadTransaction);
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp0_ = self->priv->session;
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp1_ = publishing_tumblr_tumblr_publisher_session_get_oauth_nonce (_tmp0_);
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp2_ = _tmp1_;
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_nonce", _tmp2_);
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (_tmp2_);
 #line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_signature_method", "HMAC-SHA1");
+	_tmp0_ = self->priv->session;
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp1_ = publishing_tumblr_tumblr_publisher_session_get_oauth_nonce (_tmp0_);
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp2_ = _tmp1_;
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_nonce", _tmp2_);
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (_tmp2_);
 #line 931 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_signature_method", "HMAC-SHA1");
+#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_version", "1.0");
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp3_ = self->priv->session;
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp4_ = publishing_tumblr_tumblr_publisher_session_get_oauth_timestamp (_tmp3_);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp5_ = _tmp4_;
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_timestamp", _tmp5_);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (_tmp5_);
 #line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp3_ = self->priv->session;
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp4_ = publishing_tumblr_tumblr_publisher_session_get_oauth_timestamp (_tmp3_);
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp5_ = _tmp4_;
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_timestamp", _tmp5_);
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (_tmp5_);
+#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_consumer_key", PUBLISHING_TUMBLR_API_KEY);
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = self->priv->session;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7_ = publishing_tumblr_tumblr_publisher_session_get_access_phase_token (_tmp6_);
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp8_ = _tmp7_;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (self, "oauth_token", _tmp8_);
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp8_);
-#line 6599 "TumblrPublishing.c"
+#line 6619 "TumblrPublishing.c"
 	{
 		SpitPublishingPublishable* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
@@ -6644,118 +6664,118 @@ static void publishing_tumblr_tumblr_publisher_upload_transaction_real_execute (
 		const gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction)->publishable;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp10_ = spit_publishing_publishable_get_serialized_file (_tmp9_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp11_ = _tmp10_;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp12_ = g_file_get_path (_tmp11_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		g_file_get_contents (_tmp13_, &_tmp14_, &_tmp15_, &_inner_error_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (payload);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		payload = _tmp14_;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		payload_length = _tmp15_;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp13_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_object_unref0 (_tmp11_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 6656 "TumblrPublishing.c"
+#line 6676 "TumblrPublishing.c"
 				goto __catch38_g_file_error;
 			}
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (payload);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 6667 "TumblrPublishing.c"
+#line 6687 "TumblrPublishing.c"
 		}
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp16_ = payload;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp17_ = string_get_data (_tmp16_, &_tmp17__length1);
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp18_ = _tmp17_;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp18__length1 = _tmp17__length1;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp19_ = payload_length;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp20_ = publishing_tumblr_tumblr_publisher_upload_transaction_encode (self, _tmp18_ + 0, ((gint) _tmp19_) - 0);
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		reqdata = _tmp20_;
-#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		_tmp21_ = reqdata;
-#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data[0]", _tmp21_);
 #line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		_tmp21_ = reqdata;
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data[0]", _tmp21_);
+#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "type", "photo");
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction)->publishable;
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp24_ = spit_publishing_publishable_get_publishing_keywords (_tmp22_, &_tmp23_);
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		keywords = _tmp24_;
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		keywords_length1 = _tmp23_;
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_keywords_size_ = keywords_length1;
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp25_ = g_strdup ("");
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		tags = _tmp25_;
-#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp26_ = keywords;
-#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp26__length1 = keywords_length1;
-#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (_tmp26_ != NULL) {
-#line 6709 "TumblrPublishing.c"
+#line 6729 "TumblrPublishing.c"
 			gchar** _tmp27_ = NULL;
 			gint _tmp27__length1 = 0;
 			gchar* _tmp28_ = NULL;
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp27_ = keywords;
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp27__length1 = keywords_length1;
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp28_ = _vala_g_strjoinv (",", _tmp27_, _tmp27__length1);
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (tags);
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			tags = _tmp28_;
-#line 6723 "TumblrPublishing.c"
+#line 6743 "TumblrPublishing.c"
 		}
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp29_ = tags;
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp30_ = soup_uri_encode (_tmp29_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp31_ = _tmp30_;
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "tags", _tmp31_);
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp31_);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (tags);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		keywords = (_vala_array_free (keywords, keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (reqdata);
-#line 6741 "TumblrPublishing.c"
+#line 6761 "TumblrPublishing.c"
 	}
 	goto __finally38;
 	__catch38_g_file_error:
@@ -6763,93 +6783,93 @@ static void publishing_tumblr_tumblr_publisher_upload_transaction_real_execute (
 		GError* e = NULL;
 		const gchar* _tmp32_ = NULL;
 		GError* _tmp33_ = NULL;
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		e = _inner_error_;
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_inner_error_ = NULL;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp32_ = _ ("A temporary file needed for publishing is unavailable");
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp33_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp32_);
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_inner_error_ = _tmp33_;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_error_free0 (e);
-#line 6761 "TumblrPublishing.c"
+#line 6781 "TumblrPublishing.c"
 		goto __finally38;
 	}
 	__finally38:
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (payload);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 6775 "TumblrPublishing.c"
+#line 6795 "TumblrPublishing.c"
 		} else {
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (payload);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
-#line 6785 "TumblrPublishing.c"
+#line 6805 "TumblrPublishing.c"
 		}
 	}
-#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 964 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp34_ = self->priv->session;
-#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 964 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_session_sign_transaction (_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 965 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp35_ = publishing_tumblr_tumblr_publisher_upload_transaction_get_authorization_header_string (self);
-#line 965 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	authorization_header = _tmp35_;
-#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp36_ = authorization_header;
-#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:967: executing upload transaction: authorization" \
+#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:968: executing upload transaction: authorization" \
 " header string = '%s'", _tmp36_);
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp37_ = authorization_header;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_add_header (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "Authorization", _tmp37_);
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp39_ = publishing_rest_support_transaction_get_arguments (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_tmp38_);
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	request_arguments = _tmp39_;
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	request_arguments_length1 = _tmp38_;
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_request_arguments_size_ = request_arguments_length1;
-#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp40_ = request_arguments;
-#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp40__length1 = request_arguments_length1;
-#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_vala_assert (_tmp40__length1 > 0, "request_arguments.length > 0");
-#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp41_ = g_strdup ("");
-#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	request_data = _tmp41_;
-#line 6822 "TumblrPublishing.c"
+#line 6842 "TumblrPublishing.c"
 	{
 		gint i = 0;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		i = 0;
-#line 6827 "TumblrPublishing.c"
+#line 6847 "TumblrPublishing.c"
 		{
 			gboolean _tmp42_ = FALSE;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp42_ = TRUE;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			while (TRUE) {
-#line 6834 "TumblrPublishing.c"
+#line 6854 "TumblrPublishing.c"
 				gint _tmp44_ = 0;
 				PublishingRESTSupportArgument** _tmp45_ = NULL;
 				gint _tmp45__length1 = 0;
@@ -6872,133 +6892,133 @@ static void publishing_tumblr_tumblr_publisher_upload_transaction_real_execute (
 				gint _tmp60_ = 0;
 				PublishingRESTSupportArgument** _tmp61_ = NULL;
 				gint _tmp61__length1 = 0;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (!_tmp42_) {
-#line 6859 "TumblrPublishing.c"
-					gint _tmp43_ = 0;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp43_ = i;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					i = _tmp43_ + 1;
-#line 6865 "TumblrPublishing.c"
-				}
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp42_ = FALSE;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp44_ = i;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp45_ = request_arguments;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp45__length1 = request_arguments_length1;
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				if (!(_tmp44_ < _tmp45__length1)) {
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					break;
 #line 6879 "TumblrPublishing.c"
+					gint _tmp43_ = 0;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					_tmp43_ = i;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					i = _tmp43_ + 1;
+#line 6885 "TumblrPublishing.c"
 				}
 #line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp42_ = FALSE;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp44_ = i;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp45_ = request_arguments;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp45__length1 = request_arguments_length1;
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				if (!(_tmp44_ < _tmp45__length1)) {
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					break;
+#line 6899 "TumblrPublishing.c"
+				}
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp46_ = request_data;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp47_ = request_arguments;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp47__length1 = request_arguments_length1;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp48_ = i;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp49_ = _tmp47_[_tmp48_];
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp50_ = _tmp49_->key;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp51_ = g_strconcat (_tmp50_, "=", NULL);
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp52_ = _tmp51_;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp53_ = request_arguments;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp53__length1 = request_arguments_length1;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp54_ = i;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp55_ = _tmp53_[_tmp54_];
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp56_ = _tmp55_->value;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp57_ = g_strconcat (_tmp52_, _tmp56_, NULL);
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp58_ = _tmp57_;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp59_ = g_strconcat (_tmp46_, _tmp58_, NULL);
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (request_data);
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				request_data = _tmp59_;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp58_);
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp52_);
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp60_ = i;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp61_ = request_arguments;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp61__length1 = request_arguments_length1;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (_tmp60_ < (_tmp61__length1 - 1)) {
-#line 6929 "TumblrPublishing.c"
+#line 6949 "TumblrPublishing.c"
 					const gchar* _tmp62_ = NULL;
 					gchar* _tmp63_ = NULL;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp62_ = request_data;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp63_ = g_strconcat (_tmp62_, "&", NULL);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_g_free0 (request_data);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					request_data = _tmp63_;
-#line 6940 "TumblrPublishing.c"
+#line 6960 "TumblrPublishing.c"
 				}
 			}
 		}
 	}
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp64_ = publishing_rest_support_transaction_get_endpoint_url (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp65_ = _tmp64_;
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp66_ = soup_message_new ("POST", _tmp65_);
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp67_ = _tmp66_;
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp65_);
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	outbound_message = _tmp67_;
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp68_ = outbound_message;
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp69_ = request_data;
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp70_ = string_get_data (_tmp69_, &_tmp70__length1);
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp71_ = _tmp70_;
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp71__length1 = _tmp70__length1;
-#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	soup_message_set_request (_tmp68_, "application/x-www-form-urlencoded", SOUP_MEMORY_COPY, _tmp71_, (gsize) _tmp71__length1);
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp72_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction)->message_headers;
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp73_ = gee_abstract_map_map_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	i = _tmp73_;
-#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp74_ = i;
-#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp75_ = gee_map_iterator_next (_tmp74_);
-#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	cont = _tmp75_;
 #line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp74_ = i;
+#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp75_ = gee_map_iterator_next (_tmp74_);
+#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	cont = _tmp75_;
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	while (TRUE) {
-#line 6983 "TumblrPublishing.c"
+#line 7003 "TumblrPublishing.c"
 		gboolean _tmp76_ = FALSE;
 		SoupMessage* _tmp77_ = NULL;
 		SoupMessageHeaders* _tmp78_ = NULL;
@@ -7010,142 +7030,142 @@ static void publishing_tumblr_tumblr_publisher_upload_transaction_real_execute (
 		gchar* _tmp84_ = NULL;
 		GeeMapIterator* _tmp85_ = NULL;
 		gboolean _tmp86_ = FALSE;
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp76_ = cont;
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (!_tmp76_) {
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			break;
-#line 7001 "TumblrPublishing.c"
+#line 7021 "TumblrPublishing.c"
 		}
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp77_ = outbound_message;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp78_ = _tmp77_->request_headers;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp79_ = i;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp80_ = gee_map_iterator_get_key (_tmp79_);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp81_ = (gchar*) _tmp80_;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp82_ = i;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp83_ = gee_map_iterator_get_value (_tmp82_);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp84_ = (gchar*) _tmp83_;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		soup_message_headers_append (_tmp78_, _tmp81_, _tmp84_);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp84_);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp81_);
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp85_ = i;
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp86_ = gee_map_iterator_next (_tmp85_);
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		cont = _tmp86_;
-#line 7031 "TumblrPublishing.c"
+#line 7051 "TumblrPublishing.c"
 	}
-#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp87_ = outbound_message;
-#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_set_message (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), _tmp87_);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_set_is_executed (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), TRUE);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_rest_support_transaction_send (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_object_unref0 (i);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_object_unref0 (outbound_message);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (request_data);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (authorization_header);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_g_free0 (payload);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			return;
-#line 7061 "TumblrPublishing.c"
-		} else {
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			_g_object_unref0 (i);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			_g_object_unref0 (outbound_message);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			_g_free0 (request_data);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			_g_free0 (authorization_header);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			_g_free0 (payload);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-			g_clear_error (&_inner_error_);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			return;
 #line 7081 "TumblrPublishing.c"
+		} else {
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			_g_object_unref0 (i);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			_g_object_unref0 (outbound_message);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			_g_free0 (request_data);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			_g_free0 (authorization_header);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			_g_free0 (payload);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			g_clear_error (&_inner_error_);
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+			return;
+#line 7101 "TumblrPublishing.c"
 		}
 	}
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (i);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (outbound_message);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (request_data);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	request_arguments = (_vala_array_free (request_arguments, request_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (authorization_header);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (payload);
-#line 7096 "TumblrPublishing.c"
+#line 7116 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_upload_transaction_class_init (PublishingTumblrTumblrPublisherUploadTransactionClass * klass) {
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_upload_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_tumblr_tumblr_publisher_upload_transaction_finalize;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingTumblrTumblrPublisherUploadTransactionPrivate));
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_tumblr_tumblr_publisher_upload_transaction_real_execute;
-#line 7109 "TumblrPublishing.c"
+#line 7129 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_upload_transaction_instance_init (PublishingTumblrTumblrPublisherUploadTransaction * self) {
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_UPLOAD_TRANSACTION_GET_PRIVATE (self);
-#line 7116 "TumblrPublishing.c"
+#line 7136 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_upload_transaction_finalize (PublishingRESTSupportTransaction* obj) {
 	PublishingTumblrTumblrPublisherUploadTransaction * self;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOAD_TRANSACTION, PublishingTumblrTumblrPublisherUploadTransaction);
 #line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_publishing_rest_support_session_unref0 (self->priv->session);
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOAD_TRANSACTION, PublishingTumblrTumblrPublisherUploadTransaction);
 #line 875 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_publishing_rest_support_session_unref0 (self->priv->session);
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->auth_header_fields = (_vala_array_free (self->priv->auth_header_fields, self->priv->auth_header_fields_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_tumblr_tumblr_publisher_upload_transaction_parent_class)->finalize (obj);
-#line 7130 "TumblrPublishing.c"
+#line 7150 "TumblrPublishing.c"
 }
 
 
@@ -7168,36 +7188,36 @@ PublishingTumblrTumblrPublisherUploader* publishing_tumblr_tumblr_publisher_uplo
 	gint _tmp1__length1 = 0;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (session), NULL);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (blog_url != NULL, NULL);
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = publishables;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1__length1 = publishables_length1;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherUploader*) publishing_rest_support_batch_uploader_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp1__length1);
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = blog_url;
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->blog_url);
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blog_url = _tmp3_;
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 7175 "TumblrPublishing.c"
+#line 7195 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherUploader* publishing_tumblr_tumblr_publisher_uploader_new (PublishingTumblrTumblrPublisherSession* session, SpitPublishingPublishable** publishables, int publishables_length1, const gchar* blog_url) {
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_uploader_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOADER, session, publishables, publishables_length1, blog_url);
-#line 7182 "TumblrPublishing.c"
+#line 7202 "TumblrPublishing.c"
 }
 
 
@@ -7211,72 +7231,72 @@ static PublishingRESTSupportTransaction* publishing_tumblr_tumblr_publisher_uplo
 	const gchar* _tmp4_ = NULL;
 	PublishingTumblrTumblrPublisherUploadTransaction* _tmp5_ = NULL;
 	PublishingRESTSupportTransaction* _tmp6_ = NULL;
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOADER, PublishingTumblrTumblrPublisherUploader);
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1011: Create upload transaction");
 #line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1012: Create upload transaction");
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = publishing_rest_support_batch_uploader_get_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION, PublishingTumblrTumblrPublisherSession);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = publishing_rest_support_batch_uploader_get_current_publishable (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = self->priv->blog_url;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = publishing_tumblr_tumblr_publisher_upload_transaction_new (_tmp1_, _tmp3_, _tmp4_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp6_;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 7224 "TumblrPublishing.c"
+#line 7244 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_uploader_class_init (PublishingTumblrTumblrPublisherUploaderClass * klass) {
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->finalize = publishing_tumblr_tumblr_publisher_uploader_finalize;
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingTumblrTumblrPublisherUploaderPrivate));
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_tumblr_tumblr_publisher_uploader_real_create_transaction;
-#line 7237 "TumblrPublishing.c"
+#line 7257 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_uploader_instance_init (PublishingTumblrTumblrPublisherUploader * self) {
 	gchar* _tmp0_ = NULL;
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_UPLOADER_GET_PRIVATE (self);
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = g_strdup ("");
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->blog_url = _tmp0_;
-#line 7249 "TumblrPublishing.c"
+#line 7269 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_uploader_finalize (PublishingRESTSupportBatchUploader* obj) {
 	PublishingTumblrTumblrPublisherUploader * self;
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOADER, PublishingTumblrTumblrPublisherUploader);
 #line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOADER, PublishingTumblrTumblrPublisherUploader);
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->blog_url);
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_CLASS (publishing_tumblr_tumblr_publisher_uploader_parent_class)->finalize (obj);
-#line 7261 "TumblrPublishing.c"
+#line 7281 "TumblrPublishing.c"
 }
 
 
@@ -7294,18 +7314,18 @@ GType publishing_tumblr_tumblr_publisher_uploader_get_type (void) {
 
 PublishingTumblrTumblrPublisherSession* publishing_tumblr_tumblr_publisher_session_construct (GType object_type) {
 	PublishingTumblrTumblrPublisherSession* self = NULL;
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = (PublishingTumblrTumblrPublisherSession*) publishing_rest_support_session_construct (object_type, PUBLISHING_TUMBLR_ENDPOINT_URL);
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
-#line 7283 "TumblrPublishing.c"
+#line 7303 "TumblrPublishing.c"
 }
 
 
 PublishingTumblrTumblrPublisherSession* publishing_tumblr_tumblr_publisher_session_new (void) {
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return publishing_tumblr_tumblr_publisher_session_construct (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION);
-#line 7290 "TumblrPublishing.c"
+#line 7310 "TumblrPublishing.c"
 }
 
 
@@ -7314,29 +7334,29 @@ static gboolean publishing_tumblr_tumblr_publisher_session_real_is_authenticated
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION, PublishingTumblrTumblrPublisherSession);
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = self->priv->access_phase_token;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp1_ != NULL) {
-#line 7305 "TumblrPublishing.c"
+#line 7325 "TumblrPublishing.c"
 		const gchar* _tmp2_ = NULL;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp2_ = self->priv->access_phase_token_secret;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = _tmp2_ != NULL;
-#line 7311 "TumblrPublishing.c"
+#line 7331 "TumblrPublishing.c"
 	} else {
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp0_ = FALSE;
-#line 7315 "TumblrPublishing.c"
+#line 7335 "TumblrPublishing.c"
 	}
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp0_;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 7321 "TumblrPublishing.c"
+#line 7341 "TumblrPublishing.c"
 }
 
 
@@ -7345,70 +7365,70 @@ void publishing_tumblr_tumblr_publisher_session_authenticate_from_persistent_cre
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self));
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (token != NULL);
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (secret != NULL);
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = token;
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token);
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token = _tmp1_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = secret;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token_secret = _tmp3_;
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), "authenticated");
-#line 7354 "TumblrPublishing.c"
+#line 7374 "TumblrPublishing.c"
 }
 
 
 void publishing_tumblr_tumblr_publisher_session_deauthenticate (PublishingTumblrTumblrPublisherSession* self) {
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self));
-#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1044 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token);
-#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1044 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token = NULL;
-#line 1044 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 1044 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token_secret = NULL;
-#line 7369 "TumblrPublishing.c"
+#line 7389 "TumblrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_transaction_ref0 (gpointer self) {
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self ? publishing_rest_support_transaction_ref (self) : NULL;
-#line 7376 "TumblrPublishing.c"
+#line 7396 "TumblrPublishing.c"
 }
 
 
 static void _vala_array_add23 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		*array = g_renew (PublishingRESTSupportArgument*, *array, (*size) + 1);
-#line 7387 "TumblrPublishing.c"
+#line 7407 "TumblrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7393 "TumblrPublishing.c"
+#line 7413 "TumblrPublishing.c"
 }
 
 
@@ -7470,89 +7490,89 @@ void publishing_tumblr_tumblr_publisher_session_sign_transaction (PublishingTumb
 	gchar* _tmp75_ = NULL;
 	const gchar* _tmp76_ = NULL;
 	PublishingTumblrTumblrPublisherUploadTransaction* _tmp77_ = NULL;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self));
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = txn;
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = publishing_rest_support_transaction_get_method (_tmp0_);
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = publishing_rest_support_http_method_to_string (_tmp1_);
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	http_method = _tmp2_;
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1050: signing transaction with parameters:");
 #line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp3_ = http_method;
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp4_ = g_strconcat ("HTTP method = ", _tmp3_, NULL);
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp5_ = _tmp4_;
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1051: %s", _tmp5_);
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (_tmp5_);
+	g_debug ("TumblrPublishing.vala:1051: signing transaction with parameters:");
 #line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp3_ = http_method;
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp4_ = g_strconcat ("HTTP method = ", _tmp3_, NULL);
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_tmp5_ = _tmp4_;
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1052: %s", _tmp5_);
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (_tmp5_);
+#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	signing_key = NULL;
-#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = self->priv->access_phase_token_secret;
-#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp6_ != NULL) {
-#line 7485 "TumblrPublishing.c"
+#line 7505 "TumblrPublishing.c"
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
-#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		g_debug ("TumblrPublishing.vala:1054: access phase token secret available; using" \
+#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		g_debug ("TumblrPublishing.vala:1055: access phase token secret available; using" \
 " it as signing key");
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp7_ = publishing_tumblr_tumblr_publisher_session_get_access_phase_token_secret (self);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp8_ = _tmp7_;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp9_ = g_strconcat (PUBLISHING_TUMBLR_API_SECRET "&", _tmp8_, NULL);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (signing_key);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		signing_key = _tmp9_;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (_tmp8_);
-#line 7503 "TumblrPublishing.c"
+#line 7523 "TumblrPublishing.c"
 	} else {
 		gchar* _tmp10_ = NULL;
-#line 1058 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		g_debug ("TumblrPublishing.vala:1058: %s", "Access phase token secret not available; using API " "key as signing key");
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1059 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		g_debug ("TumblrPublishing.vala:1059: %s", "Access phase token secret not available; using API " "key as signing key");
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp10_ = g_strdup (PUBLISHING_TUMBLR_API_SECRET "&");
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_g_free0 (signing_key);
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		signing_key = _tmp10_;
-#line 7514 "TumblrPublishing.c"
+#line 7534 "TumblrPublishing.c"
 	}
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp11_ = txn;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp13_ = publishing_rest_support_transaction_get_arguments (_tmp11_, &_tmp12_);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	base_string_arguments = _tmp13_;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	base_string_arguments_length1 = _tmp12_;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_base_string_arguments_size_ = base_string_arguments_length1;
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp14_ = txn;
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp15_ = _publishing_rest_support_transaction_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp14_, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_UPLOAD_TRANSACTION) ? ((PublishingTumblrTumblrPublisherUploadTransaction*) _tmp14_) : NULL);
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	upload_txn = _tmp15_;
-#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp16_ = upload_txn;
-#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp16_ != NULL) {
-#line 7536 "TumblrPublishing.c"
+#line 7556 "TumblrPublishing.c"
 		PublishingRESTSupportArgument** auth_header_args = NULL;
 		PublishingTumblrTumblrPublisherUploadTransaction* _tmp17_ = NULL;
 		gint _tmp18_ = 0;
@@ -7561,97 +7581,97 @@ void publishing_tumblr_tumblr_publisher_session_sign_transaction (PublishingTumb
 		gint _auth_header_args_size_ = 0;
 		PublishingRESTSupportArgument** _tmp20_ = NULL;
 		gint _tmp20__length1 = 0;
-#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-		g_debug ("TumblrPublishing.vala:1069: %s", "this transaction is an UploadTransaction; including Authorization head" \
+#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+		g_debug ("TumblrPublishing.vala:1070: %s", "this transaction is an UploadTransaction; including Authorization head" \
 "er " "fields in signature base string");
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp17_ = upload_txn;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp19_ = publishing_tumblr_tumblr_publisher_upload_transaction_get_authorization_header_fields (_tmp17_, &_tmp18_);
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		auth_header_args = _tmp19_;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		auth_header_args_length1 = _tmp18_;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_auth_header_args_size_ = auth_header_args_length1;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp20_ = auth_header_args;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp20__length1 = auth_header_args_length1;
-#line 7561 "TumblrPublishing.c"
+#line 7581 "TumblrPublishing.c"
 		{
 			PublishingRESTSupportArgument** arg_collection = NULL;
 			gint arg_collection_length1 = 0;
 			gint _arg_collection_size_ = 0;
 			gint arg_it = 0;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			arg_collection = _tmp20_;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			arg_collection_length1 = _tmp20__length1;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			for (arg_it = 0; arg_it < _tmp20__length1; arg_it = arg_it + 1) {
-#line 7573 "TumblrPublishing.c"
+#line 7593 "TumblrPublishing.c"
 				PublishingRESTSupportArgument* _tmp21_ = NULL;
 				PublishingRESTSupportArgument* arg = NULL;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp21_ = _publishing_rest_support_argument_ref0 (arg_collection[arg_it]);
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				arg = _tmp21_;
-#line 7580 "TumblrPublishing.c"
+#line 7600 "TumblrPublishing.c"
 				{
 					PublishingRESTSupportArgument** _tmp22_ = NULL;
 					gint _tmp22__length1 = 0;
 					PublishingRESTSupportArgument* _tmp23_ = NULL;
 					PublishingRESTSupportArgument* _tmp24_ = NULL;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp22_ = base_string_arguments;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp22__length1 = base_string_arguments_length1;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp23_ = arg;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp24_ = _publishing_rest_support_argument_ref0 (_tmp23_);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_vala_array_add23 (&base_string_arguments, &base_string_arguments_length1, &_base_string_arguments_size_, _tmp24_);
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_publishing_rest_support_argument_unref0 (arg);
-#line 7598 "TumblrPublishing.c"
+#line 7618 "TumblrPublishing.c"
 				}
 			}
 		}
-#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		auth_header_args = (_vala_array_free (auth_header_args, auth_header_args_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 7604 "TumblrPublishing.c"
+#line 7624 "TumblrPublishing.c"
 	}
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp25_ = base_string_arguments;
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp25__length1 = base_string_arguments_length1;
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp27_ = publishing_rest_support_argument_sort (_tmp25_, _tmp25__length1, &_tmp26_);
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	sorted_args = _tmp27_;
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	sorted_args_length1 = _tmp26_;
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_sorted_args_size_ = sorted_args_length1;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp28_ = g_strdup ("");
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	arguments_string = _tmp28_;
-#line 7622 "TumblrPublishing.c"
+#line 7642 "TumblrPublishing.c"
 	{
 		gint i = 0;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		i = 0;
-#line 7627 "TumblrPublishing.c"
+#line 7647 "TumblrPublishing.c"
 		{
 			gboolean _tmp29_ = FALSE;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			_tmp29_ = TRUE;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 			while (TRUE) {
-#line 7634 "TumblrPublishing.c"
+#line 7654 "TumblrPublishing.c"
 				gint _tmp31_ = 0;
 				PublishingRESTSupportArgument** _tmp32_ = NULL;
 				gint _tmp32__length1 = 0;
@@ -7674,216 +7694,216 @@ void publishing_tumblr_tumblr_publisher_session_sign_transaction (PublishingTumb
 				gint _tmp47_ = 0;
 				PublishingRESTSupportArgument** _tmp48_ = NULL;
 				gint _tmp48__length1 = 0;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (!_tmp29_) {
-#line 7659 "TumblrPublishing.c"
-					gint _tmp30_ = 0;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					_tmp30_ = i;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					i = _tmp30_ + 1;
-#line 7665 "TumblrPublishing.c"
-				}
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp29_ = FALSE;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp31_ = i;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp32_ = sorted_args;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				_tmp32__length1 = sorted_args_length1;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-				if (!(_tmp31_ < _tmp32__length1)) {
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-					break;
 #line 7679 "TumblrPublishing.c"
+					gint _tmp30_ = 0;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					_tmp30_ = i;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					i = _tmp30_ + 1;
+#line 7685 "TumblrPublishing.c"
 				}
 #line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp29_ = FALSE;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp31_ = i;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp32_ = sorted_args;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				_tmp32__length1 = sorted_args_length1;
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+				if (!(_tmp31_ < _tmp32__length1)) {
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+					break;
+#line 7699 "TumblrPublishing.c"
+				}
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp33_ = arguments_string;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp34_ = sorted_args;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp34__length1 = sorted_args_length1;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp35_ = i;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp36_ = _tmp34_[_tmp35_];
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp37_ = _tmp36_->key;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp38_ = g_strconcat (_tmp37_, "=", NULL);
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp39_ = _tmp38_;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp40_ = sorted_args;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp40__length1 = sorted_args_length1;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp41_ = i;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp42_ = _tmp40_[_tmp41_];
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp43_ = _tmp42_->value;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp44_ = g_strconcat (_tmp39_, _tmp43_, NULL);
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp45_ = _tmp44_;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp46_ = g_strconcat (_tmp33_, _tmp45_, NULL);
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (arguments_string);
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				arguments_string = _tmp46_;
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp45_);
-#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_g_free0 (_tmp39_);
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp47_ = i;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp48_ = sorted_args;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				_tmp48__length1 = sorted_args_length1;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 				if (_tmp47_ < (_tmp48__length1 - 1)) {
-#line 7729 "TumblrPublishing.c"
+#line 7749 "TumblrPublishing.c"
 					const gchar* _tmp49_ = NULL;
 					gchar* _tmp50_ = NULL;
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp49_ = arguments_string;
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_tmp50_ = g_strconcat (_tmp49_, "&", NULL);
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					_g_free0 (arguments_string);
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 					arguments_string = _tmp50_;
-#line 7740 "TumblrPublishing.c"
+#line 7760 "TumblrPublishing.c"
 				}
 			}
 		}
 	}
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp51_ = http_method;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp52_ = g_strconcat (_tmp51_, "&", NULL);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp53_ = _tmp52_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp54_ = txn;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp55_ = publishing_rest_support_transaction_get_endpoint_url (_tmp54_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp56_ = _tmp55_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp57_ = soup_uri_encode (_tmp56_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp58_ = _tmp57_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp59_ = g_strconcat (_tmp53_, _tmp58_, NULL);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp60_ = _tmp59_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp61_ = g_strconcat (_tmp60_, "&", NULL);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp62_ = _tmp61_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp63_ = arguments_string;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp64_ = soup_uri_encode (_tmp63_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp65_ = _tmp64_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp66_ = g_strconcat (_tmp62_, _tmp65_, NULL);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp67_ = _tmp66_;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp65_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp62_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp60_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp58_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp56_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp53_);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	signature_base_string = _tmp67_;
-#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp68_ = signature_base_string;
-#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1094: signature base string = '%s'", _tmp68_);
 #line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1095: signature base string = '%s'", _tmp68_);
+#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp69_ = signing_key;
-#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1095: signing key = '%s'", _tmp69_);
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1096: signing key = '%s'", _tmp69_);
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp70_ = signing_key;
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp71_ = signature_base_string;
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp72_ = publishing_rest_support_hmac_sha1 (_tmp70_, _tmp71_);
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	signature = _tmp72_;
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp73_ = signature;
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1099: signature = '%s'", _tmp73_);
 #line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1100: signature = '%s'", _tmp73_);
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp74_ = signature;
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp75_ = soup_uri_encode (_tmp74_, PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA);
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (signature);
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	signature = _tmp75_;
-#line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1103 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp76_ = signature;
-#line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_debug ("TumblrPublishing.vala:1102: signature after RFC encode = '%s'", _tmp76_);
-#line 1104 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1103 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_debug ("TumblrPublishing.vala:1103: signature after RFC encode = '%s'", _tmp76_);
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp77_ = upload_txn;
-#line 1104 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	if (_tmp77_ != NULL) {
-#line 7829 "TumblrPublishing.c"
+#line 7849 "TumblrPublishing.c"
 		PublishingTumblrTumblrPublisherUploadTransaction* _tmp78_ = NULL;
 		const gchar* _tmp79_ = NULL;
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp78_ = upload_txn;
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp79_ = signature;
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_tumblr_tumblr_publisher_upload_transaction_add_authorization_header_field (_tmp78_, "oauth_signature", _tmp79_);
-#line 7838 "TumblrPublishing.c"
+#line 7858 "TumblrPublishing.c"
 	} else {
 		PublishingRESTSupportTransaction* _tmp80_ = NULL;
 		const gchar* _tmp81_ = NULL;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp80_ = txn;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		_tmp81_ = signature;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 		publishing_rest_support_transaction_add_argument (_tmp80_, "oauth_signature", _tmp81_);
-#line 7848 "TumblrPublishing.c"
+#line 7868 "TumblrPublishing.c"
 	}
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (signature);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (signature_base_string);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (arguments_string);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	sorted_args = (_vala_array_free (sorted_args, sorted_args_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (upload_txn);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	base_string_arguments = (_vala_array_free (base_string_arguments, base_string_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (signing_key);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (http_method);
-#line 7866 "TumblrPublishing.c"
+#line 7886 "TumblrPublishing.c"
 }
 
 
@@ -7892,31 +7912,31 @@ void publishing_tumblr_tumblr_publisher_session_set_access_phase_credentials (Pu
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self));
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (token != NULL);
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_if_fail (secret != NULL);
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = token;
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token);
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token = _tmp1_;
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = secret;
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token_secret = _tmp3_;
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), "authenticated");
-#line 7899 "TumblrPublishing.c"
+#line 7919 "TumblrPublishing.c"
 }
 
 
@@ -7924,17 +7944,17 @@ gchar* publishing_tumblr_tumblr_publisher_session_get_access_phase_token (Publis
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self), NULL);
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->access_phase_token;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp1_;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 7917 "TumblrPublishing.c"
+#line 7937 "TumblrPublishing.c"
 }
 
 
@@ -7942,17 +7962,17 @@ gchar* publishing_tumblr_tumblr_publisher_session_get_access_phase_token_secret 
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self), NULL);
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = self->priv->access_phase_token_secret;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp1_;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 7935 "TumblrPublishing.c"
+#line 7955 "TumblrPublishing.c"
 }
 
 
@@ -7971,47 +7991,47 @@ gchar* publishing_tumblr_tumblr_publisher_session_get_oauth_nonce (PublishingTum
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self), NULL);
 #line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	g_get_current_time (&currtime);
+	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self), NULL);
 #line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_get_current_time (&currtime);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	g_get_current_time (&currtime);
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = currtime;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = _tmp0_.tv_sec;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = g_strdup_printf ("%li", _tmp1_);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = currtime;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp5_ = _tmp4_.tv_usec;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp6_ = g_strdup_printf ("%li", _tmp5_);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp8_ = g_strconcat (_tmp3_, _tmp7_, NULL);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp10_ = g_compute_checksum_for_string (G_CHECKSUM_MD5, _tmp9_, (gsize) -1);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp11_ = _tmp10_;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp3_);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp11_;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 7994 "TumblrPublishing.c"
+#line 8014 "TumblrPublishing.c"
 }
 
 
@@ -8034,7 +8054,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 8017 "TumblrPublishing.c"
+#line 8037 "TumblrPublishing.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -8042,7 +8062,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8025 "TumblrPublishing.c"
+#line 8045 "TumblrPublishing.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -8054,7 +8074,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 8037 "TumblrPublishing.c"
+#line 8057 "TumblrPublishing.c"
 	}
 }
 
@@ -8078,21 +8098,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 8061 "TumblrPublishing.c"
+#line 8081 "TumblrPublishing.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 8067 "TumblrPublishing.c"
+#line 8087 "TumblrPublishing.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 8071 "TumblrPublishing.c"
+#line 8091 "TumblrPublishing.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 8075 "TumblrPublishing.c"
+#line 8095 "TumblrPublishing.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -8104,7 +8124,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 8087 "TumblrPublishing.c"
+#line 8107 "TumblrPublishing.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -8114,13 +8134,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 8097 "TumblrPublishing.c"
+#line 8117 "TumblrPublishing.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 8103 "TumblrPublishing.c"
+#line 8123 "TumblrPublishing.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -8134,7 +8154,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 8117 "TumblrPublishing.c"
+#line 8137 "TumblrPublishing.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -8144,13 +8164,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 8127 "TumblrPublishing.c"
+#line 8147 "TumblrPublishing.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 8133 "TumblrPublishing.c"
+#line 8153 "TumblrPublishing.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8159,7 +8179,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 8142 "TumblrPublishing.c"
+#line 8162 "TumblrPublishing.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -8179,7 +8199,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 8162 "TumblrPublishing.c"
+#line 8182 "TumblrPublishing.c"
 }
 
 
@@ -8190,63 +8210,63 @@ gchar* publishing_tumblr_tumblr_publisher_session_get_oauth_timestamp (Publishin
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_IS_SESSION (self), NULL);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = g_get_real_time ();
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp1_ = g_strdup_printf ("%" G_GINT64_FORMAT, _tmp0_);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp3_ = string_substring (_tmp2_, (glong) 0, (glong) 10);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (_tmp2_);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	result = _tmp4_;
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return result;
-#line 8191 "TumblrPublishing.c"
+#line 8211 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_session_class_init (PublishingTumblrTumblrPublisherSessionClass * klass) {
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	publishing_tumblr_tumblr_publisher_session_parent_class = g_type_class_peek_parent (klass);
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->finalize = publishing_tumblr_tumblr_publisher_session_finalize;
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingTumblrTumblrPublisherSessionPrivate));
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->is_authenticated = publishing_tumblr_tumblr_publisher_session_real_is_authenticated;
-#line 8204 "TumblrPublishing.c"
+#line 8224 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_session_instance_init (PublishingTumblrTumblrPublisherSession * self) {
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_SESSION_GET_PRIVATE (self);
 #line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self->priv->access_phase_token = NULL;
+	self->priv = PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_SESSION_GET_PRIVATE (self);
 #line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	self->priv->access_phase_token = NULL;
+#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->access_phase_token_secret = NULL;
-#line 8215 "TumblrPublishing.c"
+#line 8235 "TumblrPublishing.c"
 }
 
 
 static void publishing_tumblr_tumblr_publisher_session_finalize (PublishingRESTSupportSession* obj) {
 	PublishingTumblrTumblrPublisherSession * self;
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION, PublishingTumblrTumblrPublisherSession);
 #line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_g_free0 (self->priv->access_phase_token);
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_TUMBLR_TUMBLR_PUBLISHER_TYPE_SESSION, PublishingTumblrTumblrPublisherSession);
 #line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+	_g_free0 (self->priv->access_phase_token);
+#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_SESSION_CLASS (publishing_tumblr_tumblr_publisher_session_parent_class)->finalize (obj);
-#line 8229 "TumblrPublishing.c"
+#line 8249 "TumblrPublishing.c"
 }
 
 
@@ -8273,7 +8293,7 @@ static void publishing_tumblr_tumblr_publisher_class_init (PublishingTumblrTumbl
 	g_type_class_add_private (klass, sizeof (PublishingTumblrTumblrPublisherPrivate));
 #line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_tumblr_tumblr_publisher_finalize;
-#line 8256 "TumblrPublishing.c"
+#line 8276 "TumblrPublishing.c"
 }
 
 
@@ -8288,7 +8308,7 @@ static void publishing_tumblr_tumblr_publisher_spit_publishing_publisher_interfa
 	iface->start = (void (*)(SpitPublishingPublisher*)) publishing_tumblr_tumblr_publisher_real_start;
 #line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	iface->stop = (void (*)(SpitPublishingPublisher*)) publishing_tumblr_tumblr_publisher_real_stop;
-#line 8271 "TumblrPublishing.c"
+#line 8291 "TumblrPublishing.c"
 }
 
 
@@ -8322,7 +8342,7 @@ static void publishing_tumblr_tumblr_publisher_instance_init (PublishingTumblrTu
 	_tmp0_ = g_strdup ("");
 #line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	self->priv->username = _tmp0_;
-#line 8305 "TumblrPublishing.c"
+#line 8325 "TumblrPublishing.c"
 }
 
 
@@ -8362,7 +8382,7 @@ static void publishing_tumblr_tumblr_publisher_finalize (GObject* obj) {
 	_g_free0 (self->priv->username);
 #line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	G_OBJECT_CLASS (publishing_tumblr_tumblr_publisher_parent_class)->finalize (obj);
-#line 8345 "TumblrPublishing.c"
+#line 8365 "TumblrPublishing.c"
 }
 
 

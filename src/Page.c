@@ -48,6 +48,8 @@ typedef struct _InjectionGroupElement InjectionGroupElement;
 typedef struct _InjectionGroupElementClass InjectionGroupElementClass;
 #define _g_free0(var) (var = (g_free (var), NULL))
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
+
+#define INJECTION_GROUP_ELEMENT_TYPE_ITEM_TYPE (injection_group_element_item_type_get_type ())
 #define _injection_group_element_unref0(var) ((var == NULL) ? NULL : (var = (injection_group_element_unref (var), NULL)))
 typedef struct _InjectionGroupElementPrivate InjectionGroupElementPrivate;
 typedef struct _InjectionGroupParamSpecElement InjectionGroupParamSpecElement;
@@ -115,6 +117,7 @@ typedef struct _OneShotScheduler OneShotScheduler;
 typedef struct _OneShotSchedulerClass OneShotSchedulerClass;
 #define _data_collection_unref0(var) ((var == NULL) ? NULL : (var = (data_collection_unref (var), NULL)))
 #define _one_shot_scheduler_unref0(var) ((var == NULL) ? NULL : (var = (one_shot_scheduler_unref (var), NULL)))
+#define _injection_group_unref0(var) ((var == NULL) ? NULL : (var = (injection_group_unref (var), NULL)))
 
 #define TYPE_APP_WINDOW (app_window_get_type ())
 #define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
@@ -125,6 +128,7 @@ typedef struct _OneShotSchedulerClass OneShotSchedulerClass;
 
 typedef struct _AppWindow AppWindow;
 typedef struct _AppWindowClass AppWindowClass;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
 
 #define TYPE_COMMAND_MANAGER (command_manager_get_type ())
 #define COMMAND_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_COMMAND_MANAGER, CommandManager))
@@ -135,7 +139,6 @@ typedef struct _AppWindowClass AppWindowClass;
 
 typedef struct _CommandManager CommandManager;
 typedef struct _CommandManagerClass CommandManagerClass;
-#define _injection_group_unref0(var) ((var == NULL) ? NULL : (var = (injection_group_unref (var), NULL)))
 
 #define TYPE_DATA_OBJECT (data_object_get_type ())
 #define DATA_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_DATA_OBJECT, DataObject))
@@ -457,13 +460,20 @@ struct _InjectionGroupPrivate {
 	gint separator_id;
 };
 
+typedef enum  {
+	INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENUITEM,
+	INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENU,
+	INJECTION_GROUP_ELEMENT_ITEM_TYPE_SEPARATOR
+} InjectionGroupElementItemType;
+
 struct _InjectionGroupElement {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
 	InjectionGroupElementPrivate * priv;
 	gchar* name;
 	gchar* action;
-	GtkUIManagerItemType kind;
+	gchar* accellerator;
+	InjectionGroupElementItemType kind;
 };
 
 struct _InjectionGroupElementClass {
@@ -482,7 +492,7 @@ struct _ParamSpecInjectionGroup {
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -492,8 +502,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -501,10 +509,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -568,13 +574,7 @@ struct _PagePrivate {
 	gint cursor_hide_time_cached;
 	gboolean are_actions_attached;
 	OneShotScheduler* update_actions_scheduler;
-	GtkActionGroup* action_group;
-	GtkActionGroup** common_action_groups;
-	gint common_action_groups_length1;
-	gint _common_action_groups_size_;
-	guint* merge_ids;
-	gint merge_ids_length1;
-	gint _merge_ids_size_;
+	gboolean menubar_injected;
 };
 
 typedef void (*OneShotCallback) (void* user_data);
@@ -619,6 +619,8 @@ struct _CheckerboardPagePrivate {
 	gboolean autoscroll_scheduled;
 	CheckerboardItem* activated_item;
 	GeeArrayList* previously_selected;
+	GtkMenu* item_context_menu;
+	GtkMenu* page_context_menu;
 };
 
 typedef enum  {
@@ -891,9 +893,10 @@ InjectionGroup* injection_group_new (const gchar* path);
 InjectionGroup* injection_group_construct (GType object_type, const gchar* path);
 gchar* injection_group_get_path (InjectionGroup* self);
 GeeList* injection_group_get_elements (InjectionGroup* self);
-void injection_group_add_menu_item (InjectionGroup* self, const gchar* name, const gchar* action);
-InjectionGroupElement* injection_group_element_new (const gchar* name, const gchar* action, GtkUIManagerItemType kind);
-InjectionGroupElement* injection_group_element_construct (GType object_type, const gchar* name, const gchar* action, GtkUIManagerItemType kind);
+void injection_group_add_menu_item (InjectionGroup* self, const gchar* name, const gchar* action, const gchar* accellerator);
+GType injection_group_element_item_type_get_type (void) G_GNUC_CONST;
+InjectionGroupElement* injection_group_element_new (const gchar* name, const gchar* action, const gchar* accellerator, InjectionGroupElementItemType kind);
+InjectionGroupElement* injection_group_element_construct (GType object_type, const gchar* name, const gchar* action, const gchar* accellerator, InjectionGroupElementItemType kind);
 void injection_group_add_menu (InjectionGroup* self, const gchar* name, const gchar* action);
 void injection_group_add_separator (InjectionGroup* self);
 enum  {
@@ -946,7 +949,6 @@ ViewCollection* page_get_view (Page* self);
 GtkWindow* page_get_container (Page* self);
 void page_set_container (Page* self, GtkWindow* container);
 static void page_real_set_container (Page* self, GtkWindow* container);
-GtkUIManager* page_window_get_ui_manager (PageWindow* self);
 static void page_real_clear_container (Page* self);
 void page_set_event_source (Page* self, GtkWidget* event_source);
 static gboolean page_on_button_pressed_internal (Page* self, GdkEventButton* event);
@@ -963,17 +965,15 @@ void page_on_event_source_realize (Page* self);
 static void _page_on_event_source_realize_gtk_widget_realize (GtkWidget* _sender, gpointer self);
 void page_disable_drag_source (Page* self);
 GtkWidget* page_get_event_source (Page* self);
-GtkMenuBar* page_get_menubar (Page* self);
-static GtkMenuBar* page_real_get_menubar (Page* self);
-GtkWidget* page_get_page_ui_widget (Page* self, const gchar* path);
-static GtkWidget* page_real_get_page_ui_widget (Page* self, const gchar* path);
+GMenuModel* page_get_menubar (Page* self);
+InjectionGroup** page_init_collect_injection_groups (Page* self, int* result_length1);
+GMenuModel* page_find_extension_point (Page* self, GMenuModel* model, const gchar* extension_point);
 GtkToolbar* page_get_toolbar (Page* self);
 static GtkToolbar* page_real_get_toolbar (Page* self);
 GtkMenu* page_get_page_context_menu (Page* self);
 static GtkMenu* page_real_get_page_context_menu (Page* self);
 void page_switching_from (Page* self);
 static void page_real_switching_from (Page* self);
-static void page_remove_ui (Page* self);
 void page_switched_to (Page* self);
 static void page_real_switched_to (Page* self);
 static void page_add_ui (Page* self);
@@ -985,14 +985,17 @@ void page_switching_to_fullscreen (Page* self, FullscreenWindow* fsw);
 static void page_real_switching_to_fullscreen (Page* self, FullscreenWindow* fsw);
 void page_returning_from_fullscreen (Page* self, FullscreenWindow* fsw);
 static void page_real_returning_from_fullscreen (Page* self, FullscreenWindow* fsw);
-GtkAction* page_get_action (Page* self, const gchar* name);
-GtkAction* page_get_common_action (Page* self, const gchar* name, gboolean log_warning);
+GAction* page_get_action (Page* self, const gchar* name);
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
 void page_set_action_important (Page* self, const gchar* name, gboolean important);
 void page_set_action_visible (Page* self, const gchar* name, gboolean visible);
 void page_set_action_short_label (Page* self, const gchar* name, const gchar* short_label);
 void page_set_action_details (Page* self, const gchar* name, const gchar* label, const gchar* tooltip, gboolean sensitive);
+void page_update_menu_item_label (Page* self, const gchar* id, const gchar* new_label);
 void page_activate_action (Page* self, const gchar* name);
+GAction* page_get_common_action (Page* self, const gchar* name, gboolean log_warning);
 void page_set_common_action_sensitive (Page* self, const gchar* name, gboolean sensitive);
 void page_set_common_action_label (Page* self, const gchar* name, const gchar* label);
 void page_set_common_action_important (Page* self, const gchar* name, gboolean important);
@@ -1001,9 +1004,9 @@ gboolean page_get_ctrl_pressed (Page* self);
 gboolean page_get_alt_pressed (Page* self);
 gboolean page_get_shift_pressed (Page* self);
 gboolean page_get_super_pressed (Page* self);
+void page_set_action_active (Page* self, const gchar* name, gboolean active);
+static GVariant* _variant_new16 (gboolean value);
 static gboolean page_get_modifiers (Page* self, gboolean* ctrl, gboolean* alt, gboolean* shift, gboolean* super);
-GType app_window_get_type (void) G_GNUC_CONST;
-AppWindow* app_window_get_instance (void);
 gboolean page_on_ctrl_released (Page* self, GdkEventKey* event);
 gboolean page_on_ctrl_pressed (Page* self, GdkEventKey* event);
 gboolean page_on_alt_released (Page* self, GdkEventKey* event);
@@ -1022,15 +1025,14 @@ gpointer value_get_command_manager (const GValue* value);
 GType command_manager_get_type (void) G_GNUC_CONST;
 CommandManager* page_get_command_manager (Page* self);
 CommandManager* app_window_get_command_manager (void);
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1);
-GtkToggleActionEntry* page_init_collect_toggle_action_entries (Page* self, int* result_length1);
-void page_register_radio_actions (Page* self, GtkActionGroup* action_group);
-GtkActionGroup** app_window_get_common_action_groups (AppWindow* self, int* result_length1);
+void page_add_actions (Page* self);
+static void page_real_add_actions (Page* self);
+void page_on_action_toggle (Page* self, GAction* action, GVariant* value);
+static gboolean _variant_get17 (GVariant* value);
+static GVariant* _variant_new18 (gboolean value);
+void page_on_action_radio (Page* self, GAction* action, GVariant* value);
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
 static void page_init_load_ui (Page* self, const gchar* ui_filename);
-InjectionGroup** page_init_collect_injection_groups (Page* self, int* result_length1);
-static void _vala_array_add249 (guint** array, int* length, int* size, guint value);
-void app_window_replace_common_placeholders (AppWindow* self, GtkUIManager* ui);
 void page_init_toolbar (Page* self, const gchar* path);
 gint view_collection_get_selected_count (ViewCollection* self);
 gint data_collection_get_count (DataCollection* self);
@@ -1049,7 +1051,6 @@ OneShotScheduler* one_shot_scheduler_new (const gchar* name, OneShotCallback cal
 OneShotScheduler* one_shot_scheduler_construct (GType object_type, const gchar* name, OneShotCallback callback, void* callback_target);
 void one_shot_scheduler_at_priority_idle (OneShotScheduler* self, gint priority);
 GFile* resources_get_ui (const gchar* filename);
-static void _vala_array_add250 (guint** array, int* length, int* size, guint value);
 void app_window_error_message (const gchar* message, GtkWindow* parent);
 gpointer application_ref (gpointer instance);
 void application_unref (gpointer instance);
@@ -1061,9 +1062,6 @@ GType application_get_type (void) G_GNUC_CONST;
 Application* application_get_instance (void);
 void application_panic (Application* self);
 static void page_real_init_collect_ui_filenames (Page* self, GeeList* ui_filenames);
-static GtkActionEntry* page_real_init_collect_action_entries (Page* self, int* result_length1);
-static GtkToggleActionEntry* page_real_init_collect_toggle_action_entries (Page* self, int* result_length1);
-static void page_real_register_radio_actions (Page* self, GtkActionGroup* action_group);
 static InjectionGroup** page_real_init_collect_injection_groups (Page* self, int* result_length1);
 static void page_real_init_actions (Page* self, gint selected_count, gint count);
 static void page_real_update_actions (Page* self, gint selected_count, gint count);
@@ -1491,28 +1489,28 @@ InjectionGroup* injection_group_construct (GType object_type, const gchar* path)
 	InjectionGroup* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 24 "/home/jens/Source/shotwell/src/Page.vala"
+#line 31 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (path != NULL, NULL);
-#line 24 "/home/jens/Source/shotwell/src/Page.vala"
+#line 31 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (InjectionGroup*) g_type_create_instance (object_type);
-#line 25 "/home/jens/Source/shotwell/src/Page.vala"
+#line 32 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = path;
-#line 25 "/home/jens/Source/shotwell/src/Page.vala"
+#line 32 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 25 "/home/jens/Source/shotwell/src/Page.vala"
+#line 32 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->path);
-#line 25 "/home/jens/Source/shotwell/src/Page.vala"
+#line 32 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->path = _tmp1_;
-#line 24 "/home/jens/Source/shotwell/src/Page.vala"
+#line 31 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 1509 "Page.c"
+#line 1507 "Page.c"
 }
 
 
 InjectionGroup* injection_group_new (const gchar* path) {
-#line 24 "/home/jens/Source/shotwell/src/Page.vala"
+#line 31 "/home/jens/Source/shotwell/src/Page.vala"
 	return injection_group_construct (TYPE_INJECTION_GROUP, path);
-#line 1516 "Page.c"
+#line 1514 "Page.c"
 }
 
 
@@ -1520,24 +1518,24 @@ gchar* injection_group_get_path (InjectionGroup* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 28 "/home/jens/Source/shotwell/src/Page.vala"
+#line 35 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_INJECTION_GROUP (self), NULL);
-#line 29 "/home/jens/Source/shotwell/src/Page.vala"
+#line 36 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->path;
-#line 29 "/home/jens/Source/shotwell/src/Page.vala"
+#line 36 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 29 "/home/jens/Source/shotwell/src/Page.vala"
+#line 36 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 29 "/home/jens/Source/shotwell/src/Page.vala"
+#line 36 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 1534 "Page.c"
+#line 1532 "Page.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 33 "/home/jens/Source/shotwell/src/Page.vala"
+#line 40 "/home/jens/Source/shotwell/src/Page.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1541 "Page.c"
+#line 1539 "Page.c"
 }
 
 
@@ -1545,45 +1543,48 @@ GeeList* injection_group_get_elements (InjectionGroup* self) {
 	GeeList* result = NULL;
 	GeeArrayList* _tmp0_ = NULL;
 	GeeList* _tmp1_ = NULL;
-#line 32 "/home/jens/Source/shotwell/src/Page.vala"
+#line 39 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_INJECTION_GROUP (self), NULL);
-#line 33 "/home/jens/Source/shotwell/src/Page.vala"
+#line 40 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->elements;
-#line 33 "/home/jens/Source/shotwell/src/Page.vala"
+#line 40 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_LIST, GeeList));
-#line 33 "/home/jens/Source/shotwell/src/Page.vala"
+#line 40 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 33 "/home/jens/Source/shotwell/src/Page.vala"
+#line 40 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 1559 "Page.c"
+#line 1557 "Page.c"
 }
 
 
-void injection_group_add_menu_item (InjectionGroup* self, const gchar* name, const gchar* action) {
+void injection_group_add_menu_item (InjectionGroup* self, const gchar* name, const gchar* action, const gchar* accellerator) {
 	GeeArrayList* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-	InjectionGroupElement* _tmp3_ = NULL;
+	const gchar* _tmp3_ = NULL;
 	InjectionGroupElement* _tmp4_ = NULL;
-#line 36 "/home/jens/Source/shotwell/src/Page.vala"
+	InjectionGroupElement* _tmp5_ = NULL;
+#line 43 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_INJECTION_GROUP (self));
-#line 36 "/home/jens/Source/shotwell/src/Page.vala"
+#line 43 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->elements;
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = name;
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = action;
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = injection_group_element_new (_tmp1_, _tmp2_, GTK_UI_MANAGER_MENUITEM);
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = _tmp3_;
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
-	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp4_);
-#line 37 "/home/jens/Source/shotwell/src/Page.vala"
-	_injection_group_element_unref0 (_tmp4_);
-#line 1587 "Page.c"
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = accellerator;
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = injection_group_element_new (_tmp1_, _tmp2_, _tmp3_, INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENUITEM);
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp5_ = _tmp4_;
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp5_);
+#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+	_injection_group_element_unref0 (_tmp5_);
+#line 1588 "Page.c"
 }
 
 
@@ -1593,25 +1594,25 @@ void injection_group_add_menu (InjectionGroup* self, const gchar* name, const gc
 	const gchar* _tmp2_ = NULL;
 	InjectionGroupElement* _tmp3_ = NULL;
 	InjectionGroupElement* _tmp4_ = NULL;
-#line 40 "/home/jens/Source/shotwell/src/Page.vala"
+#line 48 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_INJECTION_GROUP (self));
-#line 40 "/home/jens/Source/shotwell/src/Page.vala"
+#line 48 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->elements;
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = name;
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = action;
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = injection_group_element_new (_tmp1_, _tmp2_, GTK_UI_MANAGER_MENU);
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = injection_group_element_new (_tmp1_, _tmp2_, NULL, INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENU);
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp4_);
-#line 41 "/home/jens/Source/shotwell/src/Page.vala"
+#line 49 "/home/jens/Source/shotwell/src/Page.vala"
 	_injection_group_element_unref0 (_tmp4_);
-#line 1615 "Page.c"
+#line 1616 "Page.c"
 }
 
 
@@ -1622,98 +1623,120 @@ void injection_group_add_separator (InjectionGroup* self) {
 	gchar* _tmp3_ = NULL;
 	InjectionGroupElement* _tmp4_ = NULL;
 	InjectionGroupElement* _tmp5_ = NULL;
-#line 44 "/home/jens/Source/shotwell/src/Page.vala"
+#line 52 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_INJECTION_GROUP (self));
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->elements;
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->separator_id;
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->separator_id = _tmp1_ + 1;
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = g_strdup_printf ("%d-separator", _tmp1_);
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = injection_group_element_new (_tmp3_, NULL, GTK_UI_MANAGER_SEPARATOR);
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = injection_group_element_new (_tmp3_, NULL, NULL, INJECTION_GROUP_ELEMENT_ITEM_TYPE_SEPARATOR);
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp5_);
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_injection_group_element_unref0 (_tmp5_);
-#line 45 "/home/jens/Source/shotwell/src/Page.vala"
+#line 53 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp3_);
-#line 1648 "Page.c"
+#line 1649 "Page.c"
 }
 
 
-InjectionGroupElement* injection_group_element_construct (GType object_type, const gchar* name, const gchar* action, GtkUIManagerItemType kind) {
+GType injection_group_element_item_type_get_type (void) {
+	static volatile gsize injection_group_element_item_type_type_id__volatile = 0;
+	if (g_once_init_enter (&injection_group_element_item_type_type_id__volatile)) {
+		static const GEnumValue values[] = {{INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENUITEM, "INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENUITEM", "menuitem"}, {INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENU, "INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENU", "menu"}, {INJECTION_GROUP_ELEMENT_ITEM_TYPE_SEPARATOR, "INJECTION_GROUP_ELEMENT_ITEM_TYPE_SEPARATOR", "separator"}, {0, NULL, NULL}};
+		GType injection_group_element_item_type_type_id;
+		injection_group_element_item_type_type_id = g_enum_register_static ("InjectionGroupElementItemType", values);
+		g_once_init_leave (&injection_group_element_item_type_type_id__volatile, injection_group_element_item_type_type_id);
+	}
+	return injection_group_element_item_type_type_id__volatile;
+}
+
+
+InjectionGroupElement* injection_group_element_construct (GType object_type, const gchar* name, const gchar* action, const gchar* accellerator, InjectionGroupElementItemType kind) {
 	InjectionGroupElement* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	gchar* _tmp6_ = NULL;
-	GtkUIManagerItemType _tmp7_ = 0;
-#line 13 "/home/jens/Source/shotwell/src/Page.vala"
+	const gchar* _tmp7_ = NULL;
+	gchar* _tmp8_ = NULL;
+	InjectionGroupElementItemType _tmp9_ = 0;
+#line 19 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 13 "/home/jens/Source/shotwell/src/Page.vala"
+#line 19 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (InjectionGroupElement*) g_type_create_instance (object_type);
-#line 14 "/home/jens/Source/shotwell/src/Page.vala"
+#line 20 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 14 "/home/jens/Source/shotwell/src/Page.vala"
+#line 20 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 14 "/home/jens/Source/shotwell/src/Page.vala"
+#line 20 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->name);
-#line 14 "/home/jens/Source/shotwell/src/Page.vala"
+#line 20 "/home/jens/Source/shotwell/src/Page.vala"
 	self->name = _tmp1_;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = action;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_ != NULL) {
-#line 1676 "Page.c"
+#line 1691 "Page.c"
 		const gchar* _tmp4_ = NULL;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = action;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = _tmp4_;
-#line 1682 "Page.c"
+#line 1697 "Page.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = name;
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = _tmp5_;
-#line 1689 "Page.c"
+#line 1704 "Page.c"
 	}
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = g_strdup (_tmp2_);
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->action);
-#line 15 "/home/jens/Source/shotwell/src/Page.vala"
+#line 21 "/home/jens/Source/shotwell/src/Page.vala"
 	self->action = _tmp6_;
-#line 16 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp7_ = kind;
-#line 16 "/home/jens/Source/shotwell/src/Page.vala"
-	self->kind = _tmp7_;
-#line 13 "/home/jens/Source/shotwell/src/Page.vala"
+#line 22 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp7_ = accellerator;
+#line 22 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp8_ = g_strdup (_tmp7_);
+#line 22 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_free0 (self->accellerator);
+#line 22 "/home/jens/Source/shotwell/src/Page.vala"
+	self->accellerator = _tmp8_;
+#line 23 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp9_ = kind;
+#line 23 "/home/jens/Source/shotwell/src/Page.vala"
+	self->kind = _tmp9_;
+#line 19 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 1703 "Page.c"
+#line 1726 "Page.c"
 }
 
 
-InjectionGroupElement* injection_group_element_new (const gchar* name, const gchar* action, GtkUIManagerItemType kind) {
-#line 13 "/home/jens/Source/shotwell/src/Page.vala"
-	return injection_group_element_construct (INJECTION_GROUP_TYPE_ELEMENT, name, action, kind);
-#line 1710 "Page.c"
+InjectionGroupElement* injection_group_element_new (const gchar* name, const gchar* action, const gchar* accellerator, InjectionGroupElementItemType kind) {
+#line 19 "/home/jens/Source/shotwell/src/Page.vala"
+	return injection_group_element_construct (INJECTION_GROUP_TYPE_ELEMENT, name, action, accellerator, kind);
+#line 1733 "Page.c"
 }
 
 
 static void injection_group_value_element_init (GValue* value) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	value->data[0].v_pointer = NULL;
-#line 1717 "Page.c"
+#line 1740 "Page.c"
 }
 
 
@@ -1722,7 +1745,7 @@ static void injection_group_value_element_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_element_unref (value->data[0].v_pointer);
-#line 1726 "Page.c"
+#line 1749 "Page.c"
 	}
 }
 
@@ -1732,11 +1755,11 @@ static void injection_group_value_element_copy_value (const GValue* src_value, G
 	if (src_value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = injection_group_element_ref (src_value->data[0].v_pointer);
-#line 1736 "Page.c"
+#line 1759 "Page.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1740 "Page.c"
+#line 1763 "Page.c"
 	}
 }
 
@@ -1744,37 +1767,37 @@ static void injection_group_value_element_copy_value (const GValue* src_value, G
 static gpointer injection_group_value_element_peek_pointer (const GValue* value) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 1748 "Page.c"
+#line 1771 "Page.c"
 }
 
 
 static gchar* injection_group_value_element_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	if (collect_values[0].v_pointer) {
-#line 1755 "Page.c"
+#line 1778 "Page.c"
 		InjectionGroupElement* object;
 		object = collect_values[0].v_pointer;
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1762 "Page.c"
+#line 1785 "Page.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1766 "Page.c"
+#line 1789 "Page.c"
 		}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = injection_group_element_ref (object);
-#line 1770 "Page.c"
+#line 1793 "Page.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 1774 "Page.c"
+#line 1797 "Page.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 1778 "Page.c"
+#line 1801 "Page.c"
 }
 
 
@@ -1785,25 +1808,25 @@ static gchar* injection_group_value_element_lcopy_value (const GValue* value, gu
 	if (!object_p) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1789 "Page.c"
+#line 1812 "Page.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!value->data[0].v_pointer) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = NULL;
-#line 1795 "Page.c"
+#line 1818 "Page.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1799 "Page.c"
+#line 1822 "Page.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = injection_group_element_ref (value->data[0].v_pointer);
-#line 1803 "Page.c"
+#line 1826 "Page.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 1807 "Page.c"
+#line 1830 "Page.c"
 }
 
 
@@ -1817,7 +1840,7 @@ GParamSpec* injection_group_param_spec_element (const gchar* name, const gchar* 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return G_PARAM_SPEC (spec);
-#line 1821 "Page.c"
+#line 1844 "Page.c"
 }
 
 
@@ -1826,7 +1849,7 @@ gpointer injection_group_value_get_element (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, INJECTION_GROUP_TYPE_ELEMENT), NULL);
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 1830 "Page.c"
+#line 1853 "Page.c"
 }
 
 
@@ -1846,17 +1869,17 @@ void injection_group_value_set_element (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_element_ref (value->data[0].v_pointer);
-#line 1850 "Page.c"
+#line 1873 "Page.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 1854 "Page.c"
+#line 1877 "Page.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_element_unref (old);
-#line 1860 "Page.c"
+#line 1883 "Page.c"
 	}
 }
 
@@ -1875,17 +1898,17 @@ void injection_group_value_take_element (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = v_object;
-#line 1879 "Page.c"
+#line 1902 "Page.c"
 	} else {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 1883 "Page.c"
+#line 1906 "Page.c"
 	}
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_element_unref (old);
-#line 1889 "Page.c"
+#line 1912 "Page.c"
 	}
 }
 
@@ -1895,14 +1918,14 @@ static void injection_group_element_class_init (InjectionGroupElementClass * kla
 	injection_group_element_parent_class = g_type_class_peek_parent (klass);
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	((InjectionGroupElementClass *) klass)->finalize = injection_group_element_finalize;
-#line 1899 "Page.c"
+#line 1922 "Page.c"
 }
 
 
 static void injection_group_element_instance_init (InjectionGroupElement * self) {
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	self->ref_count = 1;
-#line 1906 "Page.c"
+#line 1929 "Page.c"
 }
 
 
@@ -1912,11 +1935,13 @@ static void injection_group_element_finalize (InjectionGroupElement* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, INJECTION_GROUP_TYPE_ELEMENT, InjectionGroupElement);
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_destroy (self);
-#line 9 "/home/jens/Source/shotwell/src/Page.vala"
+#line 14 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->name);
-#line 10 "/home/jens/Source/shotwell/src/Page.vala"
+#line 15 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->action);
-#line 1920 "Page.c"
+#line 16 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_free0 (self->accellerator);
+#line 1945 "Page.c"
 }
 
 
@@ -1941,7 +1966,7 @@ gpointer injection_group_element_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 	return instance;
-#line 1945 "Page.c"
+#line 1970 "Page.c"
 }
 
 
@@ -1954,7 +1979,7 @@ void injection_group_element_unref (gpointer instance) {
 		INJECTION_GROUP_ELEMENT_GET_CLASS (self)->finalize (self);
 #line 8 "/home/jens/Source/shotwell/src/Page.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1958 "Page.c"
+#line 1983 "Page.c"
 	}
 }
 
@@ -1962,7 +1987,7 @@ void injection_group_element_unref (gpointer instance) {
 static void value_injection_group_init (GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	value->data[0].v_pointer = NULL;
-#line 1966 "Page.c"
+#line 1991 "Page.c"
 }
 
 
@@ -1971,7 +1996,7 @@ static void value_injection_group_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_unref (value->data[0].v_pointer);
-#line 1975 "Page.c"
+#line 2000 "Page.c"
 	}
 }
 
@@ -1981,11 +2006,11 @@ static void value_injection_group_copy_value (const GValue* src_value, GValue* d
 	if (src_value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = injection_group_ref (src_value->data[0].v_pointer);
-#line 1985 "Page.c"
+#line 2010 "Page.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1989 "Page.c"
+#line 2014 "Page.c"
 	}
 }
 
@@ -1993,37 +2018,37 @@ static void value_injection_group_copy_value (const GValue* src_value, GValue* d
 static gpointer value_injection_group_peek_pointer (const GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 1997 "Page.c"
+#line 2022 "Page.c"
 }
 
 
 static gchar* value_injection_group_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	if (collect_values[0].v_pointer) {
-#line 2004 "Page.c"
+#line 2029 "Page.c"
 		InjectionGroup* object;
 		object = collect_values[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2011 "Page.c"
+#line 2036 "Page.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2015 "Page.c"
+#line 2040 "Page.c"
 		}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = injection_group_ref (object);
-#line 2019 "Page.c"
+#line 2044 "Page.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 2023 "Page.c"
+#line 2048 "Page.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 2027 "Page.c"
+#line 2052 "Page.c"
 }
 
 
@@ -2034,25 +2059,25 @@ static gchar* value_injection_group_lcopy_value (const GValue* value, guint n_co
 	if (!object_p) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2038 "Page.c"
+#line 2063 "Page.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = NULL;
-#line 2044 "Page.c"
+#line 2069 "Page.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2048 "Page.c"
+#line 2073 "Page.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = injection_group_ref (value->data[0].v_pointer);
-#line 2052 "Page.c"
+#line 2077 "Page.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 2056 "Page.c"
+#line 2081 "Page.c"
 }
 
 
@@ -2066,7 +2091,7 @@ GParamSpec* param_spec_injection_group (const gchar* name, const gchar* nick, co
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return G_PARAM_SPEC (spec);
-#line 2070 "Page.c"
+#line 2095 "Page.c"
 }
 
 
@@ -2075,7 +2100,7 @@ gpointer value_get_injection_group (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_INJECTION_GROUP), NULL);
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 2079 "Page.c"
+#line 2104 "Page.c"
 }
 
 
@@ -2095,17 +2120,17 @@ void value_set_injection_group (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_ref (value->data[0].v_pointer);
-#line 2099 "Page.c"
+#line 2124 "Page.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 2103 "Page.c"
+#line 2128 "Page.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_unref (old);
-#line 2109 "Page.c"
+#line 2134 "Page.c"
 	}
 }
 
@@ -2124,17 +2149,17 @@ void value_take_injection_group (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = v_object;
-#line 2128 "Page.c"
+#line 2153 "Page.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 2132 "Page.c"
+#line 2157 "Page.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		injection_group_unref (old);
-#line 2138 "Page.c"
+#line 2163 "Page.c"
 	}
 }
 
@@ -2146,7 +2171,7 @@ static void injection_group_class_init (InjectionGroupClass * klass) {
 	((InjectionGroupClass *) klass)->finalize = injection_group_finalize;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	g_type_class_add_private (klass, sizeof (InjectionGroupPrivate));
-#line 2150 "Page.c"
+#line 2175 "Page.c"
 }
 
 
@@ -2154,15 +2179,15 @@ static void injection_group_instance_init (InjectionGroup * self) {
 	GeeArrayList* _tmp0_ = NULL;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv = INJECTION_GROUP_GET_PRIVATE (self);
-#line 21 "/home/jens/Source/shotwell/src/Page.vala"
+#line 28 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = gee_array_list_new (INJECTION_GROUP_TYPE_ELEMENT, (GBoxedCopyFunc) injection_group_element_ref, injection_group_element_unref, NULL, NULL, NULL);
-#line 21 "/home/jens/Source/shotwell/src/Page.vala"
+#line 28 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->elements = _tmp0_;
-#line 22 "/home/jens/Source/shotwell/src/Page.vala"
+#line 29 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->separator_id = 0;
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	self->ref_count = 1;
-#line 2166 "Page.c"
+#line 2191 "Page.c"
 }
 
 
@@ -2172,11 +2197,11 @@ static void injection_group_finalize (InjectionGroup* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_INJECTION_GROUP, InjectionGroup);
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_destroy (self);
-#line 20 "/home/jens/Source/shotwell/src/Page.vala"
+#line 27 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->path);
-#line 21 "/home/jens/Source/shotwell/src/Page.vala"
+#line 28 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->elements);
-#line 2180 "Page.c"
+#line 2205 "Page.c"
 }
 
 
@@ -2201,7 +2226,7 @@ gpointer injection_group_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 	return instance;
-#line 2205 "Page.c"
+#line 2230 "Page.c"
 }
 
 
@@ -2214,7 +2239,7 @@ void injection_group_unref (gpointer instance) {
 		INJECTION_GROUP_GET_CLASS (self)->finalize (self);
 #line 7 "/home/jens/Source/shotwell/src/Page.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2218 "Page.c"
+#line 2243 "Page.c"
 	}
 }
 
@@ -2222,16 +2247,16 @@ void injection_group_unref (gpointer instance) {
 static gboolean _page_on_context_keypress_gtk_widget_popup_menu (GtkWidget* _sender, gpointer self) {
 	gboolean result;
 	result = page_on_context_keypress ((Page*) self);
-#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+#line 99 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2228 "Page.c"
+#line 2253 "Page.c"
 }
 
 
 static void _page_attach_view_signals_gtk_widget_realize (GtkWidget* _sender, gpointer self) {
-#line 97 "/home/jens/Source/shotwell/src/Page.vala"
+#line 103 "/home/jens/Source/shotwell/src/Page.vala"
 	page_attach_view_signals ((Page*) self);
-#line 2235 "Page.c"
+#line 2260 "Page.c"
 }
 
 
@@ -2244,49 +2269,49 @@ Page* page_construct (GType object_type, const gchar* page_name) {
 	gchar* _tmp4_ = NULL;
 	ViewCollection* _tmp5_ = NULL;
 	GdkPoint _tmp6_ = {0};
-#line 84 "/home/jens/Source/shotwell/src/Page.vala"
+#line 90 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (page_name != NULL, NULL);
-#line 84 "/home/jens/Source/shotwell/src/Page.vala"
+#line 90 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (Page*) g_object_new (object_type, NULL);
-#line 85 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = page_name;
-#line 85 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = g_strdup (_tmp0_);
-#line 85 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_free0 (self->priv->page_name);
-#line 85 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->page_name = _tmp1_;
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = page_name;
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = g_strdup_printf ("ViewCollection for Page %s", _tmp2_);
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = _tmp3_;
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp5_ = view_collection_new (_tmp4_);
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_data_collection_unref0 (self->priv->view);
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->view = _tmp5_;
-#line 87 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_free0 (_tmp4_);
-#line 89 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp6_.x = -1;
-#line 89 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp6_.y = -1;
-#line 89 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->last_down = _tmp6_;
 #line 91 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), TRUE);
+	_tmp0_ = page_name;
+#line 91 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = g_strdup (_tmp0_);
+#line 91 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_free0 (self->priv->page_name);
+#line 91 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->page_name = _tmp1_;
 #line 93 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "popup-menu", (GCallback) _page_on_context_keypress_gtk_widget_popup_menu, self, 0);
+	_tmp2_ = page_name;
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = g_strdup_printf ("ViewCollection for Page %s", _tmp2_);
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = _tmp3_;
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp5_ = view_collection_new (_tmp4_);
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	_data_collection_unref0 (self->priv->view);
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->view = _tmp5_;
+#line 93 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_free0 (_tmp4_);
 #line 95 "/home/jens/Source/shotwell/src/Page.vala"
-	page_init_ui (self);
+	_tmp6_.x = -1;
+#line 95 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp6_.y = -1;
+#line 95 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->last_down = _tmp6_;
 #line 97 "/home/jens/Source/shotwell/src/Page.vala"
+	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 99 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "popup-menu", (GCallback) _page_on_context_keypress_gtk_widget_popup_menu, self, 0);
+#line 101 "/home/jens/Source/shotwell/src/Page.vala"
+	page_init_ui (self);
+#line 103 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "realize", (GCallback) _page_attach_view_signals_gtk_widget_realize, self, 0);
-#line 84 "/home/jens/Source/shotwell/src/Page.vala"
+#line 90 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 2290 "Page.c"
+#line 2315 "Page.c"
 }
 
 
@@ -2298,63 +2323,63 @@ static void page_real_destroy (GtkWidget* base) {
 	OneShotScheduler* _tmp4_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 108 "/home/jens/Source/shotwell/src/Page.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE, Page);
-#line 109 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->priv->is_destroyed;
-#line 109 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp0_) {
-#line 110 "/home/jens/Source/shotwell/src/Page.vala"
-		return;
-#line 2310 "Page.c"
-	}
-#line 113 "/home/jens/Source/shotwell/src/Page.vala"
-	page_detach_event_source (self);
 #line 114 "/home/jens/Source/shotwell/src/Page.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE, Page);
+#line 115 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = self->priv->is_destroyed;
+#line 115 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp0_) {
+#line 116 "/home/jens/Source/shotwell/src/Page.vala"
+		return;
+#line 2335 "Page.c"
+	}
+#line 119 "/home/jens/Source/shotwell/src/Page.vala"
+	page_detach_event_source (self);
+#line 120 "/home/jens/Source/shotwell/src/Page.vala"
 	page_detach_view_signals (self);
-#line 115 "/home/jens/Source/shotwell/src/Page.vala"
+#line 121 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->view;
-#line 115 "/home/jens/Source/shotwell/src/Page.vala"
+#line 121 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_close (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 118 "/home/jens/Source/shotwell/src/Page.vala"
+#line 124 "/home/jens/Source/shotwell/src/Page.vala"
 	page_clear_container (self);
-#line 120 "/home/jens/Source/shotwell/src/Page.vala"
+#line 126 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->toolbar;
-#line 120 "/home/jens/Source/shotwell/src/Page.vala"
+#line 126 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ != NULL) {
-#line 2326 "Page.c"
+#line 2351 "Page.c"
 		GtkToolbar* _tmp3_ = NULL;
-#line 121 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = self->toolbar;
-#line 121 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 2332 "Page.c"
-	}
-#line 124 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = self->priv->update_actions_scheduler;
-#line 124 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp4_ != NULL) {
-#line 2338 "Page.c"
-		OneShotScheduler* _tmp5_ = NULL;
-#line 125 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp5_ = self->priv->update_actions_scheduler;
-#line 125 "/home/jens/Source/shotwell/src/Page.vala"
-		one_shot_scheduler_cancel (_tmp5_);
-#line 2344 "Page.c"
-	}
 #line 127 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = self->toolbar;
+#line 127 "/home/jens/Source/shotwell/src/Page.vala"
+		gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
+#line 2357 "Page.c"
+	}
+#line 130 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = self->priv->update_actions_scheduler;
+#line 130 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp4_ != NULL) {
+#line 2363 "Page.c"
+		OneShotScheduler* _tmp5_ = NULL;
+#line 131 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = self->priv->update_actions_scheduler;
+#line 131 "/home/jens/Source/shotwell/src/Page.vala"
+		one_shot_scheduler_cancel (_tmp5_);
+#line 2369 "Page.c"
+	}
+#line 133 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->is_destroyed = TRUE;
-#line 129 "/home/jens/Source/shotwell/src/Page.vala"
+#line 135 "/home/jens/Source/shotwell/src/Page.vala"
 	GTK_WIDGET_CLASS (page_parent_class)->destroy (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), gtk_widget_get_type (), GtkWidget));
-#line 131 "/home/jens/Source/shotwell/src/Page.vala"
+#line 137 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = page_get_page_name (self);
-#line 131 "/home/jens/Source/shotwell/src/Page.vala"
+#line 137 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_;
-#line 131 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:131: Page %s Destroyed", _tmp7_);
-#line 131 "/home/jens/Source/shotwell/src/Page.vala"
+#line 137 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:137: Page %s Destroyed", _tmp7_);
+#line 137 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp7_);
-#line 2358 "Page.c"
+#line 2383 "Page.c"
 }
 
 
@@ -2362,43 +2387,43 @@ gchar* page_get_page_name (Page* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 134 "/home/jens/Source/shotwell/src/Page.vala"
+#line 140 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 141 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page_name;
-#line 135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 141 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 141 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 141 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2376 "Page.c"
+#line 2401 "Page.c"
 }
 
 
 static void page_real_set_page_name (Page* self, const gchar* page_name) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 138 "/home/jens/Source/shotwell/src/Page.vala"
+#line 144 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (page_name != NULL);
-#line 139 "/home/jens/Source/shotwell/src/Page.vala"
+#line 145 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_name;
-#line 139 "/home/jens/Source/shotwell/src/Page.vala"
+#line 145 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 139 "/home/jens/Source/shotwell/src/Page.vala"
+#line 145 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->page_name);
-#line 139 "/home/jens/Source/shotwell/src/Page.vala"
+#line 145 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->page_name = _tmp1_;
-#line 2393 "Page.c"
+#line 2418 "Page.c"
 }
 
 
 void page_set_page_name (Page* self, const gchar* page_name) {
-#line 138 "/home/jens/Source/shotwell/src/Page.vala"
+#line 144 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 138 "/home/jens/Source/shotwell/src/Page.vala"
+#line 144 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->set_page_name (self, page_name);
-#line 2402 "Page.c"
+#line 2427 "Page.c"
 }
 
 
@@ -2406,24 +2431,24 @@ gchar* page_to_string (Page* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 142 "/home/jens/Source/shotwell/src/Page.vala"
+#line 148 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 143 "/home/jens/Source/shotwell/src/Page.vala"
+#line 149 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page_name;
-#line 143 "/home/jens/Source/shotwell/src/Page.vala"
+#line 149 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 143 "/home/jens/Source/shotwell/src/Page.vala"
+#line 149 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 143 "/home/jens/Source/shotwell/src/Page.vala"
+#line 149 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2420 "Page.c"
+#line 2445 "Page.c"
 }
 
 
 static gpointer _data_collection_ref0 (gpointer self) {
-#line 147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 153 "/home/jens/Source/shotwell/src/Page.vala"
 	return self ? data_collection_ref (self) : NULL;
-#line 2427 "Page.c"
+#line 2452 "Page.c"
 }
 
 
@@ -2431,17 +2456,17 @@ ViewCollection* page_get_view (Page* self) {
 	ViewCollection* result = NULL;
 	ViewCollection* _tmp0_ = NULL;
 	ViewCollection* _tmp1_ = NULL;
-#line 146 "/home/jens/Source/shotwell/src/Page.vala"
+#line 152 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 153 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->view;
-#line 147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 153 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _data_collection_ref0 (_tmp0_);
-#line 147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 153 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 153 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2445 "Page.c"
+#line 2470 "Page.c"
 }
 
 
@@ -2449,17 +2474,17 @@ GtkWindow* page_get_container (Page* self) {
 	GtkWindow* result = NULL;
 	GtkWindow* _tmp0_ = NULL;
 	GtkWindow* _tmp1_ = NULL;
-#line 150 "/home/jens/Source/shotwell/src/Page.vala"
+#line 156 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 151 "/home/jens/Source/shotwell/src/Page.vala"
+#line 157 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->container;
-#line 151 "/home/jens/Source/shotwell/src/Page.vala"
+#line 157 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 151 "/home/jens/Source/shotwell/src/Page.vala"
+#line 157 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 151 "/home/jens/Source/shotwell/src/Page.vala"
+#line 157 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2463 "Page.c"
+#line 2488 "Page.c"
 }
 
 
@@ -2467,110 +2492,100 @@ static void page_real_set_container (Page* self, GtkWindow* container) {
 	GtkWindow* _tmp0_ = NULL;
 	GtkWindow* _tmp1_ = NULL;
 	GtkWindow* _tmp2_ = NULL;
-	GtkWindow* _tmp3_ = NULL;
-	GtkUIManager* _tmp4_ = NULL;
-#line 154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 160 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GTK_IS_WINDOW (container));
-#line 155 "/home/jens/Source/shotwell/src/Page.vala"
+#line 161 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->container;
-#line 155 "/home/jens/Source/shotwell/src/Page.vala"
+#line 161 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_ == NULL, "this.container == null");
-#line 157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 163 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = container;
-#line 157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 163 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 163 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->container);
-#line 157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 163 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->container = _tmp2_;
-#line 158 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = container;
-#line 158 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = page_window_get_ui_manager (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_PAGE_WINDOW, PageWindow));
-#line 158 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->ui);
-#line 158 "/home/jens/Source/shotwell/src/Page.vala"
-	self->ui = _tmp4_;
-#line 2495 "Page.c"
+#line 2510 "Page.c"
 }
 
 
 void page_set_container (Page* self, GtkWindow* container) {
-#line 154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 160 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 160 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->set_container (self, container);
-#line 2504 "Page.c"
+#line 2519 "Page.c"
 }
 
 
 static void page_real_clear_container (Page* self) {
-#line 162 "/home/jens/Source/shotwell/src/Page.vala"
+#line 167 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->container);
-#line 162 "/home/jens/Source/shotwell/src/Page.vala"
+#line 167 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->container = NULL;
-#line 2513 "Page.c"
+#line 2528 "Page.c"
 }
 
 
 void page_clear_container (Page* self) {
-#line 161 "/home/jens/Source/shotwell/src/Page.vala"
+#line 166 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 161 "/home/jens/Source/shotwell/src/Page.vala"
+#line 166 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->clear_container (self);
-#line 2522 "Page.c"
+#line 2537 "Page.c"
 }
 
 
 static gboolean _page_on_button_pressed_internal_gtk_widget_button_press_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = page_on_button_pressed_internal ((Page*) self, event);
-#line 176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 181 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2531 "Page.c"
+#line 2546 "Page.c"
 }
 
 
 static gboolean _page_on_button_released_internal_gtk_widget_button_release_event (GtkWidget* _sender, GdkEventButton* event, gpointer self) {
 	gboolean result;
 	result = page_on_button_released_internal ((Page*) self, event);
-#line 177 "/home/jens/Source/shotwell/src/Page.vala"
+#line 182 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2540 "Page.c"
+#line 2555 "Page.c"
 }
 
 
 static gboolean _page_on_motion_internal_gtk_widget_motion_notify_event (GtkWidget* _sender, GdkEventMotion* event, gpointer self) {
 	gboolean result;
 	result = page_on_motion_internal ((Page*) self, event);
-#line 178 "/home/jens/Source/shotwell/src/Page.vala"
+#line 183 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2549 "Page.c"
+#line 2564 "Page.c"
 }
 
 
 static gboolean _page_on_leave_notify_event_gtk_widget_leave_notify_event (GtkWidget* _sender, GdkEventCrossing* event, gpointer self) {
 	gboolean result;
 	result = page_on_leave_notify_event ((Page*) self);
-#line 179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 184 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2558 "Page.c"
+#line 2573 "Page.c"
 }
 
 
 static gboolean _page_on_mousewheel_internal_gtk_widget_scroll_event (GtkWidget* _sender, GdkEventScroll* event, gpointer self) {
 	gboolean result;
 	result = page_on_mousewheel_internal ((Page*) self, event);
-#line 180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 185 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2567 "Page.c"
+#line 2582 "Page.c"
 }
 
 
 static void _page_on_event_source_realize_gtk_widget_realize (GtkWidget* _sender, gpointer self) {
-#line 181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 186 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_event_source_realize ((Page*) self);
-#line 2574 "Page.c"
+#line 2589 "Page.c"
 }
 
 
@@ -2586,55 +2601,55 @@ void page_set_event_source (Page* self, GtkWidget* event_source) {
 	GtkWidget* _tmp8_ = NULL;
 	GtkWidget* _tmp9_ = NULL;
 	GtkWidget* _tmp10_ = NULL;
-#line 165 "/home/jens/Source/shotwell/src/Page.vala"
+#line 170 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 165 "/home/jens/Source/shotwell/src/Page.vala"
+#line 170 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GTK_IS_WIDGET (event_source));
-#line 166 "/home/jens/Source/shotwell/src/Page.vala"
+#line 171 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 166 "/home/jens/Source/shotwell/src/Page.vala"
+#line 171 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_ == NULL, "this.event_source == null");
-#line 168 "/home/jens/Source/shotwell/src/Page.vala"
+#line 173 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = event_source;
-#line 168 "/home/jens/Source/shotwell/src/Page.vala"
+#line 173 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 168 "/home/jens/Source/shotwell/src/Page.vala"
+#line 173 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 168 "/home/jens/Source/shotwell/src/Page.vala"
+#line 173 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->event_source = _tmp2_;
-#line 169 "/home/jens/Source/shotwell/src/Page.vala"
+#line 174 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = event_source;
-#line 169 "/home/jens/Source/shotwell/src/Page.vala"
+#line 174 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_set_can_focus (_tmp3_, TRUE);
-#line 172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 177 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = event_source;
-#line 172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 177 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_add_events (_tmp4_, (gint) ((((((GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK) | GDK_POINTER_MOTION_MASK) | GDK_POINTER_MOTION_HINT_MASK) | GDK_BUTTON_MOTION_MASK) | GDK_LEAVE_NOTIFY_MASK) | GDK_SCROLL_MASK));
-#line 176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 181 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = event_source;
-#line 176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 181 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp5_, "button-press-event", (GCallback) _page_on_button_pressed_internal_gtk_widget_button_press_event, self, 0);
-#line 177 "/home/jens/Source/shotwell/src/Page.vala"
+#line 182 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = event_source;
-#line 177 "/home/jens/Source/shotwell/src/Page.vala"
+#line 182 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp6_, "button-release-event", (GCallback) _page_on_button_released_internal_gtk_widget_button_release_event, self, 0);
-#line 178 "/home/jens/Source/shotwell/src/Page.vala"
+#line 183 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = event_source;
-#line 178 "/home/jens/Source/shotwell/src/Page.vala"
+#line 183 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp7_, "motion-notify-event", (GCallback) _page_on_motion_internal_gtk_widget_motion_notify_event, self, 0);
-#line 179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 184 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = event_source;
-#line 179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 184 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp8_, "leave-notify-event", (GCallback) _page_on_leave_notify_event_gtk_widget_leave_notify_event, self, 0);
-#line 180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 185 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = event_source;
-#line 180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 185 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp9_, "scroll-event", (GCallback) _page_on_mousewheel_internal_gtk_widget_scroll_event, self, 0);
-#line 181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 186 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = event_source;
-#line 181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 186 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp10_, "realize", (GCallback) _page_on_event_source_realize_gtk_widget_realize, self, 0);
-#line 2638 "Page.c"
+#line 2653 "Page.c"
 }
 
 
@@ -2650,53 +2665,53 @@ static void page_detach_event_source (Page* self) {
 	guint _tmp8_ = 0U;
 	GtkWidget* _tmp9_ = NULL;
 	guint _tmp10_ = 0U;
-#line 184 "/home/jens/Source/shotwell/src/Page.vala"
+#line 189 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 185 "/home/jens/Source/shotwell/src/Page.vala"
+#line 190 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 185 "/home/jens/Source/shotwell/src/Page.vala"
+#line 190 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 186 "/home/jens/Source/shotwell/src/Page.vala"
+#line 191 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 2662 "Page.c"
+#line 2677 "Page.c"
 	}
-#line 188 "/home/jens/Source/shotwell/src/Page.vala"
+#line 193 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->event_source;
-#line 188 "/home/jens/Source/shotwell/src/Page.vala"
+#line 193 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("button-press-event", gtk_widget_get_type (), &_tmp2_, NULL, FALSE);
-#line 188 "/home/jens/Source/shotwell/src/Page.vala"
+#line 193 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp1_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp2_, 0, NULL, (GCallback) _page_on_button_pressed_internal_gtk_widget_button_press_event, self);
-#line 189 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = self->priv->event_source;
-#line 189 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_parse_name ("button-release-event", gtk_widget_get_type (), &_tmp4_, NULL, FALSE);
-#line 189 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _page_on_button_released_internal_gtk_widget_button_release_event, self);
-#line 190 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp5_ = self->priv->event_source;
-#line 190 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_parse_name ("motion-notify-event", gtk_widget_get_type (), &_tmp6_, NULL, FALSE);
-#line 190 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_handlers_disconnect_matched (_tmp5_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _page_on_motion_internal_gtk_widget_motion_notify_event, self);
-#line 191 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp7_ = self->priv->event_source;
-#line 191 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_parse_name ("leave-notify-event", gtk_widget_get_type (), &_tmp8_, NULL, FALSE);
-#line 191 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _page_on_leave_notify_event_gtk_widget_leave_notify_event, self);
-#line 192 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp9_ = self->priv->event_source;
-#line 192 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_parse_name ("scroll-event", gtk_widget_get_type (), &_tmp10_, NULL, FALSE);
-#line 192 "/home/jens/Source/shotwell/src/Page.vala"
-	g_signal_handlers_disconnect_matched (_tmp9_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp10_, 0, NULL, (GCallback) _page_on_mousewheel_internal_gtk_widget_scroll_event, self);
 #line 194 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = self->priv->event_source;
+#line 194 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_parse_name ("button-release-event", gtk_widget_get_type (), &_tmp4_, NULL, FALSE);
+#line 194 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _page_on_button_released_internal_gtk_widget_button_release_event, self);
+#line 195 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp5_ = self->priv->event_source;
+#line 195 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_parse_name ("motion-notify-event", gtk_widget_get_type (), &_tmp6_, NULL, FALSE);
+#line 195 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_handlers_disconnect_matched (_tmp5_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _page_on_motion_internal_gtk_widget_motion_notify_event, self);
+#line 196 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp7_ = self->priv->event_source;
+#line 196 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_parse_name ("leave-notify-event", gtk_widget_get_type (), &_tmp8_, NULL, FALSE);
+#line 196 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _page_on_leave_notify_event_gtk_widget_leave_notify_event, self);
+#line 197 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp9_ = self->priv->event_source;
+#line 197 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_parse_name ("scroll-event", gtk_widget_get_type (), &_tmp10_, NULL, FALSE);
+#line 197 "/home/jens/Source/shotwell/src/Page.vala"
+	g_signal_handlers_disconnect_matched (_tmp9_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp10_, 0, NULL, (GCallback) _page_on_mousewheel_internal_gtk_widget_scroll_event, self);
+#line 199 "/home/jens/Source/shotwell/src/Page.vala"
 	page_disable_drag_source (self);
-#line 196 "/home/jens/Source/shotwell/src/Page.vala"
+#line 201 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 196 "/home/jens/Source/shotwell/src/Page.vala"
+#line 201 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->event_source = NULL;
-#line 2700 "Page.c"
+#line 2715 "Page.c"
 }
 
 
@@ -2704,80 +2719,368 @@ GtkWidget* page_get_event_source (Page* self) {
 	GtkWidget* result = NULL;
 	GtkWidget* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 199 "/home/jens/Source/shotwell/src/Page.vala"
+#line 204 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 200 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->priv->event_source;
-#line 200 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 200 "/home/jens/Source/shotwell/src/Page.vala"
-	result = _tmp1_;
-#line 200 "/home/jens/Source/shotwell/src/Page.vala"
-	return result;
-#line 2718 "Page.c"
-}
-
-
-static GtkMenuBar* page_real_get_menubar (Page* self) {
-	GtkMenuBar* result = NULL;
-	GtkMenuBar* menubar = NULL;
-	GtkUIManager* _tmp0_ = NULL;
-	GtkWidget* _tmp1_ = NULL;
-	GtkMenuBar* _tmp2_ = NULL;
-#line 204 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->ui;
-#line 204 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = gtk_ui_manager_get_widget (_tmp0_, "/MenuBar");
-#line 204 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_menu_bar_get_type ()) ? ((GtkMenuBar*) _tmp1_) : NULL);
-#line 204 "/home/jens/Source/shotwell/src/Page.vala"
-	menubar = _tmp2_;
 #line 205 "/home/jens/Source/shotwell/src/Page.vala"
-	_vala_assert (menubar != NULL, "menubar != null");
-#line 207 "/home/jens/Source/shotwell/src/Page.vala"
-	result = menubar;
-#line 207 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = self->priv->event_source;
+#line 205 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = _g_object_ref0 (_tmp0_);
+#line 205 "/home/jens/Source/shotwell/src/Page.vala"
+	result = _tmp1_;
+#line 205 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2742 "Page.c"
+#line 2733 "Page.c"
 }
 
 
-GtkMenuBar* page_get_menubar (Page* self) {
-#line 203 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 203 "/home/jens/Source/shotwell/src/Page.vala"
-	return PAGE_GET_CLASS (self)->get_menubar (self);
-#line 2751 "Page.c"
+static gpointer _injection_group_ref0 (gpointer self) {
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+	return self ? injection_group_ref (self) : NULL;
+#line 2740 "Page.c"
 }
 
 
-static GtkWidget* page_real_get_page_ui_widget (Page* self, const gchar* path) {
-	GtkWidget* result = NULL;
-	GtkUIManager* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	GtkWidget* _tmp2_ = NULL;
-#line 210 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_val_if_fail (path != NULL, NULL);
-#line 211 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->ui;
-#line 211 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = path;
-#line 211 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = gtk_ui_manager_get_widget (_tmp0_, _tmp1_);
-#line 211 "/home/jens/Source/shotwell/src/Page.vala"
-	result = _tmp2_;
-#line 211 "/home/jens/Source/shotwell/src/Page.vala"
-	return result;
-#line 2772 "Page.c"
-}
-
-
-GtkWidget* page_get_page_ui_widget (Page* self, const gchar* path) {
-#line 210 "/home/jens/Source/shotwell/src/Page.vala"
+GMenuModel* page_get_menubar (Page* self) {
+	GMenuModel* result = NULL;
+	GMenu* model = NULL;
+	GtkBuilder* _tmp0_ = NULL;
+	GObject* _tmp1_ = NULL;
+	GMenu* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+#line 209 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
 #line 210 "/home/jens/Source/shotwell/src/Page.vala"
-	return PAGE_GET_CLASS (self)->get_page_ui_widget (self, path);
-#line 2781 "Page.c"
+	_tmp0_ = self->builder;
+#line 210 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = gtk_builder_get_object (_tmp0_, "MenuBar");
+#line 210 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_menu_get_type ()) ? ((GMenu*) _tmp1_) : NULL);
+#line 210 "/home/jens/Source/shotwell/src/Page.vala"
+	model = _tmp2_;
+#line 212 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = self->priv->menubar_injected;
+#line 212 "/home/jens/Source/shotwell/src/Page.vala"
+	if (!_tmp3_) {
+#line 2765 "Page.c"
+		InjectionGroup** injection_groups = NULL;
+		gint _tmp4_ = 0;
+		InjectionGroup** _tmp5_ = NULL;
+		gint injection_groups_length1 = 0;
+		gint _injection_groups_size_ = 0;
+		InjectionGroup** _tmp6_ = NULL;
+		gint _tmp6__length1 = 0;
+#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = page_init_collect_injection_groups (self, &_tmp4_);
+#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+		injection_groups = _tmp5_;
+#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+		injection_groups_length1 = _tmp4_;
+#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+		_injection_groups_size_ = injection_groups_length1;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = injection_groups;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6__length1 = injection_groups_length1;
+#line 2785 "Page.c"
+		{
+			InjectionGroup** group_collection = NULL;
+			gint group_collection_length1 = 0;
+			gint _group_collection_size_ = 0;
+			gint group_it = 0;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+			group_collection = _tmp6_;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+			group_collection_length1 = _tmp6__length1;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+			for (group_it = 0; group_it < _tmp6__length1; group_it = group_it + 1) {
+#line 2797 "Page.c"
+				InjectionGroup* _tmp7_ = NULL;
+				InjectionGroup* group = NULL;
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp7_ = _injection_group_ref0 (group_collection[group_it]);
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+				group = _tmp7_;
+#line 2804 "Page.c"
+				{
+					gint items = 0;
+					GMenu* _tmp8_ = NULL;
+					gint _tmp9_ = 0;
+#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp8_ = model;
+#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp9_ = g_menu_model_get_n_items (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, g_menu_model_get_type (), GMenuModel));
+#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+					items = _tmp9_;
+#line 2815 "Page.c"
+					{
+						gint i = 0;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+						i = 0;
+#line 2820 "Page.c"
+						{
+							gboolean _tmp10_ = FALSE;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp10_ = TRUE;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+							while (TRUE) {
+#line 2827 "Page.c"
+								gint _tmp12_ = 0;
+								gint _tmp13_ = 0;
+								GMenuModel* submenu = NULL;
+								GMenu* _tmp14_ = NULL;
+								gint _tmp15_ = 0;
+								GMenuModel* _tmp16_ = NULL;
+								GMenuModel* section = NULL;
+								GMenuModel* _tmp17_ = NULL;
+								InjectionGroup* _tmp18_ = NULL;
+								gchar* _tmp19_ = NULL;
+								gchar* _tmp20_ = NULL;
+								GMenuModel* _tmp21_ = NULL;
+								GMenuModel* _tmp22_ = NULL;
+								GMenuModel* _tmp23_ = NULL;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								if (!_tmp10_) {
+#line 2844 "Page.c"
+									gint _tmp11_ = 0;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp11_ = i;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+									i = _tmp11_ + 1;
+#line 2850 "Page.c"
+								}
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp10_ = FALSE;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp12_ = i;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp13_ = items;
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								if (!(_tmp12_ < _tmp13_)) {
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+									break;
+#line 2862 "Page.c"
+								}
+#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp14_ = model;
+#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp15_ = i;
+#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp16_ = g_menu_model_get_item_link (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, g_menu_model_get_type (), GMenuModel), _tmp15_, G_MENU_LINK_SUBMENU);
+#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+								submenu = _tmp16_;
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp17_ = submenu;
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp18_ = group;
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp19_ = injection_group_get_path (_tmp18_);
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp20_ = _tmp19_;
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp21_ = page_find_extension_point (self, _tmp17_, _tmp20_);
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp22_ = _tmp21_;
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								_g_free0 (_tmp20_);
+#line 220 "/home/jens/Source/shotwell/src/Page.vala"
+								section = _tmp22_;
+#line 223 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp23_ = section;
+#line 223 "/home/jens/Source/shotwell/src/Page.vala"
+								if (_tmp23_ == NULL) {
+#line 224 "/home/jens/Source/shotwell/src/Page.vala"
+									_g_object_unref0 (section);
+#line 224 "/home/jens/Source/shotwell/src/Page.vala"
+									_g_object_unref0 (submenu);
+#line 224 "/home/jens/Source/shotwell/src/Page.vala"
+									continue;
+#line 2898 "Page.c"
+								}
+								{
+									GeeList* _element_list = NULL;
+									InjectionGroup* _tmp24_ = NULL;
+									GeeList* _tmp25_ = NULL;
+									gint _element_size = 0;
+									GeeList* _tmp26_ = NULL;
+									gint _tmp27_ = 0;
+									gint _tmp28_ = 0;
+									gint _element_index = 0;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp24_ = group;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp25_ = injection_group_get_elements (_tmp24_);
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_element_list = _tmp25_;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp26_ = _element_list;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp27_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp28_ = _tmp27_;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_element_size = _tmp28_;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_element_index = -1;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									while (TRUE) {
+#line 2927 "Page.c"
+										gint _tmp29_ = 0;
+										gint _tmp30_ = 0;
+										gint _tmp31_ = 0;
+										InjectionGroupElement* element = NULL;
+										GeeList* _tmp32_ = NULL;
+										gint _tmp33_ = 0;
+										gpointer _tmp34_ = NULL;
+										GMenu* menu = NULL;
+										GMenuModel* _tmp35_ = NULL;
+										GMenu* _tmp36_ = NULL;
+										InjectionGroupElement* _tmp37_ = NULL;
+										InjectionGroupElementItemType _tmp38_ = 0;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp29_ = _element_index;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_element_index = _tmp29_ + 1;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp30_ = _element_index;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp31_ = _element_size;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										if (!(_tmp30_ < _tmp31_)) {
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+											break;
+#line 2952 "Page.c"
+										}
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp32_ = _element_list;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp33_ = _element_index;
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp34_ = gee_list_get (_tmp32_, _tmp33_);
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										element = (InjectionGroupElement*) _tmp34_;
+#line 228 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp35_ = section;
+#line 228 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp36_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp35_, g_menu_get_type ()) ? ((GMenu*) _tmp35_) : NULL);
+#line 228 "/home/jens/Source/shotwell/src/Page.vala"
+										menu = _tmp36_;
+#line 229 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp37_ = element;
+#line 229 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp38_ = _tmp37_->kind;
+#line 229 "/home/jens/Source/shotwell/src/Page.vala"
+										switch (_tmp38_) {
+#line 229 "/home/jens/Source/shotwell/src/Page.vala"
+											case INJECTION_GROUP_ELEMENT_ITEM_TYPE_MENUITEM:
+#line 2976 "Page.c"
+											{
+												GMenuItem* item = NULL;
+												InjectionGroupElement* _tmp39_ = NULL;
+												const gchar* _tmp40_ = NULL;
+												InjectionGroupElement* _tmp41_ = NULL;
+												const gchar* _tmp42_ = NULL;
+												gchar* _tmp43_ = NULL;
+												gchar* _tmp44_ = NULL;
+												GMenuItem* _tmp45_ = NULL;
+												GMenuItem* _tmp46_ = NULL;
+												InjectionGroupElement* _tmp47_ = NULL;
+												const gchar* _tmp48_ = NULL;
+												GMenu* _tmp52_ = NULL;
+												GMenuItem* _tmp53_ = NULL;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp39_ = element;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp40_ = _tmp39_->name;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp41_ = element;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp42_ = _tmp41_->action;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp43_ = g_strconcat ("win.", _tmp42_, NULL);
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp44_ = _tmp43_;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp45_ = g_menu_item_new (_tmp40_, _tmp44_);
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp46_ = _tmp45_;
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												_g_free0 (_tmp44_);
+#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+												item = _tmp46_;
+#line 233 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp47_ = element;
+#line 233 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp48_ = _tmp47_->accellerator;
+#line 233 "/home/jens/Source/shotwell/src/Page.vala"
+												if (_tmp48_ != NULL) {
+#line 3017 "Page.c"
+													GMenuItem* _tmp49_ = NULL;
+													InjectionGroupElement* _tmp50_ = NULL;
+													const gchar* _tmp51_ = NULL;
+#line 234 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp49_ = item;
+#line 234 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp50_ = element;
+#line 234 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp51_ = _tmp50_->accellerator;
+#line 234 "/home/jens/Source/shotwell/src/Page.vala"
+													g_menu_item_set_attribute (_tmp49_, "accel", "s", _tmp51_, NULL);
+#line 3029 "Page.c"
+												}
+#line 239 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp52_ = menu;
+#line 239 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp53_ = item;
+#line 239 "/home/jens/Source/shotwell/src/Page.vala"
+												g_menu_append_item (_tmp52_, _tmp53_);
+#line 240 "/home/jens/Source/shotwell/src/Page.vala"
+												_g_object_unref0 (item);
+#line 240 "/home/jens/Source/shotwell/src/Page.vala"
+												break;
+#line 3041 "Page.c"
+											}
+											default:
+											{
+#line 242 "/home/jens/Source/shotwell/src/Page.vala"
+												break;
+#line 3047 "Page.c"
+											}
+										}
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_g_object_unref0 (menu);
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+										_injection_group_element_unref0 (element);
+#line 3054 "Page.c"
+									}
+#line 227 "/home/jens/Source/shotwell/src/Page.vala"
+									_g_object_unref0 (_element_list);
+#line 3058 "Page.c"
+								}
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								_g_object_unref0 (section);
+#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+								_g_object_unref0 (submenu);
+#line 3064 "Page.c"
+							}
+						}
+					}
+#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+					_injection_group_unref0 (group);
+#line 3070 "Page.c"
+				}
+			}
+		}
+#line 248 "/home/jens/Source/shotwell/src/Page.vala"
+		self->priv->menubar_injected = TRUE;
+#line 212 "/home/jens/Source/shotwell/src/Page.vala"
+		injection_groups = (_vala_array_free (injection_groups, injection_groups_length1, (GDestroyNotify) injection_group_unref), NULL);
+#line 3078 "Page.c"
+	}
+#line 251 "/home/jens/Source/shotwell/src/Page.vala"
+	result = G_TYPE_CHECK_INSTANCE_CAST (model, g_menu_model_get_type (), GMenuModel);
+#line 251 "/home/jens/Source/shotwell/src/Page.vala"
+	return result;
+#line 3084 "Page.c"
 }
 
 
@@ -2786,156 +3089,154 @@ static GtkToolbar* page_real_get_toolbar (Page* self) {
 	GtkToolbar* _tmp0_ = NULL;
 	GtkToolbar* _tmp12_ = NULL;
 	GtkToolbar* _tmp13_ = NULL;
-#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 255 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->toolbar;
-#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 255 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 2794 "Page.c"
+#line 3097 "Page.c"
 		GtkToolbar* _tmp1_ = NULL;
 		const gchar* _tmp2_ = NULL;
 		GtkToolbar* _tmp8_ = NULL;
 		GtkToolbar* _tmp9_ = NULL;
 		GtkStyleContext* _tmp10_ = NULL;
 		GtkToolbar* _tmp11_ = NULL;
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->toolbar_path;
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp2_ == NULL) {
-#line 2805 "Page.c"
+#line 3108 "Page.c"
 			GtkToolbar* _tmp3_ = NULL;
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp3_ = (GtkToolbar*) gtk_toolbar_new ();
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 			g_object_ref_sink (_tmp3_);
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp1_);
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp1_ = _tmp3_;
-#line 2815 "Page.c"
+#line 3118 "Page.c"
 		} else {
-			GtkUIManager* _tmp4_ = NULL;
+			GtkBuilder* _tmp4_ = NULL;
 			const gchar* _tmp5_ = NULL;
-			GtkWidget* _tmp6_ = NULL;
+			GObject* _tmp6_ = NULL;
 			GtkToolbar* _tmp7_ = NULL;
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
-			_tmp4_ = self->ui;
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
+			_tmp4_ = self->builder;
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = self->priv->toolbar_path;
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
-			_tmp6_ = gtk_ui_manager_get_widget (_tmp4_, _tmp5_);
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
+			_tmp6_ = gtk_builder_get_object (_tmp4_, _tmp5_);
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp6_, gtk_toolbar_get_type ()) ? ((GtkToolbar*) _tmp6_) : NULL);
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp1_);
-#line 217 "/home/jens/Source/shotwell/src/Page.vala"
+#line 257 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp1_ = _tmp7_;
-#line 2833 "Page.c"
+#line 3136 "Page.c"
 		}
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _g_object_ref0 (_tmp1_);
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->toolbar);
-#line 216 "/home/jens/Source/shotwell/src/Page.vala"
+#line 256 "/home/jens/Source/shotwell/src/Page.vala"
 		self->toolbar = _tmp8_;
-#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 259 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = self->toolbar;
-#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 259 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = gtk_widget_get_style_context (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 259 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_style_context_add_class (_tmp10_, "bottom-toolbar");
-#line 219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 260 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = self->toolbar;
-#line 219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 260 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_toolbar_set_icon_size (_tmp11_, GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 255 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp1_);
-#line 2853 "Page.c"
+#line 3156 "Page.c"
 	}
-#line 221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 262 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = self->toolbar;
-#line 221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 262 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = _g_object_ref0 (_tmp12_);
-#line 221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 262 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp13_;
-#line 221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 262 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2863 "Page.c"
+#line 3166 "Page.c"
 }
 
 
 GtkToolbar* page_get_toolbar (Page* self) {
-#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+#line 254 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 214 "/home/jens/Source/shotwell/src/Page.vala"
+#line 254 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->get_toolbar (self);
-#line 2872 "Page.c"
+#line 3175 "Page.c"
 }
 
 
 static GtkMenu* page_real_get_page_context_menu (Page* self) {
 	GtkMenu* result = NULL;
-#line 225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 266 "/home/jens/Source/shotwell/src/Page.vala"
 	result = NULL;
-#line 225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 266 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2882 "Page.c"
+#line 3185 "Page.c"
 }
 
 
 GtkMenu* page_get_page_context_menu (Page* self) {
-#line 224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 265 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 265 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->get_page_context_menu (self);
-#line 2891 "Page.c"
+#line 3194 "Page.c"
 }
 
 
 static void page_real_switching_from (Page* self) {
 	const gchar* _tmp0_ = NULL;
-#line 229 "/home/jens/Source/shotwell/src/Page.vala"
+#line 270 "/home/jens/Source/shotwell/src/Page.vala"
 	self->in_view = FALSE;
-#line 230 "/home/jens/Source/shotwell/src/Page.vala"
-	page_remove_ui (self);
-#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+#line 271 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->toolbar_path;
-#line 231 "/home/jens/Source/shotwell/src/Page.vala"
+#line 271 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 272 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->toolbar);
-#line 232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 272 "/home/jens/Source/shotwell/src/Page.vala"
 		self->toolbar = NULL;
-#line 2909 "Page.c"
+#line 3210 "Page.c"
 	}
 }
 
 
 void page_switching_from (Page* self) {
-#line 228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 269 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 269 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->switching_from (self);
-#line 2919 "Page.c"
+#line 3220 "Page.c"
 }
 
 
 static void page_real_switched_to (Page* self) {
-#line 236 "/home/jens/Source/shotwell/src/Page.vala"
+#line 276 "/home/jens/Source/shotwell/src/Page.vala"
 	self->in_view = TRUE;
-#line 237 "/home/jens/Source/shotwell/src/Page.vala"
+#line 277 "/home/jens/Source/shotwell/src/Page.vala"
 	page_add_ui (self);
-#line 238 "/home/jens/Source/shotwell/src/Page.vala"
+#line 278 "/home/jens/Source/shotwell/src/Page.vala"
 	page_update_modifiers (self);
-#line 2930 "Page.c"
+#line 3231 "Page.c"
 }
 
 
 void page_switched_to (Page* self) {
-#line 235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 275 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 275 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->switched_to (self);
-#line 2939 "Page.c"
+#line 3240 "Page.c"
 }
 
 
@@ -2944,713 +3245,589 @@ static void page_real_ready (Page* self) {
 
 
 void page_ready (Page* self) {
-#line 241 "/home/jens/Source/shotwell/src/Page.vala"
+#line 281 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 241 "/home/jens/Source/shotwell/src/Page.vala"
+#line 281 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->ready (self);
-#line 2952 "Page.c"
+#line 3253 "Page.c"
 }
 
 
 gboolean page_is_in_view (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 284 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 245 "/home/jens/Source/shotwell/src/Page.vala"
+#line 285 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->in_view;
-#line 245 "/home/jens/Source/shotwell/src/Page.vala"
+#line 285 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 245 "/home/jens/Source/shotwell/src/Page.vala"
+#line 285 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 2967 "Page.c"
+#line 3268 "Page.c"
 }
 
 
 static void page_real_switching_to_fullscreen (Page* self, FullscreenWindow* fsw) {
-#line 248 "/home/jens/Source/shotwell/src/Page.vala"
+#line 288 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (fsw));
-#line 2974 "Page.c"
+#line 3275 "Page.c"
 }
 
 
 void page_switching_to_fullscreen (Page* self, FullscreenWindow* fsw) {
-#line 248 "/home/jens/Source/shotwell/src/Page.vala"
+#line 288 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 248 "/home/jens/Source/shotwell/src/Page.vala"
+#line 288 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->switching_to_fullscreen (self, fsw);
-#line 2983 "Page.c"
+#line 3284 "Page.c"
 }
 
 
 static void page_real_returning_from_fullscreen (Page* self, FullscreenWindow* fsw) {
-#line 251 "/home/jens/Source/shotwell/src/Page.vala"
+#line 291 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (fsw));
-#line 2990 "Page.c"
+#line 3291 "Page.c"
 }
 
 
 void page_returning_from_fullscreen (Page* self, FullscreenWindow* fsw) {
-#line 251 "/home/jens/Source/shotwell/src/Page.vala"
+#line 291 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 251 "/home/jens/Source/shotwell/src/Page.vala"
+#line 291 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->returning_from_fullscreen (self, fsw);
-#line 2999 "Page.c"
+#line 3300 "Page.c"
 }
 
 
-GtkAction* page_get_action (Page* self, const gchar* name) {
-	GtkAction* result = NULL;
-	GtkActionGroup* _tmp0_ = NULL;
-	GtkAction* action = NULL;
-	GtkActionGroup* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	GtkAction* _tmp3_ = NULL;
-	GtkAction* _tmp4_ = NULL;
-	GtkAction* _tmp5_ = NULL;
-	GtkAction* _tmp8_ = NULL;
-#line 254 "/home/jens/Source/shotwell/src/Page.vala"
+GAction* page_get_action (Page* self, const gchar* name) {
+	GAction* result = NULL;
+	AppWindow* aw = NULL;
+	AppWindow* _tmp0_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+#line 294 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 254 "/home/jens/Source/shotwell/src/Page.vala"
+#line 294 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 255 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->priv->action_group;
-#line 255 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp0_ == NULL) {
-#line 256 "/home/jens/Source/shotwell/src/Page.vala"
-		result = NULL;
-#line 256 "/home/jens/Source/shotwell/src/Page.vala"
+#line 295 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = app_window_get_instance ();
+#line 295 "/home/jens/Source/shotwell/src/Page.vala"
+	aw = _tmp0_;
+#line 297 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = aw;
+#line 297 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp1_ != NULL) {
+#line 3321 "Page.c"
+		AppWindow* _tmp2_ = NULL;
+		const gchar* _tmp3_ = NULL;
+		GAction* _tmp4_ = NULL;
+		GAction* _tmp5_ = NULL;
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp2_ = aw;
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = name;
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = g_action_map_lookup_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_action_map_get_type (), GActionMap), _tmp3_);
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = _g_object_ref0 (_tmp4_);
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		result = _tmp5_;
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (aw);
+#line 298 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 3025 "Page.c"
+#line 3340 "Page.c"
 	}
-#line 258 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = self->priv->action_group;
-#line 258 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = name;
-#line 258 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = gtk_action_group_get_action (_tmp1_, _tmp2_);
-#line 258 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = _g_object_ref0 (_tmp3_);
-#line 258 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp4_;
-#line 259 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp5_ = action;
-#line 259 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp5_ == NULL) {
-#line 3041 "Page.c"
-		const gchar* _tmp6_ = NULL;
-		GtkAction* _tmp7_ = NULL;
-#line 260 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp6_ = name;
-#line 260 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp7_ = page_get_common_action (self, _tmp6_, FALSE);
-#line 260 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_object_unref0 (action);
-#line 260 "/home/jens/Source/shotwell/src/Page.vala"
-		action = _tmp7_;
-#line 3052 "Page.c"
-	}
-#line 262 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp8_ = action;
-#line 262 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp8_ == NULL) {
-#line 3058 "Page.c"
-		gchar* _tmp9_ = NULL;
-		gchar* _tmp10_ = NULL;
-		const gchar* _tmp11_ = NULL;
-#line 263 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp9_ = page_get_page_name (self);
-#line 263 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp10_ = _tmp9_;
-#line 263 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp11_ = name;
-#line 263 "/home/jens/Source/shotwell/src/Page.vala"
-		g_warning ("Page.vala:263: Page %s: Unable to locate action %s", _tmp10_, _tmp11_);
-#line 263 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_free0 (_tmp10_);
-#line 3072 "Page.c"
-	}
-#line 265 "/home/jens/Source/shotwell/src/Page.vala"
-	result = action;
-#line 265 "/home/jens/Source/shotwell/src/Page.vala"
+#line 301 "/home/jens/Source/shotwell/src/Page.vala"
+	result = NULL;
+#line 301 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (aw);
+#line 301 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3078 "Page.c"
+#line 3348 "Page.c"
 }
 
 
 void page_set_action_sensitive (Page* self, const gchar* name, gboolean sensitive) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 268 "/home/jens/Source/shotwell/src/Page.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 304 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 268 "/home/jens/Source/shotwell/src/Page.vala"
+#line 304 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_action (self, _tmp0_);
-#line 269 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 270 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 270 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3101 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 271 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 271 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = sensitive;
-#line 271 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_sensitive (_tmp3_, _tmp4_);
-#line 3110 "Page.c"
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp2_ == NULL) {
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp1_);
+#line 3372 "Page.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/Page.vala"
+#line 305 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp2_;
+#line 306 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = action;
+#line 306 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ != NULL) {
+#line 3380 "Page.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+#line 307 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = action;
+#line 307 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = sensitive;
+#line 307 "/home/jens/Source/shotwell/src/Page.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp5_);
+#line 3389 "Page.c"
+	}
+#line 304 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (action);
-#line 3114 "Page.c"
+#line 3393 "Page.c"
 }
 
 
 void page_set_action_important (Page* self, const gchar* name, gboolean important) {
-	GtkAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 274 "/home/jens/Source/shotwell/src/Page.vala"
+	gboolean _tmp1_ = FALSE;
+#line 310 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 274 "/home/jens/Source/shotwell/src/Page.vala"
+#line 310 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 275 "/home/jens/Source/shotwell/src/Page.vala"
+#line 311 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 275 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = page_get_action (self, _tmp0_);
-#line 275 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 276 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 276 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3137 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 277 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 277 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = important;
-#line 277 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_is_important (_tmp3_, _tmp4_);
-#line 3146 "Page.c"
-	}
-#line 274 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (action);
-#line 3150 "Page.c"
+#line 311 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = important;
+#line 311 "/home/jens/Source/shotwell/src/Page.vala"
+	page_set_action_sensitive (self, _tmp0_, _tmp1_);
+#line 3410 "Page.c"
 }
 
 
 void page_set_action_visible (Page* self, const gchar* name, gboolean visible) {
-	GtkAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-	GtkAction* _tmp3_ = NULL;
-	gboolean _tmp4_ = FALSE;
-	GtkAction* _tmp5_ = NULL;
-	gboolean _tmp6_ = FALSE;
-#line 280 "/home/jens/Source/shotwell/src/Page.vala"
+	gboolean _tmp1_ = FALSE;
+#line 314 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 280 "/home/jens/Source/shotwell/src/Page.vala"
+#line 314 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 315 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 281 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = page_get_action (self, _tmp0_);
-#line 281 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 282 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 282 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ == NULL) {
-#line 283 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_object_unref0 (action);
-#line 283 "/home/jens/Source/shotwell/src/Page.vala"
-		return;
-#line 3181 "Page.c"
-	}
-#line 285 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = action;
-#line 285 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = visible;
-#line 285 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_action_set_visible (_tmp3_, _tmp4_);
-#line 286 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp5_ = action;
-#line 286 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp6_ = visible;
-#line 286 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_action_set_sensitive (_tmp5_, _tmp6_);
-#line 280 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (action);
-#line 3197 "Page.c"
+#line 315 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = visible;
+#line 315 "/home/jens/Source/shotwell/src/Page.vala"
+	page_set_action_sensitive (self, _tmp0_, _tmp1_);
+#line 3427 "Page.c"
 }
 
 
 void page_set_action_short_label (Page* self, const gchar* name, const gchar* short_label) {
-	GtkAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 289 "/home/jens/Source/shotwell/src/Page.vala"
+#line 318 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 289 "/home/jens/Source/shotwell/src/Page.vala"
+#line 318 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 289 "/home/jens/Source/shotwell/src/Page.vala"
+#line 318 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (short_label != NULL);
-#line 290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 319 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 290 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = page_get_action (self, _tmp0_);
-#line 290 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 291 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 291 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3222 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		const gchar* _tmp4_ = NULL;
-#line 292 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 292 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = short_label;
-#line 292 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_short_label (_tmp3_, _tmp4_);
-#line 3231 "Page.c"
-	}
-#line 289 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (action);
-#line 3235 "Page.c"
+#line 319 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:319: => Set action short_label called for %s", _tmp0_);
+#line 3443 "Page.c"
 }
 
 
 void page_set_action_details (Page* self, const gchar* name, const gchar* label, const gchar* tooltip, gboolean sensitive) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-	const gchar* _tmp3_ = NULL;
-	const gchar* _tmp6_ = NULL;
-	GtkAction* _tmp9_ = NULL;
-	gboolean _tmp10_ = FALSE;
-#line 295 "/home/jens/Source/shotwell/src/Page.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+	const gchar* _tmp4_ = NULL;
+	GSimpleAction* _tmp7_ = NULL;
+	gboolean _tmp8_ = FALSE;
+#line 322 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 295 "/home/jens/Source/shotwell/src/Page.vala"
+#line 322 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 296 "/home/jens/Source/shotwell/src/Page.vala"
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 296 "/home/jens/Source/shotwell/src/Page.vala"
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_action (self, _tmp0_);
-#line 296 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 297 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ == NULL) {
-#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp1_);
+#line 3470 "Page.c"
+	}
+#line 323 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp2_;
+#line 325 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = action;
+#line 325 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ == NULL) {
+#line 326 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (action);
-#line 298 "/home/jens/Source/shotwell/src/Page.vala"
+#line 326 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 3266 "Page.c"
+#line 3482 "Page.c"
 	}
-#line 300 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = label;
-#line 300 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp3_ != NULL) {
-#line 3272 "Page.c"
-		GtkAction* _tmp4_ = NULL;
+#line 328 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = label;
+#line 328 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp4_ != NULL) {
+#line 3488 "Page.c"
 		const gchar* _tmp5_ = NULL;
-#line 301 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = action;
-#line 301 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp5_ = label;
-#line 301 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_label (_tmp4_, _tmp5_);
-#line 3281 "Page.c"
+		const gchar* _tmp6_ = NULL;
+#line 329 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = name;
+#line 329 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = label;
+#line 329 "/home/jens/Source/shotwell/src/Page.vala"
+		page_update_menu_item_label (self, _tmp5_, _tmp6_);
+#line 3497 "Page.c"
 	}
-#line 303 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp6_ = tooltip;
-#line 303 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp6_ != NULL) {
-#line 3287 "Page.c"
-		GtkAction* _tmp7_ = NULL;
-		const gchar* _tmp8_ = NULL;
-#line 304 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp7_ = action;
-#line 304 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp8_ = tooltip;
-#line 304 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_tooltip (_tmp7_, _tmp8_);
-#line 3296 "Page.c"
-	}
-#line 306 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp9_ = action;
-#line 306 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp10_ = sensitive;
-#line 306 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_action_set_sensitive (_tmp9_, _tmp10_);
-#line 295 "/home/jens/Source/shotwell/src/Page.vala"
+#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp7_ = action;
+#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp8_ = sensitive;
+#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+	g_simple_action_set_enabled (_tmp7_, _tmp8_);
+#line 322 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (action);
-#line 3306 "Page.c"
+#line 3507 "Page.c"
 }
 
 
 void page_activate_action (Page* self, const gchar* name) {
-	GtkAction* action = NULL;
+	GAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 309 "/home/jens/Source/shotwell/src/Page.vala"
+	GAction* _tmp1_ = NULL;
+	GAction* _tmp2_ = NULL;
+#line 334 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 334 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 310 "/home/jens/Source/shotwell/src/Page.vala"
+#line 335 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 310 "/home/jens/Source/shotwell/src/Page.vala"
+#line 335 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_action (self, _tmp0_);
-#line 310 "/home/jens/Source/shotwell/src/Page.vala"
+#line 335 "/home/jens/Source/shotwell/src/Page.vala"
 	action = _tmp1_;
-#line 311 "/home/jens/Source/shotwell/src/Page.vala"
+#line 337 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = action;
-#line 311 "/home/jens/Source/shotwell/src/Page.vala"
+#line 337 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ != NULL) {
-#line 3329 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-#line 312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 3530 "Page.c"
+		GAction* _tmp3_ = NULL;
+#line 338 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = action;
-#line 312 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_activate (_tmp3_);
-#line 3335 "Page.c"
+#line 338 "/home/jens/Source/shotwell/src/Page.vala"
+		g_action_activate (_tmp3_, NULL);
+#line 3536 "Page.c"
 	}
-#line 309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 334 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (action);
-#line 3339 "Page.c"
+#line 3540 "Page.c"
 }
 
 
-GtkAction* page_get_common_action (Page* self, const gchar* name, gboolean log_warning) {
-	GtkAction* result = NULL;
-	GtkActionGroup** _tmp0_ = NULL;
-	gint _tmp0__length1 = 0;
-	GtkActionGroup** _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-	gboolean _tmp8_ = FALSE;
-#line 315 "/home/jens/Source/shotwell/src/Page.vala"
+GAction* page_get_common_action (Page* self, const gchar* name, gboolean log_warning) {
+	GAction* result = NULL;
+	GAction* action = NULL;
+	const gchar* _tmp0_ = NULL;
+	GAction* _tmp1_ = NULL;
+	GAction* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+#line 341 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 315 "/home/jens/Source/shotwell/src/Page.vala"
+#line 341 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 316 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->priv->common_action_groups;
-#line 316 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0__length1 = self->priv->common_action_groups_length1;
-#line 316 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp0_ == NULL) {
-#line 317 "/home/jens/Source/shotwell/src/Page.vala"
-		result = NULL;
-#line 317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 342 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = name;
+#line 342 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = page_get_action (self, _tmp0_);
+#line 342 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp1_;
+#line 344 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = action;
+#line 344 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp2_ != NULL) {
+#line 345 "/home/jens/Source/shotwell/src/Page.vala"
+		result = action;
+#line 345 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 3364 "Page.c"
+#line 3569 "Page.c"
 	}
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = self->priv->common_action_groups;
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1__length1 = self->priv->common_action_groups_length1;
-#line 3370 "Page.c"
-	{
-		GtkActionGroup** group_collection = NULL;
-		gint group_collection_length1 = 0;
-		gint _group_collection_size_ = 0;
-		gint group_it = 0;
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-		group_collection = _tmp1_;
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-		group_collection_length1 = _tmp1__length1;
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-		for (group_it = 0; group_it < _tmp1__length1; group_it = group_it + 1) {
-#line 3382 "Page.c"
-			GtkActionGroup* _tmp2_ = NULL;
-			GtkActionGroup* group = NULL;
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-			_tmp2_ = _g_object_ref0 (group_collection[group_it]);
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-			group = _tmp2_;
-#line 3389 "Page.c"
-			{
-				GtkAction* action = NULL;
-				GtkActionGroup* _tmp3_ = NULL;
-				const gchar* _tmp4_ = NULL;
-				GtkAction* _tmp5_ = NULL;
-				GtkAction* _tmp6_ = NULL;
-				GtkAction* _tmp7_ = NULL;
-#line 320 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp3_ = group;
-#line 320 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp4_ = name;
-#line 320 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp5_ = gtk_action_group_get_action (_tmp3_, _tmp4_);
-#line 320 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp6_ = _g_object_ref0 (_tmp5_);
-#line 320 "/home/jens/Source/shotwell/src/Page.vala"
-				action = _tmp6_;
-#line 321 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp7_ = action;
-#line 321 "/home/jens/Source/shotwell/src/Page.vala"
-				if (_tmp7_ != NULL) {
-#line 322 "/home/jens/Source/shotwell/src/Page.vala"
-					result = action;
-#line 322 "/home/jens/Source/shotwell/src/Page.vala"
-					_g_object_unref0 (group);
-#line 322 "/home/jens/Source/shotwell/src/Page.vala"
-					return result;
-#line 3417 "Page.c"
-				}
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-				_g_object_unref0 (action);
-#line 319 "/home/jens/Source/shotwell/src/Page.vala"
-				_g_object_unref0 (group);
-#line 3423 "Page.c"
-			}
-		}
+#line 347 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = log_warning;
+#line 347 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_) {
+#line 3575 "Page.c"
+		gchar* _tmp4_ = NULL;
+		gchar* _tmp5_ = NULL;
+		const gchar* _tmp6_ = NULL;
+#line 348 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = page_get_page_name (self);
+#line 348 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = _tmp4_;
+#line 348 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = name;
+#line 348 "/home/jens/Source/shotwell/src/Page.vala"
+		g_warning ("Page.vala:348: Page %s: Unable to locate common action %s", _tmp5_, _tmp6_);
+#line 348 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_free0 (_tmp5_);
+#line 3589 "Page.c"
 	}
-#line 325 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp8_ = log_warning;
-#line 325 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp8_) {
-#line 3431 "Page.c"
-		gchar* _tmp9_ = NULL;
-		gchar* _tmp10_ = NULL;
-		const gchar* _tmp11_ = NULL;
-#line 326 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp9_ = page_get_page_name (self);
-#line 326 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp10_ = _tmp9_;
-#line 326 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp11_ = name;
-#line 326 "/home/jens/Source/shotwell/src/Page.vala"
-		g_warning ("Page.vala:326: Page %s: Unable to locate common action %s", _tmp10_, _tmp11_);
-#line 326 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_free0 (_tmp10_);
-#line 3445 "Page.c"
-	}
-#line 328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 350 "/home/jens/Source/shotwell/src/Page.vala"
 	result = NULL;
-#line 328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 350 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (action);
+#line 350 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3451 "Page.c"
+#line 3597 "Page.c"
 }
 
 
 void page_set_common_action_sensitive (Page* self, const gchar* name, gboolean sensitive) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 353 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+#line 353 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 332 "/home/jens/Source/shotwell/src/Page.vala"
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 332 "/home/jens/Source/shotwell/src/Page.vala"
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_common_action (self, _tmp0_, TRUE);
-#line 332 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 333 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 333 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3474 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 334 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 334 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = sensitive;
-#line 334 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_sensitive (_tmp3_, _tmp4_);
-#line 3483 "Page.c"
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp2_ == NULL) {
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp1_);
+#line 3621 "Page.c"
 	}
-#line 331 "/home/jens/Source/shotwell/src/Page.vala"
+#line 354 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp2_;
+#line 355 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = action;
+#line 355 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ != NULL) {
+#line 3629 "Page.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = action;
+#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = sensitive;
+#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp5_);
+#line 3638 "Page.c"
+	}
+#line 353 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (action);
-#line 3487 "Page.c"
+#line 3642 "Page.c"
 }
 
 
 void page_set_common_action_label (Page* self, const gchar* name, const gchar* label) {
-	GtkAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 359 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 359 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 359 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (label != NULL);
-#line 338 "/home/jens/Source/shotwell/src/Page.vala"
+#line 360 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 338 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = page_get_common_action (self, _tmp0_, TRUE);
-#line 338 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 339 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 339 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3512 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		const gchar* _tmp4_ = NULL;
-#line 340 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 340 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = label;
-#line 340 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_label (_tmp3_, _tmp4_);
-#line 3521 "Page.c"
-	}
-#line 337 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (action);
-#line 3525 "Page.c"
+#line 360 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:360: Trying to set common action label for %s", _tmp0_);
+#line 3658 "Page.c"
 }
 
 
 void page_set_common_action_important (Page* self, const gchar* name, gboolean important) {
-	GtkAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 343 "/home/jens/Source/shotwell/src/Page.vala"
+#line 363 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 343 "/home/jens/Source/shotwell/src/Page.vala"
+#line 363 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 344 "/home/jens/Source/shotwell/src/Page.vala"
+#line 364 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 344 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = page_get_common_action (self, _tmp0_, TRUE);
-#line 344 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 345 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 345 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3548 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 346 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 346 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = important;
-#line 346 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_set_is_important (_tmp3_, _tmp4_);
-#line 3557 "Page.c"
-	}
-#line 343 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (action);
-#line 3561 "Page.c"
+#line 364 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:364: Setting action to important: %s", _tmp0_);
+#line 3672 "Page.c"
 }
 
 
 void page_activate_common_action (Page* self, const gchar* name) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 349 "/home/jens/Source/shotwell/src/Page.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 367 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 367 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_common_action (self, _tmp0_, TRUE);
-#line 350 "/home/jens/Source/shotwell/src/Page.vala"
-	action = _tmp1_;
-#line 351 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = action;
-#line 351 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp2_ != NULL) {
-#line 3584 "Page.c"
-		GtkAction* _tmp3_ = NULL;
-#line 352 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = action;
-#line 352 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_activate (_tmp3_);
-#line 3590 "Page.c"
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp2_ == NULL) {
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp1_);
+#line 3696 "Page.c"
 	}
-#line 349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp2_;
+#line 369 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = action;
+#line 369 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ != NULL) {
+#line 3704 "Page.c"
+		GSimpleAction* _tmp4_ = NULL;
+#line 370 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = action;
+#line 370 "/home/jens/Source/shotwell/src/Page.vala"
+		g_signal_emit_by_name (_tmp4_, "activate", NULL);
+#line 3710 "Page.c"
+	}
+#line 367 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (action);
-#line 3594 "Page.c"
+#line 3714 "Page.c"
 }
 
 
 gboolean page_get_ctrl_pressed (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 355 "/home/jens/Source/shotwell/src/Page.vala"
+#line 373 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+#line 374 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->ctrl_pressed;
-#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+#line 374 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 356 "/home/jens/Source/shotwell/src/Page.vala"
+#line 374 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3609 "Page.c"
+#line 3729 "Page.c"
 }
 
 
 gboolean page_get_alt_pressed (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 359 "/home/jens/Source/shotwell/src/Page.vala"
+#line 377 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 378 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->alt_pressed;
-#line 360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 378 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 378 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3624 "Page.c"
+#line 3744 "Page.c"
 }
 
 
 gboolean page_get_shift_pressed (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 363 "/home/jens/Source/shotwell/src/Page.vala"
+#line 381 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 364 "/home/jens/Source/shotwell/src/Page.vala"
+#line 382 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->shift_pressed;
-#line 364 "/home/jens/Source/shotwell/src/Page.vala"
+#line 382 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 364 "/home/jens/Source/shotwell/src/Page.vala"
+#line 382 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3639 "Page.c"
+#line 3759 "Page.c"
 }
 
 
 gboolean page_get_super_pressed (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 367 "/home/jens/Source/shotwell/src/Page.vala"
+#line 385 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+#line 386 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->super_pressed;
-#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+#line 386 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 368 "/home/jens/Source/shotwell/src/Page.vala"
+#line 386 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3654 "Page.c"
+#line 3774 "Page.c"
+}
+
+
+static GVariant* _variant_new16 (gboolean value) {
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 3781 "Page.c"
+}
+
+
+void page_set_action_active (Page* self, const gchar* name, gboolean active) {
+	GSimpleAction* action = NULL;
+	const gchar* _tmp0_ = NULL;
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 389 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (IS_PAGE (self));
+#line 389 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (name != NULL);
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = name;
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = page_get_action (self, _tmp0_);
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp2_ == NULL) {
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp1_);
+#line 3805 "Page.c"
+	}
+#line 390 "/home/jens/Source/shotwell/src/Page.vala"
+	action = _tmp2_;
+#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = action;
+#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ != NULL) {
+#line 3813 "Page.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+		GVariant* _tmp6_ = NULL;
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = action;
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = active;
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = _variant_new16 (_tmp5_);
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+		g_simple_action_set_state (_tmp4_, _tmp6_);
+#line 392 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_variant_unref0 (_tmp6_);
+#line 3827 "Page.c"
+	}
+#line 389 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (action);
+#line 3831 "Page.c"
 }
 
 
@@ -3680,125 +3857,125 @@ static gboolean page_get_modifiers (Page* self, gboolean* ctrl, gboolean* alt, g
 	GdkModifierType _tmp14_ = 0;
 	GdkModifierType _tmp15_ = 0;
 	GdkModifierType _tmp16_ = 0;
-#line 371 "/home/jens/Source/shotwell/src/Page.vala"
+#line 396 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = app_window_get_instance ();
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_ == NULL;
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp1_);
-#line 372 "/home/jens/Source/shotwell/src/Page.vala"
+#line 397 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 373 "/home/jens/Source/shotwell/src/Page.vala"
+#line 398 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_ctrl = FALSE;
-#line 374 "/home/jens/Source/shotwell/src/Page.vala"
+#line 399 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_alt = FALSE;
-#line 375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 400 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_shift = FALSE;
-#line 376 "/home/jens/Source/shotwell/src/Page.vala"
+#line 401 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_super = FALSE;
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		if (ctrl) {
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 			*ctrl = _vala_ctrl;
-#line 3712 "Page.c"
+#line 3889 "Page.c"
 		}
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		if (alt) {
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 			*alt = _vala_alt;
-#line 3718 "Page.c"
+#line 3895 "Page.c"
 		}
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		if (shift) {
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 			*shift = _vala_shift;
-#line 3724 "Page.c"
+#line 3901 "Page.c"
 		}
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		if (super) {
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 			*super = _vala_super;
-#line 3730 "Page.c"
+#line 3907 "Page.c"
 		}
-#line 378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 403 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 3734 "Page.c"
+#line 3911 "Page.c"
 	}
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = app_window_get_instance ();
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = gdk_display_get_default ();
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = gdk_display_get_device_manager (_tmp7_);
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = gdk_device_manager_get_client_pointer (_tmp8_);
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	gdk_window_get_device_position (_tmp6_, _tmp9_, &_tmp10_, &_tmp11_, &_tmp12_);
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	x = _tmp10_;
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	y = _tmp11_;
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	mask = _tmp12_;
-#line 383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 408 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp5_);
-#line 386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 411 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = mask;
-#line 386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 411 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_ctrl = (_tmp13_ & GDK_CONTROL_MASK) != 0;
-#line 387 "/home/jens/Source/shotwell/src/Page.vala"
+#line 412 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = mask;
-#line 387 "/home/jens/Source/shotwell/src/Page.vala"
+#line 412 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_alt = (_tmp14_ & GDK_MOD1_MASK) != 0;
-#line 388 "/home/jens/Source/shotwell/src/Page.vala"
+#line 413 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = mask;
-#line 388 "/home/jens/Source/shotwell/src/Page.vala"
+#line 413 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_shift = (_tmp15_ & GDK_SHIFT_MASK) != 0;
-#line 389 "/home/jens/Source/shotwell/src/Page.vala"
+#line 414 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = mask;
-#line 389 "/home/jens/Source/shotwell/src/Page.vala"
+#line 414 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_super = (_tmp16_ & GDK_MOD4_MASK) != 0;
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	if (ctrl) {
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 		*ctrl = _vala_ctrl;
-#line 3780 "Page.c"
+#line 3957 "Page.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	if (alt) {
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 		*alt = _vala_alt;
-#line 3786 "Page.c"
+#line 3963 "Page.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	if (shift) {
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 		*shift = _vala_shift;
-#line 3792 "Page.c"
+#line 3969 "Page.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	if (super) {
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 		*super = _vala_super;
-#line 3798 "Page.c"
+#line 3975 "Page.c"
 	}
-#line 391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 416 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 3802 "Page.c"
+#line 3979 "Page.c"
 }
 
 
@@ -3824,229 +4001,229 @@ static void page_update_modifiers (Page* self) {
 	gboolean _tmp30_ = FALSE;
 	gboolean _tmp31_ = FALSE;
 	gboolean _tmp32_ = FALSE;
-#line 394 "/home/jens/Source/shotwell/src/Page.vala"
+#line 419 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = page_get_modifiers (self, &_tmp0_, &_tmp1_, &_tmp2_, &_tmp3_);
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	ctrl_currently_pressed = _tmp0_;
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	alt_currently_pressed = _tmp1_;
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	shift_currently_pressed = _tmp2_;
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	super_currently_pressed = _tmp3_;
-#line 397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 422 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp4_) {
-#line 399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 424 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 3844 "Page.c"
+#line 4021 "Page.c"
 	}
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->ctrl_pressed;
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_) {
-#line 3850 "Page.c"
+#line 4027 "Page.c"
 		gboolean _tmp7_ = FALSE;
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = ctrl_currently_pressed;
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = !_tmp7_;
-#line 3856 "Page.c"
+#line 4033 "Page.c"
 	} else {
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = FALSE;
-#line 3860 "Page.c"
+#line 4037 "Page.c"
 	}
-#line 402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 427 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp5_) {
-#line 403 "/home/jens/Source/shotwell/src/Page.vala"
+#line 428 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_ctrl_released (self, NULL);
-#line 3866 "Page.c"
+#line 4043 "Page.c"
 	} else {
 		gboolean _tmp8_ = FALSE;
 		gboolean _tmp9_ = FALSE;
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = self->priv->ctrl_pressed;
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp9_) {
-#line 3874 "Page.c"
+#line 4051 "Page.c"
 			gboolean _tmp10_ = FALSE;
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = ctrl_currently_pressed;
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = _tmp10_;
-#line 3880 "Page.c"
+#line 4057 "Page.c"
 		} else {
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = FALSE;
-#line 3884 "Page.c"
+#line 4061 "Page.c"
 		}
-#line 404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 429 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp8_) {
-#line 405 "/home/jens/Source/shotwell/src/Page.vala"
+#line 430 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_ctrl_pressed (self, NULL);
-#line 3890 "Page.c"
+#line 4067 "Page.c"
 		}
 	}
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = self->priv->alt_pressed;
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp12_) {
-#line 3897 "Page.c"
+#line 4074 "Page.c"
 		gboolean _tmp13_ = FALSE;
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = alt_currently_pressed;
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = !_tmp13_;
-#line 3903 "Page.c"
+#line 4080 "Page.c"
 	} else {
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = FALSE;
-#line 3907 "Page.c"
+#line 4084 "Page.c"
 	}
-#line 407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 432 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp11_) {
-#line 408 "/home/jens/Source/shotwell/src/Page.vala"
+#line 433 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_alt_released (self, NULL);
-#line 3913 "Page.c"
+#line 4090 "Page.c"
 	} else {
 		gboolean _tmp14_ = FALSE;
 		gboolean _tmp15_ = FALSE;
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = self->priv->alt_pressed;
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp15_) {
-#line 3921 "Page.c"
+#line 4098 "Page.c"
 			gboolean _tmp16_ = FALSE;
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp16_ = alt_currently_pressed;
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = _tmp16_;
-#line 3927 "Page.c"
+#line 4104 "Page.c"
 		} else {
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = FALSE;
-#line 3931 "Page.c"
+#line 4108 "Page.c"
 		}
-#line 409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 434 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp14_) {
-#line 410 "/home/jens/Source/shotwell/src/Page.vala"
+#line 435 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_alt_pressed (self, NULL);
-#line 3937 "Page.c"
+#line 4114 "Page.c"
 		}
 	}
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = self->priv->shift_pressed;
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp18_) {
-#line 3944 "Page.c"
+#line 4121 "Page.c"
 		gboolean _tmp19_ = FALSE;
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = shift_currently_pressed;
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = !_tmp19_;
-#line 3950 "Page.c"
+#line 4127 "Page.c"
 	} else {
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = FALSE;
-#line 3954 "Page.c"
+#line 4131 "Page.c"
 	}
-#line 412 "/home/jens/Source/shotwell/src/Page.vala"
+#line 437 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp17_) {
-#line 413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 438 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_shift_released (self, NULL);
-#line 3960 "Page.c"
+#line 4137 "Page.c"
 	} else {
 		gboolean _tmp20_ = FALSE;
 		gboolean _tmp21_ = FALSE;
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = self->priv->shift_pressed;
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp21_) {
-#line 3968 "Page.c"
+#line 4145 "Page.c"
 			gboolean _tmp22_ = FALSE;
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp22_ = shift_currently_pressed;
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = _tmp22_;
-#line 3974 "Page.c"
+#line 4151 "Page.c"
 		} else {
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = FALSE;
-#line 3978 "Page.c"
+#line 4155 "Page.c"
 		}
-#line 414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 439 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp20_) {
-#line 415 "/home/jens/Source/shotwell/src/Page.vala"
+#line 440 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_shift_pressed (self, NULL);
-#line 3984 "Page.c"
+#line 4161 "Page.c"
 		}
 	}
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp24_ = self->priv->super_pressed;
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp24_) {
-#line 3991 "Page.c"
+#line 4168 "Page.c"
 		gboolean _tmp25_ = FALSE;
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp25_ = super_currently_pressed;
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = !_tmp25_;
-#line 3997 "Page.c"
+#line 4174 "Page.c"
 	} else {
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = FALSE;
-#line 4001 "Page.c"
+#line 4178 "Page.c"
 	}
-#line 417 "/home/jens/Source/shotwell/src/Page.vala"
+#line 442 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp23_) {
-#line 418 "/home/jens/Source/shotwell/src/Page.vala"
+#line 443 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_super_released (self, NULL);
-#line 4007 "Page.c"
+#line 4184 "Page.c"
 	} else {
 		gboolean _tmp26_ = FALSE;
 		gboolean _tmp27_ = FALSE;
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp27_ = self->priv->super_pressed;
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp27_) {
-#line 4015 "Page.c"
+#line 4192 "Page.c"
 			gboolean _tmp28_ = FALSE;
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp28_ = super_currently_pressed;
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = _tmp28_;
-#line 4021 "Page.c"
+#line 4198 "Page.c"
 		} else {
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = FALSE;
-#line 4025 "Page.c"
+#line 4202 "Page.c"
 		}
-#line 419 "/home/jens/Source/shotwell/src/Page.vala"
+#line 444 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp26_) {
-#line 420 "/home/jens/Source/shotwell/src/Page.vala"
+#line 445 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_super_pressed (self, NULL);
-#line 4031 "Page.c"
+#line 4208 "Page.c"
 		}
 	}
-#line 422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 447 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = ctrl_currently_pressed;
-#line 422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 447 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->ctrl_pressed = _tmp29_;
-#line 423 "/home/jens/Source/shotwell/src/Page.vala"
+#line 448 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = alt_currently_pressed;
-#line 423 "/home/jens/Source/shotwell/src/Page.vala"
+#line 448 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->alt_pressed = _tmp30_;
-#line 424 "/home/jens/Source/shotwell/src/Page.vala"
+#line 449 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31_ = shift_currently_pressed;
-#line 424 "/home/jens/Source/shotwell/src/Page.vala"
+#line 449 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->shift_pressed = _tmp31_;
-#line 425 "/home/jens/Source/shotwell/src/Page.vala"
+#line 450 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp32_ = super_currently_pressed;
-#line 425 "/home/jens/Source/shotwell/src/Page.vala"
+#line 450 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->super_pressed = _tmp32_;
-#line 4050 "Page.c"
+#line 4227 "Page.c"
 }
 
 
@@ -4056,223 +4233,180 @@ PageWindow* page_get_page_window (Page* self) {
 	GtkContainer* _tmp0_ = NULL;
 	GtkContainer* _tmp1_ = NULL;
 	GtkWidget* _tmp2_ = NULL;
-#line 428 "/home/jens/Source/shotwell/src/Page.vala"
+#line 453 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 454 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = gtk_widget_get_parent (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 454 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 454 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 454 "/home/jens/Source/shotwell/src/Page.vala"
 	p = _tmp2_;
-#line 430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 455 "/home/jens/Source/shotwell/src/Page.vala"
 	while (TRUE) {
-#line 4072 "Page.c"
+#line 4249 "Page.c"
 		GtkWidget* _tmp3_ = NULL;
 		GtkWidget* _tmp4_ = NULL;
 		GtkWidget* _tmp7_ = NULL;
 		GtkContainer* _tmp8_ = NULL;
 		GtkContainer* _tmp9_ = NULL;
 		GtkWidget* _tmp10_ = NULL;
-#line 430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 455 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = p;
-#line 430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 455 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!(_tmp3_ != NULL)) {
-#line 430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 455 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 4085 "Page.c"
+#line 4262 "Page.c"
 		}
-#line 431 "/home/jens/Source/shotwell/src/Page.vala"
+#line 456 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = p;
-#line 431 "/home/jens/Source/shotwell/src/Page.vala"
+#line 456 "/home/jens/Source/shotwell/src/Page.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp4_, TYPE_PAGE_WINDOW)) {
-#line 4091 "Page.c"
+#line 4268 "Page.c"
 			GtkWidget* _tmp5_ = NULL;
 			PageWindow* _tmp6_ = NULL;
-#line 432 "/home/jens/Source/shotwell/src/Page.vala"
+#line 457 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = p;
-#line 432 "/home/jens/Source/shotwell/src/Page.vala"
+#line 457 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_PAGE_WINDOW, PageWindow));
-#line 432 "/home/jens/Source/shotwell/src/Page.vala"
+#line 457 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp6_;
-#line 432 "/home/jens/Source/shotwell/src/Page.vala"
+#line 457 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (p);
-#line 432 "/home/jens/Source/shotwell/src/Page.vala"
+#line 457 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 4104 "Page.c"
+#line 4281 "Page.c"
 		}
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = p;
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = gtk_widget_get_parent (_tmp7_);
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_;
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (p);
-#line 434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 459 "/home/jens/Source/shotwell/src/Page.vala"
 		p = _tmp10_;
-#line 4118 "Page.c"
+#line 4295 "Page.c"
 	}
-#line 437 "/home/jens/Source/shotwell/src/Page.vala"
+#line 462 "/home/jens/Source/shotwell/src/Page.vala"
 	result = NULL;
-#line 437 "/home/jens/Source/shotwell/src/Page.vala"
+#line 462 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (p);
-#line 437 "/home/jens/Source/shotwell/src/Page.vala"
+#line 462 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 4126 "Page.c"
+#line 4303 "Page.c"
 }
 
 
 CommandManager* page_get_command_manager (Page* self) {
 	CommandManager* result = NULL;
 	CommandManager* _tmp0_ = NULL;
-#line 440 "/home/jens/Source/shotwell/src/Page.vala"
+#line 465 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 441 "/home/jens/Source/shotwell/src/Page.vala"
+#line 466 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = app_window_get_command_manager ();
-#line 441 "/home/jens/Source/shotwell/src/Page.vala"
+#line 466 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 441 "/home/jens/Source/shotwell/src/Page.vala"
+#line 466 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 4141 "Page.c"
+#line 4318 "Page.c"
+}
+
+
+static void page_real_add_actions (Page* self) {
+}
+
+
+void page_add_actions (Page* self) {
+#line 469 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (IS_PAGE (self));
+#line 469 "/home/jens/Source/shotwell/src/Page.vala"
+	PAGE_GET_CLASS (self)->add_actions (self);
+#line 4331 "Page.c"
+}
+
+
+static gboolean _variant_get17 (GVariant* value) {
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	return g_variant_get_boolean (value);
+#line 4338 "Page.c"
+}
+
+
+static GVariant* _variant_new18 (gboolean value) {
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 4345 "Page.c"
+}
+
+
+void page_on_action_toggle (Page* self, GAction* action, GVariant* value) {
+	GVariant* new_state = NULL;
+	GAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+	GVariant* _tmp4_ = NULL;
+	GVariant* _tmp5_ = NULL;
+	GAction* _tmp6_ = NULL;
+#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (IS_PAGE (self));
+#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (G_IS_ACTION (action));
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = action;
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = g_action_get_state (_tmp0_);
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = _tmp1_;
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = _variant_get17 (_tmp2_);
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = _variant_new18 (!_tmp3_);
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp5_ = _tmp4_;
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_variant_unref0 (_tmp2_);
+#line 472 "/home/jens/Source/shotwell/src/Page.vala"
+	new_state = _tmp5_;
+#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp6_ = action;
+#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+	g_action_change_state (_tmp6_, new_state);
+#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_variant_unref0 (new_state);
+#line 4384 "Page.c"
+}
+
+
+void page_on_action_radio (Page* self, GAction* action, GVariant* value) {
+	GAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+#line 476 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (IS_PAGE (self));
+#line 476 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (G_IS_ACTION (action));
+#line 477 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = action;
+#line 477 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = value;
+#line 477 "/home/jens/Source/shotwell/src/Page.vala"
+	g_action_change_state (_tmp0_, _tmp1_);
+#line 4401 "Page.c"
 }
 
 
 static void page_init_ui (Page* self) {
-	GtkActionGroup* _tmp0_ = NULL;
-	GtkActionEntry* action_entries = NULL;
-	gint _tmp1_ = 0;
-	GtkActionEntry* _tmp2_ = NULL;
-	gint action_entries_length1 = 0;
-	gint _action_entries_size_ = 0;
-	GtkActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkToggleActionEntry* toggle_entries = NULL;
-	gint _tmp6_ = 0;
-	GtkToggleActionEntry* _tmp7_ = NULL;
-	gint toggle_entries_length1 = 0;
-	gint _toggle_entries_size_ = 0;
-	GtkToggleActionEntry* _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-	GtkActionGroup* _tmp11_ = NULL;
-	AppWindow* _tmp12_ = NULL;
-	AppWindow* _tmp13_ = NULL;
-	gint _tmp14_ = 0;
-	GtkActionGroup** _tmp15_ = NULL;
-#line 444 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_if_fail (IS_PAGE (self));
-#line 445 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = gtk_action_group_new ("PageActionGroup");
-#line 445 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->priv->action_group);
-#line 445 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->action_group = _tmp0_;
-#line 448 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = page_init_collect_action_entries (self, &_tmp1_);
-#line 448 "/home/jens/Source/shotwell/src/Page.vala"
-	action_entries = _tmp2_;
-#line 448 "/home/jens/Source/shotwell/src/Page.vala"
-	action_entries_length1 = _tmp1_;
-#line 448 "/home/jens/Source/shotwell/src/Page.vala"
-	_action_entries_size_ = action_entries_length1;
-#line 449 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = action_entries;
-#line 449 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3__length1 = action_entries_length1;
-#line 449 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp3__length1 > 0) {
-#line 4188 "Page.c"
-		GtkActionGroup* _tmp4_ = NULL;
-		GtkActionEntry* _tmp5_ = NULL;
-		gint _tmp5__length1 = 0;
-#line 450 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = self->priv->action_group;
-#line 450 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp5_ = action_entries;
-#line 450 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp5__length1 = action_entries_length1;
-#line 450 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_group_add_actions (_tmp4_, _tmp5_, _tmp5__length1, self);
-#line 4200 "Page.c"
-	}
-#line 453 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp7_ = page_init_collect_toggle_action_entries (self, &_tmp6_);
-#line 453 "/home/jens/Source/shotwell/src/Page.vala"
-	toggle_entries = _tmp7_;
-#line 453 "/home/jens/Source/shotwell/src/Page.vala"
-	toggle_entries_length1 = _tmp6_;
-#line 453 "/home/jens/Source/shotwell/src/Page.vala"
-	_toggle_entries_size_ = toggle_entries_length1;
-#line 454 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp8_ = toggle_entries;
-#line 454 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp8__length1 = toggle_entries_length1;
-#line 454 "/home/jens/Source/shotwell/src/Page.vala"
-	if (_tmp8__length1 > 0) {
-#line 4216 "Page.c"
-		GtkActionGroup* _tmp9_ = NULL;
-		GtkToggleActionEntry* _tmp10_ = NULL;
-		gint _tmp10__length1 = 0;
-#line 455 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp9_ = self->priv->action_group;
-#line 455 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp10_ = toggle_entries;
-#line 455 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp10__length1 = toggle_entries_length1;
-#line 455 "/home/jens/Source/shotwell/src/Page.vala"
-		gtk_action_group_add_toggle_actions (_tmp9_, _tmp10_, _tmp10__length1, self);
-#line 4228 "Page.c"
-	}
-#line 460 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp11_ = self->priv->action_group;
-#line 460 "/home/jens/Source/shotwell/src/Page.vala"
-	page_register_radio_actions (self, _tmp11_);
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp12_ = app_window_get_instance ();
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp13_ = _tmp12_;
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp15_ = app_window_get_common_action_groups (_tmp13_, &_tmp14_);
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups = (_vala_array_free (self->priv->common_action_groups, self->priv->common_action_groups_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups = _tmp15_;
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups_length1 = _tmp14_;
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->_common_action_groups_size_ = self->priv->common_action_groups_length1;
-#line 463 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (_tmp13_);
-#line 444 "/home/jens/Source/shotwell/src/Page.vala"
-	toggle_entries = (g_free (toggle_entries), NULL);
-#line 444 "/home/jens/Source/shotwell/src/Page.vala"
-	action_entries = (g_free (action_entries), NULL);
-#line 4254 "Page.c"
-}
-
-
-static gpointer _injection_group_ref0 (gpointer self) {
 #line 480 "/home/jens/Source/shotwell/src/Page.vala"
-	return self ? injection_group_ref (self) : NULL;
-#line 4261 "Page.c"
-}
-
-
-static void _vala_array_add249 (guint** array, int* length, int* size, guint value) {
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-	if ((*length) == (*size)) {
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-		*array = g_renew (guint, *array, *size);
-#line 4272 "Page.c"
-	}
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-	(*array)[(*length)++] = value;
-#line 4276 "Page.c"
+	g_return_if_fail (IS_PAGE (self));
+#line 481 "/home/jens/Source/shotwell/src/Page.vala"
+	page_add_actions (self);
+#line 4410 "Page.c"
 }
 
 
@@ -4283,49 +4417,36 @@ static void page_add_ui (Page* self) {
 	GeeList* _tmp2_ = NULL;
 	gint _tmp3_ = 0;
 	gint _tmp4_ = 0;
-	GtkUIManager* _tmp19_ = NULL;
-	GtkActionGroup* _tmp20_ = NULL;
-	InjectionGroup** injection_groups = NULL;
-	gint _tmp21_ = 0;
-	InjectionGroup** _tmp22_ = NULL;
-	gint injection_groups_length1 = 0;
-	gint _injection_groups_size_ = 0;
-	InjectionGroup** _tmp23_ = NULL;
-	gint _tmp23__length1 = 0;
-	AppWindow* _tmp51_ = NULL;
-	AppWindow* _tmp52_ = NULL;
-	GtkUIManager* _tmp53_ = NULL;
-	GtkUIManager* _tmp54_ = NULL;
-#line 466 "/home/jens/Source/shotwell/src/Page.vala"
+#line 484 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 468 "/home/jens/Source/shotwell/src/Page.vala"
+#line 486 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = gee_array_list_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL);
-#line 468 "/home/jens/Source/shotwell/src/Page.vala"
+#line 486 "/home/jens/Source/shotwell/src/Page.vala"
 	ui_filenames = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_LIST, GeeList);
-#line 469 "/home/jens/Source/shotwell/src/Page.vala"
+#line 487 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = ui_filenames;
-#line 469 "/home/jens/Source/shotwell/src/Page.vala"
+#line 487 "/home/jens/Source/shotwell/src/Page.vala"
 	page_init_collect_ui_filenames (self, _tmp1_);
-#line 470 "/home/jens/Source/shotwell/src/Page.vala"
+#line 488 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = ui_filenames;
-#line 470 "/home/jens/Source/shotwell/src/Page.vala"
+#line 488 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 470 "/home/jens/Source/shotwell/src/Page.vala"
+#line 488 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 470 "/home/jens/Source/shotwell/src/Page.vala"
+#line 488 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ == 0) {
-#line 4318 "Page.c"
+#line 4439 "Page.c"
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
-#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 489 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = page_get_page_name (self);
-#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 489 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = _tmp5_;
-#line 471 "/home/jens/Source/shotwell/src/Page.vala"
-		g_message ("Page.vala:471: No UI file specified for %s", _tmp6_);
-#line 471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 489 "/home/jens/Source/shotwell/src/Page.vala"
+		g_message ("Page.vala:489: No UI file specified for %s", _tmp6_);
+#line 489 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (_tmp6_);
-#line 4329 "Page.c"
+#line 4450 "Page.c"
 	}
 	{
 		GeeList* _ui_filename_list = NULL;
@@ -4336,25 +4457,25 @@ static void page_add_ui (Page* self) {
 		gint _tmp10_ = 0;
 		gint _tmp11_ = 0;
 		gint _ui_filename_index = 0;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = ui_filenames;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _g_object_ref0 (_tmp7_);
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_ui_filename_list = _tmp8_;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _ui_filename_list;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = _tmp10_;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_ui_filename_size = _tmp11_;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_ui_filename_index = -1;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		while (TRUE) {
-#line 4358 "Page.c"
+#line 4479 "Page.c"
 			gint _tmp12_ = 0;
 			gint _tmp13_ = 0;
 			gint _tmp14_ = 0;
@@ -4363,365 +4484,90 @@ static void page_add_ui (Page* self) {
 			gint _tmp16_ = 0;
 			gpointer _tmp17_ = NULL;
 			const gchar* _tmp18_ = NULL;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = _ui_filename_index;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_ui_filename_index = _tmp12_ + 1;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = _ui_filename_index;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = _ui_filename_size;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!(_tmp13_ < _tmp14_)) {
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 4379 "Page.c"
+#line 4500 "Page.c"
 			}
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = _ui_filename_list;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp16_ = _ui_filename_index;
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp17_ = gee_list_get (_tmp15_, _tmp16_);
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			ui_filename = (gchar*) _tmp17_;
-#line 474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 492 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = ui_filename;
-#line 474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 492 "/home/jens/Source/shotwell/src/Page.vala"
 			page_init_load_ui (self, _tmp18_);
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_free0 (ui_filename);
-#line 4395 "Page.c"
+#line 4516 "Page.c"
 		}
-#line 473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 491 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_ui_filename_list);
-#line 4399 "Page.c"
+#line 4520 "Page.c"
 	}
-#line 476 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp19_ = self->ui;
-#line 476 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp20_ = self->priv->action_group;
-#line 476 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_ui_manager_insert_action_group (_tmp19_, _tmp20_, 0);
-#line 479 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp22_ = page_init_collect_injection_groups (self, &_tmp21_);
-#line 479 "/home/jens/Source/shotwell/src/Page.vala"
-	injection_groups = _tmp22_;
-#line 479 "/home/jens/Source/shotwell/src/Page.vala"
-	injection_groups_length1 = _tmp21_;
-#line 479 "/home/jens/Source/shotwell/src/Page.vala"
-	_injection_groups_size_ = injection_groups_length1;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp23_ = injection_groups;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp23__length1 = injection_groups_length1;
-#line 4419 "Page.c"
-	{
-		InjectionGroup** group_collection = NULL;
-		gint group_collection_length1 = 0;
-		gint _group_collection_size_ = 0;
-		gint group_it = 0;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-		group_collection = _tmp23_;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-		group_collection_length1 = _tmp23__length1;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-		for (group_it = 0; group_it < _tmp23__length1; group_it = group_it + 1) {
-#line 4431 "Page.c"
-			InjectionGroup* _tmp24_ = NULL;
-			InjectionGroup* group = NULL;
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-			_tmp24_ = _injection_group_ref0 (group_collection[group_it]);
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-			group = _tmp24_;
-#line 4438 "Page.c"
-			{
-				{
-					GeeList* _element_list = NULL;
-					InjectionGroup* _tmp25_ = NULL;
-					GeeList* _tmp26_ = NULL;
-					gint _element_size = 0;
-					GeeList* _tmp27_ = NULL;
-					gint _tmp28_ = 0;
-					gint _tmp29_ = 0;
-					gint _element_index = 0;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp25_ = group;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp26_ = injection_group_get_elements (_tmp25_);
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_element_list = _tmp26_;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp27_ = _element_list;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp28_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp29_ = _tmp28_;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_element_size = _tmp29_;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_element_index = -1;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					while (TRUE) {
-#line 4467 "Page.c"
-						gint _tmp30_ = 0;
-						gint _tmp31_ = 0;
-						gint _tmp32_ = 0;
-						InjectionGroupElement* element = NULL;
-						GeeList* _tmp33_ = NULL;
-						gint _tmp34_ = 0;
-						gpointer _tmp35_ = NULL;
-						guint merge_id = 0U;
-						GtkUIManager* _tmp36_ = NULL;
-						guint _tmp37_ = 0U;
-						GtkUIManager* _tmp38_ = NULL;
-						guint _tmp39_ = 0U;
-						InjectionGroup* _tmp40_ = NULL;
-						gchar* _tmp41_ = NULL;
-						gchar* _tmp42_ = NULL;
-						InjectionGroupElement* _tmp43_ = NULL;
-						const gchar* _tmp44_ = NULL;
-						InjectionGroupElement* _tmp45_ = NULL;
-						const gchar* _tmp46_ = NULL;
-						InjectionGroupElement* _tmp47_ = NULL;
-						GtkUIManagerItemType _tmp48_ = 0;
-						guint* _tmp49_ = NULL;
-						gint _tmp49__length1 = 0;
-						guint _tmp50_ = 0U;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp30_ = _element_index;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_element_index = _tmp30_ + 1;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp31_ = _element_index;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp32_ = _element_size;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						if (!(_tmp31_ < _tmp32_)) {
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-							break;
-#line 4504 "Page.c"
-						}
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp33_ = _element_list;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp34_ = _element_index;
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp35_ = gee_list_get (_tmp33_, _tmp34_);
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						element = (InjectionGroupElement*) _tmp35_;
-#line 482 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp36_ = self->ui;
-#line 482 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp37_ = gtk_ui_manager_new_merge_id (_tmp36_);
-#line 482 "/home/jens/Source/shotwell/src/Page.vala"
-						merge_id = _tmp37_;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp38_ = self->ui;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp39_ = merge_id;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp40_ = group;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp41_ = injection_group_get_path (_tmp40_);
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp42_ = _tmp41_;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp43_ = element;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp44_ = _tmp43_->name;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp45_ = element;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp46_ = _tmp45_->action;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp47_ = element;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp48_ = _tmp47_->kind;
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						gtk_ui_manager_add_ui (_tmp38_, _tmp39_, _tmp42_, _tmp44_, _tmp46_, _tmp48_, FALSE);
-#line 483 "/home/jens/Source/shotwell/src/Page.vala"
-						_g_free0 (_tmp42_);
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp49_ = self->priv->merge_ids;
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp49__length1 = self->priv->merge_ids_length1;
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-						_tmp50_ = merge_id;
-#line 485 "/home/jens/Source/shotwell/src/Page.vala"
-						_vala_array_add249 (&self->priv->merge_ids, &self->priv->merge_ids_length1, &self->priv->_merge_ids_size_, _tmp50_);
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-						_injection_group_element_unref0 (element);
-#line 4556 "Page.c"
-					}
-#line 481 "/home/jens/Source/shotwell/src/Page.vala"
-					_g_object_unref0 (_element_list);
-#line 4560 "Page.c"
-				}
-#line 480 "/home/jens/Source/shotwell/src/Page.vala"
-				_injection_group_unref0 (group);
-#line 4564 "Page.c"
-			}
-		}
-	}
-#line 489 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp51_ = app_window_get_instance ();
-#line 489 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp52_ = _tmp51_;
-#line 489 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp53_ = self->ui;
-#line 489 "/home/jens/Source/shotwell/src/Page.vala"
-	app_window_replace_common_placeholders (_tmp52_, _tmp53_);
-#line 489 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (_tmp52_);
-#line 491 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp54_ = self->ui;
-#line 491 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_ui_manager_ensure_update (_tmp54_);
-#line 466 "/home/jens/Source/shotwell/src/Page.vala"
-	injection_groups = (_vala_array_free (injection_groups, injection_groups_length1, (GDestroyNotify) injection_group_unref), NULL);
-#line 466 "/home/jens/Source/shotwell/src/Page.vala"
+#line 484 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (ui_filenames);
-#line 4586 "Page.c"
-}
-
-
-static void page_remove_ui (Page* self) {
-	GtkUIManager* _tmp8_ = NULL;
-	GtkActionGroup* _tmp9_ = NULL;
-	gint _tmp10_ = 0;
-	GtkUIManager* _tmp11_ = NULL;
-#line 494 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_if_fail (IS_PAGE (self));
-#line 4597 "Page.c"
-	{
-		gint i = 0;
-		guint* _tmp0_ = NULL;
-		gint _tmp0__length1 = 0;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp0_ = self->priv->merge_ids;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp0__length1 = self->priv->merge_ids_length1;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-		i = _tmp0__length1 - 1;
-#line 4608 "Page.c"
-		{
-			gboolean _tmp1_ = FALSE;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-			_tmp1_ = TRUE;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-			while (TRUE) {
-#line 4615 "Page.c"
-				gint _tmp3_ = 0;
-				GtkUIManager* _tmp4_ = NULL;
-				guint* _tmp5_ = NULL;
-				gint _tmp5__length1 = 0;
-				gint _tmp6_ = 0;
-				guint _tmp7_ = 0U;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-				if (!_tmp1_) {
-#line 4624 "Page.c"
-					gint _tmp2_ = 0;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-					_tmp2_ = i;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-					i = _tmp2_ - 1;
-#line 4630 "Page.c"
-				}
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp1_ = FALSE;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp3_ = i;
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-				if (!(_tmp3_ >= 0)) {
-#line 495 "/home/jens/Source/shotwell/src/Page.vala"
-					break;
-#line 4640 "Page.c"
-				}
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp4_ = self->ui;
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp5_ = self->priv->merge_ids;
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp5__length1 = self->priv->merge_ids_length1;
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp6_ = i;
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				_tmp7_ = _tmp5_[_tmp6_];
-#line 496 "/home/jens/Source/shotwell/src/Page.vala"
-				gtk_ui_manager_remove_ui (_tmp4_, _tmp7_);
-#line 4654 "Page.c"
-			}
-		}
-	}
-#line 497 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp8_ = self->ui;
-#line 497 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp9_ = self->priv->action_group;
-#line 497 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_ui_manager_remove_action_group (_tmp8_, _tmp9_);
-#line 498 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp10_ = 0;
-#line 498 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->merge_ids = g_renew (guint, self->priv->merge_ids, 0);
-#line 498 "/home/jens/Source/shotwell/src/Page.vala"
-	(_tmp10_ > self->priv->merge_ids_length1) ? memset (self->priv->merge_ids + self->priv->merge_ids_length1, 0, sizeof (guint) * (_tmp10_ - self->priv->merge_ids_length1)) : NULL;
-#line 498 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->merge_ids_length1 = _tmp10_;
-#line 498 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->_merge_ids_size_ = _tmp10_;
-#line 500 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp11_ = self->ui;
-#line 500 "/home/jens/Source/shotwell/src/Page.vala"
-	gtk_ui_manager_ensure_update (_tmp11_);
-#line 4678 "Page.c"
+#line 4524 "Page.c"
 }
 
 
 void page_init_toolbar (Page* self, const gchar* path) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 497 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 497 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (path != NULL);
-#line 504 "/home/jens/Source/shotwell/src/Page.vala"
+#line 498 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = path;
-#line 504 "/home/jens/Source/shotwell/src/Page.vala"
+#line 498 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 504 "/home/jens/Source/shotwell/src/Page.vala"
+#line 498 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->toolbar_path);
-#line 504 "/home/jens/Source/shotwell/src/Page.vala"
+#line 498 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->toolbar_path = _tmp1_;
-#line 4697 "Page.c"
+#line 4543 "Page.c"
 }
 
 
 static void _page_on_update_actions_view_collection_items_state_changed (ViewCollection* _sender, GeeIterable* changed, gpointer self) {
-#line 519 "/home/jens/Source/shotwell/src/Page.vala"
+#line 513 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_update_actions ((Page*) self);
-#line 4704 "Page.c"
+#line 4550 "Page.c"
 }
 
 
 static void _page_on_update_actions_view_collection_selection_group_altered (ViewCollection* _sender, gpointer self) {
-#line 520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 514 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_update_actions ((Page*) self);
-#line 4711 "Page.c"
+#line 4557 "Page.c"
 }
 
 
 static void _page_on_update_actions_view_collection_items_visibility_changed (ViewCollection* _sender, GeeCollection* changed, gpointer self) {
-#line 521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 515 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_update_actions ((Page*) self);
-#line 4718 "Page.c"
+#line 4564 "Page.c"
 }
 
 
 static void _page_on_update_actions_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
-#line 522 "/home/jens/Source/shotwell/src/Page.vala"
+#line 516 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_update_actions ((Page*) self);
-#line 4725 "Page.c"
+#line 4571 "Page.c"
 }
 
 
@@ -4749,87 +4595,87 @@ static void page_attach_view_signals (Page* self) {
 	ViewCollection* _tmp18_ = NULL;
 	ViewCollection* _tmp19_ = NULL;
 	ViewCollection* _tmp20_ = NULL;
-#line 508 "/home/jens/Source/shotwell/src/Page.vala"
+#line 502 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 509 "/home/jens/Source/shotwell/src/Page.vala"
+#line 503 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->are_actions_attached;
-#line 509 "/home/jens/Source/shotwell/src/Page.vala"
+#line 503 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 510 "/home/jens/Source/shotwell/src/Page.vala"
+#line 504 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 4761 "Page.c"
+#line 4607 "Page.c"
 	}
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (self);
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = view_collection_get_selected_count (_tmp2_);
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 507 "/home/jens/Source/shotwell/src/Page.vala"
 	selected_count = _tmp4_;
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = page_get_view (self);
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_;
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_DATA_COLLECTION, DataCollection));
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _tmp7_;
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp6_);
-#line 514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 508 "/home/jens/Source/shotwell/src/Page.vala"
 	count = _tmp8_;
-#line 515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 509 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = selected_count;
-#line 515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 509 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = count;
-#line 515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 509 "/home/jens/Source/shotwell/src/Page.vala"
 	page_init_actions (self, _tmp9_, _tmp10_);
-#line 516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 510 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = selected_count;
-#line 516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 510 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = count;
-#line 516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 510 "/home/jens/Source/shotwell/src/Page.vala"
 	page_update_actions (self, _tmp11_, _tmp12_);
-#line 519 "/home/jens/Source/shotwell/src/Page.vala"
+#line 513 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = page_get_view (self);
-#line 519 "/home/jens/Source/shotwell/src/Page.vala"
+#line 513 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = _tmp13_;
-#line 519 "/home/jens/Source/shotwell/src/Page.vala"
+#line 513 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp14_, "items-state-changed", (GCallback) _page_on_update_actions_view_collection_items_state_changed, self, 0);
-#line 519 "/home/jens/Source/shotwell/src/Page.vala"
+#line 513 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp14_);
-#line 520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 514 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = page_get_view (self);
-#line 520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 514 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = _tmp15_;
-#line 520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 514 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp16_, "selection-group-altered", (GCallback) _page_on_update_actions_view_collection_selection_group_altered, self, 0);
-#line 520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 514 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp16_);
-#line 521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 515 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = page_get_view (self);
-#line 521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 515 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = _tmp17_;
-#line 521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 515 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp18_, "items-visibility-changed", (GCallback) _page_on_update_actions_view_collection_items_visibility_changed, self, 0);
-#line 521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 515 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp18_);
-#line 522 "/home/jens/Source/shotwell/src/Page.vala"
+#line 516 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = page_get_view (self);
-#line 522 "/home/jens/Source/shotwell/src/Page.vala"
+#line 516 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = _tmp19_;
-#line 522 "/home/jens/Source/shotwell/src/Page.vala"
+#line 516 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, TYPE_DATA_COLLECTION, DataCollection), "contents-altered", (GCallback) _page_on_update_actions_data_collection_contents_altered, self, 0);
-#line 522 "/home/jens/Source/shotwell/src/Page.vala"
+#line 516 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp20_);
-#line 524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 518 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->are_actions_attached = TRUE;
-#line 4833 "Page.c"
+#line 4679 "Page.c"
 }
 
 
@@ -4847,109 +4693,109 @@ static void page_detach_view_signals (Page* self) {
 	ViewCollection* _tmp10_ = NULL;
 	ViewCollection* _tmp11_ = NULL;
 	guint _tmp12_ = 0U;
-#line 528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 522 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 523 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->are_actions_attached;
-#line 529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 523 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp0_) {
-#line 530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 524 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 4859 "Page.c"
+#line 4705 "Page.c"
 	}
-#line 532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 526 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (self);
-#line 532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 526 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 526 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("items-state-changed", TYPE_VIEW_COLLECTION, &_tmp3_, NULL, FALSE);
-#line 532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 526 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _page_on_update_actions_view_collection_items_state_changed, self);
-#line 532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 526 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 527 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = page_get_view (self);
-#line 533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 527 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 527 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("selection-group-altered", TYPE_VIEW_COLLECTION, &_tmp6_, NULL, FALSE);
-#line 533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 527 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp5_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _page_on_update_actions_view_collection_selection_group_altered, self);
-#line 533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 527 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 534 "/home/jens/Source/shotwell/src/Page.vala"
+#line 528 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = page_get_view (self);
-#line 534 "/home/jens/Source/shotwell/src/Page.vala"
+#line 528 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _tmp7_;
-#line 534 "/home/jens/Source/shotwell/src/Page.vala"
+#line 528 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("items-visibility-changed", TYPE_VIEW_COLLECTION, &_tmp9_, NULL, FALSE);
-#line 534 "/home/jens/Source/shotwell/src/Page.vala"
+#line 528 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _page_on_update_actions_view_collection_items_visibility_changed, self);
-#line 534 "/home/jens/Source/shotwell/src/Page.vala"
+#line 528 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp8_);
-#line 535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 529 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = page_get_view (self);
-#line 535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 529 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = _tmp10_;
-#line 535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 529 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("contents-altered", TYPE_DATA_COLLECTION, &_tmp12_, NULL, FALSE);
-#line 535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 529 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_COLLECTION, DataCollection), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp12_, 0, NULL, (GCallback) _page_on_update_actions_data_collection_contents_altered, self);
-#line 535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 529 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp11_);
-#line 537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 531 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->are_actions_attached = FALSE;
-#line 4903 "Page.c"
+#line 4749 "Page.c"
 }
 
 
 static void _page_on_update_actions_on_idle_one_shot_callback (gpointer self) {
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_update_actions_on_idle ((Page*) self);
-#line 4910 "Page.c"
+#line 4756 "Page.c"
 }
 
 
 static void page_on_update_actions (Page* self) {
 	OneShotScheduler* _tmp0_ = NULL;
 	OneShotScheduler* _tmp6_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/Page.vala"
+#line 534 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 535 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->update_actions_scheduler;
-#line 541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 535 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 4923 "Page.c"
+#line 4769 "Page.c"
 		gchar* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		OneShotScheduler* _tmp5_ = NULL;
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = page_get_page_name (self);
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = _tmp1_;
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = g_strdup_printf ("Update actions scheduler for %s", _tmp2_);
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _tmp3_;
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = one_shot_scheduler_new (_tmp4_, _page_on_update_actions_on_idle_one_shot_callback, self);
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_one_shot_scheduler_unref0 (self->priv->update_actions_scheduler);
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->update_actions_scheduler = _tmp5_;
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (_tmp4_);
-#line 542 "/home/jens/Source/shotwell/src/Page.vala"
+#line 536 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (_tmp2_);
-#line 4947 "Page.c"
+#line 4793 "Page.c"
 	}
-#line 547 "/home/jens/Source/shotwell/src/Page.vala"
+#line 541 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->update_actions_scheduler;
-#line 547 "/home/jens/Source/shotwell/src/Page.vala"
+#line 541 "/home/jens/Source/shotwell/src/Page.vala"
 	one_shot_scheduler_at_priority_idle (_tmp6_, G_PRIORITY_LOW);
-#line 4953 "Page.c"
+#line 4799 "Page.c"
 }
 
 
@@ -4961,50 +4807,35 @@ static void page_on_update_actions_on_idle (Page* self) {
 	ViewCollection* _tmp4_ = NULL;
 	ViewCollection* _tmp5_ = NULL;
 	gint _tmp6_ = 0;
-#line 550 "/home/jens/Source/shotwell/src/Page.vala"
+#line 544 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 545 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->is_destroyed;
-#line 551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 545 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 552 "/home/jens/Source/shotwell/src/Page.vala"
+#line 546 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 4973 "Page.c"
+#line 4819 "Page.c"
 	}
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (self);
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = view_collection_get_selected_count (_tmp2_);
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = page_get_view (self);
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_DATA_COLLECTION, DataCollection));
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	page_update_actions (self, _tmp3_, _tmp6_);
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+#line 548 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 4993 "Page.c"
-}
-
-
-static void _vala_array_add250 (guint** array, int* length, int* size, guint value) {
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-	if ((*length) == (*size)) {
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		*array = g_renew (guint, *array, *size);
-#line 5004 "Page.c"
-	}
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-	(*array)[(*length)++] = value;
-#line 5008 "Page.c"
+#line 4839 "Page.c"
 }
 
 
@@ -5013,215 +4844,115 @@ static void page_init_load_ui (Page* self, const gchar* ui_filename) {
 	const gchar* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+#line 551 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+#line 551 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (ui_filename != NULL);
-#line 558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 552 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = ui_filename;
-#line 558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 552 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = resources_get_ui (_tmp0_);
-#line 558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 552 "/home/jens/Source/shotwell/src/Page.vala"
 	ui_file = _tmp1_;
-#line 5027 "Page.c"
+#line 4858 "Page.c"
 	{
-		guint _tmp2_ = 0U;
-		GtkUIManager* _tmp3_ = NULL;
+		GtkBuilder* _tmp2_ = NULL;
+		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
-		gchar* _tmp5_ = NULL;
-		guint _tmp6_ = 0U;
-		guint _tmp7_ = 0U;
-		guint* _tmp8_ = NULL;
-		gint _tmp8__length1 = 0;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = self->ui;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = g_file_get_path (ui_file);
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp5_ = _tmp4_;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp6_ = gtk_ui_manager_add_ui_from_file (_tmp3_, _tmp5_, &_inner_error_);
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp7_ = _tmp6_;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_free0 (_tmp5_);
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp2_ = _tmp7_;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp2_ = self->builder;
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = g_file_get_path (ui_file);
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = _tmp3_;
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
+		gtk_builder_add_from_file (_tmp2_, _tmp4_, &_inner_error_);
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_free0 (_tmp4_);
+#line 555 "/home/jens/Source/shotwell/src/Page.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5053 "Page.c"
-			goto __catch254_g_error;
+#line 4875 "Page.c"
+			goto __catch251_g_error;
 		}
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp8_ = self->priv->merge_ids;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp8__length1 = self->priv->merge_ids_length1;
-#line 561 "/home/jens/Source/shotwell/src/Page.vala"
-		_vala_array_add250 (&self->priv->merge_ids, &self->priv->merge_ids_length1, &self->priv->_merge_ids_size_, _tmp2_);
-#line 5062 "Page.c"
 	}
-	goto __finally254;
-	__catch254_g_error:
+	goto __finally251;
+	__catch251_g_error:
 	{
 		GError* err = NULL;
+		gchar* _tmp5_ = NULL;
+		gchar* _tmp6_ = NULL;
+		GError* _tmp7_ = NULL;
+		const gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-		GError* _tmp11_ = NULL;
-		const gchar* _tmp12_ = NULL;
-		gchar* _tmp13_ = NULL;
-		gchar* _tmp14_ = NULL;
-		Application* _tmp15_ = NULL;
-		Application* _tmp16_ = NULL;
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
+		Application* _tmp11_ = NULL;
+		Application* _tmp12_ = NULL;
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
 		err = _inner_error_;
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
 		_inner_error_ = NULL;
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp9_ = g_file_get_path (ui_file);
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp10_ = _tmp9_;
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp11_ = err;
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp12_ = _tmp11_->message;
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp13_ = g_strdup_printf ("Error loading UI file %s: %s", _tmp10_, _tmp12_);
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp14_ = _tmp13_;
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		app_window_error_message (_tmp14_, NULL);
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_free0 (_tmp14_);
-#line 563 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_free0 (_tmp10_);
-#line 565 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp15_ = application_get_instance ();
-#line 565 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp16_ = _tmp15_;
-#line 565 "/home/jens/Source/shotwell/src/Page.vala"
-		application_panic (_tmp16_);
-#line 565 "/home/jens/Source/shotwell/src/Page.vala"
-		_application_unref0 (_tmp16_);
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_error_free0 (err);
-#line 5108 "Page.c"
-	}
-	__finally254:
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_object_unref0 (ui_file);
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-		g_clear_error (&_inner_error_);
-#line 560 "/home/jens/Source/shotwell/src/Page.vala"
-		return;
-#line 5121 "Page.c"
-	}
 #line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = g_file_get_path (ui_file);
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = _tmp5_;
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp7_ = err;
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp8_ = _tmp7_->message;
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp9_ = g_strdup_printf ("Error loading UI file %s: %s", _tmp6_, _tmp8_);
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp10_ = _tmp9_;
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		app_window_error_message (_tmp10_, NULL);
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_free0 (_tmp10_);
+#line 557 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_free0 (_tmp6_);
+#line 559 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp11_ = application_get_instance ();
+#line 559 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp12_ = _tmp11_;
+#line 559 "/home/jens/Source/shotwell/src/Page.vala"
+		application_panic (_tmp12_);
+#line 559 "/home/jens/Source/shotwell/src/Page.vala"
+		_application_unref0 (_tmp12_);
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_error_free0 (err);
+#line 4923 "Page.c"
+	}
+	__finally251:
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (ui_file);
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+		g_clear_error (&_inner_error_);
+#line 554 "/home/jens/Source/shotwell/src/Page.vala"
+		return;
+#line 4936 "Page.c"
+	}
+#line 551 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (ui_file);
-#line 5125 "Page.c"
+#line 4940 "Page.c"
 }
 
 
 static void page_real_init_collect_ui_filenames (Page* self, GeeList* ui_filenames) {
-#line 572 "/home/jens/Source/shotwell/src/Page.vala"
+#line 566 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GEE_IS_LIST (ui_filenames));
-#line 5132 "Page.c"
+#line 4947 "Page.c"
 }
 
 
 void page_init_collect_ui_filenames (Page* self, GeeList* ui_filenames) {
-#line 572 "/home/jens/Source/shotwell/src/Page.vala"
+#line 566 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 572 "/home/jens/Source/shotwell/src/Page.vala"
+#line 566 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->init_collect_ui_filenames (self, ui_filenames);
-#line 5141 "Page.c"
-}
-
-
-static GtkActionEntry* page_real_init_collect_action_entries (Page* self, int* result_length1) {
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* _tmp0_ = NULL;
-	GtkActionEntry* _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = g_new0 (GtkActionEntry, 0);
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = _tmp0_;
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1__length1 = 0;
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	if (result_length1) {
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-		*result_length1 = _tmp1__length1;
-#line 5160 "Page.c"
-	}
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	result = _tmp1_;
-#line 577 "/home/jens/Source/shotwell/src/Page.vala"
-	return result;
-#line 5166 "Page.c"
-}
-
-
-GtkActionEntry* page_init_collect_action_entries (Page* self, int* result_length1) {
-#line 576 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 576 "/home/jens/Source/shotwell/src/Page.vala"
-	return PAGE_GET_CLASS (self)->init_collect_action_entries (self, result_length1);
-#line 5175 "Page.c"
-}
-
-
-static GtkToggleActionEntry* page_real_init_collect_toggle_action_entries (Page* self, int* result_length1) {
-	GtkToggleActionEntry* result = NULL;
-	GtkToggleActionEntry* _tmp0_ = NULL;
-	GtkToggleActionEntry* _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = g_new0 (GtkToggleActionEntry, 0);
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = _tmp0_;
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1__length1 = 0;
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	if (result_length1) {
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-		*result_length1 = _tmp1__length1;
-#line 5194 "Page.c"
-	}
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	result = _tmp1_;
-#line 582 "/home/jens/Source/shotwell/src/Page.vala"
-	return result;
-#line 5200 "Page.c"
-}
-
-
-GtkToggleActionEntry* page_init_collect_toggle_action_entries (Page* self, int* result_length1) {
-#line 581 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 581 "/home/jens/Source/shotwell/src/Page.vala"
-	return PAGE_GET_CLASS (self)->init_collect_toggle_action_entries (self, result_length1);
-#line 5209 "Page.c"
-}
-
-
-static void page_real_register_radio_actions (Page* self, GtkActionGroup* action_group) {
-#line 586 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
-#line 5216 "Page.c"
-}
-
-
-void page_register_radio_actions (Page* self, GtkActionGroup* action_group) {
-#line 586 "/home/jens/Source/shotwell/src/Page.vala"
-	g_return_if_fail (IS_PAGE (self));
-#line 586 "/home/jens/Source/shotwell/src/Page.vala"
-	PAGE_GET_CLASS (self)->register_radio_actions (self, action_group);
-#line 5225 "Page.c"
+#line 4956 "Page.c"
 }
 
 
@@ -5230,32 +4961,32 @@ static InjectionGroup** page_real_init_collect_injection_groups (Page* self, int
 	InjectionGroup** _tmp0_ = NULL;
 	InjectionGroup** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = g_new0 (InjectionGroup*, 0 + 1);
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1__length1 = 0;
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	if (result_length1) {
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 		*result_length1 = _tmp1__length1;
-#line 5244 "Page.c"
+#line 4975 "Page.c"
 	}
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 592 "/home/jens/Source/shotwell/src/Page.vala"
+#line 572 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5250 "Page.c"
+#line 4981 "Page.c"
 }
 
 
 InjectionGroup** page_init_collect_injection_groups (Page* self, int* result_length1) {
-#line 591 "/home/jens/Source/shotwell/src/Page.vala"
+#line 571 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), NULL);
-#line 591 "/home/jens/Source/shotwell/src/Page.vala"
+#line 571 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->init_collect_injection_groups (self, result_length1);
-#line 5259 "Page.c"
+#line 4990 "Page.c"
 }
 
 
@@ -5264,11 +4995,11 @@ static void page_real_init_actions (Page* self, gint selected_count, gint count)
 
 
 void page_init_actions (Page* self, gint selected_count, gint count) {
-#line 597 "/home/jens/Source/shotwell/src/Page.vala"
+#line 577 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 597 "/home/jens/Source/shotwell/src/Page.vala"
+#line 577 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->init_actions (self, selected_count, count);
-#line 5272 "Page.c"
+#line 5003 "Page.c"
 }
 
 
@@ -5277,48 +5008,48 @@ static void page_real_update_actions (Page* self, gint selected_count, gint coun
 
 
 void page_update_actions (Page* self, gint selected_count, gint count) {
-#line 603 "/home/jens/Source/shotwell/src/Page.vala"
+#line 583 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 603 "/home/jens/Source/shotwell/src/Page.vala"
+#line 583 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->update_actions (self, selected_count, count);
-#line 5285 "Page.c"
+#line 5016 "Page.c"
 }
 
 
 static void _page_on_drag_begin_gtk_widget_drag_begin (GtkWidget* _sender, GdkDragContext* context, gpointer self) {
-#line 618 "/home/jens/Source/shotwell/src/Page.vala"
+#line 598 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_drag_begin ((Page*) self, context);
-#line 5292 "Page.c"
+#line 5023 "Page.c"
 }
 
 
 static void _page_on_drag_data_get_gtk_widget_drag_data_get (GtkWidget* _sender, GdkDragContext* context, GtkSelectionData* selection_data, guint info, guint time_, gpointer self) {
-#line 619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 599 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_drag_data_get ((Page*) self, context, selection_data, info, time_);
-#line 5299 "Page.c"
+#line 5030 "Page.c"
 }
 
 
 static void _page_on_drag_data_delete_gtk_widget_drag_data_delete (GtkWidget* _sender, GdkDragContext* context, gpointer self) {
-#line 620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 600 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_drag_data_delete ((Page*) self, context);
-#line 5306 "Page.c"
+#line 5037 "Page.c"
 }
 
 
 static void _page_on_drag_end_gtk_widget_drag_end (GtkWidget* _sender, GdkDragContext* context, gpointer self) {
-#line 621 "/home/jens/Source/shotwell/src/Page.vala"
+#line 601 "/home/jens/Source/shotwell/src/Page.vala"
 	page_on_drag_end ((Page*) self, context);
-#line 5313 "Page.c"
+#line 5044 "Page.c"
 }
 
 
 static gboolean _page_on_drag_failed_gtk_widget_drag_failed (GtkWidget* _sender, GdkDragContext* context, GtkDragResult _result_, gpointer self) {
 	gboolean result;
 	result = page_on_drag_failed ((Page*) self, context, _result_);
-#line 622 "/home/jens/Source/shotwell/src/Page.vala"
+#line 602 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5322 "Page.c"
+#line 5053 "Page.c"
 }
 
 
@@ -5334,53 +5065,53 @@ void page_enable_drag_source (Page* self, GdkDragAction actions, GtkTargetEntry*
 	GtkWidget* _tmp7_ = NULL;
 	GtkWidget* _tmp8_ = NULL;
 	GtkWidget* _tmp9_ = NULL;
-#line 608 "/home/jens/Source/shotwell/src/Page.vala"
+#line 588 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 609 "/home/jens/Source/shotwell/src/Page.vala"
+#line 589 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->dnd_enabled;
-#line 609 "/home/jens/Source/shotwell/src/Page.vala"
+#line 589 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 610 "/home/jens/Source/shotwell/src/Page.vala"
+#line 590 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 5346 "Page.c"
+#line 5077 "Page.c"
 	}
-#line 612 "/home/jens/Source/shotwell/src/Page.vala"
+#line 592 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->event_source;
-#line 612 "/home/jens/Source/shotwell/src/Page.vala"
+#line 592 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp1_ != NULL, "event_source != null");
-#line 614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 594 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->event_source;
-#line 614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 594 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = source_target_entries;
-#line 614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 594 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3__length1 = source_target_entries_length1;
-#line 614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 594 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = actions;
-#line 614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 594 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_drag_source_set (_tmp2_, GDK_BUTTON1_MASK, _tmp3_, _tmp3__length1, _tmp4_);
-#line 618 "/home/jens/Source/shotwell/src/Page.vala"
+#line 598 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->priv->event_source;
-#line 618 "/home/jens/Source/shotwell/src/Page.vala"
+#line 598 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp5_, "drag-begin", (GCallback) _page_on_drag_begin_gtk_widget_drag_begin, self, 0);
-#line 619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 599 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->event_source;
-#line 619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 599 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp6_, "drag-data-get", (GCallback) _page_on_drag_data_get_gtk_widget_drag_data_get, self, 0);
-#line 620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 600 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->event_source;
-#line 620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 600 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp7_, "drag-data-delete", (GCallback) _page_on_drag_data_delete_gtk_widget_drag_data_delete, self, 0);
-#line 621 "/home/jens/Source/shotwell/src/Page.vala"
+#line 601 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->event_source;
-#line 621 "/home/jens/Source/shotwell/src/Page.vala"
+#line 601 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp8_, "drag-end", (GCallback) _page_on_drag_end_gtk_widget_drag_end, self, 0);
-#line 622 "/home/jens/Source/shotwell/src/Page.vala"
+#line 602 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->priv->event_source;
-#line 622 "/home/jens/Source/shotwell/src/Page.vala"
+#line 602 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp9_, "drag-failed", (GCallback) _page_on_drag_failed_gtk_widget_drag_failed, self, 0);
-#line 624 "/home/jens/Source/shotwell/src/Page.vala"
+#line 604 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->dnd_enabled = TRUE;
-#line 5384 "Page.c"
+#line 5115 "Page.c"
 }
 
 
@@ -5398,86 +5129,86 @@ void page_disable_drag_source (Page* self) {
 	GtkWidget* _tmp10_ = NULL;
 	guint _tmp11_ = 0U;
 	GtkWidget* _tmp12_ = NULL;
-#line 627 "/home/jens/Source/shotwell/src/Page.vala"
+#line 607 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 628 "/home/jens/Source/shotwell/src/Page.vala"
+#line 608 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->dnd_enabled;
-#line 628 "/home/jens/Source/shotwell/src/Page.vala"
+#line 608 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp0_) {
-#line 629 "/home/jens/Source/shotwell/src/Page.vala"
+#line 609 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 5410 "Page.c"
+#line 5141 "Page.c"
 	}
-#line 631 "/home/jens/Source/shotwell/src/Page.vala"
+#line 611 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->event_source;
-#line 631 "/home/jens/Source/shotwell/src/Page.vala"
+#line 611 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp1_ != NULL, "event_source != null");
-#line 633 "/home/jens/Source/shotwell/src/Page.vala"
+#line 613 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->event_source;
-#line 633 "/home/jens/Source/shotwell/src/Page.vala"
+#line 613 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("drag-begin", gtk_widget_get_type (), &_tmp3_, NULL, FALSE);
-#line 633 "/home/jens/Source/shotwell/src/Page.vala"
+#line 613 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _page_on_drag_begin_gtk_widget_drag_begin, self);
-#line 634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 614 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->event_source;
-#line 634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 614 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("drag-data-get", gtk_widget_get_type (), &_tmp5_, NULL, FALSE);
-#line 634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 614 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _page_on_drag_data_get_gtk_widget_drag_data_get, self);
-#line 635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 615 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->event_source;
-#line 635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 615 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("drag-data-delete", gtk_widget_get_type (), &_tmp7_, NULL, FALSE);
-#line 635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 615 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _page_on_drag_data_delete_gtk_widget_drag_data_delete, self);
-#line 636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 616 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->event_source;
-#line 636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 616 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("drag-end", gtk_widget_get_type (), &_tmp9_, NULL, FALSE);
-#line 636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 616 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _page_on_drag_end_gtk_widget_drag_end, self);
-#line 637 "/home/jens/Source/shotwell/src/Page.vala"
+#line 617 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = self->priv->event_source;
-#line 637 "/home/jens/Source/shotwell/src/Page.vala"
+#line 617 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("drag-failed", gtk_widget_get_type (), &_tmp11_, NULL, FALSE);
-#line 637 "/home/jens/Source/shotwell/src/Page.vala"
+#line 617 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (_tmp10_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _page_on_drag_failed_gtk_widget_drag_failed, self);
-#line 638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 618 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = self->priv->event_source;
-#line 638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 618 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_drag_source_unset (_tmp12_);
-#line 640 "/home/jens/Source/shotwell/src/Page.vala"
+#line 620 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->dnd_enabled = FALSE;
-#line 5452 "Page.c"
+#line 5183 "Page.c"
 }
 
 
 gboolean page_is_dnd_enabled (Page* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 643 "/home/jens/Source/shotwell/src/Page.vala"
+#line 623 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 624 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->dnd_enabled;
-#line 644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 624 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 624 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5467 "Page.c"
+#line 5198 "Page.c"
 }
 
 
 static void page_on_drag_begin (Page* self, GdkDragContext* context) {
 	GdkDragContext* _tmp0_ = NULL;
-#line 647 "/home/jens/Source/shotwell/src/Page.vala"
+#line 627 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 647 "/home/jens/Source/shotwell/src/Page.vala"
+#line 627 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 628 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = context;
-#line 648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 628 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "drag-begin", _tmp0_);
-#line 5481 "Page.c"
+#line 5212 "Page.c"
 }
 
 
@@ -5486,72 +5217,72 @@ static void page_on_drag_data_get (Page* self, GdkDragContext* context, GtkSelec
 	GtkSelectionData* _tmp1_ = NULL;
 	guint _tmp2_ = 0U;
 	guint _tmp3_ = 0U;
-#line 651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 631 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 631 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 631 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (selection_data != NULL);
-#line 653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 633 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = context;
-#line 653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 633 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = selection_data;
-#line 653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 633 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = info;
-#line 653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 633 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = time;
-#line 653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 633 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "drag-data-get", _tmp0_, _tmp1_, _tmp2_, _tmp3_);
-#line 5506 "Page.c"
+#line 5237 "Page.c"
 }
 
 
 static void page_on_drag_data_delete (Page* self, GdkDragContext* context) {
 	GdkDragContext* _tmp0_ = NULL;
-#line 656 "/home/jens/Source/shotwell/src/Page.vala"
+#line 636 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 656 "/home/jens/Source/shotwell/src/Page.vala"
+#line 636 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 657 "/home/jens/Source/shotwell/src/Page.vala"
+#line 637 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = context;
-#line 657 "/home/jens/Source/shotwell/src/Page.vala"
+#line 637 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "drag-data-delete", _tmp0_);
-#line 5520 "Page.c"
+#line 5251 "Page.c"
 }
 
 
 static void page_on_drag_end (Page* self, GdkDragContext* context) {
 	GdkDragContext* _tmp0_ = NULL;
-#line 660 "/home/jens/Source/shotwell/src/Page.vala"
+#line 640 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 660 "/home/jens/Source/shotwell/src/Page.vala"
+#line 640 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 661 "/home/jens/Source/shotwell/src/Page.vala"
+#line 641 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = context;
-#line 661 "/home/jens/Source/shotwell/src/Page.vala"
+#line 641 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "drag-end", _tmp0_);
-#line 5534 "Page.c"
+#line 5265 "Page.c"
 }
 
 
 static gboolean page_real_source_drag_failed (Page* self, GdkDragContext* context, GtkDragResult drag_result) {
 	gboolean result = FALSE;
-#line 668 "/home/jens/Source/shotwell/src/Page.vala"
+#line 648 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), FALSE);
-#line 669 "/home/jens/Source/shotwell/src/Page.vala"
+#line 649 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 669 "/home/jens/Source/shotwell/src/Page.vala"
+#line 649 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5546 "Page.c"
+#line 5277 "Page.c"
 }
 
 
 gboolean page_source_drag_failed (Page* self, GdkDragContext* context, GtkDragResult drag_result) {
-#line 668 "/home/jens/Source/shotwell/src/Page.vala"
+#line 648 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 668 "/home/jens/Source/shotwell/src/Page.vala"
+#line 648 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->source_drag_failed (self, context, drag_result);
-#line 5555 "Page.c"
+#line 5286 "Page.c"
 }
 
 
@@ -5560,21 +5291,21 @@ static gboolean page_on_drag_failed (Page* self, GdkDragContext* context, GtkDra
 	GdkDragContext* _tmp0_ = NULL;
 	GtkDragResult _tmp1_ = 0;
 	gboolean _tmp2_ = FALSE;
-#line 672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 652 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 652 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), FALSE);
-#line 673 "/home/jens/Source/shotwell/src/Page.vala"
+#line 653 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = context;
-#line 673 "/home/jens/Source/shotwell/src/Page.vala"
+#line 653 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = drag_result;
-#line 673 "/home/jens/Source/shotwell/src/Page.vala"
+#line 653 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_source_drag_failed (self, _tmp0_, _tmp1_);
-#line 673 "/home/jens/Source/shotwell/src/Page.vala"
+#line 653 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp2_;
-#line 673 "/home/jens/Source/shotwell/src/Page.vala"
+#line 653 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5578 "Page.c"
+#line 5309 "Page.c"
 }
 
 
@@ -5603,291 +5334,291 @@ gboolean page_get_event_source_pointer (Page* self, gint* x, gint* y, GdkModifie
 	GdkPoint _tmp20_ = {0};
 	gint _tmp21_ = 0;
 	gint _tmp22_ = 0;
-#line 680 "/home/jens/Source/shotwell/src/Page.vala"
+#line 660 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 681 "/home/jens/Source/shotwell/src/Page.vala"
+#line 661 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 681 "/home/jens/Source/shotwell/src/Page.vala"
+#line 661 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 682 "/home/jens/Source/shotwell/src/Page.vala"
+#line 662 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_x = 0;
-#line 683 "/home/jens/Source/shotwell/src/Page.vala"
+#line 663 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_y = 0;
-#line 684 "/home/jens/Source/shotwell/src/Page.vala"
+#line 664 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_mask = 0;
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 		if (x) {
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 			*x = _vala_x;
-#line 5625 "Page.c"
+#line 5356 "Page.c"
 		}
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 		if (y) {
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 			*y = _vala_y;
-#line 5631 "Page.c"
+#line 5362 "Page.c"
 		}
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 		if (mask) {
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 			*mask = _vala_mask;
-#line 5637 "Page.c"
+#line 5368 "Page.c"
 		}
-#line 686 "/home/jens/Source/shotwell/src/Page.vala"
+#line 666 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 5641 "Page.c"
+#line 5372 "Page.c"
 	}
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->event_source;
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = gtk_widget_get_window (_tmp1_);
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = gdk_display_get_default ();
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = gdk_display_get_device_manager (_tmp3_);
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = gdk_device_manager_get_client_pointer (_tmp4_);
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	gdk_window_get_device_position (_tmp2_, _tmp5_, &_tmp6_, &_tmp7_, &_tmp8_);
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_x = _tmp6_;
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_y = _tmp7_;
-#line 689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 669 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_mask = _tmp8_;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = self->priv->last_down;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = _tmp10_.x;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp11_ < 0) {
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = TRUE;
-#line 5669 "Page.c"
+#line 5400 "Page.c"
 	} else {
 		GdkPoint _tmp12_ = {0};
 		gint _tmp13_ = 0;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = self->priv->last_down;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = _tmp12_.y;
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp13_ < 0;
-#line 5679 "Page.c"
+#line 5410 "Page.c"
 	}
-#line 692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 672 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp9_) {
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 		if (x) {
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 			*x = _vala_x;
-#line 5689 "Page.c"
+#line 5420 "Page.c"
 		}
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 		if (y) {
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 			*y = _vala_y;
-#line 5695 "Page.c"
+#line 5426 "Page.c"
 		}
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 		if (mask) {
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 			*mask = _vala_mask;
-#line 5701 "Page.c"
+#line 5432 "Page.c"
 		}
-#line 693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 673 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 5705 "Page.c"
+#line 5436 "Page.c"
 	}
-#line 699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 679 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = _vala_x;
-#line 699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 679 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = self->priv->last_down;
-#line 699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 679 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = _tmp15_.x;
-#line 699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 679 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = abs (_tmp14_ - _tmp16_);
-#line 699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 679 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp17_ >= 0x7FFF) {
-#line 5717 "Page.c"
+#line 5448 "Page.c"
 		gint _tmp18_ = 0;
-#line 700 "/home/jens/Source/shotwell/src/Page.vala"
+#line 680 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = _vala_x;
-#line 700 "/home/jens/Source/shotwell/src/Page.vala"
+#line 680 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_x = _tmp18_ + 0xFFFF;
-#line 5723 "Page.c"
+#line 5454 "Page.c"
 	}
-#line 702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 682 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = _vala_y;
-#line 702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 682 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = self->priv->last_down;
-#line 702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 682 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp21_ = _tmp20_.y;
-#line 702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 682 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp22_ = abs (_tmp19_ - _tmp21_);
-#line 702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 682 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp22_ >= 0x7FFF) {
-#line 5735 "Page.c"
+#line 5466 "Page.c"
 		gint _tmp23_ = 0;
-#line 703 "/home/jens/Source/shotwell/src/Page.vala"
+#line 683 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = _vala_y;
-#line 703 "/home/jens/Source/shotwell/src/Page.vala"
+#line 683 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_y = _tmp23_ + 0xFFFF;
-#line 5741 "Page.c"
+#line 5472 "Page.c"
 	}
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 	if (x) {
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 		*x = _vala_x;
-#line 5749 "Page.c"
+#line 5480 "Page.c"
 	}
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 	if (y) {
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 		*y = _vala_y;
-#line 5755 "Page.c"
+#line 5486 "Page.c"
 	}
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 	if (mask) {
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 		*mask = _vala_mask;
-#line 5761 "Page.c"
+#line 5492 "Page.c"
 	}
-#line 705 "/home/jens/Source/shotwell/src/Page.vala"
+#line 685 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5765 "Page.c"
+#line 5496 "Page.c"
 }
 
 
 static gboolean page_real_on_left_click (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 708 "/home/jens/Source/shotwell/src/Page.vala"
+#line 688 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 709 "/home/jens/Source/shotwell/src/Page.vala"
+#line 689 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 709 "/home/jens/Source/shotwell/src/Page.vala"
+#line 689 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5777 "Page.c"
+#line 5508 "Page.c"
 }
 
 
 gboolean page_on_left_click (Page* self, GdkEventButton* event) {
-#line 708 "/home/jens/Source/shotwell/src/Page.vala"
+#line 688 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 708 "/home/jens/Source/shotwell/src/Page.vala"
+#line 688 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_left_click (self, event);
-#line 5786 "Page.c"
+#line 5517 "Page.c"
 }
 
 
 static gboolean page_real_on_middle_click (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 712 "/home/jens/Source/shotwell/src/Page.vala"
+#line 692 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 713 "/home/jens/Source/shotwell/src/Page.vala"
+#line 693 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 713 "/home/jens/Source/shotwell/src/Page.vala"
+#line 693 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5798 "Page.c"
+#line 5529 "Page.c"
 }
 
 
 gboolean page_on_middle_click (Page* self, GdkEventButton* event) {
-#line 712 "/home/jens/Source/shotwell/src/Page.vala"
+#line 692 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 712 "/home/jens/Source/shotwell/src/Page.vala"
+#line 692 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_middle_click (self, event);
-#line 5807 "Page.c"
+#line 5538 "Page.c"
 }
 
 
 static gboolean page_real_on_right_click (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 716 "/home/jens/Source/shotwell/src/Page.vala"
+#line 696 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 717 "/home/jens/Source/shotwell/src/Page.vala"
+#line 697 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 717 "/home/jens/Source/shotwell/src/Page.vala"
+#line 697 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5819 "Page.c"
+#line 5550 "Page.c"
 }
 
 
 gboolean page_on_right_click (Page* self, GdkEventButton* event) {
-#line 716 "/home/jens/Source/shotwell/src/Page.vala"
+#line 696 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 716 "/home/jens/Source/shotwell/src/Page.vala"
+#line 696 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_right_click (self, event);
-#line 5828 "Page.c"
+#line 5559 "Page.c"
 }
 
 
 static gboolean page_real_on_left_released (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 720 "/home/jens/Source/shotwell/src/Page.vala"
+#line 700 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 721 "/home/jens/Source/shotwell/src/Page.vala"
+#line 701 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 721 "/home/jens/Source/shotwell/src/Page.vala"
+#line 701 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5840 "Page.c"
+#line 5571 "Page.c"
 }
 
 
 gboolean page_on_left_released (Page* self, GdkEventButton* event) {
-#line 720 "/home/jens/Source/shotwell/src/Page.vala"
+#line 700 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 720 "/home/jens/Source/shotwell/src/Page.vala"
+#line 700 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_left_released (self, event);
-#line 5849 "Page.c"
+#line 5580 "Page.c"
 }
 
 
 static gboolean page_real_on_middle_released (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 704 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 705 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 705 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5861 "Page.c"
+#line 5592 "Page.c"
 }
 
 
 gboolean page_on_middle_released (Page* self, GdkEventButton* event) {
-#line 724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 704 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 704 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_middle_released (self, event);
-#line 5870 "Page.c"
+#line 5601 "Page.c"
 }
 
 
 static gboolean page_real_on_right_released (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 708 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 729 "/home/jens/Source/shotwell/src/Page.vala"
+#line 709 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 729 "/home/jens/Source/shotwell/src/Page.vala"
+#line 709 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 5882 "Page.c"
+#line 5613 "Page.c"
 }
 
 
 gboolean page_on_right_released (Page* self, GdkEventButton* event) {
-#line 728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 708 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 708 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_right_released (self, event);
-#line 5891 "Page.c"
+#line 5622 "Page.c"
 }
 
 
@@ -5895,19 +5626,19 @@ static gboolean page_on_button_pressed_internal (Page* self, GdkEventButton* eve
 	gboolean result = FALSE;
 	GdkEventButton* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 732 "/home/jens/Source/shotwell/src/Page.vala"
+#line 712 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 732 "/home/jens/Source/shotwell/src/Page.vala"
+#line 712 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->button;
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 	switch (_tmp1_) {
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 		case 1:
-#line 5911 "Page.c"
+#line 5642 "Page.c"
 		{
 			GtkWidget* _tmp2_ = NULL;
 			GdkEventButton* _tmp4_ = NULL;
@@ -5916,79 +5647,79 @@ static gboolean page_on_button_pressed_internal (Page* self, GdkEventButton* eve
 			gdouble _tmp7_ = 0.0;
 			GdkEventButton* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
-#line 735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 715 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp2_ = self->priv->event_source;
-#line 735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 715 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp2_ != NULL) {
-#line 5924 "Page.c"
+#line 5655 "Page.c"
 				GtkWidget* _tmp3_ = NULL;
-#line 736 "/home/jens/Source/shotwell/src/Page.vala"
+#line 716 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp3_ = self->priv->event_source;
-#line 736 "/home/jens/Source/shotwell/src/Page.vala"
+#line 716 "/home/jens/Source/shotwell/src/Page.vala"
 				gtk_widget_grab_focus (_tmp3_);
-#line 5930 "Page.c"
+#line 5661 "Page.c"
 			}
-#line 739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 719 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp4_ = event;
-#line 739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 719 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = _tmp4_->x;
-#line 739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 719 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->last_down.x = (gint) _tmp5_;
-#line 740 "/home/jens/Source/shotwell/src/Page.vala"
+#line 720 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp6_ = event;
-#line 740 "/home/jens/Source/shotwell/src/Page.vala"
+#line 720 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = _tmp6_->y;
-#line 740 "/home/jens/Source/shotwell/src/Page.vala"
+#line 720 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->last_down.y = (gint) _tmp7_;
-#line 742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 722 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = event;
-#line 742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 722 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = page_on_left_click (self, _tmp8_);
-#line 742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 722 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp9_;
-#line 742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 722 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 5952 "Page.c"
+#line 5683 "Page.c"
 		}
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 		case 2:
-#line 5956 "Page.c"
+#line 5687 "Page.c"
 		{
 			GdkEventButton* _tmp10_ = NULL;
 			gboolean _tmp11_ = FALSE;
-#line 745 "/home/jens/Source/shotwell/src/Page.vala"
+#line 725 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = event;
-#line 745 "/home/jens/Source/shotwell/src/Page.vala"
+#line 725 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp11_ = page_on_middle_click (self, _tmp10_);
-#line 745 "/home/jens/Source/shotwell/src/Page.vala"
+#line 725 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp11_;
-#line 745 "/home/jens/Source/shotwell/src/Page.vala"
+#line 725 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 5968 "Page.c"
+#line 5699 "Page.c"
 		}
-#line 733 "/home/jens/Source/shotwell/src/Page.vala"
+#line 713 "/home/jens/Source/shotwell/src/Page.vala"
 		case 3:
-#line 5972 "Page.c"
+#line 5703 "Page.c"
 		{
 			GdkEventButton* _tmp12_ = NULL;
 			gboolean _tmp13_ = FALSE;
-#line 748 "/home/jens/Source/shotwell/src/Page.vala"
+#line 728 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = event;
-#line 748 "/home/jens/Source/shotwell/src/Page.vala"
+#line 728 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = page_on_right_click (self, _tmp12_);
-#line 748 "/home/jens/Source/shotwell/src/Page.vala"
+#line 728 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp13_;
-#line 748 "/home/jens/Source/shotwell/src/Page.vala"
+#line 728 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 5984 "Page.c"
+#line 5715 "Page.c"
 		}
 		default:
 		{
-#line 751 "/home/jens/Source/shotwell/src/Page.vala"
+#line 731 "/home/jens/Source/shotwell/src/Page.vala"
 			result = FALSE;
-#line 751 "/home/jens/Source/shotwell/src/Page.vala"
+#line 731 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 5992 "Page.c"
+#line 5723 "Page.c"
 		}
 	}
 }
@@ -5998,78 +5729,78 @@ static gboolean page_on_button_released_internal (Page* self, GdkEventButton* ev
 	gboolean result = FALSE;
 	GdkEventButton* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 755 "/home/jens/Source/shotwell/src/Page.vala"
+#line 735 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 755 "/home/jens/Source/shotwell/src/Page.vala"
+#line 735 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->button;
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 	switch (_tmp1_) {
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 		case 1:
-#line 6014 "Page.c"
+#line 5745 "Page.c"
 		{
 			GdkPoint _tmp2_ = {0};
 			GdkEventButton* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
-#line 759 "/home/jens/Source/shotwell/src/Page.vala"
+#line 739 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp2_.x = -1;
-#line 759 "/home/jens/Source/shotwell/src/Page.vala"
+#line 739 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp2_.y = -1;
-#line 759 "/home/jens/Source/shotwell/src/Page.vala"
+#line 739 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->last_down = _tmp2_;
-#line 761 "/home/jens/Source/shotwell/src/Page.vala"
+#line 741 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp3_ = event;
-#line 761 "/home/jens/Source/shotwell/src/Page.vala"
+#line 741 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp4_ = page_on_left_released (self, _tmp3_);
-#line 761 "/home/jens/Source/shotwell/src/Page.vala"
+#line 741 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp4_;
-#line 761 "/home/jens/Source/shotwell/src/Page.vala"
+#line 741 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 6033 "Page.c"
+#line 5764 "Page.c"
 		}
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 		case 2:
-#line 6037 "Page.c"
+#line 5768 "Page.c"
 		{
 			GdkEventButton* _tmp5_ = NULL;
 			gboolean _tmp6_ = FALSE;
-#line 764 "/home/jens/Source/shotwell/src/Page.vala"
+#line 744 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = event;
-#line 764 "/home/jens/Source/shotwell/src/Page.vala"
+#line 744 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp6_ = page_on_middle_released (self, _tmp5_);
-#line 764 "/home/jens/Source/shotwell/src/Page.vala"
+#line 744 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp6_;
-#line 764 "/home/jens/Source/shotwell/src/Page.vala"
+#line 744 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 6049 "Page.c"
+#line 5780 "Page.c"
 		}
-#line 756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 736 "/home/jens/Source/shotwell/src/Page.vala"
 		case 3:
-#line 6053 "Page.c"
+#line 5784 "Page.c"
 		{
 			GdkEventButton* _tmp7_ = NULL;
 			gboolean _tmp8_ = FALSE;
-#line 767 "/home/jens/Source/shotwell/src/Page.vala"
+#line 747 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = event;
-#line 767 "/home/jens/Source/shotwell/src/Page.vala"
+#line 747 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = page_on_right_released (self, _tmp7_);
-#line 767 "/home/jens/Source/shotwell/src/Page.vala"
+#line 747 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp8_;
-#line 767 "/home/jens/Source/shotwell/src/Page.vala"
+#line 747 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 6065 "Page.c"
+#line 5796 "Page.c"
 		}
 		default:
 		{
-#line 770 "/home/jens/Source/shotwell/src/Page.vala"
+#line 750 "/home/jens/Source/shotwell/src/Page.vala"
 			result = FALSE;
-#line 770 "/home/jens/Source/shotwell/src/Page.vala"
+#line 750 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 6073 "Page.c"
+#line 5804 "Page.c"
 		}
 	}
 }
@@ -6077,195 +5808,195 @@ static gboolean page_on_button_released_internal (Page* self, GdkEventButton* ev
 
 static gboolean page_real_on_ctrl_pressed (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 775 "/home/jens/Source/shotwell/src/Page.vala"
+#line 755 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 775 "/home/jens/Source/shotwell/src/Page.vala"
+#line 755 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6085 "Page.c"
+#line 5816 "Page.c"
 }
 
 
 gboolean page_on_ctrl_pressed (Page* self, GdkEventKey* event) {
-#line 774 "/home/jens/Source/shotwell/src/Page.vala"
+#line 754 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 774 "/home/jens/Source/shotwell/src/Page.vala"
+#line 754 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_ctrl_pressed (self, event);
-#line 6094 "Page.c"
+#line 5825 "Page.c"
 }
 
 
 static gboolean page_real_on_ctrl_released (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 759 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 759 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6104 "Page.c"
+#line 5835 "Page.c"
 }
 
 
 gboolean page_on_ctrl_released (Page* self, GdkEventKey* event) {
-#line 778 "/home/jens/Source/shotwell/src/Page.vala"
+#line 758 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 778 "/home/jens/Source/shotwell/src/Page.vala"
+#line 758 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_ctrl_released (self, event);
-#line 6113 "Page.c"
+#line 5844 "Page.c"
 }
 
 
 static gboolean page_real_on_alt_pressed (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 783 "/home/jens/Source/shotwell/src/Page.vala"
+#line 763 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 783 "/home/jens/Source/shotwell/src/Page.vala"
+#line 763 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6123 "Page.c"
+#line 5854 "Page.c"
 }
 
 
 gboolean page_on_alt_pressed (Page* self, GdkEventKey* event) {
-#line 782 "/home/jens/Source/shotwell/src/Page.vala"
+#line 762 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 782 "/home/jens/Source/shotwell/src/Page.vala"
+#line 762 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_alt_pressed (self, event);
-#line 6132 "Page.c"
+#line 5863 "Page.c"
 }
 
 
 static gboolean page_real_on_alt_released (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 787 "/home/jens/Source/shotwell/src/Page.vala"
+#line 767 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 787 "/home/jens/Source/shotwell/src/Page.vala"
+#line 767 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6142 "Page.c"
+#line 5873 "Page.c"
 }
 
 
 gboolean page_on_alt_released (Page* self, GdkEventKey* event) {
-#line 786 "/home/jens/Source/shotwell/src/Page.vala"
+#line 766 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 786 "/home/jens/Source/shotwell/src/Page.vala"
+#line 766 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_alt_released (self, event);
-#line 6151 "Page.c"
+#line 5882 "Page.c"
 }
 
 
 static gboolean page_real_on_shift_pressed (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 791 "/home/jens/Source/shotwell/src/Page.vala"
+#line 771 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 791 "/home/jens/Source/shotwell/src/Page.vala"
+#line 771 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6161 "Page.c"
+#line 5892 "Page.c"
 }
 
 
 gboolean page_on_shift_pressed (Page* self, GdkEventKey* event) {
-#line 790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 770 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 770 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_shift_pressed (self, event);
-#line 6170 "Page.c"
+#line 5901 "Page.c"
 }
 
 
 static gboolean page_real_on_shift_released (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 775 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 775 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6180 "Page.c"
+#line 5911 "Page.c"
 }
 
 
 gboolean page_on_shift_released (Page* self, GdkEventKey* event) {
-#line 794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 774 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 774 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_shift_released (self, event);
-#line 6189 "Page.c"
+#line 5920 "Page.c"
 }
 
 
 static gboolean page_real_on_super_pressed (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 799 "/home/jens/Source/shotwell/src/Page.vala"
+#line 779 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 799 "/home/jens/Source/shotwell/src/Page.vala"
+#line 779 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6199 "Page.c"
+#line 5930 "Page.c"
 }
 
 
 gboolean page_on_super_pressed (Page* self, GdkEventKey* event) {
-#line 798 "/home/jens/Source/shotwell/src/Page.vala"
+#line 778 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 798 "/home/jens/Source/shotwell/src/Page.vala"
+#line 778 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_super_pressed (self, event);
-#line 6208 "Page.c"
+#line 5939 "Page.c"
 }
 
 
 static gboolean page_real_on_super_released (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 803 "/home/jens/Source/shotwell/src/Page.vala"
+#line 783 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 803 "/home/jens/Source/shotwell/src/Page.vala"
+#line 783 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6218 "Page.c"
+#line 5949 "Page.c"
 }
 
 
 gboolean page_on_super_released (Page* self, GdkEventKey* event) {
-#line 802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 782 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 782 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_super_released (self, event);
-#line 6227 "Page.c"
+#line 5958 "Page.c"
 }
 
 
 static gboolean page_real_on_app_key_pressed (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 806 "/home/jens/Source/shotwell/src/Page.vala"
+#line 786 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 787 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 787 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6239 "Page.c"
+#line 5970 "Page.c"
 }
 
 
 gboolean page_on_app_key_pressed (Page* self, GdkEventKey* event) {
-#line 806 "/home/jens/Source/shotwell/src/Page.vala"
+#line 786 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 806 "/home/jens/Source/shotwell/src/Page.vala"
+#line 786 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_app_key_pressed (self, event);
-#line 6248 "Page.c"
+#line 5979 "Page.c"
 }
 
 
 static gboolean page_real_on_app_key_released (Page* self, GdkEventKey* event) {
 	gboolean result = FALSE;
-#line 810 "/home/jens/Source/shotwell/src/Page.vala"
+#line 790 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 791 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 791 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6260 "Page.c"
+#line 5991 "Page.c"
 }
 
 
 gboolean page_on_app_key_released (Page* self, GdkEventKey* event) {
-#line 810 "/home/jens/Source/shotwell/src/Page.vala"
+#line 790 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 810 "/home/jens/Source/shotwell/src/Page.vala"
+#line 790 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_app_key_released (self, event);
-#line 6269 "Page.c"
+#line 6000 "Page.c"
 }
 
 
@@ -6284,248 +6015,248 @@ gboolean page_notify_app_key_pressed (Page* self, GdkEventKey* event) {
 	const gchar* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
 	GQuark _tmp9_ = 0U;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label0 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label1 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label2 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label3 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label4 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label5 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label6 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label7 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label8 = 0;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label9 = 0;
-#line 6308 "Page.c"
+#line 6039 "Page.c"
 	GdkEventKey* _tmp30_ = NULL;
 	gboolean _tmp31_ = FALSE;
-#line 814 "/home/jens/Source/shotwell/src/Page.vala"
+#line 794 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 814 "/home/jens/Source/shotwell/src/Page.vala"
+#line 794 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 817 "/home/jens/Source/shotwell/src/Page.vala"
+#line 797 "/home/jens/Source/shotwell/src/Page.vala"
 	page_get_modifiers (self, &_tmp0_, &_tmp1_, &_tmp2_, &_tmp3_);
-#line 817 "/home/jens/Source/shotwell/src/Page.vala"
+#line 797 "/home/jens/Source/shotwell/src/Page.vala"
 	ctrl_currently_pressed = _tmp0_;
-#line 817 "/home/jens/Source/shotwell/src/Page.vala"
+#line 797 "/home/jens/Source/shotwell/src/Page.vala"
 	alt_currently_pressed = _tmp1_;
-#line 817 "/home/jens/Source/shotwell/src/Page.vala"
+#line 797 "/home/jens/Source/shotwell/src/Page.vala"
 	shift_currently_pressed = _tmp2_;
-#line 817 "/home/jens/Source/shotwell/src/Page.vala"
+#line 797 "/home/jens/Source/shotwell/src/Page.vala"
 	super_currently_pressed = _tmp3_;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = event;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_->keyval;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = gdk_keyval_name (_tmp5_);
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_;
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = (NULL == _tmp7_) ? 0 : g_quark_from_string (_tmp7_);
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 	if ((_tmp9_ == ((0 != _tmp8_label0) ? _tmp8_label0 : (_tmp8_label0 = g_quark_from_static_string ("Control_L")))) || (_tmp9_ == ((0 != _tmp8_label1) ? _tmp8_label1 : (_tmp8_label1 = g_quark_from_static_string ("Control_R"))))) {
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6339 "Page.c"
+#line 6070 "Page.c"
 			default:
 			{
 				gboolean _tmp10_ = FALSE;
 				gboolean _tmp11_ = FALSE;
 				GdkEventKey* _tmp13_ = NULL;
 				gboolean _tmp14_ = FALSE;
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp11_ = ctrl_currently_pressed;
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp11_) {
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp10_ = TRUE;
-#line 6352 "Page.c"
+#line 6083 "Page.c"
 				} else {
 					gboolean _tmp12_ = FALSE;
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp12_ = self->priv->ctrl_pressed;
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp10_ = _tmp12_;
-#line 6359 "Page.c"
+#line 6090 "Page.c"
 				}
-#line 823 "/home/jens/Source/shotwell/src/Page.vala"
+#line 803 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp10_) {
-#line 824 "/home/jens/Source/shotwell/src/Page.vala"
+#line 804 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 824 "/home/jens/Source/shotwell/src/Page.vala"
+#line 804 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6367 "Page.c"
+#line 6098 "Page.c"
 				}
-#line 826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 806 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->ctrl_pressed = TRUE;
-#line 828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 808 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp13_ = event;
-#line 828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 808 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp14_ = page_on_ctrl_pressed (self, _tmp13_);
-#line 828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 808 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp14_;
-#line 828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 808 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6379 "Page.c"
+#line 6110 "Page.c"
 			}
 		}
 	} else if ((((_tmp9_ == ((0 != _tmp8_label2) ? _tmp8_label2 : (_tmp8_label2 = g_quark_from_static_string ("Meta_L")))) || (_tmp9_ == ((0 != _tmp8_label3) ? _tmp8_label3 : (_tmp8_label3 = g_quark_from_static_string ("Meta_R"))))) || (_tmp9_ == ((0 != _tmp8_label4) ? _tmp8_label4 : (_tmp8_label4 = g_quark_from_static_string ("Alt_L"))))) || (_tmp9_ == ((0 != _tmp8_label5) ? _tmp8_label5 : (_tmp8_label5 = g_quark_from_static_string ("Alt_R"))))) {
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6385 "Page.c"
+#line 6116 "Page.c"
 			default:
 			{
 				gboolean _tmp15_ = FALSE;
 				gboolean _tmp16_ = FALSE;
 				GdkEventKey* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp16_ = alt_currently_pressed;
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp16_) {
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp15_ = TRUE;
-#line 6398 "Page.c"
+#line 6129 "Page.c"
 				} else {
 					gboolean _tmp17_ = FALSE;
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp17_ = self->priv->alt_pressed;
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp15_ = _tmp17_;
-#line 6405 "Page.c"
+#line 6136 "Page.c"
 				}
-#line 834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 814 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp15_) {
-#line 835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 815 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 815 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6413 "Page.c"
+#line 6144 "Page.c"
 				}
-#line 837 "/home/jens/Source/shotwell/src/Page.vala"
+#line 817 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->alt_pressed = TRUE;
-#line 839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 819 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp18_ = event;
-#line 839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 819 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp19_ = page_on_alt_pressed (self, _tmp18_);
-#line 839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 819 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp19_;
-#line 839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 819 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6425 "Page.c"
+#line 6156 "Page.c"
 			}
 		}
 	} else if ((_tmp9_ == ((0 != _tmp8_label6) ? _tmp8_label6 : (_tmp8_label6 = g_quark_from_static_string ("Shift_L")))) || (_tmp9_ == ((0 != _tmp8_label7) ? _tmp8_label7 : (_tmp8_label7 = g_quark_from_static_string ("Shift_R"))))) {
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6431 "Page.c"
+#line 6162 "Page.c"
 			default:
 			{
 				gboolean _tmp20_ = FALSE;
 				gboolean _tmp21_ = FALSE;
 				GdkEventKey* _tmp23_ = NULL;
 				gboolean _tmp24_ = FALSE;
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp21_ = shift_currently_pressed;
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp21_) {
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp20_ = TRUE;
-#line 6444 "Page.c"
+#line 6175 "Page.c"
 				} else {
 					gboolean _tmp22_ = FALSE;
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp22_ = self->priv->shift_pressed;
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp20_ = _tmp22_;
-#line 6451 "Page.c"
+#line 6182 "Page.c"
 				}
-#line 843 "/home/jens/Source/shotwell/src/Page.vala"
+#line 823 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp20_) {
-#line 844 "/home/jens/Source/shotwell/src/Page.vala"
+#line 824 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 844 "/home/jens/Source/shotwell/src/Page.vala"
+#line 824 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6459 "Page.c"
+#line 6190 "Page.c"
 				}
-#line 846 "/home/jens/Source/shotwell/src/Page.vala"
+#line 826 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->shift_pressed = TRUE;
-#line 848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 828 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp23_ = event;
-#line 848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 828 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24_ = page_on_shift_pressed (self, _tmp23_);
-#line 848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 828 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp24_;
-#line 848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 828 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6471 "Page.c"
+#line 6202 "Page.c"
 			}
 		}
 	} else if ((_tmp9_ == ((0 != _tmp8_label8) ? _tmp8_label8 : (_tmp8_label8 = g_quark_from_static_string ("Super_L")))) || (_tmp9_ == ((0 != _tmp8_label9) ? _tmp8_label9 : (_tmp8_label9 = g_quark_from_static_string ("Super_R"))))) {
-#line 820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 800 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6477 "Page.c"
+#line 6208 "Page.c"
 			default:
 			{
 				gboolean _tmp25_ = FALSE;
 				gboolean _tmp26_ = FALSE;
 				GdkEventKey* _tmp28_ = NULL;
 				gboolean _tmp29_ = FALSE;
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26_ = super_currently_pressed;
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp26_) {
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp25_ = TRUE;
-#line 6490 "Page.c"
+#line 6221 "Page.c"
 				} else {
 					gboolean _tmp27_ = FALSE;
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp27_ = self->priv->super_pressed;
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp25_ = _tmp27_;
-#line 6497 "Page.c"
+#line 6228 "Page.c"
 				}
-#line 852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 832 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp25_) {
-#line 853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 833 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 833 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6505 "Page.c"
+#line 6236 "Page.c"
 				}
-#line 855 "/home/jens/Source/shotwell/src/Page.vala"
+#line 835 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->super_pressed = TRUE;
-#line 857 "/home/jens/Source/shotwell/src/Page.vala"
+#line 837 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp28_ = event;
-#line 857 "/home/jens/Source/shotwell/src/Page.vala"
+#line 837 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp29_ = page_on_super_pressed (self, _tmp28_);
-#line 857 "/home/jens/Source/shotwell/src/Page.vala"
+#line 837 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp29_;
-#line 857 "/home/jens/Source/shotwell/src/Page.vala"
+#line 837 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6517 "Page.c"
+#line 6248 "Page.c"
 			}
 		}
 	}
-#line 860 "/home/jens/Source/shotwell/src/Page.vala"
+#line 840 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = event;
-#line 860 "/home/jens/Source/shotwell/src/Page.vala"
+#line 840 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31_ = page_on_app_key_pressed (self, _tmp30_);
-#line 860 "/home/jens/Source/shotwell/src/Page.vala"
+#line 840 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp31_;
-#line 860 "/home/jens/Source/shotwell/src/Page.vala"
+#line 840 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6529 "Page.c"
+#line 6260 "Page.c"
 }
 
 
@@ -6544,406 +6275,406 @@ gboolean page_notify_app_key_released (Page* self, GdkEventKey* event) {
 	const gchar* _tmp6_ = NULL;
 	const gchar* _tmp7_ = NULL;
 	GQuark _tmp9_ = 0U;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label0 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label1 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label2 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label3 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label4 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label5 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label6 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label7 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label8 = 0;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp8_label9 = 0;
-#line 6568 "Page.c"
+#line 6299 "Page.c"
 	GdkEventKey* _tmp30_ = NULL;
 	gboolean _tmp31_ = FALSE;
-#line 863 "/home/jens/Source/shotwell/src/Page.vala"
+#line 843 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 863 "/home/jens/Source/shotwell/src/Page.vala"
+#line 843 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 866 "/home/jens/Source/shotwell/src/Page.vala"
+#line 846 "/home/jens/Source/shotwell/src/Page.vala"
 	page_get_modifiers (self, &_tmp0_, &_tmp1_, &_tmp2_, &_tmp3_);
-#line 866 "/home/jens/Source/shotwell/src/Page.vala"
+#line 846 "/home/jens/Source/shotwell/src/Page.vala"
 	ctrl_currently_pressed = _tmp0_;
-#line 866 "/home/jens/Source/shotwell/src/Page.vala"
+#line 846 "/home/jens/Source/shotwell/src/Page.vala"
 	alt_currently_pressed = _tmp1_;
-#line 866 "/home/jens/Source/shotwell/src/Page.vala"
+#line 846 "/home/jens/Source/shotwell/src/Page.vala"
 	shift_currently_pressed = _tmp2_;
-#line 866 "/home/jens/Source/shotwell/src/Page.vala"
+#line 846 "/home/jens/Source/shotwell/src/Page.vala"
 	super_currently_pressed = _tmp3_;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = event;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_->keyval;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = gdk_keyval_name (_tmp5_);
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_;
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = (NULL == _tmp7_) ? 0 : g_quark_from_string (_tmp7_);
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 	if ((_tmp9_ == ((0 != _tmp8_label0) ? _tmp8_label0 : (_tmp8_label0 = g_quark_from_static_string ("Control_L")))) || (_tmp9_ == ((0 != _tmp8_label1) ? _tmp8_label1 : (_tmp8_label1 = g_quark_from_static_string ("Control_R"))))) {
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6599 "Page.c"
+#line 6330 "Page.c"
 			default:
 			{
 				gboolean _tmp10_ = FALSE;
 				gboolean _tmp11_ = FALSE;
 				GdkEventKey* _tmp13_ = NULL;
 				gboolean _tmp14_ = FALSE;
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp11_ = ctrl_currently_pressed;
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp11_) {
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp10_ = TRUE;
-#line 6612 "Page.c"
+#line 6343 "Page.c"
 				} else {
 					gboolean _tmp12_ = FALSE;
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp12_ = self->priv->ctrl_pressed;
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp10_ = !_tmp12_;
-#line 6619 "Page.c"
+#line 6350 "Page.c"
 				}
-#line 872 "/home/jens/Source/shotwell/src/Page.vala"
+#line 852 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp10_) {
-#line 873 "/home/jens/Source/shotwell/src/Page.vala"
+#line 853 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 873 "/home/jens/Source/shotwell/src/Page.vala"
+#line 853 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6627 "Page.c"
+#line 6358 "Page.c"
 				}
-#line 875 "/home/jens/Source/shotwell/src/Page.vala"
+#line 855 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->ctrl_pressed = FALSE;
-#line 877 "/home/jens/Source/shotwell/src/Page.vala"
+#line 857 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp13_ = event;
-#line 877 "/home/jens/Source/shotwell/src/Page.vala"
+#line 857 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp14_ = page_on_ctrl_released (self, _tmp13_);
-#line 877 "/home/jens/Source/shotwell/src/Page.vala"
+#line 857 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp14_;
-#line 877 "/home/jens/Source/shotwell/src/Page.vala"
+#line 857 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6639 "Page.c"
+#line 6370 "Page.c"
 			}
 		}
 	} else if ((((_tmp9_ == ((0 != _tmp8_label2) ? _tmp8_label2 : (_tmp8_label2 = g_quark_from_static_string ("Meta_L")))) || (_tmp9_ == ((0 != _tmp8_label3) ? _tmp8_label3 : (_tmp8_label3 = g_quark_from_static_string ("Meta_R"))))) || (_tmp9_ == ((0 != _tmp8_label4) ? _tmp8_label4 : (_tmp8_label4 = g_quark_from_static_string ("Alt_L"))))) || (_tmp9_ == ((0 != _tmp8_label5) ? _tmp8_label5 : (_tmp8_label5 = g_quark_from_static_string ("Alt_R"))))) {
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6645 "Page.c"
+#line 6376 "Page.c"
 			default:
 			{
 				gboolean _tmp15_ = FALSE;
 				gboolean _tmp16_ = FALSE;
 				GdkEventKey* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp16_ = alt_currently_pressed;
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp16_) {
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp15_ = TRUE;
-#line 6658 "Page.c"
+#line 6389 "Page.c"
 				} else {
 					gboolean _tmp17_ = FALSE;
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp17_ = self->priv->alt_pressed;
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp15_ = !_tmp17_;
-#line 6665 "Page.c"
+#line 6396 "Page.c"
 				}
-#line 883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 863 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp15_) {
-#line 884 "/home/jens/Source/shotwell/src/Page.vala"
+#line 864 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 884 "/home/jens/Source/shotwell/src/Page.vala"
+#line 864 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6673 "Page.c"
+#line 6404 "Page.c"
 				}
-#line 886 "/home/jens/Source/shotwell/src/Page.vala"
+#line 866 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->alt_pressed = FALSE;
-#line 888 "/home/jens/Source/shotwell/src/Page.vala"
+#line 868 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp18_ = event;
-#line 888 "/home/jens/Source/shotwell/src/Page.vala"
+#line 868 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp19_ = page_on_alt_released (self, _tmp18_);
-#line 888 "/home/jens/Source/shotwell/src/Page.vala"
+#line 868 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp19_;
-#line 888 "/home/jens/Source/shotwell/src/Page.vala"
+#line 868 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6685 "Page.c"
+#line 6416 "Page.c"
 			}
 		}
 	} else if ((_tmp9_ == ((0 != _tmp8_label6) ? _tmp8_label6 : (_tmp8_label6 = g_quark_from_static_string ("Shift_L")))) || (_tmp9_ == ((0 != _tmp8_label7) ? _tmp8_label7 : (_tmp8_label7 = g_quark_from_static_string ("Shift_R"))))) {
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6691 "Page.c"
+#line 6422 "Page.c"
 			default:
 			{
 				gboolean _tmp20_ = FALSE;
 				gboolean _tmp21_ = FALSE;
 				GdkEventKey* _tmp23_ = NULL;
 				gboolean _tmp24_ = FALSE;
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp21_ = shift_currently_pressed;
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp21_) {
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp20_ = TRUE;
-#line 6704 "Page.c"
+#line 6435 "Page.c"
 				} else {
 					gboolean _tmp22_ = FALSE;
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp22_ = self->priv->shift_pressed;
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp20_ = !_tmp22_;
-#line 6711 "Page.c"
+#line 6442 "Page.c"
 				}
-#line 892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 872 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp20_) {
-#line 893 "/home/jens/Source/shotwell/src/Page.vala"
+#line 873 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 893 "/home/jens/Source/shotwell/src/Page.vala"
+#line 873 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6719 "Page.c"
+#line 6450 "Page.c"
 				}
-#line 895 "/home/jens/Source/shotwell/src/Page.vala"
+#line 875 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->shift_pressed = FALSE;
-#line 897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 877 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp23_ = event;
-#line 897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 877 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24_ = page_on_shift_released (self, _tmp23_);
-#line 897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 877 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp24_;
-#line 897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 877 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6731 "Page.c"
+#line 6462 "Page.c"
 			}
 		}
 	} else if ((_tmp9_ == ((0 != _tmp8_label8) ? _tmp8_label8 : (_tmp8_label8 = g_quark_from_static_string ("Super_L")))) || (_tmp9_ == ((0 != _tmp8_label9) ? _tmp8_label9 : (_tmp8_label9 = g_quark_from_static_string ("Super_R"))))) {
-#line 869 "/home/jens/Source/shotwell/src/Page.vala"
+#line 849 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 6737 "Page.c"
+#line 6468 "Page.c"
 			default:
 			{
 				gboolean _tmp25_ = FALSE;
 				gboolean _tmp26_ = FALSE;
 				GdkEventKey* _tmp28_ = NULL;
 				gboolean _tmp29_ = FALSE;
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26_ = super_currently_pressed;
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp26_) {
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp25_ = TRUE;
-#line 6750 "Page.c"
+#line 6481 "Page.c"
 				} else {
 					gboolean _tmp27_ = FALSE;
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp27_ = self->priv->super_pressed;
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp25_ = !_tmp27_;
-#line 6757 "Page.c"
+#line 6488 "Page.c"
 				}
-#line 901 "/home/jens/Source/shotwell/src/Page.vala"
+#line 881 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp25_) {
-#line 902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 882 "/home/jens/Source/shotwell/src/Page.vala"
 					result = FALSE;
-#line 902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 882 "/home/jens/Source/shotwell/src/Page.vala"
 					return result;
-#line 6765 "Page.c"
+#line 6496 "Page.c"
 				}
-#line 904 "/home/jens/Source/shotwell/src/Page.vala"
+#line 884 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->super_pressed = FALSE;
-#line 906 "/home/jens/Source/shotwell/src/Page.vala"
+#line 886 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp28_ = event;
-#line 906 "/home/jens/Source/shotwell/src/Page.vala"
+#line 886 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp29_ = page_on_super_released (self, _tmp28_);
-#line 906 "/home/jens/Source/shotwell/src/Page.vala"
+#line 886 "/home/jens/Source/shotwell/src/Page.vala"
 				result = _tmp29_;
-#line 906 "/home/jens/Source/shotwell/src/Page.vala"
+#line 886 "/home/jens/Source/shotwell/src/Page.vala"
 				return result;
-#line 6777 "Page.c"
+#line 6508 "Page.c"
 			}
 		}
 	}
-#line 909 "/home/jens/Source/shotwell/src/Page.vala"
+#line 889 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = event;
-#line 909 "/home/jens/Source/shotwell/src/Page.vala"
+#line 889 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31_ = page_on_app_key_released (self, _tmp30_);
-#line 909 "/home/jens/Source/shotwell/src/Page.vala"
+#line 889 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp31_;
-#line 909 "/home/jens/Source/shotwell/src/Page.vala"
+#line 889 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6789 "Page.c"
+#line 6520 "Page.c"
 }
 
 
 gboolean page_notify_app_focus_in (Page* self, GdkEventFocus* event) {
 	gboolean result = FALSE;
-#line 912 "/home/jens/Source/shotwell/src/Page.vala"
+#line 892 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 912 "/home/jens/Source/shotwell/src/Page.vala"
+#line 892 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 913 "/home/jens/Source/shotwell/src/Page.vala"
+#line 893 "/home/jens/Source/shotwell/src/Page.vala"
 	page_update_modifiers (self);
-#line 915 "/home/jens/Source/shotwell/src/Page.vala"
+#line 895 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 915 "/home/jens/Source/shotwell/src/Page.vala"
+#line 895 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6805 "Page.c"
+#line 6536 "Page.c"
 }
 
 
 gboolean page_notify_app_focus_out (Page* self, GdkEventFocus* event) {
 	gboolean result = FALSE;
-#line 918 "/home/jens/Source/shotwell/src/Page.vala"
+#line 898 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 918 "/home/jens/Source/shotwell/src/Page.vala"
+#line 898 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 919 "/home/jens/Source/shotwell/src/Page.vala"
+#line 899 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 919 "/home/jens/Source/shotwell/src/Page.vala"
+#line 899 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6819 "Page.c"
+#line 6550 "Page.c"
 }
 
 
 static void page_real_on_move (Page* self, GdkRectangle* rect) {
-#line 922 "/home/jens/Source/shotwell/src/Page.vala"
+#line 902 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6826 "Page.c"
+#line 6557 "Page.c"
 }
 
 
 void page_on_move (Page* self, GdkRectangle* rect) {
-#line 922 "/home/jens/Source/shotwell/src/Page.vala"
+#line 902 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 922 "/home/jens/Source/shotwell/src/Page.vala"
+#line 902 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_move (self, rect);
-#line 6835 "Page.c"
+#line 6566 "Page.c"
 }
 
 
 static void page_real_on_move_start (Page* self, GdkRectangle* rect) {
-#line 925 "/home/jens/Source/shotwell/src/Page.vala"
+#line 905 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6842 "Page.c"
+#line 6573 "Page.c"
 }
 
 
 void page_on_move_start (Page* self, GdkRectangle* rect) {
-#line 925 "/home/jens/Source/shotwell/src/Page.vala"
+#line 905 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 925 "/home/jens/Source/shotwell/src/Page.vala"
+#line 905 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_move_start (self, rect);
-#line 6851 "Page.c"
+#line 6582 "Page.c"
 }
 
 
 static void page_real_on_move_finished (Page* self, GdkRectangle* rect) {
-#line 928 "/home/jens/Source/shotwell/src/Page.vala"
+#line 908 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6858 "Page.c"
+#line 6589 "Page.c"
 }
 
 
 void page_on_move_finished (Page* self, GdkRectangle* rect) {
-#line 928 "/home/jens/Source/shotwell/src/Page.vala"
+#line 908 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 928 "/home/jens/Source/shotwell/src/Page.vala"
+#line 908 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_move_finished (self, rect);
-#line 6867 "Page.c"
+#line 6598 "Page.c"
 }
 
 
 static void page_real_on_resize (Page* self, GdkRectangle* rect) {
-#line 931 "/home/jens/Source/shotwell/src/Page.vala"
+#line 911 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6874 "Page.c"
+#line 6605 "Page.c"
 }
 
 
 void page_on_resize (Page* self, GdkRectangle* rect) {
-#line 931 "/home/jens/Source/shotwell/src/Page.vala"
+#line 911 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 931 "/home/jens/Source/shotwell/src/Page.vala"
+#line 911 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_resize (self, rect);
-#line 6883 "Page.c"
+#line 6614 "Page.c"
 }
 
 
 static void page_real_on_resize_start (Page* self, GdkRectangle* rect) {
-#line 934 "/home/jens/Source/shotwell/src/Page.vala"
+#line 914 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6890 "Page.c"
+#line 6621 "Page.c"
 }
 
 
 void page_on_resize_start (Page* self, GdkRectangle* rect) {
-#line 934 "/home/jens/Source/shotwell/src/Page.vala"
+#line 914 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 934 "/home/jens/Source/shotwell/src/Page.vala"
+#line 914 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_resize_start (self, rect);
-#line 6899 "Page.c"
+#line 6630 "Page.c"
 }
 
 
 static void page_real_on_resize_finished (Page* self, GdkRectangle* rect) {
-#line 937 "/home/jens/Source/shotwell/src/Page.vala"
+#line 917 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 6906 "Page.c"
+#line 6637 "Page.c"
 }
 
 
 void page_on_resize_finished (Page* self, GdkRectangle* rect) {
-#line 937 "/home/jens/Source/shotwell/src/Page.vala"
+#line 917 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 937 "/home/jens/Source/shotwell/src/Page.vala"
+#line 917 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->on_resize_finished (self, rect);
-#line 6915 "Page.c"
+#line 6646 "Page.c"
 }
 
 
 static gboolean page_real_on_configure (Page* self, GdkEventConfigure* event, GdkRectangle* rect) {
 	gboolean result = FALSE;
-#line 940 "/home/jens/Source/shotwell/src/Page.vala"
+#line 920 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 940 "/home/jens/Source/shotwell/src/Page.vala"
+#line 920 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (rect != NULL, FALSE);
-#line 941 "/home/jens/Source/shotwell/src/Page.vala"
+#line 921 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 941 "/home/jens/Source/shotwell/src/Page.vala"
+#line 921 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6929 "Page.c"
+#line 6660 "Page.c"
 }
 
 
 gboolean page_on_configure (Page* self, GdkEventConfigure* event, GdkRectangle* rect) {
-#line 940 "/home/jens/Source/shotwell/src/Page.vala"
+#line 920 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 940 "/home/jens/Source/shotwell/src/Page.vala"
+#line 920 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_configure (self, event, rect);
-#line 6938 "Page.c"
+#line 6669 "Page.c"
 }
 
 
 static gboolean _page_check_configure_halted_gsource_func (gpointer self) {
 	gboolean result;
 	result = page_check_configure_halted ((Page*) self);
-#line 965 "/home/jens/Source/shotwell/src/Page.vala"
+#line 945 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 6947 "Page.c"
+#line 6678 "Page.c"
 }
 
 
@@ -6974,41 +6705,41 @@ gboolean page_notify_configure_event (Page* self, GdkEventConfigure* event) {
 	GdkEventConfigure* _tmp51_ = NULL;
 	GdkRectangle _tmp52_ = {0};
 	gboolean _tmp53_ = FALSE;
-#line 944 "/home/jens/Source/shotwell/src/Page.vala"
+#line 924 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 944 "/home/jens/Source/shotwell/src/Page.vala"
+#line 924 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 945 "/home/jens/Source/shotwell/src/Page.vala"
+#line 925 "/home/jens/Source/shotwell/src/Page.vala"
 	memset (&rect, 0, sizeof (GdkRectangle));
-#line 946 "/home/jens/Source/shotwell/src/Page.vala"
+#line 926 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 946 "/home/jens/Source/shotwell/src/Page.vala"
+#line 926 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->x;
-#line 946 "/home/jens/Source/shotwell/src/Page.vala"
+#line 926 "/home/jens/Source/shotwell/src/Page.vala"
 	rect.x = _tmp1_;
-#line 947 "/home/jens/Source/shotwell/src/Page.vala"
+#line 927 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = event;
-#line 947 "/home/jens/Source/shotwell/src/Page.vala"
+#line 927 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_->y;
-#line 947 "/home/jens/Source/shotwell/src/Page.vala"
+#line 927 "/home/jens/Source/shotwell/src/Page.vala"
 	rect.y = _tmp3_;
-#line 948 "/home/jens/Source/shotwell/src/Page.vala"
+#line 928 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = event;
-#line 948 "/home/jens/Source/shotwell/src/Page.vala"
+#line 928 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_->width;
-#line 948 "/home/jens/Source/shotwell/src/Page.vala"
+#line 928 "/home/jens/Source/shotwell/src/Page.vala"
 	rect.width = _tmp5_;
-#line 949 "/home/jens/Source/shotwell/src/Page.vala"
+#line 929 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = event;
-#line 949 "/home/jens/Source/shotwell/src/Page.vala"
+#line 929 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_->height;
-#line 949 "/home/jens/Source/shotwell/src/Page.vala"
+#line 929 "/home/jens/Source/shotwell/src/Page.vala"
 	rect.height = _tmp7_;
-#line 952 "/home/jens/Source/shotwell/src/Page.vala"
+#line 932 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->last_configure_ms;
-#line 952 "/home/jens/Source/shotwell/src/Page.vala"
+#line 932 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp8_ == ((gulong) 0)) {
-#line 7012 "Page.c"
+#line 6743 "Page.c"
 		gboolean _tmp9_ = FALSE;
 		GdkRectangle _tmp10_ = {0};
 		gint _tmp11_ = 0;
@@ -7019,193 +6750,193 @@ gboolean page_notify_configure_event (Page* self, GdkEventConfigure* event) {
 		gint _tmp21_ = 0;
 		GdkRectangle _tmp22_ = {0};
 		gint _tmp23_ = 0;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = self->priv->last_position;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = _tmp10_.x;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = rect;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = _tmp12_.x;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp11_ != _tmp13_) {
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = TRUE;
-#line 7035 "Page.c"
+#line 6766 "Page.c"
 		} else {
 			GdkRectangle _tmp14_ = {0};
 			gint _tmp15_ = 0;
 			GdkRectangle _tmp16_ = {0};
 			gint _tmp17_ = 0;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = self->priv->last_position;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = _tmp14_.y;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp16_ = rect;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp17_ = _tmp16_.y;
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = _tmp15_ != _tmp17_;
-#line 7051 "Page.c"
+#line 6782 "Page.c"
 		}
-#line 953 "/home/jens/Source/shotwell/src/Page.vala"
+#line 933 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp9_) {
-#line 7055 "Page.c"
+#line 6786 "Page.c"
 			GdkRectangle _tmp18_ = {0};
-#line 954 "/home/jens/Source/shotwell/src/Page.vala"
+#line 934 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = rect;
-#line 954 "/home/jens/Source/shotwell/src/Page.vala"
+#line 934 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_move_start (self, &_tmp18_);
-#line 955 "/home/jens/Source/shotwell/src/Page.vala"
+#line 935 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->report_move_finished = TRUE;
-#line 7063 "Page.c"
+#line 6794 "Page.c"
 		}
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = self->priv->last_position;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = _tmp20_.width;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = rect;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = _tmp22_.width;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp21_ != _tmp23_) {
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = TRUE;
-#line 7077 "Page.c"
+#line 6808 "Page.c"
 		} else {
 			GdkRectangle _tmp24_ = {0};
 			gint _tmp25_ = 0;
 			GdkRectangle _tmp26_ = {0};
 			gint _tmp27_ = 0;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp24_ = self->priv->last_position;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp25_ = _tmp24_.height;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = rect;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp27_ = _tmp26_.height;
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = _tmp25_ != _tmp27_;
-#line 7093 "Page.c"
+#line 6824 "Page.c"
 		}
-#line 958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 938 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp19_) {
-#line 7097 "Page.c"
+#line 6828 "Page.c"
 			GdkRectangle _tmp28_ = {0};
-#line 959 "/home/jens/Source/shotwell/src/Page.vala"
+#line 939 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp28_ = rect;
-#line 959 "/home/jens/Source/shotwell/src/Page.vala"
+#line 939 "/home/jens/Source/shotwell/src/Page.vala"
 			page_on_resize_start (self, &_tmp28_);
-#line 960 "/home/jens/Source/shotwell/src/Page.vala"
+#line 940 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->report_resize_finished = TRUE;
-#line 7105 "Page.c"
+#line 6836 "Page.c"
 		}
-#line 965 "/home/jens/Source/shotwell/src/Page.vala"
+#line 945 "/home/jens/Source/shotwell/src/Page.vala"
 		g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) (PAGE_CONSIDER_CONFIGURE_HALTED_MSEC / 8), _page_check_configure_halted_gsource_func, g_object_ref (self), g_object_unref);
-#line 7109 "Page.c"
+#line 6840 "Page.c"
 	}
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = self->priv->last_position;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31_ = _tmp30_.x;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp32_ = rect;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp33_ = _tmp32_.x;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp31_ != _tmp33_) {
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp29_ = TRUE;
-#line 7123 "Page.c"
+#line 6854 "Page.c"
 	} else {
 		GdkRectangle _tmp34_ = {0};
 		gint _tmp35_ = 0;
 		GdkRectangle _tmp36_ = {0};
 		gint _tmp37_ = 0;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp34_ = self->priv->last_position;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp35_ = _tmp34_.y;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp36_ = rect;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp37_ = _tmp36_.y;
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp29_ = _tmp35_ != _tmp37_;
-#line 7139 "Page.c"
+#line 6870 "Page.c"
 	}
-#line 968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 948 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp29_) {
-#line 7143 "Page.c"
+#line 6874 "Page.c"
 		GdkRectangle _tmp38_ = {0};
-#line 969 "/home/jens/Source/shotwell/src/Page.vala"
+#line 949 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp38_ = rect;
-#line 969 "/home/jens/Source/shotwell/src/Page.vala"
+#line 949 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_move (self, &_tmp38_);
-#line 7149 "Page.c"
+#line 6880 "Page.c"
 	}
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp40_ = self->priv->last_position;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp41_ = _tmp40_.width;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp42_ = rect;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp43_ = _tmp42_.width;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp41_ != _tmp43_) {
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp39_ = TRUE;
-#line 7163 "Page.c"
+#line 6894 "Page.c"
 	} else {
 		GdkRectangle _tmp44_ = {0};
 		gint _tmp45_ = 0;
 		GdkRectangle _tmp46_ = {0};
 		gint _tmp47_ = 0;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp44_ = self->priv->last_position;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp45_ = _tmp44_.height;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp46_ = rect;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp47_ = _tmp46_.height;
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp39_ = _tmp45_ != _tmp47_;
-#line 7179 "Page.c"
+#line 6910 "Page.c"
 	}
-#line 971 "/home/jens/Source/shotwell/src/Page.vala"
+#line 951 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp39_) {
-#line 7183 "Page.c"
+#line 6914 "Page.c"
 		GdkRectangle _tmp48_ = {0};
-#line 972 "/home/jens/Source/shotwell/src/Page.vala"
+#line 952 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp48_ = rect;
-#line 972 "/home/jens/Source/shotwell/src/Page.vala"
+#line 952 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_resize (self, &_tmp48_);
-#line 7189 "Page.c"
+#line 6920 "Page.c"
 	}
-#line 974 "/home/jens/Source/shotwell/src/Page.vala"
+#line 954 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp49_ = rect;
-#line 974 "/home/jens/Source/shotwell/src/Page.vala"
+#line 954 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_position = _tmp49_;
-#line 975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 955 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp50_ = now_ms ();
-#line 975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 955 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_configure_ms = _tmp50_;
-#line 977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 957 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp51_ = event;
-#line 977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 957 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp52_ = rect;
-#line 977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 957 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp53_ = page_on_configure (self, _tmp51_, &_tmp52_);
-#line 977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 957 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp53_;
-#line 977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 957 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7209 "Page.c"
+#line 6940 "Page.c"
 }
 
 
@@ -7218,117 +6949,117 @@ static gboolean page_check_configure_halted (Page* self) {
 	GtkAllocation _tmp3_ = {0};
 	gboolean _tmp4_ = FALSE;
 	gboolean _tmp7_ = FALSE;
-#line 980 "/home/jens/Source/shotwell/src/Page.vala"
+#line 960 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 981 "/home/jens/Source/shotwell/src/Page.vala"
+#line 961 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->is_destroyed;
-#line 981 "/home/jens/Source/shotwell/src/Page.vala"
+#line 961 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 982 "/home/jens/Source/shotwell/src/Page.vala"
+#line 962 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 982 "/home/jens/Source/shotwell/src/Page.vala"
+#line 962 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 7232 "Page.c"
+#line 6963 "Page.c"
 	}
-#line 984 "/home/jens/Source/shotwell/src/Page.vala"
+#line 964 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = now_ms ();
-#line 984 "/home/jens/Source/shotwell/src/Page.vala"
+#line 964 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->last_configure_ms;
-#line 984 "/home/jens/Source/shotwell/src/Page.vala"
+#line 964 "/home/jens/Source/shotwell/src/Page.vala"
 	if ((_tmp1_ - _tmp2_) < ((gulong) PAGE_CONSIDER_CONFIGURE_HALTED_MSEC)) {
-#line 985 "/home/jens/Source/shotwell/src/Page.vala"
+#line 965 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 985 "/home/jens/Source/shotwell/src/Page.vala"
+#line 965 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 7244 "Page.c"
+#line 6975 "Page.c"
 	}
-#line 988 "/home/jens/Source/shotwell/src/Page.vala"
+#line 968 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_get_allocation (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), &_tmp3_);
-#line 988 "/home/jens/Source/shotwell/src/Page.vala"
+#line 968 "/home/jens/Source/shotwell/src/Page.vala"
 	allocation = _tmp3_;
-#line 990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 970 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->report_move_finished;
-#line 990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 970 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 7254 "Page.c"
+#line 6985 "Page.c"
 		GtkAllocation _tmp5_ = {0};
 		GdkRectangle _tmp6_ = {0};
-#line 991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 971 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = allocation;
-#line 991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 971 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = (GdkRectangle) _tmp5_;
-#line 991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 971 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_move_finished (self, &_tmp6_);
-#line 7263 "Page.c"
+#line 6994 "Page.c"
 	}
-#line 993 "/home/jens/Source/shotwell/src/Page.vala"
+#line 973 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->report_resize_finished;
-#line 993 "/home/jens/Source/shotwell/src/Page.vala"
+#line 973 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp7_) {
-#line 7269 "Page.c"
+#line 7000 "Page.c"
 		GtkAllocation _tmp8_ = {0};
 		GdkRectangle _tmp9_ = {0};
-#line 994 "/home/jens/Source/shotwell/src/Page.vala"
+#line 974 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = allocation;
-#line 994 "/home/jens/Source/shotwell/src/Page.vala"
+#line 974 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = (GdkRectangle) _tmp8_;
-#line 994 "/home/jens/Source/shotwell/src/Page.vala"
+#line 974 "/home/jens/Source/shotwell/src/Page.vala"
 		page_on_resize_finished (self, &_tmp9_);
-#line 7278 "Page.c"
+#line 7009 "Page.c"
 	}
-#line 996 "/home/jens/Source/shotwell/src/Page.vala"
+#line 976 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_configure_ms = (gulong) 0;
-#line 997 "/home/jens/Source/shotwell/src/Page.vala"
+#line 977 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->report_move_finished = FALSE;
-#line 998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 978 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->report_resize_finished = FALSE;
-#line 1000 "/home/jens/Source/shotwell/src/Page.vala"
+#line 980 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1000 "/home/jens/Source/shotwell/src/Page.vala"
+#line 980 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7290 "Page.c"
+#line 7021 "Page.c"
 }
 
 
 static gboolean page_real_on_motion (Page* self, GdkEventMotion* event, gint x, gint y, GdkModifierType mask) {
 	gboolean result = FALSE;
-#line 1003 "/home/jens/Source/shotwell/src/Page.vala"
+#line 983 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
+#line 984 "/home/jens/Source/shotwell/src/Page.vala"
 	page_check_cursor_hiding (self);
-#line 1006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 986 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 986 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7304 "Page.c"
+#line 7035 "Page.c"
 }
 
 
 gboolean page_on_motion (Page* self, GdkEventMotion* event, gint x, gint y, GdkModifierType mask) {
-#line 1003 "/home/jens/Source/shotwell/src/Page.vala"
+#line 983 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1003 "/home/jens/Source/shotwell/src/Page.vala"
+#line 983 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_motion (self, event, x, y, mask);
-#line 7313 "Page.c"
+#line 7044 "Page.c"
 }
 
 
 static gboolean page_real_on_leave_notify_event (Page* self) {
 	gboolean result = FALSE;
-#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
+#line 990 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
+#line 990 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7323 "Page.c"
+#line 7054 "Page.c"
 }
 
 
 gboolean page_on_leave_notify_event (Page* self) {
-#line 1009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 989 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 989 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_leave_notify_event (self);
-#line 7332 "Page.c"
+#line 7063 "Page.c"
 }
 
 
@@ -7344,29 +7075,29 @@ static gboolean page_on_motion_internal (Page* self, GdkEventMotion* event) {
 	gint _tmp13_ = 0;
 	GdkModifierType _tmp14_ = 0;
 	gboolean _tmp15_ = FALSE;
-#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
+#line 993 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
+#line 993 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
+#line 996 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
+#line 996 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->is_hint;
-#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
+#line 996 "/home/jens/Source/shotwell/src/Page.vala"
 	if (((gint) _tmp1_) == 1) {
-#line 7358 "Page.c"
+#line 7089 "Page.c"
 		gint _tmp2_ = 0;
 		gint _tmp3_ = 0;
 		GdkModifierType _tmp4_ = 0;
-#line 1017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 997 "/home/jens/Source/shotwell/src/Page.vala"
 		page_get_event_source_pointer (self, &_tmp2_, &_tmp3_, &_tmp4_);
-#line 1017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 997 "/home/jens/Source/shotwell/src/Page.vala"
 		x = _tmp2_;
-#line 1017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 997 "/home/jens/Source/shotwell/src/Page.vala"
 		y = _tmp3_;
-#line 1017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 997 "/home/jens/Source/shotwell/src/Page.vala"
 		mask = _tmp4_;
-#line 7370 "Page.c"
+#line 7101 "Page.c"
 	} else {
 		GdkEventMotion* _tmp5_ = NULL;
 		gdouble _tmp6_ = 0.0;
@@ -7374,41 +7105,41 @@ static gboolean page_on_motion_internal (Page* self, GdkEventMotion* event) {
 		gdouble _tmp8_ = 0.0;
 		GdkEventMotion* _tmp9_ = NULL;
 		GdkModifierType _tmp10_ = 0;
-#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
+#line 999 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = event;
-#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
+#line 999 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = _tmp5_->x;
-#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
+#line 999 "/home/jens/Source/shotwell/src/Page.vala"
 		x = (gint) _tmp6_;
-#line 1020 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1000 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = event;
-#line 1020 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1000 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_->y;
-#line 1020 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1000 "/home/jens/Source/shotwell/src/Page.vala"
 		y = (gint) _tmp8_;
-#line 1021 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = event;
-#line 1021 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = _tmp9_->state;
-#line 1021 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1001 "/home/jens/Source/shotwell/src/Page.vala"
 		mask = _tmp10_;
-#line 7396 "Page.c"
+#line 7127 "Page.c"
 	}
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = event;
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = x;
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = y;
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = mask;
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = page_on_motion (self, _tmp11_, _tmp12_, _tmp13_, _tmp14_);
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp15_;
-#line 1024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1004 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7412 "Page.c"
+#line 7143 "Page.c"
 }
 
 
@@ -7416,87 +7147,87 @@ static gboolean page_on_mousewheel_internal (Page* self, GdkEventScroll* event) 
 	gboolean result = FALSE;
 	GdkEventScroll* _tmp0_ = NULL;
 	GdkScrollDirection _tmp1_ = 0;
-#line 1027 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1007 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1027 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1007 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->direction;
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 	switch (_tmp1_) {
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 		case GDK_SCROLL_UP:
-#line 7432 "Page.c"
+#line 7163 "Page.c"
 		{
 			GdkEventScroll* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
-#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp2_ = event;
-#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp3_ = page_on_mousewheel_up (self, _tmp2_);
-#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp3_;
-#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1010 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 7444 "Page.c"
+#line 7175 "Page.c"
 		}
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 		case GDK_SCROLL_DOWN:
-#line 7448 "Page.c"
+#line 7179 "Page.c"
 		{
 			GdkEventScroll* _tmp4_ = NULL;
 			gboolean _tmp5_ = FALSE;
-#line 1033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp4_ = event;
-#line 1033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = page_on_mousewheel_down (self, _tmp4_);
-#line 1033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp5_;
-#line 1033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1013 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 7460 "Page.c"
+#line 7191 "Page.c"
 		}
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 		case GDK_SCROLL_LEFT:
-#line 7464 "Page.c"
+#line 7195 "Page.c"
 		{
 			GdkEventScroll* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
-#line 1036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp6_ = event;
-#line 1036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = page_on_mousewheel_left (self, _tmp6_);
-#line 1036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp7_;
-#line 1036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1016 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 7476 "Page.c"
+#line 7207 "Page.c"
 		}
-#line 1028 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1008 "/home/jens/Source/shotwell/src/Page.vala"
 		case GDK_SCROLL_RIGHT:
-#line 7480 "Page.c"
+#line 7211 "Page.c"
 		{
 			GdkEventScroll* _tmp8_ = NULL;
 			gboolean _tmp9_ = FALSE;
-#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = event;
-#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = page_on_mousewheel_right (self, _tmp8_);
-#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
 			result = _tmp9_;
-#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1019 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 7492 "Page.c"
+#line 7223 "Page.c"
 		}
 		default:
 		{
-#line 1042 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Page.vala"
 			result = FALSE;
-#line 1042 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1022 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 7500 "Page.c"
+#line 7231 "Page.c"
 		}
 	}
 }
@@ -7504,144 +7235,144 @@ static gboolean page_on_mousewheel_internal (Page* self, GdkEventScroll* event) 
 
 static gboolean page_real_on_mousewheel_up (Page* self, GdkEventScroll* event) {
 	gboolean result = FALSE;
-#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1047 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1047 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1027 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7514 "Page.c"
+#line 7245 "Page.c"
 }
 
 
 gboolean page_on_mousewheel_up (Page* self, GdkEventScroll* event) {
-#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1026 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_mousewheel_up (self, event);
-#line 7523 "Page.c"
+#line 7254 "Page.c"
 }
 
 
 static gboolean page_real_on_mousewheel_down (Page* self, GdkEventScroll* event) {
 	gboolean result = FALSE;
-#line 1050 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1051 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1031 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1051 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1031 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7535 "Page.c"
+#line 7266 "Page.c"
 }
 
 
 gboolean page_on_mousewheel_down (Page* self, GdkEventScroll* event) {
-#line 1050 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1050 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1030 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_mousewheel_down (self, event);
-#line 7544 "Page.c"
+#line 7275 "Page.c"
 }
 
 
 static gboolean page_real_on_mousewheel_left (Page* self, GdkEventScroll* event) {
 	gboolean result = FALSE;
-#line 1054 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1055 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1035 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1055 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1035 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7556 "Page.c"
+#line 7287 "Page.c"
 }
 
 
 gboolean page_on_mousewheel_left (Page* self, GdkEventScroll* event) {
-#line 1054 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1054 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1034 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_mousewheel_left (self, event);
-#line 7565 "Page.c"
+#line 7296 "Page.c"
 }
 
 
 static gboolean page_real_on_mousewheel_right (Page* self, GdkEventScroll* event) {
 	gboolean result = FALSE;
-#line 1058 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1038 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1059 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1059 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1039 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7577 "Page.c"
+#line 7308 "Page.c"
 }
 
 
 gboolean page_on_mousewheel_right (Page* self, GdkEventScroll* event) {
-#line 1058 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1038 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1058 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1038 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_mousewheel_right (self, event);
-#line 7586 "Page.c"
+#line 7317 "Page.c"
 }
 
 
 static gboolean page_real_on_context_keypress (Page* self) {
 	gboolean result = FALSE;
-#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1043 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7596 "Page.c"
+#line 7327 "Page.c"
 }
 
 
 gboolean page_on_context_keypress (Page* self) {
-#line 1062 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1042 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1062 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1042 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_context_keypress (self);
-#line 7605 "Page.c"
+#line 7336 "Page.c"
 }
 
 
 static gboolean page_real_on_context_buttonpress (Page* self, GdkEventButton* event) {
 	gboolean result = FALSE;
-#line 1066 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1067 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1047 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1067 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1047 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7617 "Page.c"
+#line 7348 "Page.c"
 }
 
 
 gboolean page_on_context_buttonpress (Page* self, GdkEventButton* event) {
-#line 1066 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1066 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1046 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_context_buttonpress (self, event);
-#line 7626 "Page.c"
+#line 7357 "Page.c"
 }
 
 
 static gboolean page_real_on_context_invoked (Page* self) {
 	gboolean result = FALSE;
-#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1051 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7636 "Page.c"
+#line 7367 "Page.c"
 }
 
 
 gboolean page_on_context_invoked (Page* self) {
-#line 1070 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1070 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1050 "/home/jens/Source/shotwell/src/Page.vala"
 	return PAGE_GET_CLASS (self)->on_context_invoked (self);
-#line 7645 "Page.c"
+#line 7376 "Page.c"
 }
 
 
@@ -7650,72 +7381,72 @@ gboolean page_popup_context_menu (Page* self, GtkMenu* context_menu, GdkEventBut
 	gboolean _tmp0_ = FALSE;
 	GtkMenu* _tmp1_ = NULL;
 	GdkEventButton* _tmp3_ = NULL;
-#line 1074 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1074 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1054 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail ((context_menu == NULL) || GTK_IS_MENU (context_menu), FALSE);
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = context_menu;
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ == NULL) {
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = TRUE;
-#line 7664 "Page.c"
+#line 7395 "Page.c"
 	} else {
 		gboolean _tmp2_ = FALSE;
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = page_on_context_invoked (self);
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = !_tmp2_;
-#line 7671 "Page.c"
+#line 7402 "Page.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1057 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1058 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1058 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 7679 "Page.c"
+#line 7410 "Page.c"
 	}
-#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = event;
-#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1060 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_ == NULL) {
-#line 7685 "Page.c"
+#line 7416 "Page.c"
 		GtkMenu* _tmp4_ = NULL;
 		guint32 _tmp5_ = 0U;
-#line 1081 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1061 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = context_menu;
-#line 1081 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1061 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = gtk_get_current_event_time ();
-#line 1081 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1061 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_menu_popup (_tmp4_, NULL, NULL, NULL, NULL, (guint) 0, _tmp5_);
-#line 7694 "Page.c"
+#line 7425 "Page.c"
 	} else {
 		GtkMenu* _tmp6_ = NULL;
 		GdkEventButton* _tmp7_ = NULL;
 		guint _tmp8_ = 0U;
 		GdkEventButton* _tmp9_ = NULL;
 		guint32 _tmp10_ = 0U;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = context_menu;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = event;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_->button;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = event;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = _tmp9_->time;
-#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1063 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_menu_popup (_tmp6_, NULL, NULL, NULL, NULL, _tmp8_, _tmp10_);
-#line 7713 "Page.c"
+#line 7444 "Page.c"
 	}
-#line 1085 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1065 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1085 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1065 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 7719 "Page.c"
+#line 7450 "Page.c"
 }
 
 
@@ -7730,166 +7461,166 @@ void page_on_event_source_realize (Page* self) {
 	GdkWindow* _tmp10_ = NULL;
 	GdkWindow* _tmp11_ = NULL;
 	GdkWindow* _tmp20_ = NULL;
-#line 1088 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1068 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1089 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1069 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 1089 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1069 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = gtk_widget_get_window (_tmp0_);
-#line 1089 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1069 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp1_ != NULL, "event_source.get_window() != null");
-#line 1091 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->event_source;
-#line 1091 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = gtk_widget_get_window (_tmp2_);
-#line 1091 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = gdk_window_get_cursor (_tmp3_);
-#line 1091 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1071 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ != NULL) {
-#line 7750 "Page.c"
+#line 7481 "Page.c"
 		GtkWidget* _tmp5_ = NULL;
 		GdkWindow* _tmp6_ = NULL;
 		GdkCursor* _tmp7_ = NULL;
 		GdkCursorType _tmp8_ = 0;
-#line 1092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1072 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = self->priv->event_source;
-#line 1092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1072 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = gtk_widget_get_window (_tmp5_);
-#line 1092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1072 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = gdk_window_get_cursor (_tmp6_);
-#line 1092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1072 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = gdk_cursor_get_cursor_type (_tmp7_);
-#line 1092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1072 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->last_cursor = _tmp8_;
-#line 1093 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1073 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 7767 "Page.c"
+#line 7498 "Page.c"
 	}
-#line 1097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->priv->event_source;
-#line 1097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = gtk_widget_get_window (_tmp9_);
-#line 1097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = _g_object_ref0 (_tmp10_);
-#line 1097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1077 "/home/jens/Source/shotwell/src/Page.vala"
 	parent_window = _tmp11_;
-#line 7777 "Page.c"
+#line 7508 "Page.c"
 	{
 		gboolean _tmp12_ = FALSE;
-#line 1098 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = TRUE;
-#line 1098 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
 		while (TRUE) {
-#line 7784 "Page.c"
+#line 7515 "Page.c"
 			GdkWindow* _tmp17_ = NULL;
 			GdkWindow* _tmp18_ = NULL;
 			GdkWindow* _tmp19_ = NULL;
-#line 1098 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!_tmp12_) {
-#line 7790 "Page.c"
+#line 7521 "Page.c"
 				gboolean _tmp13_ = FALSE;
 				GdkWindow* _tmp14_ = NULL;
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp14_ = parent_window;
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp14_ != NULL) {
-#line 7797 "Page.c"
+#line 7528 "Page.c"
 					GdkWindow* _tmp15_ = NULL;
 					GdkCursor* _tmp16_ = NULL;
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp15_ = parent_window;
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp16_ = gdk_window_get_cursor (_tmp15_);
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp13_ = _tmp16_ == NULL;
-#line 7806 "Page.c"
+#line 7537 "Page.c"
 				} else {
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp13_ = FALSE;
-#line 7810 "Page.c"
+#line 7541 "Page.c"
 				}
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp13_) {
-#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1080 "/home/jens/Source/shotwell/src/Page.vala"
 					break;
-#line 7816 "Page.c"
+#line 7547 "Page.c"
 				}
 			}
-#line 1098 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1078 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = FALSE;
-#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp17_ = parent_window;
-#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = gdk_window_get_parent (_tmp17_);
-#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = _g_object_ref0 (_tmp18_);
-#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (parent_window);
-#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1079 "/home/jens/Source/shotwell/src/Page.vala"
 			parent_window = _tmp19_;
-#line 7831 "Page.c"
+#line 7562 "Page.c"
 		}
 	}
-#line 1102 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1082 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = parent_window;
-#line 1102 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1082 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp20_ != NULL) {
-#line 7838 "Page.c"
+#line 7569 "Page.c"
 		GdkWindow* _tmp21_ = NULL;
 		GdkCursor* _tmp22_ = NULL;
 		GdkCursorType _tmp23_ = 0;
-#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = parent_window;
-#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = gdk_window_get_cursor (_tmp21_);
-#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = gdk_cursor_get_cursor_type (_tmp22_);
-#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1083 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->last_cursor = _tmp23_;
-#line 7850 "Page.c"
+#line 7581 "Page.c"
 	}
-#line 1088 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1068 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (parent_window);
-#line 7854 "Page.c"
+#line 7585 "Page.c"
 }
 
 
 void page_set_cursor_hide_time (Page* self, gint hide_time) {
 	gint _tmp0_ = 0;
-#line 1106 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1086 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1107 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = hide_time;
-#line 1107 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1087 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->cursor_hide_msec = _tmp0_;
-#line 7866 "Page.c"
+#line 7597 "Page.c"
 }
 
 
 void page_start_cursor_hiding (Page* self) {
-#line 1110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1090 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1111 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1091 "/home/jens/Source/shotwell/src/Page.vala"
 	page_check_cursor_hiding (self);
-#line 7875 "Page.c"
+#line 7606 "Page.c"
 }
 
 
 void page_stop_cursor_hiding (Page* self) {
 	guint _tmp0_ = 0U;
-#line 1114 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1094 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1115 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1095 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->last_timeout_id;
-#line 1115 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1095 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != ((guint) 0)) {
-#line 7887 "Page.c"
+#line 7618 "Page.c"
 		guint _tmp1_ = 0U;
-#line 1116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->last_timeout_id;
-#line 1116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1096 "/home/jens/Source/shotwell/src/Page.vala"
 		g_source_remove (_tmp1_);
-#line 7893 "Page.c"
+#line 7624 "Page.c"
 	}
 }
 
@@ -7897,41 +7628,41 @@ void page_stop_cursor_hiding (Page* self) {
 void page_suspend_cursor_hiding (Page* self) {
 	gint _tmp0_ = 0;
 	guint _tmp1_ = 0U;
-#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1099 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1120 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->cursor_hide_msec;
-#line 1120 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1100 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->cursor_hide_time_cached = _tmp0_;
-#line 1122 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1102 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->last_timeout_id;
-#line 1122 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1102 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ != ((guint) 0)) {
-#line 7911 "Page.c"
+#line 7642 "Page.c"
 		guint _tmp2_ = 0U;
-#line 1123 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->last_timeout_id;
-#line 1123 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1103 "/home/jens/Source/shotwell/src/Page.vala"
 		g_source_remove (_tmp2_);
-#line 7917 "Page.c"
+#line 7648 "Page.c"
 	}
-#line 1125 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1105 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->cursor_hide_msec = 0;
-#line 7921 "Page.c"
+#line 7652 "Page.c"
 }
 
 
 void page_restore_cursor_hiding (Page* self) {
 	gint _tmp0_ = 0;
-#line 1128 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1108 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1129 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1109 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->cursor_hide_time_cached;
-#line 1129 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1109 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->cursor_hide_msec = _tmp0_;
-#line 1130 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1110 "/home/jens/Source/shotwell/src/Page.vala"
 	page_check_cursor_hiding (self);
-#line 7935 "Page.c"
+#line 7666 "Page.c"
 }
 
 
@@ -7939,117 +7670,137 @@ static void page_real_set_page_cursor (Page* self, GdkCursorType cursor_type) {
 	GdkCursorType _tmp0_ = 0;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 1135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1115 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = cursor_type;
-#line 1135 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1115 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_cursor = _tmp0_;
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->cursor_hidden;
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp2_) {
-#line 7951 "Page.c"
+#line 7682 "Page.c"
 		GtkWidget* _tmp3_ = NULL;
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->priv->event_source;
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 7957 "Page.c"
+#line 7688 "Page.c"
 	} else {
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = FALSE;
-#line 7961 "Page.c"
+#line 7692 "Page.c"
 	}
-#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 7965 "Page.c"
+#line 7696 "Page.c"
+		GdkDisplay* display = NULL;
 		GtkWidget* _tmp4_ = NULL;
 		GdkWindow* _tmp5_ = NULL;
-		GdkCursorType _tmp6_ = 0;
-		GdkCursor* _tmp7_ = NULL;
-		GdkCursor* _tmp8_ = NULL;
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
+		GdkDisplay* _tmp6_ = NULL;
+		GdkDisplay* _tmp7_ = NULL;
+		GtkWidget* _tmp8_ = NULL;
+		GdkWindow* _tmp9_ = NULL;
+		GdkDisplay* _tmp10_ = NULL;
+		GdkCursorType _tmp11_ = 0;
+		GdkCursor* _tmp12_ = NULL;
+		GdkCursor* _tmp13_ = NULL;
+#line 1118 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = self->priv->event_source;
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1118 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = gtk_widget_get_window (_tmp4_);
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp6_ = cursor_type;
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp7_ = gdk_cursor_new (_tmp6_);
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp8_ = _tmp7_;
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
-		gdk_window_set_cursor (_tmp5_, _tmp8_);
-#line 1138 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_object_unref0 (_tmp8_);
-#line 7985 "Page.c"
+#line 1118 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = gdk_window_get_display (_tmp5_);
+#line 1118 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp7_ = _g_object_ref0 (_tmp6_);
+#line 1118 "/home/jens/Source/shotwell/src/Page.vala"
+		display = _tmp7_;
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp8_ = self->priv->event_source;
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp9_ = gtk_widget_get_window (_tmp8_);
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp10_ = display;
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp11_ = cursor_type;
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp12_ = gdk_cursor_new_for_display (_tmp10_, _tmp11_);
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp13_ = _tmp12_;
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		gdk_window_set_cursor (_tmp9_, _tmp13_);
+#line 1119 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp13_);
+#line 1117 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (display);
+#line 7736 "Page.c"
 	}
 }
 
 
 void page_set_page_cursor (Page* self, GdkCursorType cursor_type) {
-#line 1134 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1114 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1134 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1114 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_GET_CLASS (self)->set_page_cursor (self, cursor_type);
-#line 7995 "Page.c"
+#line 7746 "Page.c"
 }
 
 
 static gboolean _page_on_hide_cursor_gsource_func (gpointer self) {
 	gboolean result;
 	result = page_on_hide_cursor ((Page*) self);
-#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1132 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8004 "Page.c"
+#line 7755 "Page.c"
 }
 
 
 static void page_check_cursor_hiding (Page* self) {
 	gboolean _tmp0_ = FALSE;
 	gint _tmp2_ = 0;
-#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1123 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (self));
-#line 1142 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1124 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->cursor_hidden;
-#line 1142 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1124 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 8017 "Page.c"
+#line 7768 "Page.c"
 		GdkCursorType _tmp1_ = 0;
-#line 1143 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1125 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->cursor_hidden = FALSE;
-#line 1144 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1126 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->last_cursor;
-#line 1144 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1126 "/home/jens/Source/shotwell/src/Page.vala"
 		page_set_page_cursor (self, _tmp1_);
-#line 8025 "Page.c"
+#line 7776 "Page.c"
 	}
-#line 1147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1129 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->cursor_hide_msec;
-#line 1147 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1129 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ != 0) {
-#line 8031 "Page.c"
+#line 7782 "Page.c"
 		guint _tmp3_ = 0U;
 		gint _tmp5_ = 0;
 		guint _tmp6_ = 0U;
-#line 1148 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1130 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->priv->last_timeout_id;
-#line 1148 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1130 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp3_ != ((guint) 0)) {
-#line 8039 "Page.c"
+#line 7790 "Page.c"
 			guint _tmp4_ = 0U;
-#line 1149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1131 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp4_ = self->priv->last_timeout_id;
-#line 1149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1131 "/home/jens/Source/shotwell/src/Page.vala"
 			g_source_remove (_tmp4_);
-#line 8045 "Page.c"
+#line 7796 "Page.c"
 		}
-#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1132 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = self->priv->cursor_hide_msec;
-#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1132 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) _tmp5_, _page_on_hide_cursor_gsource_func, g_object_ref (self), g_object_unref);
-#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1132 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->last_timeout_id = _tmp6_;
-#line 8053 "Page.c"
+#line 7804 "Page.c"
 	}
 }
 
@@ -8057,259 +7808,868 @@ static void page_check_cursor_hiding (Page* self) {
 static gboolean page_on_hide_cursor (Page* self) {
 	gboolean result = FALSE;
 	GtkWidget* _tmp0_ = NULL;
-#line 1154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1136 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (self), FALSE);
-#line 1155 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1137 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->cursor_hidden = TRUE;
-#line 1157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1139 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 1157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1139 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 8069 "Page.c"
+#line 7820 "Page.c"
+		GdkDisplay* display = NULL;
 		GtkWidget* _tmp1_ = NULL;
 		GdkWindow* _tmp2_ = NULL;
-		GdkCursor* _tmp3_ = NULL;
-		GdkCursor* _tmp4_ = NULL;
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
+		GdkDisplay* _tmp3_ = NULL;
+		GdkDisplay* _tmp4_ = NULL;
+		GtkWidget* _tmp5_ = NULL;
+		GdkWindow* _tmp6_ = NULL;
+		GdkDisplay* _tmp7_ = NULL;
+		GdkCursor* _tmp8_ = NULL;
+		GdkCursor* _tmp9_ = NULL;
+#line 1140 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->event_source;
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1140 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = gtk_widget_get_window (_tmp1_);
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp3_ = gdk_cursor_new (GDK_BLANK_CURSOR);
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
-		_tmp4_ = _tmp3_;
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
-		gdk_window_set_cursor (_tmp2_, _tmp4_);
-#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
-		_g_object_unref0 (_tmp4_);
-#line 8086 "Page.c"
+#line 1140 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = gdk_window_get_display (_tmp2_);
+#line 1140 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = _g_object_ref0 (_tmp3_);
+#line 1140 "/home/jens/Source/shotwell/src/Page.vala"
+		display = _tmp4_;
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = self->priv->event_source;
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = gtk_widget_get_window (_tmp5_);
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp7_ = display;
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp8_ = gdk_cursor_new_for_display (_tmp7_, GDK_BLANK_CURSOR);
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp9_ = _tmp8_;
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		gdk_window_set_cursor (_tmp6_, _tmp9_);
+#line 1141 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (_tmp9_);
+#line 1139 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (display);
+#line 7857 "Page.c"
 	}
-#line 1161 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1145 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_timeout_id = (guint) 0;
-#line 1163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1147 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 1163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1147 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8094 "Page.c"
+#line 7865 "Page.c"
+}
+
+
+void page_update_menu_item_label (Page* self, const gchar* id, const gchar* new_label) {
+	GMenu* bar = NULL;
+	GtkBuilder* _tmp0_ = NULL;
+	GObject* _tmp1_ = NULL;
+	GMenu* _tmp2_ = NULL;
+	GMenu* _tmp3_ = NULL;
+	gint items = 0;
+	GMenu* _tmp4_ = NULL;
+	gint _tmp5_ = 0;
+#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (IS_PAGE (self));
+#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (id != NULL);
+#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_if_fail (new_label != NULL);
+#line 1152 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = self->builder;
+#line 1152 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = gtk_builder_get_object (_tmp0_, "MenuBar");
+#line 1152 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_menu_get_type ()) ? ((GMenu*) _tmp1_) : NULL);
+#line 1152 "/home/jens/Source/shotwell/src/Page.vala"
+	bar = _tmp2_;
+#line 1154 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp3_ = bar;
+#line 1154 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp3_ == NULL) {
+#line 1155 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (bar);
+#line 1155 "/home/jens/Source/shotwell/src/Page.vala"
+		return;
+#line 7900 "Page.c"
+	}
+#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp4_ = bar;
+#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp5_ = g_menu_model_get_n_items (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, g_menu_model_get_type (), GMenuModel));
+#line 1158 "/home/jens/Source/shotwell/src/Page.vala"
+	items = _tmp5_;
+#line 7908 "Page.c"
+	{
+		gint i = 0;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+		i = 0;
+#line 7913 "Page.c"
+		{
+			gboolean _tmp6_ = FALSE;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+			_tmp6_ = TRUE;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+			while (TRUE) {
+#line 7920 "Page.c"
+				gint _tmp8_ = 0;
+				gint _tmp9_ = 0;
+				GMenuModel* model = NULL;
+				GMenu* _tmp10_ = NULL;
+				gint _tmp11_ = 0;
+				GMenuModel* _tmp12_ = NULL;
+				GMenu* _tmp13_ = NULL;
+				gint model_items = 0;
+				GMenuModel* _tmp14_ = NULL;
+				gint _tmp15_ = 0;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				if (!_tmp6_) {
+#line 7933 "Page.c"
+					gint _tmp7_ = 0;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp7_ = i;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+					i = _tmp7_ + 1;
+#line 7939 "Page.c"
+				}
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp6_ = FALSE;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp8_ = i;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp9_ = items;
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				if (!(_tmp8_ < _tmp9_)) {
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+					break;
+#line 7951 "Page.c"
+				}
+#line 1160 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp10_ = bar;
+#line 1160 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp11_ = i;
+#line 1160 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp12_ = g_menu_model_get_item_link (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, g_menu_model_get_type (), GMenuModel), _tmp11_, G_MENU_LINK_SUBMENU);
+#line 1160 "/home/jens/Source/shotwell/src/Page.vala"
+				model = _tmp12_;
+#line 1161 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp13_ = bar;
+#line 1161 "/home/jens/Source/shotwell/src/Page.vala"
+				if (_tmp13_ == NULL) {
+#line 1162 "/home/jens/Source/shotwell/src/Page.vala"
+					_g_object_unref0 (model);
+#line 1162 "/home/jens/Source/shotwell/src/Page.vala"
+					continue;
+#line 7969 "Page.c"
+				}
+#line 1165 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp14_ = model;
+#line 1165 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp15_ = g_menu_model_get_n_items (_tmp14_);
+#line 1165 "/home/jens/Source/shotwell/src/Page.vala"
+				model_items = _tmp15_;
+#line 7977 "Page.c"
+				{
+					gint j = 0;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+					j = 0;
+#line 7982 "Page.c"
+					{
+						gboolean _tmp16_ = FALSE;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+						_tmp16_ = TRUE;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+						while (TRUE) {
+#line 7989 "Page.c"
+							gint _tmp18_ = 0;
+							gint _tmp19_ = 0;
+							GMenuModel* subsection = NULL;
+							GMenuModel* _tmp20_ = NULL;
+							gint _tmp21_ = 0;
+							GMenuModel* _tmp22_ = NULL;
+							GMenuModel* _tmp23_ = NULL;
+							gint sub_items = 0;
+							GMenuModel* _tmp24_ = NULL;
+							gint _tmp25_ = 0;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							if (!_tmp16_) {
+#line 8002 "Page.c"
+								gint _tmp17_ = 0;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp17_ = j;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+								j = _tmp17_ + 1;
+#line 8008 "Page.c"
+							}
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp16_ = FALSE;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp18_ = j;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp19_ = model_items;
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							if (!(_tmp18_ < _tmp19_)) {
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+								break;
+#line 8020 "Page.c"
+							}
+#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp20_ = model;
+#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp21_ = j;
+#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp22_ = g_menu_model_get_item_link (_tmp20_, _tmp21_, G_MENU_LINK_SECTION);
+#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+							subsection = _tmp22_;
+#line 1169 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp23_ = subsection;
+#line 1169 "/home/jens/Source/shotwell/src/Page.vala"
+							if (_tmp23_ == NULL) {
+#line 1170 "/home/jens/Source/shotwell/src/Page.vala"
+								_g_object_unref0 (subsection);
+#line 1170 "/home/jens/Source/shotwell/src/Page.vala"
+								continue;
+#line 8038 "Page.c"
+							}
+#line 1173 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp24_ = subsection;
+#line 1173 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp25_ = g_menu_model_get_n_items (_tmp24_);
+#line 1173 "/home/jens/Source/shotwell/src/Page.vala"
+							sub_items = _tmp25_;
+#line 8046 "Page.c"
+							{
+								gint k = 0;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+								k = 0;
+#line 8051 "Page.c"
+								{
+									gboolean _tmp26_ = FALSE;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp26_ = TRUE;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+									while (TRUE) {
+#line 8058 "Page.c"
+										gint _tmp28_ = 0;
+										gint _tmp29_ = 0;
+										GMenuAttributeIter* it = NULL;
+										GMenuModel* _tmp30_ = NULL;
+										gint _tmp31_ = 0;
+										GMenuAttributeIter* _tmp32_ = NULL;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										if (!_tmp26_) {
+#line 8067 "Page.c"
+											gint _tmp27_ = 0;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+											_tmp27_ = k;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+											k = _tmp27_ + 1;
+#line 8073 "Page.c"
+										}
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp26_ = FALSE;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp28_ = k;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp29_ = sub_items;
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										if (!(_tmp28_ < _tmp29_)) {
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+											break;
+#line 8085 "Page.c"
+										}
+#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp30_ = subsection;
+#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp31_ = k;
+#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+										_tmp32_ = g_menu_model_iterate_item_attributes (_tmp30_, _tmp31_);
+#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+										it = _tmp32_;
+#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+										while (TRUE) {
+#line 8097 "Page.c"
+											GMenuAttributeIter* _tmp33_ = NULL;
+											gboolean _tmp34_ = FALSE;
+											GMenuAttributeIter* _tmp35_ = NULL;
+											const gchar* _tmp36_ = NULL;
+#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+											_tmp33_ = it;
+#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+											_tmp34_ = g_menu_attribute_iter_next (_tmp33_);
+#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+											if (!_tmp34_) {
+#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+												break;
+#line 8110 "Page.c"
+											}
+#line 1177 "/home/jens/Source/shotwell/src/Page.vala"
+											_tmp35_ = it;
+#line 1177 "/home/jens/Source/shotwell/src/Page.vala"
+											_tmp36_ = g_menu_attribute_iter_get_name (_tmp35_);
+#line 1177 "/home/jens/Source/shotwell/src/Page.vala"
+											if (g_strcmp0 (_tmp36_, "id") == 0) {
+#line 8118 "Page.c"
+												GMenuAttributeIter* _tmp37_ = NULL;
+												GVariant* _tmp38_ = NULL;
+												GVariant* _tmp39_ = NULL;
+												const gchar* _tmp40_ = NULL;
+												const gchar* _tmp41_ = NULL;
+												gboolean _tmp42_ = FALSE;
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp37_ = it;
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp38_ = g_menu_attribute_iter_get_value (_tmp37_);
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp39_ = _tmp38_;
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp40_ = g_variant_get_string (_tmp39_, NULL);
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp41_ = id;
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_tmp42_ = g_strcmp0 (_tmp40_, _tmp41_) == 0;
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												_g_variant_unref0 (_tmp39_);
+#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+												if (_tmp42_) {
+#line 8141 "Page.c"
+													GMenu* md = NULL;
+													GMenuModel* _tmp43_ = NULL;
+													GMenu* _tmp44_ = NULL;
+													GMenuItem* m = NULL;
+													GMenuModel* _tmp45_ = NULL;
+													gint _tmp46_ = 0;
+													GMenuItem* _tmp47_ = NULL;
+													GMenuItem* _tmp48_ = NULL;
+													const gchar* _tmp49_ = NULL;
+													GMenu* _tmp50_ = NULL;
+													gint _tmp51_ = 0;
+													GMenu* _tmp52_ = NULL;
+													gint _tmp53_ = 0;
+													GMenuItem* _tmp54_ = NULL;
+#line 1179 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp43_ = subsection;
+#line 1179 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp44_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp43_, g_menu_get_type ()) ? ((GMenu*) _tmp43_) : NULL);
+#line 1179 "/home/jens/Source/shotwell/src/Page.vala"
+													md = _tmp44_;
+#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp45_ = subsection;
+#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp46_ = k;
+#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp47_ = g_menu_item_new_from_model (_tmp45_, _tmp46_);
+#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+													m = _tmp47_;
+#line 1182 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp48_ = m;
+#line 1182 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp49_ = new_label;
+#line 1182 "/home/jens/Source/shotwell/src/Page.vala"
+													g_menu_item_set_label (_tmp48_, _tmp49_);
+#line 1183 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp50_ = md;
+#line 1183 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp51_ = k;
+#line 1183 "/home/jens/Source/shotwell/src/Page.vala"
+													g_menu_remove (_tmp50_, _tmp51_);
+#line 1184 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp52_ = md;
+#line 1184 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp53_ = k;
+#line 1184 "/home/jens/Source/shotwell/src/Page.vala"
+													_tmp54_ = m;
+#line 1184 "/home/jens/Source/shotwell/src/Page.vala"
+													g_menu_insert_item (_tmp52_, _tmp53_, _tmp54_);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (m);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (md);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (it);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (subsection);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (model);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													_g_object_unref0 (bar);
+#line 1186 "/home/jens/Source/shotwell/src/Page.vala"
+													return;
+#line 8204 "Page.c"
+												}
+											}
+										}
+#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+										_g_object_unref0 (it);
+#line 8210 "Page.c"
+									}
+								}
+							}
+#line 1166 "/home/jens/Source/shotwell/src/Page.vala"
+							_g_object_unref0 (subsection);
+#line 8216 "Page.c"
+						}
+					}
+				}
+#line 1159 "/home/jens/Source/shotwell/src/Page.vala"
+				_g_object_unref0 (model);
+#line 8222 "Page.c"
+			}
+		}
+	}
+#line 1150 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (bar);
+#line 8228 "Page.c"
+}
+
+
+GMenuModel* page_find_extension_point (Page* self, GMenuModel* model, const gchar* extension_point) {
+	GMenuModel* result = NULL;
+	gint items = 0;
+	GMenuModel* _tmp0_ = NULL;
+	gint _tmp1_ = 0;
+	GMenuModel* section = NULL;
+#line 1195 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_val_if_fail (IS_PAGE (self), NULL);
+#line 1195 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+#line 1195 "/home/jens/Source/shotwell/src/Page.vala"
+	g_return_val_if_fail (extension_point != NULL, NULL);
+#line 1197 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = model;
+#line 1197 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp1_ = g_menu_model_get_n_items (_tmp0_);
+#line 1197 "/home/jens/Source/shotwell/src/Page.vala"
+	items = _tmp1_;
+#line 1198 "/home/jens/Source/shotwell/src/Page.vala"
+	section = NULL;
+#line 8252 "Page.c"
+	{
+		gint i = 0;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+		i = 0;
+#line 8257 "Page.c"
+		{
+			gboolean _tmp2_ = FALSE;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+			_tmp2_ = TRUE;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+			while (TRUE) {
+#line 8264 "Page.c"
+				gboolean _tmp4_ = FALSE;
+				gint _tmp5_ = 0;
+				gint _tmp6_ = 0;
+				gchar* name = NULL;
+				GMenuModel* _tmp8_ = NULL;
+				gint _tmp9_ = 0;
+				const gchar* _tmp10_ = NULL;
+				const gchar* _tmp11_ = NULL;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				if (!_tmp2_) {
+#line 8275 "Page.c"
+					gint _tmp3_ = 0;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp3_ = i;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					i = _tmp3_ + 1;
+#line 8281 "Page.c"
+				}
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp2_ = FALSE;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp5_ = i;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp6_ = items;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				if (_tmp5_ < _tmp6_) {
+#line 8291 "Page.c"
+					GMenuModel* _tmp7_ = NULL;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp7_ = section;
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp4_ = _tmp7_ == NULL;
+#line 8297 "Page.c"
+				} else {
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp4_ = FALSE;
+#line 8301 "Page.c"
+				}
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				if (!_tmp4_) {
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+					break;
+#line 8307 "Page.c"
+				}
+#line 1201 "/home/jens/Source/shotwell/src/Page.vala"
+				name = NULL;
+#line 1202 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp8_ = model;
+#line 1202 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp9_ = i;
+#line 1202 "/home/jens/Source/shotwell/src/Page.vala"
+				g_menu_model_get_item_attribute (_tmp8_, _tmp9_, "id", "s", &name, NULL);
+#line 1203 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp10_ = name;
+#line 1203 "/home/jens/Source/shotwell/src/Page.vala"
+				_tmp11_ = extension_point;
+#line 1203 "/home/jens/Source/shotwell/src/Page.vala"
+				if (g_strcmp0 (_tmp10_, _tmp11_) == 0) {
+#line 8323 "Page.c"
+					GMenuModel* _tmp12_ = NULL;
+					gint _tmp13_ = 0;
+					GMenuModel* _tmp14_ = NULL;
+#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp12_ = model;
+#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp13_ = i;
+#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp14_ = g_menu_model_get_item_link (_tmp12_, _tmp13_, G_MENU_LINK_SECTION);
+#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+					_g_object_unref0 (section);
+#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+					section = _tmp14_;
+#line 8337 "Page.c"
+				} else {
+					GMenuModel* subsection = NULL;
+					GMenuModel* _tmp15_ = NULL;
+					gint _tmp16_ = 0;
+					GMenuModel* _tmp17_ = NULL;
+					GMenuModel* _tmp18_ = NULL;
+					gint sub_items = 0;
+					GMenuModel* _tmp19_ = NULL;
+					gint _tmp20_ = 0;
+#line 1206 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp15_ = model;
+#line 1206 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp16_ = i;
+#line 1206 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp17_ = g_menu_model_get_item_link (_tmp15_, _tmp16_, G_MENU_LINK_SECTION);
+#line 1206 "/home/jens/Source/shotwell/src/Page.vala"
+					subsection = _tmp17_;
+#line 1208 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp18_ = subsection;
+#line 1208 "/home/jens/Source/shotwell/src/Page.vala"
+					if (_tmp18_ == NULL) {
+#line 1209 "/home/jens/Source/shotwell/src/Page.vala"
+						_g_object_unref0 (subsection);
+#line 1209 "/home/jens/Source/shotwell/src/Page.vala"
+						_g_free0 (name);
+#line 1209 "/home/jens/Source/shotwell/src/Page.vala"
+						continue;
+#line 8365 "Page.c"
+					}
+#line 1212 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp19_ = subsection;
+#line 1212 "/home/jens/Source/shotwell/src/Page.vala"
+					_tmp20_ = g_menu_model_get_n_items (_tmp19_);
+#line 1212 "/home/jens/Source/shotwell/src/Page.vala"
+					sub_items = _tmp20_;
+#line 8373 "Page.c"
+					{
+						gint j = 0;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+						j = 0;
+#line 8378 "Page.c"
+						{
+							gboolean _tmp21_ = FALSE;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+							_tmp21_ = TRUE;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+							while (TRUE) {
+#line 8385 "Page.c"
+								gboolean _tmp23_ = FALSE;
+								gint _tmp24_ = 0;
+								gint _tmp25_ = 0;
+								GMenuModel* submenu = NULL;
+								GMenuModel* _tmp27_ = NULL;
+								gint _tmp28_ = 0;
+								GMenuModel* _tmp29_ = NULL;
+								GMenuModel* _tmp30_ = NULL;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								if (!_tmp21_) {
+#line 8396 "Page.c"
+									gint _tmp22_ = 0;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp22_ = j;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									j = _tmp22_ + 1;
+#line 8402 "Page.c"
+								}
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp21_ = FALSE;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp24_ = j;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp25_ = sub_items;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								if (_tmp24_ < _tmp25_) {
+#line 8412 "Page.c"
+									GMenuModel* _tmp26_ = NULL;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp26_ = section;
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp23_ = _tmp26_ == NULL;
+#line 8418 "Page.c"
+								} else {
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp23_ = FALSE;
+#line 8422 "Page.c"
+								}
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								if (!_tmp23_) {
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+									break;
+#line 8428 "Page.c"
+								}
+#line 1214 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp27_ = subsection;
+#line 1214 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp28_ = j;
+#line 1214 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp29_ = g_menu_model_get_item_link (_tmp27_, _tmp28_, G_MENU_LINK_SUBMENU);
+#line 1214 "/home/jens/Source/shotwell/src/Page.vala"
+								submenu = _tmp29_;
+#line 1216 "/home/jens/Source/shotwell/src/Page.vala"
+								_tmp30_ = submenu;
+#line 1216 "/home/jens/Source/shotwell/src/Page.vala"
+								if (_tmp30_ != NULL) {
+#line 8442 "Page.c"
+									GMenuModel* _tmp31_ = NULL;
+									const gchar* _tmp32_ = NULL;
+									GMenuModel* _tmp33_ = NULL;
+#line 1217 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp31_ = submenu;
+#line 1217 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp32_ = extension_point;
+#line 1217 "/home/jens/Source/shotwell/src/Page.vala"
+									_tmp33_ = page_find_extension_point (self, _tmp31_, _tmp32_);
+#line 1217 "/home/jens/Source/shotwell/src/Page.vala"
+									_g_object_unref0 (section);
+#line 1217 "/home/jens/Source/shotwell/src/Page.vala"
+									section = _tmp33_;
+#line 8456 "Page.c"
+								}
+#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+								_g_object_unref0 (submenu);
+#line 8460 "Page.c"
+							}
+						}
+					}
+#line 1203 "/home/jens/Source/shotwell/src/Page.vala"
+					_g_object_unref0 (subsection);
+#line 8466 "Page.c"
+				}
+#line 1200 "/home/jens/Source/shotwell/src/Page.vala"
+				_g_free0 (name);
+#line 8470 "Page.c"
+			}
+		}
+	}
+#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+	result = section;
+#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+	return result;
+#line 8478 "Page.c"
 }
 
 
 static void page_class_init (PageClass * klass) {
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	page_parent_class = g_type_class_peek_parent (klass);
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	g_type_class_add_private (klass, sizeof (PagePrivate));
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((GtkWidgetClass *) klass)->destroy = page_real_destroy;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->set_page_name = page_real_set_page_name;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->set_container = page_real_set_container;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->clear_container = page_real_clear_container;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	((PageClass *) klass)->get_menubar = page_real_get_menubar;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	((PageClass *) klass)->get_page_ui_widget = page_real_get_page_ui_widget;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->get_toolbar = page_real_get_toolbar;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->get_page_context_menu = page_real_get_page_context_menu;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switching_from = page_real_switching_from;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switched_to = page_real_switched_to;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->ready = page_real_ready;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switching_to_fullscreen = page_real_switching_to_fullscreen;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->returning_from_fullscreen = page_real_returning_from_fullscreen;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
+	((PageClass *) klass)->add_actions = page_real_add_actions;
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = page_real_init_collect_ui_filenames;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	((PageClass *) klass)->init_collect_action_entries = page_real_init_collect_action_entries;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	((PageClass *) klass)->init_collect_toggle_action_entries = page_real_init_collect_toggle_action_entries;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	((PageClass *) klass)->register_radio_actions = page_real_register_radio_actions;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->init_collect_injection_groups = page_real_init_collect_injection_groups;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->init_actions = page_real_init_actions;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->update_actions = page_real_update_actions;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->source_drag_failed = page_real_source_drag_failed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_left_click = page_real_on_left_click;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_middle_click = page_real_on_middle_click;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_right_click = page_real_on_right_click;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_left_released = page_real_on_left_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_middle_released = page_real_on_middle_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_right_released = page_real_on_right_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_ctrl_pressed = page_real_on_ctrl_pressed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_ctrl_released = page_real_on_ctrl_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_alt_pressed = page_real_on_alt_pressed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_alt_released = page_real_on_alt_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_shift_pressed = page_real_on_shift_pressed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_shift_released = page_real_on_shift_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_super_pressed = page_real_on_super_pressed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_super_released = page_real_on_super_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_app_key_pressed = page_real_on_app_key_pressed;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_app_key_released = page_real_on_app_key_released;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_move = page_real_on_move;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_move_start = page_real_on_move_start;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_move_finished = page_real_on_move_finished;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_resize = page_real_on_resize;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_resize_start = page_real_on_resize_start;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_resize_finished = page_real_on_resize_finished;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_configure = page_real_on_configure;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_motion = page_real_on_motion;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_leave_notify_event = page_real_on_leave_notify_event;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_mousewheel_up = page_real_on_mousewheel_up;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_mousewheel_down = page_real_on_mousewheel_down;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_mousewheel_left = page_real_on_mousewheel_left;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_mousewheel_right = page_real_on_mousewheel_right;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_context_keypress = page_real_on_context_keypress;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_context_buttonpress = page_real_on_context_buttonpress;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_context_invoked = page_real_on_context_invoked;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->set_page_cursor = page_real_set_page_cursor;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (klass)->finalize = page_finalize;
-#line 8213 "Page.c"
+#line 8589 "Page.c"
 }
 
 
 static void page_instance_init (Page * self) {
-	guint* _tmp0_ = NULL;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+	GtkBuilder* _tmp0_ = NULL;
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv = PAGE_GET_PRIVATE (self);
-#line 54 "/home/jens/Source/shotwell/src/Page.vala"
-	self->in_view = FALSE;
-#line 57 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->view = NULL;
-#line 58 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->container = NULL;
-#line 60 "/home/jens/Source/shotwell/src/Page.vala"
-	memset (&self->priv->last_position, 0, sizeof (GdkRectangle));
-#line 61 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->event_source = NULL;
 #line 62 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->dnd_enabled = FALSE;
-#line 63 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->last_configure_ms = (gulong) 0;
+	_tmp0_ = gtk_builder_new ();
+#line 62 "/home/jens/Source/shotwell/src/Page.vala"
+	self->builder = _tmp0_;
 #line 64 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->report_move_finished = FALSE;
-#line 65 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->report_resize_finished = FALSE;
-#line 66 "/home/jens/Source/shotwell/src/Page.vala"
-	memset (&self->priv->last_down, 0, sizeof (GdkPoint));
+	self->in_view = FALSE;
 #line 67 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->is_destroyed = FALSE;
+	self->priv->view = NULL;
 #line 68 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->ctrl_pressed = FALSE;
-#line 69 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->alt_pressed = FALSE;
+	self->priv->container = NULL;
 #line 70 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->shift_pressed = FALSE;
+	memset (&self->priv->last_position, 0, sizeof (GdkRectangle));
 #line 71 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->super_pressed = FALSE;
+	self->priv->event_source = NULL;
 #line 72 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->last_cursor = GDK_LEFT_PTR;
+	self->priv->dnd_enabled = FALSE;
 #line 73 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->cursor_hidden = FALSE;
+	self->priv->last_configure_ms = (gulong) 0;
 #line 74 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->cursor_hide_msec = 0;
+	self->priv->report_move_finished = FALSE;
 #line 75 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->last_timeout_id = (guint) 0;
+	self->priv->report_resize_finished = FALSE;
 #line 76 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->cursor_hide_time_cached = 0;
+	memset (&self->priv->last_down, 0, sizeof (GdkPoint));
 #line 77 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->are_actions_attached = FALSE;
+	self->priv->is_destroyed = FALSE;
 #line 78 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->update_actions_scheduler = NULL;
+	self->priv->ctrl_pressed = FALSE;
 #line 79 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->action_group = NULL;
+	self->priv->alt_pressed = FALSE;
 #line 80 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups = NULL;
-#line 80 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups_length1 = 0;
-#line 80 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->_common_action_groups_size_ = self->priv->common_action_groups_length1;
+	self->priv->shift_pressed = FALSE;
+#line 81 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->super_pressed = FALSE;
 #line 82 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = g_new0 (guint, 0);
-#line 82 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->merge_ids = _tmp0_;
-#line 82 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->merge_ids_length1 = 0;
-#line 82 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->_merge_ids_size_ = self->priv->merge_ids_length1;
-#line 8281 "Page.c"
+	self->priv->last_cursor = GDK_LEFT_PTR;
+#line 83 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->cursor_hidden = FALSE;
+#line 84 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->cursor_hide_msec = 0;
+#line 85 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->last_timeout_id = (guint) 0;
+#line 86 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->cursor_hide_time_cached = 0;
+#line 87 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->are_actions_attached = FALSE;
+#line 88 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->update_actions_scheduler = NULL;
+#line 208 "/home/jens/Source/shotwell/src/Page.vala"
+	self->priv->menubar_injected = FALSE;
+#line 8647 "Page.c"
 }
 
 
 static void page_finalize (GObject* obj) {
 	Page * self;
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PAGE, Page);
-#line 52 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->ui);
-#line 53 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->toolbar);
-#line 56 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_free0 (self->priv->page_name);
-#line 57 "/home/jens/Source/shotwell/src/Page.vala"
-	_data_collection_unref0 (self->priv->view);
-#line 58 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->priv->container);
 #line 59 "/home/jens/Source/shotwell/src/Page.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PAGE, Page);
+#line 62 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (self->builder);
+#line 63 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (self->toolbar);
+#line 66 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_free0 (self->priv->page_name);
+#line 67 "/home/jens/Source/shotwell/src/Page.vala"
+	_data_collection_unref0 (self->priv->view);
+#line 68 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (self->priv->container);
+#line 69 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->toolbar_path);
-#line 61 "/home/jens/Source/shotwell/src/Page.vala"
+#line 71 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 78 "/home/jens/Source/shotwell/src/Page.vala"
+#line 88 "/home/jens/Source/shotwell/src/Page.vala"
 	_one_shot_scheduler_unref0 (self->priv->update_actions_scheduler);
-#line 79 "/home/jens/Source/shotwell/src/Page.vala"
-	_g_object_unref0 (self->priv->action_group);
-#line 80 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->common_action_groups = (_vala_array_free (self->priv->common_action_groups, self->priv->common_action_groups_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 82 "/home/jens/Source/shotwell/src/Page.vala"
-	self->priv->merge_ids = (g_free (self->priv->merge_ids), NULL);
-#line 49 "/home/jens/Source/shotwell/src/Page.vala"
+#line 59 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (page_parent_class)->finalize (obj);
-#line 8313 "Page.c"
+#line 8673 "Page.c"
 }
 
 
@@ -8338,30 +8698,30 @@ GType checkerboard_page_activator_get_type (void) {
 
 
 static void _checkerboard_page_on_items_hidden_view_collection_items_hidden (ViewCollection* _sender, GeeCollection* hidden, gpointer self) {
-#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1286 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_items_hidden ((CheckerboardPage*) self, hidden);
-#line 8344 "Page.c"
+#line 8704 "Page.c"
 }
 
 
 static void _checkerboard_page_on_contents_altered_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
-#line 1225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_contents_altered ((CheckerboardPage*) self, added, removed);
-#line 8351 "Page.c"
+#line 8711 "Page.c"
 }
 
 
 static void _checkerboard_page_on_items_state_changed_view_collection_items_state_changed (ViewCollection* _sender, GeeIterable* changed, gpointer self) {
-#line 1226 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_items_state_changed ((CheckerboardPage*) self, changed);
-#line 8358 "Page.c"
+#line 8718 "Page.c"
 }
 
 
 static void _checkerboard_page_on_items_visibility_changed_view_collection_items_visibility_changed (ViewCollection* _sender, GeeCollection* changed, gpointer self) {
-#line 1227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_items_visibility_changed ((CheckerboardPage*) self, changed);
-#line 8365 "Page.c"
+#line 8725 "Page.c"
 }
 
 
@@ -8390,141 +8750,141 @@ CheckerboardPage* checkerboard_page_construct (GType object_type, const gchar* p
 	ViewCollection* _tmp20_ = NULL;
 	ViewCollection* _tmp21_ = NULL;
 	ViewCollection* _tmp22_ = NULL;
-#line 1201 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1263 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (page_name != NULL, NULL);
-#line 1202 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1264 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_name;
-#line 1202 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1264 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (CheckerboardPage*) page_construct (object_type, _tmp0_);
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = checkerboard_layout_new (_tmp2_);
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	g_object_ref_sink (_tmp3_);
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->layout);
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->layout = _tmp3_;
-#line 1204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 1205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1267 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->layout;
-#line 1205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1267 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = page_name;
-#line 1205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1267 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_name (_tmp4_, _tmp5_);
-#line 1207 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1269 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->layout;
-#line 1207 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1269 "/home/jens/Source/shotwell/src/Page.vala"
 	page_set_event_source (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget));
-#line 1209 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1271 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), (guint) 0);
-#line 1210 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1272 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_scrolled_window_set_shadow_type (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), GTK_SHADOW_NONE);
-#line 1212 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1274 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->viewport;
-#line 1212 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1274 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_container_get_type (), GtkContainer), (guint) 0);
-#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1275 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->viewport;
-#line 1213 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1275 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_viewport_set_shadow_type (_tmp8_, GTK_SHADOW_NONE);
-#line 1215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1277 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->priv->viewport;
-#line 1215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1277 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = self->priv->layout;
-#line 1215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1277 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget));
-#line 1219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = self->priv->layout;
-#line 1219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = gtk_scrolled_window_get_hadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = gtk_scrolled_window_get_vadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1219 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1281 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_adjustments (_tmp11_, _tmp12_, _tmp13_);
-#line 1221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1283 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = self->priv->viewport;
-#line 1221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1283 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget));
-#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1286 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1286 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = _tmp15_;
-#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1286 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp16_, "items-hidden", (GCallback) _checkerboard_page_on_items_hidden_view_collection_items_hidden, self, 0);
-#line 1224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1286 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp16_);
-#line 1225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = _tmp17_;
-#line 1225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, TYPE_DATA_COLLECTION, DataCollection), "contents-altered", (GCallback) _checkerboard_page_on_contents_altered_data_collection_contents_altered, self, 0);
-#line 1225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1287 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp18_);
-#line 1226 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1226 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = _tmp19_;
-#line 1226 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp20_, "items-state-changed", (GCallback) _checkerboard_page_on_items_state_changed_view_collection_items_state_changed, self, 0);
-#line 1226 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp20_);
-#line 1227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp21_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp22_ = _tmp21_;
-#line 1227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (_tmp22_, "items-visibility-changed", (GCallback) _checkerboard_page_on_items_visibility_changed_view_collection_items_visibility_changed, self, 0);
-#line 1227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp22_);
-#line 1230 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1292 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_scrolled_window_set_policy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-#line 1201 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1263 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 8490 "Page.c"
+#line 8850 "Page.c"
 }
 
 
 void checkerboard_page_init_item_context_menu (CheckerboardPage* self, const gchar* path) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1233 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1233 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1295 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (path != NULL);
-#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = path;
-#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->item_context_menu_path);
-#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1296 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->item_context_menu_path = _tmp1_;
-#line 8509 "Page.c"
+#line 8869 "Page.c"
 }
 
 
 void checkerboard_page_init_page_context_menu (CheckerboardPage* self, const gchar* path) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1237 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1237 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1299 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (path != NULL);
-#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = path;
-#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->page_context_menu_path);
-#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->page_context_menu_path = _tmp1_;
-#line 8528 "Page.c"
+#line 8888 "Page.c"
 }
 
 
@@ -8535,124 +8895,172 @@ GtkMenu* checkerboard_page_get_context_menu (CheckerboardPage* self) {
 	ViewCollection* _tmp2_ = NULL;
 	gint _tmp3_ = 0;
 	gboolean _tmp4_ = FALSE;
-#line 1241 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = view_collection_get_selected_count (_tmp2_);
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_ != 0;
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 8553 "Page.c"
+#line 8913 "Page.c"
 		GtkMenu* _tmp5_ = NULL;
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = checkerboard_page_get_item_context_menu (self);
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp0_);
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp5_;
-#line 8561 "Page.c"
+#line 8921 "Page.c"
 	} else {
 		GtkMenu* _tmp6_ = NULL;
-#line 1244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1306 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = page_get_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1306 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp0_);
-#line 1244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1306 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp6_;
-#line 8570 "Page.c"
+#line 8930 "Page.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp0_;
-#line 1243 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1305 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8576 "Page.c"
+#line 8936 "Page.c"
 }
 
 
 static GtkMenu* checkerboard_page_real_get_item_context_menu (CheckerboardPage* self) {
 	GtkMenu* result = NULL;
-	GtkMenu* menu = NULL;
-	GtkUIManager* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	GtkWidget* _tmp2_ = NULL;
-	GtkMenu* _tmp3_ = NULL;
-#line 1248 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->ui;
-#line 1248 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = self->priv->item_context_menu_path;
-#line 1248 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = gtk_ui_manager_get_widget (_tmp0_, _tmp1_);
-#line 1248 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_menu_get_type (), GtkMenu));
-#line 1248 "/home/jens/Source/shotwell/src/Page.vala"
-	menu = _tmp3_;
-#line 1249 "/home/jens/Source/shotwell/src/Page.vala"
-	_vala_assert (menu != NULL, "menu != null");
-#line 1250 "/home/jens/Source/shotwell/src/Page.vala"
-	result = menu;
-#line 1250 "/home/jens/Source/shotwell/src/Page.vala"
+	GtkMenu* _tmp0_ = NULL;
+	GtkMenu* _tmp8_ = NULL;
+	GtkMenu* _tmp9_ = NULL;
+#line 1311 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = self->priv->item_context_menu;
+#line 1311 "/home/jens/Source/shotwell/src/Page.vala"
+	if (_tmp0_ == NULL) {
+#line 8949 "Page.c"
+		GMenuModel* model = NULL;
+		GtkBuilder* _tmp1_ = NULL;
+		const gchar* _tmp2_ = NULL;
+		GObject* _tmp3_ = NULL;
+		GMenuModel* _tmp4_ = NULL;
+		GMenuModel* _tmp5_ = NULL;
+		GtkMenu* _tmp6_ = NULL;
+		GtkMenu* _tmp7_ = NULL;
+#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->builder;
+#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp2_ = self->priv->item_context_menu_path;
+#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = gtk_builder_get_object (_tmp1_, _tmp2_);
+#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp3_) : NULL);
+#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+		model = _tmp4_;
+#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = model;
+#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = (GtkMenu*) gtk_menu_new_from_model (_tmp5_);
+#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+		g_object_ref_sink (_tmp6_);
+#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (self->priv->item_context_menu);
+#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+		self->priv->item_context_menu = _tmp6_;
+#line 1315 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp7_ = self->priv->item_context_menu;
+#line 1315 "/home/jens/Source/shotwell/src/Page.vala"
+		gtk_menu_attach_to_widget (_tmp7_, G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), NULL);
+#line 1311 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (model);
+#line 8984 "Page.c"
+	}
+#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp8_ = self->priv->item_context_menu;
+#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp9_ = _g_object_ref0 (_tmp8_);
+#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
+	result = _tmp9_;
+#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8603 "Page.c"
+#line 8994 "Page.c"
 }
 
 
 GtkMenu* checkerboard_page_get_item_context_menu (CheckerboardPage* self) {
-#line 1247 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1310 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1247 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1310 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->get_item_context_menu (self);
-#line 8612 "Page.c"
+#line 9003 "Page.c"
 }
 
 
 static GtkMenu* checkerboard_page_real_get_page_context_menu (Page* base) {
 	CheckerboardPage * self;
 	GtkMenu* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	GtkMenu* menu = NULL;
-	GtkUIManager* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	GtkWidget* _tmp3_ = NULL;
-	GtkMenu* _tmp4_ = NULL;
-	GtkMenu* _tmp5_ = NULL;
-#line 1253 "/home/jens/Source/shotwell/src/Page.vala"
+	GtkMenu* _tmp0_ = NULL;
+	GtkMenu* _tmp8_ = NULL;
+	GtkMenu* _tmp9_ = NULL;
+#line 1322 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1254 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp0_ = self->priv->page_context_menu_path;
-#line 1254 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1323 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp0_ = self->priv->page_context_menu;
+#line 1323 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 1255 "/home/jens/Source/shotwell/src/Page.vala"
-		result = NULL;
-#line 1255 "/home/jens/Source/shotwell/src/Page.vala"
-		return result;
-#line 8636 "Page.c"
+#line 9019 "Page.c"
+		GMenuModel* model = NULL;
+		GtkBuilder* _tmp1_ = NULL;
+		const gchar* _tmp2_ = NULL;
+		GObject* _tmp3_ = NULL;
+		GMenuModel* _tmp4_ = NULL;
+		GMenuModel* _tmp5_ = NULL;
+		GtkMenu* _tmp6_ = NULL;
+		GtkMenu* _tmp7_ = NULL;
+#line 1324 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->builder;
+#line 1324 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp2_ = self->priv->page_context_menu_path;
+#line 1324 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp3_ = gtk_builder_get_object (_tmp1_, _tmp2_);
+#line 1324 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp3_) : NULL);
+#line 1324 "/home/jens/Source/shotwell/src/Page.vala"
+		model = _tmp4_;
+#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp5_ = model;
+#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp6_ = (GtkMenu*) gtk_menu_new_from_model (_tmp5_);
+#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+		g_object_ref_sink (_tmp6_);
+#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (self->priv->page_context_menu);
+#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+		self->priv->page_context_menu = _tmp6_;
+#line 1327 "/home/jens/Source/shotwell/src/Page.vala"
+		_tmp7_ = self->priv->page_context_menu;
+#line 1327 "/home/jens/Source/shotwell/src/Page.vala"
+		gtk_menu_attach_to_widget (_tmp7_, G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), NULL);
+#line 1323 "/home/jens/Source/shotwell/src/Page.vala"
+		_g_object_unref0 (model);
+#line 9054 "Page.c"
 	}
-#line 1256 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->ui;
-#line 1256 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp2_ = self->priv->page_context_menu_path;
-#line 1256 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp3_ = gtk_ui_manager_get_widget (_tmp1_, _tmp2_);
-#line 1256 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_menu_get_type (), GtkMenu));
-#line 1256 "/home/jens/Source/shotwell/src/Page.vala"
-	menu = _tmp4_;
-#line 1257 "/home/jens/Source/shotwell/src/Page.vala"
-	_tmp5_ = menu;
-#line 1257 "/home/jens/Source/shotwell/src/Page.vala"
-	_vala_assert (_tmp5_ != NULL, "menu != null");
-#line 1258 "/home/jens/Source/shotwell/src/Page.vala"
-	result = menu;
-#line 1258 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1330 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp8_ = self->priv->page_context_menu;
+#line 1330 "/home/jens/Source/shotwell/src/Page.vala"
+	_tmp9_ = _g_object_ref0 (_tmp8_);
+#line 1330 "/home/jens/Source/shotwell/src/Page.vala"
+	result = _tmp9_;
+#line 1330 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8656 "Page.c"
+#line 9064 "Page.c"
 }
 
 
@@ -8663,23 +9071,23 @@ static gboolean checkerboard_page_real_on_context_keypress (Page* base) {
 	GtkMenu* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 1261 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1333 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = checkerboard_page_get_context_menu (self);
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_popup_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp1_, NULL);
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp3_;
-#line 1262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1334 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8683 "Page.c"
+#line 9091 "Page.c"
 }
 
 
@@ -8687,24 +9095,24 @@ static gchar* checkerboard_page_real_get_view_empty_message (CheckerboardPage* s
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = _ ("No photos/videos");
-#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 1266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8699 "Page.c"
+#line 9107 "Page.c"
 }
 
 
 gchar* checkerboard_page_get_view_empty_message (CheckerboardPage* self) {
-#line 1265 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1337 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1265 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1337 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->get_view_empty_message (self);
-#line 8708 "Page.c"
+#line 9116 "Page.c"
 }
 
 
@@ -8712,42 +9120,42 @@ static gchar* checkerboard_page_real_get_filter_no_match_message (CheckerboardPa
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1270 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = _ ("No photos/videos found which match the current filter");
-#line 1270 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1270 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 1270 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8724 "Page.c"
+#line 9132 "Page.c"
 }
 
 
 gchar* checkerboard_page_get_filter_no_match_message (CheckerboardPage* self) {
-#line 1269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1341 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1341 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->get_filter_no_match_message (self);
-#line 8733 "Page.c"
+#line 9141 "Page.c"
 }
 
 
 static void checkerboard_page_real_on_item_activated (CheckerboardPage* self, CheckerboardItem* item, CheckerboardPageActivator activator, CheckerboardPageKeyboardModifiers* modifiers) {
-#line 1273 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1345 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item));
-#line 1273 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1345 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (modifiers != NULL);
-#line 8742 "Page.c"
+#line 9150 "Page.c"
 }
 
 
 void checkerboard_page_on_item_activated (CheckerboardPage* self, CheckerboardItem* item, CheckerboardPageActivator activator, CheckerboardPageKeyboardModifiers* modifiers) {
-#line 1273 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1345 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1273 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1345 "/home/jens/Source/shotwell/src/Page.vala"
 	CHECKERBOARD_PAGE_GET_CLASS (self)->on_item_activated (self, item, activator, modifiers);
-#line 8751 "Page.c"
+#line 9159 "Page.c"
 }
 
 
@@ -8755,61 +9163,61 @@ CheckerboardLayout* checkerboard_page_get_checkerboard_layout (CheckerboardPage*
 	CheckerboardLayout* result = NULL;
 	CheckerboardLayout* _tmp0_ = NULL;
 	CheckerboardLayout* _tmp1_ = NULL;
-#line 1277 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 1278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8769 "Page.c"
+#line 9177 "Page.c"
 }
 
 
 static SearchViewFilter* checkerboard_page_real_get_search_view_filter (CheckerboardPage* self) {
-#line 1282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1354 "/home/jens/Source/shotwell/src/Page.vala"
 	g_critical ("Type `%s' does not implement abstract method `checkerboard_page_get_search_view_filter'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1354 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 8778 "Page.c"
+#line 9186 "Page.c"
 }
 
 
 SearchViewFilter* checkerboard_page_get_search_view_filter (CheckerboardPage* self) {
-#line 1282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1354 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1354 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->get_search_view_filter (self);
-#line 8787 "Page.c"
+#line 9195 "Page.c"
 }
 
 
 static CoreViewTracker* checkerboard_page_real_get_view_tracker (CheckerboardPage* self) {
 	CoreViewTracker* result = NULL;
-#line 1285 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1357 "/home/jens/Source/shotwell/src/Page.vala"
 	result = NULL;
-#line 1285 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1357 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 8797 "Page.c"
+#line 9205 "Page.c"
 }
 
 
 CoreViewTracker* checkerboard_page_get_view_tracker (CheckerboardPage* self) {
-#line 1284 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1356 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1284 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1356 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->get_view_tracker (self);
-#line 8806 "Page.c"
+#line 9214 "Page.c"
 }
 
 
 static void _checkerboard_page_on_view_filter_refresh_view_filter_refresh (ViewFilter* _sender, gpointer self) {
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_view_filter_refresh ((CheckerboardPage*) self);
-#line 8813 "Page.c"
+#line 9221 "Page.c"
 }
 
 
@@ -8821,33 +9229,33 @@ static void checkerboard_page_real_switching_from (Page* base) {
 	guint _tmp3_ = 0U;
 	ViewCollection* _tmp4_ = NULL;
 	ViewCollection* _tmp5_ = NULL;
-#line 1288 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1360 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1289 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1361 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_in_view (_tmp0_, FALSE);
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = checkerboard_page_get_search_view_filter (self);
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_parse_name ("refresh", TYPE_VIEW_FILTER, &_tmp3_, NULL, FALSE);
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_VIEW_FILTER, ViewFilter), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _checkerboard_page_on_view_filter_refresh_view_filter_refresh, self);
-#line 1290 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
 	_view_filter_unref0 (_tmp2_);
-#line 1293 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1293 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 1293 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
 	view_collection_unselect_all (_tmp5_);
-#line 1293 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp5_);
-#line 1295 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1367 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (checkerboard_page_parent_class)->switching_from (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 8851 "Page.c"
+#line 9259 "Page.c"
 }
 
 
@@ -8860,35 +9268,35 @@ static void checkerboard_page_real_switched_to (Page* base) {
 	ViewCollection* _tmp4_ = NULL;
 	gint _tmp5_ = 0;
 	gboolean _tmp6_ = FALSE;
-#line 1298 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1370 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1299 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1371 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1299 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1371 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_in_view (_tmp0_, TRUE);
-#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1372 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = checkerboard_page_get_search_view_filter (self);
-#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1372 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1372 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_VIEW_FILTER, ViewFilter), "refresh", (GCallback) _checkerboard_page_on_view_filter_refresh_view_filter_refresh, self, 0);
-#line 1300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1372 "/home/jens/Source/shotwell/src/Page.vala"
 	_view_filter_unref0 (_tmp2_);
-#line 1301 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1373 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_on_view_filter_refresh (self);
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = view_collection_get_selected_count (_tmp4_);
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_ > 0;
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp4_);
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_) {
-#line 8892 "Page.c"
+#line 9300 "Page.c"
 		CheckerboardItem* item = NULL;
 		ViewCollection* _tmp7_ = NULL;
 		ViewCollection* _tmp8_ = NULL;
@@ -8903,37 +9311,37 @@ static void checkerboard_page_real_switched_to (Page* base) {
 		GdkRectangle _tmp16_ = {0};
 		gint _tmp17_ = 0;
 		AdjustmentRelation _tmp18_ = 0;
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_;
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = view_collection_get_selected_at (_tmp8_, 0);
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem);
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp8_);
-#line 1304 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1376 "/home/jens/Source/shotwell/src/Page.vala"
 		item = _tmp10_;
-#line 1307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = gtk_scrolled_window_get_vadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = _g_object_ref0 (_tmp11_);
-#line 1307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
 		vadj = _tmp12_;
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = vadj;
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = item;
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = _tmp15_->allocation;
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = _tmp16_.y;
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = get_adjustment_relation (_tmp14_, _tmp17_);
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp18_ == ADJUSTMENT_RELATION_IN_RANGE) {
-#line 8937 "Page.c"
+#line 9345 "Page.c"
 			GtkAdjustment* _tmp19_ = NULL;
 			CheckerboardItem* _tmp20_ = NULL;
 			GdkRectangle _tmp21_ = {0};
@@ -8942,33 +9350,33 @@ static void checkerboard_page_real_switched_to (Page* base) {
 			GdkRectangle _tmp24_ = {0};
 			gint _tmp25_ = 0;
 			AdjustmentRelation _tmp26_ = 0;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = vadj;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = item;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp21_ = _tmp20_->allocation;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp22_ = _tmp21_.y;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp23_ = item;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp24_ = _tmp23_->allocation;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp25_ = _tmp24_.height;
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = get_adjustment_relation (_tmp19_, _tmp22_ + _tmp25_);
-#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1381 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = _tmp26_ == ADJUSTMENT_RELATION_IN_RANGE;
-#line 8964 "Page.c"
+#line 9372 "Page.c"
 		} else {
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = FALSE;
-#line 8968 "Page.c"
+#line 9376 "Page.c"
 		}
-#line 1308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp13_) {
-#line 8972 "Page.c"
+#line 9380 "Page.c"
 			gint top = 0;
 			CheckerboardItem* _tmp27_ = NULL;
 			GdkRectangle _tmp28_ = {0};
@@ -8977,38 +9385,38 @@ static void checkerboard_page_real_switched_to (Page* base) {
 			gdouble _tmp31_ = 0.0;
 			GtkAdjustment* _tmp45_ = NULL;
 			gint _tmp46_ = 0;
-#line 1312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1384 "/home/jens/Source/shotwell/src/Page.vala"
 			top = 0;
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp27_ = item;
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp28_ = _tmp27_->allocation;
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp29_ = _tmp28_.y;
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp30_ = vadj;
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp31_ = gtk_adjustment_get_value (_tmp30_);
-#line 1313 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
 			if (((gdouble) _tmp29_) < _tmp31_) {
-#line 8995 "Page.c"
+#line 9403 "Page.c"
 				CheckerboardItem* _tmp32_ = NULL;
 				GdkRectangle _tmp33_ = {0};
 				gint _tmp34_ = 0;
 				gint _tmp35_ = 0;
-#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp32_ = item;
-#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp33_ = _tmp32_->allocation;
-#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp34_ = _tmp33_.y;
-#line 1314 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
 				top = _tmp34_;
-#line 1315 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1387 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp35_ = top;
-#line 1315 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1387 "/home/jens/Source/shotwell/src/Page.vala"
 				top = _tmp35_ - (CHECKERBOARD_LAYOUT_ROW_GUTTER_PADDING / 2);
-#line 9012 "Page.c"
+#line 9420 "Page.c"
 			} else {
 				CheckerboardItem* _tmp36_ = NULL;
 				GdkRectangle _tmp37_ = {0};
@@ -9019,91 +9427,91 @@ static void checkerboard_page_real_switched_to (Page* base) {
 				GtkAdjustment* _tmp42_ = NULL;
 				gdouble _tmp43_ = 0.0;
 				gint _tmp44_ = 0;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp36_ = item;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp37_ = _tmp36_->allocation;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp38_ = _tmp37_.y;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp39_ = item;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp40_ = _tmp39_->allocation;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp41_ = _tmp40_.height;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp42_ = vadj;
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp43_ = gtk_adjustment_get_page_size (_tmp42_);
-#line 1317 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
 				top = (_tmp38_ + _tmp41_) - ((gint) _tmp43_);
-#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1390 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp44_ = top;
-#line 1318 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1390 "/home/jens/Source/shotwell/src/Page.vala"
 				top = _tmp44_ + (CHECKERBOARD_LAYOUT_ROW_GUTTER_PADDING / 2);
-#line 9045 "Page.c"
+#line 9453 "Page.c"
 			}
-#line 1321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp45_ = vadj;
-#line 1321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp46_ = top;
-#line 1321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1393 "/home/jens/Source/shotwell/src/Page.vala"
 			gtk_adjustment_set_value (_tmp45_, (gdouble) _tmp46_);
-#line 9053 "Page.c"
+#line 9461 "Page.c"
 		}
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (vadj);
-#line 1303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (item);
-#line 9059 "Page.c"
+#line 9467 "Page.c"
 	}
-#line 1326 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1398 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (checkerboard_page_parent_class)->switched_to (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 9063 "Page.c"
+#line 9471 "Page.c"
 }
 
 
 static void checkerboard_page_on_view_filter_refresh (CheckerboardPage* self) {
-#line 1329 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1401 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1330 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1402 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_update_view_filter_message (self);
-#line 9072 "Page.c"
+#line 9480 "Page.c"
 }
 
 
 static void checkerboard_page_on_contents_altered (CheckerboardPage* self, GeeIterable* added, GeeIterable* removed) {
-#line 1333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1405 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1405 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail ((added == NULL) || GEE_IS_ITERABLE (added));
-#line 1333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1405 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail ((removed == NULL) || GEE_IS_ITERABLE (removed));
-#line 1335 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1407 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_update_view_filter_message (self);
-#line 9085 "Page.c"
+#line 9493 "Page.c"
 }
 
 
 static void checkerboard_page_on_items_state_changed (CheckerboardPage* self, GeeIterable* changed) {
-#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1410 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1338 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1410 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GEE_IS_ITERABLE (changed));
-#line 1339 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1411 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_update_view_filter_message (self);
-#line 9096 "Page.c"
+#line 9504 "Page.c"
 }
 
 
 static void checkerboard_page_on_items_visibility_changed (CheckerboardPage* self, GeeCollection* changed) {
-#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1414 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1342 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1414 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (changed));
-#line 1343 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1415 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_update_view_filter_message (self);
-#line 9107 "Page.c"
+#line 9515 "Page.c"
 }
 
 
@@ -9113,87 +9521,87 @@ static void checkerboard_page_update_view_filter_message (CheckerboardPage* self
 	ViewCollection* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
 	gboolean _tmp4_ = FALSE;
-#line 1346 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1418 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = view_collection_are_items_filtered_out (_tmp2_);
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp2_);
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 9131 "Page.c"
+#line 9539 "Page.c"
 		ViewCollection* _tmp5_ = NULL;
 		ViewCollection* _tmp6_ = NULL;
 		gint _tmp7_ = 0;
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = _tmp5_;
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp7_ == 0;
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp6_);
-#line 9145 "Page.c"
+#line 9553 "Page.c"
 	} else {
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = FALSE;
-#line 9149 "Page.c"
+#line 9557 "Page.c"
 	}
-#line 1347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1419 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 9153 "Page.c"
+#line 9561 "Page.c"
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
-#line 1348 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = checkerboard_page_get_filter_no_match_message (self);
-#line 1348 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_;
-#line 1348 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_set_page_message (self, _tmp9_);
-#line 1348 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1420 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (_tmp9_);
-#line 9164 "Page.c"
+#line 9572 "Page.c"
 	} else {
 		ViewCollection* _tmp10_ = NULL;
 		ViewCollection* _tmp11_ = NULL;
 		gint _tmp12_ = 0;
 		gboolean _tmp13_ = FALSE;
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = _tmp10_;
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = _tmp12_ == 0;
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp11_);
-#line 1349 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp13_) {
-#line 9182 "Page.c"
+#line 9590 "Page.c"
 			gchar* _tmp14_ = NULL;
 			gchar* _tmp15_ = NULL;
-#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1422 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = checkerboard_page_get_view_empty_message (self);
-#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1422 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = _tmp14_;
-#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1422 "/home/jens/Source/shotwell/src/Page.vala"
 			checkerboard_page_set_page_message (self, _tmp15_);
-#line 1350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1422 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_free0 (_tmp15_);
-#line 9193 "Page.c"
+#line 9601 "Page.c"
 		} else {
-#line 1352 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1424 "/home/jens/Source/shotwell/src/Page.vala"
 			checkerboard_page_unset_page_message (self);
-#line 9197 "Page.c"
+#line 9605 "Page.c"
 		}
 	}
 }
@@ -9203,27 +9611,27 @@ void checkerboard_page_set_page_message (CheckerboardPage* self, const gchar* me
 	CheckerboardLayout* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 1356 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1356 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1428 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (message != NULL);
-#line 1357 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1429 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1357 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1429 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = message;
-#line 1357 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1429 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_message (_tmp0_, _tmp1_);
-#line 1358 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1430 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_is_in_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1358 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1430 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_) {
-#line 9221 "Page.c"
+#line 9629 "Page.c"
 		CheckerboardLayout* _tmp3_ = NULL;
-#line 1359 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1431 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->priv->layout;
-#line 1359 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1431 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_widget_queue_draw (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 9227 "Page.c"
+#line 9635 "Page.c"
 	}
 }
 
@@ -9231,23 +9639,23 @@ void checkerboard_page_set_page_message (CheckerboardPage* self, const gchar* me
 void checkerboard_page_unset_page_message (CheckerboardPage* self) {
 	CheckerboardLayout* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1362 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1363 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1435 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1363 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1435 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_unset_message (_tmp0_);
-#line 1364 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1436 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_is_in_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1364 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1436 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 9245 "Page.c"
+#line 9653 "Page.c"
 		CheckerboardLayout* _tmp2_ = NULL;
-#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1437 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->layout;
-#line 1365 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1437 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_widget_queue_draw (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 9251 "Page.c"
+#line 9659 "Page.c"
 	}
 }
 
@@ -9257,21 +9665,21 @@ static void checkerboard_page_real_set_page_name (Page* base, const gchar* name)
 	const gchar* _tmp0_ = NULL;
 	CheckerboardLayout* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 1368 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1440 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1368 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1440 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (name != NULL);
-#line 1369 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1441 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = name;
-#line 1369 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1441 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (checkerboard_page_parent_class)->set_page_name (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp0_);
-#line 1371 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->layout;
-#line 1371 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = name;
-#line 1371 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_name (_tmp1_, _tmp2_);
-#line 9275 "Page.c"
+#line 9683 "Page.c"
 }
 
 
@@ -9281,43 +9689,43 @@ CheckerboardItem* checkerboard_page_get_item_at_pixel (CheckerboardPage* self, g
 	gdouble _tmp1_ = 0.0;
 	gdouble _tmp2_ = 0.0;
 	CheckerboardItem* _tmp3_ = NULL;
-#line 1374 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1446 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), NULL);
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = x;
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = y;
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = checkerboard_layout_get_item_at_pixel (_tmp0_, _tmp1_, _tmp2_);
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp3_;
-#line 1375 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 9299 "Page.c"
+#line 9707 "Page.c"
 }
 
 
 static void checkerboard_page_on_items_hidden (CheckerboardPage* self, GeeIterable* hidden) {
-#line 1378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1378 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GEE_IS_ITERABLE (hidden));
-#line 9308 "Page.c"
+#line 9716 "Page.c"
 	{
 		GeeIterator* _view_it = NULL;
 		GeeIterable* _tmp0_ = NULL;
 		GeeIterator* _tmp1_ = NULL;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = hidden;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = gee_iterable_iterator (_tmp0_);
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 		_view_it = _tmp1_;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 		while (TRUE) {
-#line 9321 "Page.c"
+#line 9729 "Page.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			DataView* view = NULL;
@@ -9332,73 +9740,73 @@ static void checkerboard_page_on_items_hidden (CheckerboardPage* self, GeeIterab
 			CheckerboardItem* _tmp11_ = NULL;
 			CheckerboardItem* _tmp12_ = NULL;
 			CheckerboardItem* _tmp13_ = NULL;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp2_ = _view_it;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp3_ = gee_iterator_next (_tmp2_);
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!_tmp3_) {
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9344 "Page.c"
+#line 9752 "Page.c"
 			}
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp4_ = _view_it;
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = gee_iterator_get (_tmp4_);
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			view = (DataView*) _tmp5_;
-#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1452 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp6_ = view;
-#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1452 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem));
-#line 1380 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1452 "/home/jens/Source/shotwell/src/Page.vala"
 			item = _tmp7_;
-#line 1382 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = self->anchor;
-#line 1382 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = item;
-#line 1382 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1454 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp8_ == _tmp9_) {
-#line 1383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->anchor);
-#line 1383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1455 "/home/jens/Source/shotwell/src/Page.vala"
 				self->anchor = NULL;
-#line 9368 "Page.c"
+#line 9776 "Page.c"
 			}
-#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = self->cursor;
-#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp11_ = item;
-#line 1385 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1457 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp10_ == _tmp11_) {
-#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1458 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->cursor);
-#line 1386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1458 "/home/jens/Source/shotwell/src/Page.vala"
 				self->cursor = NULL;
-#line 9380 "Page.c"
+#line 9788 "Page.c"
 			}
-#line 1388 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1460 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = self->priv->highlighted;
-#line 1388 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1460 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = item;
-#line 1388 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1460 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp12_ == _tmp13_) {
-#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->priv->highlighted);
-#line 1389 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1461 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->highlighted = NULL;
-#line 9392 "Page.c"
+#line 9800 "Page.c"
 			}
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (item);
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (view);
-#line 9398 "Page.c"
+#line 9806 "Page.c"
 		}
-#line 1379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_view_it);
-#line 9402 "Page.c"
+#line 9810 "Page.c"
 	}
 }
 
@@ -9415,138 +9823,138 @@ static gboolean checkerboard_page_real_key_press_event (GtkWidget* base, GdkEven
 	const gchar* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
 	GQuark _tmp7_ = 0U;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label0 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label1 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label2 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label3 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label4 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label5 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label6 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label7 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label8 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label9 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label10 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label11 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label12 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label13 = 0;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp6_label14 = 0;
-#line 9449 "Page.c"
+#line 9857 "Page.c"
 	gboolean _tmp45_ = FALSE;
 	gboolean _tmp46_ = FALSE;
-#line 1393 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1393 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1465 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1394 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1466 "/home/jens/Source/shotwell/src/Page.vala"
 	handled = TRUE;
-#line 1397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1469 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 1397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1469 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->state;
-#line 1397 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1469 "/home/jens/Source/shotwell/src/Page.vala"
 	state = (guint) (_tmp1_ & GDK_SHIFT_MASK);
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = event;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_->keyval;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = gdk_keyval_name (_tmp3_);
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_;
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = (NULL == _tmp5_) ? 0 : g_quark_from_string (_tmp5_);
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 	if ((_tmp7_ == ((0 != _tmp6_label0) ? _tmp6_label0 : (_tmp6_label0 = g_quark_from_static_string ("Up")))) || (_tmp7_ == ((0 != _tmp6_label1) ? _tmp6_label1 : (_tmp6_label1 = g_quark_from_static_string ("KP_Up"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9478 "Page.c"
+#line 9886 "Page.c"
 			default:
 			{
 				guint _tmp8_ = 0U;
-#line 1402 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1474 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_move_cursor (self, COMPASS_POINT_NORTH);
-#line 1403 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp8_ = state;
-#line 1403 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp8_);
-#line 1404 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1476 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9490 "Page.c"
+#line 9898 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label2) ? _tmp6_label2 : (_tmp6_label2 = g_quark_from_static_string ("Down")))) || (_tmp7_ == ((0 != _tmp6_label3) ? _tmp6_label3 : (_tmp6_label3 = g_quark_from_static_string ("KP_Down"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9496 "Page.c"
+#line 9904 "Page.c"
 			default:
 			{
 				guint _tmp9_ = 0U;
-#line 1408 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1480 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_move_cursor (self, COMPASS_POINT_SOUTH);
-#line 1409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1481 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp9_ = state;
-#line 1409 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1481 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp9_);
-#line 1410 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9508 "Page.c"
+#line 9916 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label4) ? _tmp6_label4 : (_tmp6_label4 = g_quark_from_static_string ("Left")))) || (_tmp7_ == ((0 != _tmp6_label5) ? _tmp6_label5 : (_tmp6_label5 = g_quark_from_static_string ("KP_Left"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9514 "Page.c"
+#line 9922 "Page.c"
 			default:
 			{
 				guint _tmp10_ = 0U;
-#line 1414 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_move_cursor (self, COMPASS_POINT_WEST);
-#line 1415 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp10_ = state;
-#line 1415 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp10_);
-#line 1416 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1488 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9526 "Page.c"
+#line 9934 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label6) ? _tmp6_label6 : (_tmp6_label6 = g_quark_from_static_string ("Right")))) || (_tmp7_ == ((0 != _tmp6_label7) ? _tmp6_label7 : (_tmp6_label7 = g_quark_from_static_string ("KP_Right"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9532 "Page.c"
+#line 9940 "Page.c"
 			default:
 			{
 				guint _tmp11_ = 0U;
-#line 1420 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1492 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_move_cursor (self, COMPASS_POINT_EAST);
-#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp11_ = state;
-#line 1421 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1493 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp11_);
-#line 1422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1494 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9544 "Page.c"
+#line 9952 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label8) ? _tmp6_label8 : (_tmp6_label8 = g_quark_from_static_string ("Home")))) || (_tmp7_ == ((0 != _tmp6_label9) ? _tmp6_label9 : (_tmp6_label9 = g_quark_from_static_string ("KP_Home"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9550 "Page.c"
+#line 9958 "Page.c"
 			default:
 			{
 				CheckerboardItem* first = NULL;
@@ -9556,45 +9964,45 @@ static gboolean checkerboard_page_real_key_press_event (GtkWidget* base, GdkEven
 				CheckerboardItem* _tmp15_ = NULL;
 				CheckerboardItem* _tmp16_ = NULL;
 				guint _tmp18_ = 0U;
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp12_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp13_ = _tmp12_;
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp14_ = view_collection_get_first (_tmp13_);
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp15_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem);
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp13_);
-#line 1426 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
 				first = _tmp15_;
-#line 1427 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp16_ = first;
-#line 1427 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp16_ != NULL) {
-#line 9576 "Page.c"
+#line 9984 "Page.c"
 					CheckerboardItem* _tmp17_ = NULL;
-#line 1428 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1500 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp17_ = first;
-#line 1428 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1500 "/home/jens/Source/shotwell/src/Page.vala"
 					checkerboard_page_cursor_to_item (self, _tmp17_);
-#line 9582 "Page.c"
+#line 9990 "Page.c"
 				}
-#line 1429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1501 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp18_ = state;
-#line 1429 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1501 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp18_);
-#line 1430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1502 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (first);
-#line 1430 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1502 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9592 "Page.c"
+#line 10000 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label10) ? _tmp6_label10 : (_tmp6_label10 = g_quark_from_static_string ("End")))) || (_tmp7_ == ((0 != _tmp6_label11) ? _tmp6_label11 : (_tmp6_label11 = g_quark_from_static_string ("KP_End"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9598 "Page.c"
+#line 10006 "Page.c"
 			default:
 			{
 				CheckerboardItem* last = NULL;
@@ -9604,100 +10012,100 @@ static gboolean checkerboard_page_real_key_press_event (GtkWidget* base, GdkEven
 				CheckerboardItem* _tmp22_ = NULL;
 				CheckerboardItem* _tmp23_ = NULL;
 				guint _tmp25_ = 0U;
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp19_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp20_ = _tmp19_;
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp21_ = view_collection_get_last (_tmp20_);
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem);
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp20_);
-#line 1434 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1506 "/home/jens/Source/shotwell/src/Page.vala"
 				last = _tmp22_;
-#line 1435 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1507 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp23_ = last;
-#line 1435 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1507 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp23_ != NULL) {
-#line 9624 "Page.c"
+#line 10032 "Page.c"
 					CheckerboardItem* _tmp24_ = NULL;
-#line 1436 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1508 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp24_ = last;
-#line 1436 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1508 "/home/jens/Source/shotwell/src/Page.vala"
 					checkerboard_page_cursor_to_item (self, _tmp24_);
-#line 9630 "Page.c"
+#line 10038 "Page.c"
 				}
-#line 1437 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1509 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25_ = state;
-#line 1437 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1509 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_anchor_to_cursor (self, _tmp25_);
-#line 1438 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1510 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (last);
-#line 1438 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1510 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9640 "Page.c"
+#line 10048 "Page.c"
 			}
 		}
 	} else if ((_tmp7_ == ((0 != _tmp6_label12) ? _tmp6_label12 : (_tmp6_label12 = g_quark_from_static_string ("Return")))) || (_tmp7_ == ((0 != _tmp6_label13) ? _tmp6_label13 : (_tmp6_label13 = g_quark_from_static_string ("KP_Enter"))))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9646 "Page.c"
+#line 10054 "Page.c"
 			default:
 			{
 				ViewCollection* _tmp26_ = NULL;
 				ViewCollection* _tmp27_ = NULL;
 				gint _tmp28_ = 0;
 				gboolean _tmp29_ = FALSE;
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp27_ = _tmp26_;
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp28_ = view_collection_get_selected_count (_tmp27_);
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp29_ = _tmp28_ == 1;
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp27_);
-#line 1442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp29_) {
-#line 9665 "Page.c"
+#line 10073 "Page.c"
 					ViewCollection* _tmp30_ = NULL;
 					ViewCollection* _tmp31_ = NULL;
 					DataView* _tmp32_ = NULL;
 					CheckerboardItem* _tmp33_ = NULL;
 					CheckerboardPageKeyboardModifiers _tmp34_ = {0};
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp30_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp31_ = _tmp30_;
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp32_ = view_collection_get_selected_at (_tmp31_, 0);
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp33_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem);
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					checkerboard_page_keyboard_modifiers_init (&_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					checkerboard_page_on_item_activated (self, _tmp33_, CHECKERBOARD_PAGE_ACTIVATOR_KEYBOARD, &_tmp34_);
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (_tmp33_);
-#line 1443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1515 "/home/jens/Source/shotwell/src/Page.vala"
 					_data_collection_unref0 (_tmp31_);
-#line 9687 "Page.c"
+#line 10095 "Page.c"
 				} else {
-#line 1446 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1518 "/home/jens/Source/shotwell/src/Page.vala"
 					handled = FALSE;
-#line 9691 "Page.c"
+#line 10099 "Page.c"
 				}
-#line 1447 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1519 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9695 "Page.c"
+#line 10103 "Page.c"
 			}
 		}
 	} else if (_tmp7_ == ((0 != _tmp6_label14) ? _tmp6_label14 : (_tmp6_label14 = g_quark_from_static_string ("space")))) {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9701 "Page.c"
+#line 10109 "Page.c"
 			default:
 			{
 				Marker* marker = NULL;
@@ -9711,89 +10119,89 @@ static gboolean checkerboard_page_real_key_press_event (GtkWidget* base, GdkEven
 				ViewCollection* _tmp42_ = NULL;
 				ViewCollection* _tmp43_ = NULL;
 				Marker* _tmp44_ = NULL;
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp35_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp36_ = _tmp35_;
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp37_ = self->priv->layout;
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp38_ = checkerboard_layout_get_cursor (_tmp37_);
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp39_ = _tmp38_;
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp40_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, TYPE_DATA_OBJECT, DataObject));
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp41_ = _tmp40_;
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (_tmp39_);
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp36_);
-#line 1450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1522 "/home/jens/Source/shotwell/src/Page.vala"
 				marker = _tmp41_;
-#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1523 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp42_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1523 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp43_ = _tmp42_;
-#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1523 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp44_ = marker;
-#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1523 "/home/jens/Source/shotwell/src/Page.vala"
 				view_collection_toggle_marked (_tmp43_, _tmp44_);
-#line 1451 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1523 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp43_);
-#line 1452 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1524 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (marker);
-#line 1452 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1524 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9749 "Page.c"
+#line 10157 "Page.c"
 			}
 		}
 	} else {
-#line 1399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 9755 "Page.c"
+#line 10163 "Page.c"
 			default:
 			{
-#line 1455 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1527 "/home/jens/Source/shotwell/src/Page.vala"
 				handled = FALSE;
-#line 1456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9762 "Page.c"
+#line 10170 "Page.c"
 			}
 		}
 	}
-#line 1459 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp45_ = handled;
-#line 1459 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp45_) {
-#line 1460 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1532 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1460 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1532 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 9774 "Page.c"
+#line 10182 "Page.c"
 	}
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 	if (GTK_WIDGET_CLASS (checkerboard_page_parent_class)->key_press_event != NULL) {
-#line 9778 "Page.c"
+#line 10186 "Page.c"
 		GdkEventKey* _tmp47_ = NULL;
 		gboolean _tmp48_ = FALSE;
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp47_ = event;
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp48_ = GTK_WIDGET_CLASS (checkerboard_page_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), gtk_widget_get_type (), GtkWidget), _tmp47_);
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp46_ = _tmp48_;
-#line 9787 "Page.c"
+#line 10195 "Page.c"
 	} else {
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp46_ = TRUE;
-#line 9791 "Page.c"
+#line 10199 "Page.c"
 	}
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp46_;
-#line 1462 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1534 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 9797 "Page.c"
+#line 10205 "Page.c"
 }
 
 
@@ -9817,62 +10225,62 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 	ViewCollection* _tmp107_ = NULL;
 	gint _tmp108_ = 0;
 	gboolean _tmp109_ = FALSE;
-#line 1465 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1537 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1465 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1537 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = event;
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_->type;
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ != GDK_BUTTON_PRESS) {
-#line 9831 "Page.c"
+#line 10239 "Page.c"
 		GdkEventButton* _tmp3_ = NULL;
 		GdkEventType _tmp4_ = 0;
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = event;
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _tmp3_->type;
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp4_ != GDK_2BUTTON_PRESS;
-#line 9840 "Page.c"
+#line 10248 "Page.c"
 	} else {
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = FALSE;
-#line 9844 "Page.c"
+#line 10252 "Page.c"
 	}
-#line 1467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 1468 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1540 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1468 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1540 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 9852 "Page.c"
+#line 10260 "Page.c"
 	}
-#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1543 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = event;
-#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1543 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_->state;
-#line 1471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1543 "/home/jens/Source/shotwell/src/Page.vala"
 	state = (guint) (_tmp6_ & (GDK_CONTROL_MASK | GDK_SHIFT_MASK));
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = event;
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _tmp7_->x;
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = event;
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = _tmp9_->y;
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = checkerboard_page_get_item_at_pixel (self, _tmp8_, _tmp10_);
-#line 1475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
 	item = _tmp11_;
-#line 1476 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = item;
-#line 1476 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp12_ != NULL) {
-#line 9876 "Page.c"
+#line 10284 "Page.c"
 		CheckerboardLayout* _tmp13_ = NULL;
 		CheckerboardItem* _tmp14_ = NULL;
 		GdkEventButton* _tmp15_ = NULL;
@@ -9885,41 +10293,41 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 		guint _tmp22_ = 0U;
 		CheckerboardLayout* _tmp80_ = NULL;
 		CheckerboardItem* _tmp81_ = NULL;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = self->priv->layout;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = item;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = event;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = _tmp15_->x;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = event;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = _tmp17_->y;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = event;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = _tmp19_->state;
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = checkerboard_layout_handle_left_click (_tmp13_, _tmp14_, _tmp16_, _tmp18_, _tmp20_);
-#line 1479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp21_) {
-#line 1480 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Page.vala"
 			result = TRUE;
-#line 1480 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (item);
-#line 1480 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1552 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 9915 "Page.c"
+#line 10323 "Page.c"
 		}
-#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1554 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = state;
-#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1554 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (_tmp22_) {
-#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1554 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_CONTROL_MASK:
-#line 9923 "Page.c"
+#line 10331 "Page.c"
 			{
 				Marker* marker = NULL;
 				ViewCollection* _tmp23_ = NULL;
@@ -9932,68 +10340,68 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 				Marker* _tmp30_ = NULL;
 				CheckerboardItem* _tmp31_ = NULL;
 				gboolean _tmp32_ = FALSE;
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp23_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24_ = _tmp23_;
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25_ = item;
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, TYPE_DATA_OBJECT, DataObject));
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp27_ = _tmp26_;
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp24_);
-#line 1486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1558 "/home/jens/Source/shotwell/src/Page.vala"
 				marker = _tmp27_;
-#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp28_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp29_ = _tmp28_;
-#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp30_ = marker;
-#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
 				view_collection_toggle_marked (_tmp29_, _tmp30_);
-#line 1487 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp29_);
-#line 1489 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1561 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp31_ = item;
-#line 1489 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1561 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp32_ = data_view_is_selected (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_DATA_VIEW, DataView));
-#line 1489 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1561 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp32_) {
-#line 9966 "Page.c"
+#line 10374 "Page.c"
 					CheckerboardItem* _tmp33_ = NULL;
 					CheckerboardItem* _tmp34_ = NULL;
 					CheckerboardItem* _tmp35_ = NULL;
 					CheckerboardItem* _tmp36_ = NULL;
-#line 1490 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp33_ = item;
-#line 1490 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp34_ = _g_object_ref0 (_tmp33_);
-#line 1490 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (self->anchor);
-#line 1490 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
 					self->anchor = _tmp34_;
-#line 1491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp35_ = item;
-#line 1491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp36_ = _g_object_ref0 (_tmp35_);
-#line 1491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (self->cursor);
-#line 1491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
 					self->cursor = _tmp36_;
-#line 9987 "Page.c"
+#line 10395 "Page.c"
 				}
-#line 1493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1565 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (marker);
-#line 1493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1565 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 9993 "Page.c"
+#line 10401 "Page.c"
 			}
-#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1554 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_SHIFT_MASK:
-#line 9997 "Page.c"
+#line 10405 "Page.c"
 			{
 				ViewCollection* _tmp37_ = NULL;
 				ViewCollection* _tmp38_ = NULL;
@@ -10002,92 +10410,92 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 				CheckerboardItem* _tmp43_ = NULL;
 				CheckerboardItem* _tmp44_ = NULL;
 				CheckerboardItem* _tmp45_ = NULL;
-#line 1496 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp37_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1496 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp38_ = _tmp37_;
-#line 1496 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
 				view_collection_unselect_all (_tmp38_);
-#line 1496 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp38_);
-#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1570 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp39_ = self->anchor;
-#line 1498 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1570 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp39_ == NULL) {
-#line 10018 "Page.c"
+#line 10426 "Page.c"
 					CheckerboardItem* _tmp40_ = NULL;
 					CheckerboardItem* _tmp41_ = NULL;
-#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1571 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp40_ = item;
-#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1571 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp41_ = _g_object_ref0 (_tmp40_);
-#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1571 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (self->anchor);
-#line 1499 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1571 "/home/jens/Source/shotwell/src/Page.vala"
 					self->anchor = _tmp41_;
-#line 10029 "Page.c"
+#line 10437 "Page.c"
 				}
-#line 1501 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp42_ = self->anchor;
-#line 1501 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp43_ = item;
-#line 1501 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1573 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_between_items (self, _tmp42_, _tmp43_);
-#line 1503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp44_ = item;
-#line 1503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp45_ = _g_object_ref0 (_tmp44_);
-#line 1503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->cursor);
-#line 1503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
 				self->cursor = _tmp45_;
-#line 1504 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1576 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10047 "Page.c"
+#line 10455 "Page.c"
 			}
-#line 1482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1554 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_CONTROL_MASK | GDK_SHIFT_MASK:
-#line 10051 "Page.c"
+#line 10459 "Page.c"
 			{
 				CheckerboardItem* _tmp46_ = NULL;
 				CheckerboardItem* _tmp49_ = NULL;
 				CheckerboardItem* _tmp50_ = NULL;
 				CheckerboardItem* _tmp51_ = NULL;
 				CheckerboardItem* _tmp52_ = NULL;
-#line 1511 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1583 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp46_ = self->anchor;
-#line 1511 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1583 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp46_ == NULL) {
-#line 10062 "Page.c"
+#line 10470 "Page.c"
 					CheckerboardItem* _tmp47_ = NULL;
 					CheckerboardItem* _tmp48_ = NULL;
-#line 1512 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1584 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp47_ = item;
-#line 1512 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1584 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp48_ = _g_object_ref0 (_tmp47_);
-#line 1512 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1584 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (self->anchor);
-#line 1512 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1584 "/home/jens/Source/shotwell/src/Page.vala"
 					self->anchor = _tmp48_;
-#line 10073 "Page.c"
+#line 10481 "Page.c"
 				}
-#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1586 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp49_ = self->anchor;
-#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1586 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp50_ = item;
-#line 1514 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1586 "/home/jens/Source/shotwell/src/Page.vala"
 				checkerboard_page_select_between_items (self, _tmp49_, _tmp50_);
-#line 1516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp51_ = item;
-#line 1516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp52_ = _g_object_ref0 (_tmp51_);
-#line 1516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->cursor);
-#line 1516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
 				self->cursor = _tmp52_;
-#line 1517 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1589 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10091 "Page.c"
+#line 10499 "Page.c"
 			}
 			default:
 			{
@@ -10097,34 +10505,34 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 				CheckerboardItem* _tmp77_ = NULL;
 				CheckerboardItem* _tmp78_ = NULL;
 				CheckerboardItem* _tmp79_ = NULL;
-#line 1520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1592 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp53_ = event;
-#line 1520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1592 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp54_ = _tmp53_->type;
-#line 1520 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1592 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp54_ == GDK_2BUTTON_PRESS) {
-#line 10107 "Page.c"
+#line 10515 "Page.c"
 					CheckerboardItem* _tmp55_ = NULL;
 					CheckerboardItem* _tmp56_ = NULL;
-#line 1521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1593 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp55_ = item;
-#line 1521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1593 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp56_ = _g_object_ref0 (_tmp55_);
-#line 1521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1593 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (self->priv->activated_item);
-#line 1521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1593 "/home/jens/Source/shotwell/src/Page.vala"
 					self->priv->activated_item = _tmp56_;
-#line 10118 "Page.c"
+#line 10526 "Page.c"
 				} else {
 					CheckerboardItem* _tmp57_ = NULL;
 					gboolean _tmp58_ = FALSE;
-#line 1527 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1599 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp57_ = item;
-#line 1527 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1599 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp58_ = data_view_is_selected (G_TYPE_CHECK_INSTANCE_CAST (_tmp57_, TYPE_DATA_VIEW, DataView));
-#line 1527 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1599 "/home/jens/Source/shotwell/src/Page.vala"
 					if (!_tmp58_) {
-#line 10128 "Page.c"
+#line 10536 "Page.c"
 						Marker* all = NULL;
 						ViewCollection* _tmp59_ = NULL;
 						ViewCollection* _tmp60_ = NULL;
@@ -10143,91 +10551,91 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 						CheckerboardItem* _tmp73_ = NULL;
 						Marker* _tmp74_ = NULL;
 						Marker* _tmp75_ = NULL;
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp59_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp60_ = _tmp59_;
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp61_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp62_ = _tmp61_;
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						_data_collection_unref0 (_tmp60_);
-#line 1528 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
 						all = _tmp62_;
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp63_ = all;
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp64_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp65_ = _tmp64_;
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp66_ = view_collection_get_selected (_tmp65_);
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp67_ = _tmp66_;
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						marker_mark_many (_tmp63_, G_TYPE_CHECK_INSTANCE_CAST (_tmp67_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_g_object_unref0 (_tmp67_);
-#line 1529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
 						_data_collection_unref0 (_tmp65_);
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp68_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp69_ = _tmp68_;
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp70_ = all;
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp71_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp72_ = _tmp71_;
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp73_ = item;
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp74_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, TYPE_DATA_OBJECT, DataObject));
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_tmp75_ = _tmp74_;
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						view_collection_unselect_and_select_marked (_tmp69_, _tmp70_, _tmp75_);
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_g_object_unref0 (_tmp75_);
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_data_collection_unref0 (_tmp72_);
-#line 1531 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1603 "/home/jens/Source/shotwell/src/Page.vala"
 						_data_collection_unref0 (_tmp69_);
-#line 1527 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1599 "/home/jens/Source/shotwell/src/Page.vala"
 						_g_object_unref0 (all);
-#line 10201 "Page.c"
+#line 10609 "Page.c"
 					}
 				}
-#line 1535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp76_ = item;
-#line 1535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp77_ = _g_object_ref0 (_tmp76_);
-#line 1535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->anchor);
-#line 1535 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
 				self->anchor = _tmp77_;
-#line 1536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp78_ = item;
-#line 1536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp79_ = _g_object_ref0 (_tmp78_);
-#line 1536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->cursor);
-#line 1536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1608 "/home/jens/Source/shotwell/src/Page.vala"
 				self->cursor = _tmp79_;
-#line 1537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1609 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10222 "Page.c"
+#line 10630 "Page.c"
 			}
 		}
-#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1611 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp80_ = self->priv->layout;
-#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1611 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp81_ = item;
-#line 1539 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1611 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_layout_set_cursor (_tmp80_, _tmp81_);
-#line 10231 "Page.c"
+#line 10639 "Page.c"
 	} else {
 		guint _tmp82_ = 0U;
 		GeeArrayList* _tmp85_ = NULL;
@@ -10236,30 +10644,30 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 		gdouble _tmp103_ = 0.0;
 		GdkEventButton* _tmp104_ = NULL;
 		gdouble _tmp105_ = 0.0;
-#line 1543 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1615 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp82_ = state;
-#line 1543 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1615 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp82_ != ((guint) GDK_CONTROL_MASK)) {
-#line 10244 "Page.c"
+#line 10652 "Page.c"
 			ViewCollection* _tmp83_ = NULL;
 			ViewCollection* _tmp84_ = NULL;
-#line 1544 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp83_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1544 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp84_ = _tmp83_;
-#line 1544 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
 			view_collection_unselect_all (_tmp84_);
-#line 1544 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_collection_unref0 (_tmp84_);
-#line 10255 "Page.c"
+#line 10663 "Page.c"
 		}
-#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp85_ = gee_array_list_new (TYPE_CHECKERBOARD_ITEM, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->priv->previously_selected);
-#line 1547 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->previously_selected = _tmp85_;
-#line 10263 "Page.c"
+#line 10671 "Page.c"
 		{
 			GeeList* _view_list = NULL;
 			ViewCollection* _tmp86_ = NULL;
@@ -10271,31 +10679,31 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 			gint _tmp91_ = 0;
 			gint _tmp92_ = 0;
 			gint _view_index = 0;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp86_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp87_ = _tmp86_;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp88_ = view_collection_get_selected (_tmp87_);
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp89_ = _tmp88_;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_collection_unref0 (_tmp87_);
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_view_list = _tmp89_;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp90_ = _view_list;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp91_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp92_ = _tmp91_;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_view_size = _tmp92_;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_view_index = -1;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			while (TRUE) {
-#line 10299 "Page.c"
+#line 10707 "Page.c"
 				gint _tmp93_ = 0;
 				gint _tmp94_ = 0;
 				gint _tmp95_ = 0;
@@ -10305,79 +10713,79 @@ static gboolean checkerboard_page_real_on_left_click (Page* base, GdkEventButton
 				gpointer _tmp98_ = NULL;
 				GeeArrayList* _tmp99_ = NULL;
 				DataView* _tmp100_ = NULL;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp93_ = _view_index;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_view_index = _tmp93_ + 1;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp94_ = _view_index;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp95_ = _view_size;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!(_tmp94_ < _tmp95_)) {
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 					break;
-#line 10321 "Page.c"
+#line 10729 "Page.c"
 				}
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp96_ = _view_list;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp97_ = _view_index;
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp98_ = gee_list_get (_tmp96_, _tmp97_);
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				view = (DataView*) _tmp98_;
-#line 1549 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1621 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp99_ = self->priv->previously_selected;
-#line 1549 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1621 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp100_ = view;
-#line 1549 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1621 "/home/jens/Source/shotwell/src/Page.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp99_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp100_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem));
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (view);
-#line 10339 "Page.c"
+#line 10747 "Page.c"
 			}
-#line 1548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_view_list);
-#line 10343 "Page.c"
+#line 10751 "Page.c"
 		}
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp101_ = self->priv->layout;
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp102_ = event;
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp103_ = _tmp102_->x;
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp104_ = event;
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp105_ = _tmp104_->y;
-#line 1551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1623 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_layout_set_drag_select_origin (_tmp101_, (gint) _tmp103_, (gint) _tmp105_);
-#line 1553 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1625 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1553 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1625 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (item);
-#line 1553 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1625 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10363 "Page.c"
+#line 10771 "Page.c"
 	}
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp106_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp107_ = _tmp106_;
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp108_ = view_collection_get_selected_count (_tmp107_);
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp109_ = _tmp108_ == 0;
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp107_);
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp109_;
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (item);
-#line 1559 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1631 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 10381 "Page.c"
+#line 10789 "Page.c"
 }
 
 
@@ -10398,152 +10806,152 @@ static gboolean checkerboard_page_real_on_left_released (Page* base, GdkEventBut
 	CheckerboardItem* _tmp15_ = NULL;
 	CheckerboardItem* _tmp16_ = NULL;
 	CheckerboardItem* _tmp17_ = NULL;
-#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1562 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->previously_selected);
-#line 1563 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->previously_selected = NULL;
-#line 1566 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1566 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = checkerboard_layout_is_drag_select_active (_tmp0_);
-#line 1566 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 10416 "Page.c"
+#line 10824 "Page.c"
 		CheckerboardLayout* _tmp2_ = NULL;
 		CheckerboardItem* _tmp3_ = NULL;
 		CheckerboardItem* _tmp4_ = NULL;
-#line 1567 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1639 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->layout;
-#line 1567 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1639 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_layout_clear_drag_select (_tmp2_);
-#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1640 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->cursor;
-#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1640 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _g_object_ref0 (_tmp3_);
-#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1640 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->anchor);
-#line 1568 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1640 "/home/jens/Source/shotwell/src/Page.vala"
 		self->anchor = _tmp4_;
-#line 1570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1642 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1642 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10436 "Page.c"
+#line 10844 "Page.c"
 	}
-#line 1574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1646 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = event;
-#line 1574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1646 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_->state;
-#line 1574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1646 "/home/jens/Source/shotwell/src/Page.vala"
 	if ((_tmp6_ & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0) {
-#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1647 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1575 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1647 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10448 "Page.c"
+#line 10856 "Page.c"
 	}
-#line 1578 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1650 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->activated_item;
-#line 1578 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1650 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp7_ != NULL) {
-#line 10454 "Page.c"
+#line 10862 "Page.c"
 		CheckerboardItem* _tmp8_ = NULL;
 		CheckerboardPageKeyboardModifiers _tmp9_ = {0};
-#line 1579 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = self->priv->activated_item;
-#line 1579 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_keyboard_modifiers_init (&_tmp9_, G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1579 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_on_item_activated (self, _tmp8_, CHECKERBOARD_PAGE_ACTIVATOR_MOUSE, &_tmp9_);
-#line 1580 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1652 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->priv->activated_item);
-#line 1580 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1652 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->activated_item = NULL;
-#line 1582 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1654 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1582 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1654 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10471 "Page.c"
+#line 10879 "Page.c"
 	}
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = event;
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = _tmp10_->x;
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = event;
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = _tmp12_->y;
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = checkerboard_page_get_item_at_pixel (self, _tmp11_, _tmp13_);
-#line 1585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
 	item = _tmp14_;
-#line 1586 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1658 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = item;
-#line 1586 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1658 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp15_ == NULL) {
-#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1660 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1660 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (item);
-#line 1588 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1660 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10495 "Page.c"
+#line 10903 "Page.c"
 	}
-#line 1591 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1663 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = self->cursor;
-#line 1591 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1663 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = item;
-#line 1591 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1663 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp16_ != _tmp17_) {
-#line 10503 "Page.c"
+#line 10911 "Page.c"
 		ViewCollection* _tmp18_ = NULL;
 		ViewCollection* _tmp19_ = NULL;
-#line 1594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1666 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1666 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = _tmp18_;
-#line 1594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1666 "/home/jens/Source/shotwell/src/Page.vala"
 		view_collection_unselect_all (_tmp19_);
-#line 1594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1666 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp19_);
-#line 10514 "Page.c"
+#line 10922 "Page.c"
 	} else {
 		CheckerboardItem* _tmp20_ = NULL;
 		gboolean _tmp21_ = FALSE;
-#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = item;
-#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = data_view_is_selected (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, TYPE_DATA_VIEW, DataView));
-#line 1600 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp21_) {
-#line 10524 "Page.c"
+#line 10932 "Page.c"
 			ViewCollection* _tmp22_ = NULL;
 			ViewCollection* _tmp23_ = NULL;
 			CheckerboardItem* _tmp24_ = NULL;
-#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp22_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp23_ = _tmp22_;
-#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp24_ = item;
-#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Page.vala"
 			view_collection_unselect_all_but (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_DATA_VIEW, DataView));
-#line 1601 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1673 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_collection_unref0 (_tmp23_);
-#line 10538 "Page.c"
+#line 10946 "Page.c"
 		}
 	}
-#line 1604 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1676 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1604 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1676 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (item);
-#line 1604 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1676 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 10547 "Page.c"
+#line 10955 "Page.c"
 }
 
 
@@ -10564,50 +10972,50 @@ static gboolean checkerboard_page_real_on_right_click (Page* base, GdkEventButto
 	GtkMenu* _tmp40_ = NULL;
 	GdkEventButton* _tmp41_ = NULL;
 	gboolean _tmp42_ = FALSE;
-#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1607 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1609 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 1609 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->type;
-#line 1609 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1681 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ != GDK_BUTTON_PRESS) {
-#line 1610 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1682 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1610 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1682 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10582 "Page.c"
+#line 10990 "Page.c"
 	}
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = event;
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_->x;
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = event;
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _tmp4_->y;
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = checkerboard_page_get_item_at_pixel (self, _tmp3_, _tmp5_);
-#line 1613 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1685 "/home/jens/Source/shotwell/src/Page.vala"
 	item = _tmp6_;
-#line 1614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1686 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = item;
-#line 1614 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1686 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp7_ != NULL) {
-#line 10600 "Page.c"
+#line 11008 "Page.c"
 		GdkEventButton* _tmp8_ = NULL;
 		GdkModifierType _tmp9_ = 0;
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = event;
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_->state;
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (_tmp9_ & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) {
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_CONTROL_MASK:
-#line 10611 "Page.c"
+#line 11019 "Page.c"
 			{
 				Marker* marker = NULL;
 				ViewCollection* _tmp10_ = NULL;
@@ -10618,63 +11026,63 @@ static gboolean checkerboard_page_real_on_right_click (Page* base, GdkEventButto
 				ViewCollection* _tmp15_ = NULL;
 				ViewCollection* _tmp16_ = NULL;
 				Marker* _tmp17_ = NULL;
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp10_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp11_ = _tmp10_;
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp12_ = item;
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp13_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_DATA_OBJECT, DataObject));
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp14_ = _tmp13_;
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp11_);
-#line 1619 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1691 "/home/jens/Source/shotwell/src/Page.vala"
 				marker = _tmp14_;
-#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp15_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp16_ = _tmp15_;
-#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp17_ = marker;
-#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
 				view_collection_toggle_marked (_tmp16_, _tmp17_);
-#line 1620 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
 				_data_collection_unref0 (_tmp16_);
-#line 1621 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (marker);
-#line 1621 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10650 "Page.c"
+#line 11058 "Page.c"
 			}
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_SHIFT_MASK:
-#line 10654 "Page.c"
+#line 11062 "Page.c"
 			{
-#line 1625 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1697 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10658 "Page.c"
+#line 11066 "Page.c"
 			}
-#line 1616 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1688 "/home/jens/Source/shotwell/src/Page.vala"
 			case GDK_CONTROL_MASK | GDK_SHIFT_MASK:
-#line 10662 "Page.c"
+#line 11070 "Page.c"
 			{
-#line 1629 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1701 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10666 "Page.c"
+#line 11074 "Page.c"
 			}
 			default:
 			{
 				CheckerboardItem* _tmp18_ = NULL;
 				gboolean _tmp19_ = FALSE;
-#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp18_ = item;
-#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp19_ = data_view_is_selected (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, TYPE_DATA_VIEW, DataView));
-#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
 				if (!_tmp19_) {
-#line 10678 "Page.c"
+#line 11086 "Page.c"
 					Marker* all = NULL;
 					ViewCollection* _tmp20_ = NULL;
 					ViewCollection* _tmp21_ = NULL;
@@ -10693,99 +11101,99 @@ static gboolean checkerboard_page_real_on_right_click (Page* base, GdkEventButto
 					CheckerboardItem* _tmp34_ = NULL;
 					Marker* _tmp35_ = NULL;
 					Marker* _tmp36_ = NULL;
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp20_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp21_ = _tmp20_;
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp22_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp23_ = _tmp22_;
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					_data_collection_unref0 (_tmp21_);
-#line 1635 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
 					all = _tmp23_;
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp24_ = all;
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp25_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp26_ = _tmp25_;
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp27_ = view_collection_get_selected (_tmp26_);
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp28_ = _tmp27_;
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					marker_mark_many (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (_tmp28_);
-#line 1636 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
 					_data_collection_unref0 (_tmp26_);
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp29_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp30_ = _tmp29_;
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp31_ = all;
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp32_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp33_ = _tmp32_;
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp34_ = item;
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp35_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_DATA_OBJECT, DataObject));
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp36_ = _tmp35_;
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					view_collection_unselect_and_select_marked (_tmp30_, _tmp31_, _tmp36_);
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (_tmp36_);
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_data_collection_unref0 (_tmp33_);
-#line 1638 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
 					_data_collection_unref0 (_tmp30_);
-#line 1634 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
 					_g_object_unref0 (all);
-#line 10751 "Page.c"
+#line 11159 "Page.c"
 				}
-#line 1640 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1712 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 10755 "Page.c"
+#line 11163 "Page.c"
 			}
 		}
 	} else {
 		ViewCollection* _tmp37_ = NULL;
 		ViewCollection* _tmp38_ = NULL;
-#line 1644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp37_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp38_ = _tmp37_;
-#line 1644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Page.vala"
 		view_collection_unselect_all (_tmp38_);
-#line 1644 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1716 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp38_);
-#line 10769 "Page.c"
+#line 11177 "Page.c"
 	}
-#line 1647 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1719 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp39_ = checkerboard_page_get_context_menu (self);
-#line 1647 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1719 "/home/jens/Source/shotwell/src/Page.vala"
 	context_menu = _tmp39_;
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp40_ = context_menu;
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp41_ = event;
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp42_ = page_popup_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp40_, _tmp41_);
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp42_;
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (context_menu);
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (item);
-#line 1648 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1720 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 10789 "Page.c"
+#line 11197 "Page.c"
 }
 
 
@@ -10799,105 +11207,105 @@ static gboolean checkerboard_page_real_on_mouse_over (CheckerboardPage* self, Ch
 	CheckerboardItem* _tmp11_ = NULL;
 	CheckerboardItem* _tmp12_ = NULL;
 	CheckerboardItem* _tmp13_ = NULL;
-#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail ((item == NULL) || IS_CHECKERBOARD_ITEM (item), FALSE);
-#line 1652 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = item;
-#line 1652 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 10809 "Page.c"
+#line 11217 "Page.c"
 		CheckerboardLayout* _tmp1_ = NULL;
 		CheckerboardItem* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
 		GdkModifierType _tmp5_ = 0;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->layout;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = item;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = x;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = y;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = mask;
-#line 1653 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_layout_handle_mouse_motion (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 10827 "Page.c"
+#line 11235 "Page.c"
 	}
-#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1729 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = item;
-#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1729 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->highlighted;
-#line 1657 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1729 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_ == _tmp7_) {
-#line 1658 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1658 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1730 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10839 "Page.c"
+#line 11247 "Page.c"
 	}
-#line 1661 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1733 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->highlighted;
-#line 1661 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1733 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp8_ != NULL) {
-#line 10845 "Page.c"
+#line 11253 "Page.c"
 		CheckerboardItem* _tmp9_ = NULL;
-#line 1662 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = self->priv->highlighted;
-#line 1662 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_item_unbrighten (_tmp9_);
-#line 1663 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->priv->highlighted);
-#line 1663 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->highlighted = NULL;
-#line 10855 "Page.c"
+#line 11263 "Page.c"
 	}
-#line 1667 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1739 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = item;
-#line 1667 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1739 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp10_ == NULL) {
-#line 1668 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1740 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 1668 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1740 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10865 "Page.c"
+#line 11273 "Page.c"
 	}
-#line 1671 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = item;
-#line 1671 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1743 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_item_brighten (_tmp11_);
-#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = item;
-#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = _g_object_ref0 (_tmp12_);
-#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->highlighted);
-#line 1672 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1744 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->highlighted = _tmp13_;
-#line 1674 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1674 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1746 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 10883 "Page.c"
+#line 11291 "Page.c"
 }
 
 
 gboolean checkerboard_page_on_mouse_over (CheckerboardPage* self, CheckerboardItem* item, gint x, gint y, GdkModifierType mask) {
-#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), FALSE);
-#line 1651 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1723 "/home/jens/Source/shotwell/src/Page.vala"
 	return CHECKERBOARD_PAGE_GET_CLASS (self)->on_mouse_over (self, item, x, y, mask);
-#line 10892 "Page.c"
+#line 11300 "Page.c"
 }
 
 
 static gboolean _checkerboard_page_selection_autoscroll_gsource_func (gpointer self) {
 	gboolean result;
 	result = checkerboard_page_selection_autoscroll ((CheckerboardPage*) self);
-#line 1694 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1766 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 10901 "Page.c"
+#line 11309 "Page.c"
 }
 
 
@@ -10920,95 +11328,95 @@ static gboolean checkerboard_page_real_on_motion (Page* base, GdkEventMotion* ev
 	gint _tmp13_ = 0;
 	gboolean _tmp14_ = FALSE;
 	gboolean _tmp15_ = FALSE;
-#line 1677 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1749 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1677 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1749 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = x;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = y;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = checkerboard_page_get_item_at_pixel (self, (gdouble) _tmp0_, (gdouble) _tmp1_);
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = x;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = y;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = mask;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = checkerboard_page_on_mouse_over (self, _tmp3_, _tmp4_, _tmp5_, _tmp6_);
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = !_tmp7_;
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1679 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1751 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp8_) {
-#line 1680 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1752 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1680 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1752 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10954 "Page.c"
+#line 11362 "Page.c"
 	}
-#line 1683 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->priv->layout;
-#line 1683 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = checkerboard_layout_is_drag_select_active (_tmp9_);
-#line 1683 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1755 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp10_) {
-#line 1684 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1756 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1684 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1756 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 10966 "Page.c"
+#line 11374 "Page.c"
 	}
-#line 1687 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1759 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = self->priv->layout;
-#line 1687 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1759 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = x;
-#line 1687 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1759 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = y;
-#line 1687 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1759 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_drag_select_endpoint (_tmp11_, _tmp12_, _tmp13_);
-#line 1689 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1761 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_updated_selection_band (self);
-#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1764 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = self->priv->autoscroll_scheduled;
-#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1764 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp15_) {
-#line 10982 "Page.c"
+#line 11390 "Page.c"
 		GtkAdjustment* _tmp16_ = NULL;
 		gint _tmp17_ = 0;
 		AdjustmentRelation _tmp18_ = 0;
-#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = gtk_scrolled_window_get_vadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = y;
-#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = get_adjustment_relation (_tmp16_, _tmp17_);
-#line 1693 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1765 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = _tmp18_ != ADJUSTMENT_RELATION_IN_RANGE;
-#line 10994 "Page.c"
+#line 11402 "Page.c"
 	} else {
-#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1764 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = FALSE;
-#line 10998 "Page.c"
+#line 11406 "Page.c"
 	}
-#line 1692 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1764 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp14_) {
-#line 1694 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1766 "/home/jens/Source/shotwell/src/Page.vala"
 		g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) CHECKERBOARD_PAGE_AUTOSCROLL_TICKS_MSEC, _checkerboard_page_selection_autoscroll_gsource_func, g_object_ref (self), g_object_unref);
-#line 1695 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1767 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->autoscroll_scheduled = TRUE;
-#line 11006 "Page.c"
+#line 11414 "Page.c"
 	}
-#line 1699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1699 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1771 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 11012 "Page.c"
+#line 11420 "Page.c"
 }
 
 
@@ -11045,91 +11453,91 @@ static void checkerboard_page_updated_selection_band (CheckerboardPage* self) {
 	ViewCollection* _tmp47_ = NULL;
 	ViewCollection* _tmp48_ = NULL;
 	Marker* _tmp49_ = NULL;
-#line 1702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1703 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1775 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1703 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1775 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = checkerboard_layout_is_drag_select_active (_tmp0_);
-#line 1703 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1775 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp1_, "layout.is_drag_select_active()");
-#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->layout;
-#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = checkerboard_layout_items_in_selection_band (_tmp2_);
-#line 1706 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1778 "/home/jens/Source/shotwell/src/Page.vala"
 	intersection = _tmp3_;
-#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = intersection;
-#line 1707 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ == NULL) {
-#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1780 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (intersection);
-#line 1708 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1780 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 11071 "Page.c"
+#line 11479 "Page.c"
 	}
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_;
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _tmp7_;
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp6_);
-#line 1710 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
 	to_unselect = _tmp8_;
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = _tmp9_;
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = _tmp11_;
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp10_);
-#line 1711 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1783 "/home/jens/Source/shotwell/src/Page.vala"
 	to_select = _tmp12_;
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = to_unselect;
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = _tmp14_;
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = view_collection_get_selected (_tmp15_);
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = _tmp16_;
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	marker_mark_many (_tmp13_, G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp17_);
-#line 1714 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1786 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp15_);
-#line 1717 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1789 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = self->priv->previously_selected;
-#line 1717 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1789 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp18_ != NULL, "previously_selected != null");
-#line 1718 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = to_unselect;
-#line 1718 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = self->priv->previously_selected;
-#line 1718 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
 	marker_unmark_many (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1719 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1791 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp21_ = to_select;
-#line 1719 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1791 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp22_ = self->priv->previously_selected;
-#line 1719 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1791 "/home/jens/Source/shotwell/src/Page.vala"
 	marker_mark_many (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1722 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->cursor);
-#line 1722 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
 	self->cursor = NULL;
-#line 11133 "Page.c"
+#line 11541 "Page.c"
 	{
 		GeeList* _item_list = NULL;
 		GeeList* _tmp23_ = NULL;
@@ -11139,25 +11547,25 @@ static void checkerboard_page_updated_selection_band (CheckerboardPage* self) {
 		gint _tmp26_ = 0;
 		gint _tmp27_ = 0;
 		gint _item_index = 0;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = intersection;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = _g_object_ref0 (_tmp23_);
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_item_list = _tmp24_;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp25_ = _item_list;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp26_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp27_ = _tmp26_;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_item_size = _tmp27_;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_item_index = -1;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		while (TRUE) {
-#line 11161 "Page.c"
+#line 11569 "Page.c"
 			gint _tmp28_ = 0;
 			gint _tmp29_ = 0;
 			gint _tmp30_ = 0;
@@ -11169,109 +11577,109 @@ static void checkerboard_page_updated_selection_band (CheckerboardPage* self) {
 			CheckerboardItem* _tmp35_ = NULL;
 			gboolean _tmp36_ = FALSE;
 			CheckerboardItem* _tmp41_ = NULL;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp28_ = _item_index;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_item_index = _tmp28_ + 1;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp29_ = _item_index;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp30_ = _item_size;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!(_tmp29_ < _tmp30_)) {
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 11185 "Page.c"
+#line 11593 "Page.c"
 			}
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp31_ = _item_list;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp32_ = _item_index;
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp33_ = gee_list_get (_tmp31_, _tmp32_);
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			item = (CheckerboardItem*) _tmp33_;
-#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp34_ = to_select;
-#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp35_ = item;
-#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp36_ = marker_toggle (_tmp34_, G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_DATA_OBJECT, DataObject));
-#line 1725 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp36_) {
-#line 11203 "Page.c"
+#line 11611 "Page.c"
 				Marker* _tmp37_ = NULL;
 				CheckerboardItem* _tmp38_ = NULL;
-#line 1726 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1798 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp37_ = to_unselect;
-#line 1726 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1798 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp38_ = item;
-#line 1726 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1798 "/home/jens/Source/shotwell/src/Page.vala"
 				marker_unmark (_tmp37_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, TYPE_DATA_OBJECT, DataObject));
-#line 11212 "Page.c"
+#line 11620 "Page.c"
 			} else {
 				Marker* _tmp39_ = NULL;
 				CheckerboardItem* _tmp40_ = NULL;
-#line 1728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp39_ = to_unselect;
-#line 1728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp40_ = item;
-#line 1728 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
 				marker_mark (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, TYPE_DATA_OBJECT, DataObject));
-#line 11222 "Page.c"
+#line 11630 "Page.c"
 			}
-#line 1730 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp41_ = self->cursor;
-#line 1730 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp41_ == NULL) {
-#line 11228 "Page.c"
+#line 11636 "Page.c"
 				CheckerboardItem* _tmp42_ = NULL;
 				CheckerboardItem* _tmp43_ = NULL;
-#line 1731 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp42_ = item;
-#line 1731 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp43_ = _g_object_ref0 (_tmp42_);
-#line 1731 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->cursor);
-#line 1731 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
 				self->cursor = _tmp43_;
-#line 11239 "Page.c"
+#line 11647 "Page.c"
 			}
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (item);
-#line 11243 "Page.c"
+#line 11651 "Page.c"
 		}
-#line 1724 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1796 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_item_list);
-#line 11247 "Page.c"
+#line 11655 "Page.c"
 	}
-#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp44_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp45_ = _tmp44_;
-#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp46_ = to_select;
-#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
 	view_collection_select_marked (_tmp45_, _tmp46_);
-#line 1734 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp45_);
-#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp47_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp48_ = _tmp47_;
-#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp49_ = to_unselect;
-#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
 	view_collection_unselect_marked (_tmp48_, _tmp49_);
-#line 1735 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp48_);
-#line 1702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (to_select);
-#line 1702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (to_unselect);
-#line 1702 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1774 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (intersection);
-#line 11275 "Page.c"
+#line 11683 "Page.c"
 }
 
 
@@ -11303,77 +11711,77 @@ static gboolean checkerboard_page_selection_autoscroll (CheckerboardPage* self) 
 	GtkAdjustment* _tmp28_ = NULL;
 	gdouble _tmp29_ = 0.0;
 	gint _tmp30_ = 0;
-#line 1738 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1810 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_CHECKERBOARD_PAGE (self), FALSE);
-#line 1739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->layout;
-#line 1739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = checkerboard_layout_is_drag_select_active (_tmp0_);
-#line 1739 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp1_) {
-#line 1740 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1812 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->autoscroll_scheduled = FALSE;
-#line 1742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 1742 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1814 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 11321 "Page.c"
+#line 11729 "Page.c"
 	}
-#line 1746 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = gtk_scrolled_window_get_vadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1746 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 1746 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1818 "/home/jens/Source/shotwell/src/Page.vala"
 	vadj = _tmp3_;
-#line 1750 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1822 "/home/jens/Source/shotwell/src/Page.vala"
 	page_get_event_source_pointer (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), &_tmp4_, &_tmp5_, &_tmp6_);
-#line 1750 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1822 "/home/jens/Source/shotwell/src/Page.vala"
 	x = _tmp4_;
-#line 1750 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1822 "/home/jens/Source/shotwell/src/Page.vala"
 	y = _tmp5_;
-#line 1750 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1822 "/home/jens/Source/shotwell/src/Page.vala"
 	mask = _tmp6_;
-#line 1752 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1824 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = vadj;
-#line 1752 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1824 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = gtk_adjustment_get_value (_tmp7_);
-#line 1752 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1824 "/home/jens/Source/shotwell/src/Page.vala"
 	new_value = (gint) _tmp8_;
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = vadj;
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = y;
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = get_adjustment_relation (_tmp9_, _tmp10_);
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 	switch (_tmp11_) {
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 		case ADJUSTMENT_RELATION_BELOW:
-#line 11353 "Page.c"
+#line 11761 "Page.c"
 		{
 			gint _tmp12_ = 0;
 			CheckerboardLayout* _tmp13_ = NULL;
 			gint _tmp14_ = 0;
 			gint _tmp15_ = 0;
-#line 1756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = new_value;
-#line 1756 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1828 "/home/jens/Source/shotwell/src/Page.vala"
 			new_value = _tmp12_ - CHECKERBOARD_PAGE_AUTOSCROLL_PIXELS;
-#line 1757 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = self->priv->layout;
-#line 1757 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = x;
-#line 1757 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = new_value;
-#line 1757 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
 			checkerboard_layout_set_drag_select_endpoint (_tmp13_, _tmp14_, _tmp15_);
-#line 1758 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1830 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 11373 "Page.c"
+#line 11781 "Page.c"
 		}
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 		case ADJUSTMENT_RELATION_ABOVE:
-#line 11377 "Page.c"
+#line 11785 "Page.c"
 		{
 			gint _tmp16_ = 0;
 			CheckerboardLayout* _tmp17_ = NULL;
@@ -11381,78 +11789,78 @@ static gboolean checkerboard_page_selection_autoscroll (CheckerboardPage* self) 
 			gint _tmp19_ = 0;
 			GtkAdjustment* _tmp20_ = NULL;
 			gdouble _tmp21_ = 0.0;
-#line 1762 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1834 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp16_ = new_value;
-#line 1762 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1834 "/home/jens/Source/shotwell/src/Page.vala"
 			new_value = _tmp16_ + CHECKERBOARD_PAGE_AUTOSCROLL_PIXELS;
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp17_ = self->priv->layout;
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = x;
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = new_value;
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = vadj;
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp21_ = gtk_adjustment_get_page_size (_tmp20_);
-#line 1763 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
 			checkerboard_layout_set_drag_select_endpoint (_tmp17_, _tmp18_, _tmp19_ + ((gint) _tmp21_));
-#line 1764 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1836 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 11403 "Page.c"
+#line 11811 "Page.c"
 		}
-#line 1753 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1825 "/home/jens/Source/shotwell/src/Page.vala"
 		case ADJUSTMENT_RELATION_IN_RANGE:
-#line 11407 "Page.c"
+#line 11815 "Page.c"
 		{
-#line 1767 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
 			self->priv->autoscroll_scheduled = FALSE;
-#line 1769 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Page.vala"
 			result = FALSE;
-#line 1769 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (vadj);
-#line 1769 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1841 "/home/jens/Source/shotwell/src/Page.vala"
 			return result;
-#line 11417 "Page.c"
+#line 11825 "Page.c"
 		}
 		default:
 		{
-#line 1772 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1844 "/home/jens/Source/shotwell/src/Page.vala"
 			g_warn_if_reached ();
-#line 1773 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 11425 "Page.c"
+#line 11833 "Page.c"
 		}
 	}
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp22_ = vadj;
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp23_ = new_value;
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp24_ = vadj;
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp25_ = gtk_adjustment_get_lower (_tmp24_);
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp26_ = vadj;
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp27_ = gtk_adjustment_get_upper (_tmp26_);
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp28_ = vadj;
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = gtk_adjustment_get_page_size (_tmp28_);
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = CLAMP (_tmp23_, (gint) _tmp25_, ((gint) _tmp27_) - ((gint) _tmp29_));
-#line 1779 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1851 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_adjustment_set_value (_tmp22_, (gdouble) _tmp30_);
-#line 1782 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1854 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_updated_selection_band (self);
-#line 1784 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1856 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 1784 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1856 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (vadj);
-#line 1784 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1856 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 11456 "Page.c"
+#line 11864 "Page.c"
 }
 
 
@@ -11483,35 +11891,35 @@ void checkerboard_page_cursor_to_item (CheckerboardPage* self, CheckerboardItem*
 	gdouble _tmp39_ = 0.0;
 	GtkAdjustment* _tmp53_ = NULL;
 	gint _tmp54_ = 0;
-#line 1787 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1787 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item));
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = item;
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = data_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_DATA_OBJECT, DataObject));
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp3_, "get_view().contains(item)");
-#line 1788 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1860 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = item;
-#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->cursor);
-#line 1790 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1862 "/home/jens/Source/shotwell/src/Page.vala"
 	self->cursor = _tmp5_;
-#line 1792 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = page_get_ctrl_pressed (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1792 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp6_) {
-#line 11515 "Page.c"
+#line 11923 "Page.c"
 		ViewCollection* _tmp7_ = NULL;
 		ViewCollection* _tmp8_ = NULL;
 		Marker* marker = NULL;
@@ -11523,67 +11931,67 @@ void checkerboard_page_cursor_to_item (CheckerboardPage* self, CheckerboardItem*
 		ViewCollection* _tmp14_ = NULL;
 		ViewCollection* _tmp15_ = NULL;
 		Marker* _tmp16_ = NULL;
-#line 1793 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1865 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1793 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1865 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_;
-#line 1793 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1865 "/home/jens/Source/shotwell/src/Page.vala"
 		view_collection_unselect_all (_tmp8_);
-#line 1793 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1865 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp8_);
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = _tmp9_;
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = item;
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, TYPE_DATA_OBJECT, DataObject));
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = _tmp12_;
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp10_);
-#line 1794 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1866 "/home/jens/Source/shotwell/src/Page.vala"
 		marker = _tmp13_;
-#line 1795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = _tmp14_;
-#line 1795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = marker;
-#line 1795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
 		view_collection_select_marked (_tmp15_, _tmp16_);
-#line 1795 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp15_);
-#line 1792 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (marker);
-#line 11561 "Page.c"
+#line 11969 "Page.c"
 	}
-#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = self->priv->layout;
-#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = item;
-#line 1797 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1869 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_layout_set_cursor (_tmp17_, _tmp18_);
-#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1872 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = gtk_scrolled_window_get_vadjustment (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow));
-#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1872 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = _g_object_ref0 (_tmp19_);
-#line 1800 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1872 "/home/jens/Source/shotwell/src/Page.vala"
 	vadj = _tmp20_;
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp22_ = vadj;
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp23_ = item;
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp24_ = _tmp23_->allocation;
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp25_ = _tmp24_.y;
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp26_ = get_adjustment_relation (_tmp22_, _tmp25_);
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp26_ == ADJUSTMENT_RELATION_IN_RANGE) {
-#line 11587 "Page.c"
+#line 11995 "Page.c"
 		GtkAdjustment* _tmp27_ = NULL;
 		CheckerboardItem* _tmp28_ = NULL;
 		GdkRectangle _tmp29_ = {0};
@@ -11592,70 +12000,70 @@ void checkerboard_page_cursor_to_item (CheckerboardPage* self, CheckerboardItem*
 		GdkRectangle _tmp32_ = {0};
 		gint _tmp33_ = 0;
 		AdjustmentRelation _tmp34_ = 0;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp27_ = vadj;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp28_ = item;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp29_ = _tmp28_->allocation;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp30_ = _tmp29_.y;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp31_ = item;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp32_ = _tmp31_->allocation;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp33_ = _tmp32_.height;
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp34_ = get_adjustment_relation (_tmp27_, _tmp30_ + _tmp33_);
-#line 1802 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = _tmp34_ == ADJUSTMENT_RELATION_IN_RANGE;
-#line 11614 "Page.c"
+#line 12022 "Page.c"
 	} else {
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = FALSE;
-#line 11618 "Page.c"
+#line 12026 "Page.c"
 	}
-#line 1801 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1873 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp21_) {
-#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1875 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (vadj);
-#line 1803 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1875 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 11626 "Page.c"
+#line 12034 "Page.c"
 	}
-#line 1806 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
 	top = 0;
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp35_ = item;
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp36_ = _tmp35_->allocation;
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp37_ = _tmp36_.y;
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp38_ = vadj;
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp39_ = gtk_adjustment_get_value (_tmp38_);
-#line 1807 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
 	if (((gdouble) _tmp37_) < _tmp39_) {
-#line 11642 "Page.c"
+#line 12050 "Page.c"
 		CheckerboardItem* _tmp40_ = NULL;
 		GdkRectangle _tmp41_ = {0};
 		gint _tmp42_ = 0;
 		gint _tmp43_ = 0;
-#line 1808 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1880 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp40_ = item;
-#line 1808 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1880 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp41_ = _tmp40_->allocation;
-#line 1808 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1880 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp42_ = _tmp41_.y;
-#line 1808 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1880 "/home/jens/Source/shotwell/src/Page.vala"
 		top = _tmp42_;
-#line 1809 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1881 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp43_ = top;
-#line 1809 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1881 "/home/jens/Source/shotwell/src/Page.vala"
 		top = _tmp43_ - (CHECKERBOARD_LAYOUT_ROW_GUTTER_PADDING / 2);
-#line 11659 "Page.c"
+#line 12067 "Page.c"
 	} else {
 		CheckerboardItem* _tmp44_ = NULL;
 		GdkRectangle _tmp45_ = {0};
@@ -11666,39 +12074,39 @@ void checkerboard_page_cursor_to_item (CheckerboardPage* self, CheckerboardItem*
 		GtkAdjustment* _tmp50_ = NULL;
 		gdouble _tmp51_ = 0.0;
 		gint _tmp52_ = 0;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp44_ = item;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp45_ = _tmp44_->allocation;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp46_ = _tmp45_.y;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp47_ = item;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp48_ = _tmp47_->allocation;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp49_ = _tmp48_.height;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp50_ = vadj;
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp51_ = gtk_adjustment_get_page_size (_tmp50_);
-#line 1811 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
 		top = (_tmp46_ + _tmp49_) - ((gint) _tmp51_);
-#line 1812 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1884 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp52_ = top;
-#line 1812 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1884 "/home/jens/Source/shotwell/src/Page.vala"
 		top = _tmp52_ + (CHECKERBOARD_LAYOUT_ROW_GUTTER_PADDING / 2);
-#line 11692 "Page.c"
+#line 12100 "Page.c"
 	}
-#line 1815 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1887 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp53_ = vadj;
-#line 1815 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1887 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp54_ = top;
-#line 1815 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1887 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_adjustment_set_value (_tmp53_, (gdouble) _tmp54_);
-#line 1787 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (vadj);
-#line 11702 "Page.c"
+#line 12110 "Page.c"
 }
 
 
@@ -11717,171 +12125,171 @@ void checkerboard_page_move_cursor (CheckerboardPage* self, CompassPoint point) 
 	CompassPoint _tmp27_ = 0;
 	CheckerboardItem* _tmp28_ = NULL;
 	CheckerboardItem* _tmp29_ = NULL;
-#line 1818 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_ == 0;
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1820 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 1821 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1893 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 11737 "Page.c"
+#line 12145 "Page.c"
 	}
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->cursor;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_ == NULL) {
-#line 11743 "Page.c"
+#line 12151 "Page.c"
 		CheckerboardLayout* _tmp7_ = NULL;
 		CheckerboardItem* _tmp8_ = NULL;
 		CheckerboardItem* _tmp9_ = NULL;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = self->priv->layout;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = checkerboard_layout_get_cursor (_tmp7_);
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = _tmp9_ == NULL;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp9_);
-#line 11757 "Page.c"
+#line 12165 "Page.c"
 	} else {
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = FALSE;
-#line 11761 "Page.c"
+#line 12169 "Page.c"
 	}
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp5_) {
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = TRUE;
-#line 11767 "Page.c"
+#line 12175 "Page.c"
 	} else {
 		gboolean _tmp10_ = FALSE;
 		CheckerboardItem* _tmp11_ = NULL;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = self->cursor;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp11_ != NULL) {
-#line 11775 "Page.c"
+#line 12183 "Page.c"
 			ViewCollection* _tmp12_ = NULL;
 			ViewCollection* _tmp13_ = NULL;
 			CheckerboardItem* _tmp14_ = NULL;
 			gboolean _tmp15_ = FALSE;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = _tmp12_;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = self->cursor;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = data_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_DATA_OBJECT, DataObject));
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = !_tmp15_;
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_collection_unref0 (_tmp13_);
-#line 11792 "Page.c"
+#line 12200 "Page.c"
 		} else {
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = FALSE;
-#line 11796 "Page.c"
+#line 12204 "Page.c"
 		}
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _tmp10_;
-#line 11800 "Page.c"
+#line 12208 "Page.c"
 	}
-#line 1826 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 11804 "Page.c"
+#line 12212 "Page.c"
 		CheckerboardItem* item = NULL;
 		CheckerboardLayout* _tmp16_ = NULL;
 		CheckerboardItem* _tmp17_ = NULL;
 		CheckerboardItem* _tmp18_ = NULL;
 		CheckerboardItem* _tmp19_ = NULL;
 		CheckerboardItem* _tmp20_ = NULL;
-#line 1827 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = self->priv->layout;
-#line 1827 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = checkerboard_layout_get_item_at_coordinate (_tmp16_, 0, 0);
-#line 1827 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1899 "/home/jens/Source/shotwell/src/Page.vala"
 		item = _tmp17_;
-#line 1828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1900 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = item;
-#line 1828 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1900 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_cursor_to_item (self, _tmp18_);
-#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = item;
-#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = _g_object_ref0 (_tmp19_);
-#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->anchor);
-#line 1829 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1901 "/home/jens/Source/shotwell/src/Page.vala"
 		self->anchor = _tmp20_;
-#line 1831 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1903 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (item);
-#line 1831 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1903 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 11833 "Page.c"
+#line 12241 "Page.c"
 	}
-#line 1834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1906 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp21_ = self->cursor;
-#line 1834 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1906 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp21_ == NULL) {
-#line 11839 "Page.c"
+#line 12247 "Page.c"
 		CheckerboardLayout* _tmp22_ = NULL;
 		CheckerboardItem* _tmp23_ = NULL;
 		CheckerboardItem* _tmp24_ = NULL;
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = self->priv->layout;
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = checkerboard_layout_get_cursor (_tmp22_);
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp23_, TYPE_CHECKERBOARD_ITEM) ? ((CheckerboardItem*) _tmp23_) : NULL;
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp24_ == NULL) {
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp23_);
-#line 11853 "Page.c"
+#line 12261 "Page.c"
 		}
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->cursor);
-#line 1835 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1907 "/home/jens/Source/shotwell/src/Page.vala"
 		self->cursor = _tmp24_;
-#line 11859 "Page.c"
+#line 12267 "Page.c"
 	}
-#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp25_ = self->priv->layout;
-#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp26_ = self->cursor;
-#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp27_ = point;
-#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp28_ = checkerboard_layout_get_item_relative_to (_tmp25_, _tmp26_, _tmp27_);
-#line 1839 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1911 "/home/jens/Source/shotwell/src/Page.vala"
 	item = _tmp28_;
-#line 1840 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1912 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = item;
-#line 1840 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1912 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp29_ != NULL) {
-#line 11875 "Page.c"
+#line 12283 "Page.c"
 		CheckerboardItem* _tmp30_ = NULL;
-#line 1841 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp30_ = item;
-#line 1841 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_cursor_to_item (self, _tmp30_);
-#line 11881 "Page.c"
+#line 12289 "Page.c"
 	}
-#line 1818 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (item);
-#line 11885 "Page.c"
+#line 12293 "Page.c"
 }
 
 
@@ -11898,51 +12306,51 @@ void checkerboard_page_set_cursor (CheckerboardPage* self, CheckerboardItem* ite
 	CheckerboardItem* _tmp8_ = NULL;
 	CheckerboardItem* _tmp9_ = NULL;
 	CheckerboardItem* _tmp10_ = NULL;
-#line 1844 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1916 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1844 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1916 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item));
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = item;
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = data_collection_mark (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_DATA_OBJECT, DataObject));
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_;
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1845 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
 	marker = _tmp4_;
-#line 1846 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1846 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_;
-#line 1846 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Page.vala"
 	view_collection_select_marked (_tmp6_, marker);
-#line 1846 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1918 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp6_);
-#line 1848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = item;
-#line 1848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _g_object_ref0 (_tmp7_);
-#line 1848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->cursor);
-#line 1848 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
 	self->cursor = _tmp8_;
-#line 1849 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = item;
-#line 1849 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = _g_object_ref0 (_tmp9_);
-#line 1849 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->anchor);
-#line 1849 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
 	self->anchor = _tmp10_;
-#line 1844 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1916 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (marker);
-#line 11946 "Page.c"
+#line 12354 "Page.c"
 }
 
 
@@ -11957,29 +12365,29 @@ void checkerboard_page_select_between_items (CheckerboardPage* self, Checkerboar
 	ViewCollection* _tmp28_ = NULL;
 	ViewCollection* _tmp29_ = NULL;
 	Marker* _tmp30_ = NULL;
-#line 1852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1924 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1924 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item_start));
-#line 1852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1924 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_ITEM (item_end));
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = data_collection_start_marking (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1853 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
 	marker = _tmp3_;
-#line 1855 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1927 "/home/jens/Source/shotwell/src/Page.vala"
 	passed_start = FALSE;
-#line 1856 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1928 "/home/jens/Source/shotwell/src/Page.vala"
 	passed_end = FALSE;
-#line 11983 "Page.c"
+#line 12391 "Page.c"
 	{
 		GeeIterator* _object_it = NULL;
 		ViewCollection* _tmp4_ = NULL;
@@ -11988,27 +12396,27 @@ void checkerboard_page_select_between_items (CheckerboardPage* self, Checkerboar
 		GeeCollection* _tmp7_ = NULL;
 		GeeIterator* _tmp8_ = NULL;
 		GeeIterator* _tmp9_ = NULL;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = _tmp4_;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = data_collection_get_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = _tmp6_;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp7_);
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_object_it = _tmp9_;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		while (TRUE) {
-#line 12012 "Page.c"
+#line 12420 "Page.c"
 			GeeIterator* _tmp10_ = NULL;
 			gboolean _tmp11_ = FALSE;
 			DataObject* object = NULL;
@@ -12025,125 +12433,125 @@ void checkerboard_page_select_between_items (CheckerboardPage* self, Checkerboar
 			gboolean _tmp21_ = FALSE;
 			gboolean _tmp25_ = FALSE;
 			gboolean _tmp26_ = FALSE;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = _object_it;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp11_ = gee_iterator_next (_tmp10_);
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!_tmp11_) {
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 12037 "Page.c"
+#line 12445 "Page.c"
 			}
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = _object_it;
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = gee_iterator_get (_tmp12_);
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			object = (DataObject*) _tmp13_;
-#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = object;
-#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, TYPE_CHECKERBOARD_ITEM, CheckerboardItem));
-#line 1859 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1931 "/home/jens/Source/shotwell/src/Page.vala"
 			item = _tmp15_;
-#line 1861 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp16_ = item_start;
-#line 1861 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1933 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp17_ = item;
-#line 1861 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1933 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp16_ == _tmp17_) {
-#line 1862 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1934 "/home/jens/Source/shotwell/src/Page.vala"
 				passed_start = TRUE;
-#line 12059 "Page.c"
+#line 12467 "Page.c"
 			}
-#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = item_end;
-#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = item;
-#line 1864 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1936 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp18_ == _tmp19_) {
-#line 1865 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1937 "/home/jens/Source/shotwell/src/Page.vala"
 				passed_end = TRUE;
-#line 12069 "Page.c"
+#line 12477 "Page.c"
 			}
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp21_ = passed_start;
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp21_) {
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp20_ = TRUE;
-#line 12077 "Page.c"
+#line 12485 "Page.c"
 			} else {
 				gboolean _tmp22_ = FALSE;
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp22_ = passed_end;
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp20_ = _tmp22_;
-#line 12084 "Page.c"
+#line 12492 "Page.c"
 			}
-#line 1867 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp20_) {
-#line 12088 "Page.c"
+#line 12496 "Page.c"
 				Marker* _tmp23_ = NULL;
 				DataObject* _tmp24_ = NULL;
-#line 1868 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1940 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp23_ = marker;
-#line 1868 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1940 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24_ = object;
-#line 1868 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1940 "/home/jens/Source/shotwell/src/Page.vala"
 				marker_mark (_tmp23_, G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, TYPE_DATA_VIEW, DataView), TYPE_DATA_OBJECT, DataObject));
-#line 12097 "Page.c"
+#line 12505 "Page.c"
 			}
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = passed_start;
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp26_) {
-#line 12103 "Page.c"
+#line 12511 "Page.c"
 				gboolean _tmp27_ = FALSE;
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp27_ = passed_end;
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25_ = _tmp27_;
-#line 12109 "Page.c"
+#line 12517 "Page.c"
 			} else {
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25_ = FALSE;
-#line 12113 "Page.c"
+#line 12521 "Page.c"
 			}
-#line 1870 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1942 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp25_) {
-#line 1871 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (item);
-#line 1871 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (object);
-#line 1871 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1943 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 12123 "Page.c"
+#line 12531 "Page.c"
 			}
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (item);
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (object);
-#line 12129 "Page.c"
+#line 12537 "Page.c"
 		}
-#line 1858 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1930 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_object_it);
-#line 12133 "Page.c"
+#line 12541 "Page.c"
 	}
-#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp28_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = _tmp28_;
-#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = marker;
-#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
 	view_collection_select_marked (_tmp29_, _tmp30_);
-#line 1874 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp29_);
-#line 1852 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1924 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (marker);
-#line 12147 "Page.c"
+#line 12555 "Page.c"
 }
 
 
@@ -12151,65 +12559,65 @@ void checkerboard_page_select_anchor_to_cursor (CheckerboardPage* self, guint st
 	gboolean _tmp0_ = FALSE;
 	CheckerboardItem* _tmp1_ = NULL;
 	guint _tmp3_ = 0U;
-#line 1877 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1949 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->cursor;
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ == NULL) {
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = TRUE;
-#line 12163 "Page.c"
+#line 12571 "Page.c"
 	} else {
 		CheckerboardItem* _tmp2_ = NULL;
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->anchor;
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp2_ == NULL;
-#line 12170 "Page.c"
+#line 12578 "Page.c"
 	}
-#line 1878 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 1879 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1951 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 12176 "Page.c"
+#line 12584 "Page.c"
 	}
-#line 1881 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1953 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = state;
-#line 1881 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1953 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_ == ((guint) GDK_SHIFT_MASK)) {
-#line 12182 "Page.c"
+#line 12590 "Page.c"
 		ViewCollection* _tmp4_ = NULL;
 		ViewCollection* _tmp5_ = NULL;
 		CheckerboardItem* _tmp6_ = NULL;
 		CheckerboardItem* _tmp7_ = NULL;
-#line 1882 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1882 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = _tmp4_;
-#line 1882 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
 		view_collection_unselect_all (_tmp5_);
-#line 1882 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1955 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = self->anchor;
-#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1955 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = self->cursor;
-#line 1883 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1955 "/home/jens/Source/shotwell/src/Page.vala"
 		checkerboard_page_select_between_items (self, _tmp6_, _tmp7_);
-#line 12201 "Page.c"
+#line 12609 "Page.c"
 	} else {
 		CheckerboardItem* _tmp8_ = NULL;
 		CheckerboardItem* _tmp9_ = NULL;
-#line 1885 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = self->cursor;
-#line 1885 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _g_object_ref0 (_tmp8_);
-#line 1885 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->anchor);
-#line 1885 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
 		self->anchor = _tmp9_;
-#line 12213 "Page.c"
+#line 12621 "Page.c"
 	}
 }
 
@@ -12223,48 +12631,48 @@ static void checkerboard_page_real_set_display_titles (CheckerboardPage* self, g
 	GValue _tmp5_ = {0};
 	ViewCollection* _tmp6_ = NULL;
 	ViewCollection* _tmp7_ = NULL;
-#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1962 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1962 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1962 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_freeze_notifications (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1890 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1962 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = display;
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	g_value_init (&_tmp5_, G_TYPE_BOOLEAN);
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	g_value_set_boolean (&_tmp5_, _tmp4_);
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_set_property (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_COLLECTION, DataCollection), CHECKERBOARD_ITEM_PROP_SHOW_TITLES, &_tmp5_, NULL, NULL);
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	G_IS_VALUE (&_tmp5_) ? (g_value_unset (&_tmp5_), NULL) : NULL;
-#line 1891 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp3_);
-#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_;
-#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_thaw_notifications (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1892 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp7_);
-#line 12259 "Page.c"
+#line 12667 "Page.c"
 }
 
 
 void checkerboard_page_set_display_titles (CheckerboardPage* self, gboolean display) {
-#line 1889 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1961 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1889 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1961 "/home/jens/Source/shotwell/src/Page.vala"
 	CHECKERBOARD_PAGE_GET_CLASS (self)->set_display_titles (self, display);
-#line 12268 "Page.c"
+#line 12676 "Page.c"
 }
 
 
@@ -12277,48 +12685,48 @@ static void checkerboard_page_real_set_display_comments (CheckerboardPage* self,
 	GValue _tmp5_ = {0};
 	ViewCollection* _tmp6_ = NULL;
 	ViewCollection* _tmp7_ = NULL;
-#line 1896 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1896 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1896 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_freeze_notifications (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1896 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = display;
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	g_value_init (&_tmp5_, G_TYPE_BOOLEAN);
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	g_value_set_boolean (&_tmp5_, _tmp4_);
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_set_property (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_DATA_COLLECTION, DataCollection), CHECKERBOARD_ITEM_PROP_SHOW_COMMENTS, &_tmp5_, NULL, NULL);
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	G_IS_VALUE (&_tmp5_) ? (g_value_unset (&_tmp5_), NULL) : NULL;
-#line 1897 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp3_);
-#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1970 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1970 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = _tmp6_;
-#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1970 "/home/jens/Source/shotwell/src/Page.vala"
 	data_collection_thaw_notifications (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_DATA_COLLECTION, DataCollection));
-#line 1898 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1970 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp7_);
-#line 12313 "Page.c"
+#line 12721 "Page.c"
 }
 
 
 void checkerboard_page_set_display_comments (CheckerboardPage* self, gboolean display) {
-#line 1895 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1967 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_CHECKERBOARD_PAGE (self));
-#line 1895 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1967 "/home/jens/Source/shotwell/src/Page.vala"
 	CHECKERBOARD_PAGE_GET_CLASS (self)->set_display_comments (self, display);
-#line 12322 "Page.c"
+#line 12730 "Page.c"
 }
 
 
@@ -12331,54 +12739,54 @@ void checkerboard_page_keyboard_modifiers_init (CheckerboardPageKeyboardModifier
 	gboolean _tmp5_ = FALSE;
 	Page* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 1188 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1250 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 1188 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1250 "/home/jens/Source/shotwell/src/Page.vala"
 	memset (self, 0, sizeof (CheckerboardPageKeyboardModifiers));
-#line 1189 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1251 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page;
-#line 1189 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1251 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_ctrl_pressed (_tmp0_);
-#line 1189 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1251 "/home/jens/Source/shotwell/src/Page.vala"
 	(*self).ctrl_pressed = _tmp1_;
-#line 1190 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1252 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page;
-#line 1190 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1252 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = page_get_alt_pressed (_tmp2_);
-#line 1190 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1252 "/home/jens/Source/shotwell/src/Page.vala"
 	(*self).alt_pressed = _tmp3_;
-#line 1191 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1253 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = page;
-#line 1191 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1253 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = page_get_shift_pressed (_tmp4_);
-#line 1191 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1253 "/home/jens/Source/shotwell/src/Page.vala"
 	(*self).shift_pressed = _tmp5_;
-#line 1192 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = page;
-#line 1192 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = page_get_super_pressed (_tmp6_);
-#line 1192 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1254 "/home/jens/Source/shotwell/src/Page.vala"
 	(*self).super_pressed = _tmp7_;
-#line 12363 "Page.c"
+#line 12771 "Page.c"
 }
 
 
 CheckerboardPageKeyboardModifiers* checkerboard_page_keyboard_modifiers_dup (const CheckerboardPageKeyboardModifiers* self) {
 	CheckerboardPageKeyboardModifiers* dup;
-#line 1187 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1249 "/home/jens/Source/shotwell/src/Page.vala"
 	dup = g_new0 (CheckerboardPageKeyboardModifiers, 1);
-#line 1187 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1249 "/home/jens/Source/shotwell/src/Page.vala"
 	memcpy (dup, self, sizeof (CheckerboardPageKeyboardModifiers));
-#line 1187 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1249 "/home/jens/Source/shotwell/src/Page.vala"
 	return dup;
-#line 12375 "Page.c"
+#line 12783 "Page.c"
 }
 
 
 void checkerboard_page_keyboard_modifiers_free (CheckerboardPageKeyboardModifiers* self) {
-#line 1187 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1249 "/home/jens/Source/shotwell/src/Page.vala"
 	g_free (self);
-#line 12382 "Page.c"
+#line 12790 "Page.c"
 }
 
 
@@ -12394,109 +12802,113 @@ GType checkerboard_page_keyboard_modifiers_get_type (void) {
 
 
 static void checkerboard_page_class_init (CheckerboardPageClass * klass) {
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	checkerboard_page_parent_class = g_type_class_peek_parent (klass);
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	g_type_class_add_private (klass, sizeof (CheckerboardPagePrivate));
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->get_item_context_menu = checkerboard_page_real_get_item_context_menu;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->get_page_context_menu = checkerboard_page_real_get_page_context_menu;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_context_keypress = checkerboard_page_real_on_context_keypress;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->get_view_empty_message = checkerboard_page_real_get_view_empty_message;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->get_filter_no_match_message = checkerboard_page_real_get_filter_no_match_message;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->on_item_activated = checkerboard_page_real_on_item_activated;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->get_search_view_filter = checkerboard_page_real_get_search_view_filter;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->get_view_tracker = checkerboard_page_real_get_view_tracker;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switching_from = checkerboard_page_real_switching_from;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switched_to = checkerboard_page_real_switched_to;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->set_page_name = checkerboard_page_real_set_page_name;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((GtkWidgetClass *) klass)->key_press_event = checkerboard_page_real_key_press_event;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_left_click = checkerboard_page_real_on_left_click;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_left_released = checkerboard_page_real_on_left_released;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_right_click = checkerboard_page_real_on_right_click;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->on_mouse_over = checkerboard_page_real_on_mouse_over;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_motion = checkerboard_page_real_on_motion;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->set_display_titles = checkerboard_page_real_set_display_titles;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	((CheckerboardPageClass *) klass)->set_display_comments = checkerboard_page_real_set_display_comments;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (klass)->finalize = checkerboard_page_finalize;
-#line 12442 "Page.c"
+#line 12850 "Page.c"
 }
 
 
 static void checkerboard_page_instance_init (CheckerboardPage * self) {
 	GtkViewport* _tmp0_ = NULL;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv = CHECKERBOARD_PAGE_GET_PRIVATE (self);
-#line 1172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->item_context_menu_path = NULL;
-#line 1173 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1235 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->page_context_menu_path = NULL;
-#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1236 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = (GtkViewport*) gtk_viewport_new (NULL, NULL);
-#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1236 "/home/jens/Source/shotwell/src/Page.vala"
 	g_object_ref_sink (_tmp0_);
-#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1236 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->viewport = _tmp0_;
-#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1237 "/home/jens/Source/shotwell/src/Page.vala"
 	self->anchor = NULL;
-#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
 	self->cursor = NULL;
-#line 1177 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1239 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->highlighted = NULL;
-#line 1178 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1240 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->autoscroll_scheduled = FALSE;
-#line 1179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1241 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->activated_item = NULL;
-#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1242 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->previously_selected = NULL;
-#line 12472 "Page.c"
+#line 12880 "Page.c"
 }
 
 
 static void checkerboard_page_finalize (GObject* obj) {
 	CheckerboardPage * self;
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_CHECKERBOARD_PAGE, CheckerboardPage);
-#line 1171 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1233 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->layout);
-#line 1172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1234 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->item_context_menu_path);
-#line 1173 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1235 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (self->priv->page_context_menu_path);
-#line 1174 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1236 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->viewport);
-#line 1175 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1237 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->anchor);
-#line 1176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1238 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->cursor);
-#line 1177 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1239 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->highlighted);
-#line 1179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1241 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->activated_item);
-#line 1180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1242 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->previously_selected);
-#line 1167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1309 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (self->priv->item_context_menu);
+#line 1321 "/home/jens/Source/shotwell/src/Page.vala"
+	_g_object_unref0 (self->priv->page_context_menu);
+#line 1229 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (checkerboard_page_parent_class)->finalize (obj);
-#line 12500 "Page.c"
+#line 12912 "Page.c"
 }
 
 
@@ -12525,18 +12937,18 @@ GType single_photo_page_update_reason_get_type (void) {
 
 
 static void _single_photo_page_on_viewport_resize_gtk_widget_size_allocate (GtkWidget* _sender, GtkAllocation* allocation, gpointer self) {
-#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2029 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_on_viewport_resize ((SinglePhotoPage*) self);
-#line 12531 "Page.c"
+#line 12943 "Page.c"
 }
 
 
 static gboolean _single_photo_page_on_canvas_exposed_gtk_widget_draw (GtkWidget* _sender, cairo_t* cr, gpointer self) {
 	gboolean result;
 	result = single_photo_page_on_canvas_exposed ((SinglePhotoPage*) self, cr);
-#line 1958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2030 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 12540 "Page.c"
+#line 12952 "Page.c"
 }
 
 
@@ -12556,71 +12968,71 @@ SinglePhotoPage* single_photo_page_construct (GType object_type, const gchar* pa
 	GtkViewport* _tmp11_ = NULL;
 	GtkDrawingArea* _tmp12_ = NULL;
 	GtkDrawingArea* _tmp13_ = NULL;
-#line 1934 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (page_name != NULL, NULL);
-#line 1935 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2007 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_name;
-#line 1935 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2007 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (SinglePhotoPage*) page_construct (object_type, _tmp0_);
-#line 1937 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = scale_up_to_viewport;
-#line 1937 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->scale_up_to_viewport = _tmp1_;
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = transition_effects_manager_get_instance ();
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = transition_effects_manager_create_null_transition_clock (_tmp3_);
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	_transition_clock_unref0 (self->priv->transition_clock);
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->transition_clock = _tmp4_;
-#line 1939 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2011 "/home/jens/Source/shotwell/src/Page.vala"
 	_transition_effects_manager_unref0 (_tmp3_);
-#line 1943 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2015 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_scrolled_window_set_policy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-#line 1945 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2017 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), (guint) 0);
-#line 1946 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2018 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_scrolled_window_set_shadow_type (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), GTK_SHADOW_NONE);
-#line 1948 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2020 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->viewport;
-#line 1948 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2020 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_viewport_set_shadow_type (_tmp5_, GTK_SHADOW_NONE);
-#line 1949 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2021 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->viewport;
-#line 1949 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2021 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_container_get_type (), GtkContainer), (guint) 0);
-#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2022 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->viewport;
-#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2022 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->canvas;
-#line 1950 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2022 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget));
-#line 1952 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->viewport;
-#line 1952 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2024 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2026 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = self->canvas;
-#line 1954 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2026 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_add_events (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), (gint) ((GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK) | GDK_SUBSTRUCTURE_MASK));
-#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2029 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = self->viewport;
-#line 1957 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2029 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), "size-allocate", (GCallback) _single_photo_page_on_viewport_resize_gtk_widget_size_allocate, self, 0);
-#line 1958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2030 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = self->canvas;
-#line 1958 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2030 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), "draw", (GCallback) _single_photo_page_on_canvas_exposed_gtk_widget_draw, self, 0);
-#line 1960 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = self->canvas;
-#line 1960 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2032 "/home/jens/Source/shotwell/src/Page.vala"
 	page_set_event_source (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget));
-#line 1934 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 12624 "Page.c"
+#line 13036 "Page.c"
 }
 
 
@@ -12628,38 +13040,38 @@ gboolean single_photo_page_is_transition_in_progress (SinglePhotoPage* self) {
 	gboolean result = FALSE;
 	TransitionClock* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1963 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2035 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), FALSE);
-#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->transition_clock;
-#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = transition_clock_is_in_progress (_tmp0_);
-#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 1964 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 12642 "Page.c"
+#line 13054 "Page.c"
 }
 
 
 void single_photo_page_cancel_transition (SinglePhotoPage* self) {
 	TransitionClock* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1967 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2039 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2040 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->transition_clock;
-#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2040 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = transition_clock_is_in_progress (_tmp0_);
-#line 1968 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2040 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 12657 "Page.c"
+#line 13069 "Page.c"
 		TransitionClock* _tmp2_ = NULL;
-#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->transition_clock;
-#line 1969 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2041 "/home/jens/Source/shotwell/src/Page.vala"
 		transition_clock_cancel (_tmp2_);
-#line 12663 "Page.c"
+#line 13075 "Page.c"
 	}
 }
 
@@ -12671,53 +13083,53 @@ void single_photo_page_set_transition (SinglePhotoPage* self, const gchar* effec
 	TransitionClock* _tmp3_ = NULL;
 	TransitionClock* _tmp4_ = NULL;
 	gint _tmp8_ = 0;
-#line 1972 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 1972 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2044 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (effect_id != NULL);
-#line 1973 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2045 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_cancel_transition (self);
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = transition_effects_manager_get_instance ();
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = effect_id;
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = transition_effects_manager_create_transition_clock (_tmp1_, _tmp2_);
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_transition_clock_unref0 (self->priv->transition_clock);
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->transition_clock = _tmp3_;
-#line 1975 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2047 "/home/jens/Source/shotwell/src/Page.vala"
 	_transition_effects_manager_unref0 (_tmp1_);
-#line 1976 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2048 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->transition_clock;
-#line 1976 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2048 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ == NULL) {
-#line 12699 "Page.c"
+#line 13111 "Page.c"
 		TransitionEffectsManager* _tmp5_ = NULL;
 		TransitionEffectsManager* _tmp6_ = NULL;
 		TransitionClock* _tmp7_ = NULL;
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = transition_effects_manager_get_instance ();
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = _tmp5_;
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = transition_effects_manager_create_null_transition_clock (_tmp6_);
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		_transition_clock_unref0 (self->priv->transition_clock);
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->transition_clock = _tmp7_;
-#line 1977 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
 		_transition_effects_manager_unref0 (_tmp6_);
-#line 12715 "Page.c"
+#line 13127 "Page.c"
 	}
-#line 1979 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2051 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = duration_msec;
-#line 1979 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2051 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->transition_duration_msec = _tmp8_;
-#line 12721 "Page.c"
+#line 13133 "Page.c"
 }
 
 
@@ -12749,86 +13161,86 @@ static void single_photo_page_render_zoomed_to_pixmap (SinglePhotoPage* self, Zo
 	gint _tmp49_ = 0;
 	gint _tmp50_ = 0;
 	cairo_t* _tmp51_ = NULL;
-#line 1983 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 1983 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (zoom_state != NULL);
-#line 1984 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2056 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = single_photo_page_is_zoom_supported (self);
-#line 1984 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2056 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_, "is_zoom_supported()");
-#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2058 "/home/jens/Source/shotwell/src/Page.vala"
 	zoom_state_get_viewing_rectangle_wrt_content (zoom_state, &_tmp1_);
-#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2058 "/home/jens/Source/shotwell/src/Page.vala"
 	view_rect = _tmp1_;
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = single_photo_page_get_zoom_buffer (self);
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_ != NULL;
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp3_);
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 12775 "Page.c"
+#line 13187 "Page.c"
 		GdkPixbuf* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
 		GdkPixbuf* _tmp15_ = NULL;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = self->priv->zoom_high_quality;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp6_) {
-#line 12783 "Page.c"
+#line 13195 "Page.c"
 			ZoomBuffer* _tmp7_ = NULL;
 			ZoomBuffer* _tmp8_ = NULL;
 			ZoomState _tmp9_ = {0};
 			GdkPixbuf* _tmp10_ = NULL;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp7_ = single_photo_page_get_zoom_buffer (self);
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp8_ = _tmp7_;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp9_ = *zoom_state;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = zoom_buffer_get_zoomed_image (_tmp8_, &_tmp9_);
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp5_);
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = _tmp10_;
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp8_);
-#line 12802 "Page.c"
+#line 13214 "Page.c"
 		} else {
 			ZoomBuffer* _tmp11_ = NULL;
 			ZoomBuffer* _tmp12_ = NULL;
 			ZoomState _tmp13_ = {0};
 			GdkPixbuf* _tmp14_ = NULL;
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp11_ = single_photo_page_get_zoom_buffer (self);
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = _tmp11_;
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = *zoom_state;
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = zoom_buffer_get_zoom_preview_image (_tmp12_, &_tmp13_);
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp5_);
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp5_ = _tmp14_;
-#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2063 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (_tmp12_);
-#line 12822 "Page.c"
+#line 13234 "Page.c"
 		}
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = _g_object_ref0 (_tmp5_);
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (zoomed);
-#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
 		zoomed = _tmp15_;
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp5_);
-#line 12832 "Page.c"
+#line 13244 "Page.c"
 	} else {
 		GdkRectangle view_rect_proj = {0};
 		GdkPixbuf* _tmp16_ = NULL;
@@ -12850,113 +13262,113 @@ static void single_photo_page_render_zoomed_to_pixmap (SinglePhotoPage* self, Zo
 		GdkRectangle _tmp31_ = {0};
 		gint _tmp32_ = 0;
 		GdkPixbuf* _tmp33_ = NULL;
-#line 1993 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2065 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = self->priv->unscaled;
-#line 1993 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2065 "/home/jens/Source/shotwell/src/Page.vala"
 		zoom_state_get_viewing_rectangle_projection (zoom_state, _tmp16_, &_tmp17_);
-#line 1993 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2065 "/home/jens/Source/shotwell/src/Page.vala"
 		view_rect_proj = _tmp17_;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = self->priv->unscaled;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = view_rect_proj;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = _tmp19_.x;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = view_rect_proj;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = _tmp21_.y;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = view_rect_proj;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = _tmp23_.width;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp25_ = view_rect_proj;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp26_ = _tmp25_.height;
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp27_ = gdk_pixbuf_new_subpixbuf (_tmp18_, _tmp20_, _tmp22_, _tmp24_, _tmp26_);
-#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2067 "/home/jens/Source/shotwell/src/Page.vala"
 		proj_subpixbuf = _tmp27_;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp28_ = proj_subpixbuf;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp29_ = view_rect;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp30_ = _tmp29_.width;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp31_ = view_rect;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp32_ = _tmp31_.height;
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp33_ = gdk_pixbuf_scale_simple (_tmp28_, _tmp30_, _tmp32_, GDK_INTERP_BILINEAR);
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (zoomed);
-#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
 		zoomed = _tmp33_;
-#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (proj_subpixbuf);
-#line 12900 "Page.c"
+#line 13312 "Page.c"
 	}
-#line 2002 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2074 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp34_ = zoomed;
-#line 2002 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2074 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp34_ == NULL) {
-#line 2003 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2075 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (zoomed);
-#line 2003 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2075 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 12910 "Page.c"
+#line 13322 "Page.c"
 	}
-#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp35_ = self->priv->pixmap_dim;
-#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp36_ = _tmp35_.width;
-#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp37_ = view_rect;
-#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp38_ = _tmp37_.width;
-#line 2006 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
 	draw_x = (_tmp36_ - _tmp38_) / 2;
-#line 2007 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2079 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp39_ = draw_x;
-#line 2007 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2079 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp40_ = CLAMP (_tmp39_, 0, G_MAXINT);
-#line 2007 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2079 "/home/jens/Source/shotwell/src/Page.vala"
 	draw_x = _tmp40_;
-#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp41_ = self->priv->pixmap_dim;
-#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp42_ = _tmp41_.height;
-#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp43_ = view_rect;
-#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp44_ = _tmp43_.height;
-#line 2009 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2081 "/home/jens/Source/shotwell/src/Page.vala"
 	draw_y = (_tmp42_ - _tmp44_) / 2;
-#line 2010 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2082 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp45_ = draw_y;
-#line 2010 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2082 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp46_ = CLAMP (_tmp45_, 0, G_MAXINT);
-#line 2010 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2082 "/home/jens/Source/shotwell/src/Page.vala"
 	draw_y = _tmp46_;
-#line 2012 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp47_ = self->priv->pixmap_ctx;
-#line 2012 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp48_ = zoomed;
-#line 2012 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp49_ = draw_x;
-#line 2012 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp50_ = draw_y;
-#line 2012 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
 	gdk_cairo_set_source_pixbuf (_tmp47_, _tmp48_, (gdouble) _tmp49_, (gdouble) _tmp50_);
-#line 2013 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp51_ = self->priv->pixmap_ctx;
-#line 2013 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2085 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_paint (_tmp51_);
-#line 1983 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2055 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (zoomed);
-#line 12960 "Page.c"
+#line 13372 "Page.c"
 }
 
 
@@ -12968,39 +13380,39 @@ void single_photo_page_on_interactive_zoom (SinglePhotoPage* self, ZoomState* in
 	gboolean _tmp3_ = FALSE;
 	ZoomState _tmp4_ = {0};
 	GtkDrawingArea* _tmp5_ = NULL;
-#line 2016 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2088 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2016 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2088 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (interactive_zoom_state != NULL);
-#line 2017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2089 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = single_photo_page_is_zoom_supported (self);
-#line 2017 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2089 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_, "is_zoom_supported()");
-#line 2019 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2091 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->pixmap_ctx;
-#line 2019 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2091 "/home/jens/Source/shotwell/src/Page.vala"
 	set_source_color_from_string (_tmp1_, "#000");
-#line 2020 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2092 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->pixmap_ctx;
-#line 2020 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2092 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_paint (_tmp2_);
-#line 2022 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2094 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = self->priv->zoom_high_quality;
-#line 2022 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2094 "/home/jens/Source/shotwell/src/Page.vala"
 	old_quality_setting = _tmp3_;
-#line 2023 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2095 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = FALSE;
-#line 2024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2096 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = *interactive_zoom_state;
-#line 2024 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2096 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_render_zoomed_to_pixmap (self, &_tmp4_);
-#line 2025 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2097 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = old_quality_setting;
-#line 2027 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2099 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->canvas;
-#line 2027 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2099 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_queue_draw (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 13004 "Page.c"
+#line 13416 "Page.c"
 }
 
 
@@ -13012,230 +13424,230 @@ void single_photo_page_on_interactive_pan (SinglePhotoPage* self, ZoomState* int
 	gboolean _tmp3_ = FALSE;
 	ZoomState _tmp4_ = {0};
 	GtkDrawingArea* _tmp5_ = NULL;
-#line 2030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2102 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2030 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2102 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (interactive_zoom_state != NULL);
-#line 2031 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2103 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = single_photo_page_is_zoom_supported (self);
-#line 2031 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2103 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_, "is_zoom_supported()");
-#line 2033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->pixmap_ctx;
-#line 2033 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2105 "/home/jens/Source/shotwell/src/Page.vala"
 	set_source_color_from_string (_tmp1_, "#000");
-#line 2034 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2106 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->pixmap_ctx;
-#line 2034 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2106 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_paint (_tmp2_);
-#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2108 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = self->priv->zoom_high_quality;
-#line 2036 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2108 "/home/jens/Source/shotwell/src/Page.vala"
 	old_quality_setting = _tmp3_;
-#line 2037 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2109 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = TRUE;
-#line 2038 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = *interactive_zoom_state;
-#line 2038 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_render_zoomed_to_pixmap (self, &_tmp4_);
-#line 2039 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2111 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = old_quality_setting;
-#line 2041 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2113 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->canvas;
-#line 2041 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2113 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_queue_draw (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 13048 "Page.c"
+#line 13460 "Page.c"
 }
 
 
 static gboolean single_photo_page_real_is_zoom_supported (SinglePhotoPage* self) {
 	gboolean result = FALSE;
-#line 2045 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2117 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 2045 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2117 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13058 "Page.c"
+#line 13470 "Page.c"
 }
 
 
 gboolean single_photo_page_is_zoom_supported (SinglePhotoPage* self) {
-#line 2044 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), FALSE);
-#line 2044 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
 	return SINGLE_PHOTO_PAGE_GET_CLASS (self)->is_zoom_supported (self);
-#line 13067 "Page.c"
+#line 13479 "Page.c"
 }
 
 
 static void single_photo_page_real_cancel_zoom (SinglePhotoPage* self) {
 	cairo_surface_t* _tmp0_ = NULL;
-#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2121 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap;
-#line 2049 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2121 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 13077 "Page.c"
+#line 13489 "Page.c"
 		cairo_t* _tmp1_ = NULL;
 		cairo_t* _tmp2_ = NULL;
-#line 2050 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2122 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->pixmap_ctx;
-#line 2050 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2122 "/home/jens/Source/shotwell/src/Page.vala"
 		set_source_color_from_string (_tmp1_, "#000");
-#line 2051 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2123 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->pixmap_ctx;
-#line 2051 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2123 "/home/jens/Source/shotwell/src/Page.vala"
 		cairo_paint (_tmp2_);
-#line 13088 "Page.c"
+#line 13500 "Page.c"
 	}
 }
 
 
 void single_photo_page_cancel_zoom (SinglePhotoPage* self) {
-#line 2048 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2120 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2048 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2120 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->cancel_zoom (self);
-#line 13098 "Page.c"
+#line 13510 "Page.c"
 }
 
 
 static void single_photo_page_real_save_zoom_state (SinglePhotoPage* self) {
 	ZoomState _tmp0_ = {0};
-#line 2056 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2128 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->static_zoom_state;
-#line 2056 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2128 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->saved_zoom_state = _tmp0_;
-#line 2057 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2129 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->has_saved_zoom_state = TRUE;
-#line 13110 "Page.c"
+#line 13522 "Page.c"
 }
 
 
 void single_photo_page_save_zoom_state (SinglePhotoPage* self) {
-#line 2055 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2127 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2055 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2127 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->save_zoom_state (self);
-#line 13119 "Page.c"
+#line 13531 "Page.c"
 }
 
 
 static void single_photo_page_real_restore_zoom_state (SinglePhotoPage* self) {
 	gboolean _tmp0_ = FALSE;
 	ZoomState _tmp1_ = {0};
-#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2133 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->has_saved_zoom_state;
-#line 2061 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2133 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp0_) {
-#line 2062 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2134 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 13132 "Page.c"
+#line 13544 "Page.c"
 	}
-#line 2064 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2136 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->saved_zoom_state;
-#line 2064 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2136 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->static_zoom_state = _tmp1_;
-#line 2065 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2137 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_repaint (self, NULL);
-#line 2066 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2138 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->has_saved_zoom_state = FALSE;
-#line 13142 "Page.c"
+#line 13554 "Page.c"
 }
 
 
 void single_photo_page_restore_zoom_state (SinglePhotoPage* self) {
-#line 2060 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2132 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2060 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2132 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->restore_zoom_state (self);
-#line 13151 "Page.c"
+#line 13563 "Page.c"
 }
 
 
 static ZoomBuffer* single_photo_page_real_get_zoom_buffer (SinglePhotoPage* self) {
 	ZoomBuffer* result = NULL;
-#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2142 "/home/jens/Source/shotwell/src/Page.vala"
 	result = NULL;
-#line 2070 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2142 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13161 "Page.c"
+#line 13573 "Page.c"
 }
 
 
 ZoomBuffer* single_photo_page_get_zoom_buffer (SinglePhotoPage* self) {
-#line 2069 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), NULL);
-#line 2069 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
 	return SINGLE_PHOTO_PAGE_GET_CLASS (self)->get_zoom_buffer (self);
-#line 13170 "Page.c"
+#line 13582 "Page.c"
 }
 
 
 void single_photo_page_get_saved_zoom_state (SinglePhotoPage* self, ZoomState* result) {
 	ZoomState _tmp0_ = {0};
-#line 2073 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2145 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2074 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2146 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->saved_zoom_state;
-#line 2074 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2146 "/home/jens/Source/shotwell/src/Page.vala"
 	*result = _tmp0_;
-#line 2074 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2146 "/home/jens/Source/shotwell/src/Page.vala"
 	return;
-#line 13184 "Page.c"
+#line 13596 "Page.c"
 }
 
 
 void single_photo_page_set_zoom_state (SinglePhotoPage* self, ZoomState* zoom_state) {
 	gboolean _tmp0_ = FALSE;
 	ZoomState _tmp1_ = {0};
-#line 2077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2077 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (zoom_state != NULL);
-#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2150 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = single_photo_page_is_zoom_supported (self);
-#line 2078 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2150 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_, "is_zoom_supported()");
-#line 2080 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2152 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = *zoom_state;
-#line 2080 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2152 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->static_zoom_state = _tmp1_;
-#line 13203 "Page.c"
+#line 13615 "Page.c"
 }
 
 
 void single_photo_page_get_zoom_state (SinglePhotoPage* self, ZoomState* result) {
 	gboolean _tmp0_ = FALSE;
 	ZoomState _tmp1_ = {0};
-#line 2083 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2155 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2156 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = single_photo_page_is_zoom_supported (self);
-#line 2084 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2156 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_, "is_zoom_supported()");
-#line 2086 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->static_zoom_state;
-#line 2086 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
 	*result = _tmp1_;
-#line 2086 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
 	return;
-#line 13222 "Page.c"
+#line 13634 "Page.c"
 }
 
 
 static void single_photo_page_real_switched_to (Page* base) {
 	SinglePhotoPage * self;
 	GdkPixbuf* _tmp0_ = NULL;
-#line 2089 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2161 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 2090 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2162 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (single_photo_page_parent_class)->switched_to (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 2092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2164 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->unscaled;
-#line 2092 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2164 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 2093 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2165 "/home/jens/Source/shotwell/src/Page.vala"
 		single_photo_page_repaint (self, NULL);
-#line 13239 "Page.c"
+#line 13651 "Page.c"
 	}
 }
 
@@ -13244,21 +13656,21 @@ static void single_photo_page_real_set_container (Page* base, GtkWindow* contain
 	SinglePhotoPage * self;
 	GtkWindow* _tmp0_ = NULL;
 	GtkWindow* _tmp1_ = NULL;
-#line 2096 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2168 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 2096 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2168 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GTK_IS_WINDOW (container));
-#line 2097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2169 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = container;
-#line 2097 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2169 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (single_photo_page_parent_class)->set_container (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp0_);
-#line 2101 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2173 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = container;
-#line 2101 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2173 "/home/jens/Source/shotwell/src/Page.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, TYPE_FULLSCREEN_WINDOW)) {
-#line 2102 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2174 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_scrolled_window_set_policy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_scrolled_window_get_type (), GtkScrolledWindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-#line 13262 "Page.c"
+#line 13674 "Page.c"
 	}
 }
 
@@ -13275,92 +13687,92 @@ void single_photo_page_set_pixbuf (SinglePhotoPage* self, GdkPixbuf* unscaled, D
 	GdkPixbuf* _tmp8_ = NULL;
 	GtkDrawingArea* _tmp9_ = NULL;
 	Direction* _tmp10_ = NULL;
-#line 2109 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2109 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (unscaled));
-#line 2109 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (max_dim != NULL);
-#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2182 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = *max_dim;
-#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2182 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->pixmap_dim;
-#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2182 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = zoom_state_get_interpolation_factor (&self->priv->static_zoom_state);
-#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2182 "/home/jens/Source/shotwell/src/Page.vala"
 	zoom_state_get_viewport_center (&self->priv->static_zoom_state, &_tmp3_);
-#line 2110 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2182 "/home/jens/Source/shotwell/src/Page.vala"
 	zoom_state_init (&self->priv->static_zoom_state, &_tmp0_, &_tmp1_, _tmp2_, &_tmp3_);
-#line 2114 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2186 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_cancel_transition (self);
-#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = unscaled;
-#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->unscaled);
-#line 2116 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2188 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->unscaled = _tmp5_;
-#line 2117 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2189 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = *max_dim;
-#line 2117 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2189 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->max_dim = _tmp6_;
-#line 2118 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2190 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = self->priv->scaled;
-#line 2118 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2190 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _g_object_ref0 (_tmp7_);
-#line 2118 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2190 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->old_scaled);
-#line 2118 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2190 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->old_scaled = _tmp8_;
-#line 2119 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2191 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->scaled);
-#line 2119 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2191 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->scaled = NULL;
-#line 2122 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2194 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = self->canvas;
-#line 2122 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2194 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_realize (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 2124 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = direction;
-#line 2124 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2196 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_repaint (self, _tmp10_);
-#line 13329 "Page.c"
+#line 13741 "Page.c"
 }
 
 
 void single_photo_page_blank_display (SinglePhotoPage* self) {
 	GtkDrawingArea* _tmp0_ = NULL;
-#line 2127 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2199 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2128 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->unscaled);
-#line 2128 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2200 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->unscaled = NULL;
-#line 2129 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2201 "/home/jens/Source/shotwell/src/Page.vala"
 	dimensions_init (&self->priv->max_dim, 0, 0);
-#line 2130 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2202 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->scaled);
-#line 2130 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2202 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->scaled = NULL;
-#line 2131 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2203 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_surface_destroy0 (self->priv->pixmap);
-#line 2131 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2203 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->pixmap = NULL;
-#line 2134 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2206 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->canvas;
-#line 2134 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2206 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_realize (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 2137 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2209 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_invalidate_all (self);
-#line 13357 "Page.c"
+#line 13769 "Page.c"
 }
 
 
 static gpointer _cairo_surface_reference0 (gpointer self) {
-#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2213 "/home/jens/Source/shotwell/src/Page.vala"
 	return self ? cairo_surface_reference (self) : NULL;
-#line 13364 "Page.c"
+#line 13776 "Page.c"
 }
 
 
@@ -13368,38 +13780,38 @@ cairo_surface_t* single_photo_page_get_surface (SinglePhotoPage* self) {
 	cairo_surface_t* result = NULL;
 	cairo_surface_t* _tmp0_ = NULL;
 	cairo_surface_t* _tmp1_ = NULL;
-#line 2140 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2212 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), NULL);
-#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2213 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap;
-#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2213 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _cairo_surface_reference0 (_tmp0_);
-#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2213 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 2141 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2213 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13382 "Page.c"
+#line 13794 "Page.c"
 }
 
 
 void single_photo_page_get_surface_dim (SinglePhotoPage* self, Dimensions* result) {
 	Dimensions _tmp0_ = {0};
-#line 2144 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2216 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2145 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2217 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap_dim;
-#line 2145 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2217 "/home/jens/Source/shotwell/src/Page.vala"
 	*result = _tmp0_;
-#line 2145 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2217 "/home/jens/Source/shotwell/src/Page.vala"
 	return;
-#line 13396 "Page.c"
+#line 13808 "Page.c"
 }
 
 
 static gpointer _cairo_reference0 (gpointer self) {
-#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
 	return self ? cairo_reference (self) : NULL;
-#line 13403 "Page.c"
+#line 13815 "Page.c"
 }
 
 
@@ -13407,17 +13819,17 @@ cairo_t* single_photo_page_get_cairo_context (SinglePhotoPage* self) {
 	cairo_t* result = NULL;
 	cairo_t* _tmp0_ = NULL;
 	cairo_t* _tmp1_ = NULL;
-#line 2148 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2220 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), NULL);
-#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap_ctx;
-#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _cairo_reference0 (_tmp0_);
-#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 2149 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13421 "Page.c"
+#line 13833 "Page.c"
 }
 
 
@@ -13427,25 +13839,25 @@ void single_photo_page_paint_text (SinglePhotoPage* self, PangoLayout* pango_lay
 	gint _tmp2_ = 0;
 	cairo_t* _tmp3_ = NULL;
 	PangoLayout* _tmp4_ = NULL;
-#line 2152 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2152 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (PANGO_IS_LAYOUT (pango_layout));
-#line 2153 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->text_ctx;
-#line 2153 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = x;
-#line 2153 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = y;
-#line 2153 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_move_to (_tmp0_, (gdouble) _tmp1_, (gdouble) _tmp2_);
-#line 2154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2226 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = self->priv->text_ctx;
-#line 2154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2226 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = pango_layout;
-#line 2154 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2226 "/home/jens/Source/shotwell/src/Page.vala"
 	pango_cairo_show_layout (_tmp3_, _tmp4_);
-#line 13449 "Page.c"
+#line 13861 "Page.c"
 }
 
 
@@ -13454,55 +13866,55 @@ void single_photo_page_get_canvas_scaling (SinglePhotoPage* self, Scaling* resul
 	GtkWindow* _tmp1_ = NULL;
 	GtkWindow* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 2157 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2229 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_container (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, TYPE_FULLSCREEN_WINDOW);
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp2_);
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 13470 "Page.c"
+#line 13882 "Page.c"
 		GtkWindow* _tmp4_ = NULL;
 		GtkWindow* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
 		Scaling _tmp7_ = {0};
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = page_get_container (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = _tmp4_;
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = self->priv->scale_up_to_viewport;
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		scaling_for_screen (_tmp5_, _tmp6_, &_tmp7_);
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp7_;
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp5_);
-#line 13487 "Page.c"
+#line 13899 "Page.c"
 	} else {
 		GtkViewport* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 		Scaling _tmp10_ = {0};
-#line 2159 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2231 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = self->viewport;
-#line 2159 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2231 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = self->priv->scale_up_to_viewport;
-#line 2159 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2231 "/home/jens/Source/shotwell/src/Page.vala"
 		scaling_for_widget (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget), _tmp9_, &_tmp10_);
-#line 2159 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2231 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = _tmp10_;
-#line 13500 "Page.c"
+#line 13912 "Page.c"
 	}
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	*result = _tmp0_;
-#line 2158 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
 	return;
-#line 13506 "Page.c"
+#line 13918 "Page.c"
 }
 
 
@@ -13510,17 +13922,17 @@ GdkPixbuf* single_photo_page_get_unscaled_pixbuf (SinglePhotoPage* self) {
 	GdkPixbuf* result = NULL;
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp1_ = NULL;
-#line 2162 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2234 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), NULL);
-#line 2163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->unscaled;
-#line 2163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 2163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 2163 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13524 "Page.c"
+#line 13936 "Page.c"
 }
 
 
@@ -13528,31 +13940,31 @@ GdkPixbuf* single_photo_page_get_scaled_pixbuf (SinglePhotoPage* self) {
 	GdkPixbuf* result = NULL;
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp1_ = NULL;
-#line 2166 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2238 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), NULL);
-#line 2167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->scaled;
-#line 2167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 2167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp1_;
-#line 2167 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2239 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13542 "Page.c"
+#line 13954 "Page.c"
 }
 
 
 void single_photo_page_get_scaled_pixbuf_position (SinglePhotoPage* self, GdkRectangle* result) {
 	GdkRectangle _tmp0_ = {0};
-#line 2171 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2243 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->scaled_pos;
-#line 2172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
 	*result = _tmp0_;
-#line 2172 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
 	return;
-#line 13556 "Page.c"
+#line 13968 "Page.c"
 }
 
 
@@ -13562,50 +13974,50 @@ gboolean single_photo_page_is_inside_pixbuf (SinglePhotoPage* self, gint x, gint
 	gint _tmp1_ = 0;
 	GdkRectangle _tmp2_ = {0};
 	gboolean _tmp3_ = FALSE;
-#line 2175 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2247 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), FALSE);
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = x;
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = y;
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->scaled_pos;
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = coord_in_rectangle (_tmp0_, _tmp1_, &_tmp2_);
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp3_;
-#line 2176 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13580 "Page.c"
+#line 13992 "Page.c"
 }
 
 
 void single_photo_page_invalidate (SinglePhotoPage* self, GdkRectangle* rect) {
 	GtkDrawingArea* _tmp0_ = NULL;
 	GdkWindow* _tmp1_ = NULL;
-#line 2179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2251 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2179 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2251 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 2180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2252 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->canvas;
-#line 2180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2252 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 2180 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2252 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ != NULL) {
-#line 13597 "Page.c"
+#line 14009 "Page.c"
 		GtkDrawingArea* _tmp2_ = NULL;
 		GdkWindow* _tmp3_ = NULL;
 		GdkRectangle _tmp4_ = {0};
-#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->canvas;
-#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = *rect;
-#line 2181 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2253 "/home/jens/Source/shotwell/src/Page.vala"
 		gdk_window_invalidate_rect (_tmp3_, &_tmp4_, FALSE);
-#line 13609 "Page.c"
+#line 14021 "Page.c"
 	}
 }
 
@@ -13613,51 +14025,51 @@ void single_photo_page_invalidate (SinglePhotoPage* self, GdkRectangle* rect) {
 void single_photo_page_invalidate_all (SinglePhotoPage* self) {
 	GtkDrawingArea* _tmp0_ = NULL;
 	GdkWindow* _tmp1_ = NULL;
-#line 2184 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2256 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2185 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2257 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->canvas;
-#line 2185 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2257 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 2185 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2257 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_ != NULL) {
-#line 13625 "Page.c"
+#line 14037 "Page.c"
 		GtkDrawingArea* _tmp2_ = NULL;
 		GdkWindow* _tmp3_ = NULL;
-#line 2186 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->canvas;
-#line 2186 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 2186 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2258 "/home/jens/Source/shotwell/src/Page.vala"
 		gdk_window_invalidate_rect (_tmp3_, NULL, FALSE);
-#line 13634 "Page.c"
+#line 14046 "Page.c"
 	}
 }
 
 
 static void single_photo_page_on_viewport_resize (SinglePhotoPage* self) {
-#line 2189 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2261 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2191 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2263 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_internal_repaint (self, TRUE, NULL);
-#line 13644 "Page.c"
+#line 14056 "Page.c"
 }
 
 
 static void single_photo_page_real_on_resize_finished (Page* base, GdkRectangle* rect) {
 	SinglePhotoPage * self;
 	GdkRectangle _tmp0_ = {0};
-#line 2194 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2266 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 2194 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2266 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (rect != NULL);
-#line 2195 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = *rect;
-#line 2195 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2267 "/home/jens/Source/shotwell/src/Page.vala"
 	PAGE_CLASS (single_photo_page_parent_class)->on_resize_finished (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), &_tmp0_);
-#line 2198 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2270 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_repaint (self, NULL);
-#line 13661 "Page.c"
+#line 14073 "Page.c"
 }
 
 
@@ -13668,114 +14080,114 @@ static gboolean single_photo_page_on_canvas_exposed (SinglePhotoPage* self, cair
 	gint _tmp5_ = 0;
 	gint _tmp6_ = 0;
 	cairo_t* _tmp7_ = NULL;
-#line 2201 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2273 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_SINGLE_PHOTO_PAGE (self), FALSE);
-#line 2201 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2273 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (exposed_ctx != NULL, FALSE);
-#line 2204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap;
-#line 2204 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2276 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 13680 "Page.c"
+#line 14092 "Page.c"
 		cairo_t* _tmp1_ = NULL;
 		cairo_surface_t* _tmp2_ = NULL;
-#line 2205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = exposed_ctx;
-#line 2205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = self->priv->pixmap;
-#line 2205 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
 		cairo_set_source_surface (_tmp1_, _tmp2_, (gdouble) 0, (gdouble) 0);
-#line 13689 "Page.c"
+#line 14101 "Page.c"
 	} else {
 		cairo_t* _tmp3_ = NULL;
-#line 2207 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2279 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = exposed_ctx;
-#line 2207 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2279 "/home/jens/Source/shotwell/src/Page.vala"
 		set_source_color_from_string (_tmp3_, "#000");
-#line 13696 "Page.c"
+#line 14108 "Page.c"
 	}
-#line 2209 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = exposed_ctx;
-#line 2209 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = gtk_widget_get_allocated_width (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2209 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = gtk_widget_get_allocated_height (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 2209 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_rectangle (_tmp4_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp5_, (gdouble) _tmp6_);
-#line 2210 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2282 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = exposed_ctx;
-#line 2210 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2282 "/home/jens/Source/shotwell/src/Page.vala"
 	cairo_paint (_tmp7_);
-#line 2212 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2284 "/home/jens/Source/shotwell/src/Page.vala"
 	result = TRUE;
-#line 2212 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2284 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 13714 "Page.c"
+#line 14126 "Page.c"
 }
 
 
 static void single_photo_page_real_new_surface (SinglePhotoPage* self, cairo_t* ctx, Dimensions* ctx_dim) {
-#line 2215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (ctx != NULL);
-#line 2215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (ctx_dim != NULL);
-#line 13723 "Page.c"
+#line 14135 "Page.c"
 }
 
 
 void single_photo_page_new_surface (SinglePhotoPage* self, cairo_t* ctx, Dimensions* ctx_dim) {
-#line 2215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2215 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->new_surface (self, ctx, ctx_dim);
-#line 13732 "Page.c"
+#line 14144 "Page.c"
 }
 
 
 static void single_photo_page_real_updated_pixbuf (SinglePhotoPage* self, GdkPixbuf* pixbuf, SinglePhotoPageUpdateReason reason, Dimensions* old_dim) {
-#line 2218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2290 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-#line 2218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2290 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (old_dim != NULL);
-#line 13741 "Page.c"
+#line 14153 "Page.c"
 }
 
 
 void single_photo_page_updated_pixbuf (SinglePhotoPage* self, GdkPixbuf* pixbuf, SinglePhotoPageUpdateReason reason, Dimensions* old_dim) {
-#line 2218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2290 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2218 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2290 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->updated_pixbuf (self, pixbuf, reason, old_dim);
-#line 13750 "Page.c"
+#line 14162 "Page.c"
 }
 
 
 static void single_photo_page_real_paint (SinglePhotoPage* self, cairo_t* ctx, Dimensions* ctx_dim) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2293 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (ctx != NULL);
-#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2293 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (ctx_dim != NULL);
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = single_photo_page_is_zoom_supported (self);
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 13765 "Page.c"
+#line 14177 "Page.c"
 		gboolean _tmp2_ = FALSE;
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp2_ = zoom_state_is_default (&self->priv->static_zoom_state);
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = !_tmp2_;
-#line 13771 "Page.c"
+#line 14183 "Page.c"
 	} else {
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp0_ = FALSE;
-#line 13775 "Page.c"
+#line 14187 "Page.c"
 	}
-#line 2222 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2294 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_) {
-#line 13779 "Page.c"
+#line 14191 "Page.c"
 		cairo_t* _tmp3_ = NULL;
 		cairo_t* _tmp4_ = NULL;
 		Dimensions _tmp5_ = {0};
@@ -13784,31 +14196,31 @@ static void single_photo_page_real_paint (SinglePhotoPage* self, cairo_t* ctx, D
 		gint _tmp8_ = 0;
 		cairo_t* _tmp9_ = NULL;
 		ZoomState _tmp10_ = {0};
-#line 2223 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2295 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = ctx;
-#line 2223 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2295 "/home/jens/Source/shotwell/src/Page.vala"
 		set_source_color_from_string (_tmp3_, "#000");
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = ctx;
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = self->priv->pixmap_dim;
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = _tmp5_.width;
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = self->priv->pixmap_dim;
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_.height;
-#line 2224 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
 		cairo_rectangle (_tmp4_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp6_, (gdouble) _tmp8_);
-#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = ctx;
-#line 2225 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
 		cairo_fill (_tmp9_);
-#line 2227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2299 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = self->priv->static_zoom_state;
-#line 2227 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2299 "/home/jens/Source/shotwell/src/Page.vala"
 		single_photo_page_render_zoomed_to_pixmap (self, &_tmp10_);
-#line 13812 "Page.c"
+#line 14224 "Page.c"
 	} else {
 		TransitionClock* _tmp11_ = NULL;
 		cairo_t* _tmp12_ = NULL;
@@ -13817,23 +14229,23 @@ static void single_photo_page_real_paint (SinglePhotoPage* self, cairo_t* ctx, D
 		Dimensions _tmp15_ = {0};
 		gint _tmp16_ = 0;
 		gboolean _tmp17_ = FALSE;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = self->priv->transition_clock;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = ctx;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = *ctx_dim;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = _tmp13_.width;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp15_ = *ctx_dim;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = _tmp15_.height;
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = transition_clock_paint (_tmp11_, _tmp12_, _tmp14_, _tmp16_);
-#line 2228 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp17_) {
-#line 13837 "Page.c"
+#line 14249 "Page.c"
 			cairo_t* _tmp18_ = NULL;
 			cairo_t* _tmp19_ = NULL;
 			Dimensions _tmp20_ = {0};
@@ -13848,56 +14260,56 @@ static void single_photo_page_real_paint (SinglePhotoPage* self, cairo_t* ctx, D
 			GdkRectangle _tmp29_ = {0};
 			gint _tmp30_ = 0;
 			cairo_t* _tmp31_ = NULL;
-#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp18_ = ctx;
-#line 2230 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
 			set_source_color_from_string (_tmp18_, "#000");
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp19_ = ctx;
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = self->priv->pixmap_dim;
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp21_ = _tmp20_.width;
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp22_ = self->priv->pixmap_dim;
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp23_ = _tmp22_.height;
-#line 2232 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2304 "/home/jens/Source/shotwell/src/Page.vala"
 			cairo_rectangle (_tmp19_, (gdouble) 0, (gdouble) 0, (gdouble) _tmp21_, (gdouble) _tmp23_);
-#line 2233 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2305 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp24_ = ctx;
-#line 2233 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2305 "/home/jens/Source/shotwell/src/Page.vala"
 			cairo_fill (_tmp24_);
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp25_ = ctx;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp26_ = self->priv->scaled;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp27_ = self->priv->scaled_pos;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp28_ = _tmp27_.x;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp29_ = self->priv->scaled_pos;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp30_ = _tmp29_.y;
-#line 2235 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
 			gdk_cairo_set_source_pixbuf (_tmp25_, _tmp26_, (gdouble) _tmp28_, (gdouble) _tmp30_);
-#line 2236 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2308 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp31_ = ctx;
-#line 2236 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2308 "/home/jens/Source/shotwell/src/Page.vala"
 			cairo_paint (_tmp31_);
-#line 13890 "Page.c"
+#line 14302 "Page.c"
 		}
 	}
 }
 
 
 void single_photo_page_paint (SinglePhotoPage* self, cairo_t* ctx, Dimensions* ctx_dim) {
-#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2293 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2221 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2293 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->paint (self, ctx, ctx_dim);
-#line 13901 "Page.c"
+#line 14313 "Page.c"
 }
 
 
@@ -13905,44 +14317,44 @@ static void single_photo_page_repaint_pixmap (SinglePhotoPage* self) {
 	cairo_t* _tmp0_ = NULL;
 	cairo_t* _tmp1_ = NULL;
 	Dimensions _tmp2_ = {0};
-#line 2240 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2241 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2313 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->pixmap_ctx;
-#line 2241 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2313 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ == NULL) {
-#line 2242 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2314 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 13917 "Page.c"
+#line 14329 "Page.c"
 	}
-#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->priv->pixmap_ctx;
-#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->pixmap_dim;
-#line 2244 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_paint (self, _tmp1_, &_tmp2_);
-#line 2245 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2317 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_invalidate_all (self);
-#line 13927 "Page.c"
+#line 14339 "Page.c"
 }
 
 
 void single_photo_page_repaint (SinglePhotoPage* self, Direction* direction) {
 	Direction* _tmp0_ = NULL;
-#line 2248 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2320 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2249 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = direction;
-#line 2249 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_internal_repaint (self, FALSE, _tmp0_);
-#line 13939 "Page.c"
+#line 14351 "Page.c"
 }
 
 
 static void _single_photo_page_repaint_pixmap_transition_clock_repaint_callback (gpointer self) {
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_repaint_pixmap ((SinglePhotoPage*) self);
-#line 13946 "Page.c"
+#line 14358 "Page.c"
 }
 
 
@@ -13985,171 +14397,171 @@ static void single_photo_page_internal_repaint (SinglePhotoPage* self, gboolean 
 	Direction* _tmp84_ = NULL;
 	TransitionClock* _tmp98_ = NULL;
 	gboolean _tmp99_ = FALSE;
-#line 2252 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2254 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2326 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_is_in_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 2254 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2326 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp0_) {
-#line 2255 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2327 "/home/jens/Source/shotwell/src/Page.vala"
 		_cairo_surface_destroy0 (self->priv->pixmap);
-#line 2255 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2327 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->pixmap = NULL;
-#line 2256 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->priv->scaled);
-#line 2256 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled = NULL;
-#line 2258 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2330 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 14005 "Page.c"
+#line 14417 "Page.c"
 	}
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->unscaled;
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp2_ == NULL) {
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = TRUE;
-#line 14013 "Page.c"
+#line 14425 "Page.c"
 	} else {
 		GtkDrawingArea* _tmp3_ = NULL;
 		GdkWindow* _tmp4_ = NULL;
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->canvas;
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = _tmp4_ == NULL;
-#line 14023 "Page.c"
+#line 14435 "Page.c"
 	}
-#line 2262 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp1_) {
-#line 2263 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2335 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 14029 "Page.c"
+#line 14441 "Page.c"
 	}
-#line 2266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2338 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->viewport;
-#line 2266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2338 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_widget_get_allocation (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), &_tmp6_);
-#line 2266 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2338 "/home/jens/Source/shotwell/src/Page.vala"
 	allocation = _tmp6_;
-#line 2268 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2340 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = allocation;
-#line 2268 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2340 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = _tmp7_.width;
-#line 2268 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2340 "/home/jens/Source/shotwell/src/Page.vala"
 	width = _tmp8_;
-#line 2269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = allocation;
-#line 2269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = _tmp9_.height;
-#line 2269 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
 	height = _tmp10_;
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = width;
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp12_ <= 0) {
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = TRUE;
-#line 14055 "Page.c"
+#line 14467 "Page.c"
 	} else {
 		gint _tmp13_ = 0;
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp13_ = height;
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = _tmp13_ <= 0;
-#line 14062 "Page.c"
+#line 14474 "Page.c"
 	}
-#line 2271 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2343 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp11_) {
-#line 2272 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2344 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 14068 "Page.c"
+#line 14480 "Page.c"
 	}
-#line 2274 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2346 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = self->priv->scaled;
-#line 2274 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2346 "/home/jens/Source/shotwell/src/Page.vala"
 	new_pixbuf = _tmp14_ == NULL;
-#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2349 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = self->priv->scaled_pos;
-#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2349 "/home/jens/Source/shotwell/src/Page.vala"
 	dimensions_for_rectangle (&_tmp15_, &_tmp16_);
-#line 2277 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2349 "/home/jens/Source/shotwell/src/Page.vala"
 	old_scaled_dim = _tmp16_;
-#line 2278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = self->priv->scaled_pos;
-#line 2278 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
 	old_scaled_pos = _tmp17_;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = self->priv->pixmap_dim;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp20_ = _tmp19_.width;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp21_ = width;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp20_ != _tmp21_) {
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = TRUE;
-#line 14094 "Page.c"
+#line 14506 "Page.c"
 	} else {
 		Dimensions _tmp22_ = {0};
 		gint _tmp23_ = 0;
 		gint _tmp24_ = 0;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = self->priv->pixmap_dim;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = _tmp22_.height;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = height;
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = _tmp23_ != _tmp24_;
-#line 14107 "Page.c"
+#line 14519 "Page.c"
 	}
-#line 2281 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2353 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp18_) {
-#line 2282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
 		_cairo_surface_destroy0 (self->priv->pixmap);
-#line 2282 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->pixmap = NULL;
-#line 14115 "Page.c"
+#line 14527 "Page.c"
 	}
-#line 2285 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2357 "/home/jens/Source/shotwell/src/Page.vala"
 	new_pixmap = FALSE;
-#line 2286 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2358 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp25_ = self->priv->pixmap;
-#line 2286 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2358 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp25_ == NULL) {
-#line 14123 "Page.c"
+#line 14535 "Page.c"
 		gint _tmp26_ = 0;
 		gint _tmp27_ = 0;
-#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2359 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp26_ = width;
-#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2359 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp27_ = height;
-#line 2287 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2359 "/home/jens/Source/shotwell/src/Page.vala"
 		single_photo_page_init_pixmap (self, _tmp26_, _tmp27_);
-#line 2288 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2360 "/home/jens/Source/shotwell/src/Page.vala"
 		new_pixmap = TRUE;
-#line 14134 "Page.c"
+#line 14546 "Page.c"
 	}
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = new_pixbuf;
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp29_) {
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp28_ = TRUE;
-#line 14142 "Page.c"
+#line 14554 "Page.c"
 	} else {
 		gboolean _tmp30_ = FALSE;
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp30_ = new_pixmap;
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp28_ = _tmp30_;
-#line 14149 "Page.c"
+#line 14561 "Page.c"
 	}
-#line 2291 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2363 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp28_) {
-#line 14153 "Page.c"
+#line 14565 "Page.c"
 		Dimensions unscaled_dim = {0};
 		GdkPixbuf* _tmp31_ = NULL;
 		Dimensions _tmp32_ = {0};
@@ -14174,155 +14586,155 @@ static void single_photo_page_internal_repaint (SinglePhotoPage* self, gboolean 
 		gint _tmp60_ = 0;
 		Dimensions _tmp61_ = {0};
 		gint _tmp62_ = 0;
-#line 2292 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2364 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp31_ = self->priv->unscaled;
-#line 2292 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2364 "/home/jens/Source/shotwell/src/Page.vala"
 		dimensions_for_pixbuf (_tmp31_, &_tmp32_);
-#line 2292 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2364 "/home/jens/Source/shotwell/src/Page.vala"
 		unscaled_dim = _tmp32_;
-#line 2296 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2368 "/home/jens/Source/shotwell/src/Page.vala"
 		dimensions_init (&scaled_dim, 0, 0);
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp36_ = self->priv->scale_up_to_viewport;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 		if (!_tmp36_) {
-#line 14190 "Page.c"
+#line 14602 "Page.c"
 			gboolean _tmp37_ = FALSE;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp37_ = dimensions_has_area (&self->priv->max_dim);
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp35_ = _tmp37_;
-#line 14196 "Page.c"
+#line 14608 "Page.c"
 		} else {
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp35_ = FALSE;
-#line 14200 "Page.c"
+#line 14612 "Page.c"
 		}
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp35_) {
-#line 14204 "Page.c"
+#line 14616 "Page.c"
 			Dimensions _tmp38_ = {0};
 			gint _tmp39_ = 0;
 			gint _tmp40_ = 0;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp38_ = self->priv->max_dim;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp39_ = _tmp38_.width;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp40_ = width;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp34_ = _tmp39_ < _tmp40_;
-#line 14216 "Page.c"
+#line 14628 "Page.c"
 		} else {
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp34_ = FALSE;
-#line 14220 "Page.c"
+#line 14632 "Page.c"
 		}
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp34_) {
-#line 14224 "Page.c"
+#line 14636 "Page.c"
 			Dimensions _tmp41_ = {0};
 			gint _tmp42_ = 0;
 			gint _tmp43_ = 0;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp41_ = self->priv->max_dim;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp42_ = _tmp41_.height;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp43_ = height;
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp33_ = _tmp42_ < _tmp43_;
-#line 14236 "Page.c"
+#line 14648 "Page.c"
 		} else {
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp33_ = FALSE;
-#line 14240 "Page.c"
+#line 14652 "Page.c"
 		}
-#line 2297 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp33_) {
-#line 14244 "Page.c"
+#line 14656 "Page.c"
 			Dimensions _tmp44_ = {0};
-#line 2298 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp44_ = self->priv->max_dim;
-#line 2298 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
 			scaled_dim = _tmp44_;
-#line 14250 "Page.c"
+#line 14662 "Page.c"
 		} else {
 			Dimensions _tmp45_ = {0};
 			Dimensions _tmp46_ = {0};
-#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2372 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp45_ = self->priv->pixmap_dim;
-#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2372 "/home/jens/Source/shotwell/src/Page.vala"
 			dimensions_get_scaled_proportional (&unscaled_dim, &_tmp45_, &_tmp46_);
-#line 2300 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2372 "/home/jens/Source/shotwell/src/Page.vala"
 			scaled_dim = _tmp46_;
-#line 14260 "Page.c"
+#line 14672 "Page.c"
 		}
-#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2374 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp47_ = width;
-#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2374 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp48_ = scaled_dim;
-#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2374 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp49_ = _tmp48_.width;
-#line 2302 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2374 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_assert (_tmp47_ >= _tmp49_, "width >= scaled_dim.width");
-#line 2303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2375 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp50_ = height;
-#line 2303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2375 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp51_ = scaled_dim;
-#line 2303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2375 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp52_ = _tmp51_.height;
-#line 2303 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2375 "/home/jens/Source/shotwell/src/Page.vala"
 		_vala_assert (_tmp50_ >= _tmp52_, "height >= scaled_dim.height");
-#line 2306 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2378 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp53_ = width;
-#line 2306 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2378 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp54_ = scaled_dim;
-#line 2306 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2378 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp55_ = _tmp54_.width;
-#line 2306 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2378 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled_pos.x = (_tmp53_ - _tmp55_) / 2;
-#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp56_ = height;
-#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp57_ = scaled_dim;
-#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp58_ = _tmp57_.height;
-#line 2307 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled_pos.y = (_tmp56_ - _tmp58_) / 2;
-#line 2308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp59_ = scaled_dim;
-#line 2308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2380 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp60_ = _tmp59_.width;
-#line 2308 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2380 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled_pos.width = _tmp60_;
-#line 2309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2381 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp61_ = scaled_dim;
-#line 2309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2381 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp62_ = _tmp61_.height;
-#line 2309 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2381 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled_pos.height = _tmp62_;
-#line 14306 "Page.c"
+#line 14718 "Page.c"
 	}
-#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2384 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp64_ = fast;
-#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2384 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp64_) {
-#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2384 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp63_ = SINGLE_PHOTO_PAGE_FAST_INTERP;
-#line 14314 "Page.c"
+#line 14726 "Page.c"
 	} else {
-#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2384 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp63_ = SINGLE_PHOTO_PAGE_QUALITY_INTERP;
-#line 14318 "Page.c"
+#line 14730 "Page.c"
 	}
-#line 2312 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2384 "/home/jens/Source/shotwell/src/Page.vala"
 	interp = _tmp63_;
-#line 2315 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2387 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp65_ = self->priv->scaled;
-#line 2315 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2387 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp65_ == NULL) {
-#line 14326 "Page.c"
+#line 14738 "Page.c"
 		GdkPixbuf* _tmp66_ = NULL;
 		GdkRectangle _tmp67_ = {0};
 		Dimensions _tmp68_ = {0};
@@ -14337,101 +14749,101 @@ static void single_photo_page_internal_repaint (SinglePhotoPage* self, gboolean 
 		GdkPixbuf* _tmp79_ = NULL;
 		SinglePhotoPageUpdateReason _tmp80_ = 0;
 		Dimensions _tmp81_ = {0};
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp66_ = self->priv->unscaled;
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp67_ = self->priv->scaled_pos;
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		dimensions_for_rectangle (&_tmp67_, &_tmp68_);
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp69_ = interp;
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp70_ = resize_pixbuf (_tmp66_, &_tmp68_, _tmp69_);
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (self->priv->scaled);
-#line 2316 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2388 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->scaled = _tmp70_;
-#line 2318 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2390 "/home/jens/Source/shotwell/src/Page.vala"
 		reason = SINGLE_PHOTO_PAGE_UPDATE_REASON_RESIZED_CANVAS;
-#line 2319 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2391 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp71_ = new_pixbuf;
-#line 2319 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2391 "/home/jens/Source/shotwell/src/Page.vala"
 		if (_tmp71_) {
-#line 2320 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2392 "/home/jens/Source/shotwell/src/Page.vala"
 			reason = SINGLE_PHOTO_PAGE_UPDATE_REASON_NEW_PIXBUF;
-#line 14363 "Page.c"
+#line 14775 "Page.c"
 		} else {
 			gboolean _tmp72_ = FALSE;
 			gboolean _tmp73_ = FALSE;
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp73_ = new_pixmap;
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 			if (!_tmp73_) {
-#line 14371 "Page.c"
+#line 14783 "Page.c"
 				GdkInterpType _tmp74_ = 0;
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp74_ = interp;
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp72_ = _tmp74_ == SINGLE_PHOTO_PAGE_QUALITY_INTERP;
-#line 14377 "Page.c"
+#line 14789 "Page.c"
 			} else {
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp72_ = FALSE;
-#line 14381 "Page.c"
+#line 14793 "Page.c"
 			}
-#line 2321 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2393 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp72_) {
-#line 2322 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2394 "/home/jens/Source/shotwell/src/Page.vala"
 				reason = SINGLE_PHOTO_PAGE_UPDATE_REASON_QUALITY_IMPROVEMENT;
-#line 14387 "Page.c"
+#line 14799 "Page.c"
 			}
 		}
-#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp75_ = self->priv->max_dim;
-#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp76_ = self->priv->pixmap_dim;
-#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp77_ = zoom_state_get_interpolation_factor (&self->priv->static_zoom_state);
-#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Page.vala"
 		zoom_state_get_viewport_center (&self->priv->static_zoom_state, &_tmp78_);
-#line 2324 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2396 "/home/jens/Source/shotwell/src/Page.vala"
 		zoom_state_init (&self->priv->static_zoom_state, &_tmp75_, &_tmp76_, _tmp77_, &_tmp78_);
-#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2400 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp79_ = self->priv->scaled;
-#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2400 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp80_ = reason;
-#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2400 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp81_ = old_scaled_dim;
-#line 2328 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2400 "/home/jens/Source/shotwell/src/Page.vala"
 		single_photo_page_updated_pixbuf (self, _tmp79_, _tmp80_, &_tmp81_);
-#line 14408 "Page.c"
+#line 14820 "Page.c"
 	}
-#line 2331 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2403 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp82_ = fast;
-#line 2331 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2403 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = !_tmp82_;
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp84_ = direction;
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp84_ != NULL) {
-#line 14418 "Page.c"
+#line 14830 "Page.c"
 		TransitionClock* _tmp85_ = NULL;
 		gboolean _tmp86_ = FALSE;
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp85_ = self->priv->transition_clock;
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp86_ = transition_clock_is_in_progress (_tmp85_);
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp83_ = !_tmp86_;
-#line 14427 "Page.c"
+#line 14839 "Page.c"
 	} else {
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp83_ = FALSE;
-#line 14431 "Page.c"
+#line 14843 "Page.c"
 	}
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp83_) {
-#line 14435 "Page.c"
+#line 14847 "Page.c"
 		SpitTransitionsVisuals* visuals = NULL;
 		GdkPixbuf* _tmp87_ = NULL;
 		GdkRectangle _tmp88_ = {0};
@@ -14444,45 +14856,45 @@ static void single_photo_page_internal_repaint (SinglePhotoPage* self, gboolean 
 		Direction* _tmp95_ = NULL;
 		SpitTransitionsDirection _tmp96_ = 0;
 		gint _tmp97_ = 0;
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp87_ = self->priv->old_scaled;
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp88_ = old_scaled_pos;
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp89_ = self->priv->scaled;
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp90_ = self->priv->scaled_pos;
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		parse_color ("#000", &_tmp91_);
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp92_ = spit_transitions_visuals_new (_tmp87_, &_tmp88_, _tmp89_, &_tmp90_, &_tmp91_);
-#line 2334 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
 		visuals = _tmp92_;
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp93_ = self->priv->transition_clock;
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp94_ = visuals;
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp95_ = direction;
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp96_ = direction_to_transition_direction (*_tmp95_);
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp97_ = self->priv->transition_duration_msec;
-#line 2337 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2409 "/home/jens/Source/shotwell/src/Page.vala"
 		transition_clock_start (_tmp93_, _tmp94_, _tmp96_, _tmp97_, _single_photo_page_repaint_pixmap_transition_clock_repaint_callback, self);
-#line 2333 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2405 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (visuals);
-#line 14476 "Page.c"
+#line 14888 "Page.c"
 	}
-#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp98_ = self->priv->transition_clock;
-#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp99_ = transition_clock_is_in_progress (_tmp98_);
-#line 2341 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!_tmp99_) {
-#line 2342 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2414 "/home/jens/Source/shotwell/src/Page.vala"
 		single_photo_page_repaint_pixmap (self);
-#line 14486 "Page.c"
+#line 14898 "Page.c"
 	}
 }
 
@@ -14503,65 +14915,65 @@ static void single_photo_page_init_pixmap (SinglePhotoPage* self, gint width, gi
 	cairo_t* _tmp12_ = NULL;
 	cairo_t* _tmp13_ = NULL;
 	Dimensions _tmp14_ = {0};
-#line 2345 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2417 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2346 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->unscaled;
-#line 2346 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2418 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp0_ != NULL, "unscaled != null");
-#line 2347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = self->canvas;
-#line 2347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2419 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 2347 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2419 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp2_ != NULL, "canvas.get_window() != null");
-#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = width;
-#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = height;
-#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, _tmp3_, _tmp4_);
-#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_surface_destroy0 (self->priv->pixmap);
-#line 2350 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->pixmap = _tmp5_;
-#line 2351 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2423 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = width;
-#line 2351 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2423 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp7_ = height;
-#line 2351 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2423 "/home/jens/Source/shotwell/src/Page.vala"
 	dimensions_init (&self->priv->pixmap_dim, _tmp6_, _tmp7_);
-#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2426 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = self->priv->pixmap;
-#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2426 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = cairo_create (_tmp8_);
-#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2426 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_destroy0 (self->priv->pixmap_ctx);
-#line 2354 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2426 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->pixmap_ctx = _tmp9_;
-#line 2357 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2429 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->scaled);
-#line 2357 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2429 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->scaled = NULL;
-#line 2360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp10_ = self->priv->pixmap;
-#line 2360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = cairo_create (_tmp10_);
-#line 2360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_destroy0 (self->priv->text_ctx);
-#line 2360 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2432 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->text_ctx = _tmp11_;
-#line 2361 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2433 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = self->priv->text_ctx;
-#line 2361 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2433 "/home/jens/Source/shotwell/src/Page.vala"
 	set_source_color_from_string (_tmp12_, "#fff");
-#line 2366 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2438 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = self->priv->pixmap_ctx;
-#line 2366 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2438 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = self->priv->pixmap_dim;
-#line 2366 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2438 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_new_surface (self, _tmp13_, &_tmp14_);
-#line 14565 "Page.c"
+#line 14977 "Page.c"
 }
 
 
@@ -14572,23 +14984,23 @@ static gboolean single_photo_page_real_on_context_keypress (Page* base) {
 	GtkMenu* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 2369 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2441 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page_get_page_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_;
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_popup_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp1_, NULL);
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = _tmp2_;
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp1_);
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp3_;
-#line 2370 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 14592 "Page.c"
+#line 15004 "Page.c"
 }
 
 
@@ -14597,11 +15009,11 @@ static void single_photo_page_real_on_previous_photo (SinglePhotoPage* self) {
 
 
 void single_photo_page_on_previous_photo (SinglePhotoPage* self) {
-#line 2373 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2373 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2445 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->on_previous_photo (self);
-#line 14605 "Page.c"
+#line 15017 "Page.c"
 }
 
 
@@ -14610,11 +15022,11 @@ static void single_photo_page_real_on_next_photo (SinglePhotoPage* self) {
 
 
 void single_photo_page_on_next_photo (SinglePhotoPage* self) {
-#line 2376 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2448 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_SINGLE_PHOTO_PAGE (self));
-#line 2376 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2448 "/home/jens/Source/shotwell/src/Page.vala"
 	SINGLE_PHOTO_PAGE_GET_CLASS (self)->on_next_photo (self);
-#line 14618 "Page.c"
+#line 15030 "Page.c"
 }
 
 
@@ -14631,266 +15043,266 @@ static gboolean single_photo_page_real_key_press_event (GtkWidget* base, GdkEven
 	const gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	GQuark _tmp8_ = 0U;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label0 = 0;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label1 = 0;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label2 = 0;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label3 = 0;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label4 = 0;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	static GQuark _tmp7_label5 = 0;
-#line 14647 "Page.c"
+#line 15059 "Page.c"
 	gboolean _tmp15_ = FALSE;
 	gboolean _tmp16_ = FALSE;
-#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2451 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 2379 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2451 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 2383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = event;
-#line 2383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = _tmp0_->time;
-#line 2383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = self->priv->last_nav_key;
-#line 2383 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
 	nav_ok = (_tmp1_ - _tmp2_) > ((guint32) SINGLE_PHOTO_PAGE_KEY_REPEAT_INTERVAL_MSEC);
-#line 2385 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2457 "/home/jens/Source/shotwell/src/Page.vala"
 	handled = TRUE;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = event;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = _tmp3_->keyval;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = gdk_keyval_name (_tmp4_);
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = _tmp5_;
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp8_ = (NULL == _tmp6_) ? 0 : g_quark_from_string (_tmp6_);
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 	if (((_tmp8_ == ((0 != _tmp7_label0) ? _tmp7_label0 : (_tmp7_label0 = g_quark_from_static_string ("Left")))) || (_tmp8_ == ((0 != _tmp7_label1) ? _tmp7_label1 : (_tmp7_label1 = g_quark_from_static_string ("KP_Left"))))) || (_tmp8_ == ((0 != _tmp7_label2) ? _tmp7_label2 : (_tmp7_label2 = g_quark_from_static_string ("BackSpace"))))) {
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 14678 "Page.c"
+#line 15090 "Page.c"
 			default:
 			{
 				gboolean _tmp9_ = FALSE;
-#line 2390 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp9_ = nav_ok;
-#line 2390 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2462 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp9_) {
-#line 14686 "Page.c"
+#line 15098 "Page.c"
 					GdkEventKey* _tmp10_ = NULL;
 					guint32 _tmp11_ = 0U;
-#line 2391 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2463 "/home/jens/Source/shotwell/src/Page.vala"
 					single_photo_page_on_previous_photo (self);
-#line 2392 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp10_ = event;
-#line 2392 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp11_ = _tmp10_->time;
-#line 2392 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2464 "/home/jens/Source/shotwell/src/Page.vala"
 					self->priv->last_nav_key = _tmp11_;
-#line 14697 "Page.c"
+#line 15109 "Page.c"
 				}
-#line 2394 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2466 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 14701 "Page.c"
+#line 15113 "Page.c"
 			}
 		}
 	} else if (((_tmp8_ == ((0 != _tmp7_label3) ? _tmp7_label3 : (_tmp7_label3 = g_quark_from_static_string ("Right")))) || (_tmp8_ == ((0 != _tmp7_label4) ? _tmp7_label4 : (_tmp7_label4 = g_quark_from_static_string ("KP_Right"))))) || (_tmp8_ == ((0 != _tmp7_label5) ? _tmp7_label5 : (_tmp7_label5 = g_quark_from_static_string ("space"))))) {
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 14707 "Page.c"
+#line 15119 "Page.c"
 			default:
 			{
 				gboolean _tmp12_ = FALSE;
-#line 2399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2471 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp12_ = nav_ok;
-#line 2399 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2471 "/home/jens/Source/shotwell/src/Page.vala"
 				if (_tmp12_) {
-#line 14715 "Page.c"
+#line 15127 "Page.c"
 					GdkEventKey* _tmp13_ = NULL;
 					guint32 _tmp14_ = 0U;
-#line 2400 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2472 "/home/jens/Source/shotwell/src/Page.vala"
 					single_photo_page_on_next_photo (self);
-#line 2401 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp13_ = event;
-#line 2401 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
 					_tmp14_ = _tmp13_->time;
-#line 2401 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
 					self->priv->last_nav_key = _tmp14_;
-#line 14726 "Page.c"
+#line 15138 "Page.c"
 				}
-#line 2403 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2475 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 14730 "Page.c"
+#line 15142 "Page.c"
 			}
 		}
 	} else {
-#line 2386 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2458 "/home/jens/Source/shotwell/src/Page.vala"
 		switch (0) {
-#line 14736 "Page.c"
+#line 15148 "Page.c"
 			default:
 			{
-#line 2406 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2478 "/home/jens/Source/shotwell/src/Page.vala"
 				handled = FALSE;
-#line 2407 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2479 "/home/jens/Source/shotwell/src/Page.vala"
 				break;
-#line 14743 "Page.c"
+#line 15155 "Page.c"
 			}
 		}
 	}
-#line 2410 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = handled;
-#line 2410 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2482 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp15_) {
-#line 2411 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
 		result = TRUE;
-#line 2411 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 14755 "Page.c"
+#line 15167 "Page.c"
 	}
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 	if (GTK_WIDGET_CLASS (single_photo_page_parent_class)->key_press_event != NULL) {
-#line 14759 "Page.c"
+#line 15171 "Page.c"
 		GdkEventKey* _tmp17_ = NULL;
 		gboolean _tmp18_ = FALSE;
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp17_ = event;
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = GTK_WIDGET_CLASS (single_photo_page_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), gtk_widget_get_type (), GtkWidget), _tmp17_);
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = _tmp18_;
-#line 14768 "Page.c"
+#line 15180 "Page.c"
 	} else {
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp16_ = TRUE;
-#line 14772 "Page.c"
+#line 15184 "Page.c"
 	}
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 	result = _tmp16_;
-#line 2413 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 14778 "Page.c"
+#line 15190 "Page.c"
 }
 
 
 static void single_photo_page_class_init (SinglePhotoPageClass * klass) {
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	single_photo_page_parent_class = g_type_class_peek_parent (klass);
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	g_type_class_add_private (klass, sizeof (SinglePhotoPagePrivate));
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->is_zoom_supported = single_photo_page_real_is_zoom_supported;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->cancel_zoom = single_photo_page_real_cancel_zoom;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->save_zoom_state = single_photo_page_real_save_zoom_state;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->restore_zoom_state = single_photo_page_real_restore_zoom_state;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->get_zoom_buffer = single_photo_page_real_get_zoom_buffer;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->switched_to = single_photo_page_real_switched_to;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->set_container = single_photo_page_real_set_container;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_resize_finished = single_photo_page_real_on_resize_finished;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->new_surface = single_photo_page_real_new_surface;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->updated_pixbuf = single_photo_page_real_updated_pixbuf;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->paint = single_photo_page_real_paint;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((PageClass *) klass)->on_context_keypress = single_photo_page_real_on_context_keypress;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->on_previous_photo = single_photo_page_real_on_previous_photo;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((SinglePhotoPageClass *) klass)->on_next_photo = single_photo_page_real_on_next_photo;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	((GtkWidgetClass *) klass)->key_press_event = single_photo_page_real_key_press_event;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (klass)->finalize = single_photo_page_finalize;
-#line 14819 "Page.c"
+#line 15231 "Page.c"
 }
 
 
 static void single_photo_page_instance_init (SinglePhotoPage * self) {
 	GtkDrawingArea* _tmp0_ = NULL;
 	GtkViewport* _tmp1_ = NULL;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv = SINGLE_PHOTO_PAGE_GET_PRIVATE (self);
-#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1985 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = (GtkDrawingArea*) gtk_drawing_area_new ();
-#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1985 "/home/jens/Source/shotwell/src/Page.vala"
 	g_object_ref_sink (_tmp0_);
-#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1985 "/home/jens/Source/shotwell/src/Page.vala"
 	self->canvas = _tmp0_;
-#line 1914 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = (GtkViewport*) gtk_viewport_new (NULL, NULL);
-#line 1914 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
 	g_object_ref_sink (_tmp1_);
-#line 1914 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
 	self->viewport = _tmp1_;
-#line 1918 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1990 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->transition_duration_msec = 0;
-#line 1919 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->pixmap = NULL;
-#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1992 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->pixmap_ctx = NULL;
-#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1993 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->text_ctx = NULL;
-#line 1922 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1994 "/home/jens/Source/shotwell/src/Page.vala"
 	dimensions_init (&self->priv->pixmap_dim, 0, 0);
-#line 1923 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->unscaled = NULL;
-#line 1924 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1996 "/home/jens/Source/shotwell/src/Page.vala"
 	dimensions_init (&self->priv->max_dim, 0, 0);
-#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1997 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->scaled = NULL;
-#line 1926 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->old_scaled = NULL;
-#line 1927 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1999 "/home/jens/Source/shotwell/src/Page.vala"
 	memset (&self->priv->scaled_pos, 0, sizeof (GdkRectangle));
-#line 1929 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2001 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->zoom_high_quality = TRUE;
-#line 1931 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2003 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->has_saved_zoom_state = FALSE;
-#line 1932 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2004 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->last_nav_key = (guint32) 0;
-#line 14866 "Page.c"
+#line 15278 "Page.c"
 }
 
 
 static void single_photo_page_finalize (GObject* obj) {
 	SinglePhotoPage * self;
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage);
-#line 1913 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1985 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->canvas);
-#line 1914 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1986 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->viewport);
-#line 1917 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1989 "/home/jens/Source/shotwell/src/Page.vala"
 	_transition_clock_unref0 (self->priv->transition_clock);
-#line 1919 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1991 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_surface_destroy0 (self->priv->pixmap);
-#line 1920 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1992 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_destroy0 (self->priv->pixmap_ctx);
-#line 1921 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1993 "/home/jens/Source/shotwell/src/Page.vala"
 	_cairo_destroy0 (self->priv->text_ctx);
-#line 1923 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1995 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->unscaled);
-#line 1925 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1997 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->scaled);
-#line 1926 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1998 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->old_scaled);
-#line 1902 "/home/jens/Source/shotwell/src/Page.vala"
+#line 1974 "/home/jens/Source/shotwell/src/Page.vala"
 	G_OBJECT_CLASS (single_photo_page_parent_class)->finalize (obj);
-#line 14894 "Page.c"
+#line 15306 "Page.c"
 }
 
 
@@ -14907,32 +15319,32 @@ GType single_photo_page_get_type (void) {
 
 
 static void _drag_and_drop_handler_on_drag_begin_gtk_widget_drag_begin (GtkWidget* _sender, GdkDragContext* context, gpointer self) {
-#line 2472 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2544 "/home/jens/Source/shotwell/src/Page.vala"
 	drag_and_drop_handler_on_drag_begin ((DragAndDropHandler*) self, context);
-#line 14913 "Page.c"
+#line 15325 "Page.c"
 }
 
 
 static void _drag_and_drop_handler_on_drag_data_get_gtk_widget_drag_data_get (GtkWidget* _sender, GdkDragContext* context, GtkSelectionData* selection_data, guint info, guint time_, gpointer self) {
-#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Page.vala"
 	drag_and_drop_handler_on_drag_data_get ((DragAndDropHandler*) self, context, selection_data, info, time_);
-#line 14920 "Page.c"
+#line 15332 "Page.c"
 }
 
 
 static void _drag_and_drop_handler_on_drag_end_gtk_widget_drag_end (GtkWidget* _sender, GdkDragContext* context, gpointer self) {
-#line 2474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
 	drag_and_drop_handler_on_drag_end ((DragAndDropHandler*) self);
-#line 14927 "Page.c"
+#line 15339 "Page.c"
 }
 
 
 static gboolean _drag_and_drop_handler_on_drag_failed_gtk_widget_drag_failed (GtkWidget* _sender, GdkDragContext* context, GtkDragResult _result_, gpointer self) {
 	gboolean result;
 	result = drag_and_drop_handler_on_drag_failed ((DragAndDropHandler*) self, context, _result_);
-#line 2475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2547 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 14936 "Page.c"
+#line 15348 "Page.c"
 }
 
 
@@ -14950,20 +15362,20 @@ static GType drag_and_drop_handler_target_type_get_type (void) {
 
 static GdkAtom* _gdk_atom_dup (GdkAtom* self) {
 	GdkAtom* dup;
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 	dup = g_new0 (GdkAtom, 1);
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 	memcpy (dup, self, sizeof (GdkAtom));
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 	return dup;
-#line 14960 "Page.c"
+#line 15372 "Page.c"
 }
 
 
 static gpointer __gdk_atom_dup0 (gpointer self) {
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 	return self ? _gdk_atom_dup (self) : NULL;
-#line 14967 "Page.c"
+#line 15379 "Page.c"
 }
 
 
@@ -14984,117 +15396,117 @@ DragAndDropHandler* drag_and_drop_handler_construct (GType object_type, Page* pa
 	GtkWidget* _tmp17_ = NULL;
 	GtkWidget* _tmp18_ = NULL;
 	GtkWidget* _tmp19_ = NULL;
-#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2514 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_PAGE (page), NULL);
-#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2514 "/home/jens/Source/shotwell/src/Page.vala"
 	self = (DragAndDropHandler*) g_type_create_instance (object_type);
-#line 2443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = page;
-#line 2443 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->page = _tmp0_;
-#line 2444 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page;
-#line 2444 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = page_get_event_source (_tmp1_);
-#line 2444 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 2444 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2516 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->event_source = _tmp2_;
-#line 2445 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2517 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = self->priv->event_source;
-#line 2445 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2517 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp3_ != NULL, "event_source != null");
-#line 2446 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->event_source;
-#line 2446 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = gtk_widget_get_has_window (_tmp4_);
-#line 2446 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
 	_vala_assert (_tmp5_, "event_source.get_has_window()");
-#line 2449 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = drag_and_drop_handler_XDS_ATOM;
-#line 2449 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_ == NULL) {
-#line 15018 "Page.c"
+#line 15430 "Page.c"
 		GdkAtom _tmp7_ = 0U;
 		GdkAtom* _tmp8_ = NULL;
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = gdk_atom_intern_static_string ("XdndDirectSave0");
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = __gdk_atom_dup0 (&_tmp7_);
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (drag_and_drop_handler_XDS_ATOM);
-#line 2450 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2522 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_XDS_ATOM = _tmp8_;
-#line 15029 "Page.c"
+#line 15441 "Page.c"
 	}
-#line 2452 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = drag_and_drop_handler_TEXT_ATOM;
-#line 2452 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp9_ == NULL) {
-#line 15035 "Page.c"
+#line 15447 "Page.c"
 		GdkAtom _tmp10_ = 0U;
 		GdkAtom* _tmp11_ = NULL;
-#line 2453 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = gdk_atom_intern_static_string ("text/plain");
-#line 2453 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = __gdk_atom_dup0 (&_tmp10_);
-#line 2453 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (drag_and_drop_handler_TEXT_ATOM);
-#line 2453 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2525 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_TEXT_ATOM = _tmp11_;
-#line 15046 "Page.c"
+#line 15458 "Page.c"
 	}
-#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2527 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = drag_and_drop_handler_XDS_FAKE_TARGET;
-#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2527 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12__length1 = drag_and_drop_handler_XDS_FAKE_TARGET_length1;
-#line 2455 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2527 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp12_ == NULL) {
-#line 15054 "Page.c"
+#line 15466 "Page.c"
 		gint _tmp13_ = 0;
 		guchar* _tmp14_ = NULL;
-#line 2456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp14_ = string_to_uchar_array ("shotwell.txt", &_tmp13_);
-#line 2456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_XDS_FAKE_TARGET = (g_free (drag_and_drop_handler_XDS_FAKE_TARGET), NULL);
-#line 2456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_XDS_FAKE_TARGET = _tmp14_;
-#line 2456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_XDS_FAKE_TARGET_length1 = _tmp13_;
-#line 2456 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2528 "/home/jens/Source/shotwell/src/Page.vala"
 		_drag_and_drop_handler_XDS_FAKE_TARGET_size_ = drag_and_drop_handler_XDS_FAKE_TARGET_length1;
-#line 15067 "Page.c"
+#line 15479 "Page.c"
 	}
-#line 2459 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2531 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = self->priv->event_source;
-#line 2459 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2531 "/home/jens/Source/shotwell/src/Page.vala"
 	gtk_drag_source_set (_tmp15_, GDK_BUTTON1_MASK, DRAG_AND_DROP_HANDLER_SOURCE_TARGET_ENTRIES, G_N_ELEMENTS (DRAG_AND_DROP_HANDLER_SOURCE_TARGET_ENTRIES), GDK_ACTION_COPY);
-#line 2464 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = self->priv->event_source;
-#line 2464 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect (_tmp16_, "drag-begin", (GCallback) _drag_and_drop_handler_on_drag_begin_gtk_widget_drag_begin, self);
-#line 2465 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = self->priv->event_source;
-#line 2465 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect (_tmp17_, "drag-data-get", (GCallback) _drag_and_drop_handler_on_drag_data_get_gtk_widget_drag_data_get, self);
-#line 2466 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = self->priv->event_source;
-#line 2466 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2538 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect (_tmp18_, "drag-end", (GCallback) _drag_and_drop_handler_on_drag_end_gtk_widget_drag_end, self);
-#line 2467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2539 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = self->priv->event_source;
-#line 2467 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2539 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_connect (_tmp19_, "drag-failed", (GCallback) _drag_and_drop_handler_on_drag_failed_gtk_widget_drag_failed, self);
-#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2514 "/home/jens/Source/shotwell/src/Page.vala"
 	return self;
-#line 15091 "Page.c"
+#line 15503 "Page.c"
 }
 
 
 DragAndDropHandler* drag_and_drop_handler_new (Page* page) {
-#line 2442 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2514 "/home/jens/Source/shotwell/src/Page.vala"
 	return drag_and_drop_handler_construct (TYPE_DRAG_AND_DROP_HANDLER, page);
-#line 15098 "Page.c"
+#line 15510 "Page.c"
 }
 
 
@@ -15120,119 +15532,119 @@ static void drag_and_drop_handler_on_drag_begin (DragAndDropHandler* self, GdkDr
 	guint8* _tmp31_ = NULL;
 	gint _tmp31__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 2482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2554 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_DRAG_AND_DROP_HANDLER (self));
-#line 2482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2554 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2555 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page;
-#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2555 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_page_name (_tmp0_);
-#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2555 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:2483: on_drag_begin (%s)", _tmp2_);
-#line 2483 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2555 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:2555: on_drag_begin (%s)", _tmp2_);
+#line 2555 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp2_);
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp5_ = self->priv->page;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp5_ == NULL) {
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = TRUE;
-#line 15144 "Page.c"
+#line 15556 "Page.c"
 	} else {
 		Page* _tmp6_ = NULL;
 		ViewCollection* _tmp7_ = NULL;
 		ViewCollection* _tmp8_ = NULL;
 		gint _tmp9_ = 0;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = self->priv->page;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = page_get_view (_tmp6_);
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = _tmp7_;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = view_collection_get_selected_count (_tmp8_);
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _tmp9_ == 0;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp8_);
-#line 15162 "Page.c"
+#line 15574 "Page.c"
 	}
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = TRUE;
-#line 15168 "Page.c"
+#line 15580 "Page.c"
 	} else {
 		ExporterUI* _tmp10_ = NULL;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = self->priv->exporter;
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = _tmp10_ != NULL;
-#line 15175 "Page.c"
+#line 15587 "Page.c"
 	}
-#line 2485 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 2486 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 15181 "Page.c"
+#line 15593 "Page.c"
 	}
-#line 2488 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->drag_destination);
-#line 2488 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->drag_destination = NULL;
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp11_ = self->priv->page;
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp12_ = page_get_view (_tmp11_);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = _tmp12_;
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = view_collection_get_selected_at (_tmp13_, 0);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = _tmp14_;
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = data_view_get_source (_tmp15_);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_THUMBNAIL_SOURCE, ThumbnailSource);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (_tmp15_);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	_data_collection_unref0 (_tmp13_);
-#line 2491 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2563 "/home/jens/Source/shotwell/src/Page.vala"
 	thumb = _tmp17_;
-#line 15207 "Page.c"
+#line 15619 "Page.c"
 	{
 		GdkPixbuf* icon = NULL;
 		ThumbnailSource* _tmp18_ = NULL;
 		GdkPixbuf* _tmp19_ = NULL;
 		GtkWidget* _tmp20_ = NULL;
 		GdkPixbuf* _tmp21_ = NULL;
-#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp18_ = thumb;
-#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp19_ = thumbnail_source_get_thumbnail (_tmp18_, APP_WINDOW_DND_ICON_SCALE, &_inner_error_);
-#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Page.vala"
 		icon = _tmp19_;
-#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2566 "/home/jens/Source/shotwell/src/Page.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 15222 "Page.c"
-			goto __catch255_g_error;
+#line 15634 "Page.c"
+			goto __catch252_g_error;
 		}
-#line 2495 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = self->priv->event_source;
-#line 2495 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = icon;
-#line 2495 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2567 "/home/jens/Source/shotwell/src/Page.vala"
 		gtk_drag_source_set_icon_pixbuf (_tmp20_, _tmp21_);
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (icon);
-#line 15233 "Page.c"
+#line 15645 "Page.c"
 	}
-	goto __finally255;
-	__catch255_g_error:
+	goto __finally252;
+	__catch252_g_error:
 	{
 		GError* err = NULL;
 		ThumbnailSource* _tmp22_ = NULL;
@@ -15240,58 +15652,58 @@ static void drag_and_drop_handler_on_drag_begin (DragAndDropHandler* self, GdkDr
 		gchar* _tmp24_ = NULL;
 		GError* _tmp25_ = NULL;
 		const gchar* _tmp26_ = NULL;
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		err = _inner_error_;
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		_inner_error_ = NULL;
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = thumb;
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = data_object_to_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, TYPE_DATA_OBJECT, DataObject));
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = _tmp23_;
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp25_ = err;
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp26_ = _tmp25_->message;
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
-		g_warning ("Page.vala:2497: Unable to fetch icon for drag-and-drop from %s: %s", _tmp24_, _tmp26_);
-#line 2497 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
+		g_warning ("Page.vala:2569: Unable to fetch icon for drag-and-drop from %s: %s", _tmp24_, _tmp26_);
+#line 2569 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_free0 (_tmp24_);
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_error_free0 (err);
-#line 15264 "Page.c"
+#line 15676 "Page.c"
 	}
-	__finally255:
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+	__finally252:
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (thumb);
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		g_clear_error (&_inner_error_);
-#line 2493 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 15277 "Page.c"
+#line 15689 "Page.c"
 	}
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp27_ = context;
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp28_ = gdk_drag_context_get_source_window (_tmp27_);
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp29_ = drag_and_drop_handler_XDS_ATOM;
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp30_ = drag_and_drop_handler_TEXT_ATOM;
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31_ = drag_and_drop_handler_XDS_FAKE_TARGET;
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp31__length1 = drag_and_drop_handler_XDS_FAKE_TARGET_length1;
-#line 2503 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2575 "/home/jens/Source/shotwell/src/Page.vala"
 	gdk_property_change (_tmp28_, *_tmp29_, *_tmp30_, 8, GDK_PROP_MODE_REPLACE, (const guchar*) _tmp31_, 1);
-#line 2482 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2554 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (thumb);
-#line 15295 "Page.c"
+#line 15707 "Page.c"
 }
 
 
@@ -15302,61 +15714,61 @@ static void drag_and_drop_handler_on_drag_data_get (DragAndDropHandler* self, Gd
 	gboolean _tmp3_ = FALSE;
 	Page* _tmp4_ = NULL;
 	guint _tmp9_ = 0U;
-#line 2511 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_DRAG_AND_DROP_HANDLER (self));
-#line 2511 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-#line 2511 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (selection_data != NULL);
-#line 2513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page;
-#line 2513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_page_name (_tmp0_);
-#line 2513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 2513 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:2513: on_drag_data_get (%s)", _tmp2_);
-#line 2513 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:2585: on_drag_data_get (%s)", _tmp2_);
+#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp2_);
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->page;
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ == NULL) {
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = TRUE;
-#line 15328 "Page.c"
+#line 15740 "Page.c"
 	} else {
 		Page* _tmp5_ = NULL;
 		ViewCollection* _tmp6_ = NULL;
 		ViewCollection* _tmp7_ = NULL;
 		gint _tmp8_ = 0;
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = self->priv->page;
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp6_ = page_get_view (_tmp5_);
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = _tmp6_;
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = view_collection_get_selected_count (_tmp7_);
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = _tmp8_ == 0;
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp7_);
-#line 15346 "Page.c"
+#line 15758 "Page.c"
 	}
-#line 2515 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2587 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 2516 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2588 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 15352 "Page.c"
+#line 15764 "Page.c"
 	}
-#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp9_ = target_type;
-#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
 	switch (_tmp9_) {
-#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
 		case DRAG_AND_DROP_HANDLER_TARGET_TYPE_XDS:
-#line 15360 "Page.c"
+#line 15772 "Page.c"
 		{
 			guchar* data = NULL;
 			guchar* _tmp10_ = NULL;
@@ -15392,83 +15804,83 @@ static void drag_and_drop_handler_on_drag_data_get (DragAndDropHandler* self, Gd
 			guchar* _tmp45_ = NULL;
 			guchar* _tmp46_ = NULL;
 			gint _tmp46__length1 = 0;
-#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2593 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp10_ = g_new0 (guchar, 4096);
-#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2593 "/home/jens/Source/shotwell/src/Page.vala"
 			data = _tmp10_;
-#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2593 "/home/jens/Source/shotwell/src/Page.vala"
 			data_length1 = 4096;
-#line 2521 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2593 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_size_ = data_length1;
-#line 2523 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2595 "/home/jens/Source/shotwell/src/Page.vala"
 			actual_format = 0;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp11_ = context;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp12_ = gdk_drag_context_get_source_window (_tmp11_);
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp13_ = drag_and_drop_handler_XDS_ATOM;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp14_ = drag_and_drop_handler_TEXT_ATOM;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15_ = data;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp15__length1 = data_length1;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp20_ = gdk_property_get (_tmp12_, *_tmp13_, *_tmp14_, (gulong) 0, (gulong) _tmp15__length1, 0, &_tmp16_, &_tmp17_, &_tmp19_, &_tmp18_);
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			actual_type = _tmp16_;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			actual_format = _tmp17_;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			data = (g_free (data), NULL);
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			data = _tmp18_;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			data_length1 = _tmp19_;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_size_ = data_length1;
-#line 2524 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2596 "/home/jens/Source/shotwell/src/Page.vala"
 			fetched = _tmp20_;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp23_ = fetched;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp23_) {
-#line 15438 "Page.c"
+#line 15850 "Page.c"
 				guchar* _tmp24_ = NULL;
 				gint _tmp24__length1 = 0;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24_ = data;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp24__length1 = data_length1;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp22_ = _tmp24_ != NULL;
-#line 15447 "Page.c"
+#line 15859 "Page.c"
 			} else {
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp22_ = FALSE;
-#line 15451 "Page.c"
+#line 15863 "Page.c"
 			}
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp22_) {
-#line 15455 "Page.c"
+#line 15867 "Page.c"
 				guchar* _tmp25_ = NULL;
 				gint _tmp25__length1 = 0;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25_ = data;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp25__length1 = data_length1;
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp21_ = _tmp25__length1 > 0;
-#line 15464 "Page.c"
+#line 15876 "Page.c"
 			} else {
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp21_ = FALSE;
-#line 15468 "Page.c"
+#line 15880 "Page.c"
 			}
-#line 2529 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2601 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp21_) {
-#line 15472 "Page.c"
+#line 15884 "Page.c"
 				guchar* _tmp26_ = NULL;
 				gint _tmp26__length1 = 0;
 				gchar* _tmp27_ = NULL;
@@ -15476,103 +15888,103 @@ static void drag_and_drop_handler_on_drag_data_get (DragAndDropHandler* self, Gd
 				GFile* _tmp29_ = NULL;
 				GFile* _tmp30_ = NULL;
 				GFile* _tmp31_ = NULL;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26_ = data;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp26__length1 = data_length1;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp27_ = uchar_array_to_string (_tmp26_, _tmp26__length1, -1);
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp28_ = _tmp27_;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp29_ = g_file_new_for_uri (_tmp28_);
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp30_ = _tmp29_;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp31_ = g_file_get_parent (_tmp30_);
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (self->priv->drag_destination);
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				self->priv->drag_destination = _tmp31_;
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_object_unref0 (_tmp30_);
-#line 2530 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2602 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_free0 (_tmp28_);
-#line 15502 "Page.c"
+#line 15914 "Page.c"
 			}
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp33_ = self->priv->drag_destination;
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp33_ != NULL) {
-#line 15508 "Page.c"
+#line 15920 "Page.c"
 				GFile* _tmp34_ = NULL;
 				gchar* _tmp35_ = NULL;
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp34_ = self->priv->drag_destination;
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp35_ = g_file_get_path (_tmp34_);
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_free0 (_tmp32_);
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp32_ = _tmp35_;
-#line 15519 "Page.c"
+#line 15931 "Page.c"
 			} else {
 				gchar* _tmp36_ = NULL;
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp36_ = g_strdup ("(no path)");
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_g_free0 (_tmp32_);
-#line 2533 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2605 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp32_ = _tmp36_;
-#line 15528 "Page.c"
+#line 15940 "Page.c"
 			}
-#line 2532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2604 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp37_ = self->priv->page;
-#line 2532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2604 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp38_ = page_get_page_name (_tmp37_);
-#line 2532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2604 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp39_ = _tmp38_;
-#line 2532 "/home/jens/Source/shotwell/src/Page.vala"
-			g_debug ("Page.vala:2532: on_drag_data_get (%s): %s", _tmp39_, _tmp32_);
-#line 2532 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2604 "/home/jens/Source/shotwell/src/Page.vala"
+			g_debug ("Page.vala:2604: on_drag_data_get (%s): %s", _tmp39_, _tmp32_);
+#line 2604 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_free0 (_tmp39_);
-#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2609 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp41_ = self->priv->drag_destination;
-#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2609 "/home/jens/Source/shotwell/src/Page.vala"
 			if (_tmp41_ != NULL) {
-#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2609 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp40_ = "S";
-#line 15546 "Page.c"
+#line 15958 "Page.c"
 			} else {
-#line 2537 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2609 "/home/jens/Source/shotwell/src/Page.vala"
 				_tmp40_ = "E";
-#line 15550 "Page.c"
+#line 15962 "Page.c"
 			}
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp42_ = selection_data;
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp43_ = drag_and_drop_handler_XDS_ATOM;
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp45_ = string_to_uchar_array (_tmp40_, &_tmp44_);
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp46_ = _tmp45_;
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp46__length1 = _tmp44_;
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			gtk_selection_data_set (_tmp42_, *_tmp43_, 8, _tmp46_, _tmp44_);
-#line 2536 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2608 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp46_ = (g_free (_tmp46_), NULL);
-#line 2538 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2610 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_free0 (_tmp32_);
-#line 2538 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2610 "/home/jens/Source/shotwell/src/Page.vala"
 			data = (g_free (data), NULL);
-#line 2538 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2610 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 15572 "Page.c"
+#line 15984 "Page.c"
 		}
-#line 2518 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
 		case DRAG_AND_DROP_HANDLER_TARGET_TYPE_MEDIA_LIST:
-#line 15576 "Page.c"
+#line 15988 "Page.c"
 		{
 			GeeCollection* sources = NULL;
 			Page* _tmp47_ = NULL;
@@ -15587,41 +15999,41 @@ static void drag_and_drop_handler_on_drag_data_get (DragAndDropHandler* self, Gd
 			guchar* _tmp56_ = NULL;
 			guchar* _tmp57_ = NULL;
 			gint _tmp57__length1 = 0;
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp47_ = self->priv->page;
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp48_ = page_get_view (_tmp47_);
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp49_ = _tmp48_;
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp50_ = view_collection_get_selected_sources (_tmp49_);
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp51_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			_data_collection_unref0 (_tmp49_);
-#line 2541 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2613 "/home/jens/Source/shotwell/src/Page.vala"
 			sources = _tmp51_;
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp52_ = selection_data;
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp53_ = gdk_atom_intern_static_string ("SourceIDAtom");
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp54_ = sources;
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp56_ = serialize_media_sources (_tmp54_, &_tmp55_);
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp57_ = _tmp56_;
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp57__length1 = _tmp55_;
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			gtk_selection_data_set (_tmp52_, _tmp53_, (gint) sizeof (GdkAtom), _tmp57_, _tmp55_);
-#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2618 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp57_ = (g_free (_tmp57_), NULL);
-#line 2548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2620 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_object_unref0 (sources);
-#line 2548 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2620 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 15625 "Page.c"
+#line 16037 "Page.c"
 		}
 		default:
 		{
@@ -15629,30 +16041,30 @@ static void drag_and_drop_handler_on_drag_data_get (DragAndDropHandler* self, Gd
 			gchar* _tmp59_ = NULL;
 			gchar* _tmp60_ = NULL;
 			guint _tmp61_ = 0U;
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp58_ = self->priv->page;
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp59_ = page_get_page_name (_tmp58_);
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp60_ = _tmp59_;
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
 			_tmp61_ = target_type;
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
-			g_warning ("Page.vala:2551: on_drag_data_get (%s): unknown target type %u", _tmp60_, _tmp61_);
-#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
+			g_warning ("Page.vala:2623: on_drag_data_get (%s): unknown target type %u", _tmp60_, _tmp61_);
+#line 2623 "/home/jens/Source/shotwell/src/Page.vala"
 			_g_free0 (_tmp60_);
-#line 2553 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2625 "/home/jens/Source/shotwell/src/Page.vala"
 			break;
-#line 15647 "Page.c"
+#line 16059 "Page.c"
 		}
 	}
 }
 
 
 static void _drag_and_drop_handler_on_export_completed_exporter_completion_callback (Exporter* exporter, gboolean is_cancelled, gpointer self) {
-#line 2574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2646 "/home/jens/Source/shotwell/src/Page.vala"
 	drag_and_drop_handler_on_export_completed ((DragAndDropHandler*) self);
-#line 15656 "Page.c"
+#line 16068 "Page.c"
 }
 
 
@@ -15671,99 +16083,99 @@ static void drag_and_drop_handler_on_drag_end (DragAndDropHandler* self) {
 	gchar* _tmp17_ = NULL;
 	gchar* _tmp18_ = NULL;
 	gboolean _tmp19_ = FALSE;
-#line 2557 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2629 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_DRAG_AND_DROP_HANDLER (self));
-#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page;
-#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_page_name (_tmp0_);
-#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:2558: on_drag_end (%s)", _tmp2_);
-#line 2558 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2630 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:2630: on_drag_end (%s)", _tmp2_);
+#line 2630 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp2_);
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp6_ = self->priv->page;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp6_ == NULL) {
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = TRUE;
-#line 15693 "Page.c"
+#line 16105 "Page.c"
 	} else {
 		Page* _tmp7_ = NULL;
 		ViewCollection* _tmp8_ = NULL;
 		ViewCollection* _tmp9_ = NULL;
 		gint _tmp10_ = 0;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = self->priv->page;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp8_ = page_get_view (_tmp7_);
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp9_ = _tmp8_;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp10_ = view_collection_get_selected_count (_tmp9_);
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = _tmp10_ == 0;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp9_);
-#line 15711 "Page.c"
+#line 16123 "Page.c"
 	}
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp5_) {
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = TRUE;
-#line 15717 "Page.c"
+#line 16129 "Page.c"
 	} else {
 		GFile* _tmp11_ = NULL;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp11_ = self->priv->drag_destination;
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp4_ = _tmp11_ == NULL;
-#line 15724 "Page.c"
+#line 16136 "Page.c"
 	}
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_) {
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = TRUE;
-#line 15730 "Page.c"
+#line 16142 "Page.c"
 	} else {
 		ExporterUI* _tmp12_ = NULL;
-#line 2561 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2633 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp12_ = self->priv->exporter;
-#line 2561 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2633 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = _tmp12_ != NULL;
-#line 15737 "Page.c"
+#line 16149 "Page.c"
 	}
-#line 2560 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2632 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp3_) {
-#line 2562 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2634 "/home/jens/Source/shotwell/src/Page.vala"
 		return;
-#line 15743 "Page.c"
+#line 16155 "Page.c"
 	}
-#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp13_ = self->priv->drag_destination;
-#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp14_ = g_file_get_path (_tmp13_);
-#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp15_ = _tmp14_;
-#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:2565: Exporting to %s", _tmp15_);
-#line 2565 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2637 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:2637: Exporting to %s", _tmp15_);
+#line 2637 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp15_);
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp16_ = self->priv->drag_destination;
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp17_ = g_file_get_path (_tmp16_);
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp18_ = _tmp17_;
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp19_ = _tmp18_ != NULL;
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp18_);
-#line 2570 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2642 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp19_) {
-#line 15767 "Page.c"
+#line 16179 "Page.c"
 		Page* _tmp20_ = NULL;
 		ViewCollection* _tmp21_ = NULL;
 		ViewCollection* _tmp22_ = NULL;
@@ -15776,56 +16188,56 @@ static void drag_and_drop_handler_on_drag_end (DragAndDropHandler* self) {
 		Exporter* _tmp29_ = NULL;
 		ExporterUI* _tmp30_ = NULL;
 		ExporterUI* _tmp31_ = NULL;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp20_ = self->priv->page;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp21_ = page_get_view (_tmp20_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp22_ = _tmp21_;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp23_ = view_collection_get_selected_sources (_tmp22_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp24_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp25_ = self->priv->drag_destination;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		scaling_for_original (&_tmp26_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		export_format_parameters_current (&_tmp27_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp28_ = exporter_new (_tmp24_, _tmp25_, &_tmp26_, &_tmp27_, FALSE);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp29_ = _tmp28_;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp30_ = exporter_ui_new (_tmp29_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_exporter_ui_unref0 (self->priv->exporter);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		self->priv->exporter = _tmp30_;
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp29_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_g_object_unref0 (_tmp24_);
-#line 2571 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2643 "/home/jens/Source/shotwell/src/Page.vala"
 		_data_collection_unref0 (_tmp22_);
-#line 2574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2646 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp31_ = self->priv->exporter;
-#line 2574 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2646 "/home/jens/Source/shotwell/src/Page.vala"
 		exporter_ui_export (_tmp31_, _drag_and_drop_handler_on_export_completed_exporter_completion_callback, self);
-#line 15816 "Page.c"
+#line 16228 "Page.c"
 	} else {
 		const gchar* _tmp32_ = NULL;
-#line 2576 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp32_ = _ ("Photos cannot be exported to this directory.");
-#line 2576 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2648 "/home/jens/Source/shotwell/src/Page.vala"
 		app_window_error_message (_tmp32_, NULL);
-#line 15823 "Page.c"
+#line 16235 "Page.c"
 	}
-#line 2579 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2651 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->drag_destination);
-#line 2579 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2651 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->drag_destination = NULL;
-#line 15829 "Page.c"
+#line 16241 "Page.c"
 }
 
 
@@ -15836,271 +16248,271 @@ static gboolean drag_and_drop_handler_on_drag_failed (DragAndDropHandler* self, 
 	gchar* _tmp2_ = NULL;
 	GtkDragResult _tmp3_ = 0;
 	Page* _tmp4_ = NULL;
-#line 2582 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2654 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (IS_DRAG_AND_DROP_HANDLER (self), FALSE);
-#line 2582 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2654 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), FALSE);
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->page;
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp1_ = page_get_page_name (_tmp0_);
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp2_ = _tmp1_;
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp3_ = drag_result;
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
-	g_debug ("Page.vala:2583: on_drag_failed (%s): %d", _tmp2_, (gint) _tmp3_);
-#line 2583 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
+	g_debug ("Page.vala:2655: on_drag_failed (%s): %d", _tmp2_, (gint) _tmp3_);
+#line 2655 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_free0 (_tmp2_);
-#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2657 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp4_ = self->priv->page;
-#line 2585 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2657 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp4_ == NULL) {
-#line 2586 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2658 "/home/jens/Source/shotwell/src/Page.vala"
 		result = FALSE;
-#line 2586 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2658 "/home/jens/Source/shotwell/src/Page.vala"
 		return result;
-#line 15864 "Page.c"
+#line 16276 "Page.c"
 	}
-#line 2588 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2660 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->drag_destination);
-#line 2588 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2660 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->drag_destination = NULL;
-#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2662 "/home/jens/Source/shotwell/src/Page.vala"
 	result = FALSE;
-#line 2590 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2662 "/home/jens/Source/shotwell/src/Page.vala"
 	return result;
-#line 15874 "Page.c"
+#line 16286 "Page.c"
 }
 
 
 static void drag_and_drop_handler_on_export_completed (DragAndDropHandler* self) {
-#line 2593 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2665 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (IS_DRAG_AND_DROP_HANDLER (self));
-#line 2594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2666 "/home/jens/Source/shotwell/src/Page.vala"
 	_exporter_ui_unref0 (self->priv->exporter);
-#line 2594 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2666 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->exporter = NULL;
-#line 15885 "Page.c"
+#line 16297 "Page.c"
 }
 
 
 static void value_drag_and_drop_handler_init (GValue* value) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	value->data[0].v_pointer = NULL;
-#line 15892 "Page.c"
+#line 16304 "Page.c"
 }
 
 
 static void value_drag_and_drop_handler_free_value (GValue* value) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (value->data[0].v_pointer) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_unref (value->data[0].v_pointer);
-#line 15901 "Page.c"
+#line 16313 "Page.c"
 	}
 }
 
 
 static void value_drag_and_drop_handler_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (src_value->data[0].v_pointer) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = drag_and_drop_handler_ref (src_value->data[0].v_pointer);
-#line 15911 "Page.c"
+#line 16323 "Page.c"
 	} else {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 15915 "Page.c"
+#line 16327 "Page.c"
 	}
 }
 
 
 static gpointer value_drag_and_drop_handler_peek_pointer (const GValue* value) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 15923 "Page.c"
+#line 16335 "Page.c"
 }
 
 
 static gchar* value_drag_and_drop_handler_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (collect_values[0].v_pointer) {
-#line 15930 "Page.c"
+#line 16342 "Page.c"
 		DragAndDropHandler* object;
 		object = collect_values[0].v_pointer;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 15937 "Page.c"
+#line 16349 "Page.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 15941 "Page.c"
+#line 16353 "Page.c"
 		}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = drag_and_drop_handler_ref (object);
-#line 15945 "Page.c"
+#line 16357 "Page.c"
 	} else {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 15949 "Page.c"
+#line 16361 "Page.c"
 	}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 15953 "Page.c"
+#line 16365 "Page.c"
 }
 
 
 static gchar* value_drag_and_drop_handler_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	DragAndDropHandler** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!object_p) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 15964 "Page.c"
+#line 16376 "Page.c"
 	}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (!value->data[0].v_pointer) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = NULL;
-#line 15970 "Page.c"
+#line 16382 "Page.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = value->data[0].v_pointer;
-#line 15974 "Page.c"
+#line 16386 "Page.c"
 	} else {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		*object_p = drag_and_drop_handler_ref (value->data[0].v_pointer);
-#line 15978 "Page.c"
+#line 16390 "Page.c"
 	}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return NULL;
-#line 15982 "Page.c"
+#line 16394 "Page.c"
 }
 
 
 GParamSpec* param_spec_drag_and_drop_handler (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	ParamSpecDragAndDropHandler* spec;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, TYPE_DRAG_AND_DROP_HANDLER), NULL);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return G_PARAM_SPEC (spec);
-#line 15996 "Page.c"
+#line 16408 "Page.c"
 }
 
 
 gpointer value_get_drag_and_drop_handler (const GValue* value) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_DRAG_AND_DROP_HANDLER), NULL);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return value->data[0].v_pointer;
-#line 16005 "Page.c"
+#line 16417 "Page.c"
 }
 
 
 void value_set_drag_and_drop_handler (GValue* value, gpointer v_object) {
 	DragAndDropHandler* old;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_DRAG_AND_DROP_HANDLER));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	old = value->data[0].v_pointer;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (v_object) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_DRAG_AND_DROP_HANDLER));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = v_object;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_ref (value->data[0].v_pointer);
-#line 16025 "Page.c"
+#line 16437 "Page.c"
 	} else {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 16029 "Page.c"
+#line 16441 "Page.c"
 	}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_unref (old);
-#line 16035 "Page.c"
+#line 16447 "Page.c"
 	}
 }
 
 
 void value_take_drag_and_drop_handler (GValue* value, gpointer v_object) {
 	DragAndDropHandler* old;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_DRAG_AND_DROP_HANDLER));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	old = value->data[0].v_pointer;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (v_object) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, TYPE_DRAG_AND_DROP_HANDLER));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = v_object;
-#line 16054 "Page.c"
+#line 16466 "Page.c"
 	} else {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		value->data[0].v_pointer = NULL;
-#line 16058 "Page.c"
+#line 16470 "Page.c"
 	}
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (old) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		drag_and_drop_handler_unref (old);
-#line 16064 "Page.c"
+#line 16476 "Page.c"
 	}
 }
 
 
 static void drag_and_drop_handler_class_init (DragAndDropHandlerClass * klass) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	drag_and_drop_handler_parent_class = g_type_class_peek_parent (klass);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	((DragAndDropHandlerClass *) klass)->finalize = drag_and_drop_handler_finalize;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_type_class_add_private (klass, sizeof (DragAndDropHandlerPrivate));
-#line 16076 "Page.c"
+#line 16488 "Page.c"
 }
 
 
 static void drag_and_drop_handler_instance_init (DragAndDropHandler * self) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv = DRAG_AND_DROP_HANDLER_GET_PRIVATE (self);
-#line 2439 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2511 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->drag_destination = NULL;
-#line 2440 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->exporter = NULL;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	self->ref_count = 1;
-#line 16089 "Page.c"
+#line 16501 "Page.c"
 }
 
 
 static void drag_and_drop_handler_finalize (DragAndDropHandler* obj) {
 	DragAndDropHandler * self;
 	GtkWidget* _tmp0_ = NULL;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_DRAG_AND_DROP_HANDLER, DragAndDropHandler);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_signal_handlers_destroy (self);
-#line 2471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2543 "/home/jens/Source/shotwell/src/Page.vala"
 	_tmp0_ = self->priv->event_source;
-#line 2471 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2543 "/home/jens/Source/shotwell/src/Page.vala"
 	if (_tmp0_ != NULL) {
-#line 16104 "Page.c"
+#line 16516 "Page.c"
 		GtkWidget* _tmp1_ = NULL;
 		guint _tmp2_ = 0U;
 		GtkWidget* _tmp3_ = NULL;
@@ -16109,45 +16521,45 @@ static void drag_and_drop_handler_finalize (DragAndDropHandler* obj) {
 		guint _tmp6_ = 0U;
 		GtkWidget* _tmp7_ = NULL;
 		guint _tmp8_ = 0U;
-#line 2472 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2544 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp1_ = self->priv->event_source;
-#line 2472 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2544 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_parse_name ("drag-begin", gtk_widget_get_type (), &_tmp2_, NULL, FALSE);
-#line 2472 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2544 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_handlers_disconnect_matched (_tmp1_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp2_, 0, NULL, (GCallback) _drag_and_drop_handler_on_drag_begin_gtk_widget_drag_begin, self);
-#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp3_ = self->priv->event_source;
-#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_parse_name ("drag-data-get", gtk_widget_get_type (), &_tmp4_, NULL, FALSE);
-#line 2473 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2545 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _drag_and_drop_handler_on_drag_data_get_gtk_widget_drag_data_get, self);
-#line 2474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp5_ = self->priv->event_source;
-#line 2474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_parse_name ("drag-end", gtk_widget_get_type (), &_tmp6_, NULL, FALSE);
-#line 2474 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2546 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_handlers_disconnect_matched (_tmp5_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _drag_and_drop_handler_on_drag_end_gtk_widget_drag_end, self);
-#line 2475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2547 "/home/jens/Source/shotwell/src/Page.vala"
 		_tmp7_ = self->priv->event_source;
-#line 2475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2547 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_parse_name ("drag-failed", gtk_widget_get_type (), &_tmp8_, NULL, FALSE);
-#line 2475 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2547 "/home/jens/Source/shotwell/src/Page.vala"
 		g_signal_handlers_disconnect_matched (_tmp7_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp8_, 0, NULL, (GCallback) _drag_and_drop_handler_on_drag_failed_gtk_widget_drag_failed, self);
-#line 16137 "Page.c"
+#line 16549 "Page.c"
 	}
-#line 2478 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2550 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->page = NULL;
-#line 2479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 2479 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2551 "/home/jens/Source/shotwell/src/Page.vala"
 	self->priv->event_source = NULL;
-#line 2438 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2510 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->event_source);
-#line 2439 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2511 "/home/jens/Source/shotwell/src/Page.vala"
 	_g_object_unref0 (self->priv->drag_destination);
-#line 2440 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2512 "/home/jens/Source/shotwell/src/Page.vala"
 	_exporter_ui_unref0 (self->priv->exporter);
-#line 16151 "Page.c"
+#line 16563 "Page.c"
 }
 
 
@@ -16168,24 +16580,24 @@ GType drag_and_drop_handler_get_type (void) {
 gpointer drag_and_drop_handler_ref (gpointer instance) {
 	DragAndDropHandler* self;
 	self = instance;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	return instance;
-#line 16176 "Page.c"
+#line 16588 "Page.c"
 }
 
 
 void drag_and_drop_handler_unref (gpointer instance) {
 	DragAndDropHandler* self;
 	self = instance;
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		DRAG_AND_DROP_HANDLER_GET_CLASS (self)->finalize (self);
-#line 2422 "/home/jens/Source/shotwell/src/Page.vala"
+#line 2494 "/home/jens/Source/shotwell/src/Page.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 16189 "Page.c"
+#line 16601 "Page.c"
 	}
 }
 

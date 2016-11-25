@@ -282,11 +282,11 @@ GFile* library_files_generate_unique_file (const gchar* basename, MediaMetadata*
 #line 30 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 285 "LibraryFiles.c"
-			goto __catch464_g_error;
+			goto __catch461_g_error;
 		}
 	}
-	goto __finally464;
-	__catch464_g_error:
+	goto __finally461;
+	__catch461_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp12_ = NULL;
@@ -310,13 +310,13 @@ GFile* library_files_generate_unique_file (const gchar* basename, MediaMetadata*
 #line 33 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_g_error_free0 (err);
 #line 313 "LibraryFiles.c"
-			goto __finally464;
+			goto __finally461;
 		}
 #line 29 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		_g_error_free0 (err);
 #line 318 "LibraryFiles.c"
 	}
-	__finally464:
+	__finally461:
 #line 29 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 29 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -441,14 +441,14 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 50 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 444 "LibraryFiles.c"
-			goto __catch465_g_error;
+			goto __catch462_g_error;
 		}
 #line 50 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		timestamp = _tmp0_;
 #line 449 "LibraryFiles.c"
 	}
-	goto __finally465;
-	__catch465_g_error:
+	goto __finally462;
+	__catch462_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp3_ = NULL;
@@ -478,7 +478,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 		_g_error_free0 (err);
 #line 480 "LibraryFiles.c"
 	}
-	__finally465:
+	__finally462:
 #line 49 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 49 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -520,7 +520,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 59 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 523 "LibraryFiles.c"
-				goto __catch466_g_error;
+				goto __catch463_g_error;
 			}
 #line 59 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_tmp15_ = _tmp12_;
@@ -534,8 +534,8 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 			_media_metadata_unref0 (_tmp12_);
 #line 536 "LibraryFiles.c"
 		}
-		goto __finally466;
-		__catch466_g_error:
+		goto __finally463;
+		__catch463_g_error:
 		{
 			GError* err = NULL;
 #line 58 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -546,7 +546,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 			_g_error_free0 (err);
 #line 548 "LibraryFiles.c"
 		}
-		__finally466:
+		__finally463:
 #line 58 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 58 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -604,7 +604,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 67 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 607 "LibraryFiles.c"
-				goto __catch467_g_error;
+				goto __catch464_g_error;
 			}
 #line 67 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_tmp26_ = _tmp23_;
@@ -618,8 +618,8 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 			_media_metadata_unref0 (_tmp23_);
 #line 620 "LibraryFiles.c"
 		}
-		goto __finally467;
-		__catch467_g_error:
+		goto __finally464;
+		__catch464_g_error:
 		{
 			GError* err = NULL;
 #line 66 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -630,7 +630,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 			_g_error_free0 (err);
 #line 632 "LibraryFiles.c"
 		}
-		__finally467:
+		__finally464:
 #line 66 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 66 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -728,7 +728,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 82 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 731 "LibraryFiles.c"
-			goto __catch468_g_error;
+			goto __catch465_g_error;
 		}
 #line 83 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		_tmp42_ = blacklist;
@@ -743,8 +743,8 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 744 "LibraryFiles.c"
 		}
 	}
-	goto __finally468;
-	__catch468_g_error:
+	goto __finally465;
+	__catch465_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp44_ = NULL;
@@ -798,7 +798,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 87 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 				_g_error_free0 (err);
 #line 801 "LibraryFiles.c"
-				goto __finally468;
+				goto __finally465;
 			}
 #line 87 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_tmp55_ = dest;
@@ -813,7 +813,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 87 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 				_g_error_free0 (err);
 #line 816 "LibraryFiles.c"
-				goto __finally468;
+				goto __finally465;
 			}
 #line 87 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_tmp57_ = _tmp51_;
@@ -857,7 +857,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 		_g_error_free0 (err);
 #line 859 "LibraryFiles.c"
 	}
-	__finally468:
+	__finally465:
 #line 81 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 81 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
@@ -890,7 +890,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 93 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 893 "LibraryFiles.c"
-			goto __catch469_g_error;
+			goto __catch466_g_error;
 		}
 #line 94 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		_tmp64_ = info;
@@ -911,7 +911,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 #line 95 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 			_g_object_unref0 (info);
 #line 914 "LibraryFiles.c"
-			goto __catch469_g_error;
+			goto __catch466_g_error;
 		}
 #line 95 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 		if (!_tmp66_) {
@@ -923,8 +923,8 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 		_g_object_unref0 (info);
 #line 925 "LibraryFiles.c"
 	}
-	goto __finally469;
-	__catch469_g_error:
+	goto __finally466;
+	__catch466_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp70_ = NULL;
@@ -943,7 +943,7 @@ GFile* library_files_duplicate (GFile* src, GFileProgressCallback progress_callb
 		_g_error_free0 (err);
 #line 945 "LibraryFiles.c"
 	}
-	__finally469:
+	__finally466:
 #line 92 "/home/jens/Source/shotwell/src/LibraryFiles.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 92 "/home/jens/Source/shotwell/src/LibraryFiles.vala"

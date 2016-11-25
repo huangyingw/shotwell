@@ -55,8 +55,6 @@ typedef struct _FullscreenWindow FullscreenWindow;
 typedef struct _FullscreenWindowClass FullscreenWindowClass;
 typedef struct _FullscreenWindowPrivate FullscreenWindowPrivate;
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-#define _g_free0(var) (var = (g_free (var), NULL))
-#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 
 #define TYPE_APP_WINDOW (app_window_get_type ())
 #define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
@@ -107,6 +105,17 @@ typedef struct _SinglePhotoPageClass SinglePhotoPageClass;
 
 typedef struct _SlideshowPage SlideshowPage;
 typedef struct _SlideshowPageClass SlideshowPageClass;
+
+#define TYPE_APPLICATION (application_get_type ())
+#define APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APPLICATION, Application))
+#define APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APPLICATION, ApplicationClass))
+#define IS_APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APPLICATION))
+#define IS_APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APPLICATION))
+#define APPLICATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APPLICATION, ApplicationClass))
+
+typedef struct _Application Application;
+typedef struct _ApplicationClass ApplicationClass;
+#define _application_unref0(var) ((var == NULL) ? NULL : (var = (application_unref (var), NULL)))
 typedef struct _AppWindowPrivate AppWindowPrivate;
 
 #define TYPE_DIMENSIONS (dimensions_get_type ())
@@ -142,17 +151,8 @@ typedef struct _LibraryWindowClass LibraryWindowClass;
 typedef struct _DirectWindow DirectWindow;
 typedef struct _DirectWindowClass DirectWindowClass;
 #define _command_manager_unref0(var) ((var == NULL) ? NULL : (var = (command_manager_unref (var), NULL)))
-
-#define TYPE_APPLICATION (application_get_type ())
-#define APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APPLICATION, Application))
-#define APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APPLICATION, ApplicationClass))
-#define IS_APPLICATION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APPLICATION))
-#define IS_APPLICATION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APPLICATION))
-#define APPLICATION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APPLICATION, ApplicationClass))
-
-typedef struct _Application Application;
-typedef struct _ApplicationClass ApplicationClass;
-#define _application_unref0(var) ((var == NULL) ? NULL : (var = (application_unref (var), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
 
 #define TYPE_DATA_COLLECTION (data_collection_get_type ())
 #define DATA_COLLECTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_DATA_COLLECTION, DataCollection))
@@ -249,13 +249,12 @@ typedef struct _CommandDescriptionIface CommandDescriptionIface;
 #define _vala_warn_if_fail(expr, msg) if G_LIKELY (expr) ; else g_warn_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 
 struct _PageWindow {
-	GtkWindow parent_instance;
+	GtkApplicationWindow parent_instance;
 	PageWindowPrivate * priv;
-	GtkUIManager* ui;
 };
 
 struct _PageWindowClass {
-	GtkWindowClass parent_class;
+	GtkApplicationWindowClass parent_class;
 	void (*switched_pages) (PageWindow* self, Page* old_page, Page* new_page);
 	void (*set_current_page) (PageWindow* self, Page* page);
 	void (*clear_current_page) (PageWindow* self);
@@ -295,8 +294,6 @@ struct _Dimensions {
 struct _AppWindow {
 	PageWindow parent_instance;
 	AppWindowPrivate * priv;
-	GtkActionGroup** common_action_groups;
-	gint common_action_groups_length1;
 	gboolean maximized;
 	Dimensions dimensions;
 	gint pos_x;
@@ -308,14 +305,9 @@ struct _AppWindowClass {
 	void (*on_fullscreen) (AppWindow* self);
 	gchar* (*get_app_role) (AppWindow* self);
 	void (*on_quit) (AppWindow* self);
-	GtkActionGroup** (*create_common_action_groups) (AppWindow* self, int* result_length1);
-	void (*replace_common_placeholders) (AppWindow* self, GtkUIManager* ui);
+	void (*add_actions) (AppWindow* self);
 	void (*update_common_action_availability) (AppWindow* self, Page* old_page, Page* new_page);
 	void (*update_common_actions) (AppWindow* self, Page* page, gint selected_count, gint count);
-};
-
-struct _AppWindowPrivate {
-	GtkActionGroup* common_action_group;
 };
 
 typedef enum  {
@@ -354,14 +346,15 @@ enum  {
 #define FULLSCREEN_WINDOW_TOOLBAR_INVOCATION_MSEC 250
 #define FULLSCREEN_WINDOW_TOOLBAR_DISMISSAL_SEC 2
 #define FULLSCREEN_WINDOW_TOOLBAR_CHECK_DISMISSAL_MSEC 500
+static void fullscreen_window_on_close (FullscreenWindow* self);
+static void _fullscreen_window_on_close_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 FullscreenWindow* fullscreen_window_new (Page* page);
 FullscreenWindow* fullscreen_window_construct (GType object_type, Page* page);
 PageWindow* page_window_construct (GType object_type);
 void page_window_set_current_page (PageWindow* self, Page* page);
-GFile* resources_get_ui (const gchar* filename);
-static GtkActionEntry* fullscreen_window_create_actions (FullscreenWindow* self, int* result_length1);
 GType app_window_get_type (void) G_GNUC_CONST;
 AppWindow* app_window_get_instance (void);
+void application_set_accels_for_action (const gchar* action, gchar** accel, int accel_length1);
 static void fullscreen_window_get_monitor_geometry (FullscreenWindow* self, GdkRectangle* result);
 GType configuration_facade_get_type (void) G_GNUC_CONST;
 GType config_facade_get_type (void) G_GNUC_CONST;
@@ -369,8 +362,6 @@ ConfigFacade* config_facade_get_instance (void);
 gboolean configuration_facade_get_pin_toolbar_state (ConfigurationFacade* self);
 void fullscreen_window_update_toolbar_dismissal (FullscreenWindow* self);
 static void _fullscreen_window_update_toolbar_dismissal_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self);
-static void fullscreen_window_on_close (FullscreenWindow* self);
-static void _fullscreen_window_on_close_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self);
 GtkToolbar* page_get_toolbar (Page* self);
 #define RESOURCES_TRANSIENT_WINDOW_OPACITY 0.90
 GType single_photo_page_get_type (void) G_GNUC_CONST;
@@ -384,10 +375,6 @@ void fullscreen_window_disable_toolbar_dismissal (FullscreenWindow* self);
 static gboolean fullscreen_window_real_configure_event (GtkWidget* base, GdkEventConfigure* event);
 Page* page_window_get_current_page (PageWindow* self);
 void page_switched_to (Page* self);
-#define RESOURCES_LEAVE_FULLSCREEN_LABEL _ ("Leave _Fullscreen")
-#define TRANSLATABLE "translatable"
-static void _fullscreen_window_on_close_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add158 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static gboolean fullscreen_window_real_key_press_event (GtkWidget* base, GdkEventKey* event);
 void configuration_facade_set_pin_toolbar_state (ConfigurationFacade* self, gboolean state);
 void app_window_end_fullscreen (AppWindow* self);
@@ -410,7 +397,15 @@ enum  {
 };
 void page_window_switched_pages (PageWindow* self, Page* old_page, Page* new_page);
 static void page_window_real_switched_pages (PageWindow* self, Page* old_page, Page* new_page);
-GtkUIManager* page_window_get_ui_manager (PageWindow* self);
+gpointer application_ref (gpointer instance);
+void application_unref (gpointer instance);
+GParamSpec* param_spec_application (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void value_set_application (GValue* value, gpointer v_object);
+void value_take_application (GValue* value, gpointer v_object);
+gpointer value_get_application (const GValue* value);
+GType application_get_type (void) G_GNUC_CONST;
+Application* application_get_instance (void);
+GtkApplication* application_get_system_app (Application* self);
 static void page_window_real_set_current_page (PageWindow* self, Page* page);
 void page_clear_container (Page* self);
 void page_set_container (Page* self, GtkWindow* container);
@@ -432,7 +427,6 @@ static void page_window_finalize (GObject* obj);
 GType dimensions_get_type (void) G_GNUC_CONST;
 Dimensions* dimensions_dup (const Dimensions* self);
 void dimensions_free (Dimensions* self);
-#define APP_WINDOW_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_APP_WINDOW, AppWindowPrivate))
 enum  {
 	APP_WINDOW_DUMMY_PROPERTY
 };
@@ -444,6 +438,26 @@ void value_take_command_manager (GValue* value, gpointer v_object);
 gpointer value_get_command_manager (const GValue* value);
 GType command_manager_get_type (void) G_GNUC_CONST;
 #define APP_WINDOW_DND_ICON_SCALE 128
+void app_window_on_quit (AppWindow* self);
+static void _app_window_on_quit_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void app_window_on_fullscreen (AppWindow* self);
+static void _app_window_on_fullscreen_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_help_contents (AppWindow* self);
+static void _app_window_on_help_contents_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_help_faq (AppWindow* self);
+static void _app_window_on_help_faq_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_help_report_problem (AppWindow* self);
+static void _app_window_on_help_report_problem_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_undo (AppWindow* self);
+static void _app_window_on_undo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_redo (AppWindow* self);
+static void _app_window_on_redo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+void app_window_on_jump_to_file (AppWindow* self);
+static void _app_window_on_jump_to_file_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_select_all (AppWindow* self);
+static void _app_window_on_select_all_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void app_window_on_select_none (AppWindow* self);
+static void _app_window_on_select_none_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
 AppWindow* app_window_construct (GType object_type);
 #define RESOURCES_APP_TITLE "Shotwell"
 GType library_window_get_type (void) G_GNUC_CONST;
@@ -455,8 +469,7 @@ CommandManager* command_manager_new (gint depth);
 CommandManager* command_manager_construct (GType object_type, gint depth);
 static void app_window_on_command_manager_altered (AppWindow* self);
 static void _app_window_on_command_manager_altered_command_manager_altered (CommandManager* _sender, gboolean can_undo, gboolean can_redo, gpointer self);
-GtkActionGroup** app_window_create_common_action_groups (AppWindow* self, int* result_length1);
-gchar* build_dummy_ui_string (GtkActionGroup** groups, int groups_length1);
+void app_window_add_actions (AppWindow* self);
 #define RESOURCES_CUSTOM_CSS "LibraryWindow .pane-separator {\n" \
 "               background-color: @borders;\n" \
 "            }\n" \
@@ -465,48 +478,6 @@ gchar* build_dummy_ui_string (GtkActionGroup** groups, int groups_length1);
 "               border-style: solid;\n" \
 "               border-color: @borders;\n" \
 "            }"
-static GtkActionEntry* app_window_create_common_actions (AppWindow* self, int* result_length1);
-#define RESOURCES_QUIT_LABEL _ ("_Quit")
-void app_window_on_quit (AppWindow* self);
-static void _app_window_on_quit_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add159 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_ABOUT_LABEL _ ("_About")
-void app_window_on_about (AppWindow* self);
-static void _app_window_on_about_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add160 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_FULLSCREEN_LABEL _ ("Fulls_creen")
-void app_window_on_fullscreen (AppWindow* self);
-static void _app_window_on_fullscreen_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add161 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_HELP_LABEL _ ("_Help")
-static void app_window_on_help_contents (AppWindow* self);
-static void _app_window_on_help_contents_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add162 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void app_window_on_help_faq (AppWindow* self);
-static void _app_window_on_help_faq_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add163 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void app_window_on_help_report_problem (AppWindow* self);
-static void _app_window_on_help_report_problem_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add164 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_UNDO_MENU _ ("_Undo")
-static void app_window_on_undo (AppWindow* self);
-static void _app_window_on_undo_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add165 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_REDO_MENU _ ("_Redo")
-static void app_window_on_redo (AppWindow* self);
-static void _app_window_on_redo_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add166 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_JUMP_TO_FILE_MENU _ ("Show in File Mana_ger")
-void app_window_on_jump_to_file (AppWindow* self);
-static void _app_window_on_jump_to_file_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add167 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-#define RESOURCES_SELECT_ALL_MENU _ ("Select _All")
-static void app_window_on_select_all (AppWindow* self);
-static void _app_window_on_select_all_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add168 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
-static void app_window_on_select_none (AppWindow* self);
-static void _app_window_on_select_none_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add169 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value);
 static void app_window_real_on_fullscreen (AppWindow* self);
 gboolean app_window_has_instance (void);
 FullscreenWindow* app_window_get_fullscreen (void);
@@ -522,17 +493,10 @@ GtkResponseType app_window_negate_affirm_all_cancel_question (const gchar* messa
 GQuark database_error_quark (void);
 void app_window_database_error (GError* err);
 void app_window_panic (const gchar* msg);
-gpointer application_ref (gpointer instance);
-void application_unref (gpointer instance);
-GParamSpec* param_spec_application (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
-void value_set_application (GValue* value, gpointer v_object);
-void value_take_application (GValue* value, gpointer v_object);
-gpointer value_get_application (const GValue* value);
-GType application_get_type (void) G_GNUC_CONST;
-Application* application_get_instance (void);
 void application_panic (Application* self);
 gchar* app_window_get_app_role (AppWindow* self);
 static gchar* app_window_real_get_app_role (AppWindow* self);
+void app_window_on_about (AppWindow* self);
 #define RESOURCES_APP_VERSION _VERSION
 #define RESOURCES_COPYRIGHT _ ("Copyright 2016 Software Freedom Conservancy Inc.")
 #define RESOURCES_HOME_URL "https://wiki.gnome.org/Apps/Shotwell"
@@ -590,16 +554,11 @@ static void app_window_real_destroy (GtkWidget* base);
 gchar* get_nautilus_install_location (void);
 void show_file_in_nautilus (const gchar* filename, GError** error);
 void sys_show_uri (GdkScreen* screen, const gchar* uri, GError** error);
-static GtkActionGroup** app_window_real_create_common_action_groups (AppWindow* self, int* result_length1);
-static void _vala_array_add170 (GtkActionGroup*** array, int* length, int* size, GtkActionGroup* value);
-GtkActionGroup** app_window_get_common_action_groups (AppWindow* self, int* result_length1);
-static GtkActionGroup** _vala_array_dup28 (GtkActionGroup** self, int length);
-void app_window_replace_common_placeholders (AppWindow* self, GtkUIManager* ui);
-static void app_window_real_replace_common_placeholders (AppWindow* self, GtkUIManager* ui);
+static void app_window_real_add_actions (AppWindow* self);
 void app_window_go_fullscreen (AppWindow* self, Page* page);
 void page_switching_to_fullscreen (Page* self, FullscreenWindow* fsw);
 void page_returning_from_fullscreen (Page* self, FullscreenWindow* fsw);
-GtkAction* app_window_get_common_action (AppWindow* self, const gchar* name);
+GAction* app_window_get_common_action (AppWindow* self, const gchar* name);
 void app_window_set_common_action_sensitive (AppWindow* self, const gchar* name, gboolean sensitive);
 void app_window_set_common_action_important (AppWindow* self, const gchar* name, gboolean important);
 void app_window_set_common_action_visible (AppWindow* self, const gchar* name, gboolean visible);
@@ -619,9 +578,9 @@ void app_window_decorate_redo_action (AppWindow* self);
 CommandManager* app_window_get_command_manager (void);
 GType command_description_get_type (void) G_GNUC_CONST;
 static void app_window_decorate_command_manager_action (AppWindow* self, const gchar* name, const gchar* prefix, const gchar* default_explanation, CommandDescription* desc);
-gchar* command_description_get_name (CommandDescription* self);
-gchar* command_description_get_explanation (CommandDescription* self);
+#define RESOURCES_UNDO_MENU _ ("_Undo")
 CommandDescription* command_manager_get_undo_description (CommandManager* self);
+#define RESOURCES_REDO_MENU _ ("_Redo")
 CommandDescription* command_manager_get_redo_description (CommandManager* self);
 gboolean command_manager_undo (CommandManager* self);
 gboolean command_manager_redo (CommandManager* self);
@@ -629,441 +588,318 @@ void view_collection_select_all (ViewCollection* self);
 void view_collection_unselect_all (ViewCollection* self);
 static gboolean app_window_real_configure_event (GtkWidget* base, GdkEventConfigure* event);
 static void app_window_finalize (GObject* obj);
-static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func);
-static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 
+static const GActionEntry FULLSCREEN_WINDOW_entries[1] = {{"LeaveFullscreen", _fullscreen_window_on_close_gsimple_action_activate_callback}};
+static const GActionEntry APP_WINDOW_common_actions[10] = {{"CommonQuit", _app_window_on_quit_gsimple_action_activate_callback}, {"CommonFullscreen", _app_window_on_fullscreen_gsimple_action_activate_callback}, {"CommonHelpContents", _app_window_on_help_contents_gsimple_action_activate_callback}, {"CommonHelpFAQ", _app_window_on_help_faq_gsimple_action_activate_callback}, {"CommonHelpReportProblem", _app_window_on_help_report_problem_gsimple_action_activate_callback}, {"CommonUndo", _app_window_on_undo_gsimple_action_activate_callback}, {"CommonRedo", _app_window_on_redo_gsimple_action_activate_callback}, {"CommonJumpToFile", _app_window_on_jump_to_file_gsimple_action_activate_callback}, {"CommonSelectAll", _app_window_on_select_all_gsimple_action_activate_callback}, {"CommonSelectNone", _app_window_on_select_none_gsimple_action_activate_callback}};
 extern const gchar* RESOURCES_AUTHORS[6];
 
-static gpointer _g_object_ref0 (gpointer self) {
-#line 38 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return self ? g_object_ref (self) : NULL;
-#line 613 "AppWindow.c"
+static void _fullscreen_window_on_close_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	fullscreen_window_on_close ((FullscreenWindow*) self);
+#line 572 "AppWindow.c"
 }
 
 
 static void _fullscreen_window_update_toolbar_dismissal_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
-#line 57 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 50 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_update_toolbar_dismissal ((FullscreenWindow*) self);
-#line 620 "AppWindow.c"
-}
-
-
-static void _fullscreen_window_on_close_gtk_tool_button_clicked (GtkToolButton* _sender, gpointer self) {
-#line 61 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	fullscreen_window_on_close ((FullscreenWindow*) self);
-#line 627 "AppWindow.c"
+#line 579 "AppWindow.c"
 }
 
 
 static void _fullscreen_window_hide_toolbar_slideshow_page_hide_toolbar (SlideshowPage* _sender, gpointer self) {
-#line 72 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 65 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_hide_toolbar ((FullscreenWindow*) self);
-#line 634 "AppWindow.c"
+#line 586 "AppWindow.c"
 }
 
 
 FullscreenWindow* fullscreen_window_construct (GType object_type, Page* page) {
 	FullscreenWindow * self = NULL;
 	Page* _tmp0_ = NULL;
-	GFile* ui_file = NULL;
-	GFile* _tmp1_ = NULL;
-	GtkActionGroup* action_group = NULL;
-	GtkActionGroup* _tmp8_ = NULL;
-	GtkActionGroup* _tmp9_ = NULL;
-	gint _tmp10_ = 0;
-	GtkActionEntry* _tmp11_ = NULL;
-	GtkActionEntry* _tmp12_ = NULL;
-	gint _tmp12__length1 = 0;
-	GtkUIManager* _tmp13_ = NULL;
-	GtkActionGroup* _tmp14_ = NULL;
-	GtkUIManager* _tmp15_ = NULL;
-	GtkAccelGroup* accel_group = NULL;
-	GtkUIManager* _tmp16_ = NULL;
-	GtkAccelGroup* _tmp17_ = NULL;
-	GtkAccelGroup* _tmp18_ = NULL;
-	GtkAccelGroup* _tmp19_ = NULL;
-	AppWindow* _tmp21_ = NULL;
-	AppWindow* _tmp22_ = NULL;
-	GdkScreen* _tmp23_ = NULL;
+	AppWindow* _tmp1_ = NULL;
+	AppWindow* _tmp2_ = NULL;
+#line 32 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	static const gchar* accels[] = {"F11"};
+#line 597 "AppWindow.c"
+	AppWindow* _tmp3_ = NULL;
+	AppWindow* _tmp4_ = NULL;
+	GdkScreen* _tmp5_ = NULL;
 	GdkRectangle monitor = {0};
-	GdkRectangle _tmp24_ = {0};
-	GdkRectangle _tmp25_ = {0};
-	gint _tmp26_ = 0;
-	GdkRectangle _tmp27_ = {0};
-	gint _tmp28_ = 0;
-	ConfigFacade* _tmp29_ = NULL;
-	ConfigFacade* _tmp30_ = NULL;
-	gboolean _tmp31_ = FALSE;
-	GtkToggleToolButton* _tmp32_ = NULL;
-	GtkToggleToolButton* _tmp33_ = NULL;
-	const gchar* _tmp34_ = NULL;
-	GtkToggleToolButton* _tmp35_ = NULL;
-	const gchar* _tmp36_ = NULL;
-	GtkToggleToolButton* _tmp37_ = NULL;
-	gboolean _tmp38_ = FALSE;
-	GtkToggleToolButton* _tmp39_ = NULL;
+	GdkRectangle _tmp6_ = {0};
+	GdkRectangle _tmp7_ = {0};
+	gint _tmp8_ = 0;
+	GdkRectangle _tmp9_ = {0};
+	gint _tmp10_ = 0;
+	ConfigFacade* _tmp11_ = NULL;
+	ConfigFacade* _tmp12_ = NULL;
+	gboolean _tmp13_ = FALSE;
+	GtkToggleToolButton* _tmp14_ = NULL;
+	GtkToggleToolButton* _tmp15_ = NULL;
+	const gchar* _tmp16_ = NULL;
+	GtkToggleToolButton* _tmp17_ = NULL;
+	const gchar* _tmp18_ = NULL;
+	GtkToggleToolButton* _tmp19_ = NULL;
+	gboolean _tmp20_ = FALSE;
+	GtkToggleToolButton* _tmp21_ = NULL;
+	GtkToolButton* _tmp22_ = NULL;
+	GtkToolButton* _tmp23_ = NULL;
+	const gchar* _tmp24_ = NULL;
+	GtkToolButton* _tmp25_ = NULL;
+	Page* _tmp26_ = NULL;
+	GtkToolbar* _tmp27_ = NULL;
+	GtkToolbar* _tmp28_ = NULL;
+	GtkToolbar* _tmp29_ = NULL;
+	GtkToolbar* _tmp30_ = NULL;
+	GtkToolbar* _tmp31_ = NULL;
+	GtkToolbar* _tmp32_ = NULL;
+	Page* _tmp33_ = NULL;
+	Page* _tmp37_ = NULL;
+	Page* _tmp38_ = NULL;
+	GtkToolbar* _tmp39_ = NULL;
 	GtkToolButton* _tmp40_ = NULL;
-	GtkToolButton* _tmp41_ = NULL;
-	const gchar* _tmp42_ = NULL;
-	GtkToolButton* _tmp43_ = NULL;
-	Page* _tmp44_ = NULL;
+	GtkOverlay* _tmp41_ = NULL;
+	GtkOverlay* _tmp42_ = NULL;
+	Page* _tmp43_ = NULL;
+	GtkOverlay* _tmp44_ = NULL;
 	GtkToolbar* _tmp45_ = NULL;
-	GtkToolbar* _tmp46_ = NULL;
-	GtkToolbar* _tmp47_ = NULL;
-	GtkToolbar* _tmp48_ = NULL;
-	GtkToolbar* _tmp49_ = NULL;
-	GtkToolbar* _tmp50_ = NULL;
-	Page* _tmp51_ = NULL;
-	Page* _tmp55_ = NULL;
-	Page* _tmp56_ = NULL;
-	GtkToolbar* _tmp57_ = NULL;
-	GtkToolButton* _tmp58_ = NULL;
-	GtkOverlay* _tmp59_ = NULL;
-	GtkOverlay* _tmp60_ = NULL;
-	Page* _tmp61_ = NULL;
-	GtkOverlay* _tmp62_ = NULL;
-	GtkToolbar* _tmp63_ = NULL;
-	GdkRectangle _tmp64_ = {0};
-	gint _tmp65_ = 0;
-	GdkRectangle _tmp66_ = {0};
-	gint _tmp67_ = 0;
-	Page* _tmp68_ = NULL;
-	GError * _inner_error_ = NULL;
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GdkRectangle _tmp46_ = {0};
+	gint _tmp47_ = 0;
+	GdkRectangle _tmp48_ = {0};
+	gint _tmp49_ = 0;
+	Page* _tmp50_ = NULL;
+#line 26 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_PAGE (page), NULL);
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = (FullscreenWindow*) page_window_construct (object_type);
-#line 23 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 29 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page;
-#line 23 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 29 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_window_set_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), _tmp0_);
-#line 25 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_ = resources_get_ui ("fullscreen.ui");
-#line 25 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	ui_file = _tmp1_;
-#line 717 "AppWindow.c"
-	{
-		GtkUIManager* _tmp2_ = NULL;
-		gchar* _tmp3_ = NULL;
-		gchar* _tmp4_ = NULL;
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp2_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp3_ = g_file_get_path (ui_file);
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp4_ = _tmp3_;
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_ui_manager_add_ui_from_file (_tmp2_, _tmp4_, &_inner_error_);
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp4_);
-#line 28 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 734 "AppWindow.c"
-			goto __catch224_g_error;
-		}
-	}
-	goto __finally224;
-	__catch224_g_error:
-	{
-		GError* err = NULL;
-		gchar* _tmp5_ = NULL;
-		gchar* _tmp6_ = NULL;
-		const gchar* _tmp7_ = NULL;
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		err = _inner_error_;
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_inner_error_ = NULL;
-#line 30 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp5_ = g_file_get_path (ui_file);
-#line 30 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp6_ = _tmp5_;
-#line 30 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp7_ = err->message;
-#line 30 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_error ("AppWindow.vala:30: Error loading UI file %s: %s", _tmp6_, _tmp7_);
-#line 30 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp6_);
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_error_free0 (err);
-#line 761 "AppWindow.c"
-	}
-	__finally224:
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_object_unref0 (ui_file);
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_clear_error (&_inner_error_);
-#line 27 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		return NULL;
-#line 774 "AppWindow.c"
-	}
+#line 31 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp1_ = app_window_get_instance ();
+#line 31 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = _tmp1_;
+#line 31 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_action_map_get_type (), GActionMap), FULLSCREEN_WINDOW_entries, G_N_ELEMENTS (FULLSCREEN_WINDOW_entries), self);
+#line 31 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (_tmp2_);
 #line 33 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp8_ = gtk_action_group_new ("FullscreenActionGroup");
-#line 33 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	action_group = _tmp8_;
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp9_ = action_group;
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp11_ = fullscreen_window_create_actions (self, &_tmp10_);
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp12_ = _tmp11_;
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp12__length1 = _tmp10_;
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_action_group_add_actions (_tmp9_, _tmp12_, _tmp10_, self);
-#line 34 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp12_ = (g_free (_tmp12_), NULL);
+	application_set_accels_for_action ("win.LeaveFullscreen", accels, G_N_ELEMENTS (accels));
 #line 35 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp13_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
+	_tmp3_ = app_window_get_instance ();
 #line 35 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_ = action_group;
+	_tmp4_ = _tmp3_;
 #line 35 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_ui_manager_insert_action_group (_tmp13_, _tmp14_, 0);
-#line 36 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp15_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 36 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_ui_manager_ensure_update (_tmp15_);
+	_tmp5_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow));
+#line 35 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_window_set_screen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp5_);
+#line 35 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (_tmp4_);
 #line 38 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp16_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
+	fullscreen_window_get_monitor_geometry (self, &_tmp6_);
 #line 38 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp17_ = gtk_ui_manager_get_accel_group (_tmp16_);
-#line 38 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_ = _g_object_ref0 (_tmp17_);
-#line 38 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	accel_group = _tmp18_;
+	monitor = _tmp6_;
 #line 39 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp19_ = accel_group;
+	_tmp7_ = monitor;
 #line 39 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp19_ != NULL) {
-#line 814 "AppWindow.c"
-		GtkAccelGroup* _tmp20_ = NULL;
-#line 40 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp20_ = accel_group;
-#line 40 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_window_add_accel_group (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp20_);
-#line 820 "AppWindow.c"
-	}
-#line 42 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp21_ = app_window_get_instance ();
-#line 42 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_ = _tmp21_;
-#line 42 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp23_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_window_get_type (), GtkWindow));
-#line 42 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_window_set_screen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp23_);
-#line 42 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (_tmp22_);
-#line 45 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	fullscreen_window_get_monitor_geometry (self, &_tmp24_);
-#line 45 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	monitor = _tmp24_;
-#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_ = monitor;
-#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp26_ = _tmp25_.x;
-#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp27_ = monitor;
-#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_ = _tmp27_.y;
-#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_window_move (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp26_, _tmp28_);
-#line 48 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp8_ = _tmp7_.x;
+#line 39 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp9_ = monitor;
+#line 39 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp10_ = _tmp9_.y;
+#line 39 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_window_move (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp8_, _tmp10_);
+#line 41 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), (guint) 0);
-#line 51 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp29_ = config_facade_get_instance ();
-#line 51 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp30_ = _tmp29_;
-#line 51 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_ = configuration_facade_get_pin_toolbar_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 51 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->priv->is_toolbar_dismissal_enabled = _tmp31_;
-#line 51 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (_tmp30_);
+#line 44 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp11_ = config_facade_get_instance ();
+#line 44 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp12_ = _tmp11_;
+#line 44 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp13_ = configuration_facade_get_pin_toolbar_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
+#line 44 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	self->priv->is_toolbar_dismissal_enabled = _tmp13_;
+#line 44 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (_tmp12_);
+#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp14_ = self->priv->pin_button;
+#line 46 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_tool_button_set_icon_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_tool_button_get_type (), GtkToolButton), "pin-toolbar");
+#line 47 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp15_ = self->priv->pin_button;
+#line 47 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp16_ = _ ("Pin Toolbar");
+#line 47 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_tool_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_tool_button_get_type (), GtkToolButton), _tmp16_);
+#line 48 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp17_ = self->priv->pin_button;
+#line 48 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp18_ = _ ("Pin the toolbar open");
+#line 48 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_tool_item_get_type (), GtkToolItem), _tmp18_);
+#line 49 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp19_ = self->priv->pin_button;
+#line 49 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp20_ = self->priv->is_toolbar_dismissal_enabled;
+#line 49 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_toggle_tool_button_set_active (_tmp19_, !_tmp20_);
+#line 50 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp21_ = self->priv->pin_button;
+#line 50 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_tool_button_get_type (), GtkToolButton), "clicked", (GCallback) _fullscreen_window_update_toolbar_dismissal_gtk_tool_button_clicked, self, 0);
+#line 52 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp22_ = self->priv->close_button;
+#line 52 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_tool_button_set_icon_name (_tmp22_, "view-restore");
 #line 53 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp32_ = self->priv->pin_button;
+	_tmp23_ = self->priv->close_button;
 #line 53 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_tool_button_set_icon_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_tool_button_get_type (), GtkToolButton), "pin-toolbar");
+	_tmp24_ = _ ("Leave fullscreen");
+#line 53 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_tool_item_get_type (), GtkToolItem), _tmp24_);
 #line 54 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp33_ = self->priv->pin_button;
+	_tmp25_ = self->priv->close_button;
 #line 54 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_ = _ ("Pin Toolbar");
-#line 54 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_tool_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_tool_button_get_type (), GtkToolButton), _tmp34_);
-#line 55 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp35_ = self->priv->pin_button;
-#line 55 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp36_ = _ ("Pin the toolbar open");
-#line 55 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, gtk_tool_item_get_type (), GtkToolItem), _tmp36_);
+	gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, GTK_TYPE_ACTIONABLE, GtkActionable), "win.LeaveFullscreen");
 #line 56 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp37_ = self->priv->pin_button;
+	_tmp26_ = page;
 #line 56 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp38_ = self->priv->is_toolbar_dismissal_enabled;
+	_tmp27_ = page_get_toolbar (_tmp26_);
 #line 56 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_toggle_tool_button_set_active (_tmp37_, !_tmp38_);
-#line 57 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp39_ = self->priv->pin_button;
-#line 57 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_tool_button_get_type (), GtkToolButton), "clicked", (GCallback) _fullscreen_window_update_toolbar_dismissal_gtk_tool_button_clicked, self, 0);
-#line 59 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp40_ = self->priv->close_button;
-#line 59 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_tool_button_set_icon_name (_tmp40_, "view-restore");
-#line 60 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp41_ = self->priv->close_button;
-#line 60 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp42_ = _ ("Leave fullscreen");
-#line 60 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_tool_item_get_type (), GtkToolItem), _tmp42_);
-#line 61 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp43_ = self->priv->close_button;
-#line 61 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_signal_connect_object (_tmp43_, "clicked", (GCallback) _fullscreen_window_on_close_gtk_tool_button_clicked, self, 0);
-#line 63 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp44_ = page;
-#line 63 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp45_ = page_get_toolbar (_tmp44_);
-#line 63 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (self->priv->toolbar);
+#line 56 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	self->priv->toolbar = _tmp27_;
+#line 57 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp28_ = self->priv->toolbar;
+#line 57 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_toolbar_set_show_arrow (_tmp28_, FALSE);
+#line 58 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp29_ = self->priv->toolbar;
+#line 58 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_END);
+#line 59 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp30_ = self->priv->toolbar;
+#line 59 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 60 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp31_ = self->priv->toolbar;
+#line 60 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	g_object_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, gtk_widget_get_type (), GtkWidget), "expand", FALSE, NULL);
+#line 61 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp32_ = self->priv->toolbar;
+#line 61 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_widget_set_opacity (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_widget_get_type (), GtkWidget), RESOURCES_TRANSIENT_WINDOW_OPACITY);
 #line 63 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->priv->toolbar = _tmp45_;
-#line 64 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp46_ = self->priv->toolbar;
-#line 64 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_toolbar_set_show_arrow (_tmp46_, FALSE);
+	_tmp33_ = page;
+#line 63 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp33_, TYPE_SLIDESHOW_PAGE)) {
+#line 770 "AppWindow.c"
+		Page* _tmp34_ = NULL;
 #line 65 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp47_ = self->priv->toolbar;
+		_tmp34_ = page;
 #line 65 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_END);
-#line 66 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp48_ = self->priv->toolbar;
-#line 66 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
-#line 67 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp49_ = self->priv->toolbar;
-#line 67 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_object_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, gtk_widget_get_type (), GtkWidget), "expand", FALSE, NULL);
-#line 68 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp50_ = self->priv->toolbar;
-#line 68 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_widget_set_opacity (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_widget_get_type (), GtkWidget), RESOURCES_TRANSIENT_WINDOW_OPACITY);
-#line 70 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp51_ = page;
-#line 70 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp51_, TYPE_SLIDESHOW_PAGE)) {
-#line 930 "AppWindow.c"
-		Page* _tmp52_ = NULL;
-#line 72 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp52_ = page;
-#line 72 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, TYPE_SLIDESHOW_PAGE, SlideshowPage), "hide-toolbar", (GCallback) _fullscreen_window_hide_toolbar_slideshow_page_hide_toolbar, self, 0);
-#line 936 "AppWindow.c"
+		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, TYPE_SLIDESHOW_PAGE, SlideshowPage), "hide-toolbar", (GCallback) _fullscreen_window_hide_toolbar_slideshow_page_hide_toolbar, self, 0);
+#line 776 "AppWindow.c"
 	} else {
-		GtkToolbar* _tmp53_ = NULL;
-		GtkToggleToolButton* _tmp54_ = NULL;
-#line 75 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp53_ = self->priv->toolbar;
-#line 75 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp54_ = self->priv->pin_button;
-#line 75 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_toolbar_insert (_tmp53_, G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 946 "AppWindow.c"
+		GtkToolbar* _tmp35_ = NULL;
+		GtkToggleToolButton* _tmp36_ = NULL;
+#line 68 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp35_ = self->priv->toolbar;
+#line 68 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp36_ = self->priv->pin_button;
+#line 68 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		gtk_toolbar_insert (_tmp35_, G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 786 "AppWindow.c"
 	}
+#line 71 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp37_ = page;
+#line 71 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	page_set_cursor_hide_time (_tmp37_, FULLSCREEN_WINDOW_TOOLBAR_DISMISSAL_SEC * 1000);
+#line 72 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp38_ = page;
+#line 72 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	page_start_cursor_hiding (_tmp38_);
+#line 74 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp39_ = self->priv->toolbar;
+#line 74 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp40_ = self->priv->close_button;
+#line 74 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_toolbar_insert (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 76 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp41_ = self->priv->overlay;
+#line 76 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_widget_get_type (), GtkWidget));
+#line 77 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp42_ = self->priv->overlay;
+#line 77 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp43_ = page;
+#line 77 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget));
 #line 78 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp55_ = page;
+	_tmp44_ = self->priv->overlay;
 #line 78 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	page_set_cursor_hide_time (_tmp55_, FULLSCREEN_WINDOW_TOOLBAR_DISMISSAL_SEC * 1000);
-#line 79 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp56_ = page;
-#line 79 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	page_start_cursor_hiding (_tmp56_);
-#line 81 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp57_ = self->priv->toolbar;
-#line 81 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp58_ = self->priv->close_button;
-#line 81 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_toolbar_insert (_tmp57_, G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, gtk_tool_item_get_type (), GtkToolItem), -1);
+	_tmp45_ = self->priv->toolbar;
+#line 78 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_overlay_add_overlay (_tmp44_, G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_widget_get_type (), GtkWidget));
 #line 83 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp59_ = self->priv->overlay;
+	_tmp46_ = monitor;
 #line 83 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, gtk_widget_get_type (), GtkWidget));
-#line 84 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp60_ = self->priv->overlay;
-#line 84 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp61_ = page;
-#line 84 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_widget_get_type (), GtkWidget));
-#line 85 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp62_ = self->priv->overlay;
-#line 85 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp63_ = self->priv->toolbar;
-#line 85 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_overlay_add_overlay (_tmp62_, G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, gtk_widget_get_type (), GtkWidget));
-#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp64_ = monitor;
-#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp65_ = _tmp64_.width;
-#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp66_ = monitor;
-#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp67_ = _tmp66_.height;
-#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_window_set_default_size (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp65_, _tmp67_);
-#line 93 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp47_ = _tmp46_.width;
+#line 83 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp48_ = monitor;
+#line 83 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp49_ = _tmp48_.height;
+#line 83 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_window_set_default_size (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp47_, _tmp49_);
+#line 86 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_fullscreen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 94 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 87 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 97 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 90 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_add_events (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), (gint) GDK_POINTER_MOTION_MASK);
-#line 100 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 93 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_invoke_toolbar (self);
-#line 103 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp68_ = page;
-#line 103 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, gtk_widget_get_type (), GtkWidget));
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (accel_group);
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (action_group);
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (ui_file);
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 96 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp50_ = page;
+#line 96 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_widget_get_type (), GtkWidget));
+#line 99 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_application_window_set_show_menubar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), FALSE);
+#line 26 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return self;
-#line 1008 "AppWindow.c"
+#line 844 "AppWindow.c"
 }
 
 
 FullscreenWindow* fullscreen_window_new (Page* page) {
-#line 22 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 26 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return fullscreen_window_construct (TYPE_FULLSCREEN_WINDOW, page);
-#line 1015 "AppWindow.c"
+#line 851 "AppWindow.c"
 }
 
 
 void fullscreen_window_disable_toolbar_dismissal (FullscreenWindow* self) {
-#line 106 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 102 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 107 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 103 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->is_toolbar_dismissal_enabled = FALSE;
-#line 1024 "AppWindow.c"
+#line 860 "AppWindow.c"
 }
 
 
 void fullscreen_window_update_toolbar_dismissal (FullscreenWindow* self) {
 	GtkToggleToolButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 110 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 106 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 111 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 107 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->pin_button;
-#line 111 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 107 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gtk_toggle_tool_button_get_active (_tmp0_);
-#line 111 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 107 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->is_toolbar_dismissal_enabled = !_tmp1_;
-#line 1039 "AppWindow.c"
+#line 875 "AppWindow.c"
 }
 
 
@@ -1076,31 +912,31 @@ static void fullscreen_window_get_monitor_geometry (FullscreenWindow* self, GdkR
 	GdkWindow* _tmp4_ = NULL;
 	gint _tmp5_ = 0;
 	GdkRectangle _tmp6_ = {0};
-#line 114 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 110 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = app_window_get_instance ();
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = gdk_screen_get_monitor_at_window (_tmp1_, _tmp4_);
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gdk_screen_get_monitor_geometry (_tmp0_, _tmp5_, &_tmp6_);
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	monitor = _tmp6_;
-#line 117 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 113 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp3_);
-#line 120 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 116 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	*result = monitor;
-#line 120 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 116 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return;
-#line 1076 "AppWindow.c"
+#line 912 "AppWindow.c"
 }
 
 
@@ -1111,129 +947,40 @@ static gboolean fullscreen_window_real_configure_event (GtkWidget* base, GdkEven
 	GdkEventConfigure* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 119 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FULLSCREEN_WINDOW, FullscreenWindow);
-#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 119 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 124 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 120 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = event;
-#line 124 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 120 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = GTK_WIDGET_CLASS (fullscreen_window_parent_class)->configure_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), gtk_widget_get_type (), GtkWidget), _tmp0_);
-#line 124 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 120 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_result_ = _tmp1_;
-#line 126 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 122 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->priv->switched_to;
-#line 126 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 122 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp2_) {
-#line 1101 "AppWindow.c"
+#line 937 "AppWindow.c"
 		Page* _tmp3_ = NULL;
 		Page* _tmp4_ = NULL;
-#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp3_;
-#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_switched_to (_tmp4_);
-#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 123 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp4_);
-#line 128 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 124 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->priv->switched_to = TRUE;
-#line 1114 "AppWindow.c"
+#line 950 "AppWindow.c"
 	}
-#line 131 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _result_;
-#line 131 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 127 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1120 "AppWindow.c"
-}
-
-
-static void _fullscreen_window_on_close_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	fullscreen_window_on_close ((FullscreenWindow*) self);
-#line 1127 "AppWindow.c"
-}
-
-
-static void _vala_array_add158 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 1138 "AppWindow.c"
-	}
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 1142 "AppWindow.c"
-}
-
-
-static GtkActionEntry* fullscreen_window_create_actions (FullscreenWindow* self, int* result_length1) {
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	GtkActionEntry* _tmp0_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry leave_fullscreen = {0};
-	GtkActionEntry _tmp1_ = {0};
-	GtkActionEntry* _tmp2_ = NULL;
-	gint _tmp2__length1 = 0;
-	GtkActionEntry _tmp3_ = {0};
-	GtkActionEntry* _tmp4_ = NULL;
-	gint _tmp4__length1 = 0;
-#line 134 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_val_if_fail (IS_FULLSCREEN_WINDOW (self), NULL);
-#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = g_new0 (GtkActionEntry, 0);
-#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	actions = _tmp0_;
-#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	actions_length1 = 0;
-#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_actions_size_ = actions_length1;
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.name = "LeaveFullscreen";
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.stock_id = RESOURCES_LEAVE_FULLSCREEN_LABEL;
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.label = TRANSLATABLE;
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.accelerator = "F11";
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.tooltip = TRANSLATABLE;
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.callback = (GCallback) _fullscreen_window_on_close_gtk_action_callback;
-#line 137 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	leave_fullscreen = _tmp1_;
-#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	leave_fullscreen.label = RESOURCES_LEAVE_FULLSCREEN_LABEL;
-#line 140 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	leave_fullscreen.tooltip = RESOURCES_LEAVE_FULLSCREEN_LABEL;
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = actions;
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2__length1 = actions_length1;
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp3_ = leave_fullscreen;
-#line 141 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add158 (&actions, &actions_length1, &_actions_size_, &_tmp3_);
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_ = actions;
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4__length1 = actions_length1;
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (result_length1) {
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*result_length1 = _tmp4__length1;
-#line 1203 "AppWindow.c"
-	}
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = _tmp4_;
-#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 1209 "AppWindow.c"
+#line 956 "AppWindow.c"
 }
 
 
@@ -1249,68 +996,68 @@ static gboolean fullscreen_window_real_key_press_event (GtkWidget* base, GdkEven
 	GdkEventKey* _tmp8_ = NULL;
 	gboolean _tmp9_ = FALSE;
 	gboolean _tmp10_ = FALSE;
-#line 146 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 130 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FULLSCREEN_WINDOW, FullscreenWindow);
-#line 146 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 130 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 148 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 132 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = event;
-#line 148 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 132 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_->keyval;
-#line 148 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 132 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = gdk_keyval_name (_tmp1_);
-#line 148 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 132 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (g_strcmp0 (_tmp2_, "Escape") == 0) {
-#line 149 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 133 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		fullscreen_window_on_close (self);
-#line 151 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 151 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 135 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1243 "AppWindow.c"
+#line 990 "AppWindow.c"
 	}
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (fullscreen_window_parent_class)->key_press_event != NULL) {
-#line 1247 "AppWindow.c"
+#line 994 "AppWindow.c"
 		GdkEventKey* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = event;
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = GTK_WIDGET_CLASS (fullscreen_window_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), gtk_widget_get_type (), GtkWidget), _tmp4_);
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _tmp5_;
-#line 1256 "AppWindow.c"
+#line 1003 "AppWindow.c"
 	} else {
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = FALSE;
-#line 1260 "AppWindow.c"
+#line 1007 "AppWindow.c"
 	}
-#line 155 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 139 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp3_) {
-#line 156 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 140 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 156 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 140 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1268 "AppWindow.c"
+#line 1015 "AppWindow.c"
 	}
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = app_window_get_instance ();
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = _tmp6_;
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = event;
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), "key-press-event", _tmp8_, &_tmp9_);
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = _tmp9_;
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp7_);
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp10_;
-#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 143 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1286 "AppWindow.c"
+#line 1033 "AppWindow.c"
 }
 
 
@@ -1320,38 +1067,38 @@ static void fullscreen_window_on_close (FullscreenWindow* self) {
 	gboolean _tmp2_ = FALSE;
 	AppWindow* _tmp3_ = NULL;
 	AppWindow* _tmp4_ = NULL;
-#line 162 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 146 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 147 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = config_facade_get_instance ();
-#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 147 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 147 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->priv->is_toolbar_dismissal_enabled;
-#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 147 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	configuration_facade_set_pin_toolbar_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_);
-#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 147 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp1_);
-#line 164 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 148 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_hide_toolbar (self);
-#line 166 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 150 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = app_window_get_instance ();
-#line 166 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 150 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = _tmp3_;
-#line 166 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 150 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_end_fullscreen (_tmp4_);
-#line 166 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 150 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp4_);
-#line 1318 "AppWindow.c"
+#line 1065 "AppWindow.c"
 }
 
 
 void fullscreen_window_close (FullscreenWindow* self) {
-#line 169 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 153 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 170 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 154 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_on_close (self);
-#line 1327 "AppWindow.c"
+#line 1074 "AppWindow.c"
 }
 
 
@@ -1360,36 +1107,36 @@ static void fullscreen_window_real_destroy (GtkWidget* base) {
 	Page* page = NULL;
 	Page* _tmp0_ = NULL;
 	Page* _tmp1_ = NULL;
-#line 173 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 157 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FULLSCREEN_WINDOW, FullscreenWindow);
-#line 174 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 158 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 174 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 158 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page = _tmp0_;
-#line 175 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 159 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_window_clear_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 177 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 161 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = page;
-#line 177 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 161 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 1348 "AppWindow.c"
+#line 1095 "AppWindow.c"
 		Page* _tmp2_ = NULL;
 		Page* _tmp3_ = NULL;
-#line 178 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 162 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = page;
-#line 178 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 162 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_stop_cursor_hiding (_tmp2_);
-#line 179 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page;
-#line 179 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 163 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_switching_from (_tmp3_);
-#line 1359 "AppWindow.c"
+#line 1106 "AppWindow.c"
 	}
-#line 182 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 166 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	GTK_WIDGET_CLASS (fullscreen_window_parent_class)->destroy (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), gtk_widget_get_type (), GtkWidget));
-#line 173 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 157 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (page);
-#line 1365 "AppWindow.c"
+#line 1112 "AppWindow.c"
 }
 
 
@@ -1398,34 +1145,34 @@ static gboolean fullscreen_window_real_delete_event (GtkWidget* base, GdkEventAn
 	gboolean result = FALSE;
 	AppWindow* _tmp0_ = NULL;
 	AppWindow* _tmp1_ = NULL;
-#line 185 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 169 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FULLSCREEN_WINDOW, FullscreenWindow);
-#line 185 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 169 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 186 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 170 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_on_close (self);
-#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 171 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_get_instance ();
-#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 171 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 171 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 171 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp1_);
-#line 189 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 173 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = TRUE;
-#line 189 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 173 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1392 "AppWindow.c"
+#line 1139 "AppWindow.c"
 }
 
 
 static gboolean _fullscreen_window_on_check_toolbar_invocation_gsource_func (gpointer self) {
 	gboolean result;
 	result = fullscreen_window_on_check_toolbar_invocation ((FullscreenWindow*) self);
-#line 198 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 182 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1401 "AppWindow.c"
+#line 1148 "AppWindow.c"
 }
 
 
@@ -1434,64 +1181,71 @@ static gboolean fullscreen_window_real_motion_notify_event (GtkWidget* base, Gdk
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp4_ = FALSE;
-#line 192 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 176 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FULLSCREEN_WINDOW, FullscreenWindow);
-#line 192 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 176 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 193 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 177 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->is_toolbar_shown;
-#line 193 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 177 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp0_) {
-#line 1418 "AppWindow.c"
+#line 1165 "AppWindow.c"
 		gboolean _tmp1_ = FALSE;
 		gboolean _tmp2_ = FALSE;
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = self->priv->waiting_for_invoke;
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (!_tmp2_) {
-#line 1425 "AppWindow.c"
+#line 1172 "AppWindow.c"
 			gboolean _tmp3_ = FALSE;
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			_tmp3_ = fullscreen_window_is_pointer_in_toolbar (self);
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			_tmp1_ = _tmp3_;
-#line 1431 "AppWindow.c"
+#line 1178 "AppWindow.c"
 		} else {
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			_tmp1_ = FALSE;
-#line 1435 "AppWindow.c"
+#line 1182 "AppWindow.c"
 		}
-#line 197 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 181 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (_tmp1_) {
-#line 198 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 182 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) FULLSCREEN_WINDOW_TOOLBAR_INVOCATION_MSEC, _fullscreen_window_on_check_toolbar_invocation_gsource_func, g_object_ref (self), g_object_unref);
-#line 199 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 183 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			self->priv->waiting_for_invoke = TRUE;
-#line 1443 "AppWindow.c"
+#line 1190 "AppWindow.c"
 		}
 	}
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (fullscreen_window_parent_class)->motion_notify_event != NULL) {
-#line 1448 "AppWindow.c"
+#line 1195 "AppWindow.c"
 		GdkEventMotion* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = event;
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = GTK_WIDGET_CLASS (fullscreen_window_parent_class)->motion_notify_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), gtk_widget_get_type (), GtkWidget), _tmp5_);
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp6_;
-#line 1457 "AppWindow.c"
+#line 1204 "AppWindow.c"
 	} else {
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = FALSE;
-#line 1461 "AppWindow.c"
+#line 1208 "AppWindow.c"
 	}
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp4_;
-#line 203 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 187 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1467 "AppWindow.c"
+#line 1214 "AppWindow.c"
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+#line 191 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 1221 "AppWindow.c"
 }
 
 
@@ -1512,57 +1266,57 @@ static gboolean fullscreen_window_is_pointer_in_toolbar (FullscreenWindow* self)
 	gint _tmp9_ = 0;
 	gint _tmp10_ = 0;
 	gint _tmp11_ = 0;
-#line 206 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 190 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_FULLSCREEN_WINDOW (self), FALSE);
-#line 207 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 191 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = gtk_widget_get_display (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 207 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 191 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gdk_display_get_device_manager (_tmp0_);
-#line 207 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 191 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 207 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 191 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	devmgr = _tmp2_;
-#line 208 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 192 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = devmgr;
-#line 208 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 192 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp3_ == NULL) {
-#line 209 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_debug ("AppWindow.vala:209: No device manager for display");
-#line 211 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 193 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_debug ("AppWindow.vala:193: No device manager for display");
+#line 195 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = FALSE;
-#line 211 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 195 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (devmgr);
-#line 211 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 195 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1510 "AppWindow.c"
+#line 1264 "AppWindow.c"
 	}
-#line 215 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 199 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = devmgr;
-#line 215 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 199 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = gdk_device_manager_get_client_pointer (_tmp4_);
-#line 215 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 199 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gdk_device_get_position (_tmp5_, NULL, NULL, &_tmp6_);
-#line 215 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 199 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	py = _tmp6_;
-#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 202 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = self->priv->toolbar;
-#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 202 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 202 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gdk_window_get_geometry (_tmp8_, NULL, &_tmp9_, NULL, NULL);
-#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 202 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	wy = _tmp9_;
-#line 220 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 204 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = py;
-#line 220 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 204 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = wy;
-#line 220 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 204 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp10_ >= _tmp11_;
-#line 220 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 204 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (devmgr);
-#line 220 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 204 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1538 "AppWindow.c"
+#line 1292 "AppWindow.c"
 }
 
 
@@ -1570,62 +1324,62 @@ static gboolean fullscreen_window_on_check_toolbar_invocation (FullscreenWindow*
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 223 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 207 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_FULLSCREEN_WINDOW (self), FALSE);
-#line 224 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 208 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->waiting_for_invoke = FALSE;
-#line 226 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 210 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->is_toolbar_shown;
-#line 226 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 210 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_) {
-#line 227 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 211 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = FALSE;
-#line 227 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 211 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1558 "AppWindow.c"
+#line 1312 "AppWindow.c"
 	}
-#line 229 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 213 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = fullscreen_window_is_pointer_in_toolbar (self);
-#line 229 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 213 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp1_) {
-#line 230 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 214 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = FALSE;
-#line 230 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 214 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1568 "AppWindow.c"
+#line 1322 "AppWindow.c"
 	}
-#line 232 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 216 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_invoke_toolbar (self);
-#line 234 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = FALSE;
-#line 234 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 218 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1576 "AppWindow.c"
+#line 1330 "AppWindow.c"
 }
 
 
 static gboolean _fullscreen_window_on_check_toolbar_dismissal_gsource_func (gpointer self) {
 	gboolean result;
 	result = fullscreen_window_on_check_toolbar_dismissal ((FullscreenWindow*) self);
-#line 242 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 226 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1585 "AppWindow.c"
+#line 1339 "AppWindow.c"
 }
 
 
 static void fullscreen_window_invoke_toolbar (FullscreenWindow* self) {
 	GtkToolbar* _tmp0_ = NULL;
-#line 237 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 221 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 238 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 222 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->toolbar;
-#line 238 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 222 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 240 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 224 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->is_toolbar_shown = TRUE;
-#line 242 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 226 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) FULLSCREEN_WINDOW_TOOLBAR_CHECK_DISMISSAL_MSEC, _fullscreen_window_on_check_toolbar_dismissal_gsource_func, g_object_ref (self), g_object_unref);
-#line 1601 "AppWindow.c"
+#line 1355 "AppWindow.c"
 }
 
 
@@ -1641,99 +1395,99 @@ static gboolean fullscreen_window_on_check_toolbar_dismissal (FullscreenWindow* 
 	time_t _tmp7_ = 0;
 	time_t _tmp8_ = 0;
 	time_t _tmp9_ = 0;
-#line 245 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 229 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_FULLSCREEN_WINDOW (self), FALSE);
-#line 246 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 230 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->is_toolbar_shown;
-#line 246 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 230 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp0_) {
-#line 247 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 231 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = FALSE;
-#line 247 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 231 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1627 "AppWindow.c"
+#line 1381 "AppWindow.c"
 	}
-#line 250 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 234 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = self->priv->is_toolbar_dismissal_enabled;
-#line 250 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 234 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp1_) {
-#line 251 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 235 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 251 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 235 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1637 "AppWindow.c"
+#line 1391 "AppWindow.c"
 	}
-#line 254 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 238 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = fullscreen_window_is_pointer_in_toolbar (self);
-#line 254 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 238 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp2_) {
-#line 255 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 239 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->priv->left_toolbar_time = (time_t) 0;
-#line 257 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 241 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 257 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 241 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1649 "AppWindow.c"
+#line 1403 "AppWindow.c"
 	}
-#line 261 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 245 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = self->priv->left_toolbar_time;
-#line 261 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 245 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp3_ == ((time_t) 0)) {
-#line 1655 "AppWindow.c"
+#line 1409 "AppWindow.c"
 		time_t _tmp4_ = 0;
-#line 262 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 246 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = time (NULL);
-#line 262 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 246 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->priv->left_toolbar_time = _tmp4_;
-#line 264 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 248 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 264 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 248 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1665 "AppWindow.c"
+#line 1419 "AppWindow.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 252 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = time (NULL);
-#line 268 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 252 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	now = _tmp5_;
-#line 269 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 253 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = now;
-#line 269 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 253 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = self->priv->left_toolbar_time;
-#line 269 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 253 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_vala_assert (_tmp6_ >= _tmp7_, "now >= left_toolbar_time");
-#line 271 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 255 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = now;
-#line 271 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 255 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = self->priv->left_toolbar_time;
-#line 271 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 255 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if ((_tmp8_ - _tmp9_) < ((time_t) FULLSCREEN_WINDOW_TOOLBAR_DISMISSAL_SEC)) {
-#line 272 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 256 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 272 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 256 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 1687 "AppWindow.c"
+#line 1441 "AppWindow.c"
 	}
-#line 274 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 258 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fullscreen_window_hide_toolbar (self);
-#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 260 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = FALSE;
-#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 260 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1695 "AppWindow.c"
+#line 1449 "AppWindow.c"
 }
 
 
 static void fullscreen_window_hide_toolbar (FullscreenWindow* self) {
 	GtkToolbar* _tmp0_ = NULL;
-#line 279 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 263 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_FULLSCREEN_WINDOW (self));
-#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->toolbar;
-#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 281 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 265 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->is_toolbar_shown = FALSE;
-#line 1709 "AppWindow.c"
+#line 1463 "AppWindow.c"
 }
 
 
@@ -1754,7 +1508,7 @@ static void fullscreen_window_class_init (FullscreenWindowClass * klass) {
 	((GtkWidgetClass *) klass)->motion_notify_event = fullscreen_window_real_motion_notify_event;
 #line 7 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (klass)->finalize = fullscreen_window_finalize;
-#line 1730 "AppWindow.c"
+#line 1484 "AppWindow.c"
 }
 
 
@@ -1792,7 +1546,7 @@ static void fullscreen_window_instance_init (FullscreenWindow * self) {
 	self->priv->left_toolbar_time = (time_t) 0;
 #line 19 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->switched_to = FALSE;
-#line 1768 "AppWindow.c"
+#line 1522 "AppWindow.c"
 }
 
 
@@ -1810,7 +1564,7 @@ static void fullscreen_window_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->pin_button);
 #line 7 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (fullscreen_window_parent_class)->finalize (obj);
-#line 1786 "AppWindow.c"
+#line 1540 "AppWindow.c"
 }
 
 
@@ -1827,52 +1581,50 @@ GType fullscreen_window_get_type (void) {
 
 
 static void page_window_real_switched_pages (PageWindow* self, Page* old_page, Page* new_page) {
-#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((old_page == NULL) || IS_PAGE (old_page));
-#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((new_page == NULL) || IS_PAGE (new_page));
-#line 1807 "AppWindow.c"
+#line 1561 "AppWindow.c"
 }
 
 
 void page_window_switched_pages (PageWindow* self, Page* old_page, Page* new_page) {
-#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE_WINDOW (self));
-#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 280 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	PAGE_WINDOW_GET_CLASS (self)->switched_pages (self, old_page, new_page);
-#line 1816 "AppWindow.c"
+#line 1570 "AppWindow.c"
 }
 
 
 PageWindow* page_window_construct (GType object_type) {
 	PageWindow * self = NULL;
-#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self = (PageWindow*) g_object_new (object_type, NULL);
-#line 303 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	Application* _tmp0_ = NULL;
+	Application* _tmp1_ = NULL;
+	GtkApplication* _tmp2_ = NULL;
+	GtkApplication* _tmp3_ = NULL;
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp0_ = application_get_instance ();
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp1_ = _tmp0_;
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = application_get_system_app (_tmp1_);
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp3_ = _tmp2_;
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	self = (PageWindow*) g_object_new (object_type, "application", _tmp3_, NULL);
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (_tmp3_);
+#line 284 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_application_unref0 (_tmp1_);
+#line 287 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_add_events (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), (gint) ((GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK) | GDK_STRUCTURE_MASK));
-#line 306 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_window_set_has_resize_grip (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 289 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gtk_application_window_set_show_menubar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), TRUE);
+#line 283 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return self;
-#line 1830 "AppWindow.c"
-}
-
-
-GtkUIManager* page_window_get_ui_manager (PageWindow* self) {
-	GtkUIManager* result = NULL;
-	GtkUIManager* _tmp0_ = NULL;
-	GtkUIManager* _tmp1_ = NULL;
-#line 309 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_val_if_fail (IS_PAGE_WINDOW (self), NULL);
-#line 310 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = self->ui;
-#line 310 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 310 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = _tmp1_;
-#line 310 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 1848 "AppWindow.c"
+#line 1600 "AppWindow.c"
 }
 
 
@@ -1880,17 +1632,17 @@ Page* page_window_get_current_page (PageWindow* self) {
 	Page* result = NULL;
 	Page* _tmp0_ = NULL;
 	Page* _tmp1_ = NULL;
-#line 313 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_PAGE_WINDOW (self), NULL);
-#line 314 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->current_page;
-#line 314 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 314 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp1_;
-#line 314 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 1866 "AppWindow.c"
+#line 1618 "AppWindow.c"
 }
 
 
@@ -1903,54 +1655,54 @@ static void page_window_real_set_current_page (PageWindow* self, Page* page) {
 	Page* _tmp5_ = NULL;
 	Page* _tmp6_ = NULL;
 	Page* _tmp7_ = NULL;
-#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 297 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->current_page;
-#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 297 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ != NULL) {
-#line 1885 "AppWindow.c"
+#line 1637 "AppWindow.c"
 		Page* _tmp1_ = NULL;
-#line 319 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = self->priv->current_page;
-#line 319 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 298 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_clear_container (_tmp1_);
-#line 1891 "AppWindow.c"
+#line 1643 "AppWindow.c"
 	}
-#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 300 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->priv->current_page;
-#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 300 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 300 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	old_page = _tmp3_;
-#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = page;
-#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (self->priv->current_page);
-#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->current_page = _tmp5_;
-#line 323 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 302 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = self->priv->current_page;
-#line 323 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 302 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_set_container (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 325 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = page;
-#line 325 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_window_switched_pages (self, old_page, _tmp7_);
-#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (old_page);
-#line 1917 "AppWindow.c"
+#line 1669 "AppWindow.c"
 }
 
 
 void page_window_set_current_page (PageWindow* self, Page* page) {
-#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE_WINDOW (self));
-#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	PAGE_WINDOW_GET_CLASS (self)->set_current_page (self, page);
-#line 1926 "AppWindow.c"
+#line 1678 "AppWindow.c"
 }
 
 
@@ -1959,42 +1711,42 @@ static void page_window_real_clear_current_page (PageWindow* self) {
 	Page* old_page = NULL;
 	Page* _tmp2_ = NULL;
 	Page* _tmp3_ = NULL;
-#line 329 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 308 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->current_page;
-#line 329 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 308 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ != NULL) {
-#line 1939 "AppWindow.c"
+#line 1691 "AppWindow.c"
 		Page* _tmp1_ = NULL;
-#line 330 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 309 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = self->priv->current_page;
-#line 330 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 309 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_clear_container (_tmp1_);
-#line 1945 "AppWindow.c"
+#line 1697 "AppWindow.c"
 	}
-#line 332 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 311 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->priv->current_page;
-#line 332 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 311 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 332 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 311 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	old_page = _tmp3_;
-#line 333 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 312 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (self->priv->current_page);
-#line 333 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 312 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->current_page = NULL;
-#line 335 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 314 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_window_switched_pages (self, old_page, NULL);
-#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 307 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (old_page);
-#line 1961 "AppWindow.c"
+#line 1713 "AppWindow.c"
 }
 
 
 void page_window_clear_current_page (PageWindow* self) {
-#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 307 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE_WINDOW (self));
-#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 307 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	PAGE_WINDOW_GET_CLASS (self)->clear_current_page (self);
-#line 1970 "AppWindow.c"
+#line 1722 "AppWindow.c"
 }
 
 
@@ -2006,92 +1758,92 @@ static gboolean page_window_real_key_press_event (GtkWidget* base, GdkEventKey* 
 	gboolean _tmp5_ = FALSE;
 	Page* _tmp6_ = NULL;
 	gboolean _tmp10_ = FALSE;
-#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE_WINDOW, PageWindow);
-#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 317 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gtk_window_get_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_entry_get_type ())) {
-#line 1990 "AppWindow.c"
+#line 1742 "AppWindow.c"
 		GtkWidget* _tmp2_ = NULL;
 		GdkEventKey* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = gtk_window_get_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = event;
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_emit_by_name (_tmp2_, "key-press-event", _tmp3_, &_tmp4_);
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp4_;
-#line 2002 "AppWindow.c"
+#line 1754 "AppWindow.c"
 	} else {
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = FALSE;
-#line 2006 "AppWindow.c"
+#line 1758 "AppWindow.c"
 	}
-#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 318 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_) {
-#line 340 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 319 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 340 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 319 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2014 "AppWindow.c"
+#line 1766 "AppWindow.c"
 	}
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = self->priv->current_page;
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp6_ != NULL) {
-#line 2020 "AppWindow.c"
+#line 1772 "AppWindow.c"
 		Page* _tmp7_ = NULL;
 		GdkEventKey* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = self->priv->current_page;
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = event;
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = page_notify_app_key_pressed (_tmp7_, _tmp8_);
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp9_;
-#line 2032 "AppWindow.c"
+#line 1784 "AppWindow.c"
 	} else {
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = FALSE;
-#line 2036 "AppWindow.c"
+#line 1788 "AppWindow.c"
 	}
-#line 342 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 321 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp5_) {
-#line 343 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 343 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 322 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2044 "AppWindow.c"
+#line 1796 "AppWindow.c"
 	}
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (page_window_parent_class)->key_press_event != NULL) {
-#line 2048 "AppWindow.c"
+#line 1800 "AppWindow.c"
 		GdkEventKey* _tmp11_ = NULL;
 		gboolean _tmp12_ = FALSE;
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = event;
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp12_ = GTK_WIDGET_CLASS (page_window_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp11_);
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp12_ = GTK_WIDGET_CLASS (page_window_parent_class)->key_press_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), gtk_widget_get_type (), GtkWidget), _tmp11_);
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _tmp12_;
-#line 2057 "AppWindow.c"
+#line 1809 "AppWindow.c"
 	} else {
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = FALSE;
-#line 2061 "AppWindow.c"
+#line 1813 "AppWindow.c"
 	}
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp10_;
-#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 324 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 2067 "AppWindow.c"
+#line 1819 "AppWindow.c"
 }
 
 
@@ -2103,92 +1855,92 @@ static gboolean page_window_real_key_release_event (GtkWidget* base, GdkEventKey
 	gboolean _tmp5_ = FALSE;
 	Page* _tmp6_ = NULL;
 	gboolean _tmp10_ = FALSE;
-#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 327 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE_WINDOW, PageWindow);
-#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 327 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gtk_window_get_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_entry_get_type ())) {
-#line 2087 "AppWindow.c"
+#line 1839 "AppWindow.c"
 		GtkWidget* _tmp2_ = NULL;
 		GdkEventKey* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = gtk_window_get_focus (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = event;
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_emit_by_name (_tmp2_, "key-release-event", _tmp3_, &_tmp4_);
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp4_;
-#line 2099 "AppWindow.c"
+#line 1851 "AppWindow.c"
 	} else {
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = FALSE;
-#line 2103 "AppWindow.c"
+#line 1855 "AppWindow.c"
 	}
-#line 349 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 328 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_) {
-#line 350 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 329 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 350 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 329 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2111 "AppWindow.c"
+#line 1863 "AppWindow.c"
 	}
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = self->priv->current_page;
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp6_ != NULL) {
-#line 2117 "AppWindow.c"
+#line 1869 "AppWindow.c"
 		Page* _tmp7_ = NULL;
 		GdkEventKey* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = self->priv->current_page;
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = event;
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = page_notify_app_key_released (_tmp7_, _tmp8_);
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp9_;
-#line 2129 "AppWindow.c"
+#line 1881 "AppWindow.c"
 	} else {
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = FALSE;
-#line 2133 "AppWindow.c"
+#line 1885 "AppWindow.c"
 	}
-#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 331 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp5_) {
-#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 332 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 332 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2141 "AppWindow.c"
+#line 1893 "AppWindow.c"
 	}
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (page_window_parent_class)->key_release_event != NULL) {
-#line 2145 "AppWindow.c"
+#line 1897 "AppWindow.c"
 		GdkEventKey* _tmp11_ = NULL;
 		gboolean _tmp12_ = FALSE;
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = event;
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp12_ = GTK_WIDGET_CLASS (page_window_parent_class)->key_release_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp11_);
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp12_ = GTK_WIDGET_CLASS (page_window_parent_class)->key_release_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), gtk_widget_get_type (), GtkWidget), _tmp11_);
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _tmp12_;
-#line 2154 "AppWindow.c"
+#line 1906 "AppWindow.c"
 	} else {
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = FALSE;
-#line 2158 "AppWindow.c"
+#line 1910 "AppWindow.c"
 	}
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp10_;
-#line 355 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 334 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 2164 "AppWindow.c"
+#line 1916 "AppWindow.c"
 }
 
 
@@ -2198,62 +1950,62 @@ static gboolean page_window_real_focus_in_event (GtkWidget* base, GdkEventFocus*
 	gboolean _tmp0_ = FALSE;
 	Page* _tmp1_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 358 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 337 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE_WINDOW, PageWindow);
-#line 358 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 337 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = self->priv->current_page;
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 2182 "AppWindow.c"
+#line 1934 "AppWindow.c"
 		Page* _tmp2_ = NULL;
 		GdkEventFocus* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = self->priv->current_page;
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = event;
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_notify_app_focus_in (_tmp2_, _tmp3_);
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp4_;
-#line 2194 "AppWindow.c"
+#line 1946 "AppWindow.c"
 	} else {
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = FALSE;
-#line 2198 "AppWindow.c"
+#line 1950 "AppWindow.c"
 	}
-#line 359 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 338 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_) {
-#line 360 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 360 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 339 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2206 "AppWindow.c"
+#line 1958 "AppWindow.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (page_window_parent_class)->focus_in_event != NULL) {
-#line 2210 "AppWindow.c"
+#line 1962 "AppWindow.c"
 		GdkEventFocus* _tmp6_ = NULL;
 		gboolean _tmp7_ = FALSE;
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = event;
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp7_ = GTK_WIDGET_CLASS (page_window_parent_class)->focus_in_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp6_);
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp7_ = GTK_WIDGET_CLASS (page_window_parent_class)->focus_in_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), gtk_widget_get_type (), GtkWidget), _tmp6_);
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp7_;
-#line 2219 "AppWindow.c"
+#line 1971 "AppWindow.c"
 	} else {
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = FALSE;
-#line 2223 "AppWindow.c"
+#line 1975 "AppWindow.c"
 	}
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp5_;
-#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 341 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 2229 "AppWindow.c"
+#line 1981 "AppWindow.c"
 }
 
 
@@ -2263,62 +2015,62 @@ static gboolean page_window_real_focus_out_event (GtkWidget* base, GdkEventFocus
 	gboolean _tmp0_ = FALSE;
 	Page* _tmp1_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 365 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 344 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE_WINDOW, PageWindow);
-#line 365 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 344 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = self->priv->current_page;
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 2247 "AppWindow.c"
+#line 1999 "AppWindow.c"
 		Page* _tmp2_ = NULL;
 		GdkEventFocus* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = self->priv->current_page;
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = event;
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_notify_app_focus_out (_tmp2_, _tmp3_);
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp4_;
-#line 2259 "AppWindow.c"
+#line 2011 "AppWindow.c"
 	} else {
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = FALSE;
-#line 2263 "AppWindow.c"
+#line 2015 "AppWindow.c"
 	}
-#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 345 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_) {
-#line 367 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 346 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		result = TRUE;
-#line 367 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 346 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return result;
-#line 2271 "AppWindow.c"
+#line 2023 "AppWindow.c"
 	}
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (page_window_parent_class)->focus_out_event != NULL) {
-#line 2275 "AppWindow.c"
+#line 2027 "AppWindow.c"
 		GdkEventFocus* _tmp6_ = NULL;
 		gboolean _tmp7_ = FALSE;
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = event;
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp7_ = GTK_WIDGET_CLASS (page_window_parent_class)->focus_out_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp6_);
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp7_ = GTK_WIDGET_CLASS (page_window_parent_class)->focus_out_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), gtk_widget_get_type (), GtkWidget), _tmp6_);
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp7_;
-#line 2284 "AppWindow.c"
+#line 2036 "AppWindow.c"
 	} else {
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = FALSE;
-#line 2288 "AppWindow.c"
+#line 2040 "AppWindow.c"
 	}
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp5_;
-#line 369 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 348 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 2294 "AppWindow.c"
+#line 2046 "AppWindow.c"
 }
 
 
@@ -2327,193 +2079,226 @@ static gboolean page_window_real_configure_event (GtkWidget* base, GdkEventConfi
 	gboolean result = FALSE;
 	Page* _tmp0_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 372 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 351 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_PAGE_WINDOW, PageWindow);
-#line 372 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 351 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 373 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->current_page;
-#line 373 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 352 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ != NULL) {
-#line 2311 "AppWindow.c"
+#line 2063 "AppWindow.c"
 		Page* _tmp1_ = NULL;
 		GdkEventConfigure* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
-#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = self->priv->current_page;
-#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = event;
-#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page_notify_configure_event (_tmp1_, _tmp2_);
-#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 353 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (_tmp3_) {
-#line 375 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 354 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			result = TRUE;
-#line 375 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 354 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			return result;
-#line 2327 "AppWindow.c"
+#line 2079 "AppWindow.c"
 		}
 	}
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (GTK_WIDGET_CLASS (page_window_parent_class)->configure_event != NULL) {
-#line 2332 "AppWindow.c"
+#line 2084 "AppWindow.c"
 		GdkEventConfigure* _tmp5_ = NULL;
 		gboolean _tmp6_ = FALSE;
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = event;
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp6_ = GTK_WIDGET_CLASS (page_window_parent_class)->configure_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), gtk_widget_get_type (), GtkWidget), _tmp5_);
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp6_ = GTK_WIDGET_CLASS (page_window_parent_class)->configure_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_application_window_get_type (), GtkApplicationWindow), gtk_widget_get_type (), GtkWidget), _tmp5_);
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp6_;
-#line 2341 "AppWindow.c"
+#line 2093 "AppWindow.c"
 	} else {
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = FALSE;
-#line 2345 "AppWindow.c"
+#line 2097 "AppWindow.c"
 	}
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp4_;
-#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 357 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 2351 "AppWindow.c"
+#line 2103 "AppWindow.c"
 }
 
 
 void page_window_set_busy_cursor (PageWindow* self) {
 	gint _tmp0_ = 0;
+	GdkDisplay* display = NULL;
 	GdkWindow* _tmp1_ = NULL;
-	GdkCursor* _tmp2_ = NULL;
-	GdkCursor* _tmp3_ = NULL;
-#line 381 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GdkDisplay* _tmp2_ = NULL;
+	GdkDisplay* _tmp3_ = NULL;
+	GdkCursor* cursor = NULL;
+	GdkDisplay* _tmp4_ = NULL;
+	GdkCursor* _tmp5_ = NULL;
+	GdkWindow* _tmp6_ = NULL;
+	GdkCursor* _tmp7_ = NULL;
+#line 360 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE_WINDOW (self));
-#line 382 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 361 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->busy_counter;
-#line 382 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 361 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->busy_counter = _tmp0_ + 1;
-#line 382 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 361 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ > 0) {
-#line 383 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 362 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 2370 "AppWindow.c"
+#line 2128 "AppWindow.c"
 	}
-#line 385 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 364 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 385 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = gdk_cursor_new (GDK_WATCH);
-#line 385 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp3_ = _tmp2_;
-#line 385 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gdk_window_set_cursor (_tmp1_, _tmp3_);
-#line 385 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (_tmp3_);
-#line 386 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 364 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = gdk_window_get_display (_tmp1_);
+#line 364 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp3_ = _g_object_ref0 (_tmp2_);
+#line 364 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	display = _tmp3_;
+#line 365 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp4_ = display;
+#line 365 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp5_ = gdk_cursor_new_for_display (_tmp4_, GDK_WATCH);
+#line 365 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	cursor = _tmp5_;
+#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp6_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp7_ = cursor;
+#line 366 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gdk_window_set_cursor (_tmp6_, _tmp7_);
+#line 367 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	spin_event_loop ();
-#line 2384 "AppWindow.c"
+#line 360 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (cursor);
+#line 360 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (display);
+#line 2156 "AppWindow.c"
 }
 
 
 void page_window_set_normal_cursor (PageWindow* self) {
 	gint _tmp0_ = 0;
+	GdkDisplay* display = NULL;
 	GdkWindow* _tmp3_ = NULL;
-	GdkCursor* _tmp4_ = NULL;
-	GdkCursor* _tmp5_ = NULL;
-#line 389 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GdkDisplay* _tmp4_ = NULL;
+	GdkDisplay* _tmp5_ = NULL;
+	GdkCursor* cursor = NULL;
+	GdkDisplay* _tmp6_ = NULL;
+	GdkCursor* _tmp7_ = NULL;
+	GdkWindow* _tmp8_ = NULL;
+	GdkCursor* _tmp9_ = NULL;
+#line 370 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE_WINDOW (self));
-#line 390 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 371 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = self->priv->busy_counter;
-#line 390 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 371 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ <= 0) {
-#line 391 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 372 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->priv->busy_counter = 0;
-#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 373 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 2403 "AppWindow.c"
+#line 2181 "AppWindow.c"
 	} else {
 		gint _tmp1_ = 0;
 		gint _tmp2_ = 0;
-#line 393 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = self->priv->busy_counter;
-#line 393 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->priv->busy_counter = _tmp1_ - 1;
-#line 393 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = self->priv->busy_counter;
-#line 393 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 374 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (_tmp2_ > 0) {
-#line 394 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 375 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			return;
-#line 2417 "AppWindow.c"
+#line 2195 "AppWindow.c"
 		}
 	}
-#line 397 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 397 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_ = gdk_cursor_new (GDK_LEFT_PTR);
-#line 397 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp5_ = _tmp4_;
-#line 397 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gdk_window_set_cursor (_tmp3_, _tmp5_);
-#line 397 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (_tmp5_);
-#line 398 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp4_ = gdk_window_get_display (_tmp3_);
+#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp5_ = _g_object_ref0 (_tmp4_);
+#line 378 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	display = _tmp5_;
+#line 379 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp6_ = display;
+#line 379 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp7_ = gdk_cursor_new_for_display (_tmp6_, GDK_LEFT_PTR);
+#line 379 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	cursor = _tmp7_;
+#line 380 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp8_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 380 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp9_ = cursor;
+#line 380 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	gdk_window_set_cursor (_tmp8_, _tmp9_);
+#line 381 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	spin_event_loop ();
-#line 2432 "AppWindow.c"
+#line 370 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (cursor);
+#line 370 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_g_object_unref0 (display);
+#line 2224 "AppWindow.c"
 }
 
 
 static void page_window_class_init (PageWindowClass * klass) {
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page_window_parent_class = g_type_class_peek_parent (klass);
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_type_class_add_private (klass, sizeof (PageWindowPrivate));
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((PageWindowClass *) klass)->switched_pages = page_window_real_switched_pages;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((PageWindowClass *) klass)->set_current_page = page_window_real_set_current_page;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((PageWindowClass *) klass)->clear_current_page = page_window_real_clear_current_page;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->key_press_event = page_window_real_key_press_event;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->key_release_event = page_window_real_key_release_event;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->focus_in_event = page_window_real_focus_in_event;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->focus_out_event = page_window_real_focus_out_event;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->configure_event = page_window_real_configure_event;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (klass)->finalize = page_window_finalize;
-#line 2459 "AppWindow.c"
+#line 2251 "AppWindow.c"
 }
 
 
 static void page_window_instance_init (PageWindow * self) {
-	GtkUIManager* _tmp0_ = NULL;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv = PAGE_WINDOW_GET_PRIVATE (self);
-#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = gtk_ui_manager_new ();
-#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->ui = _tmp0_;
-#line 295 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 277 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->current_page = NULL;
-#line 296 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 278 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->priv->busy_counter = 0;
-#line 2475 "AppWindow.c"
+#line 2262 "AppWindow.c"
 }
 
 
 static void page_window_finalize (GObject* obj) {
 	PageWindow * self;
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PAGE_WINDOW, PageWindow);
-#line 293 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (self->ui);
-#line 295 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 277 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (self->priv->current_page);
-#line 292 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 276 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (page_window_parent_class)->finalize (obj);
-#line 2489 "AppWindow.c"
+#line 2274 "AppWindow.c"
 }
 
 
@@ -2522,17 +2307,87 @@ GType page_window_get_type (void) {
 	if (g_once_init_enter (&page_window_type_id__volatile)) {
 		static const GTypeInfo g_define_type_info = { sizeof (PageWindowClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) page_window_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PageWindow), 0, (GInstanceInitFunc) page_window_instance_init, NULL };
 		GType page_window_type_id;
-		page_window_type_id = g_type_register_static (gtk_window_get_type (), "PageWindow", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
+		page_window_type_id = g_type_register_static (gtk_application_window_get_type (), "PageWindow", &g_define_type_info, G_TYPE_FLAG_ABSTRACT);
 		g_once_init_leave (&page_window_type_id__volatile, page_window_type_id);
 	}
 	return page_window_type_id__volatile;
 }
 
 
+static void _app_window_on_quit_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_quit ((AppWindow*) self);
+#line 2293 "AppWindow.c"
+}
+
+
+static void _app_window_on_fullscreen_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_fullscreen ((AppWindow*) self);
+#line 2300 "AppWindow.c"
+}
+
+
+static void _app_window_on_help_contents_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_help_contents ((AppWindow*) self);
+#line 2307 "AppWindow.c"
+}
+
+
+static void _app_window_on_help_faq_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_help_faq ((AppWindow*) self);
+#line 2314 "AppWindow.c"
+}
+
+
+static void _app_window_on_help_report_problem_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_help_report_problem ((AppWindow*) self);
+#line 2321 "AppWindow.c"
+}
+
+
+static void _app_window_on_undo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_undo ((AppWindow*) self);
+#line 2328 "AppWindow.c"
+}
+
+
+static void _app_window_on_redo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_redo ((AppWindow*) self);
+#line 2335 "AppWindow.c"
+}
+
+
+static void _app_window_on_jump_to_file_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_jump_to_file ((AppWindow*) self);
+#line 2342 "AppWindow.c"
+}
+
+
+static void _app_window_on_select_all_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_select_all ((AppWindow*) self);
+#line 2349 "AppWindow.c"
+}
+
+
+static void _app_window_on_select_none_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_on_select_none ((AppWindow*) self);
+#line 2356 "AppWindow.c"
+}
+
+
 static void _app_window_on_command_manager_altered_command_manager_altered (CommandManager* _sender, gboolean can_undo, gboolean can_redo, gpointer self) {
-#line 450 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_on_command_manager_altered ((AppWindow*) self);
-#line 2508 "AppWindow.c"
+#line 2363 "AppWindow.c"
 }
 
 
@@ -2548,909 +2403,189 @@ AppWindow* app_window_construct (GType object_type) {
 	CommandManager* _tmp15_ = NULL;
 	CommandManager* _tmp16_ = NULL;
 	CommandManager* _tmp17_ = NULL;
-	gint _tmp18_ = 0;
-	GtkActionGroup** _tmp19_ = NULL;
-	GtkActionGroup** _tmp20_ = NULL;
-	gint _tmp20__length1 = 0;
-	GtkUIManager* _tmp29_ = NULL;
-	GtkUIManager* _tmp30_ = NULL;
-	GtkAccelGroup* _tmp31_ = NULL;
 	GtkCssProvider* provider = NULL;
-	GtkCssProvider* _tmp32_ = NULL;
+	GtkCssProvider* _tmp18_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 427 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 407 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = (AppWindow*) page_window_construct (object_type);
-#line 429 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_instance;
-#line 429 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_vala_assert (_tmp0_ == NULL, "instance == null");
-#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 410 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _g_object_ref0 (self);
-#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 410 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (app_window_instance);
-#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 410 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_instance = _tmp1_;
-#line 432 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 412 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), RESOURCES_APP_TITLE);
-#line 433 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 413 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_default_icon_name ("shotwell");
-#line 436 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 416 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (self, TYPE_LIBRARY_WINDOW)) {
-#line 2552 "AppWindow.c"
+#line 2400 "AppWindow.c"
 		ConfigFacade* _tmp2_ = NULL;
 		ConfigFacade* _tmp3_ = NULL;
 		gboolean _tmp4_ = FALSE;
 		Dimensions _tmp5_ = {0};
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = config_facade_get_instance ();
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _tmp2_;
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		configuration_facade_get_library_window_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), &_tmp4_, &_tmp5_);
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->maximized = _tmp4_;
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->dimensions = _tmp5_;
-#line 437 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 417 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp3_);
-#line 2569 "AppWindow.c"
+#line 2417 "AppWindow.c"
 	} else {
 		ConfigFacade* _tmp6_ = NULL;
 		ConfigFacade* _tmp7_ = NULL;
 		gboolean _tmp8_ = FALSE;
 		Dimensions _tmp9_ = {0};
-#line 439 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 419 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_vala_assert (G_TYPE_CHECK_INSTANCE_TYPE (self, TYPE_DIRECT_WINDOW), "this is DirectWindow");
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = config_facade_get_instance ();
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = _tmp6_;
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		configuration_facade_get_direct_window_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), &_tmp8_, &_tmp9_);
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->maximized = _tmp8_;
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->dimensions = _tmp9_;
-#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp7_);
-#line 2589 "AppWindow.c"
+#line 2437 "AppWindow.c"
 	}
-#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = self->dimensions;
-#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = _tmp10_.width;
-#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = self->dimensions;
-#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = _tmp12_.height;
-#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_default_size (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp11_, _tmp13_);
-#line 445 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 425 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = self->maximized;
-#line 445 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 425 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp14_) {
-#line 446 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 426 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		gtk_window_maximize (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 2607 "AppWindow.c"
+#line 2455 "AppWindow.c"
 	}
-#line 448 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 428 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = app_window_command_manager;
-#line 448 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 428 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_vala_assert (_tmp15_ == NULL, "command_manager == null");
-#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 429 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = command_manager_new (COMMAND_MANAGER_DEFAULT_DEPTH);
-#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 429 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_command_manager_unref0 (app_window_command_manager);
-#line 449 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 429 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_command_manager = _tmp16_;
-#line 450 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp17_ = app_window_command_manager;
-#line 450 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 430 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_signal_connect_object (_tmp17_, "altered", (GCallback) _app_window_on_command_manager_altered_command_manager_altered, self, 0);
-#line 457 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp19_ = app_window_create_common_action_groups (self, &_tmp18_);
-#line 457 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->common_action_groups = (_vala_array_free (self->common_action_groups, self->common_action_groups_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 457 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->common_action_groups = _tmp19_;
-#line 457 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->common_action_groups_length1 = _tmp18_;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp20_ = self->common_action_groups;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp20__length1 = self->common_action_groups_length1;
-#line 2635 "AppWindow.c"
+#line 438 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	app_window_add_actions (self);
+#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp18_ = gtk_css_provider_new ();
+#line 440 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	provider = _tmp18_;
+#line 2477 "AppWindow.c"
 	{
-		GtkActionGroup** group_collection = NULL;
-		gint group_collection_length1 = 0;
-		gint _group_collection_size_ = 0;
-		gint group_it = 0;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		group_collection = _tmp20_;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		group_collection_length1 = _tmp20__length1;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		for (group_it = 0; group_it < _tmp20__length1; group_it = group_it + 1) {
-#line 2647 "AppWindow.c"
-			GtkActionGroup* _tmp21_ = NULL;
-			GtkActionGroup* group = NULL;
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-			_tmp21_ = _g_object_ref0 (group_collection[group_it]);
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-			group = _tmp21_;
-#line 2654 "AppWindow.c"
-			{
-				GtkUIManager* _tmp22_ = NULL;
-				GtkActionGroup* _tmp23_ = NULL;
-#line 459 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp22_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 459 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp23_ = group;
-#line 459 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				gtk_ui_manager_insert_action_group (_tmp22_, _tmp23_, 0);
-#line 458 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_g_object_unref0 (group);
-#line 2666 "AppWindow.c"
-			}
-		}
-	}
-	{
-		GtkUIManager* _tmp24_ = NULL;
-		GtkActionGroup** _tmp25_ = NULL;
-		gint _tmp25__length1 = 0;
-		gchar* _tmp26_ = NULL;
-		gchar* _tmp27_ = NULL;
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp24_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp25_ = self->common_action_groups;
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp25__length1 = self->common_action_groups_length1;
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp26_ = build_dummy_ui_string (_tmp25_, _tmp25__length1);
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp27_ = _tmp26_;
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_ui_manager_add_ui_from_string (_tmp24_, _tmp27_, (gssize) -1, &_inner_error_);
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp27_);
-#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2692 "AppWindow.c"
-			goto __catch225_g_error;
-		}
-	}
-	goto __finally225;
-	__catch225_g_error:
-	{
-		GError* err = NULL;
-		const gchar* _tmp28_ = NULL;
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		err = _inner_error_;
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_inner_error_ = NULL;
-#line 464 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp28_ = err->message;
-#line 464 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_error ("AppWindow.vala:464: Unable to add AppWindow UI: %s", _tmp28_);
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_error_free0 (err);
-#line 2711 "AppWindow.c"
-	}
-	__finally225:
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_clear_error (&_inner_error_);
-#line 461 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		return NULL;
-#line 2722 "AppWindow.c"
-	}
-#line 467 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp29_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 467 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_ui_manager_ensure_update (_tmp29_);
-#line 468 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp30_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow)->ui;
-#line 468 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_ = gtk_ui_manager_get_accel_group (_tmp30_);
-#line 468 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_window_add_accel_group (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp31_);
-#line 470 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp32_ = gtk_css_provider_new ();
-#line 470 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	provider = _tmp32_;
-#line 2738 "AppWindow.c"
-	{
-		GdkScreen* _tmp33_ = NULL;
-#line 472 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		GdkScreen* _tmp19_ = NULL;
+#line 442 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		gtk_css_provider_load_from_data (provider, RESOURCES_CUSTOM_CSS, (gssize) -1, &_inner_error_);
-#line 472 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 442 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2745 "AppWindow.c"
-			goto __catch226_g_error;
+#line 2484 "AppWindow.c"
+			goto __catch223_g_error;
 		}
-#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp33_ = gdk_screen_get_default ();
-#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_style_context_add_provider_for_screen (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (provider, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider), (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#line 2752 "AppWindow.c"
+#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp19_ = gdk_screen_get_default ();
+#line 443 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		gtk_style_context_add_provider_for_screen (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (provider, GTK_TYPE_STYLE_PROVIDER, GtkStyleProvider), (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#line 2491 "AppWindow.c"
 	}
-	goto __finally226;
-	__catch226_g_error:
+	goto __finally223;
+	__catch223_g_error:
 	{
 		GError* err = NULL;
-		GError* _tmp34_ = NULL;
-		const gchar* _tmp35_ = NULL;
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		GError* _tmp20_ = NULL;
+		const gchar* _tmp21_ = NULL;
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		err = _inner_error_;
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 475 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp34_ = err;
-#line 475 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp35_ = _tmp34_->message;
-#line 475 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_debug ("AppWindow.vala:475: Unable to load custom CSS: %s", _tmp35_);
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 445 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp20_ = err;
+#line 445 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp21_ = _tmp20_->message;
+#line 445 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_debug ("AppWindow.vala:445: Unable to load custom CSS: %s", _tmp21_);
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (err);
-#line 2772 "AppWindow.c"
+#line 2511 "AppWindow.c"
 	}
-	__finally226:
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally223:
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (provider);
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 471 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 441 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return NULL;
-#line 2785 "AppWindow.c"
+#line 2524 "AppWindow.c"
 	}
-#line 427 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 407 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (provider);
-#line 427 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 407 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return self;
-#line 2791 "AppWindow.c"
-}
-
-
-static void _app_window_on_quit_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_quit ((AppWindow*) self);
-#line 2798 "AppWindow.c"
-}
-
-
-static void _vala_array_add159 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2809 "AppWindow.c"
-	}
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2813 "AppWindow.c"
-}
-
-
-static void _app_window_on_about_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_about ((AppWindow*) self);
-#line 2820 "AppWindow.c"
-}
-
-
-static void _vala_array_add160 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2831 "AppWindow.c"
-	}
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2835 "AppWindow.c"
-}
-
-
-static void _app_window_on_fullscreen_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_fullscreen ((AppWindow*) self);
-#line 2842 "AppWindow.c"
-}
-
-
-static void _vala_array_add161 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2853 "AppWindow.c"
-	}
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2857 "AppWindow.c"
-}
-
-
-static void _app_window_on_help_contents_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_help_contents ((AppWindow*) self);
-#line 2864 "AppWindow.c"
-}
-
-
-static void _vala_array_add162 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2875 "AppWindow.c"
-	}
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2879 "AppWindow.c"
-}
-
-
-static void _app_window_on_help_faq_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_help_faq ((AppWindow*) self);
-#line 2886 "AppWindow.c"
-}
-
-
-static void _vala_array_add163 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2897 "AppWindow.c"
-	}
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2901 "AppWindow.c"
-}
-
-
-static void _app_window_on_help_report_problem_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_help_report_problem ((AppWindow*) self);
-#line 2908 "AppWindow.c"
-}
-
-
-static void _vala_array_add164 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2919 "AppWindow.c"
-	}
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2923 "AppWindow.c"
-}
-
-
-static void _app_window_on_undo_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_undo ((AppWindow*) self);
-#line 2930 "AppWindow.c"
-}
-
-
-static void _vala_array_add165 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2941 "AppWindow.c"
-	}
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2945 "AppWindow.c"
-}
-
-
-static void _app_window_on_redo_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_redo ((AppWindow*) self);
-#line 2952 "AppWindow.c"
-}
-
-
-static void _vala_array_add166 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2963 "AppWindow.c"
-	}
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2967 "AppWindow.c"
-}
-
-
-static void _app_window_on_jump_to_file_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_jump_to_file ((AppWindow*) self);
-#line 2974 "AppWindow.c"
-}
-
-
-static void _vala_array_add167 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 2985 "AppWindow.c"
-	}
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 2989 "AppWindow.c"
-}
-
-
-static void _app_window_on_select_all_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_select_all ((AppWindow*) self);
-#line 2996 "AppWindow.c"
-}
-
-
-static void _vala_array_add168 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 3007 "AppWindow.c"
-	}
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 3011 "AppWindow.c"
-}
-
-
-static void _app_window_on_select_none_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	app_window_on_select_none ((AppWindow*) self);
-#line 3018 "AppWindow.c"
-}
-
-
-static void _vala_array_add169 (GtkActionEntry** array, int* length, int* size, const GtkActionEntry* value) {
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionEntry, *array, *size);
-#line 3029 "AppWindow.c"
-	}
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = *value;
-#line 3033 "AppWindow.c"
-}
-
-
-static GtkActionEntry* app_window_create_common_actions (AppWindow* self, int* result_length1) {
-	GtkActionEntry* result = NULL;
-	GtkActionEntry* actions = NULL;
-	GtkActionEntry* _tmp0_ = NULL;
-	gint actions_length1 = 0;
-	gint _actions_size_ = 0;
-	GtkActionEntry quit = {0};
-	GtkActionEntry _tmp1_ = {0};
-	GtkActionEntry* _tmp2_ = NULL;
-	gint _tmp2__length1 = 0;
-	GtkActionEntry _tmp3_ = {0};
-	GtkActionEntry about = {0};
-	GtkActionEntry _tmp4_ = {0};
-	GtkActionEntry* _tmp5_ = NULL;
-	gint _tmp5__length1 = 0;
-	GtkActionEntry _tmp6_ = {0};
-	GtkActionEntry fullscreen = {0};
-	GtkActionEntry _tmp7_ = {0};
-	GtkActionEntry* _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-	GtkActionEntry _tmp9_ = {0};
-	GtkActionEntry help_contents = {0};
-	GtkActionEntry _tmp10_ = {0};
-	const gchar* _tmp11_ = NULL;
-	GtkActionEntry* _tmp12_ = NULL;
-	gint _tmp12__length1 = 0;
-	GtkActionEntry _tmp13_ = {0};
-	GtkActionEntry help_faq = {0};
-	GtkActionEntry _tmp14_ = {0};
-	const gchar* _tmp15_ = NULL;
-	GtkActionEntry* _tmp16_ = NULL;
-	gint _tmp16__length1 = 0;
-	GtkActionEntry _tmp17_ = {0};
-	GtkActionEntry help_report_problem = {0};
-	GtkActionEntry _tmp18_ = {0};
-	const gchar* _tmp19_ = NULL;
-	GtkActionEntry* _tmp20_ = NULL;
-	gint _tmp20__length1 = 0;
-	GtkActionEntry _tmp21_ = {0};
-	GtkActionEntry undo = {0};
-	GtkActionEntry _tmp22_ = {0};
-	GtkActionEntry* _tmp23_ = NULL;
-	gint _tmp23__length1 = 0;
-	GtkActionEntry _tmp24_ = {0};
-	GtkActionEntry redo = {0};
-	GtkActionEntry _tmp25_ = {0};
-	GtkActionEntry* _tmp26_ = NULL;
-	gint _tmp26__length1 = 0;
-	GtkActionEntry _tmp27_ = {0};
-	GtkActionEntry jump_to_file = {0};
-	GtkActionEntry _tmp28_ = {0};
-	GtkActionEntry* _tmp29_ = NULL;
-	gint _tmp29__length1 = 0;
-	GtkActionEntry _tmp30_ = {0};
-	GtkActionEntry select_all = {0};
-	GtkActionEntry _tmp31_ = {0};
-	GtkActionEntry* _tmp32_ = NULL;
-	gint _tmp32__length1 = 0;
-	GtkActionEntry _tmp33_ = {0};
-	GtkActionEntry select_none = {0};
-	GtkActionEntry _tmp34_ = {0};
-	GtkActionEntry* _tmp35_ = NULL;
-	gint _tmp35__length1 = 0;
-	GtkActionEntry _tmp36_ = {0};
-	GtkActionEntry* _tmp37_ = NULL;
-	gint _tmp37__length1 = 0;
-#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_val_if_fail (IS_APP_WINDOW (self), NULL);
-#line 480 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = g_new0 (GtkActionEntry, 0);
-#line 480 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	actions = _tmp0_;
-#line 480 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	actions_length1 = 0;
-#line 480 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_actions_size_ = actions_length1;
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.name = "CommonQuit";
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.stock_id = RESOURCES_QUIT_LABEL;
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.label = TRANSLATABLE;
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.accelerator = "<Ctrl>Q";
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.tooltip = TRANSLATABLE;
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_.callback = (GCallback) _app_window_on_quit_gtk_action_callback;
-#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	quit = _tmp1_;
-#line 484 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	quit.label = RESOURCES_QUIT_LABEL;
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = actions;
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2__length1 = actions_length1;
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp3_ = quit;
-#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add159 (&actions, &actions_length1, &_actions_size_, &_tmp3_);
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.name = "CommonAbout";
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.stock_id = RESOURCES_ABOUT_LABEL;
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.label = TRANSLATABLE;
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.accelerator = NULL;
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.tooltip = TRANSLATABLE;
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_.callback = (GCallback) _app_window_on_about_gtk_action_callback;
-#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	about = _tmp4_;
-#line 489 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	about.label = RESOURCES_ABOUT_LABEL;
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp5_ = actions;
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp5__length1 = actions_length1;
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp6_ = about;
-#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add160 (&actions, &actions_length1, &_actions_size_, &_tmp6_);
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.name = "CommonFullscreen";
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.stock_id = RESOURCES_FULLSCREEN_LABEL;
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.label = TRANSLATABLE;
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.accelerator = "F11";
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.tooltip = TRANSLATABLE;
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_.callback = (GCallback) _app_window_on_fullscreen_gtk_action_callback;
-#line 492 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	fullscreen = _tmp7_;
-#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	fullscreen.label = RESOURCES_FULLSCREEN_LABEL;
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp8_ = actions;
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp8__length1 = actions_length1;
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp9_ = fullscreen;
-#line 495 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add161 (&actions, &actions_length1, &_actions_size_, &_tmp9_);
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.name = "CommonHelpContents";
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.stock_id = RESOURCES_HELP_LABEL;
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.label = TRANSLATABLE;
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.accelerator = "F1";
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.tooltip = TRANSLATABLE;
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp10_.callback = (GCallback) _app_window_on_help_contents_gtk_action_callback;
-#line 497 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_contents = _tmp10_;
-#line 499 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp11_ = _ ("_Contents");
-#line 499 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_contents.label = _tmp11_;
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp12_ = actions;
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp12__length1 = actions_length1;
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp13_ = help_contents;
-#line 500 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add162 (&actions, &actions_length1, &_actions_size_, &_tmp13_);
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.name = "CommonHelpFAQ";
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.stock_id = NULL;
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.label = TRANSLATABLE;
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.accelerator = NULL;
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.tooltip = TRANSLATABLE;
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp14_.callback = (GCallback) _app_window_on_help_faq_gtk_action_callback;
-#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_faq = _tmp14_;
-#line 504 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp15_ = _ ("_Frequently Asked Questions");
-#line 504 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_faq.label = _tmp15_;
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp16_ = actions;
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp16__length1 = actions_length1;
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp17_ = help_faq;
-#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add163 (&actions, &actions_length1, &_actions_size_, &_tmp17_);
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.name = "CommonHelpReportProblem";
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.stock_id = NULL;
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.label = TRANSLATABLE;
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.accelerator = NULL;
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.tooltip = TRANSLATABLE;
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp18_.callback = (GCallback) _app_window_on_help_report_problem_gtk_action_callback;
-#line 507 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_report_problem = _tmp18_;
-#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp19_ = _ ("_Report a Problem…");
-#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	help_report_problem.label = _tmp19_;
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp20_ = actions;
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp20__length1 = actions_length1;
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp21_ = help_report_problem;
-#line 510 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add164 (&actions, &actions_length1, &_actions_size_, &_tmp21_);
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.name = "CommonUndo";
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.stock_id = RESOURCES_UNDO_MENU;
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.label = TRANSLATABLE;
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.accelerator = "<Ctrl>Z";
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.tooltip = TRANSLATABLE;
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp22_.callback = (GCallback) _app_window_on_undo_gtk_action_callback;
-#line 512 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	undo = _tmp22_;
-#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	undo.label = RESOURCES_UNDO_MENU;
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp23_ = actions;
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp23__length1 = actions_length1;
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp24_ = undo;
-#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add165 (&actions, &actions_length1, &_actions_size_, &_tmp24_);
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.name = "CommonRedo";
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.stock_id = RESOURCES_REDO_MENU;
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.label = TRANSLATABLE;
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.accelerator = "<Ctrl><Shift>Z";
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.tooltip = TRANSLATABLE;
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp25_.callback = (GCallback) _app_window_on_redo_gtk_action_callback;
-#line 517 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	redo = _tmp25_;
-#line 519 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	redo.label = RESOURCES_REDO_MENU;
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp26_ = actions;
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp26__length1 = actions_length1;
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp27_ = redo;
-#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add166 (&actions, &actions_length1, &_actions_size_, &_tmp27_);
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.name = "CommonJumpToFile";
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.stock_id = RESOURCES_JUMP_TO_FILE_MENU;
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.label = TRANSLATABLE;
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.accelerator = "<Ctrl><Shift>M";
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.tooltip = TRANSLATABLE;
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp28_.callback = (GCallback) _app_window_on_jump_to_file_gtk_action_callback;
-#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	jump_to_file = _tmp28_;
-#line 524 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	jump_to_file.label = RESOURCES_JUMP_TO_FILE_MENU;
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp29_ = actions;
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp29__length1 = actions_length1;
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp30_ = jump_to_file;
-#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add167 (&actions, &actions_length1, &_actions_size_, &_tmp30_);
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.name = "CommonSelectAll";
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.stock_id = RESOURCES_SELECT_ALL_MENU;
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.label = TRANSLATABLE;
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.accelerator = "<Ctrl>A";
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.tooltip = TRANSLATABLE;
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp31_.callback = (GCallback) _app_window_on_select_all_gtk_action_callback;
-#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	select_all = _tmp31_;
-#line 529 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	select_all.label = RESOURCES_SELECT_ALL_MENU;
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp32_ = actions;
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp32__length1 = actions_length1;
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp33_ = select_all;
-#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add168 (&actions, &actions_length1, &_actions_size_, &_tmp33_);
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.name = "CommonSelectNone";
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.stock_id = NULL;
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.label = NULL;
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.accelerator = "<Ctrl><Shift>A";
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.tooltip = TRANSLATABLE;
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp34_.callback = (GCallback) _app_window_on_select_none_gtk_action_callback;
-#line 532 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	select_none = _tmp34_;
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp35_ = actions;
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp35__length1 = actions_length1;
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp36_ = select_none;
-#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add169 (&actions, &actions_length1, &_actions_size_, &_tmp36_);
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp37_ = actions;
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp37__length1 = actions_length1;
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (result_length1) {
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*result_length1 = _tmp37__length1;
-#line 3389 "AppWindow.c"
-	}
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = _tmp37_;
-#line 536 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 3395 "AppWindow.c"
+#line 2530 "AppWindow.c"
 }
 
 
 static void app_window_real_on_fullscreen (AppWindow* self) {
-#line 539 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_critical ("Type `%s' does not implement abstract method `app_window_on_fullscreen'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 539 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return;
-#line 3404 "AppWindow.c"
+#line 2539 "AppWindow.c"
 }
 
 
 void app_window_on_fullscreen (AppWindow* self) {
-#line 539 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 539 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 462 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	APP_WINDOW_GET_CLASS (self)->on_fullscreen (self);
-#line 3413 "AppWindow.c"
+#line 2548 "AppWindow.c"
 }
 
 
 gboolean app_window_has_instance (void) {
 	gboolean result = FALSE;
 	AppWindow* _tmp0_ = NULL;
-#line 542 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 465 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_instance;
-#line 542 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 465 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp0_ != NULL;
-#line 542 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 465 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3426 "AppWindow.c"
+#line 2561 "AppWindow.c"
 }
 
 
@@ -3458,15 +2593,15 @@ AppWindow* app_window_get_instance (void) {
 	AppWindow* result = NULL;
 	AppWindow* _tmp0_ = NULL;
 	AppWindow* _tmp1_ = NULL;
-#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 469 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_instance;
-#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 469 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 469 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp1_;
-#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 469 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3442 "AppWindow.c"
+#line 2577 "AppWindow.c"
 }
 
 
@@ -3474,15 +2609,15 @@ FullscreenWindow* app_window_get_fullscreen (void) {
 	FullscreenWindow* result = NULL;
 	FullscreenWindow* _tmp0_ = NULL;
 	FullscreenWindow* _tmp1_ = NULL;
-#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_fullscreen_window;
-#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp1_;
-#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 473 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3458 "AppWindow.c"
+#line 2593 "AppWindow.c"
 }
 
 
@@ -3492,13 +2627,13 @@ GtkBuilder* app_window_create_builder (const gchar* glade_filename, void* user) 
 	GtkBuilder* _tmp0_ = NULL;
 	void* _tmp12_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 553 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 476 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (glade_filename != NULL, NULL);
-#line 554 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 477 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = gtk_builder_new ();
-#line 554 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 477 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	builder = _tmp0_;
-#line 3474 "AppWindow.c"
+#line 2609 "AppWindow.c"
 	{
 		GFile* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
@@ -3509,99 +2644,99 @@ GtkBuilder* app_window_create_builder (const gchar* glade_filename, void* user) 
 		GFile* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = app_dirs_get_resources_dir ();
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = _tmp1_;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = g_file_get_child (_tmp2_, "ui");
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp3_;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = glade_filename;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = g_file_get_child (_tmp4_, _tmp5_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = _tmp6_;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = g_file_get_path (_tmp7_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = _tmp8_;
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		gtk_builder_add_from_file (builder, _tmp9_, &_inner_error_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp9_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp7_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp4_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp2_);
-#line 556 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 479 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3515 "AppWindow.c"
-			goto __catch227_g_error;
+#line 2650 "AppWindow.c"
+			goto __catch224_g_error;
 		}
 	}
-	goto __finally227;
-	__catch227_g_error:
+	goto __finally224;
+	__catch224_g_error:
 	{
 		GError* _error_ = NULL;
 		GError* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_error_ = _inner_error_;
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _error_;
-#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = _tmp10_->message;
-#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		g_warning ("AppWindow.vala:559: Unable to create Gtk.Builder: %s\n", _tmp11_);
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 482 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_warning ("AppWindow.vala:482: Unable to create Gtk.Builder: %s\n", _tmp11_);
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (_error_);
-#line 3537 "AppWindow.c"
+#line 2672 "AppWindow.c"
 	}
-	__finally227:
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally224:
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (builder);
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 478 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return NULL;
-#line 3550 "AppWindow.c"
+#line 2685 "AppWindow.c"
 	}
-#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = user;
-#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 485 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_builder_connect_signals (builder, _tmp12_);
-#line 564 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = builder;
-#line 564 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 487 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3560 "AppWindow.c"
+#line 2695 "AppWindow.c"
 }
 
 
 void app_window_error_message (const gchar* message, GtkWindow* parent) {
 	const gchar* _tmp0_ = NULL;
 	GtkWindow* _tmp1_ = NULL;
-#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (message != NULL);
-#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 490 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent));
-#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 491 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = message;
-#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 491 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 491 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_error_message_with_title (RESOURCES_APP_TITLE, _tmp0_, _tmp1_, TRUE);
-#line 3577 "AppWindow.c"
+#line 2712 "AppWindow.c"
 }
 
 
@@ -3621,83 +2756,83 @@ void app_window_error_message_with_title (const gchar* title, const gchar* messa
 	gboolean _tmp14_ = FALSE;
 	gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (title != NULL);
-#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (message != NULL);
-#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent));
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 3607 "AppWindow.c"
+#line 2742 "AppWindow.c"
 		GtkWindow* _tmp2_ = NULL;
 		GtkWindow* _tmp3_ = NULL;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = parent;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp3_;
-#line 3618 "AppWindow.c"
+#line 2753 "AppWindow.c"
 	} else {
 		AppWindow* _tmp4_ = NULL;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = app_window_get_instance ();
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow);
-#line 3627 "AppWindow.c"
+#line 2762 "AppWindow.c"
 	}
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = title;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = message;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = should_escape;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = build_alert_body_text (_tmp5_, _tmp6_, _tmp7_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = _tmp8_;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = (GtkMessageDialog*) gtk_message_dialog_new_with_markup (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, "%s", _tmp9_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp10_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = _tmp10_;
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp9_);
-#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 498 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	dialog = _tmp11_;
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = title;
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = message;
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = should_escape;
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = build_alert_body_text (_tmp12_, _tmp13_, _tmp14_);
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = _tmp15_;
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_message_dialog_set_markup (dialog, _tmp16_);
-#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 502 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp16_);
-#line 581 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 504 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_set (dialog, "use-markup", TRUE, NULL);
-#line 582 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 505 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 583 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 506 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (dialog);
-#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 494 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp0_);
-#line 3673 "AppWindow.c"
+#line 2808 "AppWindow.c"
 }
 
 
@@ -3720,93 +2855,93 @@ gboolean app_window_negate_affirm_question (const gchar* message, const gchar* n
 	const gchar* _tmp16_ = NULL;
 	gboolean response = FALSE;
 	gint _tmp17_ = 0;
-#line 586 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (message != NULL, FALSE);
-#line 586 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (negative != NULL, FALSE);
-#line 586 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (affirmative != NULL, FALSE);
-#line 586 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 509 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent), FALSE);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 3708 "AppWindow.c"
+#line 2843 "AppWindow.c"
 		GtkWindow* _tmp2_ = NULL;
 		GtkWindow* _tmp3_ = NULL;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = parent;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp3_;
-#line 3719 "AppWindow.c"
+#line 2854 "AppWindow.c"
 	} else {
 		AppWindow* _tmp4_ = NULL;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = app_window_get_instance ();
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow);
-#line 3728 "AppWindow.c"
+#line 2863 "AppWindow.c"
 	}
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = title;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = message;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = build_alert_body_text (_tmp5_, _tmp6_, TRUE);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = _tmp7_;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", _tmp8_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp9_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = _tmp9_;
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp8_);
-#line 588 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 511 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	dialog = _tmp10_;
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = title;
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = message;
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = build_alert_body_text (_tmp11_, _tmp12_, TRUE);
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = _tmp13_;
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_message_dialog_set_markup (dialog, _tmp14_);
-#line 591 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 514 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp14_);
-#line 592 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = negative;
-#line 592 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = affirmative;
-#line 592 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 515 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_dialog_add_buttons (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp15_, GTK_RESPONSE_NO, _tmp16_, GTK_RESPONSE_YES, NULL);
-#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 516 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_urgency_hint (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_window_get_type (), GtkWindow), TRUE);
-#line 595 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 518 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp17_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 595 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 518 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	response = _tmp17_ == ((gint) GTK_RESPONSE_YES);
-#line 597 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 520 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 599 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = response;
-#line 599 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (dialog);
-#line 599 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp0_);
-#line 599 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 522 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3782 "AppWindow.c"
+#line 2917 "AppWindow.c"
 }
 
 
@@ -3830,95 +2965,95 @@ GtkResponseType app_window_negate_affirm_cancel_question (const gchar* message, 
 	gchar* _tmp17_ = NULL;
 	gint response = 0;
 	gint _tmp18_ = 0;
-#line 602 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (message != NULL, 0);
-#line 602 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (negative != NULL, 0);
-#line 602 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (affirmative != NULL, 0);
-#line 602 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 525 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent), 0);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 3818 "AppWindow.c"
+#line 2953 "AppWindow.c"
 		GtkWindow* _tmp2_ = NULL;
 		GtkWindow* _tmp3_ = NULL;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = parent;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp3_;
-#line 3829 "AppWindow.c"
+#line 2964 "AppWindow.c"
 	} else {
 		AppWindow* _tmp4_ = NULL;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = app_window_get_instance ();
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow);
-#line 3838 "AppWindow.c"
+#line 2973 "AppWindow.c"
 	}
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = title;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = message;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = build_alert_body_text (_tmp5_, _tmp6_, TRUE);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = _tmp7_;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = (GtkMessageDialog*) gtk_message_dialog_new_with_markup (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", _tmp8_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp9_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = _tmp9_;
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp8_);
-#line 604 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 527 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	dialog = _tmp10_;
-#line 607 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = negative;
-#line 607 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = affirmative;
-#line 607 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = _ ("_Cancel");
-#line 607 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 530 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_dialog_add_buttons (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog), _tmp11_, GTK_RESPONSE_NO, _tmp12_, GTK_RESPONSE_YES, _tmp13_, GTK_RESPONSE_CANCEL, NULL);
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = title;
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = message;
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = build_alert_body_text (_tmp14_, _tmp15_, TRUE);
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp17_ = _tmp16_;
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_message_dialog_set_markup (dialog, _tmp17_);
-#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 534 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp17_);
-#line 612 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 535 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_set (dialog, "use-markup", TRUE, NULL);
-#line 614 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 537 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp18_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_dialog_get_type (), GtkDialog));
-#line 614 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 537 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	response = _tmp18_;
-#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 539 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (dialog, gtk_widget_get_type (), GtkWidget));
-#line 618 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 541 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = (GtkResponseType) response;
-#line 618 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 541 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (dialog);
-#line 618 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 541 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp0_);
-#line 618 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 541 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 3894 "AppWindow.c"
+#line 3029 "AppWindow.c"
 }
 
 
@@ -3942,103 +3077,103 @@ GtkResponseType app_window_affirm_cancel_question (const gchar* message, const g
 	GtkMessageDialog* _tmp17_ = NULL;
 	gint _tmp18_ = 0;
 	GtkMessageDialog* _tmp19_ = NULL;
-#line 621 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 544 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (message != NULL, 0);
-#line 621 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 544 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (affirmative != NULL, 0);
-#line 621 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 544 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent), 0);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 3928 "AppWindow.c"
+#line 3063 "AppWindow.c"
 		GtkWindow* _tmp2_ = NULL;
 		GtkWindow* _tmp3_ = NULL;
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = parent;
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp3_;
-#line 3939 "AppWindow.c"
+#line 3074 "AppWindow.c"
 	} else {
 		AppWindow* _tmp4_ = NULL;
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = app_window_get_instance ();
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow);
-#line 3948 "AppWindow.c"
+#line 3083 "AppWindow.c"
 	}
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = message;
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = (GtkMessageDialog*) gtk_message_dialog_new_with_markup (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", _tmp5_);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp6_);
-#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 546 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	dialog = _tmp6_;
-#line 626 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 549 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = dialog;
-#line 626 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 549 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = message;
-#line 626 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 549 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_message_dialog_set_markup (_tmp7_, _tmp8_);
-#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = dialog;
-#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 550 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_set (_tmp9_, "use-markup", TRUE, NULL);
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = title;
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp11_ != NULL) {
-#line 3972 "AppWindow.c"
+#line 3107 "AppWindow.c"
 		const gchar* _tmp12_ = NULL;
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp12_ = title;
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _tmp12_;
-#line 3978 "AppWindow.c"
+#line 3113 "AppWindow.c"
 	} else {
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = RESOURCES_APP_TITLE;
-#line 3982 "AppWindow.c"
+#line 3117 "AppWindow.c"
 	}
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = dialog;
-#line 628 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 551 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_window_get_type (), GtkWindow), _tmp10_);
-#line 629 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 552 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = dialog;
-#line 629 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 552 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = affirmative;
-#line 629 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 552 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = _ ("_Cancel");
-#line 629 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 552 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_dialog_add_buttons (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_dialog_get_type (), GtkDialog), _tmp15_, GTK_RESPONSE_YES, _tmp16_, GTK_RESPONSE_CANCEL, NULL);
-#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp17_ = dialog;
-#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp18_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_dialog_get_type (), GtkDialog));
-#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 555 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	response = _tmp18_;
-#line 634 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 557 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp19_ = dialog;
-#line 634 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 557 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget));
-#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = (GtkResponseType) response;
-#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (dialog);
-#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp0_);
-#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 559 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 4014 "AppWindow.c"
+#line 3149 "AppWindow.c"
 }
 
 
@@ -4061,101 +3196,101 @@ GtkResponseType app_window_negate_affirm_all_cancel_question (const gchar* messa
 	GtkMessageDialog* _tmp16_ = NULL;
 	gint _tmp17_ = 0;
 	GtkMessageDialog* _tmp18_ = NULL;
-#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (message != NULL, 0);
-#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (negative != NULL, 0);
-#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (affirmative != NULL, 0);
-#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (affirmative_all != NULL, 0);
-#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 562 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail ((parent == NULL) || GTK_IS_WINDOW (parent), 0);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = parent;
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 4051 "AppWindow.c"
+#line 3186 "AppWindow.c"
 		GtkWindow* _tmp2_ = NULL;
 		GtkWindow* _tmp3_ = NULL;
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = parent;
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _tmp3_;
-#line 4062 "AppWindow.c"
+#line 3197 "AppWindow.c"
 	} else {
 		AppWindow* _tmp4_ = NULL;
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = app_window_get_instance ();
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_window_get_type (), GtkWindow);
-#line 4071 "AppWindow.c"
+#line 3206 "AppWindow.c"
 	}
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = message;
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = (GtkMessageDialog*) gtk_message_dialog_new (_tmp0_, GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "%s", _tmp5_);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp6_);
-#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 565 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	dialog = _tmp6_;
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = title;
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp8_ != NULL) {
-#line 4085 "AppWindow.c"
+#line 3220 "AppWindow.c"
 		const gchar* _tmp9_ = NULL;
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = title;
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = _tmp9_;
-#line 4091 "AppWindow.c"
+#line 3226 "AppWindow.c"
 	} else {
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = RESOURCES_APP_TITLE;
-#line 4095 "AppWindow.c"
+#line 3230 "AppWindow.c"
 	}
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = dialog;
-#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 567 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_window_get_type (), GtkWindow), _tmp7_);
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = dialog;
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = negative;
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = affirmative;
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = affirmative_all;
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = _ ("_Cancel");
-#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 568 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_dialog_add_buttons (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_dialog_get_type (), GtkDialog), _tmp12_, GTK_RESPONSE_NO, _tmp13_, GTK_RESPONSE_YES, _tmp14_, GTK_RESPONSE_APPLY, _tmp15_, GTK_RESPONSE_CANCEL, NULL);
-#line 648 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp16_ = dialog;
-#line 648 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp17_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_dialog_get_type (), GtkDialog));
-#line 648 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 571 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	response = _tmp17_;
-#line 650 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 573 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp18_ = dialog;
-#line 650 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 573 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget));
-#line 652 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = (GtkResponseType) response;
-#line 652 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (dialog);
-#line 652 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp0_);
-#line 652 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 575 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 4131 "AppWindow.c"
+#line 3266 "AppWindow.c"
 }
 
 
@@ -4165,24 +3300,24 @@ void app_window_database_error (GError* err) {
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = _ ("A fatal error occurred when accessing Shotwell’s library. Shotwell can" \
 "not continue.\n" \
 "\n" \
 "%s");
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = err;
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = _tmp1_->message;
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = g_strdup_printf (_tmp0_, _tmp2_);
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = _tmp3_;
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_panic (_tmp4_);
-#line 656 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 579 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp4_);
-#line 4155 "AppWindow.c"
+#line 3290 "AppWindow.c"
 }
 
 
@@ -4191,43 +3326,43 @@ void app_window_panic (const gchar* msg) {
 	const gchar* _tmp1_ = NULL;
 	Application* _tmp2_ = NULL;
 	Application* _tmp3_ = NULL;
-#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 583 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (msg != NULL);
-#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 584 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = msg;
-#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_critical ("AppWindow.vala:661: %s", _tmp0_);
-#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 584 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	g_critical ("AppWindow.vala:584: %s", _tmp0_);
+#line 585 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = msg;
-#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 585 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_error_message (_tmp1_, NULL);
-#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 587 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = application_get_instance ();
-#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 587 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 587 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	application_panic (_tmp3_);
-#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 587 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_application_unref0 (_tmp3_);
-#line 4182 "AppWindow.c"
+#line 3317 "AppWindow.c"
 }
 
 
 static gchar* app_window_real_get_app_role (AppWindow* self) {
-#line 667 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 590 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_critical ("Type `%s' does not implement abstract method `app_window_get_app_role'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 667 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 590 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return NULL;
-#line 4191 "AppWindow.c"
+#line 3326 "AppWindow.c"
 }
 
 
 gchar* app_window_get_app_role (AppWindow* self) {
-#line 667 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 590 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_APP_WINDOW (self), NULL);
-#line 667 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 590 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return APP_WINDOW_GET_CLASS (self)->get_app_role (self);
-#line 4200 "AppWindow.c"
+#line 3335 "AppWindow.c"
 }
 
 
@@ -4238,49 +3373,49 @@ void app_window_on_about (AppWindow* self) {
 	GdkPixbuf* _tmp3_ = NULL;
 	GdkPixbuf* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
-#line 669 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 592 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_get_app_role (self);
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = _ ("Visit the Shotwell web site");
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = resources_get_icon (RESOURCES_ICON_ABOUT_LOGO, -1);
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = _tmp3_;
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = _ ("translator-credits");
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_show_about_dialog (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), "version", RESOURCES_APP_VERSION, "comments", _tmp1_, "copyright", RESOURCES_COPYRIGHT, "website", RESOURCES_HOME_URL, "license", RESOURCES_LICENSE, "website-label", _tmp2_, "authors", RESOURCES_AUTHORS, "logo", _tmp4_, "translator-credits", _tmp5_, NULL, NULL);
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp4_);
-#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 593 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp1_);
-#line 4231 "AppWindow.c"
+#line 3366 "AppWindow.c"
 }
 
 
 static void app_window_on_help_contents (AppWindow* self) {
 	GError * _inner_error_ = NULL;
-#line 684 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 607 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 4239 "AppWindow.c"
+#line 3374 "AppWindow.c"
 	{
 		GdkScreen* _tmp0_ = NULL;
-#line 686 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 609 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = gtk_window_get_screen (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 686 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 609 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		resources_launch_help (_tmp0_, NULL, &_inner_error_);
-#line 686 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 609 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4248 "AppWindow.c"
-			goto __catch228_g_error;
+#line 3383 "AppWindow.c"
+			goto __catch225_g_error;
 		}
 	}
-	goto __finally228;
-	__catch228_g_error:
+	goto __finally225;
+	__catch225_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp1_ = NULL;
@@ -4288,58 +3423,58 @@ static void app_window_on_help_contents (AppWindow* self) {
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		err = _inner_error_;
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = _ ("Unable to display help: %s");
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = err;
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = _tmp2_->message;
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = g_strdup_printf (_tmp1_, _tmp3_);
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_error_message (_tmp5_, NULL);
-#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 611 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp5_);
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (err);
-#line 4281 "AppWindow.c"
+#line 3416 "AppWindow.c"
 	}
-	__finally228:
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally225:
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 608 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4292 "AppWindow.c"
+#line 3427 "AppWindow.c"
 	}
 }
 
 
 static void app_window_on_help_report_problem (AppWindow* self) {
 	GError * _inner_error_ = NULL;
-#line 692 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 615 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 4301 "AppWindow.c"
+#line 3436 "AppWindow.c"
 	{
-#line 694 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 617 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_show_uri (self, RESOURCES_BUG_DB_URL, &_inner_error_);
-#line 694 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 617 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4307 "AppWindow.c"
-			goto __catch229_g_error;
+#line 3442 "AppWindow.c"
+			goto __catch226_g_error;
 		}
 	}
-	goto __finally229;
-	__catch229_g_error:
+	goto __finally226;
+	__catch226_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4347,58 +3482,58 @@ static void app_window_on_help_report_problem (AppWindow* self) {
 		const gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		err = _inner_error_;
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _ ("Unable to navigate to bug database: %s");
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = err;
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = _tmp1_->message;
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = g_strdup_printf (_tmp0_, _tmp2_);
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp3_;
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_error_message (_tmp4_, NULL);
-#line 696 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 619 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp4_);
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (err);
-#line 4340 "AppWindow.c"
+#line 3475 "AppWindow.c"
 	}
-	__finally229:
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally226:
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 616 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4351 "AppWindow.c"
+#line 3486 "AppWindow.c"
 	}
 }
 
 
 static void app_window_on_help_faq (AppWindow* self) {
 	GError * _inner_error_ = NULL;
-#line 700 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 623 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 4360 "AppWindow.c"
+#line 3495 "AppWindow.c"
 	{
-#line 702 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 625 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_show_uri (self, RESOURCES_FAQ_URL, &_inner_error_);
-#line 702 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 625 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4366 "AppWindow.c"
-			goto __catch230_g_error;
+#line 3501 "AppWindow.c"
+			goto __catch227_g_error;
 		}
 	}
-	goto __finally230;
-	__catch230_g_error:
+	goto __finally227;
+	__catch227_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4406,38 +3541,38 @@ static void app_window_on_help_faq (AppWindow* self) {
 		const gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		err = _inner_error_;
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp0_ = _ ("Unable to display FAQ: %s");
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = err;
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = _tmp1_->message;
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = g_strdup_printf (_tmp0_, _tmp2_);
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = _tmp3_;
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_error_message (_tmp4_, NULL);
-#line 704 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 627 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp4_);
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (err);
-#line 4399 "AppWindow.c"
+#line 3534 "AppWindow.c"
 	}
-	__finally230:
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally227:
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 624 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4410 "AppWindow.c"
+#line 3545 "AppWindow.c"
 	}
 }
 
@@ -4445,24 +3580,24 @@ static void app_window_on_help_faq (AppWindow* self) {
 static void app_window_real_on_quit (AppWindow* self) {
 	Application* _tmp0_ = NULL;
 	Application* _tmp1_ = NULL;
-#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = application_get_instance ();
-#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	application_exit (_tmp1_);
-#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 632 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_application_unref0 (_tmp1_);
-#line 4426 "AppWindow.c"
+#line 3561 "AppWindow.c"
 }
 
 
 void app_window_on_quit (AppWindow* self) {
-#line 708 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 631 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 708 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 631 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	APP_WINDOW_GET_CLASS (self)->on_quit (self);
-#line 4435 "AppWindow.c"
+#line 3570 "AppWindow.c"
 }
 
 
@@ -4485,71 +3620,71 @@ void app_window_on_jump_to_file (AppWindow* self) {
 	MediaSource* _tmp14_ = NULL;
 	MediaSource* _tmp15_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 712 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 635 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = page_get_view (_tmp1_);
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = view_collection_get_selected_count (_tmp3_);
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = _tmp4_ != 1;
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_data_collection_unref0 (_tmp3_);
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp1_);
-#line 713 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 636 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp5_) {
-#line 714 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 637 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4480 "AppWindow.c"
+#line 3615 "AppWindow.c"
 	}
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = _tmp6_;
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = page_get_view (_tmp7_);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = _tmp8_;
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = view_collection_get_selected_at (_tmp9_, 0);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp11_ = _tmp10_;
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = data_view_get_source (_tmp11_);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp12_, TYPE_MEDIA_SOURCE) ? ((MediaSource*) _tmp12_) : NULL;
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp13_ == NULL) {
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp12_);
-#line 4502 "AppWindow.c"
+#line 3637 "AppWindow.c"
 	}
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = _tmp13_;
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp11_);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_data_collection_unref0 (_tmp9_);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp7_);
-#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 639 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	media = _tmp14_;
-#line 718 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 641 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = media;
-#line 718 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 641 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp15_ == NULL) {
-#line 719 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (media);
-#line 719 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 642 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4522 "AppWindow.c"
+#line 3657 "AppWindow.c"
 	}
 	{
 		AppWindow* _tmp16_ = NULL;
@@ -4557,79 +3692,79 @@ void app_window_on_jump_to_file (AppWindow* self) {
 		MediaSource* _tmp18_ = NULL;
 		GFile* _tmp19_ = NULL;
 		GFile* _tmp20_ = NULL;
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp16_ = app_window_get_instance ();
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp17_ = _tmp16_;
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp18_ = media;
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp19_ = media_source_get_master_file (_tmp18_);
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp20_ = _tmp19_;
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_show_file_uri (_tmp17_, _tmp20_, &_inner_error_);
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp20_);
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp17_);
-#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 645 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 4548 "AppWindow.c"
-			goto __catch231_g_error;
+#line 3683 "AppWindow.c"
+			goto __catch228_g_error;
 		}
 	}
-	goto __finally231;
-	__catch231_g_error:
+	goto __finally228;
+	__catch228_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp21_ = NULL;
 		gchar* _tmp22_ = NULL;
 		gchar* _tmp23_ = NULL;
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		err = _inner_error_;
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_inner_error_ = NULL;
-#line 724 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 647 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp21_ = err;
-#line 724 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 647 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp22_ = resources_jump_to_file_failed (_tmp21_);
-#line 724 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 647 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp23_ = _tmp22_;
-#line 724 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 647 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_error_message (_tmp23_, NULL);
-#line 724 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 647 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp23_);
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_error_free0 (err);
-#line 4575 "AppWindow.c"
+#line 3710 "AppWindow.c"
 	}
-	__finally231:
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	__finally228:
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (media);
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_clear_error (&_inner_error_);
-#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 644 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4588 "AppWindow.c"
+#line 3723 "AppWindow.c"
 	}
-#line 712 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 635 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (media);
-#line 4592 "AppWindow.c"
+#line 3727 "AppWindow.c"
 }
 
 
 static void app_window_real_destroy (GtkWidget* base) {
 	AppWindow * self;
-#line 728 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 651 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_APP_WINDOW, AppWindow);
-#line 729 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 652 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_on_quit (self);
-#line 4602 "AppWindow.c"
+#line 3737 "AppWindow.c"
 }
 
 
@@ -4642,7 +3777,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 4615 "AppWindow.c"
+#line 3750 "AppWindow.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -4673,8 +3808,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 4646 "AppWindow.c"
-				goto __catch232_g_regex_error;
+#line 3781 "AppWindow.c"
+				goto __catch229_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4682,7 +3817,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 4655 "AppWindow.c"
+#line 3790 "AppWindow.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -4698,8 +3833,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 4671 "AppWindow.c"
-				goto __catch232_g_regex_error;
+#line 3806 "AppWindow.c"
+				goto __catch229_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -4709,7 +3844,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 4682 "AppWindow.c"
+#line 3817 "AppWindow.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -4723,10 +3858,10 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 4696 "AppWindow.c"
+#line 3831 "AppWindow.c"
 	}
-	goto __finally232;
-	__catch232_g_regex_error:
+	goto __finally229;
+	__catch229_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4737,9 +3872,9 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 4710 "AppWindow.c"
+#line 3845 "AppWindow.c"
 	}
-	__finally232:
+	__finally229:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4748,7 +3883,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 4721 "AppWindow.c"
+#line 3856 "AppWindow.c"
 	}
 }
 
@@ -4759,53 +3894,53 @@ void app_window_show_file_uri (AppWindow* self, GFile* file, GError** error) {
 	gchar* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 655 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 655 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = get_nautilus_install_location ();
-#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = _tmp1_ != NULL;
-#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (_tmp1_);
-#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 660 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp2_) {
-#line 4746 "AppWindow.c"
+#line 3881 "AppWindow.c"
 		GFile* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = file;
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = g_file_get_uri (_tmp3_);
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = string_replace (_tmp5_, "'", "\\\'");
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (tmp);
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		tmp = _tmp6_;
-#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 661 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp5_);
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = tmp;
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		show_file_in_nautilus (_tmp7_, &_inner_error_);
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			g_propagate_error (error, _inner_error_);
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			_g_free0 (tmp);
-#line 739 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 662 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			return;
-#line 4778 "AppWindow.c"
+#line 3913 "AppWindow.c"
 		}
 	} else {
 		GFile* _tmp8_ = NULL;
@@ -4815,44 +3950,44 @@ void app_window_show_file_uri (AppWindow* self, GFile* file, GError** error) {
 		gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
 		const gchar* _tmp14_ = NULL;
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = file;
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = g_file_get_parent (_tmp8_);
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _tmp9_;
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = g_file_get_uri (_tmp10_);
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp12_ = _tmp11_;
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp13_ = string_replace (_tmp12_, "'", "\\\'");
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (tmp);
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		tmp = _tmp13_;
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_free0 (_tmp12_);
-#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 664 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp10_);
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp14_ = tmp;
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_show_uri (self, _tmp14_, &_inner_error_);
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			g_propagate_error (error, _inner_error_);
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			_g_free0 (tmp);
-#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 665 "/home/jens/Source/shotwell/src/AppWindow.vala"
 			return;
-#line 4820 "AppWindow.c"
+#line 3955 "AppWindow.c"
 		}
 	}
-#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 655 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_free0 (tmp);
-#line 4825 "AppWindow.c"
+#line 3960 "AppWindow.c"
 }
 
 
@@ -4861,190 +3996,42 @@ void app_window_show_uri (AppWindow* self, const gchar* url, GError** error) {
 	GdkScreen* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 746 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 669 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 746 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 669 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (url != NULL);
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gdk_window_get_screen (_tmp0_);
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = url;
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	sys_show_uri (_tmp1_, _tmp2_, &_inner_error_);
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_propagate_error (error, _inner_error_);
-#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 670 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 4852 "AppWindow.c"
+#line 3987 "AppWindow.c"
 	}
 }
 
 
-static void _vala_array_add170 (GtkActionGroup*** array, int* length, int* size, GtkActionGroup* value) {
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if ((*length) == (*size)) {
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*array = g_renew (GtkActionGroup*, *array, (*size) + 1);
-#line 4864 "AppWindow.c"
-	}
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[(*length)++] = value;
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	(*array)[*length] = NULL;
-#line 4870 "AppWindow.c"
+static void app_window_real_add_actions (AppWindow* self) {
+#line 674 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	g_action_map_add_action_entries (G_TYPE_CHECK_INSTANCE_CAST (self, g_action_map_get_type (), GActionMap), APP_WINDOW_common_actions, G_N_ELEMENTS (APP_WINDOW_common_actions), self);
+#line 3995 "AppWindow.c"
 }
 
 
-static GtkActionGroup** app_window_real_create_common_action_groups (AppWindow* self, int* result_length1) {
-	GtkActionGroup** result = NULL;
-	GtkActionGroup** groups = NULL;
-	GtkActionGroup** _tmp0_ = NULL;
-	gint groups_length1 = 0;
-	gint _groups_size_ = 0;
-	GtkActionGroup* _tmp1_ = NULL;
-	gint _tmp2_ = 0;
-	GtkActionEntry* _tmp3_ = NULL;
-	GtkActionEntry* _tmp4_ = NULL;
-	gint _tmp4__length1 = 0;
-	GtkActionGroup** _tmp5_ = NULL;
-	gint _tmp5__length1 = 0;
-	GtkActionGroup* _tmp6_ = NULL;
-	GtkActionGroup* _tmp7_ = NULL;
-	GtkActionGroup** _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = g_new0 (GtkActionGroup*, 0 + 1);
-#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	groups = _tmp0_;
-#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	groups_length1 = 0;
-#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_groups_size_ = groups_length1;
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_ = self->priv->common_action_group;
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp3_ = app_window_create_common_actions (self, &_tmp2_);
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_ = _tmp3_;
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4__length1 = _tmp2_;
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	gtk_action_group_add_actions (_tmp1_, _tmp4_, _tmp2_, self);
-#line 753 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp4_ = (g_free (_tmp4_), NULL);
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp5_ = groups;
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp5__length1 = groups_length1;
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp6_ = self->priv->common_action_group;
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_ = _g_object_ref0 (_tmp6_);
-#line 754 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_vala_array_add170 (&groups, &groups_length1, &_groups_size_, _tmp7_);
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp8_ = groups;
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp8__length1 = groups_length1;
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (result_length1) {
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*result_length1 = _tmp8__length1;
-#line 4929 "AppWindow.c"
-	}
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = _tmp8_;
-#line 756 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 4935 "AppWindow.c"
-}
-
-
-GtkActionGroup** app_window_create_common_action_groups (AppWindow* self, int* result_length1) {
-#line 750 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_val_if_fail (IS_APP_WINDOW (self), NULL);
-#line 750 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return APP_WINDOW_GET_CLASS (self)->create_common_action_groups (self, result_length1);
-#line 4944 "AppWindow.c"
-}
-
-
-static GtkActionGroup** _vala_array_dup28 (GtkActionGroup** self, int length) {
-	GtkActionGroup** result;
-	int i;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = g_new0 (GtkActionGroup*, length + 1);
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	for (i = 0; i < length; i++) {
-#line 4955 "AppWindow.c"
-		GtkActionGroup* _tmp0_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp0_ = _g_object_ref0 (self[i]);
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		result[i] = _tmp0_;
-#line 4961 "AppWindow.c"
-	}
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 4965 "AppWindow.c"
-}
-
-
-GtkActionGroup** app_window_get_common_action_groups (AppWindow* self, int* result_length1) {
-	GtkActionGroup** result = NULL;
-	GtkActionGroup** _tmp0_ = NULL;
-	gint _tmp0__length1 = 0;
-	GtkActionGroup** _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
-	GtkActionGroup** _tmp2_ = NULL;
-	gint _tmp2__length1 = 0;
-#line 759 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_val_if_fail (IS_APP_WINDOW (self), NULL);
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = self->common_action_groups;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0__length1 = self->common_action_groups_length1;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup28 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1__length1 = _tmp0__length1;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = _tmp1_;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2__length1 = _tmp1__length1;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (result_length1) {
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		*result_length1 = _tmp2__length1;
-#line 4995 "AppWindow.c"
-	}
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = _tmp2_;
-#line 760 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	return result;
-#line 5001 "AppWindow.c"
-}
-
-
-static void app_window_real_replace_common_placeholders (AppWindow* self, GtkUIManager* ui) {
-#line 763 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_return_if_fail (GTK_IS_UI_MANAGER (ui));
-#line 5008 "AppWindow.c"
-}
-
-
-void app_window_replace_common_placeholders (AppWindow* self, GtkUIManager* ui) {
-#line 763 "/home/jens/Source/shotwell/src/AppWindow.vala"
+void app_window_add_actions (AppWindow* self) {
+#line 673 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 763 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	APP_WINDOW_GET_CLASS (self)->replace_common_placeholders (self, ui);
-#line 5017 "AppWindow.c"
+#line 673 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	APP_WINDOW_GET_CLASS (self)->add_actions (self);
+#line 4004 "AppWindow.c"
 }
 
 
@@ -5061,81 +4048,81 @@ void app_window_go_fullscreen (AppWindow* self, Page* page) {
 	FullscreenWindow* _tmp12_ = NULL;
 	FullscreenWindow* _tmp13_ = NULL;
 	FullscreenWindow* _tmp14_ = NULL;
-#line 766 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 677 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 766 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 677 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 768 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 679 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_fullscreen_window;
-#line 768 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 679 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ != NULL) {
-#line 5042 "AppWindow.c"
+#line 4029 "AppWindow.c"
 		FullscreenWindow* _tmp1_ = NULL;
-#line 769 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 680 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = app_window_fullscreen_window;
-#line 769 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 680 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		gtk_window_present (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_window_get_type (), GtkWindow));
-#line 771 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 682 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 5050 "AppWindow.c"
+#line 4037 "AppWindow.c"
 	}
-#line 774 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_get_position (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), &_tmp2_, &_tmp3_);
-#line 774 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->pos_x = _tmp2_;
-#line 774 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 685 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->pos_y = _tmp3_;
-#line 775 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 686 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 777 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = page;
-#line 777 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = fullscreen_window_new (_tmp4_);
-#line 777 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_object_ref_sink (_tmp5_);
-#line 777 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 688 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	fsw = _tmp5_;
-#line 779 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 690 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 779 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 690 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp7_ = _tmp6_;
-#line 779 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 690 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp8_ = _tmp7_ != NULL;
-#line 779 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 690 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp7_);
-#line 779 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 690 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp8_) {
-#line 5078 "AppWindow.c"
+#line 4065 "AppWindow.c"
 		Page* _tmp9_ = NULL;
 		Page* _tmp10_ = NULL;
 		FullscreenWindow* _tmp11_ = NULL;
-#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 691 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 691 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = _tmp9_;
-#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 691 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = fsw;
-#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 691 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_switching_to_fullscreen (_tmp10_, _tmp11_);
-#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 691 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp10_);
-#line 5092 "AppWindow.c"
+#line 4079 "AppWindow.c"
 	}
-#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp12_ = fsw;
-#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp13_ = _g_object_ref0 (_tmp12_);
-#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (app_window_fullscreen_window);
-#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 693 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_fullscreen_window = _tmp13_;
-#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 694 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp14_ = app_window_fullscreen_window;
-#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 694 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_present (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_window_get_type (), GtkWindow));
-#line 766 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 677 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (fsw);
-#line 5108 "AppWindow.c"
+#line 4095 "AppWindow.c"
 }
 
 
@@ -5148,276 +4135,250 @@ void app_window_end_fullscreen (AppWindow* self) {
 	gboolean _tmp5_ = FALSE;
 	FullscreenWindow* _tmp9_ = NULL;
 	FullscreenWindow* _tmp10_ = NULL;
-#line 786 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 697 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 698 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_fullscreen_window;
-#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 698 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp0_ == NULL) {
-#line 788 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 699 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		return;
-#line 5129 "AppWindow.c"
+#line 4116 "AppWindow.c"
 	}
-#line 790 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = self->pos_x;
-#line 790 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->pos_y;
-#line 790 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 701 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_move (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp1_, _tmp2_);
-#line 792 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 703 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 794 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 705 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 794 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 705 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp4_ = _tmp3_;
-#line 794 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 705 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = _tmp4_ != NULL;
-#line 794 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 705 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp4_);
-#line 794 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 705 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp5_) {
-#line 5149 "AppWindow.c"
+#line 4136 "AppWindow.c"
 		Page* _tmp6_ = NULL;
 		Page* _tmp7_ = NULL;
 		FullscreenWindow* _tmp8_ = NULL;
-#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 706 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 706 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = _tmp6_;
-#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 706 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = app_window_fullscreen_window;
-#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 706 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		page_returning_from_fullscreen (_tmp7_, _tmp8_);
-#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 706 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp7_);
-#line 5163 "AppWindow.c"
+#line 4150 "AppWindow.c"
 	}
-#line 797 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 708 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp9_ = app_window_fullscreen_window;
-#line 797 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 708 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 798 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp10_ = app_window_fullscreen_window;
-#line 798 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 709 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget));
-#line 799 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 710 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (app_window_fullscreen_window);
-#line 799 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 710 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_fullscreen_window = NULL;
-#line 801 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 712 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	gtk_window_present (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow));
-#line 5179 "AppWindow.c"
+#line 4166 "AppWindow.c"
 }
 
 
-GtkAction* app_window_get_common_action (AppWindow* self, const gchar* name) {
-	GtkAction* result = NULL;
-	GtkActionGroup** _tmp0_ = NULL;
-	gint _tmp0__length1 = 0;
-	const gchar* _tmp7_ = NULL;
-#line 804 "/home/jens/Source/shotwell/src/AppWindow.vala"
+GAction* app_window_get_common_action (AppWindow* self, const gchar* name) {
+	GAction* result = NULL;
+	const gchar* _tmp0_ = NULL;
+	GAction* _tmp1_ = NULL;
+	GAction* _tmp2_ = NULL;
+#line 715 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (IS_APP_WINDOW (self), NULL);
-#line 804 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 715 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = self->common_action_groups;
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0__length1 = self->common_action_groups_length1;
-#line 5196 "AppWindow.c"
-	{
-		GtkActionGroup** group_collection = NULL;
-		gint group_collection_length1 = 0;
-		gint _group_collection_size_ = 0;
-		gint group_it = 0;
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		group_collection = _tmp0_;
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		group_collection_length1 = _tmp0__length1;
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		for (group_it = 0; group_it < _tmp0__length1; group_it = group_it + 1) {
-#line 5208 "AppWindow.c"
-			GtkActionGroup* _tmp1_ = NULL;
-			GtkActionGroup* group = NULL;
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-			_tmp1_ = _g_object_ref0 (group_collection[group_it]);
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-			group = _tmp1_;
-#line 5215 "AppWindow.c"
-			{
-				GtkAction* action = NULL;
-				GtkActionGroup* _tmp2_ = NULL;
-				const gchar* _tmp3_ = NULL;
-				GtkAction* _tmp4_ = NULL;
-				GtkAction* _tmp5_ = NULL;
-				GtkAction* _tmp6_ = NULL;
-#line 806 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp2_ = group;
-#line 806 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp3_ = name;
-#line 806 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp4_ = gtk_action_group_get_action (_tmp2_, _tmp3_);
-#line 806 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 806 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				action = _tmp5_;
-#line 807 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_tmp6_ = action;
-#line 807 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				if (_tmp6_ != NULL) {
-#line 808 "/home/jens/Source/shotwell/src/AppWindow.vala"
-					result = action;
-#line 808 "/home/jens/Source/shotwell/src/AppWindow.vala"
-					_g_object_unref0 (group);
-#line 808 "/home/jens/Source/shotwell/src/AppWindow.vala"
-					return result;
-#line 5243 "AppWindow.c"
-				}
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_g_object_unref0 (action);
-#line 805 "/home/jens/Source/shotwell/src/AppWindow.vala"
-				_g_object_unref0 (group);
-#line 5249 "AppWindow.c"
-			}
-		}
-	}
-#line 811 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp7_ = name;
-#line 811 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_warning ("AppWindow.vala:811: No common action found: %s", _tmp7_);
-#line 813 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	result = NULL;
-#line 813 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp0_ = name;
+#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp1_ = g_action_map_lookup_action (G_TYPE_CHECK_INSTANCE_CAST (self, g_action_map_get_type (), GActionMap), _tmp0_);
+#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = _g_object_ref0 (_tmp1_);
+#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	result = _tmp2_;
+#line 716 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 5261 "AppWindow.c"
+#line 4189 "AppWindow.c"
 }
 
 
 void app_window_set_common_action_sensitive (AppWindow* self, const gchar* name, gboolean sensitive) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 816 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 719 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 816 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 719 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (name != NULL);
-#line 817 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = name;
-#line 817 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = app_window_get_common_action (self, _tmp0_);
-#line 817 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	action = _tmp1_;
-#line 818 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = action;
-#line 818 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp2_ != NULL) {
-#line 5284 "AppWindow.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 819 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp3_ = action;
-#line 819 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp4_ = sensitive;
-#line 819 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_sensitive (_tmp3_, _tmp4_);
-#line 5293 "AppWindow.c"
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp2_ == NULL) {
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_g_object_unref0 (_tmp1_);
+#line 4213 "AppWindow.c"
 	}
-#line 816 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 720 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	action = _tmp2_;
+#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp3_ = action;
+#line 721 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp3_ != NULL) {
+#line 4221 "AppWindow.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp4_ = action;
+#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp5_ = sensitive;
+#line 722 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp5_);
+#line 4230 "AppWindow.c"
+	}
+#line 719 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (action);
-#line 5297 "AppWindow.c"
+#line 4234 "AppWindow.c"
 }
 
 
 void app_window_set_common_action_important (AppWindow* self, const gchar* name, gboolean important) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 822 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 725 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 822 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 725 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (name != NULL);
-#line 823 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = name;
-#line 823 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = app_window_get_common_action (self, _tmp0_);
-#line 823 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	action = _tmp1_;
-#line 824 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = action;
-#line 824 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp2_ != NULL) {
-#line 5320 "AppWindow.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 825 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp3_ = action;
-#line 825 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp4_ = important;
-#line 825 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_is_important (_tmp3_, _tmp4_);
-#line 5329 "AppWindow.c"
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp2_ == NULL) {
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_g_object_unref0 (_tmp1_);
+#line 4258 "AppWindow.c"
 	}
-#line 822 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 726 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	action = _tmp2_;
+#line 727 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp3_ = action;
+#line 727 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp3_ != NULL) {
+#line 4266 "AppWindow.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+		gboolean _tmp6_ = FALSE;
+#line 728 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp4_ = action;
+#line 728 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp5_ = gtk_widget_get_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 728 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp6_ = _tmp5_;
+#line 728 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp6_);
+#line 4278 "AppWindow.c"
+	}
+#line 725 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (action);
-#line 5333 "AppWindow.c"
+#line 4282 "AppWindow.c"
 }
 
 
 void app_window_set_common_action_visible (AppWindow* self, const gchar* name, gboolean visible) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-#line 828 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	GAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 731 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 828 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 731 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (name != NULL);
-#line 829 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = name;
-#line 829 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = app_window_get_common_action (self, _tmp0_);
-#line 829 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	action = _tmp1_;
-#line 830 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = action;
-#line 830 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp2_ != NULL) {
-#line 5356 "AppWindow.c"
-		GtkAction* _tmp3_ = NULL;
-		gboolean _tmp4_ = FALSE;
-#line 831 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp3_ = action;
-#line 831 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp4_ = visible;
-#line 831 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_visible (_tmp3_, _tmp4_);
-#line 5365 "AppWindow.c"
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp2_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp1_) : NULL;
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp2_ == NULL) {
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_g_object_unref0 (_tmp1_);
+#line 4306 "AppWindow.c"
 	}
-#line 828 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 732 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	action = _tmp2_;
+#line 733 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	_tmp3_ = action;
+#line 733 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	if (_tmp3_ != NULL) {
+#line 4314 "AppWindow.c"
+		GSimpleAction* _tmp4_ = NULL;
+		gboolean _tmp5_ = FALSE;
+		gboolean _tmp6_ = FALSE;
+#line 734 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp4_ = action;
+#line 734 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp5_ = gtk_widget_get_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 734 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		_tmp6_ = _tmp5_;
+#line 734 "/home/jens/Source/shotwell/src/AppWindow.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp6_);
+#line 4326 "AppWindow.c"
+	}
+#line 731 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (action);
-#line 5369 "AppWindow.c"
+#line 4330 "AppWindow.c"
 }
 
 
 static void _app_window_on_update_common_actions_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_on_update_common_actions ((AppWindow*) self);
-#line 5376 "AppWindow.c"
+#line 4337 "AppWindow.c"
 }
 
 
 static void _app_window_on_update_common_actions_view_collection_selection_group_altered (ViewCollection* _sender, gpointer self) {
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_on_update_common_actions ((AppWindow*) self);
-#line 5383 "AppWindow.c"
+#line 4344 "AppWindow.c"
 }
 
 
 static void _app_window_on_update_common_actions_view_collection_items_state_changed (ViewCollection* _sender, GeeIterable* changed, gpointer self) {
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_on_update_common_actions ((AppWindow*) self);
-#line 5390 "AppWindow.c"
+#line 4351 "AppWindow.c"
 }
 
 
@@ -5429,23 +4390,23 @@ static void app_window_real_switched_pages (PageWindow* base, Page* old_page, Pa
 	Page* _tmp15_ = NULL;
 	Page* _tmp34_ = NULL;
 	Page* _tmp35_ = NULL;
-#line 834 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_APP_WINDOW, AppWindow);
-#line 834 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((old_page == NULL) || IS_PAGE (old_page));
-#line 834 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 737 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((new_page == NULL) || IS_PAGE (new_page));
-#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = old_page;
-#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = new_page;
-#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 738 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_update_common_action_availability (self, _tmp0_, _tmp1_);
-#line 837 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 740 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = old_page;
-#line 837 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 740 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp2_ != NULL) {
-#line 5418 "AppWindow.c"
+#line 4379 "AppWindow.c"
 		Page* _tmp3_ = NULL;
 		ViewCollection* _tmp4_ = NULL;
 		ViewCollection* _tmp5_ = NULL;
@@ -5458,49 +4419,49 @@ static void app_window_real_switched_pages (PageWindow* base, Page* old_page, Pa
 		ViewCollection* _tmp12_ = NULL;
 		ViewCollection* _tmp13_ = NULL;
 		guint _tmp14_ = 0U;
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = old_page;
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_get_view (_tmp3_);
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_parse_name ("contents-altered", TYPE_DATA_COLLECTION, &_tmp6_, NULL, FALSE);
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_DATA_COLLECTION, DataCollection), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _app_window_on_update_common_actions_data_collection_contents_altered, self);
-#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 741 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = old_page;
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = page_get_view (_tmp7_);
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = _tmp8_;
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_parse_name ("selection-group-altered", TYPE_VIEW_COLLECTION, &_tmp10_, NULL, FALSE);
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_handlers_disconnect_matched (_tmp9_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp10_, 0, NULL, (GCallback) _app_window_on_update_common_actions_view_collection_selection_group_altered, self);
-#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 742 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp9_);
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp11_ = old_page;
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp12_ = page_get_view (_tmp11_);
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp13_ = _tmp12_;
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_parse_name ("items-state-changed", TYPE_VIEW_COLLECTION, &_tmp14_, NULL, FALSE);
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_handlers_disconnect_matched (_tmp13_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp14_, 0, NULL, (GCallback) _app_window_on_update_common_actions_view_collection_items_state_changed, self);
-#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 743 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp13_);
-#line 5467 "AppWindow.c"
+#line 4428 "AppWindow.c"
 	}
-#line 843 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 746 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp15_ = new_page;
-#line 843 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 746 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp15_ != NULL) {
-#line 5473 "AppWindow.c"
+#line 4434 "AppWindow.c"
 		Page* _tmp16_ = NULL;
 		ViewCollection* _tmp17_ = NULL;
 		ViewCollection* _tmp18_ = NULL;
@@ -5519,135 +4480,135 @@ static void app_window_real_switched_pages (PageWindow* base, Page* old_page, Pa
 		ViewCollection* _tmp31_ = NULL;
 		ViewCollection* _tmp32_ = NULL;
 		gint _tmp33_ = 0;
-#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp16_ = new_page;
-#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp17_ = page_get_view (_tmp16_);
-#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp18_ = _tmp17_;
-#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, TYPE_DATA_COLLECTION, DataCollection), "contents-altered", (GCallback) _app_window_on_update_common_actions_data_collection_contents_altered, self, 0);
-#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 747 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp18_);
-#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 748 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp19_ = new_page;
-#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 748 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp20_ = page_get_view (_tmp19_);
-#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 748 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp21_ = _tmp20_;
-#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 748 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_connect_object (_tmp21_, "selection-group-altered", (GCallback) _app_window_on_update_common_actions_view_collection_selection_group_altered, self, 0);
-#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 748 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp21_);
-#line 846 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 749 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp22_ = new_page;
-#line 846 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 749 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp23_ = page_get_view (_tmp22_);
-#line 846 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 749 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp24_ = _tmp23_;
-#line 846 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 749 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		g_signal_connect_object (_tmp24_, "items-state-changed", (GCallback) _app_window_on_update_common_actions_view_collection_items_state_changed, self, 0);
-#line 846 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 749 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp24_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp25_ = new_page;
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp26_ = new_page;
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp27_ = page_get_view (_tmp26_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp28_ = _tmp27_;
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp29_ = view_collection_get_selected_count (_tmp28_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp30_ = new_page;
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp31_ = page_get_view (_tmp30_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp32_ = _tmp31_;
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp33_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_DATA_COLLECTION, DataCollection));
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_update_common_actions (self, _tmp25_, _tmp29_, _tmp33_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp32_);
-#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 751 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp28_);
-#line 5546 "AppWindow.c"
+#line 4507 "AppWindow.c"
 	}
-#line 852 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 755 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp34_ = old_page;
-#line 852 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 755 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp35_ = new_page;
-#line 852 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 755 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	PAGE_WINDOW_CLASS (app_window_parent_class)->switched_pages (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), _tmp34_, _tmp35_);
-#line 5554 "AppWindow.c"
+#line 4515 "AppWindow.c"
 }
 
 
 static void app_window_real_update_common_action_availability (AppWindow* self, Page* old_page, Page* new_page) {
 	gboolean is_checkerboard = FALSE;
 	Page* _tmp0_ = NULL;
-#line 858 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 761 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((old_page == NULL) || IS_PAGE (old_page));
-#line 858 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 761 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((new_page == NULL) || IS_PAGE (new_page));
-#line 859 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 762 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = new_page;
-#line 859 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 762 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	is_checkerboard = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_CHECKERBOARD_PAGE);
-#line 861 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 764 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_set_common_action_sensitive (self, "CommonSelectAll", is_checkerboard);
-#line 862 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 765 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_set_common_action_sensitive (self, "CommonSelectNone", is_checkerboard);
-#line 5573 "AppWindow.c"
+#line 4534 "AppWindow.c"
 }
 
 
 void app_window_update_common_action_availability (AppWindow* self, Page* old_page, Page* new_page) {
-#line 858 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 761 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 858 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 761 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	APP_WINDOW_GET_CLASS (self)->update_common_action_availability (self, old_page, new_page);
-#line 5582 "AppWindow.c"
+#line 4543 "AppWindow.c"
 }
 
 
 static void app_window_real_update_common_actions (AppWindow* self, Page* page, gint selected_count, gint count) {
 	Page* _tmp0_ = NULL;
 	gint _tmp2_ = 0;
-#line 868 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 771 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_PAGE (page));
-#line 869 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 772 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page;
-#line 869 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 772 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_CHECKERBOARD_PAGE)) {
-#line 5595 "AppWindow.c"
+#line 4556 "AppWindow.c"
 		gint _tmp1_ = 0;
-#line 870 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 773 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp1_ = count;
-#line 870 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 773 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_set_common_action_sensitive (self, "CommonSelectAll", _tmp1_ > 0);
-#line 5601 "AppWindow.c"
+#line 4562 "AppWindow.c"
 	}
-#line 871 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 774 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = selected_count;
-#line 871 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 774 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_set_common_action_sensitive (self, "CommonJumpToFile", _tmp2_ == 1);
-#line 873 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 776 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_undo_action (self);
-#line 874 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 777 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_redo_action (self);
-#line 5611 "AppWindow.c"
+#line 4572 "AppWindow.c"
 }
 
 
 void app_window_update_common_actions (AppWindow* self, Page* page, gint selected_count, gint count) {
-#line 868 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 771 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 868 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 771 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	APP_WINDOW_GET_CLASS (self)->update_common_actions (self, page, selected_count, count);
-#line 5620 "AppWindow.c"
+#line 4581 "AppWindow.c"
 }
 
 
@@ -5655,17 +4616,17 @@ static void app_window_on_update_common_actions (AppWindow* self) {
 	Page* page = NULL;
 	Page* _tmp0_ = NULL;
 	Page* _tmp1_ = NULL;
-#line 877 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 878 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 781 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 878 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 781 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page = _tmp0_;
-#line 879 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = page;
-#line 879 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 782 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ != NULL) {
-#line 5638 "AppWindow.c"
+#line 4599 "AppWindow.c"
 		Page* _tmp2_ = NULL;
 		Page* _tmp3_ = NULL;
 		ViewCollection* _tmp4_ = NULL;
@@ -5675,42 +4636,42 @@ static void app_window_on_update_common_actions (AppWindow* self) {
 		ViewCollection* _tmp8_ = NULL;
 		ViewCollection* _tmp9_ = NULL;
 		gint _tmp10_ = 0;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp2_ = page;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_get_view (_tmp3_);
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp6_ = view_collection_get_selected_count (_tmp5_);
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp7_ = page;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp8_ = page_get_view (_tmp7_);
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp9_ = _tmp8_;
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp10_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, TYPE_DATA_COLLECTION, DataCollection));
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		app_window_update_common_actions (self, _tmp2_, _tmp6_, _tmp10_);
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp9_);
-#line 880 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 783 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 5672 "AppWindow.c"
+#line 4633 "AppWindow.c"
 	}
-#line 877 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 780 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (page);
-#line 5676 "AppWindow.c"
+#line 4637 "AppWindow.c"
 }
 
 
 static gpointer _command_manager_ref0 (gpointer self) {
-#line 884 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return self ? command_manager_ref (self) : NULL;
-#line 5683 "AppWindow.c"
+#line 4644 "AppWindow.c"
 }
 
 
@@ -5718,142 +4679,41 @@ CommandManager* app_window_get_command_manager (void) {
 	CommandManager* result = NULL;
 	CommandManager* _tmp0_ = NULL;
 	CommandManager* _tmp1_ = NULL;
-#line 884 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_command_manager;
-#line 884 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _command_manager_ref0 (_tmp0_);
-#line 884 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp1_;
-#line 884 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 787 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 5699 "AppWindow.c"
+#line 4660 "AppWindow.c"
 }
 
 
 static void app_window_on_command_manager_altered (AppWindow* self) {
-#line 887 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 790 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 888 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 791 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_undo_action (self);
-#line 889 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 792 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_redo_action (self);
-#line 5710 "AppWindow.c"
+#line 4671 "AppWindow.c"
 }
 
 
 static void app_window_decorate_command_manager_action (AppWindow* self, const gchar* name, const gchar* prefix, const gchar* default_explanation, CommandDescription* desc) {
-	GtkAction* action = NULL;
-	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-	CommandDescription* _tmp3_ = NULL;
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (name != NULL);
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (prefix != NULL);
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (default_explanation != NULL);
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 795 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail ((desc == NULL) || IS_COMMAND_DESCRIPTION (desc));
-#line 894 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = name;
-#line 894 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp1_ = app_window_get_common_action (self, _tmp0_);
-#line 894 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	action = _tmp1_;
-#line 895 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp2_ = action;
-#line 895 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp2_ == NULL) {
-#line 896 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_object_unref0 (action);
-#line 896 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		return;
-#line 5744 "AppWindow.c"
-	}
-#line 898 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp3_ = desc;
-#line 898 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	if (_tmp3_ != NULL) {
-#line 5750 "AppWindow.c"
-		GtkAction* _tmp4_ = NULL;
-		const gchar* _tmp5_ = NULL;
-		CommandDescription* _tmp6_ = NULL;
-		gchar* _tmp7_ = NULL;
-		gchar* _tmp8_ = NULL;
-		gchar* _tmp9_ = NULL;
-		gchar* _tmp10_ = NULL;
-		GtkAction* _tmp11_ = NULL;
-		CommandDescription* _tmp12_ = NULL;
-		gchar* _tmp13_ = NULL;
-		gchar* _tmp14_ = NULL;
-		GtkAction* _tmp15_ = NULL;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp4_ = action;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp5_ = prefix;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp6_ = desc;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp7_ = command_description_get_name (_tmp6_);
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp8_ = _tmp7_;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp9_ = g_strdup_printf ("%s %s", _tmp5_, _tmp8_);
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp10_ = _tmp9_;
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_label (_tmp4_, _tmp10_);
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp10_);
-#line 899 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp8_);
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp11_ = action;
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp12_ = desc;
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp13_ = command_description_get_explanation (_tmp12_);
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp14_ = _tmp13_;
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_tooltip (_tmp11_, _tmp14_);
-#line 900 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_g_free0 (_tmp14_);
-#line 901 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp15_ = action;
-#line 901 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_sensitive (_tmp15_, TRUE);
-#line 5799 "AppWindow.c"
-	} else {
-		GtkAction* _tmp16_ = NULL;
-		const gchar* _tmp17_ = NULL;
-		GtkAction* _tmp18_ = NULL;
-		const gchar* _tmp19_ = NULL;
-		GtkAction* _tmp20_ = NULL;
-#line 903 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp16_ = action;
-#line 903 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp17_ = prefix;
-#line 903 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_label (_tmp16_, _tmp17_);
-#line 904 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp18_ = action;
-#line 904 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp19_ = default_explanation;
-#line 904 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_tooltip (_tmp18_, _tmp19_);
-#line 905 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		_tmp20_ = action;
-#line 905 "/home/jens/Source/shotwell/src/AppWindow.vala"
-		gtk_action_set_sensitive (_tmp20_, FALSE);
-#line 5822 "AppWindow.c"
-	}
-#line 892 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (action);
-#line 5826 "AppWindow.c"
+#line 4686 "AppWindow.c"
 }
 
 
@@ -5862,23 +4722,23 @@ void app_window_decorate_undo_action (AppWindow* self) {
 	CommandManager* _tmp1_ = NULL;
 	CommandDescription* _tmp2_ = NULL;
 	CommandDescription* _tmp3_ = NULL;
-#line 909 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 814 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_get_command_manager ();
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = command_manager_get_undo_description (_tmp1_);
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_command_manager_action (self, "CommonUndo", RESOURCES_UNDO_MENU, "", _tmp3_);
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp3_);
-#line 910 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 815 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_command_manager_unref0 (_tmp1_);
-#line 5851 "AppWindow.c"
+#line 4711 "AppWindow.c"
 }
 
 
@@ -5887,47 +4747,47 @@ void app_window_decorate_redo_action (AppWindow* self) {
 	CommandManager* _tmp1_ = NULL;
 	CommandDescription* _tmp2_ = NULL;
 	CommandDescription* _tmp3_ = NULL;
-#line 914 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 819 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_get_command_manager ();
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = _tmp0_;
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = command_manager_get_redo_description (_tmp1_);
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp3_ = _tmp2_;
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_decorate_command_manager_action (self, "CommonRedo", RESOURCES_REDO_MENU, "", _tmp3_);
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (_tmp3_);
-#line 915 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 820 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_command_manager_unref0 (_tmp1_);
-#line 5876 "AppWindow.c"
+#line 4736 "AppWindow.c"
 }
 
 
 static void app_window_on_undo (AppWindow* self) {
 	CommandManager* _tmp0_ = NULL;
-#line 919 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 824 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 920 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 825 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_command_manager;
-#line 920 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 825 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	command_manager_undo (_tmp0_);
-#line 5888 "AppWindow.c"
+#line 4748 "AppWindow.c"
 }
 
 
 static void app_window_on_redo (AppWindow* self) {
 	CommandManager* _tmp0_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 828 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 924 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 829 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = app_window_command_manager;
-#line 924 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 829 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	command_manager_redo (_tmp0_);
-#line 5900 "AppWindow.c"
+#line 4760 "AppWindow.c"
 }
 
 
@@ -5936,43 +4796,43 @@ static void app_window_on_select_all (AppWindow* self) {
 	Page* _tmp0_ = NULL;
 	CheckerboardPage* _tmp1_ = NULL;
 	Page* _tmp2_ = NULL;
-#line 927 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 832 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 928 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 833 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 928 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 833 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_CHECKERBOARD_PAGE) ? ((CheckerboardPage*) _tmp0_) : NULL;
-#line 928 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 833 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ == NULL) {
-#line 928 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 833 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 5919 "AppWindow.c"
+#line 4779 "AppWindow.c"
 	}
-#line 928 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 833 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PAGE, Page);
-#line 929 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 834 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = page;
-#line 929 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 834 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp2_ != NULL) {
-#line 5927 "AppWindow.c"
+#line 4787 "AppWindow.c"
 		Page* _tmp3_ = NULL;
 		ViewCollection* _tmp4_ = NULL;
 		ViewCollection* _tmp5_ = NULL;
-#line 930 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page;
-#line 930 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_get_view (_tmp3_);
-#line 930 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 930 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		view_collection_select_all (_tmp5_);
-#line 930 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 835 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 5941 "AppWindow.c"
+#line 4801 "AppWindow.c"
 	}
-#line 927 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 832 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (page);
-#line 5945 "AppWindow.c"
+#line 4805 "AppWindow.c"
 }
 
 
@@ -5981,43 +4841,43 @@ static void app_window_on_select_none (AppWindow* self) {
 	Page* _tmp0_ = NULL;
 	CheckerboardPage* _tmp1_ = NULL;
 	Page* _tmp2_ = NULL;
-#line 933 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_if_fail (IS_APP_WINDOW (self));
-#line 934 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow));
-#line 934 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_CHECKERBOARD_PAGE) ? ((CheckerboardPage*) _tmp0_) : NULL;
-#line 934 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp1_ == NULL) {
-#line 934 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_g_object_unref0 (_tmp0_);
-#line 5964 "AppWindow.c"
+#line 4824 "AppWindow.c"
 	}
-#line 934 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 839 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	page = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PAGE, Page);
-#line 935 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = page;
-#line 935 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 840 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (_tmp2_ != NULL) {
-#line 5972 "AppWindow.c"
+#line 4832 "AppWindow.c"
 		Page* _tmp3_ = NULL;
 		ViewCollection* _tmp4_ = NULL;
 		ViewCollection* _tmp5_ = NULL;
-#line 936 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 841 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp3_ = page;
-#line 936 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 841 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp4_ = page_get_view (_tmp3_);
-#line 936 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 841 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_tmp5_ = _tmp4_;
-#line 936 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 841 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		view_collection_unselect_all (_tmp5_);
-#line 936 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 841 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		_data_collection_unref0 (_tmp5_);
-#line 5986 "AppWindow.c"
+#line 4846 "AppWindow.c"
 	}
-#line 933 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 838 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_g_object_unref0 (page);
-#line 5990 "AppWindow.c"
+#line 4850 "AppWindow.c"
 }
 
 
@@ -6029,103 +4889,88 @@ static gboolean app_window_real_configure_event (GtkWidget* base, GdkEventConfig
 	gboolean _tmp2_ = FALSE;
 	GdkEventConfigure* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
-#line 939 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_APP_WINDOW, AppWindow);
-#line 939 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 844 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 940 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp0_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 940 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp1_ = gdk_window_get_state (_tmp0_);
-#line 940 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 845 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->maximized = _tmp1_ == GDK_WINDOW_STATE_MAXIMIZED;
-#line 942 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 847 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp2_ = self->maximized;
-#line 942 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 847 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	if (!_tmp2_) {
-#line 6016 "AppWindow.c"
+#line 4876 "AppWindow.c"
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
-#line 943 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		gtk_window_get_size (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), &_tmp3_, &_tmp4_);
-#line 943 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->dimensions.width = _tmp3_;
-#line 943 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 848 "/home/jens/Source/shotwell/src/AppWindow.vala"
 		self->dimensions.height = _tmp4_;
-#line 6025 "AppWindow.c"
+#line 4885 "AppWindow.c"
 	}
-#line 945 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 850 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp5_ = event;
-#line 945 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 850 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	_tmp6_ = GTK_WIDGET_CLASS (app_window_parent_class)->configure_event (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE_WINDOW, PageWindow), gtk_widget_get_type (), GtkWidget), _tmp5_);
-#line 945 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 850 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	result = _tmp6_;
-#line 945 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 850 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	return result;
-#line 6035 "AppWindow.c"
+#line 4895 "AppWindow.c"
 }
 
 
 static void app_window_class_init (AppWindowClass * klass) {
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	app_window_parent_class = g_type_class_peek_parent (klass);
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	g_type_class_add_private (klass, sizeof (AppWindowPrivate));
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((AppWindowClass *) klass)->on_fullscreen = app_window_real_on_fullscreen;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((AppWindowClass *) klass)->get_app_role = app_window_real_get_app_role;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((AppWindowClass *) klass)->on_quit = app_window_real_on_quit;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->destroy = app_window_real_destroy;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	((AppWindowClass *) klass)->create_common_action_groups = app_window_real_create_common_action_groups;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	((AppWindowClass *) klass)->replace_common_placeholders = app_window_real_replace_common_placeholders;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
+	((AppWindowClass *) klass)->add_actions = app_window_real_add_actions;
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((PageWindowClass *) klass)->switched_pages = app_window_real_switched_pages;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((AppWindowClass *) klass)->update_common_action_availability = app_window_real_update_common_action_availability;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((AppWindowClass *) klass)->update_common_actions = app_window_real_update_common_actions;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	((GtkWidgetClass *) klass)->configure_event = app_window_real_configure_event;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (klass)->finalize = app_window_finalize;
-#line 6066 "AppWindow.c"
+#line 4922 "AppWindow.c"
 }
 
 
 static void app_window_instance_init (AppWindow * self) {
-	GtkActionGroup* _tmp0_ = NULL;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->priv = APP_WINDOW_GET_PRIVATE (self);
-#line 420 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 402 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->maximized = FALSE;
-#line 422 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 404 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->pos_x = 0;
-#line 423 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 405 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self->pos_y = 0;
-#line 425 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_tmp0_ = gtk_action_group_new ("AppWindowGlobalActionGroup");
-#line 425 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->priv->common_action_group = _tmp0_;
-#line 6084 "AppWindow.c"
+#line 4933 "AppWindow.c"
 }
 
 
 static void app_window_finalize (GObject* obj) {
 	AppWindow * self;
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_APP_WINDOW, AppWindow);
-#line 419 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	self->common_action_groups = (_vala_array_free (self->common_action_groups, self->common_action_groups_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 425 "/home/jens/Source/shotwell/src/AppWindow.vala"
-	_g_object_unref0 (self->priv->common_action_group);
-#line 409 "/home/jens/Source/shotwell/src/AppWindow.vala"
+#line 392 "/home/jens/Source/shotwell/src/AppWindow.vala"
 	G_OBJECT_CLASS (app_window_parent_class)->finalize (obj);
-#line 6098 "AppWindow.c"
+#line 4943 "AppWindow.c"
 }
 
 
@@ -6138,24 +4983,6 @@ GType app_window_get_type (void) {
 		g_once_init_leave (&app_window_type_id__volatile, app_window_type_id);
 	}
 	return app_window_type_id__volatile;
-}
-
-
-static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func) {
-	if ((array != NULL) && (destroy_func != NULL)) {
-		int i;
-		for (i = 0; i < array_length; i = i + 1) {
-			if (((gpointer*) array)[i] != NULL) {
-				destroy_func (((gpointer*) array)[i]);
-			}
-		}
-	}
-}
-
-
-static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func) {
-	_vala_array_destroy (array, array_length, destroy_func);
-	g_free (array);
 }
 
 

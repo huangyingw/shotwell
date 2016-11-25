@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<page xmlns="http://projectmallard.org/1.0/" type="guide" id="import-f-spot" xml:lang="lv">
+
+    <info>
+        <link type="guide" xref="index#import"/>
+        <desc>Shotwell var arī importēt visas jūsu fotogrāfijas un tagus no F-Spot fotogrāfiju pārvaldnieka.</desc>
+        
+        <link type="next" xref="import-camera"/>
+    </info>
+
+	<title>Importēšana no F-Spot</title>
+
+    <p>Lai importētu esošo fotogrāfiju kolekciju no F-Spot:</p>
+    <steps>
+    <item><p>Izvēlieties <guiseq><gui>Datne</gui><gui>Importēt no F-Spot</gui></guiseq>.</p></item>
+    <item><p>Tagad izvēlieties vai no noklusējuma F-Spot bibliotēku vai citu F-Spot datubāzi. Ja importējat no citas F-Spot datubāzes, izvēlēties direktoriju un datni ar izvēlētāja dialoglodziņu.</p></item>
+    </steps>
+    <p>Shotwell importēs jūsu fotogrāfijas ar to tagiem un citu informāciju. Kad importēšana ir pabeigta, varat izvēlēties <gui>Pēdējais imports</gui> sānu joslā, lai redzētu visas veiksmīgi importētās fotogrāfijas. Notikumu saraksts arī attēlos jaunos ierakstus datumiem, kas atbilst importētajām fotogrāfijām.</p>
+</page>

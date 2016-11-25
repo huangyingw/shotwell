@@ -13,8 +13,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <webkit2/webkit2.h>
-#include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 
 #define SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE (shotwell_plugins_common_web_authentication_pane_get_type ())
@@ -44,7 +44,6 @@ struct _ShotwellPluginsCommonWebAuthenticationPanePrivate {
 	SpitPublishingDialogPaneGeometryOptions _preferred_geometry;
 	gchar* _login_uri;
 	WebKitWebView* webview;
-	GtkBox* pane_widget;
 };
 
 
@@ -82,28 +81,28 @@ static void _vala_shotwell_plugins_common_web_authentication_pane_set_property (
 
 
 static void _shotwell_plugins_common_web_authentication_pane_on_page_load_changed_webkit_web_view_load_changed (WebKitWebView* _sender, WebKitLoadEvent load_event, gpointer self) {
-#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 24 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	shotwell_plugins_common_web_authentication_pane_on_page_load_changed ((ShotwellPluginsCommonWebAuthenticationPane*) self, load_event);
-#line 88 "WebAuthenticationPane.c"
+#line 87 "WebAuthenticationPane.c"
 }
 
 
 static gboolean __lambda4_ (ShotwellPluginsCommonWebAuthenticationPane* self) {
 	gboolean result = FALSE;
-#line 26 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	result = FALSE;
-#line 26 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 98 "WebAuthenticationPane.c"
+#line 97 "WebAuthenticationPane.c"
 }
 
 
 static gboolean ___lambda4__webkit_web_view_context_menu (WebKitWebView* _sender, WebKitContextMenu* context_menu, GdkEvent* event, WebKitHitTestResult* hit_test_result, gpointer self) {
 	gboolean result;
 	result = __lambda4_ ((ShotwellPluginsCommonWebAuthenticationPane*) self);
-#line 26 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 107 "WebAuthenticationPane.c"
+#line 106 "WebAuthenticationPane.c"
 }
 
 
@@ -114,81 +113,64 @@ static void shotwell_plugins_common_web_authentication_pane_real_constructed (GO
 	WebKitSettings* _tmp2_ = NULL;
 	WebKitWebView* _tmp3_ = NULL;
 	WebKitWebView* _tmp4_ = NULL;
-	GtkBox* _tmp5_ = NULL;
-	GtkBox* _tmp6_ = NULL;
-	WebKitWebView* _tmp7_ = NULL;
-#line 19 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 18 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane);
-#line 20 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 19 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	G_OBJECT_CLASS (shotwell_plugins_common_web_authentication_pane_parent_class)->constructed (G_TYPE_CHECK_INSTANCE_CAST (self, G_TYPE_OBJECT, GObject));
-#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 21 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp0_ = (WebKitWebView*) webkit_web_view_new ();
-#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 21 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_object_ref_sink (_tmp0_);
-#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 21 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (self->priv->webview);
-#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 21 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self->priv->webview = _tmp0_;
-#line 23 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp1_ = self->priv->webview;
-#line 23 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp2_ = webkit_web_view_get_settings (_tmp1_);
-#line 23 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 22 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	webkit_settings_set_enable_plugins (_tmp2_, FALSE);
-#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 24 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp3_ = self->priv->webview;
-#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 24 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_signal_connect_object (_tmp3_, "load-changed", (GCallback) _shotwell_plugins_common_web_authentication_pane_on_page_load_changed_webkit_web_view_load_changed, self, 0);
-#line 26 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp4_ = self->priv->webview;
-#line 26 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 25 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_signal_connect_object (_tmp4_, "context-menu", (GCallback) ___lambda4__webkit_web_view_context_menu, self, 0);
-#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_tmp5_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	g_object_ref_sink (_tmp5_);
-#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	self->priv->pane_widget = _tmp5_;
-#line 29 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_tmp6_ = self->priv->pane_widget;
-#line 29 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_tmp7_ = self->priv->webview;
-#line 29 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	gtk_box_pack_start (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 161 "WebAuthenticationPane.c"
+#line 143 "WebAuthenticationPane.c"
 }
 
 
 static void shotwell_plugins_common_web_authentication_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* self) {
-#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_critical ("Type `%s' does not implement abstract method `shotwell_plugins_common_web_authentication_pane_on_page_load'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return;
-#line 170 "WebAuthenticationPane.c"
+#line 152 "WebAuthenticationPane.c"
 }
 
 
 void shotwell_plugins_common_web_authentication_pane_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* self) {
-#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_return_if_fail (SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE (self));
-#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 28 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_GET_CLASS (self)->on_page_load (self);
-#line 179 "WebAuthenticationPane.c"
+#line 161 "WebAuthenticationPane.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 35 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 31 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 186 "WebAuthenticationPane.c"
+#line 168 "WebAuthenticationPane.c"
 }
 
 
 void shotwell_plugins_common_web_authentication_pane_set_cursor (ShotwellPluginsCommonWebAuthenticationPane* self, GdkCursorType type) {
 	GdkWindow* window = NULL;
-	GtkBox* _tmp0_ = NULL;
+	WebKitWebView* _tmp0_ = NULL;
 	GdkWindow* _tmp1_ = NULL;
 	GdkWindow* _tmp2_ = NULL;
 	GdkDisplay* display = NULL;
@@ -197,77 +179,77 @@ void shotwell_plugins_common_web_authentication_pane_set_cursor (ShotwellPlugins
 	GdkCursor* cursor = NULL;
 	GdkCursorType _tmp5_ = 0;
 	GdkCursor* _tmp6_ = NULL;
-#line 34 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 30 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_return_if_fail (SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE (self));
-#line 35 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 35 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 31 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+	_tmp0_ = self->priv->webview;
+#line 31 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp1_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 35 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 31 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 35 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 31 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	window = _tmp2_;
-#line 36 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp3_ = gdk_window_get_display (window);
-#line 36 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp4_ = _g_object_ref0 (_tmp3_);
-#line 36 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 32 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	display = _tmp4_;
-#line 37 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp5_ = type;
-#line 37 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp6_ = gdk_cursor_new_for_display (display, _tmp5_);
-#line 37 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	cursor = _tmp6_;
-#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 34 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	gdk_window_set_cursor (window, cursor);
-#line 34 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 30 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (cursor);
-#line 34 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 30 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (display);
-#line 34 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 30 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (window);
-#line 231 "WebAuthenticationPane.c"
+#line 213 "WebAuthenticationPane.c"
 }
 
 
 static void shotwell_plugins_common_web_authentication_pane_on_page_load_changed (ShotwellPluginsCommonWebAuthenticationPane* self, WebKitLoadEvent load_event) {
 	WebKitLoadEvent _tmp0_ = 0;
-#line 41 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 37 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_return_if_fail (SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE (self));
-#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp0_ = load_event;
-#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	switch (_tmp0_) {
-#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		case WEBKIT_LOAD_STARTED:
-#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		case WEBKIT_LOAD_REDIRECTED:
-#line 247 "WebAuthenticationPane.c"
+#line 229 "WebAuthenticationPane.c"
 		{
-#line 45 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 41 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 			shotwell_plugins_common_web_authentication_pane_set_cursor (self, GDK_WATCH);
+#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+			break;
+#line 235 "WebAuthenticationPane.c"
+		}
+#line 38 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+		case WEBKIT_LOAD_FINISHED:
+#line 239 "WebAuthenticationPane.c"
+		{
+#line 44 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+			shotwell_plugins_common_web_authentication_pane_set_cursor (self, GDK_LEFT_PTR);
+#line 45 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+			shotwell_plugins_common_web_authentication_pane_on_page_load (self);
 #line 46 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 			break;
-#line 253 "WebAuthenticationPane.c"
-		}
-#line 42 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-		case WEBKIT_LOAD_FINISHED:
-#line 257 "WebAuthenticationPane.c"
-		{
-#line 48 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-			shotwell_plugins_common_web_authentication_pane_set_cursor (self, GDK_LEFT_PTR);
-#line 49 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-			shotwell_plugins_common_web_authentication_pane_on_page_load (self);
-#line 50 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-			break;
-#line 265 "WebAuthenticationPane.c"
+#line 247 "WebAuthenticationPane.c"
 		}
 		default:
 		{
-#line 52 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 48 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 			break;
-#line 271 "WebAuthenticationPane.c"
+#line 253 "WebAuthenticationPane.c"
 		}
 	}
 }
@@ -277,17 +259,17 @@ WebKitWebView* shotwell_plugins_common_web_authentication_pane_get_view (Shotwel
 	WebKitWebView* result = NULL;
 	WebKitWebView* _tmp0_ = NULL;
 	WebKitWebView* _tmp1_ = NULL;
-#line 56 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 52 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_return_val_if_fail (SHOTWELL_PLUGINS_COMMON_IS_WEB_AUTHENTICATION_PANE (self), NULL);
-#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 53 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp0_ = self->priv->webview;
-#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 53 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 53 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	result = _tmp1_;
-#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 53 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 291 "WebAuthenticationPane.c"
+#line 273 "WebAuthenticationPane.c"
 }
 
 
@@ -295,34 +277,34 @@ static SpitPublishingDialogPaneGeometryOptions shotwell_plugins_common_web_authe
 	ShotwellPluginsCommonWebAuthenticationPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
 	SpitPublishingDialogPaneGeometryOptions _tmp0_ = 0;
-#line 60 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 56 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane);
-#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp0_ = self->priv->_preferred_geometry;
-#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	result = _tmp0_;
-#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 57 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 307 "WebAuthenticationPane.c"
+#line 289 "WebAuthenticationPane.c"
 }
 
 
 static GtkWidget* shotwell_plugins_common_web_authentication_pane_real_get_widget (SpitPublishingDialogPane* base) {
 	ShotwellPluginsCommonWebAuthenticationPane * self;
 	GtkWidget* result = NULL;
-	GtkBox* _tmp0_ = NULL;
+	WebKitWebView* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 64 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 60 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane);
-#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+	_tmp0_ = self->priv->webview;
+#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	result = _tmp1_;
-#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 61 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 326 "WebAuthenticationPane.c"
+#line 308 "WebAuthenticationPane.c"
 }
 
 
@@ -333,33 +315,33 @@ static void shotwell_plugins_common_web_authentication_pane_real_on_pane_install
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 68 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane);
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp0_ = shotwell_plugins_common_web_authentication_pane_get_view (self);
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp1_ = _tmp0_;
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp2_ = shotwell_plugins_common_web_authentication_pane_get_login_uri (self);
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp3_ = _tmp2_;
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_tmp4_ = _tmp3_;
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	webkit_web_view_load_uri (_tmp1_, _tmp4_);
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_free0 (_tmp4_);
-#line 69 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (_tmp1_);
-#line 355 "WebAuthenticationPane.c"
+#line 337 "WebAuthenticationPane.c"
 }
 
 
 static void shotwell_plugins_common_web_authentication_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
 	ShotwellPluginsCommonWebAuthenticationPane * self;
-#line 72 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane);
-#line 363 "WebAuthenticationPane.c"
+#line 345 "WebAuthenticationPane.c"
 }
 
 
@@ -369,7 +351,7 @@ ShotwellPluginsCommonWebAuthenticationPane* shotwell_plugins_common_web_authenti
 	self = (ShotwellPluginsCommonWebAuthenticationPane*) g_object_new (object_type, NULL);
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return self;
-#line 373 "WebAuthenticationPane.c"
+#line 355 "WebAuthenticationPane.c"
 }
 
 
@@ -384,7 +366,7 @@ SpitPublishingDialogPaneGeometryOptions shotwell_plugins_common_web_authenticati
 	result = _tmp0_;
 #line 11 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 388 "WebAuthenticationPane.c"
+#line 370 "WebAuthenticationPane.c"
 }
 
 
@@ -398,7 +380,7 @@ static void shotwell_plugins_common_web_authentication_pane_set_preferred_geomet
 	self->priv->_preferred_geometry = _tmp0_;
 #line 11 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_object_notify ((GObject *) self, "preferred-geometry");
-#line 402 "WebAuthenticationPane.c"
+#line 384 "WebAuthenticationPane.c"
 }
 
 
@@ -416,7 +398,7 @@ gchar* shotwell_plugins_common_web_authentication_pane_get_login_uri (ShotwellPl
 	result = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	return result;
-#line 420 "WebAuthenticationPane.c"
+#line 402 "WebAuthenticationPane.c"
 }
 
 
@@ -435,7 +417,7 @@ static void shotwell_plugins_common_web_authentication_pane_set_login_uri (Shotw
 	self->priv->_login_uri = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_object_notify ((GObject *) self, "login-uri");
-#line 439 "WebAuthenticationPane.c"
+#line 421 "WebAuthenticationPane.c"
 }
 
 
@@ -458,7 +440,7 @@ static void shotwell_plugins_common_web_authentication_pane_class_init (Shotwell
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_PREFERRED_GEOMETRY, g_param_spec_enum ("preferred-geometry", "preferred-geometry", "preferred-geometry", SPIT_PUBLISHING_DIALOG_PANE_TYPE_GEOMETRY_OPTIONS, SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_LOGIN_URI, g_param_spec_string ("login-uri", "login-uri", "login-uri", NULL, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-#line 462 "WebAuthenticationPane.c"
+#line 444 "WebAuthenticationPane.c"
 }
 
 
@@ -473,7 +455,7 @@ static void shotwell_plugins_common_web_authentication_pane_spit_publishing_dial
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) shotwell_plugins_common_web_authentication_pane_real_on_pane_installed;
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) shotwell_plugins_common_web_authentication_pane_real_on_pane_uninstalled;
-#line 477 "WebAuthenticationPane.c"
+#line 459 "WebAuthenticationPane.c"
 }
 
 
@@ -482,7 +464,7 @@ static void shotwell_plugins_common_web_authentication_pane_instance_init (Shotw
 	self->priv = SHOTWELL_PLUGINS_COMMON_WEB_AUTHENTICATION_PANE_GET_PRIVATE (self);
 #line 10 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	self->priv->_preferred_geometry = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 486 "WebAuthenticationPane.c"
+#line 468 "WebAuthenticationPane.c"
 }
 
 
@@ -494,11 +476,9 @@ static void shotwell_plugins_common_web_authentication_pane_finalize (GObject* o
 	_g_free0 (self->priv->_login_uri);
 #line 16 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	_g_object_unref0 (self->priv->webview);
-#line 17 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
-	_g_object_unref0 (self->priv->pane_widget);
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 	G_OBJECT_CLASS (shotwell_plugins_common_web_authentication_pane_parent_class)->finalize (obj);
-#line 502 "WebAuthenticationPane.c"
+#line 482 "WebAuthenticationPane.c"
 }
 
 
@@ -533,13 +513,13 @@ static void _vala_shotwell_plugins_common_web_authentication_pane_get_property (
 		g_value_take_string (value, shotwell_plugins_common_web_authentication_pane_get_login_uri (self));
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		break;
-#line 537 "WebAuthenticationPane.c"
+#line 517 "WebAuthenticationPane.c"
 		default:
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		break;
-#line 543 "WebAuthenticationPane.c"
+#line 523 "WebAuthenticationPane.c"
 	}
 }
 
@@ -561,13 +541,13 @@ static void _vala_shotwell_plugins_common_web_authentication_pane_set_property (
 		shotwell_plugins_common_web_authentication_pane_set_login_uri (self, g_value_get_string (value));
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		break;
-#line 565 "WebAuthenticationPane.c"
+#line 545 "WebAuthenticationPane.c"
 		default:
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 9 "/home/jens/Source/shotwell/plugins/common/WebAuthenticationPane.vala"
 		break;
-#line 571 "WebAuthenticationPane.c"
+#line 551 "WebAuthenticationPane.c"
 	}
 }
 

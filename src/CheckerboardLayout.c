@@ -1422,7 +1422,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1425 "CheckerboardLayout.c"
-				goto __catch242_g_regex_error;
+				goto __catch239_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -1447,7 +1447,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1450 "CheckerboardLayout.c"
-				goto __catch242_g_regex_error;
+				goto __catch239_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -1473,8 +1473,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 1475 "CheckerboardLayout.c"
 	}
-	goto __finally242;
-	__catch242_g_regex_error:
+	goto __finally239;
+	__catch239_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1487,7 +1487,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 1489 "CheckerboardLayout.c"
 	}
-	__finally242:
+	__finally239:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

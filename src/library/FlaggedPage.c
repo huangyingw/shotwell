@@ -14,6 +14,7 @@
 #include <string.h>
 #include <gee.h>
 #include <gdk/gdk.h>
+#include <gio/gio.h>
 #include <glib/gi18n-lib.h>
 
 
@@ -409,7 +410,7 @@ typedef struct _FlaggedPageFlaggedSearchViewFilterPrivate FlaggedPageFlaggedSear
 struct _Page {
 	GtkScrolledWindow parent_instance;
 	PagePrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 	GtkToolbar* toolbar;
 	gboolean in_view;
 };
@@ -419,8 +420,6 @@ struct _PageClass {
 	void (*set_page_name) (Page* self, const gchar* page_name);
 	void (*set_container) (Page* self, GtkWindow* container);
 	void (*clear_container) (Page* self);
-	GtkMenuBar* (*get_menubar) (Page* self);
-	GtkWidget* (*get_page_ui_widget) (Page* self, const gchar* path);
 	GtkToolbar* (*get_toolbar) (Page* self);
 	GtkMenu* (*get_page_context_menu) (Page* self);
 	void (*switching_from) (Page* self);
@@ -428,10 +427,8 @@ struct _PageClass {
 	void (*ready) (Page* self);
 	void (*switching_to_fullscreen) (Page* self, FullscreenWindow* fsw);
 	void (*returning_from_fullscreen) (Page* self, FullscreenWindow* fsw);
+	void (*add_actions) (Page* self);
 	void (*init_collect_ui_filenames) (Page* self, GeeList* ui_filenames);
-	GtkActionEntry* (*init_collect_action_entries) (Page* self, int* result_length1);
-	GtkToggleActionEntry* (*init_collect_toggle_action_entries) (Page* self, int* result_length1);
-	void (*register_radio_actions) (Page* self, GtkActionGroup* action_group);
 	InjectionGroup** (*init_collect_injection_groups) (Page* self, int* result_length1);
 	void (*init_actions) (Page* self, gint selected_count, gint count);
 	void (*update_actions) (Page* self, gint selected_count, gint count);
@@ -543,13 +540,13 @@ struct _MediaPageClass {
 	void (*on_move_to_trash) (MediaPage* self);
 	void (*on_edit_title) (MediaPage* self);
 	void (*on_edit_comment) (MediaPage* self);
-	void (*on_display_titles) (MediaPage* self, GtkAction* action);
-	void (*on_display_comments) (MediaPage* self, GtkAction* action);
-	void (*on_display_ratings) (MediaPage* self, GtkAction* action);
-	void (*on_display_tags) (MediaPage* self, GtkAction* action);
+	void (*on_display_titles) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_comments) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_ratings) (MediaPage* self, GSimpleAction* action, GVariant* value);
+	void (*on_display_tags) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*get_config_photos_sort) (MediaPage* self, gboolean* sort_order, gint* sort_by);
 	void (*set_config_photos_sort) (MediaPage* self, gboolean sort_order, gint sort_by);
-	void (*on_sort_changed) (MediaPage* self);
+	void (*on_sort_changed) (MediaPage* self, GSimpleAction* action, GVariant* value);
 	void (*developer_changed) (MediaPage* self, RawDeveloper rd);
 	DataView* (*create_thumbnail) (MediaPage* self, DataSource* source);
 };
@@ -825,7 +822,7 @@ FlaggedPage* flagged_page_construct (GType object_type) {
 	_view_manager_unref0 (self->priv->view_manager);
 #line 36 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	self->priv->view_manager = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_VIEW_MANAGER, ViewManager);
-#line 829 "FlaggedPage.c"
+#line 826 "FlaggedPage.c"
 	{
 		GeeIterator* _sources_it = NULL;
 		MediaCollectionRegistry* _tmp1_ = NULL;
@@ -854,7 +851,7 @@ FlaggedPage* flagged_page_construct (GType object_type) {
 		_sources_it = _tmp6_;
 #line 38 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		while (TRUE) {
-#line 858 "FlaggedPage.c"
+#line 855 "FlaggedPage.c"
 			GeeIterator* _tmp7_ = NULL;
 			gboolean _tmp8_ = FALSE;
 			MediaSourceCollection* sources = NULL;
@@ -875,7 +872,7 @@ FlaggedPage* flagged_page_construct (GType object_type) {
 			if (!_tmp8_) {
 #line 38 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 				break;
-#line 879 "FlaggedPage.c"
+#line 876 "FlaggedPage.c"
 			}
 #line 38 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 			_tmp9_ = _sources_it;
@@ -903,22 +900,22 @@ FlaggedPage* flagged_page_construct (GType object_type) {
 			_data_collection_unref0 (_tmp12_);
 #line 38 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 			_data_collection_unref0 (sources);
-#line 907 "FlaggedPage.c"
+#line 904 "FlaggedPage.c"
 		}
 #line 38 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		_g_object_unref0 (_sources_it);
-#line 911 "FlaggedPage.c"
+#line 908 "FlaggedPage.c"
 	}
 #line 33 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return self;
-#line 915 "FlaggedPage.c"
+#line 912 "FlaggedPage.c"
 }
 
 
 FlaggedPage* flagged_page_new (void) {
 #line 33 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return flagged_page_construct (TYPE_FLAGGED_PAGE);
-#line 922 "FlaggedPage.c"
+#line 919 "FlaggedPage.c"
 }
 
 
@@ -948,13 +945,13 @@ static void flagged_page_real_get_config_photos_sort (MediaPage* base, gboolean*
 	if (sort_order) {
 #line 42 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		*sort_order = _vala_sort_order;
-#line 952 "FlaggedPage.c"
+#line 949 "FlaggedPage.c"
 	}
 #line 42 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	if (sort_by) {
 #line 42 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		*sort_by = _vala_sort_by;
-#line 958 "FlaggedPage.c"
+#line 955 "FlaggedPage.c"
 	}
 }
 
@@ -979,14 +976,14 @@ static void flagged_page_real_set_config_photos_sort (MediaPage* base, gboolean 
 	configuration_facade_set_library_photos_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_, _tmp3_);
 #line 47 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 983 "FlaggedPage.c"
+#line 980 "FlaggedPage.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
 #line 51 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 990 "FlaggedPage.c"
+#line 987 "FlaggedPage.c"
 }
 
 
@@ -1005,7 +1002,7 @@ static SearchViewFilter* flagged_page_real_get_search_view_filter (CheckerboardP
 	result = _tmp1_;
 #line 51 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return result;
-#line 1009 "FlaggedPage.c"
+#line 1006 "FlaggedPage.c"
 }
 
 
@@ -1020,21 +1017,21 @@ static FlaggedPageFlaggedViewManager* flagged_page_flagged_view_manager_construc
 	self = (FlaggedPageFlaggedViewManager*) collection_view_manager_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_COLLECTION_PAGE, CollectionPage));
 #line 11 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return self;
-#line 1024 "FlaggedPage.c"
+#line 1021 "FlaggedPage.c"
 }
 
 
 static FlaggedPageFlaggedViewManager* flagged_page_flagged_view_manager_new (FlaggedPage* owner) {
 #line 11 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return flagged_page_flagged_view_manager_construct (FLAGGED_PAGE_TYPE_FLAGGED_VIEW_MANAGER, owner);
-#line 1031 "FlaggedPage.c"
+#line 1028 "FlaggedPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 16 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1038 "FlaggedPage.c"
+#line 1035 "FlaggedPage.c"
 }
 
 
@@ -1060,7 +1057,7 @@ static gboolean flagged_page_flagged_view_manager_real_include_in_view (ViewMana
 	_tmp3_ = flaggable;
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	if (_tmp3_ != NULL) {
-#line 1064 "FlaggedPage.c"
+#line 1061 "FlaggedPage.c"
 		Flaggable* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
@@ -1069,11 +1066,11 @@ static gboolean flagged_page_flagged_view_manager_real_include_in_view (ViewMana
 		_tmp5_ = flaggable_is_flagged (_tmp4_);
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		_tmp2_ = _tmp5_;
-#line 1073 "FlaggedPage.c"
+#line 1070 "FlaggedPage.c"
 	} else {
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 		_tmp2_ = FALSE;
-#line 1077 "FlaggedPage.c"
+#line 1074 "FlaggedPage.c"
 	}
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	result = _tmp2_;
@@ -1081,7 +1078,7 @@ static gboolean flagged_page_flagged_view_manager_real_include_in_view (ViewMana
 	_g_object_unref0 (flaggable);
 #line 18 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return result;
-#line 1085 "FlaggedPage.c"
+#line 1082 "FlaggedPage.c"
 }
 
 
@@ -1090,7 +1087,7 @@ static void flagged_page_flagged_view_manager_class_init (FlaggedPageFlaggedView
 	flagged_page_flagged_view_manager_parent_class = g_type_class_peek_parent (klass);
 #line 10 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	((ViewManagerClass *) klass)->include_in_view = flagged_page_flagged_view_manager_real_include_in_view;
-#line 1094 "FlaggedPage.c"
+#line 1091 "FlaggedPage.c"
 }
 
 
@@ -1119,7 +1116,7 @@ static guint flagged_page_flagged_search_view_filter_real_get_criteria (SearchVi
 	result = (guint) (((SEARCH_FILTER_CRITERIA_TEXT | SEARCH_FILTER_CRITERIA_MEDIA) | SEARCH_FILTER_CRITERIA_RATING) | SEARCH_FILTER_CRITERIA_SAVEDSEARCH);
 #line 24 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return result;
-#line 1123 "FlaggedPage.c"
+#line 1120 "FlaggedPage.c"
 }
 
 
@@ -1129,14 +1126,14 @@ static FlaggedPageFlaggedSearchViewFilter* flagged_page_flagged_search_view_filt
 	self = (FlaggedPageFlaggedSearchViewFilter*) collection_page_collection_search_view_filter_construct (object_type);
 #line 22 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return self;
-#line 1133 "FlaggedPage.c"
+#line 1130 "FlaggedPage.c"
 }
 
 
 static FlaggedPageFlaggedSearchViewFilter* flagged_page_flagged_search_view_filter_new (void) {
 #line 22 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	return flagged_page_flagged_search_view_filter_construct (FLAGGED_PAGE_TYPE_FLAGGED_SEARCH_VIEW_FILTER);
-#line 1140 "FlaggedPage.c"
+#line 1137 "FlaggedPage.c"
 }
 
 
@@ -1145,7 +1142,7 @@ static void flagged_page_flagged_search_view_filter_class_init (FlaggedPageFlagg
 	flagged_page_flagged_search_view_filter_parent_class = g_type_class_peek_parent (klass);
 #line 22 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	((SearchViewFilterClass *) klass)->get_criteria = flagged_page_flagged_search_view_filter_real_get_criteria;
-#line 1149 "FlaggedPage.c"
+#line 1146 "FlaggedPage.c"
 }
 
 
@@ -1178,7 +1175,7 @@ static void flagged_page_class_init (FlaggedPageClass * klass) {
 	((CheckerboardPageClass *) klass)->get_search_view_filter = flagged_page_real_get_search_view_filter;
 #line 7 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = flagged_page_finalize;
-#line 1182 "FlaggedPage.c"
+#line 1179 "FlaggedPage.c"
 }
 
 
@@ -1195,7 +1192,7 @@ static void flagged_page_instance_init (FlaggedPage * self) {
 	_tmp1_ = flagged_page_flagged_search_view_filter_new ();
 #line 31 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	self->priv->search_filter = _tmp1_;
-#line 1199 "FlaggedPage.c"
+#line 1196 "FlaggedPage.c"
 }
 
 
@@ -1211,7 +1208,7 @@ static void flagged_page_finalize (GObject* obj) {
 	_view_filter_unref0 (self->priv->search_filter);
 #line 7 "/home/jens/Source/shotwell/src/library/FlaggedPage.vala"
 	G_OBJECT_CLASS (flagged_page_parent_class)->finalize (obj);
-#line 1215 "FlaggedPage.c"
+#line 1212 "FlaggedPage.c"
 }
 
 

@@ -1295,11 +1295,11 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 #line 140 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1298 "GPhoto.c"
-			goto __catch59_g_error;
+			goto __catch58_g_error;
 		}
 	}
-	goto __finally59;
-	__catch59_g_error:
+	goto __finally58;
+	__catch58_g_error:
 	{
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_clear_error (&_inner_error_);
@@ -1311,7 +1311,7 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		metadata = NULL;
 #line 1313 "GPhoto.c"
 	}
-	__finally59:
+	__finally58:
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
@@ -1420,7 +1420,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 #line 154 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1423 "GPhoto.c"
-			goto __catch60_g_error;
+			goto __catch59_g_error;
 		}
 #line 154 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp7_ = _tmp0_;
@@ -1440,8 +1440,8 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		_tmp0_ = (g_free (_tmp0_), NULL);
 #line 1442 "GPhoto.c"
 	}
-	goto __finally60;
-	__catch60_g_error:
+	goto __finally59;
+	__catch59_g_error:
 	{
 		PhotoMetadata* metadata = NULL;
 		Camera* _tmp8_ = NULL;
@@ -1578,7 +1578,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 #line 162 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			_media_metadata_unref0 (metadata);
 #line 1581 "GPhoto.c"
-			goto __finally60;
+			goto __finally59;
 		}
 #line 162 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp24_ = _tmp20_;
@@ -1602,7 +1602,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		_media_metadata_unref0 (metadata);
 #line 1604 "GPhoto.c"
 	}
-	__finally60:
+	__finally59:
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
@@ -2145,7 +2145,7 @@ PhotoMetadata* gp_load_metadata (GPContext* context, Camera* camera, const gchar
 #line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2148 "GPhoto.c"
-			goto __catch61_g_error;
+			goto __catch60_g_error;
 		}
 #line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp7_ = _tmp0_;
@@ -2167,8 +2167,8 @@ PhotoMetadata* gp_load_metadata (GPContext* context, Camera* camera, const gchar
 		_tmp0_ = (g_free (_tmp0_), NULL);
 #line 2169 "GPhoto.c"
 	}
-	goto __finally61;
-	__catch61_g_error:
+	goto __finally60;
+	__catch60_g_error:
 	{
 		Camera* _tmp8_ = NULL;
 		GPContext* _tmp9_ = NULL;
@@ -2197,7 +2197,7 @@ PhotoMetadata* gp_load_metadata (GPContext* context, Camera* camera, const gchar
 		return result;
 #line 2199 "GPhoto.c"
 	}
-	__finally61:
+	__finally60:
 #line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"

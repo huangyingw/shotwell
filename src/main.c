@@ -646,11 +646,11 @@ DirectWindow* direct_window_construct (GType object_type, GFile* file);
 void direct_app_terminate (void);
 GOptionEntry* commandline_options_get_options (int* result_length1);
 static GOptionEntry* _vala_array_dup26 (GOptionEntry* self, int length);
-static void _vala_array_add152 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
-static void _vala_array_add153 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
-static void _vala_array_add154 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
-static void _vala_array_add155 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
-static void _vala_array_add156 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
+static void _vala_array_add70 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
+static void _vala_array_add71 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
+static void _vala_array_add72 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
+static void _vala_array_add73 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
+static void _vala_array_add74 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value);
 static GOptionEntry* _vala_array_dup27 (GOptionEntry* self, int length);
 void _vala_main (gchar** args, int args_length1);
 void app_dirs_init (const gchar* arg0);
@@ -660,7 +660,7 @@ GFile* app_dirs_get_exec_dir (void);
 void app_dirs_terminate (void);
 #define RESOURCES_GIT_VERSION _GIT_VERSION
 gboolean library_window_is_mount_uri_supported (const gchar* uri);
-static void _vala_array_add157 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add75 (gchar*** array, int* length, int* size, gchar* value);
 gboolean is_string_empty (const gchar* s);
 #define DEBUG_LIBRARY_PREFIX "L"
 #define DEBUG_VIEWER_PREFIX "V"
@@ -835,11 +835,11 @@ void library_exec (gchar** mounts, int mounts_length1) {
 #line 35 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 838 "main.c"
-			goto __catch219_g_error;
+			goto __catch218_g_error;
 		}
 	}
-	goto __finally219;
-	__catch219_g_error:
+	goto __finally218;
+	__catch218_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -860,7 +860,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		return;
 #line 862 "main.c"
 	}
-	__finally219:
+	__finally218:
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
@@ -1218,7 +1218,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 #line 109 "/home/jens/Source/shotwell/src/main.vala"
 					_g_free0 (icon_path);
 #line 1214 "main.c"
-					goto __catch220_g_error;
+					goto __catch219_g_error;
 				}
 #line 109 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp72_ = progress_dialog;
@@ -1230,8 +1230,8 @@ void library_exec (gchar** mounts, int mounts_length1) {
 				_g_free0 (icon_path);
 #line 1225 "main.c"
 			}
-			goto __finally220;
-			__catch220_g_error:
+			goto __finally219;
+			__catch219_g_error:
 			{
 				GError* err = NULL;
 				GError* _tmp73_ = NULL;
@@ -1251,7 +1251,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 				_g_error_free0 (err);
 #line 1245 "main.c"
 			}
-			__finally220:
+			__finally219:
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
@@ -1927,11 +1927,11 @@ void editing_exec (const gchar* filename) {
 #line 253 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1922 "main.c"
-			goto __catch221_g_error;
+			goto __catch220_g_error;
 		}
 	}
-	goto __finally221;
-	__catch221_g_error:
+	goto __finally220;
+	__catch220_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -1954,7 +1954,7 @@ void editing_exec (const gchar* filename) {
 		return;
 #line 1948 "main.c"
 	}
-	__finally221:
+	__finally220:
 #line 252 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 252 "/home/jens/Source/shotwell/src/main.vala"
@@ -2014,7 +2014,7 @@ static GOptionEntry* _vala_array_dup26 (GOptionEntry* self, int length) {
 }
 
 
-static void _vala_array_add152 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
+static void _vala_array_add70 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
 #line 295 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 295 "/home/jens/Source/shotwell/src/main.vala"
@@ -2029,7 +2029,7 @@ static void _vala_array_add152 (GOptionEntry** array, int* length, int* size, co
 }
 
 
-static void _vala_array_add153 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
+static void _vala_array_add71 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
 #line 299 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 299 "/home/jens/Source/shotwell/src/main.vala"
@@ -2044,7 +2044,7 @@ static void _vala_array_add153 (GOptionEntry** array, int* length, int* size, co
 }
 
 
-static void _vala_array_add154 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
+static void _vala_array_add72 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
 #line 303 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 303 "/home/jens/Source/shotwell/src/main.vala"
@@ -2059,7 +2059,7 @@ static void _vala_array_add154 (GOptionEntry** array, int* length, int* size, co
 }
 
 
-static void _vala_array_add155 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
+static void _vala_array_add73 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
 #line 307 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 307 "/home/jens/Source/shotwell/src/main.vala"
@@ -2074,7 +2074,7 @@ static void _vala_array_add155 (GOptionEntry** array, int* length, int* size, co
 }
 
 
-static void _vala_array_add156 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
+static void _vala_array_add74 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
 #line 310 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 310 "/home/jens/Source/shotwell/src/main.vala"
@@ -2200,7 +2200,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 295 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp8_ = datadir;
 #line 295 "/home/jens/Source/shotwell/src/main.vala"
-	_vala_array_add152 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp8_);
+	_vala_array_add70 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp8_);
 #line 297 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp9_ = _ ("Do not monitor library directory at runtime for changes");
 #line 297 "/home/jens/Source/shotwell/src/main.vala"
@@ -2226,7 +2226,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 299 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp12_ = no_monitoring;
 #line 299 "/home/jens/Source/shotwell/src/main.vala"
-	_vala_array_add153 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp12_);
+	_vala_array_add71 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp12_);
 #line 301 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp13_ = _ ("Don’t display startup progress meter");
 #line 301 "/home/jens/Source/shotwell/src/main.vala"
@@ -2252,7 +2252,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 303 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp16_ = no_startup;
 #line 303 "/home/jens/Source/shotwell/src/main.vala"
-	_vala_array_add154 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp16_);
+	_vala_array_add72 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp16_);
 #line 305 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp17_ = _ ("Show the application’s version");
 #line 305 "/home/jens/Source/shotwell/src/main.vala"
@@ -2278,7 +2278,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 307 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp20_ = version;
 #line 307 "/home/jens/Source/shotwell/src/main.vala"
-	_vala_array_add155 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp20_);
+	_vala_array_add73 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp20_);
 #line 309 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.long_name = NULL;
 #line 309 "/home/jens/Source/shotwell/src/main.vala"
@@ -2302,7 +2302,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 #line 310 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp23_ = terminator;
 #line 310 "/home/jens/Source/shotwell/src/main.vala"
-	_vala_array_add156 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp23_);
+	_vala_array_add74 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp23_);
 #line 312 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp24_ = commandline_options_entries;
 #line 312 "/home/jens/Source/shotwell/src/main.vala"
@@ -2329,7 +2329,7 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 }
 
 
-static void _vala_array_add157 (gchar*** array, int* length, int* size, gchar* value) {
+static void _vala_array_add75 (gchar*** array, int* length, int* size, gchar* value) {
 #line 372 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
 #line 372 "/home/jens/Source/shotwell/src/main.vala"
@@ -2468,11 +2468,11 @@ void _vala_main (gchar** args, int args_length1) {
 #line 338 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2463 "main.c"
-			goto __catch222_g_error;
+			goto __catch221_g_error;
 		}
 	}
-	goto __finally222;
-	__catch222_g_error:
+	goto __finally221;
+	__catch221_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp15_ = NULL;
@@ -2517,7 +2517,7 @@ void _vala_main (gchar** args, int args_length1) {
 		return;
 #line 2511 "main.c"
 	}
-	__finally222:
+	__finally221:
 #line 337 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 337 "/home/jens/Source/shotwell/src/main.vala"
@@ -2638,7 +2638,7 @@ void _vala_main (gchar** args, int args_length1) {
 #line 372 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp36_ = g_strdup (_tmp35_);
 #line 372 "/home/jens/Source/shotwell/src/main.vala"
-					_vala_array_add157 (&mounts, &mounts_length1, &_mounts_size_, _tmp36_);
+					_vala_array_add75 (&mounts, &mounts_length1, &_mounts_size_, _tmp36_);
 #line 2635 "main.c"
 				} else {
 					gboolean _tmp37_ = FALSE;
@@ -2926,7 +2926,7 @@ void _vala_main (gchar** args, int args_length1) {
 #line 442 "/home/jens/Source/shotwell/src/main.vala"
 				_g_object_unref0 (src);
 #line 2921 "main.c"
-				goto __catch223_g_error;
+				goto __catch222_g_error;
 			}
 #line 439 "/home/jens/Source/shotwell/src/main.vala"
 			_g_object_unref0 (dest);
@@ -2934,8 +2934,8 @@ void _vala_main (gchar** args, int args_length1) {
 			_g_object_unref0 (src);
 #line 2928 "main.c"
 		}
-		goto __finally223;
-		__catch223_g_error:
+		goto __finally222;
+		__catch222_g_error:
 		{
 			GError* _error_ = NULL;
 			GError* _tmp85_ = NULL;
@@ -2954,7 +2954,7 @@ void _vala_main (gchar** args, int args_length1) {
 			_g_error_free0 (_error_);
 #line 2948 "main.c"
 		}
-		__finally223:
+		__finally222:
 #line 439 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 439 "/home/jens/Source/shotwell/src/main.vala"

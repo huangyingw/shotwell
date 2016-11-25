@@ -442,10 +442,10 @@ GType background_job_get_type (void) G_GNUC_CONST;
 static void exporter_on_exported (Exporter* self, BackgroundJob* j);
 static GType exporter_export_job_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
 GType background_job_job_priority_get_type (void) G_GNUC_CONST;
-static void _vala_array_add294 (GFile*** array, int* length, int* size, GFile* value);
+static void _vala_array_add128 (GFile*** array, int* length, int* size, GFile* value);
 static void exporter_on_export_cancelled (Exporter* self, BackgroundJob* j);
 GFile** exporter_get_exported_files (Exporter* self, int* result_length1);
-static GFile** _vala_array_dup31 (GFile** self, int length);
+static GFile** _vala_array_dup30 (GFile** self, int length);
 GType photo_source_get_type (void) G_GNUC_CONST;
 GType photo_get_type (void) G_GNUC_CONST;
 PhotoFileFormat photo_get_export_format_for_parameters (Photo* self, ExportFormatParameters* params);
@@ -453,7 +453,7 @@ gchar* photo_get_export_basename_for_parameters (Photo* self, ExportFormatParame
 GType video_source_get_type (void) G_GNUC_CONST;
 GType video_get_type (void) G_GNUC_CONST;
 gchar* media_source_get_basename (MediaSource* self);
-static void _vala_array_add295 (GFile*** array, int* length, int* size, GFile* value);
+static void _vala_array_add129 (GFile*** array, int* length, int* size, GFile* value);
 GFile* generate_unique_file (GFile* dir, const gchar* basename, gboolean* collision, GError** error);
 GFile* app_dirs_get_temp_dir (void);
 void app_window_error_message (const gchar* message, GtkWindow* parent);
@@ -879,7 +879,7 @@ static gpointer _background_job_ref0 (gpointer self) {
 }
 
 
-static void _vala_array_add294 (GFile*** array, int* length, int* size, GFile* value) {
+static void _vala_array_add128 (GFile*** array, int* length, int* size, GFile* value) {
 #line 177 "/home/jens/Source/shotwell/src/Exporter.vala"
 	if ((*length) == (*size)) {
 #line 177 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -1084,7 +1084,7 @@ static void exporter_on_exported (Exporter* self, BackgroundJob* j) {
 #line 177 "/home/jens/Source/shotwell/src/Exporter.vala"
 			_tmp35_ = _g_object_ref0 (_tmp34_);
 #line 177 "/home/jens/Source/shotwell/src/Exporter.vala"
-			_vala_array_add294 (&self->priv->exported_files, &self->priv->exported_files_length1, &self->priv->_exported_files_size_, _tmp35_);
+			_vala_array_add128 (&self->priv->exported_files, &self->priv->exported_files_length1, &self->priv->_exported_files_size_, _tmp35_);
 #line 1089 "Exporter.c"
 		}
 	}
@@ -1133,7 +1133,7 @@ static void exporter_on_export_cancelled (Exporter* self, BackgroundJob* j) {
 }
 
 
-static GFile** _vala_array_dup31 (GFile** self, int length) {
+static GFile** _vala_array_dup30 (GFile** self, int length) {
 	GFile** result;
 	int i;
 #line 191 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -1169,7 +1169,7 @@ GFile** exporter_get_exported_files (Exporter* self, int* result_length1) {
 #line 191 "/home/jens/Source/shotwell/src/Exporter.vala"
 	_tmp0__length1 = self->priv->exported_files_length1;
 #line 191 "/home/jens/Source/shotwell/src/Exporter.vala"
-	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup31 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
+	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup30 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
 #line 191 "/home/jens/Source/shotwell/src/Exporter.vala"
 	_tmp1__length1 = _tmp0__length1;
 #line 191 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -1190,7 +1190,7 @@ GFile** exporter_get_exported_files (Exporter* self, int* result_length1) {
 }
 
 
-static void _vala_array_add295 (GFile*** array, int* length, int* size, GFile* value) {
+static void _vala_array_add129 (GFile*** array, int* length, int* size, GFile* value) {
 #line 210 "/home/jens/Source/shotwell/src/Exporter.vala"
 	if ((*length) == (*size)) {
 #line 210 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -1372,7 +1372,7 @@ static gboolean exporter_process_queue (Exporter* self) {
 #line 210 "/home/jens/Source/shotwell/src/Exporter.vala"
 				_tmp23_ = _g_object_ref0 (_tmp22_);
 #line 210 "/home/jens/Source/shotwell/src/Exporter.vala"
-				_vala_array_add295 (&self->priv->exported_files, &self->priv->exported_files_length1, &self->priv->_exported_files_size_, _tmp23_);
+				_vala_array_add129 (&self->priv->exported_files, &self->priv->exported_files_length1, &self->priv->_exported_files_size_, _tmp23_);
 #line 212 "/home/jens/Source/shotwell/src/Exporter.vala"
 				_tmp24_ = self->priv->completed_count;
 #line 212 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -1480,7 +1480,7 @@ static gboolean exporter_process_queue (Exporter* self) {
 #line 230 "/home/jens/Source/shotwell/src/Exporter.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1483 "Exporter.c"
-						goto __catch480_g_error;
+						goto __catch477_g_error;
 					}
 #line 230 "/home/jens/Source/shotwell/src/Exporter.vala"
 					_tmp43_ = _tmp36_;
@@ -1494,8 +1494,8 @@ static gboolean exporter_process_queue (Exporter* self) {
 					_g_object_unref0 (_tmp36_);
 #line 1496 "Exporter.c"
 				}
-				goto __finally480;
-				__catch480_g_error:
+				goto __finally477;
+				__catch477_g_error:
 				{
 					GError* err = NULL;
 					const gchar* _tmp44_ = NULL;
@@ -1556,7 +1556,7 @@ static gboolean exporter_process_queue (Exporter* self) {
 					break;
 #line 1558 "Exporter.c"
 				}
-				__finally480:
+				__finally477:
 #line 228 "/home/jens/Source/shotwell/src/Exporter.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 228 "/home/jens/Source/shotwell/src/Exporter.vala"
@@ -2054,7 +2054,7 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 #line 97 "/home/jens/Source/shotwell/src/Exporter.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2057 "Exporter.c"
-				goto __catch481_g_error;
+				goto __catch478_g_error;
 			}
 		} else {
 			MediaSource* _tmp9_ = NULL;
@@ -2074,13 +2074,13 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 #line 99 "/home/jens/Source/shotwell/src/Exporter.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2077 "Exporter.c"
-					goto __catch481_g_error;
+					goto __catch478_g_error;
 				}
 			}
 		}
 	}
-	goto __finally481;
-	__catch481_g_error:
+	goto __finally478;
+	__catch478_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp12_ = NULL;
@@ -2101,7 +2101,7 @@ static void exporter_export_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 2103 "Exporter.c"
 	}
-	__finally481:
+	__finally478:
 #line 95 "/home/jens/Source/shotwell/src/Exporter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 95 "/home/jens/Source/shotwell/src/Exporter.vala"

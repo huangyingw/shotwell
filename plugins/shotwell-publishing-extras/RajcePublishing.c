@@ -6387,10 +6387,10 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		GtkBuilder* _tmp1_ = NULL;
 		GtkBuilder* _tmp2_ = NULL;
 		GtkBuilder* _tmp3_ = NULL;
-		GtkAlignment* align = NULL;
+		GtkBox* content = NULL;
 		GtkBuilder* _tmp4_ = NULL;
 		GObject* _tmp5_ = NULL;
-		GtkAlignment* _tmp6_ = NULL;
+		GtkBox* _tmp6_ = NULL;
 		GtkLabel* message_label = NULL;
 		GtkBuilder* _tmp7_ = NULL;
 		GObject* _tmp8_ = NULL;
@@ -6438,12 +6438,16 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		GtkEntry* _tmp57_ = NULL;
 		GtkEntry* _tmp58_ = NULL;
 		GtkButton* _tmp59_ = NULL;
-		GtkAlignment* _tmp60_ = NULL;
-		GtkBox* _tmp61_ = NULL;
-		PublishingRajceRajcePublisher* _tmp62_ = NULL;
-		SpitPublishingPluginHost* _tmp63_ = NULL;
-		SpitPublishingPluginHost* _tmp64_ = NULL;
-		GtkButton* _tmp65_ = NULL;
+		GtkBox* _tmp60_ = NULL;
+		GtkContainer* _tmp61_ = NULL;
+		GtkContainer* _tmp62_ = NULL;
+		GtkBox* _tmp63_ = NULL;
+		GtkBox* _tmp64_ = NULL;
+		GtkBox* _tmp65_ = NULL;
+		PublishingRajceRajcePublisher* _tmp66_ = NULL;
+		SpitPublishingPluginHost* _tmp67_ = NULL;
+		SpitPublishingPluginHost* _tmp68_ = NULL;
+		GtkButton* _tmp69_ = NULL;
 #line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp1_ = gtk_builder_new ();
 #line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6456,7 +6460,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		gtk_builder_add_from_resource (_tmp2_, PLUGIN_RESOURCE_PATH "/rajce_authentication_pane.ui", &_inner_error_);
 #line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 6456 "RajcePublishing.c"
+#line 6460 "RajcePublishing.c"
 			goto __catch29_g_error;
 		}
 #line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6466,11 +6470,11 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 #line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp4_ = self->priv->builder;
 #line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp5_ = gtk_builder_get_object (_tmp4_, "alignment");
+		_tmp5_ = gtk_builder_get_object (_tmp4_, "content");
 #line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_alignment_get_type ()) ? ((GtkAlignment*) _tmp5_) : NULL);
+		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_box_get_type ()) ? ((GtkBox*) _tmp5_) : NULL);
 #line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		align = _tmp6_;
+		content = _tmp6_;
 #line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = self->priv->builder;
 #line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6485,7 +6489,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		switch (_tmp10_) {
 #line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			case PUBLISHING_RAJCE_AUTHENTICATION_PANE_MODE_INTRO:
-#line 6485 "RajcePublishing.c"
+#line 6489 "RajcePublishing.c"
 			{
 				GtkLabel* _tmp11_ = NULL;
 				const gchar* _tmp12_ = NULL;
@@ -6497,11 +6501,11 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 				gtk_label_set_text (_tmp11_, _tmp12_);
 #line 861 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				break;
-#line 6497 "RajcePublishing.c"
+#line 6501 "RajcePublishing.c"
 			}
 #line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			case PUBLISHING_RAJCE_AUTHENTICATION_PANE_MODE_FAILED_RETRY_USER:
-#line 6501 "RajcePublishing.c"
+#line 6505 "RajcePublishing.c"
 			{
 				GtkLabel* _tmp13_ = NULL;
 				const gchar* _tmp14_ = NULL;
@@ -6524,12 +6528,12 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 				_g_free0 (_tmp17_);
 #line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				break;
-#line 6524 "RajcePublishing.c"
+#line 6528 "RajcePublishing.c"
 			}
 			default:
 #line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			break;
-#line 6529 "RajcePublishing.c"
+#line 6533 "RajcePublishing.c"
 		}
 #line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp18_ = self->priv->builder;
@@ -6551,7 +6555,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		_tmp23_ = persistent_username;
 #line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (_tmp23_ != NULL) {
-#line 6551 "RajcePublishing.c"
+#line 6555 "RajcePublishing.c"
 			GtkEntry* _tmp24_ = NULL;
 			const gchar* _tmp25_ = NULL;
 #line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6560,7 +6564,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 			_tmp25_ = persistent_username;
 #line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			gtk_entry_set_text (_tmp24_, _tmp25_);
-#line 6560 "RajcePublishing.c"
+#line 6564 "RajcePublishing.c"
 		}
 #line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp26_ = self->priv->builder;
@@ -6582,7 +6586,7 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		_tmp31_ = persistent_token;
 #line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (_tmp31_ != NULL) {
-#line 6582 "RajcePublishing.c"
+#line 6586 "RajcePublishing.c"
 			GtkEntry* _tmp32_ = NULL;
 			const gchar* _tmp33_ = NULL;
 #line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6593,11 +6597,11 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 			gtk_entry_set_text (_tmp32_, _tmp33_);
 #line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			self->priv->crypt = FALSE;
-#line 6593 "RajcePublishing.c"
+#line 6597 "RajcePublishing.c"
 		} else {
 #line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			self->priv->crypt = TRUE;
-#line 6597 "RajcePublishing.c"
+#line 6601 "RajcePublishing.c"
 		}
 #line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp34_ = self->priv->builder;
@@ -6680,23 +6684,33 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 #line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (_tmp59_, "clicked", (GCallback) _publishing_rajce_authentication_pane_on_login_button_clicked_gtk_button_clicked, self, 0);
 #line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp60_ = align;
+		_tmp60_ = content;
 #line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp61_ = self->priv->pane_widget;
+		_tmp61_ = gtk_widget_get_parent (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_widget_get_type (), GtkWidget));
 #line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		gtk_widget_reparent (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_widget_get_type (), GtkWidget), G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_widget_get_type (), GtkWidget));
+		_tmp62_ = _tmp61_;
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp63_ = content;
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		gtk_container_remove (_tmp62_, G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, gtk_widget_get_type (), GtkWidget));
 #line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp62_ = publisher;
+		_tmp64_ = self->priv->pane_widget;
 #line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp63_ = publishing_rajce_rajce_publisher_get_host (_tmp62_);
+		_tmp65_ = content;
 #line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp64_ = _tmp63_;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp65_ = self->priv->login_button;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		spit_publishing_plugin_host_set_dialog_default_widget (_tmp64_, G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, gtk_widget_get_type (), GtkWidget));
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_g_object_unref0 (_tmp64_);
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, gtk_widget_get_type (), GtkWidget));
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp66_ = publisher;
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp67_ = publishing_rajce_rajce_publisher_get_host (_tmp66_);
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp68_ = _tmp67_;
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp69_ = self->priv->login_button;
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		spit_publishing_plugin_host_set_dialog_default_widget (_tmp68_, G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, gtk_widget_get_type (), GtkWidget));
+#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_g_object_unref0 (_tmp68_);
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (label3);
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6708,28 +6722,28 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (message_label);
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_g_object_unref0 (align);
-#line 6709 "RajcePublishing.c"
+		_g_object_unref0 (content);
+#line 6723 "RajcePublishing.c"
 	}
 	goto __finally29;
 	__catch29_g_error:
 	{
 		GError* e = NULL;
-		GError* _tmp66_ = NULL;
-		const gchar* _tmp67_ = NULL;
+		GError* _tmp70_ = NULL;
+		const gchar* _tmp71_ = NULL;
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		e = _inner_error_;
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_inner_error_ = NULL;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp66_ = e;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp67_ = _tmp66_->message;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		g_warning ("RajcePublishing.vala:905: Could not load UI: %s", _tmp67_);
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp70_ = e;
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp71_ = _tmp70_->message;
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		g_warning ("RajcePublishing.vala:906: Could not load UI: %s", _tmp71_);
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_error_free0 (e);
-#line 6729 "RajcePublishing.c"
+#line 6743 "RajcePublishing.c"
 	}
 	__finally29:
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
@@ -6740,18 +6754,18 @@ PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_construc
 		g_clear_error (&_inner_error_);
 #line 849 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return NULL;
-#line 6740 "RajcePublishing.c"
+#line 6754 "RajcePublishing.c"
 	}
 #line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 6744 "RajcePublishing.c"
+#line 6758 "RajcePublishing.c"
 }
 
 
 PublishingRajceAuthenticationPane* publishing_rajce_authentication_pane_new (PublishingRajceRajcePublisher* publisher, PublishingRajceAuthenticationPaneMode mode) {
 #line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_authentication_pane_construct (PUBLISHING_RAJCE_TYPE_AUTHENTICATION_PANE, publisher, mode);
-#line 6751 "RajcePublishing.c"
+#line 6765 "RajcePublishing.c"
 }
 
 
@@ -6759,17 +6773,17 @@ GtkWidget* publishing_rajce_authentication_pane_get_default_widget (PublishingRa
 	GtkWidget* result = NULL;
 	GtkButton* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_AUTHENTICATION_PANE (self), NULL);
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->login_button;
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 6769 "RajcePublishing.c"
+#line 6783 "RajcePublishing.c"
 }
 
 
@@ -6784,68 +6798,68 @@ static void publishing_rajce_authentication_pane_on_login_button_clicked (Publis
 	const gchar* _tmp8_ = NULL;
 	GtkCheckButton* _tmp9_ = NULL;
 	gboolean _tmp10_ = FALSE;
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_AUTHENTICATION_PANE (self));
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->password_entry;
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = gtk_entry_get_text (_tmp0_);
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	token = _tmp2_;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = self->priv->crypt;
-#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp3_) {
-#line 6798 "RajcePublishing.c"
+#line 6812 "RajcePublishing.c"
 		const gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp4_ = token;
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp5_ = g_compute_checksum_for_string (G_CHECKSUM_MD5, _tmp4_, (gsize) -1);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (token);
-#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		token = _tmp5_;
-#line 6809 "RajcePublishing.c"
+#line 6823 "RajcePublishing.c"
 	}
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = self->priv->username_entry;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = gtk_entry_get_text (_tmp6_);
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = token;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9_ = self->priv->remember_checkbutton;
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp10_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_emit_by_name (self, "login", _tmp7_, _tmp8_, _tmp10_);
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (token);
-#line 6825 "RajcePublishing.c"
+#line 6839 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_authentication_pane_on_user_changed (PublishingRajceAuthenticationPane* self) {
-#line 924 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_AUTHENTICATION_PANE (self));
-#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 927 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_authentication_pane_update_login_button_sensitivity (self);
-#line 6834 "RajcePublishing.c"
+#line 6848 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_authentication_pane_on_password_changed (PublishingRajceAuthenticationPane* self) {
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_AUTHENTICATION_PANE (self));
-#line 931 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->crypt = TRUE;
 #line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	self->priv->crypt = TRUE;
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_authentication_pane_update_login_button_sensitivity (self);
-#line 6845 "RajcePublishing.c"
+#line 6859 "RajcePublishing.c"
 }
 
 
@@ -6855,39 +6869,39 @@ static void publishing_rajce_authentication_pane_update_login_button_sensitivity
 	guint _tmp2_ = 0U;
 	guint _tmp3_ = 0U;
 	GtkButton* _tmp7_ = NULL;
-#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_AUTHENTICATION_PANE (self));
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = self->priv->username_entry;
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = gtk_entry_get_text_length (_tmp1_);
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp3_ > ((guint) 0)) {
-#line 6865 "RajcePublishing.c"
+#line 6879 "RajcePublishing.c"
 		GtkEntry* _tmp4_ = NULL;
 		guint _tmp5_ = 0U;
 		guint _tmp6_ = 0U;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp4_ = self->priv->password_entry;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp5_ = gtk_entry_get_text_length (_tmp4_);
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp6_ = _tmp5_;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp0_ = _tmp6_ > ((guint) 0);
-#line 6877 "RajcePublishing.c"
+#line 6891 "RajcePublishing.c"
 	} else {
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp0_ = FALSE;
-#line 6881 "RajcePublishing.c"
+#line 6895 "RajcePublishing.c"
 	}
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = self->priv->login_button;
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), _tmp0_);
-#line 6887 "RajcePublishing.c"
+#line 6901 "RajcePublishing.c"
 }
 
 
@@ -6896,30 +6910,30 @@ static GtkWidget* publishing_rajce_authentication_pane_real_get_widget (SpitPubl
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_AUTHENTICATION_PANE, PublishingRajceAuthenticationPane);
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 6906 "RajcePublishing.c"
+#line 6920 "RajcePublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_rajce_authentication_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingRajceAuthenticationPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 946 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_AUTHENTICATION_PANE, PublishingRajceAuthenticationPane);
-#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 6919 "RajcePublishing.c"
+#line 6933 "RajcePublishing.c"
 }
 
 
@@ -6928,31 +6942,31 @@ static void publishing_rajce_authentication_pane_real_on_pane_installed (SpitPub
 	GtkEntry* _tmp0_ = NULL;
 	GtkEntry* _tmp1_ = NULL;
 	GtkButton* _tmp2_ = NULL;
-#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_AUTHENTICATION_PANE, PublishingRajceAuthenticationPane);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->username_entry;
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = self->priv->password_entry;
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_entry_set_activates_default (_tmp1_, TRUE);
-#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp2_ = self->priv->login_button;
-#line 955 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 956 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp2_ = self->priv->login_button;
+#line 956 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_authentication_pane_update_login_button_sensitivity (self);
-#line 6944 "RajcePublishing.c"
+#line 6958 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_authentication_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
 	PublishingRajceAuthenticationPane * self;
-#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_AUTHENTICATION_PANE, PublishingRajceAuthenticationPane);
-#line 6952 "RajcePublishing.c"
+#line 6966 "RajcePublishing.c"
 }
 
 
@@ -6971,19 +6985,19 @@ static void g_cclosure_user_marshal_VOID__STRING_STRING_BOOLEAN (GClosure * clos
 		data1 = closure->data;
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 6971 "RajcePublishing.c"
+#line 6985 "RajcePublishing.c"
 	} else {
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data2 = closure->data;
-#line 6977 "RajcePublishing.c"
+#line 6991 "RajcePublishing.c"
 	}
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	callback = (GMarshalFunc_VOID__STRING_STRING_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	callback (data1, g_value_get_string (param_values + 1), g_value_get_string (param_values + 2), g_value_get_boolean (param_values + 3), data2);
-#line 6983 "RajcePublishing.c"
+#line 6997 "RajcePublishing.c"
 }
 
 
@@ -7012,7 +7026,7 @@ static void publishing_rajce_authentication_pane_class_init (PublishingRajceAuth
 	_tmp3_ = g_strdup (_tmp2_);
 #line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_authentication_pane_FAILED_RETRY_USER_MESSAGE = _tmp3_;
-#line 7012 "RajcePublishing.c"
+#line 7026 "RajcePublishing.c"
 }
 
 
@@ -7027,7 +7041,7 @@ static void publishing_rajce_authentication_pane_spit_publishing_dialog_pane_int
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_rajce_authentication_pane_real_on_pane_installed;
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_rajce_authentication_pane_real_on_pane_uninstalled;
-#line 7027 "RajcePublishing.c"
+#line 7041 "RajcePublishing.c"
 }
 
 
@@ -7038,7 +7052,7 @@ static void publishing_rajce_authentication_pane_instance_init (PublishingRajceA
 	self->priv->pane_widget = NULL;
 #line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->crypt = TRUE;
-#line 7038 "RajcePublishing.c"
+#line 7052 "RajcePublishing.c"
 }
 
 
@@ -7060,7 +7074,7 @@ static void publishing_rajce_authentication_pane_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->login_button);
 #line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_OBJECT_CLASS (publishing_rajce_authentication_pane_parent_class)->finalize (obj);
-#line 7060 "RajcePublishing.c"
+#line 7074 "RajcePublishing.c"
 }
 
 
@@ -7083,65 +7097,65 @@ GType publishing_rajce_authentication_pane_get_type (void) {
 
 
 static gpointer _publishing_rajce_album_ref0 (gpointer self) {
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self ? publishing_rajce_album_ref (self) : NULL;
-#line 7085 "RajcePublishing.c"
+#line 7099 "RajcePublishing.c"
 }
 
 
 static PublishingRajceAlbum** _vala_array_dup5 (PublishingRajceAlbum** self, int length) {
 	PublishingRajceAlbum** result;
 	int i;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = g_new0 (PublishingRajceAlbum*, length + 1);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 7096 "RajcePublishing.c"
+#line 7110 "RajcePublishing.c"
 		PublishingRajceAlbum* _tmp0_ = NULL;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp0_ = _publishing_rajce_album_ref0 (self[i]);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		result[i] = _tmp0_;
-#line 7102 "RajcePublishing.c"
+#line 7116 "RajcePublishing.c"
 	}
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 7106 "RajcePublishing.c"
-}
-
-
-static void _publishing_rajce_publishing_options_pane_on_use_existing_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_on_use_existing_radio_clicked ((PublishingRajcePublishingOptionsPane*) self);
-#line 7113 "RajcePublishing.c"
-}
-
-
-static void _publishing_rajce_publishing_options_pane_on_create_new_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_on_create_new_radio_clicked ((PublishingRajcePublishingOptionsPane*) self);
 #line 7120 "RajcePublishing.c"
 }
 
 
-static void _publishing_rajce_publishing_options_pane_on_new_album_entry_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_on_new_album_entry_changed ((PublishingRajcePublishingOptionsPane*) self);
+static void _publishing_rajce_publishing_options_pane_on_use_existing_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
+#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_publishing_options_pane_on_use_existing_radio_clicked ((PublishingRajcePublishingOptionsPane*) self);
 #line 7127 "RajcePublishing.c"
 }
 
 
-static void _publishing_rajce_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_on_logout_clicked ((PublishingRajcePublishingOptionsPane*) self);
+static void _publishing_rajce_publishing_options_pane_on_create_new_radio_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_publishing_options_pane_on_create_new_radio_clicked ((PublishingRajcePublishingOptionsPane*) self);
 #line 7134 "RajcePublishing.c"
 }
 
 
-static void _publishing_rajce_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_on_publish_clicked ((PublishingRajcePublishingOptionsPane*) self);
+static void _publishing_rajce_publishing_options_pane_on_new_album_entry_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
+#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_publishing_options_pane_on_new_album_entry_changed ((PublishingRajcePublishingOptionsPane*) self);
 #line 7141 "RajcePublishing.c"
+}
+
+
+static void _publishing_rajce_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
+#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_publishing_options_pane_on_logout_clicked ((PublishingRajcePublishingOptionsPane*) self);
+#line 7148 "RajcePublishing.c"
+}
+
+
+static void _publishing_rajce_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
+#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_publishing_options_pane_on_publish_clicked ((PublishingRajcePublishingOptionsPane*) self);
+#line 7155 "RajcePublishing.c"
 }
 
 
@@ -7157,53 +7171,53 @@ PublishingRajcePublishingOptionsPane* publishing_rajce_publishing_options_pane_c
 	PublishingRajceRajcePublisher* _tmp5_ = NULL;
 	GtkBox* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_RAJCE_PUBLISHER (publisher), NULL);
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (username != NULL, NULL);
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajcePublishingOptionsPane*) g_object_new (object_type, NULL);
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = username;
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->username);
-#line 986 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->username = _tmp1_;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = albums;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2__length1 = albums_length1;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = (_tmp2_ != NULL) ? _vala_array_dup5 (_tmp2_, _tmp2__length1) : ((gpointer) _tmp2_);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3__length1 = _tmp2__length1;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_rajce_album_unref), NULL);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albums = _tmp3_;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albums_length1 = _tmp3__length1;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->_albums_size_ = self->priv->albums_length1;
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publisher;
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->publisher = _tmp5_;
-#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_object_ref_sink (_tmp6_);
-#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->pane_widget = _tmp6_;
-#line 7203 "RajcePublishing.c"
+#line 7217 "RajcePublishing.c"
 	{
 		GtkBuilder* _tmp7_ = NULL;
 		GtkBuilder* _tmp8_ = NULL;
@@ -7271,228 +7285,228 @@ PublishingRajcePublishingOptionsPane* publishing_rajce_publishing_options_pane_c
 		GtkEntry* _tmp70_ = NULL;
 		GtkButton* _tmp71_ = NULL;
 		GtkButton* _tmp72_ = NULL;
-#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = gtk_builder_new ();
-#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->builder);
-#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->builder = _tmp7_;
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp8_ = self->priv->builder;
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_builder_add_from_resource (_tmp8_, PLUGIN_RESOURCE_PATH "/rajce_publishing_options_pane.ui", &_inner_error_);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7283 "RajcePublishing.c"
+#line 7297 "RajcePublishing.c"
 			goto __catch30_g_error;
 		}
-#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp9_ = self->priv->builder;
-#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_builder_connect_signals (_tmp9_, NULL);
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp10_ = self->priv->builder;
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp11_ = gtk_builder_get_object (_tmp10_, "rajce_pane_widget");
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_box_get_type (), GtkBox));
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->pane_widget);
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->pane_widget = _tmp12_;
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp13_ = self->priv->builder;
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp14_ = gtk_builder_get_object (_tmp13_, "login_identity_label");
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp15_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_label_get_type (), GtkLabel));
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->login_identity_label);
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->login_identity_label = _tmp15_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp16_ = self->priv->builder;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp17_ = gtk_builder_get_object (_tmp16_, "publish_to_label");
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_label_get_type (), GtkLabel));
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->publish_to_label);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->publish_to_label = _tmp18_;
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp19_ = self->priv->builder;
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp20_ = gtk_builder_get_object (_tmp19_, "use_existing_radio");
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_radio_button_get_type (), GtkRadioButton));
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->use_existing_radio);
-#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->use_existing_radio = _tmp21_;
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp22_ = self->priv->builder;
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp23_ = gtk_builder_get_object (_tmp22_, "existing_albums_combo");
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->existing_albums_combo);
-#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->existing_albums_combo = _tmp24_;
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp25_ = self->priv->builder;
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp26_ = gtk_builder_get_object (_tmp25_, "create_new_radio");
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp27_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_radio_button_get_type (), GtkRadioButton));
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->create_new_radio);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->create_new_radio = _tmp27_;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp28_ = self->priv->builder;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp29_ = gtk_builder_get_object (_tmp28_, "new_album_entry");
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_entry_get_type (), GtkEntry));
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->new_album_entry);
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->new_album_entry = _tmp30_;
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp31_ = self->priv->builder;
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp32_ = gtk_builder_get_object (_tmp31_, "hide_check");
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp33_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_check_button_get_type (), GtkCheckButton));
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->hide_check);
-#line 1004 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->hide_check = _tmp33_;
-#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp34_ = self->priv->hide_check;
-#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp35_ = _ ("_Hide album");
-#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_button_get_type (), GtkButton), _tmp35_);
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp36_ = self->priv->builder;
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp37_ = gtk_builder_get_object (_tmp36_, "show_check");
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp38_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_check_button_get_type (), GtkCheckButton));
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->show_check);
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->show_check = _tmp38_;
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp39_ = self->priv->builder;
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp40_ = gtk_builder_get_object (_tmp39_, "publish_button");
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp41_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_button_get_type (), GtkButton));
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->publish_button);
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->publish_button = _tmp41_;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp42_ = self->priv->builder;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp43_ = gtk_builder_get_object (_tmp42_, "logout_button");
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp44_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_button_get_type (), GtkButton));
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_object_unref0 (self->priv->logout_button);
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		self->priv->logout_button = _tmp44_;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp45_ = self->priv->hide_check;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp46_ = publisher;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp47_ = publishing_rajce_rajce_publisher_get_hide_album (_tmp46_);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp47_);
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp48_ = self->priv->show_check;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp49_ = publisher;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp50_ = publishing_rajce_rajce_publisher_get_show_album (_tmp49_);
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp50_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp51_ = self->priv->login_identity_label;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp52_ = _ ("You are logged into Rajce as %s.");
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp53_ = username;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp54_ = g_strdup_printf (_tmp52_, _tmp53_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp55_ = _tmp54_;
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_label_set_label (_tmp51_, _tmp55_);
-#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (_tmp55_);
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp56_ = self->priv->publish_to_label;
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp57_ = _ ("Photos will appear in:");
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_label_set_label (_tmp56_, _tmp57_);
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp58_ = self->priv->use_existing_radio;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp59_ = _ ("An _existing album:");
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, gtk_button_get_type (), GtkButton), _tmp59_);
-#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp60_ = self->priv->create_new_radio;
-#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp61_ = _ ("A _new album named:");
-#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_button_get_type (), GtkButton), _tmp61_);
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp62_ = self->priv->show_check;
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp63_ = _ ("Open target _album in browser");
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, gtk_button_get_type (), GtkButton), _tmp63_);
-#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp64_ = self->priv->publish_button;
-#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp65_ = _ ("_Publish");
-#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (_tmp64_, _tmp65_);
-#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp66_ = self->priv->logout_button;
-#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp67_ = _ ("_Logout");
-#line 1018 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_button_set_label (_tmp66_, _tmp67_);
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp68_ = self->priv->use_existing_radio;
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_rajce_publishing_options_pane_on_use_existing_radio_clicked_gtk_button_clicked, self, 0);
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp69_ = self->priv->create_new_radio;
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_rajce_publishing_options_pane_on_create_new_radio_clicked_gtk_button_clicked, self, 0);
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp70_ = self->priv->new_album_entry;
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _publishing_rajce_publishing_options_pane_on_new_album_entry_changed_gtk_editable_changed, self, 0);
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp71_ = self->priv->logout_button;
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (_tmp71_, "clicked", (GCallback) _publishing_rajce_publishing_options_pane_on_logout_clicked_gtk_button_clicked, self, 0);
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp72_ = self->priv->publish_button;
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_connect_object (_tmp72_, "clicked", (GCallback) _publishing_rajce_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
-#line 7492 "RajcePublishing.c"
+#line 7506 "RajcePublishing.c"
 	}
 	goto __finally30;
 	__catch30_g_error:
@@ -7500,41 +7514,41 @@ PublishingRajcePublishingOptionsPane* publishing_rajce_publishing_options_pane_c
 		GError* e = NULL;
 		GError* _tmp73_ = NULL;
 		const gchar* _tmp74_ = NULL;
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		e = _inner_error_;
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_inner_error_ = NULL;
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp73_ = e;
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp74_ = _tmp73_->message;
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		g_warning ("RajcePublishing.vala:1028: Could not load UI: %s", _tmp74_);
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		g_warning ("RajcePublishing.vala:1029: Could not load UI: %s", _tmp74_);
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_error_free0 (e);
-#line 7512 "RajcePublishing.c"
+#line 7526 "RajcePublishing.c"
 	}
 	__finally30:
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return NULL;
-#line 7523 "RajcePublishing.c"
+#line 7537 "RajcePublishing.c"
 	}
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 7527 "RajcePublishing.c"
+#line 7541 "RajcePublishing.c"
 }
 
 
 PublishingRajcePublishingOptionsPane* publishing_rajce_publishing_options_pane_new (PublishingRajceRajcePublisher* publisher, const gchar* username, PublishingRajceAlbum** albums, int albums_length1) {
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_publishing_options_pane_construct (PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, publisher, username, albums, albums_length1);
-#line 7534 "RajcePublishing.c"
+#line 7548 "RajcePublishing.c"
 }
 
 
@@ -7546,27 +7560,27 @@ static void publishing_rajce_publishing_options_pane_on_publish_clicked (Publish
 	gboolean _tmp3_ = FALSE;
 	GtkRadioButton* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->show_check;
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1035 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	show_album = _tmp1_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = self->priv->publisher;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = show_album;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_rajce_publisher_set_show_album (_tmp2_, _tmp3_);
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = self->priv->create_new_radio;
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp5_) {
-#line 7566 "RajcePublishing.c"
+#line 7580 "RajcePublishing.c"
 		gchar* album_name = NULL;
 		GtkEntry* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
@@ -7580,41 +7594,41 @@ static void publishing_rajce_publishing_options_pane_on_publish_clicked (Publish
 		gboolean _tmp14_ = FALSE;
 		PublishingRajcePublishingParameters* _tmp15_ = NULL;
 		PublishingRajcePublishingParameters* _tmp16_ = NULL;
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp6_ = self->priv->new_album_entry;
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = gtk_entry_get_text (_tmp6_);
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp8_ = g_strdup (_tmp7_);
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		album_name = _tmp8_;
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp9_ = self->priv->hide_check;
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp10_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		hide_album = _tmp10_;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp11_ = self->priv->publisher;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12_ = hide_album;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_rajce_publisher_set_hide_album (_tmp11_, _tmp12_);
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp13_ = album_name;
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp14_ = hide_album;
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp15_ = publishing_rajce_publishing_parameters_new_to_new_album (_tmp13_, _tmp14_);
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp16_ = _tmp15_;
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_emit_by_name (self, "publish", _tmp16_);
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_publishing_rajce_publishing_parameters_unref0 (_tmp16_);
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (album_name);
-#line 7614 "RajcePublishing.c"
+#line 7628 "RajcePublishing.c"
 	} else {
 		gint id = 0;
 		PublishingRajceAlbum** _tmp17_ = NULL;
@@ -7635,51 +7649,51 @@ static void publishing_rajce_publishing_options_pane_on_publish_clicked (Publish
 		gint _tmp29_ = 0;
 		PublishingRajcePublishingParameters* _tmp30_ = NULL;
 		PublishingRajcePublishingParameters* _tmp31_ = NULL;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp17_ = self->priv->albums;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp17__length1 = self->priv->albums_length1;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp18_ = self->priv->existing_albums_combo;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp19_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp20_ = _tmp17_[_tmp19_];
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp21_ = _tmp20_->id;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		id = _tmp21_;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp22_ = self->priv->albums;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp22__length1 = self->priv->albums_length1;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp23_ = self->priv->existing_albums_combo;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp24_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp25_ = _tmp22_[_tmp24_];
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp26_ = _tmp25_->albumName;
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp27_ = g_strdup (_tmp26_);
-#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		album_name = _tmp27_;
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp28_ = album_name;
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp29_ = id;
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp30_ = publishing_rajce_publishing_parameters_new_to_existing_album (_tmp28_, _tmp29_);
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp31_ = _tmp30_;
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_signal_emit_by_name (self, "publish", _tmp31_);
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_publishing_rajce_publishing_parameters_unref0 (_tmp31_);
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (album_name);
-#line 7679 "RajcePublishing.c"
+#line 7693 "RajcePublishing.c"
 	}
 }
 
@@ -7689,27 +7703,27 @@ static void publishing_rajce_publishing_options_pane_on_use_existing_radio_click
 	GtkEntry* _tmp1_ = NULL;
 	GtkComboBoxText* _tmp2_ = NULL;
 	GtkCheckButton* _tmp3_ = NULL;
-#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->existing_albums_combo;
-#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = self->priv->new_album_entry;
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp2_ = self->priv->existing_albums_combo;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
 #line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp2_ = self->priv->existing_albums_combo;
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
+#line 1058 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_update_publish_button_sensitivity (self);
-#line 1058 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1059 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = self->priv->hide_check;
-#line 1058 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1059 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 7709 "RajcePublishing.c"
+#line 7723 "RajcePublishing.c"
 }
 
 
@@ -7718,36 +7732,36 @@ static void publishing_rajce_publishing_options_pane_on_create_new_radio_clicked
 	GtkComboBoxText* _tmp1_ = NULL;
 	GtkEntry* _tmp2_ = NULL;
 	GtkCheckButton* _tmp3_ = NULL;
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1063 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->new_album_entry;
-#line 1063 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = self->priv->existing_albums_combo;
-#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp2_ = self->priv->new_album_entry;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
 #line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp2_ = self->priv->new_album_entry;
+#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
+#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_update_publish_button_sensitivity (self);
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = self->priv->hide_check;
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 7738 "RajcePublishing.c"
+#line 7752 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_on_logout_clicked (PublishingRajcePublishingOptionsPane* self) {
-#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1073 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 7747 "RajcePublishing.c"
+#line 7761 "RajcePublishing.c"
 }
 
 
@@ -7770,7 +7784,7 @@ static gchar* string_strip (const gchar* self) {
 	result = _result_;
 #line 1210 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 7770 "RajcePublishing.c"
+#line 7784 "RajcePublishing.c"
 }
 
 
@@ -7785,58 +7799,58 @@ static void publishing_rajce_publishing_options_pane_update_publish_button_sensi
 	gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
 	GtkButton* _tmp10_ = NULL;
-#line 1074 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->new_album_entry;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = gtk_entry_get_text (_tmp0_);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	album_name = _tmp2_;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = album_name;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = string_strip (_tmp4_);
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = _tmp5_;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = g_strcmp0 (_tmp6_, "") != 0;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp6_);
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp7_) {
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp3_ = TRUE;
-#line 7809 "RajcePublishing.c"
+#line 7823 "RajcePublishing.c"
 	} else {
 		GtkRadioButton* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp8_ = self->priv->create_new_radio;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp9_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp3_ = !_tmp9_;
-#line 7819 "RajcePublishing.c"
+#line 7833 "RajcePublishing.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp10_ = self->priv->publish_button;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), _tmp3_);
-#line 1074 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (album_name);
-#line 7827 "RajcePublishing.c"
+#line 7841 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_on_new_album_entry_changed (PublishingRajcePublishingOptionsPane* self) {
-#line 1079 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_update_publish_button_sensitivity (self);
-#line 7836 "RajcePublishing.c"
+#line 7850 "RajcePublishing.c"
 }
 
 
@@ -7844,21 +7858,21 @@ void publishing_rajce_publishing_options_pane_installed (PublishingRajcePublishi
 	PublishingRajceAlbum** _tmp9_ = NULL;
 	gint _tmp9__length1 = 0;
 	GtkRadioButton* _tmp15_ = NULL;
-#line 1083 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1084 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 7846 "RajcePublishing.c"
+#line 7860 "RajcePublishing.c"
 	{
 		gint i = 0;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		i = 0;
-#line 7851 "RajcePublishing.c"
+#line 7865 "RajcePublishing.c"
 		{
 			gboolean _tmp0_ = FALSE;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_tmp0_ = TRUE;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			while (TRUE) {
-#line 7858 "RajcePublishing.c"
+#line 7872 "RajcePublishing.c"
 				gint _tmp2_ = 0;
 				PublishingRajceAlbum** _tmp3_ = NULL;
 				gint _tmp3__length1 = 0;
@@ -7868,114 +7882,114 @@ void publishing_rajce_publishing_options_pane_installed (PublishingRajcePublishi
 				gint _tmp6_ = 0;
 				PublishingRajceAlbum* _tmp7_ = NULL;
 				const gchar* _tmp8_ = NULL;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				if (!_tmp0_) {
-#line 7870 "RajcePublishing.c"
+#line 7884 "RajcePublishing.c"
 					gint _tmp1_ = 0;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					_tmp1_ = i;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					i = _tmp1_ + 1;
-#line 7876 "RajcePublishing.c"
-				}
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-				_tmp0_ = FALSE;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-				_tmp2_ = i;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-				_tmp3_ = self->priv->albums;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-				_tmp3__length1 = self->priv->albums_length1;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-				if (!(_tmp2_ < _tmp3__length1)) {
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-					break;
 #line 7890 "RajcePublishing.c"
 				}
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+				_tmp0_ = FALSE;
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+				_tmp2_ = i;
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+				_tmp3_ = self->priv->albums;
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+				_tmp3__length1 = self->priv->albums_length1;
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+				if (!(_tmp2_ < _tmp3__length1)) {
+#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+					break;
+#line 7904 "RajcePublishing.c"
+				}
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp4_ = self->priv->existing_albums_combo;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp5_ = self->priv->albums;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp5__length1 = self->priv->albums_length1;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp6_ = i;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp7_ = _tmp5_[_tmp6_];
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp8_ = _tmp7_->albumName;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				gtk_combo_box_text_append_text (_tmp4_, _tmp8_);
-#line 7906 "RajcePublishing.c"
+#line 7920 "RajcePublishing.c"
 			}
 		}
 	}
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9_ = self->priv->albums;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9__length1 = self->priv->albums_length1;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp9__length1 == 0) {
-#line 7916 "RajcePublishing.c"
+#line 7930 "RajcePublishing.c"
 		GtkComboBoxText* _tmp10_ = NULL;
 		GtkRadioButton* _tmp11_ = NULL;
-#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp10_ = self->priv->existing_albums_combo;
-#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp11_ = self->priv->use_existing_radio;
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 7927 "RajcePublishing.c"
+#line 7941 "RajcePublishing.c"
 	} else {
 		GtkComboBoxText* _tmp12_ = NULL;
 		GtkComboBoxText* _tmp13_ = NULL;
 		GtkRadioButton* _tmp14_ = NULL;
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12_ = self->priv->existing_albums_combo;
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp13_ = self->priv->existing_albums_combo;
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp14_ = self->priv->use_existing_radio;
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 7944 "RajcePublishing.c"
+#line 7958 "RajcePublishing.c"
 	}
-#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp15_ = self->priv->create_new_radio;
-#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp15_ = self->priv->create_new_radio;
+#line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
+#line 1103 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_on_create_new_radio_clicked (self);
-#line 7952 "RajcePublishing.c"
+#line 7966 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_publishing_options_pane_notify_publish (PublishingRajcePublishingOptionsPane* self, PublishingRajcePublishingParameters* parameters) {
 	PublishingRajcePublishingParameters* _tmp0_ = NULL;
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_PARAMETERS (parameters));
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = parameters;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_emit_by_name (self, "publish", _tmp0_);
-#line 7966 "RajcePublishing.c"
+#line 7980 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_publishing_options_pane_notify_logout (PublishingRajcePublishingOptionsPane* self) {
-#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 7975 "RajcePublishing.c"
+#line 7989 "RajcePublishing.c"
 }
 
 
@@ -7983,17 +7997,17 @@ GtkWidget* publishing_rajce_publishing_options_pane_get_default_widget (Publishi
 	GtkWidget* result = NULL;
 	GtkButton* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_OPTIONS_PANE (self), NULL);
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->logout_button;
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 7993 "RajcePublishing.c"
+#line 8007 "RajcePublishing.c"
 }
 
 
@@ -8002,58 +8016,58 @@ static GtkWidget* publishing_rajce_publishing_options_pane_real_get_widget (Spit
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingRajcePublishingOptionsPane);
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8012 "RajcePublishing.c"
+#line 8026 "RajcePublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_rajce_publishing_options_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingRajcePublishingOptionsPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 1124 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1125 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingRajcePublishingOptionsPane);
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8025 "RajcePublishing.c"
+#line 8039 "RajcePublishing.c"
 }
 
 
 static void _publishing_rajce_publishing_options_pane_notify_publish_publishing_rajce_publishing_options_pane_publish (PublishingRajcePublishingOptionsPane* _sender, PublishingRajcePublishingParameters* parameters, gpointer self) {
-#line 1132 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_notify_publish ((PublishingRajcePublishingOptionsPane*) self, parameters);
-#line 8032 "RajcePublishing.c"
+#line 8046 "RajcePublishing.c"
 }
 
 
 static void _publishing_rajce_publishing_options_pane_notify_logout_publishing_rajce_publishing_options_pane_logout (PublishingRajcePublishingOptionsPane* _sender, gpointer self) {
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_notify_logout ((PublishingRajcePublishingOptionsPane*) self);
-#line 8039 "RajcePublishing.c"
+#line 8053 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
 	PublishingRajcePublishingOptionsPane * self;
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingRajcePublishingOptionsPane);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_publishing_options_pane_installed (self);
 #line 1132 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	g_signal_connect_object (self, "publish", (GCallback) _publishing_rajce_publishing_options_pane_notify_publish_publishing_rajce_publishing_options_pane_publish, self, 0);
+	publishing_rajce_publishing_options_pane_installed (self);
 #line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	g_signal_connect_object (self, "publish", (GCallback) _publishing_rajce_publishing_options_pane_notify_publish_publishing_rajce_publishing_options_pane_publish, self, 0);
+#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_connect_object (self, "logout", (GCallback) _publishing_rajce_publishing_options_pane_notify_logout_publishing_rajce_publishing_options_pane_logout, self, 0);
-#line 8053 "RajcePublishing.c"
+#line 8067 "RajcePublishing.c"
 }
 
 
@@ -8061,17 +8075,17 @@ static void publishing_rajce_publishing_options_pane_real_on_pane_uninstalled (S
 	PublishingRajcePublishingOptionsPane * self;
 	guint _tmp0_ = 0U;
 	guint _tmp1_ = 0U;
-#line 1136 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingRajcePublishingOptionsPane);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp0_, NULL, FALSE);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp0_, 0, NULL, (GCallback) _publishing_rajce_publishing_options_pane_notify_publish_publishing_rajce_publishing_options_pane_publish, self);
-#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_rajce_publishing_options_pane_notify_logout_publishing_rajce_publishing_options_pane_logout, self);
-#line 8071 "RajcePublishing.c"
+#line 8085 "RajcePublishing.c"
 }
 
 
@@ -8082,128 +8096,128 @@ static void g_cclosure_user_marshal_VOID__PUBLISHING_RAJCE_PUBLISHING_PARAMETERS
 	register gpointer data1;
 	register gpointer data2;
 	cc = (GCClosure *) closure;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (n_param_values == 2);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (G_CCLOSURE_SWAP_DATA (closure)) {
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data1 = closure->data;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 8090 "RajcePublishing.c"
+#line 8104 "RajcePublishing.c"
 	} else {
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data1 = param_values->data[0].v_pointer;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		data2 = closure->data;
-#line 8096 "RajcePublishing.c"
+#line 8110 "RajcePublishing.c"
 	}
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	callback = (GMarshalFunc_VOID__PUBLISHING_RAJCE_PUBLISHING_PARAMETERS) (marshal_data ? marshal_data : cc->callback);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	callback (data1, publishing_rajce_value_get_publishing_parameters (param_values + 1), data2);
-#line 8102 "RajcePublishing.c"
+#line 8116 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_class_init (PublishingRajcePublishingOptionsPaneClass * klass) {
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_parent_class = g_type_class_peek_parent (klass);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRajcePublishingOptionsPanePrivate));
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_rajce_publishing_options_pane_finalize;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_new ("publish", PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__PUBLISHING_RAJCE_PUBLISHING_PARAMETERS, G_TYPE_NONE, 1, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_new ("logout", PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 8117 "RajcePublishing.c"
+#line 8131 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_rajce_publishing_options_pane_real_get_widget;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_rajce_publishing_options_pane_real_get_preferred_geometry;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_rajce_publishing_options_pane_real_on_pane_installed;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_rajce_publishing_options_pane_real_on_pane_uninstalled;
-#line 8132 "RajcePublishing.c"
+#line 8146 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_instance_init (PublishingRajcePublishingOptionsPane * self) {
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv = PUBLISHING_RAJCE_PUBLISHING_OPTIONS_PANE_GET_PRIVATE (self);
-#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->builder = NULL;
 #line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->pane_widget = NULL;
+	self->priv->builder = NULL;
 #line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->login_identity_label = NULL;
+	self->priv->pane_widget = NULL;
 #line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->publish_to_label = NULL;
+	self->priv->login_identity_label = NULL;
 #line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->use_existing_radio = NULL;
+	self->priv->publish_to_label = NULL;
 #line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->existing_albums_combo = NULL;
+	self->priv->use_existing_radio = NULL;
 #line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->create_new_radio = NULL;
+	self->priv->existing_albums_combo = NULL;
 #line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->new_album_entry = NULL;
+	self->priv->create_new_radio = NULL;
 #line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->hide_check = NULL;
+	self->priv->new_album_entry = NULL;
 #line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->show_check = NULL;
+	self->priv->hide_check = NULL;
 #line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->publish_button = NULL;
+	self->priv->show_check = NULL;
 #line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	self->priv->publish_button = NULL;
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->logout_button = NULL;
-#line 8163 "RajcePublishing.c"
+#line 8177 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_options_pane_finalize (GObject* obj) {
 	PublishingRajcePublishingOptionsPane * self;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_PUBLISHING_OPTIONS_PANE, PublishingRajcePublishingOptionsPane);
-#line 964 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->publisher);
 #line 965 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_rajce_album_unref), NULL);
+	_g_object_unref0 (self->priv->publisher);
 #line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_rajce_album_unref), NULL);
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->username);
-#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->builder);
 #line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
+	_g_object_unref0 (self->priv->builder);
 #line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->login_identity_label);
+	_g_object_unref0 (self->priv->pane_widget);
 #line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->publish_to_label);
+	_g_object_unref0 (self->priv->login_identity_label);
 #line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->use_existing_radio);
+	_g_object_unref0 (self->priv->publish_to_label);
 #line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->existing_albums_combo);
+	_g_object_unref0 (self->priv->use_existing_radio);
 #line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->create_new_radio);
+	_g_object_unref0 (self->priv->existing_albums_combo);
 #line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->new_album_entry);
+	_g_object_unref0 (self->priv->create_new_radio);
 #line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->hide_check);
+	_g_object_unref0 (self->priv->new_album_entry);
 #line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->show_check);
+	_g_object_unref0 (self->priv->hide_check);
 #line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_object_unref0 (self->priv->publish_button);
+	_g_object_unref0 (self->priv->show_check);
 #line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_g_object_unref0 (self->priv->publish_button);
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_OBJECT_CLASS (publishing_rajce_publishing_options_pane_parent_class)->finalize (obj);
-#line 8203 "RajcePublishing.c"
+#line 8217 "RajcePublishing.c"
 }
 
 
@@ -8223,18 +8237,18 @@ GType publishing_rajce_publishing_options_pane_get_type (void) {
 
 static PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_construct (GType object_type) {
 	PublishingRajcePublishingParameters* self = NULL;
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajcePublishingParameters*) g_type_create_instance (object_type);
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 8227 "RajcePublishing.c"
+#line 8241 "RajcePublishing.c"
 }
 
 
 static PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_new (void) {
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_publishing_parameters_construct (PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS);
-#line 8234 "RajcePublishing.c"
+#line 8248 "RajcePublishing.c"
 }
 
 
@@ -8246,44 +8260,44 @@ PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_cons
 	gboolean* _tmp3_ = NULL;
 	gint _tmp4_ = 0;
 	gint* _tmp5_ = NULL;
-#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (album_name != NULL, NULL);
-#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajcePublishingParameters*) g_type_create_instance (object_type);
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = album_name;
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_name);
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_name = _tmp1_;
-#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = album_hidden;
-#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = __bool_dup0 (&_tmp2_);
-#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_hidden);
-#line 1155 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_hidden = _tmp3_;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = 0;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = __int_dup0 (&_tmp4_);
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_id);
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_id = _tmp5_;
-#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 8276 "RajcePublishing.c"
+#line 8290 "RajcePublishing.c"
 }
 
 
 PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_new_to_new_album (const gchar* album_name, gboolean album_hidden) {
-#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_publishing_parameters_construct_to_new_album (PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS, album_name, album_hidden);
-#line 8283 "RajcePublishing.c"
+#line 8297 "RajcePublishing.c"
 }
 
 
@@ -8293,252 +8307,252 @@ PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_cons
 	gchar* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
 	gint* _tmp3_ = NULL;
-#line 1158 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (album_name != NULL, NULL);
-#line 1158 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajcePublishingParameters*) g_type_create_instance (object_type);
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = album_name;
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_name);
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_name = _tmp1_;
-#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_hidden);
-#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_hidden = NULL;
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = album_id;
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = __int_dup0 (&_tmp2_);
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_id);
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->album_id = _tmp3_;
-#line 1158 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 8319 "RajcePublishing.c"
-}
-
-
-PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_new_to_existing_album (const gchar* album_name, gint album_id) {
-#line 1158 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	return publishing_rajce_publishing_parameters_construct_to_existing_album (PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS, album_name, album_id);
-#line 8326 "RajcePublishing.c"
-}
-
-
-static void publishing_rajce_value_publishing_parameters_init (GValue* value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	value->data[0].v_pointer = NULL;
 #line 8333 "RajcePublishing.c"
 }
 
 
-static void publishing_rajce_value_publishing_parameters_free_value (GValue* value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (value->data[0].v_pointer) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		publishing_rajce_publishing_parameters_unref (value->data[0].v_pointer);
-#line 8342 "RajcePublishing.c"
-	}
+PublishingRajcePublishingParameters* publishing_rajce_publishing_parameters_new_to_existing_album (const gchar* album_name, gint album_id) {
+#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	return publishing_rajce_publishing_parameters_construct_to_existing_album (PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS, album_name, album_id);
+#line 8340 "RajcePublishing.c"
 }
 
 
-static void publishing_rajce_value_publishing_parameters_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (src_value->data[0].v_pointer) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = publishing_rajce_publishing_parameters_ref (src_value->data[0].v_pointer);
-#line 8352 "RajcePublishing.c"
-	} else {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = NULL;
+static void publishing_rajce_value_publishing_parameters_init (GValue* value) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	value->data[0].v_pointer = NULL;
+#line 8347 "RajcePublishing.c"
+}
+
+
+static void publishing_rajce_value_publishing_parameters_free_value (GValue* value) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (value->data[0].v_pointer) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		publishing_rajce_publishing_parameters_unref (value->data[0].v_pointer);
 #line 8356 "RajcePublishing.c"
 	}
 }
 
 
+static void publishing_rajce_value_publishing_parameters_copy_value (const GValue* src_value, GValue* dest_value) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (src_value->data[0].v_pointer) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = publishing_rajce_publishing_parameters_ref (src_value->data[0].v_pointer);
+#line 8366 "RajcePublishing.c"
+	} else {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = NULL;
+#line 8370 "RajcePublishing.c"
+	}
+}
+
+
 static gpointer publishing_rajce_value_publishing_parameters_peek_pointer (const GValue* value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 8364 "RajcePublishing.c"
+#line 8378 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_publishing_parameters_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 8371 "RajcePublishing.c"
+#line 8385 "RajcePublishing.c"
 		PublishingRajcePublishingParameters* object;
 		object = collect_values[0].v_pointer;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8378 "RajcePublishing.c"
+#line 8392 "RajcePublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8382 "RajcePublishing.c"
+#line 8396 "RajcePublishing.c"
 		}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = publishing_rajce_publishing_parameters_ref (object);
-#line 8386 "RajcePublishing.c"
+#line 8400 "RajcePublishing.c"
 	} else {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8390 "RajcePublishing.c"
+#line 8404 "RajcePublishing.c"
 	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 8394 "RajcePublishing.c"
+#line 8408 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_publishing_parameters_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRajcePublishingParameters** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (!object_p) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 8405 "RajcePublishing.c"
-	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (!value->data[0].v_pointer) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = NULL;
-#line 8411 "RajcePublishing.c"
-	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = value->data[0].v_pointer;
-#line 8415 "RajcePublishing.c"
-	} else {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = publishing_rajce_publishing_parameters_ref (value->data[0].v_pointer);
 #line 8419 "RajcePublishing.c"
 	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (!value->data[0].v_pointer) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = NULL;
+#line 8425 "RajcePublishing.c"
+	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = value->data[0].v_pointer;
+#line 8429 "RajcePublishing.c"
+	} else {
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = publishing_rajce_publishing_parameters_ref (value->data[0].v_pointer);
+#line 8433 "RajcePublishing.c"
+	}
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 8423 "RajcePublishing.c"
+#line 8437 "RajcePublishing.c"
 }
 
 
 GParamSpec* publishing_rajce_param_spec_publishing_parameters (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRajceParamSpecPublishingParameters* spec;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 8437 "RajcePublishing.c"
+#line 8451 "RajcePublishing.c"
 }
 
 
 gpointer publishing_rajce_value_get_publishing_parameters (const GValue* value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 8446 "RajcePublishing.c"
+#line 8460 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_value_set_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingRajcePublishingParameters* old;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_publishing_parameters_ref (value->data[0].v_pointer);
-#line 8466 "RajcePublishing.c"
+#line 8480 "RajcePublishing.c"
 	} else {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8470 "RajcePublishing.c"
+#line 8484 "RajcePublishing.c"
 	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_publishing_parameters_unref (old);
-#line 8476 "RajcePublishing.c"
+#line 8490 "RajcePublishing.c"
 	}
 }
 
 
 void publishing_rajce_value_take_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingRajcePublishingParameters* old;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 8495 "RajcePublishing.c"
+#line 8509 "RajcePublishing.c"
 	} else {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8499 "RajcePublishing.c"
+#line 8513 "RajcePublishing.c"
 	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_publishing_parameters_unref (old);
-#line 8505 "RajcePublishing.c"
+#line 8519 "RajcePublishing.c"
 	}
 }
 
 
 static void publishing_rajce_publishing_parameters_class_init (PublishingRajcePublishingParametersClass * klass) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_publishing_parameters_parent_class = g_type_class_peek_parent (klass);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRajcePublishingParametersClass *) klass)->finalize = publishing_rajce_publishing_parameters_finalize;
-#line 8515 "RajcePublishing.c"
+#line 8529 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_parameters_instance_init (PublishingRajcePublishingParameters * self) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->ref_count = 1;
-#line 8522 "RajcePublishing.c"
+#line 8536 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_publishing_parameters_finalize (PublishingRajcePublishingParameters* obj) {
 	PublishingRajcePublishingParameters * self;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_PUBLISHING_PARAMETERS, PublishingRajcePublishingParameters);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->album_name);
 #line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->album_hidden);
+	_g_free0 (self->album_name);
 #line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_g_free0 (self->album_hidden);
+#line 1148 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->album_id);
-#line 8538 "RajcePublishing.c"
+#line 8552 "RajcePublishing.c"
 }
 
 
@@ -8559,42 +8573,42 @@ GType publishing_rajce_publishing_parameters_get_type (void) {
 gpointer publishing_rajce_publishing_parameters_ref (gpointer instance) {
 	PublishingRajcePublishingParameters* self;
 	self = instance;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return instance;
-#line 8563 "RajcePublishing.c"
+#line 8577 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_publishing_parameters_unref (gpointer instance) {
 	PublishingRajcePublishingParameters* self;
 	self = instance;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		PUBLISHING_RAJCE_PUBLISHING_PARAMETERS_GET_CLASS (self)->finalize (self);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8576 "RajcePublishing.c"
+#line 8590 "RajcePublishing.c"
 	}
 }
 
 
 PublishingRajceSession* publishing_rajce_session_construct (GType object_type) {
 	PublishingRajceSession* self = NULL;
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1182 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceSession*) publishing_rest_support_session_construct (object_type, "");
-#line 1179 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1180 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 8587 "RajcePublishing.c"
+#line 8601 "RajcePublishing.c"
 }
 
 
 PublishingRajceSession* publishing_rajce_session_new (void) {
-#line 1179 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1180 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_session_construct (PUBLISHING_RAJCE_TYPE_SESSION);
-#line 8594 "RajcePublishing.c"
+#line 8608 "RajcePublishing.c"
 }
 
 
@@ -8604,43 +8618,43 @@ static gboolean publishing_rajce_session_real_is_authenticated (PublishingRESTSu
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	gint* _tmp2_ = NULL;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_RAJCE_TYPE_SESSION, PublishingRajceSession);
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = self->priv->userid;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp2_ != NULL) {
-#line 8610 "RajcePublishing.c"
-		const gchar* _tmp3_ = NULL;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp3_ = self->priv->usertoken;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp1_ = _tmp3_ != NULL;
-#line 8616 "RajcePublishing.c"
-	} else {
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp1_ = FALSE;
-#line 8620 "RajcePublishing.c"
-	}
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (_tmp1_) {
 #line 8624 "RajcePublishing.c"
-		const gchar* _tmp4_ = NULL;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp4_ = self->priv->username;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp0_ = _tmp4_ != NULL;
+		const gchar* _tmp3_ = NULL;
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp3_ = self->priv->usertoken;
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp1_ = _tmp3_ != NULL;
 #line 8630 "RajcePublishing.c"
 	} else {
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp0_ = FALSE;
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp1_ = FALSE;
 #line 8634 "RajcePublishing.c"
 	}
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (_tmp1_) {
+#line 8638 "RajcePublishing.c"
+		const gchar* _tmp4_ = NULL;
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp4_ = self->priv->username;
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp0_ = _tmp4_ != NULL;
+#line 8644 "RajcePublishing.c"
+	} else {
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp0_ = FALSE;
+#line 8648 "RajcePublishing.c"
+	}
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp0_;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8640 "RajcePublishing.c"
+#line 8654 "RajcePublishing.c"
 }
 
 
@@ -8655,139 +8669,139 @@ void publishing_rajce_session_authenticate (PublishingRajceSession* self, const 
 	gint* _tmp7_ = NULL;
 	gint _tmp8_ = 0;
 	gint* _tmp9_ = NULL;
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_SESSION (self));
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (token != NULL);
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 1191 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = token;
-#line 1191 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1191 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->usertoken);
-#line 1191 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->usertoken = _tmp1_;
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = name;
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->username);
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->username = _tmp3_;
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = id;
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = __int_dup0 (&_tmp4_);
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->userid);
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->userid = _tmp5_;
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = maxsize;
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = __int_dup0 (&_tmp6_);
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->maxsize);
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->maxsize = _tmp7_;
-#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = quality;
-#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9_ = __int_dup0 (&_tmp8_);
-#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->quality);
-#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->quality = _tmp9_;
-#line 8701 "RajcePublishing.c"
+#line 8715 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_session_deauthenticate (PublishingRajceSession* self) {
-#line 1198 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_SESSION (self));
-#line 1200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->usertoken);
-#line 1200 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->usertoken = NULL;
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->albumtoken);
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albumtoken = NULL;
-#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->albumticket);
-#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albumticket = NULL;
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1204 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->username);
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1204 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->username = NULL;
-#line 1204 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->userid);
-#line 1204 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->userid = NULL;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->maxsize);
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->maxsize = NULL;
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->quality);
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->quality = NULL;
-#line 8736 "RajcePublishing.c"
+#line 8750 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_session_set_usertoken (PublishingRajceSession* self, const gchar* usertoken) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_SESSION (self));
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = usertoken;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->usertoken);
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->usertoken = _tmp1_;
-#line 8753 "RajcePublishing.c"
+#line 8767 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_session_set_albumtoken (PublishingRajceSession* self, const gchar* albumtoken) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_SESSION (self));
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = albumtoken;
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->albumtoken);
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albumtoken = _tmp1_;
-#line 8770 "RajcePublishing.c"
+#line 8784 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_session_set_albumticket (PublishingRajceSession* self, const gchar* albumticket) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_SESSION (self));
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = albumticket;
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->albumticket);
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->albumticket = _tmp1_;
-#line 8787 "RajcePublishing.c"
+#line 8801 "RajcePublishing.c"
 }
 
 
@@ -8795,17 +8809,17 @@ gchar* publishing_rajce_session_get_usertoken (PublishingRajceSession* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (self), NULL);
-#line 1213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->usertoken;
-#line 1213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1213 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8805 "RajcePublishing.c"
+#line 8819 "RajcePublishing.c"
 }
 
 
@@ -8813,17 +8827,17 @@ gchar* publishing_rajce_session_get_albumtoken (PublishingRajceSession* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (self), NULL);
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->albumtoken;
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8823 "RajcePublishing.c"
+#line 8837 "RajcePublishing.c"
 }
 
 
@@ -8831,17 +8845,17 @@ gchar* publishing_rajce_session_get_albumticket (PublishingRajceSession* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (self), NULL);
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->albumticket;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8841 "RajcePublishing.c"
+#line 8855 "RajcePublishing.c"
 }
 
 
@@ -8849,90 +8863,90 @@ gchar* publishing_rajce_session_get_username (PublishingRajceSession* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (self), NULL);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->username;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp1_;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8859 "RajcePublishing.c"
+#line 8873 "RajcePublishing.c"
 }
 
 
 gint publishing_rajce_session_get_maxsize (PublishingRajceSession* self) {
 	gint result = 0;
 	gint* _tmp0_ = NULL;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (self), 0);
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->maxsize;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = *_tmp0_;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 8874 "RajcePublishing.c"
+#line 8888 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_session_class_init (PublishingRajceSessionClass * klass) {
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_session_parent_class = g_type_class_peek_parent (klass);
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->finalize = publishing_rajce_session_finalize;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRajceSessionPrivate));
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->is_authenticated = publishing_rajce_session_real_is_authenticated;
-#line 8887 "RajcePublishing.c"
+#line 8901 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_session_instance_init (PublishingRajceSession * self) {
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv = PUBLISHING_RAJCE_SESSION_GET_PRIVATE (self);
 #line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->usertoken = NULL;
+	self->priv = PUBLISHING_RAJCE_SESSION_GET_PRIVATE (self);
 #line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->albumtoken = NULL;
+	self->priv->usertoken = NULL;
 #line 1173 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->albumticket = NULL;
+	self->priv->albumtoken = NULL;
 #line 1174 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->username = NULL;
+	self->priv->albumticket = NULL;
 #line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->userid = NULL;
+	self->priv->username = NULL;
 #line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->maxsize = NULL;
+	self->priv->userid = NULL;
 #line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	self->priv->maxsize = NULL;
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->quality = NULL;
-#line 8908 "RajcePublishing.c"
+#line 8922 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_session_finalize (PublishingRESTSupportSession* obj) {
 	PublishingRajceSession * self;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_SESSION, PublishingRajceSession);
 #line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->usertoken);
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_SESSION, PublishingRajceSession);
 #line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->albumtoken);
+	_g_free0 (self->priv->usertoken);
 #line 1173 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->albumticket);
+	_g_free0 (self->priv->albumtoken);
 #line 1174 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->username);
+	_g_free0 (self->priv->albumticket);
 #line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->userid);
+	_g_free0 (self->priv->username);
 #line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->priv->maxsize);
+	_g_free0 (self->priv->userid);
 #line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_g_free0 (self->priv->maxsize);
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->quality);
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	PUBLISHING_REST_SUPPORT_SESSION_CLASS (publishing_rajce_session_parent_class)->finalize (obj);
-#line 8932 "RajcePublishing.c"
+#line 8946 "RajcePublishing.c"
 }
 
 
@@ -8952,9 +8966,9 @@ GType publishing_rajce_session_get_type (void) {
 
 
 static gpointer _publishing_rajce_arg_item_ref0 (gpointer self) {
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self ? publishing_rajce_arg_item_ref (self) : NULL;
-#line 8954 "RajcePublishing.c"
+#line 8968 "RajcePublishing.c"
 }
 
 
@@ -8965,61 +8979,61 @@ PublishingRajceArgItem* publishing_rajce_arg_item_construct (GType object_type, 
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	PublishingRajceArgItem** _tmp4_ = NULL;
-#line 1228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceArgItem*) g_type_create_instance (object_type);
-#line 1230 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = k;
-#line 1230 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1230 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->key);
-#line 1230 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->key = _tmp1_;
-#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = v;
-#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->val);
-#line 1231 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->val = _tmp3_;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = g_new0 (PublishingRajceArgItem*, 0 + 1);
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->children = (_vala_array_free (self->children, self->children_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->children = _tmp4_;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->children_length1 = 0;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->_children_size_ = self->children_length1;
-#line 1228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 8995 "RajcePublishing.c"
+#line 9009 "RajcePublishing.c"
 }
 
 
 PublishingRajceArgItem* publishing_rajce_arg_item_new (const gchar* k, const gchar* v) {
-#line 1228 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_arg_item_construct (PUBLISHING_RAJCE_TYPE_ARG_ITEM, k, v);
-#line 9002 "RajcePublishing.c"
+#line 9016 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add6 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 9013 "RajcePublishing.c"
+#line 9027 "RajcePublishing.c"
 	}
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 9019 "RajcePublishing.c"
+#line 9033 "RajcePublishing.c"
 }
 
 
@@ -9028,62 +9042,62 @@ void publishing_rajce_arg_item_AddChild (PublishingRajceArgItem* self, Publishin
 	gint _tmp0__length1 = 0;
 	PublishingRajceArgItem* _tmp1_ = NULL;
 	PublishingRajceArgItem* _tmp2_ = NULL;
-#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_ARG_ITEM (self));
-#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1235 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_ARG_ITEM (child));
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->children;
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0__length1 = self->children_length1;
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = child;
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = _publishing_rajce_arg_item_ref0 (_tmp1_);
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add6 (&self->children, &self->children_length1, &self->_children_size_, _tmp2_);
-#line 9042 "RajcePublishing.c"
+#line 9056 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_arg_item_AddChildren (PublishingRajceArgItem* self, PublishingRajceArgItem** newchildren, int newchildren_length1) {
 	PublishingRajceArgItem** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_ARG_ITEM (self));
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = newchildren;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0__length1 = newchildren_length1;
-#line 9055 "RajcePublishing.c"
+#line 9069 "RajcePublishing.c"
 	{
 		PublishingRajceArgItem** child_collection = NULL;
 		gint child_collection_length1 = 0;
 		gint _child_collection_size_ = 0;
 		gint child_it = 0;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		child_collection = _tmp0_;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		child_collection_length1 = _tmp0__length1;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		for (child_it = 0; child_it < _tmp0__length1; child_it = child_it + 1) {
-#line 9067 "RajcePublishing.c"
+#line 9081 "RajcePublishing.c"
 			PublishingRajceArgItem* _tmp1_ = NULL;
 			PublishingRajceArgItem* child = NULL;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_tmp1_ = _publishing_rajce_arg_item_ref0 (child_collection[child_it]);
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			child = _tmp1_;
-#line 9074 "RajcePublishing.c"
+#line 9088 "RajcePublishing.c"
 			{
 				PublishingRajceArgItem* _tmp2_ = NULL;
-#line 1242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp2_ = child;
-#line 1242 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				publishing_rajce_arg_item_AddChild (self, _tmp2_);
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_publishing_rajce_arg_item_unref0 (child);
-#line 9083 "RajcePublishing.c"
+#line 9097 "RajcePublishing.c"
 			}
 		}
 	}
@@ -9091,198 +9105,198 @@ void publishing_rajce_arg_item_AddChildren (PublishingRajceArgItem* self, Publis
 
 
 static void publishing_rajce_value_arg_item_init (GValue* value) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 9093 "RajcePublishing.c"
+#line 9107 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_value_arg_item_free_value (GValue* value) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_arg_item_unref (value->data[0].v_pointer);
-#line 9102 "RajcePublishing.c"
-	}
-}
-
-
-static void publishing_rajce_value_arg_item_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (src_value->data[0].v_pointer) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = publishing_rajce_arg_item_ref (src_value->data[0].v_pointer);
-#line 9112 "RajcePublishing.c"
-	} else {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = NULL;
 #line 9116 "RajcePublishing.c"
 	}
 }
 
 
+static void publishing_rajce_value_arg_item_copy_value (const GValue* src_value, GValue* dest_value) {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (src_value->data[0].v_pointer) {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = publishing_rajce_arg_item_ref (src_value->data[0].v_pointer);
+#line 9126 "RajcePublishing.c"
+	} else {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = NULL;
+#line 9130 "RajcePublishing.c"
+	}
+}
+
+
 static gpointer publishing_rajce_value_arg_item_peek_pointer (const GValue* value) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 9124 "RajcePublishing.c"
+#line 9138 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_arg_item_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 9131 "RajcePublishing.c"
+#line 9145 "RajcePublishing.c"
 		PublishingRajceArgItem* object;
 		object = collect_values[0].v_pointer;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9138 "RajcePublishing.c"
+#line 9152 "RajcePublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9142 "RajcePublishing.c"
+#line 9156 "RajcePublishing.c"
 		}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = publishing_rajce_arg_item_ref (object);
-#line 9146 "RajcePublishing.c"
+#line 9160 "RajcePublishing.c"
 	} else {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9150 "RajcePublishing.c"
+#line 9164 "RajcePublishing.c"
 	}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 9154 "RajcePublishing.c"
+#line 9168 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_arg_item_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRajceArgItem** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (!object_p) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9165 "RajcePublishing.c"
-	}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (!value->data[0].v_pointer) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = NULL;
-#line 9171 "RajcePublishing.c"
-	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = value->data[0].v_pointer;
-#line 9175 "RajcePublishing.c"
-	} else {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = publishing_rajce_arg_item_ref (value->data[0].v_pointer);
 #line 9179 "RajcePublishing.c"
 	}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (!value->data[0].v_pointer) {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = NULL;
+#line 9185 "RajcePublishing.c"
+	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = value->data[0].v_pointer;
+#line 9189 "RajcePublishing.c"
+	} else {
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = publishing_rajce_arg_item_ref (value->data[0].v_pointer);
+#line 9193 "RajcePublishing.c"
+	}
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 9183 "RajcePublishing.c"
+#line 9197 "RajcePublishing.c"
 }
 
 
 GParamSpec* publishing_rajce_param_spec_arg_item (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRajceParamSpecArgItem* spec;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_RAJCE_TYPE_ARG_ITEM), NULL);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 9197 "RajcePublishing.c"
+#line 9211 "RajcePublishing.c"
 }
 
 
 gpointer publishing_rajce_value_get_arg_item (const GValue* value) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_ARG_ITEM), NULL);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 9206 "RajcePublishing.c"
+#line 9220 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_value_set_arg_item (GValue* value, gpointer v_object) {
 	PublishingRajceArgItem* old;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_ARG_ITEM));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_ARG_ITEM));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_arg_item_ref (value->data[0].v_pointer);
-#line 9226 "RajcePublishing.c"
+#line 9240 "RajcePublishing.c"
 	} else {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9230 "RajcePublishing.c"
+#line 9244 "RajcePublishing.c"
 	}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_arg_item_unref (old);
-#line 9236 "RajcePublishing.c"
+#line 9250 "RajcePublishing.c"
 	}
 }
 
 
 void publishing_rajce_value_take_arg_item (GValue* value, gpointer v_object) {
 	PublishingRajceArgItem* old;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_ARG_ITEM));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_ARG_ITEM));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 9255 "RajcePublishing.c"
+#line 9269 "RajcePublishing.c"
 	} else {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9259 "RajcePublishing.c"
+#line 9273 "RajcePublishing.c"
 	}
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_arg_item_unref (old);
-#line 9265 "RajcePublishing.c"
+#line 9279 "RajcePublishing.c"
 	}
 }
 
 
 static void publishing_rajce_arg_item_class_init (PublishingRajceArgItemClass * klass) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_arg_item_parent_class = g_type_class_peek_parent (klass);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRajceArgItemClass *) klass)->finalize = publishing_rajce_arg_item_finalize;
-#line 9275 "RajcePublishing.c"
+#line 9289 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_arg_item_instance_init (PublishingRajceArgItem * self) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->ref_count = 1;
-#line 9282 "RajcePublishing.c"
+#line 9296 "RajcePublishing.c"
 }
 
 
@@ -9290,52 +9304,52 @@ static void publishing_rajce_arg_item_finalize (PublishingRajceArgItem* obj) {
 	PublishingRajceArgItem * self;
 	PublishingRajceArgItem** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_ARG_ITEM, PublishingRajceArgItem);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->children;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0__length1 = self->children_length1;
-#line 9298 "RajcePublishing.c"
+#line 9312 "RajcePublishing.c"
 	{
 		PublishingRajceArgItem** child_collection = NULL;
 		gint child_collection_length1 = 0;
 		gint _child_collection_size_ = 0;
 		gint child_it = 0;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		child_collection = _tmp0_;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		child_collection_length1 = _tmp0__length1;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		for (child_it = 0; child_it < _tmp0__length1; child_it = child_it + 1) {
-#line 9310 "RajcePublishing.c"
+#line 9324 "RajcePublishing.c"
 			PublishingRajceArgItem* _tmp1_ = NULL;
 			PublishingRajceArgItem* child = NULL;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_tmp1_ = _publishing_rajce_arg_item_ref0 (child_collection[child_it]);
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			child = _tmp1_;
-#line 9317 "RajcePublishing.c"
+#line 9331 "RajcePublishing.c"
 			{
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1250 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_publishing_rajce_arg_item_unref0 (child);
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1250 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				child = NULL;
-#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_publishing_rajce_arg_item_unref0 (child);
-#line 9325 "RajcePublishing.c"
+#line 9339 "RajcePublishing.c"
 			}
 		}
 	}
-#line 1224 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->key);
 #line 1225 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_g_free0 (self->val);
+	_g_free0 (self->key);
 #line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_g_free0 (self->val);
+#line 1227 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->children = (_vala_array_free (self->children, self->children_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
-#line 9335 "RajcePublishing.c"
+#line 9349 "RajcePublishing.c"
 }
 
 
@@ -9356,24 +9370,24 @@ GType publishing_rajce_arg_item_get_type (void) {
 gpointer publishing_rajce_arg_item_ref (gpointer instance) {
 	PublishingRajceArgItem* self;
 	self = instance;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return instance;
-#line 9360 "RajcePublishing.c"
+#line 9374 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_arg_item_unref (gpointer instance) {
 	PublishingRajceArgItem* self;
 	self = instance;
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		PUBLISHING_RAJCE_ARG_ITEM_GET_CLASS (self)->finalize (self);
-#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1223 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9373 "RajcePublishing.c"
+#line 9387 "RajcePublishing.c"
 	}
 }
 
@@ -9383,55 +9397,55 @@ PublishingRajceLiveApiRequest* publishing_rajce_live_api_request_construct (GTyp
 	PublishingRajceArgItem** _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (cmd != NULL, NULL);
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceLiveApiRequest*) g_type_create_instance (object_type);
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = g_new0 (PublishingRajceArgItem*, 0 + 1);
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->_params = (_vala_array_free (self->priv->_params, self->priv->_params_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->_params = _tmp0_;
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->_params_length1 = 0;
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->__params_size_ = self->priv->_params_length1;
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = cmd;
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->_cmd);
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->_cmd = _tmp2_;
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 9407 "RajcePublishing.c"
+#line 9421 "RajcePublishing.c"
 }
 
 
 PublishingRajceLiveApiRequest* publishing_rajce_live_api_request_new (const gchar* cmd) {
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1262 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_live_api_request_construct (PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST, cmd);
-#line 9414 "RajcePublishing.c"
+#line 9428 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add7 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 9425 "RajcePublishing.c"
+#line 9439 "RajcePublishing.c"
 	}
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 9431 "RajcePublishing.c"
+#line 9445 "RajcePublishing.c"
 }
 
 
@@ -9441,25 +9455,25 @@ void publishing_rajce_live_api_request_AddParam (PublishingRajceLiveApiRequest* 
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	PublishingRajceArgItem* _tmp3_ = NULL;
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_LIVE_API_REQUEST (self));
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (val != NULL);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = self->priv->_params;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0__length1 = self->priv->_params_length1;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = name;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = val;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = publishing_rajce_arg_item_new (_tmp1_, _tmp2_);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add7 (&self->priv->_params, &self->priv->_params_length1, &self->priv->__params_size_, _tmp3_);
-#line 9459 "RajcePublishing.c"
+#line 9473 "RajcePublishing.c"
 }
 
 
@@ -9467,27 +9481,27 @@ void publishing_rajce_live_api_request_AddParamBool (PublishingRajceLiveApiReque
 	const gchar* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	const gchar* _tmp2_ = NULL;
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_LIVE_API_REQUEST (self));
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = val;
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp1_) {
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp0_ = "1";
-#line 9477 "RajcePublishing.c"
+#line 9491 "RajcePublishing.c"
 	} else {
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp0_ = "0";
-#line 9481 "RajcePublishing.c"
+#line 9495 "RajcePublishing.c"
 	}
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = name;
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (self, _tmp2_, _tmp0_);
-#line 9487 "RajcePublishing.c"
+#line 9501 "RajcePublishing.c"
 }
 
 
@@ -9496,40 +9510,40 @@ void publishing_rajce_live_api_request_AddParamInt (PublishingRajceLiveApiReques
 	gint _tmp1_ = 0;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_LIVE_API_REQUEST (self));
-#line 1283 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = name;
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = val;
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = g_strdup_printf ("%i", _tmp1_);
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (self, _tmp0_, _tmp3_);
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp3_);
-#line 9512 "RajcePublishing.c"
+#line 9526 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add8 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 9523 "RajcePublishing.c"
+#line 9537 "RajcePublishing.c"
 	}
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 9529 "RajcePublishing.c"
+#line 9543 "RajcePublishing.c"
 }
 
 
@@ -9542,33 +9556,33 @@ void publishing_rajce_live_api_request_AddParamNode (PublishingRajceLiveApiReque
 	PublishingRajceArgItem** _tmp3_ = NULL;
 	gint _tmp3__length1 = 0;
 	PublishingRajceArgItem* _tmp4_ = NULL;
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_LIVE_API_REQUEST (self));
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = name;
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = publishing_rajce_arg_item_new (_tmp0_, NULL);
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	newItem = _tmp1_;
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = val;
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2__length1 = val_length1;
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_arg_item_AddChildren (newItem, _tmp2_, _tmp2__length1);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = self->priv->_params;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3__length1 = self->priv->_params_length1;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = _publishing_rajce_arg_item_ref0 (newItem);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add8 (&self->priv->_params, &self->priv->_params_length1, &self->priv->__params_size_, _tmp4_);
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1298 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_arg_item_unref0 (newItem);
-#line 9568 "RajcePublishing.c"
+#line 9582 "RajcePublishing.c"
 }
 
 
@@ -9592,109 +9606,109 @@ gchar* publishing_rajce_live_api_request_Params2XmlString (PublishingRajceLiveAp
 	gchar* _tmp13_ = NULL;
 	xmlDoc* _tmp14_ = NULL;
 	gboolean _tmp15_ = FALSE;
-#line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_LIVE_API_REQUEST (self), NULL);
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = xmlNewDoc ((xmlChar*) "1.0");
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	doc = _tmp0_;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = xmlNewNode (NULL, (xmlChar*) "request");
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	root = _tmp1_;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = doc;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = root;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	xmlDocSetRootElement (_tmp2_, _tmp3_);
-#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = root;
-#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = self->priv->_cmd;
-#line 1311 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	xmlNewTextChild (_tmp4_, NULL, (xmlChar*) "command", (xmlChar*) _tmp5_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = root;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = xmlNewTextChild (_tmp6_, NULL, (xmlChar*) "parameters", (xmlChar*) "");
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	par = _tmp7_;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = self->priv->_params;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8__length1 = self->priv->_params_length1;
-#line 9624 "RajcePublishing.c"
+#line 9638 "RajcePublishing.c"
 	{
 		PublishingRajceArgItem** arg_collection = NULL;
 		gint arg_collection_length1 = 0;
 		gint _arg_collection_size_ = 0;
 		gint arg_it = 0;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		arg_collection = _tmp8_;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		arg_collection_length1 = _tmp8__length1;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		for (arg_it = 0; arg_it < _tmp8__length1; arg_it = arg_it + 1) {
-#line 9636 "RajcePublishing.c"
+#line 9650 "RajcePublishing.c"
 			PublishingRajceArgItem* _tmp9_ = NULL;
 			PublishingRajceArgItem* arg = NULL;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_tmp9_ = _publishing_rajce_arg_item_ref0 (arg_collection[arg_it]);
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			arg = _tmp9_;
-#line 9643 "RajcePublishing.c"
+#line 9657 "RajcePublishing.c"
 			{
 				xmlNode* _tmp10_ = NULL;
 				PublishingRajceArgItem* _tmp11_ = NULL;
-#line 1315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp10_ = par;
-#line 1315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp11_ = arg;
-#line 1315 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				publishing_rajce_live_api_request_WriteParam (_tmp10_, _tmp11_);
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1314 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_publishing_rajce_arg_item_unref0 (arg);
-#line 9655 "RajcePublishing.c"
+#line 9669 "RajcePublishing.c"
 			}
 		}
 	}
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp12_ = doc;
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	xmlDocDumpMemoryEnc (_tmp12_, (xmlChar**) (&_tmp13_), NULL, "UTF-8");
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xmlstr);
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	xmlstr = _tmp13_;
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp14_ = doc;
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	xmlFreeDoc (_tmp14_);
-#line 1320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp15_ = urlencode;
-#line 1320 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp15_) {
-#line 9675 "RajcePublishing.c"
+#line 9689 "RajcePublishing.c"
 		const gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
-#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp16_ = xmlstr;
-#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp17_ = soup_uri_encode (_tmp16_, "&;");
-#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		result = _tmp17_;
-#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (xmlstr);
-#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return result;
-#line 9688 "RajcePublishing.c"
+#line 9702 "RajcePublishing.c"
 	}
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1325 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = xmlstr;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1325 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 9694 "RajcePublishing.c"
+#line 9708 "RajcePublishing.c"
 }
 
 
@@ -9702,35 +9716,35 @@ static void publishing_rajce_live_api_request_WriteParam (xmlNode* node, Publish
 	PublishingRajceArgItem* _tmp0_ = NULL;
 	PublishingRajceArgItem** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (PUBLISHING_RAJCE_IS_ARG_ITEM (arg));
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = arg;
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = _tmp0_->children;
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1__length1 = _tmp0_->children_length1;
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp1__length1 == 0) {
-#line 9712 "RajcePublishing.c"
+#line 9726 "RajcePublishing.c"
 		xmlNode* _tmp2_ = NULL;
 		PublishingRajceArgItem* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
 		PublishingRajceArgItem* _tmp5_ = NULL;
 		const gchar* _tmp6_ = NULL;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp2_ = node;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp3_ = arg;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp4_ = _tmp3_->key;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp5_ = arg;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp6_ = _tmp5_->val;
-#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		xmlNewTextChild (_tmp2_, NULL, (xmlChar*) _tmp4_, (xmlChar*) _tmp6_);
-#line 9730 "RajcePublishing.c"
+#line 9744 "RajcePublishing.c"
 	} else {
 		xmlNode* subnode = NULL;
 		xmlNode* _tmp7_ = NULL;
@@ -9740,54 +9754,54 @@ static void publishing_rajce_live_api_request_WriteParam (xmlNode* node, Publish
 		PublishingRajceArgItem* _tmp11_ = NULL;
 		PublishingRajceArgItem** _tmp12_ = NULL;
 		gint _tmp12__length1 = 0;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = node;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp8_ = arg;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp9_ = _tmp8_->key;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp10_ = xmlNewTextChild (_tmp7_, NULL, (xmlChar*) _tmp9_, (xmlChar*) "");
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		subnode = _tmp10_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp11_ = arg;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12_ = _tmp11_->children;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12__length1 = _tmp11_->children_length1;
-#line 9756 "RajcePublishing.c"
+#line 9770 "RajcePublishing.c"
 		{
 			PublishingRajceArgItem** child_collection = NULL;
 			gint child_collection_length1 = 0;
 			gint _child_collection_size_ = 0;
 			gint child_it = 0;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			child_collection = _tmp12_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			child_collection_length1 = _tmp12__length1;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			for (child_it = 0; child_it < _tmp12__length1; child_it = child_it + 1) {
-#line 9768 "RajcePublishing.c"
+#line 9782 "RajcePublishing.c"
 				PublishingRajceArgItem* _tmp13_ = NULL;
 				PublishingRajceArgItem* child = NULL;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				_tmp13_ = _publishing_rajce_arg_item_ref0 (child_collection[child_it]);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 				child = _tmp13_;
-#line 9775 "RajcePublishing.c"
+#line 9789 "RajcePublishing.c"
 				{
 					xmlNode* _tmp14_ = NULL;
 					PublishingRajceArgItem* _tmp15_ = NULL;
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					_tmp14_ = subnode;
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					_tmp15_ = child;
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					publishing_rajce_live_api_request_WriteParam (_tmp14_, _tmp15_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1339 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 					_publishing_rajce_arg_item_unref0 (child);
-#line 9787 "RajcePublishing.c"
+#line 9801 "RajcePublishing.c"
 				}
 			}
 		}
@@ -9796,216 +9810,216 @@ static void publishing_rajce_live_api_request_WriteParam (xmlNode* node, Publish
 
 
 static void publishing_rajce_value_live_api_request_init (GValue* value) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 9798 "RajcePublishing.c"
+#line 9812 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_value_live_api_request_free_value (GValue* value) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_live_api_request_unref (value->data[0].v_pointer);
-#line 9807 "RajcePublishing.c"
-	}
-}
-
-
-static void publishing_rajce_value_live_api_request_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (src_value->data[0].v_pointer) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = publishing_rajce_live_api_request_ref (src_value->data[0].v_pointer);
-#line 9817 "RajcePublishing.c"
-	} else {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		dest_value->data[0].v_pointer = NULL;
 #line 9821 "RajcePublishing.c"
 	}
 }
 
 
+static void publishing_rajce_value_live_api_request_copy_value (const GValue* src_value, GValue* dest_value) {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (src_value->data[0].v_pointer) {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = publishing_rajce_live_api_request_ref (src_value->data[0].v_pointer);
+#line 9831 "RajcePublishing.c"
+	} else {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		dest_value->data[0].v_pointer = NULL;
+#line 9835 "RajcePublishing.c"
+	}
+}
+
+
 static gpointer publishing_rajce_value_live_api_request_peek_pointer (const GValue* value) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 9829 "RajcePublishing.c"
+#line 9843 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_live_api_request_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 9836 "RajcePublishing.c"
+#line 9850 "RajcePublishing.c"
 		PublishingRajceLiveApiRequest* object;
 		object = collect_values[0].v_pointer;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9843 "RajcePublishing.c"
+#line 9857 "RajcePublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9847 "RajcePublishing.c"
+#line 9861 "RajcePublishing.c"
 		}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = publishing_rajce_live_api_request_ref (object);
-#line 9851 "RajcePublishing.c"
+#line 9865 "RajcePublishing.c"
 	} else {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9855 "RajcePublishing.c"
+#line 9869 "RajcePublishing.c"
 	}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 9859 "RajcePublishing.c"
+#line 9873 "RajcePublishing.c"
 }
 
 
 static gchar* publishing_rajce_value_live_api_request_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingRajceLiveApiRequest** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (!object_p) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9870 "RajcePublishing.c"
-	}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (!value->data[0].v_pointer) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = NULL;
-#line 9876 "RajcePublishing.c"
-	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = value->data[0].v_pointer;
-#line 9880 "RajcePublishing.c"
-	} else {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		*object_p = publishing_rajce_live_api_request_ref (value->data[0].v_pointer);
 #line 9884 "RajcePublishing.c"
 	}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (!value->data[0].v_pointer) {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = NULL;
+#line 9890 "RajcePublishing.c"
+	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = value->data[0].v_pointer;
+#line 9894 "RajcePublishing.c"
+	} else {
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		*object_p = publishing_rajce_live_api_request_ref (value->data[0].v_pointer);
+#line 9898 "RajcePublishing.c"
+	}
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return NULL;
-#line 9888 "RajcePublishing.c"
+#line 9902 "RajcePublishing.c"
 }
 
 
 GParamSpec* publishing_rajce_param_spec_live_api_request (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingRajceParamSpecLiveApiRequest* spec;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST), NULL);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 9902 "RajcePublishing.c"
+#line 9916 "RajcePublishing.c"
 }
 
 
 gpointer publishing_rajce_value_get_live_api_request (const GValue* value) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST), NULL);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return value->data[0].v_pointer;
-#line 9911 "RajcePublishing.c"
+#line 9925 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_value_set_live_api_request (GValue* value, gpointer v_object) {
 	PublishingRajceLiveApiRequest* old;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_live_api_request_ref (value->data[0].v_pointer);
-#line 9931 "RajcePublishing.c"
+#line 9945 "RajcePublishing.c"
 	} else {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9935 "RajcePublishing.c"
+#line 9949 "RajcePublishing.c"
 	}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_live_api_request_unref (old);
-#line 9941 "RajcePublishing.c"
+#line 9955 "RajcePublishing.c"
 	}
 }
 
 
 void publishing_rajce_value_take_live_api_request (GValue* value, gpointer v_object) {
 	PublishingRajceLiveApiRequest* old;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (v_object) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 9960 "RajcePublishing.c"
+#line 9974 "RajcePublishing.c"
 	} else {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9964 "RajcePublishing.c"
+#line 9978 "RajcePublishing.c"
 	}
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (old) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		publishing_rajce_live_api_request_unref (old);
-#line 9970 "RajcePublishing.c"
+#line 9984 "RajcePublishing.c"
 	}
 }
 
 
 static void publishing_rajce_live_api_request_class_init (PublishingRajceLiveApiRequestClass * klass) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_parent_class = g_type_class_peek_parent (klass);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRajceLiveApiRequestClass *) klass)->finalize = publishing_rajce_live_api_request_finalize;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRajceLiveApiRequestPrivate));
-#line 9982 "RajcePublishing.c"
+#line 9996 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_live_api_request_instance_init (PublishingRajceLiveApiRequest * self) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv = PUBLISHING_RAJCE_LIVE_API_REQUEST_GET_PRIVATE (self);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->ref_count = 1;
-#line 9991 "RajcePublishing.c"
+#line 10005 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_live_api_request_finalize (PublishingRajceLiveApiRequest* obj) {
 	PublishingRajceLiveApiRequest * self;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_LIVE_API_REQUEST, PublishingRajceLiveApiRequest);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	self->priv->_params = (_vala_array_free (self->priv->_params, self->priv->_params_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
 #line 1260 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	self->priv->_params = (_vala_array_free (self->priv->_params, self->priv->_params_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
+#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (self->priv->_cmd);
-#line 10005 "RajcePublishing.c"
+#line 10019 "RajcePublishing.c"
 }
 
 
@@ -10026,24 +10040,24 @@ GType publishing_rajce_live_api_request_get_type (void) {
 gpointer publishing_rajce_live_api_request_ref (gpointer instance) {
 	PublishingRajceLiveApiRequest* self;
 	self = instance;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return instance;
-#line 10030 "RajcePublishing.c"
+#line 10044 "RajcePublishing.c"
 }
 
 
 void publishing_rajce_live_api_request_unref (gpointer instance) {
 	PublishingRajceLiveApiRequest* self;
 	self = instance;
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		PUBLISHING_RAJCE_LIVE_API_REQUEST_GET_CLASS (self)->finalize (self);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 10043 "RajcePublishing.c"
+#line 10057 "RajcePublishing.c"
 	}
 }
 
@@ -10051,22 +10065,22 @@ void publishing_rajce_live_api_request_unref (gpointer instance) {
 PublishingRajceTransaction* publishing_rajce_transaction_construct (GType object_type, PublishingRajceSession* session) {
 	PublishingRajceTransaction* self = NULL;
 	PublishingRajceSession* _tmp0_ = NULL;
-#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1357 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1357 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1358 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceTransaction*) publishing_rest_support_transaction_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10059 "RajcePublishing.c"
+#line 10073 "RajcePublishing.c"
 }
 
 
 PublishingRajceTransaction* publishing_rajce_transaction_new (PublishingRajceSession* session) {
-#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_transaction_construct (PUBLISHING_RAJCE_TYPE_TRANSACTION, session);
-#line 10066 "RajcePublishing.c"
+#line 10080 "RajcePublishing.c"
 }
 
 
@@ -10094,64 +10108,64 @@ gchar* publishing_rajce_transaction_validate_xml (PublishingRESTSupportXmlDocume
 	gchar* _tmp26_ = NULL;
 	gchar* _tmp27_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1360 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (doc), NULL);
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = doc;
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = publishing_rest_support_xml_document_get_root_node (_tmp0_);
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	root = _tmp1_;
-#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = root;
-#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1364 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp2_ == NULL) {
-#line 10106 "RajcePublishing.c"
+#line 10120 "RajcePublishing.c"
 		gchar* _tmp3_ = NULL;
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp3_ = g_strdup ("No XML returned from server");
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		result = _tmp3_;
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return result;
-#line 10114 "RajcePublishing.c"
+#line 10128 "RajcePublishing.c"
 	}
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = root;
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_->name;
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = g_strdup (_tmp5_);
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	name = _tmp6_;
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = name;
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp8_ == NULL) {
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = TRUE;
-#line 10130 "RajcePublishing.c"
+#line 10144 "RajcePublishing.c"
 	} else {
 		const gchar* _tmp9_ = NULL;
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp9_ = name;
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp7_ = g_strcmp0 (_tmp9_, "response") != 0;
-#line 10137 "RajcePublishing.c"
-	}
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	if (_tmp7_) {
-#line 10141 "RajcePublishing.c"
-		gchar* _tmp10_ = NULL;
-#line 1372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_tmp10_ = g_strdup ("No response from Rajce in XML");
-#line 1372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		result = _tmp10_;
-#line 1372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		_g_free0 (name);
-#line 1372 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-		return result;
 #line 10151 "RajcePublishing.c"
+	}
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	if (_tmp7_) {
+#line 10155 "RajcePublishing.c"
+		gchar* _tmp10_ = NULL;
+#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_tmp10_ = g_strdup ("No response from Rajce in XML");
+#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		result = _tmp10_;
+#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		_g_free0 (name);
+#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+		return result;
+#line 10165 "RajcePublishing.c"
 	}
 	{
 		xmlNode* _tmp11_ = NULL;
@@ -10162,129 +10176,129 @@ gchar* publishing_rajce_transaction_validate_xml (PublishingRESTSupportXmlDocume
 		PublishingRESTSupportXmlDocument* _tmp16_ = NULL;
 		xmlNode* _tmp17_ = NULL;
 		xmlNode* _tmp18_ = NULL;
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp12_ = doc;
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp13_ = root;
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp14_ = publishing_rest_support_xml_document_get_named_child (_tmp12_, _tmp13_, "errorCode", &_inner_error_);
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp11_ = _tmp14_;
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 10174 "RajcePublishing.c"
+#line 10188 "RajcePublishing.c"
 				goto __catch31_spit_publishing_publishing_error;
 			}
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_g_free0 (name);
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return NULL;
-#line 10185 "RajcePublishing.c"
+#line 10199 "RajcePublishing.c"
 		}
-#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		errcode = _tmp11_;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp16_ = doc;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp17_ = root;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp18_ = publishing_rest_support_xml_document_get_named_child (_tmp16_, _tmp17_, "result", &_inner_error_);
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp15_ = _tmp18_;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 10201 "RajcePublishing.c"
+#line 10215 "RajcePublishing.c"
 				goto __catch31_spit_publishing_publishing_error;
 			}
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			_g_free0 (name);
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 			return NULL;
-#line 10212 "RajcePublishing.c"
+#line 10226 "RajcePublishing.c"
 		}
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_result_ = _tmp15_;
-#line 10216 "RajcePublishing.c"
+#line 10230 "RajcePublishing.c"
 	}
 	goto __finally31;
 	__catch31_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		err = _inner_error_;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_inner_error_ = NULL;
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		result = NULL;
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_error_free0 (err);
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (name);
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return result;
-#line 10234 "RajcePublishing.c"
+#line 10248 "RajcePublishing.c"
 	}
 	__finally31:
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_g_free0 (name);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		return NULL;
-#line 10247 "RajcePublishing.c"
+#line 10261 "RajcePublishing.c"
 	}
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp19_ = errcode;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp20_ = (gchar*) xmlNodeGetContent (_tmp19_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp21_ = _tmp20_;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp22_ = atoi (_tmp21_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp23_ = _result_;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp24_ = (gchar*) xmlNodeGetContent (_tmp23_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp25_ = _tmp24_;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp26_ = g_strdup_printf ("999 Rajce Error [%d]: %s", _tmp22_, _tmp25_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp27_ = _tmp26_;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp25_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp21_);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	result = _tmp27_;
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (name);
-#line 1385 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return result;
-#line 10277 "RajcePublishing.c"
+#line 10291 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_transaction_class_init (PublishingRajceTransactionClass * klass) {
-#line 1353 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10284 "RajcePublishing.c"
+#line 10298 "RajcePublishing.c"
 }
 
 
@@ -10321,67 +10335,67 @@ PublishingRajceSessionLoginTransaction* publishing_rajce_session_login_transacti
 	const gchar* _tmp5_ = NULL;
 	gchar* xml = NULL;
 	gchar* _tmp6_ = NULL;
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (username != NULL, NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (token != NULL, NULL);
-#line 1396 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = url;
-#line 1396 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	g_debug ("RajcePublishing.vala:1396: SessionLoginTransaction: URL: %s", _tmp0_);
 #line 1397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	g_debug ("RajcePublishing.vala:1397: SessionLoginTransaction: URL: %s", _tmp0_);
+#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = session;
-#line 1397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = url;
-#line 1397 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceSessionLoginTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp2_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp3_ = publishing_rajce_live_api_request_new ("login");
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	req = _tmp3_;
 #line 1399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_live_api_request_AddParam (req, "clientID", "RajceShotwellPlugin");
+	_tmp3_ = publishing_rajce_live_api_request_new ("login");
+#line 1399 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	req = _tmp3_;
 #line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_live_api_request_AddParam (req, "clientID", "RajceShotwellPlugin");
+#line 1401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "currentVersion", "1.1.1.1");
-#line 1401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = username;
-#line 1401 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "login", _tmp4_);
-#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = token;
-#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "password", _tmp5_);
-#line 1403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp6_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1403 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp6_;
 #line 1404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp6_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1404 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp6_;
+#line 1405 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10367 "RajcePublishing.c"
+#line 10381 "RajcePublishing.c"
 }
 
 
 PublishingRajceSessionLoginTransaction* publishing_rajce_session_login_transaction_new (PublishingRajceSession* session, const gchar* url, const gchar* username, const gchar* token) {
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1395 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_session_login_transaction_construct (PUBLISHING_RAJCE_TYPE_SESSION_LOGIN_TRANSACTION, session, url, username, token);
-#line 10374 "RajcePublishing.c"
+#line 10388 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_session_login_transaction_class_init (PublishingRajceSessionLoginTransactionClass * klass) {
-#line 1392 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1393 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_session_login_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10381 "RajcePublishing.c"
+#line 10395 "RajcePublishing.c"
 }
 
 
@@ -10405,87 +10419,87 @@ GType publishing_rajce_session_login_transaction_get_type (void) {
 
 
 static void _vala_array_add9 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 10411 "RajcePublishing.c"
+#line 10425 "RajcePublishing.c"
 	}
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 10417 "RajcePublishing.c"
+#line 10431 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add10 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 10428 "RajcePublishing.c"
+#line 10442 "RajcePublishing.c"
 	}
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 10434 "RajcePublishing.c"
+#line 10448 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add11 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 10445 "RajcePublishing.c"
+#line 10459 "RajcePublishing.c"
 	}
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 10451 "RajcePublishing.c"
+#line 10465 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add12 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 10462 "RajcePublishing.c"
+#line 10476 "RajcePublishing.c"
 	}
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 10468 "RajcePublishing.c"
+#line 10482 "RajcePublishing.c"
 }
 
 
 static void _vala_array_add13 (PublishingRajceArgItem*** array, int* length, int* size, PublishingRajceArgItem* value) {
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*length) == (*size)) {
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		*array = g_renew (PublishingRajceArgItem*, *array, (*size) + 1);
-#line 10479 "RajcePublishing.c"
+#line 10493 "RajcePublishing.c"
 	}
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	(*array)[*length] = NULL;
-#line 10485 "RajcePublishing.c"
+#line 10499 "RajcePublishing.c"
 }
 
 
@@ -10521,113 +10535,113 @@ PublishingRajceGetAlbumsTransaction* publishing_rajce_get_albums_transaction_con
 	gint _tmp17__length1 = 0;
 	gchar* xml = NULL;
 	gchar* _tmp18_ = NULL;
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1415 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceGetAlbumsTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("getAlbumList");
-#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1417 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = g_new0 (PublishingRajceArgItem*, 0 + 1);
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	columns = _tmp6_;
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	columns_length1 = 0;
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_columns_size_ = columns_length1;
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = columns;
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7__length1 = columns_length1;
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = publishing_rajce_arg_item_new ("column", "viewCount");
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add9 (&columns, &columns_length1, &_columns_size_, _tmp8_);
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9_ = columns;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9__length1 = columns_length1;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp10_ = publishing_rajce_arg_item_new ("column", "isFavourite");
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add10 (&columns, &columns_length1, &_columns_size_, _tmp10_);
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp11_ = columns;
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp11__length1 = columns_length1;
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp12_ = publishing_rajce_arg_item_new ("column", "descriptionHtml");
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add11 (&columns, &columns_length1, &_columns_size_, _tmp12_);
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp13_ = columns;
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp13__length1 = columns_length1;
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp14_ = publishing_rajce_arg_item_new ("column", "coverPhotoID");
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add12 (&columns, &columns_length1, &_columns_size_, _tmp14_);
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp15_ = columns;
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp15__length1 = columns_length1;
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp16_ = publishing_rajce_arg_item_new ("column", "localPath");
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_vala_array_add13 (&columns, &columns_length1, &_columns_size_, _tmp16_);
-#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp17_ = columns;
-#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp17__length1 = columns_length1;
-#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParamNode (req, "columns", _tmp17_, _tmp17__length1);
-#line 1425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp18_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1425 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp18_;
 #line 1426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp18_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1426 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp18_;
+#line 1427 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	columns = (_vala_array_free (columns, columns_length1, (GDestroyNotify) publishing_rajce_arg_item_unref), NULL);
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10613 "RajcePublishing.c"
+#line 10627 "RajcePublishing.c"
 }
 
 
 PublishingRajceGetAlbumsTransaction* publishing_rajce_get_albums_transaction_new (PublishingRajceSession* session, const gchar* url) {
-#line 1413 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_get_albums_transaction_construct (PUBLISHING_RAJCE_TYPE_GET_ALBUMS_TRANSACTION, session, url);
-#line 10620 "RajcePublishing.c"
+#line 10634 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_get_albums_transaction_class_init (PublishingRajceGetAlbumsTransactionClass * klass) {
-#line 1411 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1412 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_get_albums_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10627 "RajcePublishing.c"
+#line 10641 "RajcePublishing.c"
 }
 
 
@@ -10663,69 +10677,69 @@ PublishingRajceCreateAlbumTransaction* publishing_rajce_create_album_transaction
 	gboolean _tmp7_ = FALSE;
 	gchar* xml = NULL;
 	gchar* _tmp8_ = NULL;
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (albumName != NULL, NULL);
-#line 1437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1437 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceCreateAlbumTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("createAlbum");
-#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1439 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp6_ = albumName;
-#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	publishing_rajce_live_api_request_AddParam (req, "albumName", _tmp6_);
 #line 1441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp6_ = albumName;
+#line 1441 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	publishing_rajce_live_api_request_AddParam (req, "albumName", _tmp6_);
+#line 1442 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "albumDescription", "");
-#line 1442 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = hidden;
-#line 1442 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParamBool (req, "albumVisible", !_tmp7_);
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp8_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp8_;
 #line 1444 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp8_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1444 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp8_;
+#line 1445 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10711 "RajcePublishing.c"
+#line 10725 "RajcePublishing.c"
 }
 
 
 PublishingRajceCreateAlbumTransaction* publishing_rajce_create_album_transaction_new (PublishingRajceSession* session, const gchar* url, const gchar* albumName, gboolean hidden) {
-#line 1435 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1436 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_create_album_transaction_construct (PUBLISHING_RAJCE_TYPE_CREATE_ALBUM_TRANSACTION, session, url, albumName, hidden);
-#line 10718 "RajcePublishing.c"
+#line 10732 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_create_album_transaction_class_init (PublishingRajceCreateAlbumTransactionClass * klass) {
-#line 1433 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_create_album_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10725 "RajcePublishing.c"
+#line 10739 "RajcePublishing.c"
 }
 
 
@@ -10760,61 +10774,61 @@ PublishingRajceOpenAlbumTransaction* publishing_rajce_open_album_transaction_con
 	gint _tmp6_ = 0;
 	gchar* xml = NULL;
 	gchar* _tmp7_ = NULL;
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1455 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1455 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1455 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceOpenAlbumTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("openAlbum");
-#line 1456 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1457 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = albumID;
-#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParamInt (req, "albumID", _tmp6_);
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp7_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp7_;
 #line 1460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp7_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1460 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp7_;
+#line 1461 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10800 "RajcePublishing.c"
+#line 10814 "RajcePublishing.c"
 }
 
 
 PublishingRajceOpenAlbumTransaction* publishing_rajce_open_album_transaction_new (PublishingRajceSession* session, const gchar* url, gint albumID) {
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_open_album_transaction_construct (PUBLISHING_RAJCE_TYPE_OPEN_ALBUM_TRANSACTION, session, url, albumID);
-#line 10807 "RajcePublishing.c"
+#line 10821 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_open_album_transaction_class_init (PublishingRajceOpenAlbumTransactionClass * klass) {
-#line 1451 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1452 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_open_album_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10814 "RajcePublishing.c"
+#line 10828 "RajcePublishing.c"
 }
 
 
@@ -10851,67 +10865,67 @@ PublishingRajceGetAlbumUrlTransaction* publishing_rajce_get_album_url_transactio
 	gchar* _tmp8_ = NULL;
 	gchar* xml = NULL;
 	gchar* _tmp9_ = NULL;
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1471 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1471 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1471 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceGetAlbumUrlTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("getAlbumUrl");
-#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1473 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = session;
-#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = publishing_rajce_session_get_albumtoken (_tmp6_);
-#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = _tmp7_;
-#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "albumToken", _tmp8_);
-#line 1474 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp8_);
-#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp9_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1475 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp9_;
 #line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp9_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp9_;
+#line 1477 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10897 "RajcePublishing.c"
+#line 10911 "RajcePublishing.c"
 }
 
 
 PublishingRajceGetAlbumUrlTransaction* publishing_rajce_get_album_url_transaction_new (PublishingRajceSession* session, const gchar* url) {
-#line 1469 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_get_album_url_transaction_construct (PUBLISHING_RAJCE_TYPE_GET_ALBUM_URL_TRANSACTION, session, url);
-#line 10904 "RajcePublishing.c"
+#line 10918 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_get_album_url_transaction_class_init (PublishingRajceGetAlbumUrlTransactionClass * klass) {
-#line 1467 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1468 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_get_album_url_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 10911 "RajcePublishing.c"
+#line 10925 "RajcePublishing.c"
 }
 
 
@@ -10948,67 +10962,67 @@ PublishingRajceCloseAlbumTransaction* publishing_rajce_close_album_transaction_c
 	gchar* _tmp8_ = NULL;
 	gchar* xml = NULL;
 	gchar* _tmp9_ = NULL;
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1487 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceCloseAlbumTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("closeAlbum");
-#line 1488 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = session;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = publishing_rajce_session_get_albumtoken (_tmp6_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = _tmp7_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "albumToken", _tmp8_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp8_);
-#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp9_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1491 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp9_;
 #line 1492 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp9_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1492 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp9_;
+#line 1493 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 10994 "RajcePublishing.c"
+#line 11008 "RajcePublishing.c"
 }
 
 
 PublishingRajceCloseAlbumTransaction* publishing_rajce_close_album_transaction_new (PublishingRajceSession* session, const gchar* url) {
-#line 1485 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1486 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_close_album_transaction_construct (PUBLISHING_RAJCE_TYPE_CLOSE_ALBUM_TRANSACTION, session, url);
-#line 11001 "RajcePublishing.c"
+#line 11015 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_close_album_transaction_class_init (PublishingRajceCloseAlbumTransactionClass * klass) {
-#line 1483 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1484 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_close_album_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 11008 "RajcePublishing.c"
+#line 11022 "RajcePublishing.c"
 }
 
 
@@ -11042,57 +11056,57 @@ PublishingRajceGetCategoriesTransaction* publishing_rajce_get_categories_transac
 	gchar* _tmp5_ = NULL;
 	gchar* xml = NULL;
 	gchar* _tmp6_ = NULL;
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = url;
-#line 1503 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceGetCategoriesTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = publishing_rajce_live_api_request_new ("getCategories");
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp2_;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = session;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = publishing_rajce_session_get_usertoken (_tmp3_);
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (req, "token", _tmp5_);
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp6_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
-#line 1506 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp6_;
 #line 1507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp6_ = publishing_rajce_live_api_request_Params2XmlString (req, TRUE);
+#line 1507 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp6_;
+#line 1508 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 11078 "RajcePublishing.c"
+#line 11092 "RajcePublishing.c"
 }
 
 
 PublishingRajceGetCategoriesTransaction* publishing_rajce_get_categories_transaction_new (PublishingRajceSession* session, const gchar* url) {
-#line 1501 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1502 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_get_categories_transaction_construct (PUBLISHING_RAJCE_TYPE_GET_CATEGORIES_TRANSACTION, session, url);
-#line 11085 "RajcePublishing.c"
+#line 11099 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_get_categories_transaction_class_init (PublishingRajceGetCategoriesTransactionClass * klass) {
-#line 1499 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1500 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_get_categories_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 11092 "RajcePublishing.c"
+#line 11106 "RajcePublishing.c"
 }
 
 
@@ -11116,9 +11130,9 @@ GType publishing_rajce_get_categories_transaction_get_type (void) {
 
 
 static void _g_free0_ (gpointer var) {
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	var = (g_free (var), NULL);
-#line 11118 "RajcePublishing.c"
+#line 11132 "RajcePublishing.c"
 }
 
 
@@ -11187,253 +11201,253 @@ PublishingRajceAddPhotoTransaction* publishing_rajce_add_photo_transaction_const
 	gchar* _tmp53_ = NULL;
 	const gchar* _tmp54_ = NULL;
 	gchar* _tmp55_ = NULL;
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_SESSION (session), NULL);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (url != NULL, NULL);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (PUBLISHING_RAJCE_IS_PUBLISHING_PARAMETERS (parameters), NULL);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp0_ = session;
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp1_ = publishable;
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp2_ = url;
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = (PublishingRajceAddPhotoTransaction*) publishing_rest_support_upload_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp2_);
-#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1522 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp3_ = parameters;
-#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1522 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp4_ = _publishing_rajce_publishing_parameters_ref0 (_tmp3_);
-#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1522 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_publishing_parameters_unref0 (self->priv->parameters);
-#line 1521 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1522 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->parameters = _tmp4_;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp6_ = parameters;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp7_ = _tmp6_->album_id;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if ((*_tmp7_) > 0) {
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp5_ = "";
-#line 11219 "RajcePublishing.c"
+#line 11233 "RajcePublishing.c"
 	} else {
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp5_ = " new";
-#line 11223 "RajcePublishing.c"
+#line 11237 "RajcePublishing.c"
 	}
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp8_ = publishable;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp9_ = spit_publishing_publishable_get_serialized_file (_tmp8_);
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp11_ = g_file_get_basename (_tmp10_);
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp12_ = _tmp11_;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp13_ = parameters;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp14_ = _tmp13_->album_name;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	g_debug ("RajcePublishing.vala:1523: RajcePlugin: Uploading photo %s to%s album " \
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	g_debug ("RajcePublishing.vala:1524: RajcePlugin: Uploading photo %s to%s album " \
 "%s", _tmp12_, _tmp5_, _tmp14_);
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp12_);
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_object_unref0 (_tmp10_);
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp15_ = publishable;
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp16_ = spit_publishing_publishable_get_param_string (_tmp15_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	basename = _tmp16_;
-#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp17_ = publishable;
-#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp18_ = spit_publishing_publishable_get_param_string (_tmp17_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_COMMENT);
-#line 1526 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	comment = _tmp18_;
-#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp19_ = publishable;
-#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp20_ = spit_publishing_publishable_get_publishing_name (_tmp19_);
-#line 1527 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1528 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	pubname = _tmp20_;
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp21_ = session;
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp22_ = publishing_rajce_session_get_maxsize (_tmp21_);
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	width = _tmp22_;
-#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1531 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp23_ = session;
-#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1531 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp24_ = publishing_rajce_session_get_maxsize (_tmp23_);
-#line 1530 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1531 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	height = _tmp24_;
-#line 1532 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp25_ = publishing_rajce_live_api_request_new ("addPhoto");
-#line 1532 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	req = _tmp25_;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp26_ = req;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp27_ = session;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp28_ = publishing_rajce_session_get_usertoken (_tmp27_);
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp29_ = _tmp28_;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (_tmp26_, "token", _tmp29_);
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp29_);
-#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp30_ = req;
-#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp31_ = width;
-#line 1534 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParamInt (_tmp30_, "width", _tmp31_);
-#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp32_ = req;
-#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp33_ = height;
-#line 1535 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParamInt (_tmp32_, "height", _tmp33_);
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp34_ = req;
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp35_ = session;
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp36_ = publishing_rajce_session_get_albumtoken (_tmp35_);
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp37_ = _tmp36_;
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (_tmp34_, "albumToken", _tmp37_);
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (_tmp37_);
-#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp38_ = req;
-#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp39_ = pubname;
-#line 1537 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (_tmp38_, "photoName", _tmp39_);
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp40_ = req;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp41_ = basename;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (_tmp40_, "fullFileName", _tmp41_);
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp43_ = comment;
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	if (_tmp43_ != NULL) {
-#line 11331 "RajcePublishing.c"
+#line 11345 "RajcePublishing.c"
 		const gchar* _tmp44_ = NULL;
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp44_ = comment;
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp42_ = _tmp44_;
-#line 11337 "RajcePublishing.c"
+#line 11351 "RajcePublishing.c"
 	} else {
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 		_tmp42_ = "";
-#line 11341 "RajcePublishing.c"
+#line 11355 "RajcePublishing.c"
 	}
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp45_ = req;
-#line 1539 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_live_api_request_AddParam (_tmp45_, "description", _tmp42_);
-#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp46_ = req;
-#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp47_ = publishing_rajce_live_api_request_Params2XmlString (_tmp46_, FALSE);
-#line 1540 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	xml = _tmp47_;
 #line 1541 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp46_ = req;
+#line 1541 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp47_ = publishing_rajce_live_api_request_Params2XmlString (_tmp46_, FALSE);
+#line 1541 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	xml = _tmp47_;
+#line 1542 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "data", xml);
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp48_ = g_str_hash;
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp49_ = g_str_equal;
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp50_ = g_hash_table_new_full (_tmp48_, _tmp49_, _g_free0_, _g_free0_);
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	disposition_table = _tmp50_;
-#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp51_ = g_strdup ("name");
-#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_tmp52_ = g_strdup ("photo");
-#line 1544 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_hash_table_insert (disposition_table, _tmp51_, _tmp52_);
-#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp53_ = g_strdup ("filename");
-#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp54_ = basename;
-#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	_tmp55_ = soup_uri_encode (_tmp54_, NULL);
-#line 1545 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
-	g_hash_table_insert (disposition_table, _tmp53_, _tmp55_);
 #line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp53_ = g_strdup ("filename");
+#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp54_ = basename;
+#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	_tmp55_ = soup_uri_encode (_tmp54_, NULL);
+#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+	g_hash_table_insert (disposition_table, _tmp53_, _tmp55_);
+#line 1547 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rest_support_upload_transaction_set_binary_disposition_table (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), disposition_table);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_hash_table_unref0 (disposition_table);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (xml);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_live_api_request_unref0 (req);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (pubname);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (comment);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_g_free0 (basename);
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return self;
-#line 11393 "RajcePublishing.c"
+#line 11407 "RajcePublishing.c"
 }
 
 
 PublishingRajceAddPhotoTransaction* publishing_rajce_add_photo_transaction_new (PublishingRajceSession* session, const gchar* url, PublishingRajcePublishingParameters* parameters, SpitPublishingPublishable* publishable) {
-#line 1518 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	return publishing_rajce_add_photo_transaction_construct (PUBLISHING_RAJCE_TYPE_ADD_PHOTO_TRANSACTION, session, url, parameters, publishable);
-#line 11400 "RajcePublishing.c"
+#line 11414 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_add_photo_transaction_class_init (PublishingRajceAddPhotoTransactionClass * klass) {
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	publishing_rajce_add_photo_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_rajce_add_photo_transaction_finalize;
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingRajceAddPhotoTransactionPrivate));
-#line 11411 "RajcePublishing.c"
+#line 11425 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_add_photo_transaction_instance_init (PublishingRajceAddPhotoTransaction * self) {
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv = PUBLISHING_RAJCE_ADD_PHOTO_TRANSACTION_GET_PRIVATE (self);
-#line 1516 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1517 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self->priv->parameters = NULL;
-#line 11420 "RajcePublishing.c"
+#line 11434 "RajcePublishing.c"
 }
 
 
 static void publishing_rajce_add_photo_transaction_finalize (PublishingRESTSupportTransaction* obj) {
 	PublishingRajceAddPhotoTransaction * self;
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_RAJCE_TYPE_ADD_PHOTO_TRANSACTION, PublishingRajceAddPhotoTransaction);
-#line 1516 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1517 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	_publishing_rajce_publishing_parameters_unref0 (self->priv->parameters);
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
+#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/RajcePublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_rajce_add_photo_transaction_parent_class)->finalize (obj);
-#line 11432 "RajcePublishing.c"
+#line 11446 "RajcePublishing.c"
 }
 
 

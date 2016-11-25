@@ -13,13 +13,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gee.h>
+#include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <glib/gi18n-lib.h>
 #include <float.h>
 #include <math.h>
-#include <gio/gio.h>
+#include <glib/gi18n-lib.h>
 #include <gdk/gdk.h>
-#include <cairo.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gobject/gvaluecollector.h>
 
@@ -330,6 +329,37 @@ typedef struct _SearchFilterActionsClass SearchFilterActionsClass;
 typedef struct _SearchFilterActionsPrivate SearchFilterActionsPrivate;
 #define _text_action_unref0(var) ((var == NULL) ? NULL : (var = (text_action_unref (var), NULL)))
 
+#define TYPE_PAGE_WINDOW (page_window_get_type ())
+#define PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGE_WINDOW, PageWindow))
+#define PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGE_WINDOW, PageWindowClass))
+#define IS_PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PAGE_WINDOW))
+#define IS_PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PAGE_WINDOW))
+#define PAGE_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PAGE_WINDOW, PageWindowClass))
+
+typedef struct _PageWindow PageWindow;
+typedef struct _PageWindowClass PageWindowClass;
+
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
+#define TYPE_LIBRARY_WINDOW (library_window_get_type ())
+#define LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LIBRARY_WINDOW, LibraryWindow))
+#define LIBRARY_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LIBRARY_WINDOW, LibraryWindowClass))
+#define IS_LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LIBRARY_WINDOW))
+#define IS_LIBRARY_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LIBRARY_WINDOW))
+#define LIBRARY_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LIBRARY_WINDOW, LibraryWindowClass))
+
+typedef struct _LibraryWindow LibraryWindow;
+typedef struct _LibraryWindowClass LibraryWindowClass;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
+
 #define TYPE_PAGE (page_get_type ())
 #define PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGE, Page))
 #define PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGE, PageClass))
@@ -498,57 +528,6 @@ typedef struct _SearchFilterToolbarToggleActionToolButtonClass SearchFilterToolb
 #define _search_filter_actions_unref0(var) ((var == NULL) ? NULL : (var = (search_filter_actions_unref (var), NULL)))
 #define _view_filter_unref0(var) ((var == NULL) ? NULL : (var = (view_filter_unref (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
-typedef struct _SearchFilterToolbarRatingFilterButtonPrivate SearchFilterToolbarRatingFilterButtonPrivate;
-
-#define TYPE_PAGE_WINDOW (page_window_get_type ())
-#define PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGE_WINDOW, PageWindow))
-#define PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGE_WINDOW, PageWindowClass))
-#define IS_PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PAGE_WINDOW))
-#define IS_PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PAGE_WINDOW))
-#define PAGE_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PAGE_WINDOW, PageWindowClass))
-
-typedef struct _PageWindow PageWindow;
-typedef struct _PageWindowClass PageWindowClass;
-
-#define TYPE_APP_WINDOW (app_window_get_type ())
-#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
-#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
-#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
-#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
-#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
-
-typedef struct _AppWindow AppWindow;
-typedef struct _AppWindowClass AppWindowClass;
-
-#define TYPE_LIBRARY_WINDOW (library_window_get_type ())
-#define LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_LIBRARY_WINDOW, LibraryWindow))
-#define LIBRARY_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_LIBRARY_WINDOW, LibraryWindowClass))
-#define IS_LIBRARY_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_LIBRARY_WINDOW))
-#define IS_LIBRARY_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_LIBRARY_WINDOW))
-#define LIBRARY_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_LIBRARY_WINDOW, LibraryWindowClass))
-
-typedef struct _LibraryWindow LibraryWindow;
-typedef struct _LibraryWindowClass LibraryWindowClass;
-
-#define TYPE_CONFIGURATION_FACADE (configuration_facade_get_type ())
-#define CONFIGURATION_FACADE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_CONFIGURATION_FACADE, ConfigurationFacade))
-#define CONFIGURATION_FACADE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_CONFIGURATION_FACADE, ConfigurationFacadeClass))
-#define IS_CONFIGURATION_FACADE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_CONFIGURATION_FACADE))
-#define IS_CONFIGURATION_FACADE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_CONFIGURATION_FACADE))
-#define CONFIGURATION_FACADE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_CONFIGURATION_FACADE, ConfigurationFacadeClass))
-
-typedef struct _ConfigurationFacade ConfigurationFacade;
-typedef struct _ConfigurationFacadeClass ConfigurationFacadeClass;
-
-#define CONFIG_TYPE_FACADE (config_facade_get_type ())
-#define CONFIG_FACADE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), CONFIG_TYPE_FACADE, ConfigFacade))
-#define CONFIG_FACADE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), CONFIG_TYPE_FACADE, ConfigFacadeClass))
-#define CONFIG_IS_FACADE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), CONFIG_TYPE_FACADE))
-#define CONFIG_IS_FACADE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), CONFIG_TYPE_FACADE))
-#define CONFIG_FACADE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), CONFIG_TYPE_FACADE, ConfigFacadeClass))
-
-typedef struct _ConfigFacade ConfigFacade;
-typedef struct _ConfigFacadeClass ConfigFacadeClass;
 typedef struct _SearchFilterToolbarSavedSearchFilterButtonPrivate SearchFilterToolbarSavedSearchFilterButtonPrivate;
 
 #define SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER (search_filter_toolbar_saved_search_popover_get_type ())
@@ -626,6 +605,7 @@ typedef struct _DeleteSavedSearchCommandClass DeleteSavedSearchCommandClass;
 typedef struct _SearchFilterToolbarLabelToolItemPrivate SearchFilterToolbarLabelToolItemPrivate;
 typedef struct _SearchFilterToolbarToggleActionToolButtonPrivate SearchFilterToolbarToggleActionToolButtonPrivate;
 typedef struct _SearchFilterToolbarSearchBoxPrivate SearchFilterToolbarSearchBoxPrivate;
+typedef struct _SearchFilterToolbarRatingFilterButtonPrivate SearchFilterToolbarRatingFilterButtonPrivate;
 typedef struct _SearchFilterToolbarSavedSearchPopoverPrivate SearchFilterToolbarSavedSearchPopoverPrivate;
 
 #define SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON (search_filter_toolbar_saved_search_popover_data_button_get_type ())
@@ -811,7 +791,6 @@ struct _SearchFilterActionsClass {
 };
 
 struct _SearchFilterActionsPrivate {
-	GtkActionGroup* action_group;
 	SearchFilterCriteria criteria;
 	TextAction* _text;
 	gboolean has_flagged;
@@ -894,7 +873,7 @@ struct _ParamSpecSearchFilterActions {
 struct _SearchFilterToolbar {
 	GtkRevealer parent_instance;
 	SearchFilterToolbarPrivate * priv;
-	GtkUIManager* ui;
+	GtkBuilder* builder;
 };
 
 struct _SearchFilterToolbarClass {
@@ -920,17 +899,6 @@ struct _SearchFilterToolbarPrivate {
 	GtkSeparatorToolItem* sepr_mediatype_flagged;
 	GtkSeparatorToolItem* sepr_flagged_rating;
 	GtkSeparatorToolItem* sepr_rating_saved;
-};
-
-struct _SearchFilterToolbarRatingFilterButton {
-	GtkToolItem parent_instance;
-	SearchFilterToolbarRatingFilterButtonPrivate * priv;
-	GtkMenu* filter_popup;
-	GtkButton* button;
-};
-
-struct _SearchFilterToolbarRatingFilterButtonClass {
-	GtkToolItemClass parent_class;
 };
 
 struct _SearchFilterToolbarSavedSearchFilterButton {
@@ -968,7 +936,6 @@ struct _SearchFilterToolbarToggleActionToolButtonClass {
 
 struct _SearchFilterToolbarToggleActionToolButtonPrivate {
 	GtkToggleButton* button;
-	GtkToggleAction* action;
 };
 
 struct _SearchFilterToolbarSearchBox {
@@ -983,6 +950,16 @@ struct _SearchFilterToolbarSearchBoxClass {
 struct _SearchFilterToolbarSearchBoxPrivate {
 	GtkSearchEntry* search_entry;
 	TextAction* action;
+};
+
+struct _SearchFilterToolbarRatingFilterButton {
+	GtkToolItem parent_instance;
+	SearchFilterToolbarRatingFilterButtonPrivate * priv;
+	GtkMenuButton* button;
+};
+
+struct _SearchFilterToolbarRatingFilterButtonClass {
+	GtkToolItemClass parent_class;
 };
 
 struct _SearchFilterToolbarSavedSearchPopover {
@@ -1033,16 +1010,6 @@ extern TagSourceCollection* tag_global;
 static gpointer disabled_view_filter_parent_class = NULL;
 static gpointer text_action_parent_class = NULL;
 static gpointer search_filter_actions_parent_class = NULL;
-extern gchar* resources_DISPLAY_ONE_OR_HIGHER_MENU;
-extern gchar* resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP;
-extern gchar* resources_DISPLAY_TWO_OR_HIGHER_MENU;
-extern gchar* resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP;
-extern gchar* resources_DISPLAY_THREE_OR_HIGHER_MENU;
-extern gchar* resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP;
-extern gchar* resources_DISPLAY_FOUR_OR_HIGHER_MENU;
-extern gchar* resources_DISPLAY_FOUR_OR_HIGHER_TOOLTIP;
-extern gchar* resources_DISPLAY_FIVE_OR_HIGHER_MENU;
-extern gchar* resources_DISPLAY_FIVE_OR_HIGHER_TOOLTIP;
 static gpointer search_filter_toolbar_parent_class = NULL;
 static gpointer search_filter_toolbar_label_tool_item_parent_class = NULL;
 static gpointer search_filter_toolbar_toggle_action_tool_button_parent_class = NULL;
@@ -1079,7 +1046,7 @@ gboolean is_string_empty (const gchar* s);
 const gchar* search_view_filter_get_search_filter (SearchViewFilter* self);
 gchar** search_view_filter_get_search_filter_words (SearchViewFilter* self, int* result_length1);
 void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* text);
-static gchar** _vala_array_dup33 (gchar** self, int length);
+static gchar** _vala_array_dup32 (gchar** self, int length);
 void search_view_filter_clear_search_filter (SearchViewFilter* self);
 gboolean search_view_filter_has_saved_search (SearchViewFilter* self);
 SavedSearch* search_view_filter_get_saved_search (SearchViewFilter* self);
@@ -1180,22 +1147,40 @@ GType search_filter_actions_get_type (void) G_GNUC_CONST;
 enum  {
 	SEARCH_FILTER_ACTIONS_DUMMY_PROPERTY
 };
+static void search_filter_actions_on_action_radio (SearchFilterActions* self, GSimpleAction* action, GVariant* parameter);
+static void _search_filter_actions_on_action_radio_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void search_filter_actions_on_rating_changed (SearchFilterActions* self, GSimpleAction* action, GVariant* value);
+static void _search_filter_actions_on_rating_changed_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
+static void search_filter_actions_on_action_toggle (SearchFilterActions* self, GSimpleAction* action, GVariant* parameter);
+static void _search_filter_actions_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self);
+static void search_filter_actions_on_flagged_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value);
+static void _search_filter_actions_on_flagged_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
+static void search_filter_actions_on_photos_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value);
+static void _search_filter_actions_on_photos_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
+static void search_filter_actions_on_videos_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value);
+static void _search_filter_actions_on_videos_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
+static void search_filter_actions_on_raw_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value);
+static void _search_filter_actions_on_raw_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self);
 SearchFilterActions* search_filter_actions_new (void);
 SearchFilterActions* search_filter_actions_construct (GType object_type);
 static void search_filter_actions_register (SearchFilterActions* self);
 TextAction* search_filter_actions_get_text (SearchFilterActions* self);
 static void search_filter_actions_on_text_changed (SearchFilterActions* self, TextAction* action, const gchar* text);
 static void _search_filter_actions_on_text_changed_text_action_text_changed (TextAction* _sender, const gchar* text, gpointer self);
-GtkActionGroup* search_filter_actions_get_action_group (SearchFilterActions* self);
 SearchFilterCriteria search_filter_actions_get_criteria (SearchFilterActions* self);
-GtkAction* search_filter_actions_get_action (SearchFilterActions* self, const gchar* name);
+GActionEntry* search_filter_actions_get_actions (SearchFilterActions* self, int* result_length1);
+GSimpleAction* search_filter_actions_get_action (SearchFilterActions* self, const gchar* name);
+GType page_window_get_type (void) G_GNUC_CONST;
+GType app_window_get_type (void) G_GNUC_CONST;
+GType library_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 void search_filter_actions_set_action_sensitive (SearchFilterActions* self, const gchar* name, gboolean sensitive);
 void search_filter_actions_reset (SearchFilterActions* self);
-GtkToggleAction* search_filter_actions_get_flagged (SearchFilterActions* self);
-GtkToggleAction* search_filter_actions_get_photos (SearchFilterActions* self);
-GtkToggleAction* search_filter_actions_get_raw (SearchFilterActions* self);
-GtkToggleAction* search_filter_actions_get_videos (SearchFilterActions* self);
-GtkRadioAction* search_filter_actions_get_rating (SearchFilterActions* self);
+GSimpleAction* search_filter_actions_get_rating (SearchFilterActions* self);
+GSimpleAction* search_filter_actions_get_photos (SearchFilterActions* self);
+GSimpleAction* search_filter_actions_get_raw (SearchFilterActions* self);
+GSimpleAction* search_filter_actions_get_videos (SearchFilterActions* self);
+static GVariant* _variant_new28 (gchar* value);
 void search_filter_actions_set_sensitive_for_search_criteria (SearchFilterActions* self, SearchFilterCriteria criteria);
 static void search_filter_actions_update_sensitivities (SearchFilterActions* self);
 GType page_get_type (void) G_GNUC_CONST;
@@ -1229,47 +1214,13 @@ GType camera_accumulator_get_type (void) G_GNUC_CONST;
 gint camera_accumulator_get_photos (CameraAccumulator* self);
 gint camera_accumulator_get_videos (CameraAccumulator* self);
 gint camera_accumulator_get_raw (CameraAccumulator* self);
-#define RESOURCES_ICON_FILTER_FLAGGED "filter-flagged"
-#define RESOURCES_ICON_FILTER_FLAGGED_DISABLED "filter-flagged-disabled"
-#define RESOURCES_ICON_FILTER_VIDEOS "filter-videos"
-#define RESOURCES_ICON_FILTER_VIDEOS_DISABLED "filter-videos-disabled"
-#define RESOURCES_ICON_FILTER_PHOTOS "filter-photos"
-#define RESOURCES_ICON_FILTER_PHOTOS_DISABLED "filter-photos-disabled"
-#define RESOURCES_ICON_FILTER_RAW "filter-raw"
-#define RESOURCES_ICON_FILTER_RAW_DISABLED "filter-raw-disabled"
-#define TRANSLATABLE "translatable"
-#define RESOURCES_DISPLAY_REJECTED_ONLY_MENU _ ("Rejected _Only")
-#define RESOURCES_DISPLAY_REJECTED_ONLY_TOOLTIP _ ("Show only rejected photos")
-static void _vala_array_add339 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-#define RESOURCES_DISPLAY_REJECTED_OR_HIGHER_MENU _ ("All + _Rejected")
-#define RESOURCES_DISPLAY_REJECTED_OR_HIGHER_TOOLTIP "Show all photos, including rejected"
-static void _vala_array_add340 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-#define RESOURCES_DISPLAY_UNRATED_OR_HIGHER_MENU _ ("_All Photos")
-#define RESOURCES_DISPLAY_UNRATED_OR_HIGHER_TOOLTIP _ ("Show all photos")
-static void _vala_array_add341 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void _vala_array_add342 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void _vala_array_add343 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void _vala_array_add344 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void _vala_array_add345 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void _vala_array_add346 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value);
-static void search_filter_actions_on_rating_changed (SearchFilterActions* self, GtkAction* action, GtkAction* current);
-static void _search_filter_actions_on_rating_changed_gtk_radio_action_callback (GtkAction* action, GtkAction* current, gpointer self);
-static void search_filter_actions_on_flagged_toggled (SearchFilterActions* self, GtkAction* action);
-static void _search_filter_actions_on_flagged_toggled_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add347 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
-static void search_filter_actions_on_photos_toggled (SearchFilterActions* self, GtkAction* action);
-static void _search_filter_actions_on_photos_toggled_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add348 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
-static void search_filter_actions_on_videos_toggled (SearchFilterActions* self, GtkAction* action);
-static void _search_filter_actions_on_videos_toggled_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add349 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
-static void search_filter_actions_on_raw_toggled (SearchFilterActions* self, GtkAction* action);
-static void _search_filter_actions_on_raw_toggled_gtk_action_callback (GtkAction* action, gpointer self);
-static void _vala_array_add350 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value);
+static gboolean _variant_get29 (GVariant* value);
+static GVariant* _variant_new30 (gboolean value);
 gboolean search_filter_actions_get_has_photos (SearchFilterActions* self);
 gboolean search_filter_actions_get_has_videos (SearchFilterActions* self);
 gboolean search_filter_actions_get_has_raw (SearchFilterActions* self);
 gboolean search_filter_actions_get_has_flagged (SearchFilterActions* self);
+GSimpleAction* search_filter_actions_get_flagged (SearchFilterActions* self);
 static void g_cclosure_user_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN (GClosure * closure, GValue * return_value, guint n_param_values, const GValue * param_values, gpointer invocation_hint, gpointer marshal_data);
 static void search_filter_actions_finalize (SearchFilterActions* obj);
 GType search_filter_toolbar_get_type (void) G_GNUC_CONST;
@@ -1300,8 +1251,6 @@ static void search_filter_toolbar_on_criteria_changed (SearchFilterToolbar* self
 static void _search_filter_toolbar_on_criteria_changed_search_filter_actions_criteria_changed (SearchFilterActions* _sender, gpointer self);
 static gboolean search_filter_toolbar_on_context_menu_requested (SearchFilterToolbar* self, gint x, gint y, gint button);
 static gboolean _search_filter_toolbar_on_context_menu_requested_gtk_toolbar_popup_context_menu (GtkToolbar* _sender, gint x, gint y, gint button_number, gpointer self);
-SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_new (void);
-SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_construct (GType object_type);
 SearchFilterToolbarSavedSearchFilterButton* search_filter_toolbar_saved_search_filter_button_new (void);
 SearchFilterToolbarSavedSearchFilterButton* search_filter_toolbar_saved_search_filter_button_construct (GType object_type);
 #define SEARCH_FILTER_TOOLBAR_FILTER_BUTTON_MARGIN 12
@@ -1313,41 +1262,37 @@ SearchFilterToolbar* search_filter_toolbar_new (SearchFilterActions* actions);
 SearchFilterToolbar* search_filter_toolbar_construct (GType object_type, SearchFilterActions* actions);
 SearchFilterToolbarSearchBox* search_filter_toolbar_search_box_new (TextAction* action);
 SearchFilterToolbarSearchBox* search_filter_toolbar_search_box_construct (GType object_type, TextAction* action);
-GFile* resources_get_ui (const gchar* filename);
 void app_window_panic (const gchar* msg);
 static void search_filter_toolbar_on_context_menu_close_chosen (SearchFilterToolbar* self);
 static void _search_filter_toolbar_on_context_menu_close_chosen_gtk_menu_item_activate (GtkMenuItem* _sender, gpointer self);
 static SearchFilterToolbarLabelToolItem* search_filter_toolbar_label_tool_item_new (const gchar* s, gint left_padding, gint right_padding);
 static SearchFilterToolbarLabelToolItem* search_filter_toolbar_label_tool_item_construct (GType object_type, const gchar* s, gint left_padding, gint right_padding);
-static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_new (GtkToggleAction* action);
-static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_construct (GType object_type, GtkToggleAction* action);
+static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_new (const gchar* action);
+static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_construct (GType object_type, const gchar* action);
 static void search_filter_toolbar_toggle_action_tool_button_set_label (SearchFilterToolbarToggleActionToolButton* self, const gchar* label);
+SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_new (GMenuModel* model);
+SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_construct (GType object_type, GMenuModel* model);
 void search_filter_toolbar_rating_filter_button_set_label (SearchFilterToolbarRatingFilterButton* self, const gchar* label);
-static void search_filter_toolbar_on_filter_button_clicked (SearchFilterToolbar* self);
-static void _search_filter_toolbar_on_filter_button_clicked_search_filter_toolbar_rating_filter_button_clicked (SearchFilterToolbarRatingFilterButton* _sender, gpointer self);
 void search_filter_toolbar_saved_search_filter_button_set_label (SearchFilterToolbarSavedSearchFilterButton* self, const gchar* label);
 static void search_filter_toolbar_on_saved_search_button_clicked (SearchFilterToolbar* self);
 static void _search_filter_toolbar_on_saved_search_button_clicked_search_filter_toolbar_saved_search_filter_button_clicked (SearchFilterToolbarSavedSearchFilterButton* _sender, gpointer self);
 static void search_filter_toolbar_toggle_action_tool_button_set_icon_name (SearchFilterToolbarToggleActionToolButton* self, const gchar* icon_name);
-GType page_window_get_type (void) G_GNUC_CONST;
-GType app_window_get_type (void) G_GNUC_CONST;
-GType library_window_get_type (void) G_GNUC_CONST;
+#define RESOURCES_ICON_FILTER_PHOTOS "filter-photos"
+#define RESOURCES_ICON_FILTER_PHOTOS_DISABLED "filter-photos-disabled"
+#define RESOURCES_ICON_FILTER_VIDEOS "filter-videos"
+#define RESOURCES_ICON_FILTER_VIDEOS_DISABLED "filter-videos-disabled"
+#define RESOURCES_ICON_FILTER_RAW "filter-raw"
+#define RESOURCES_ICON_FILTER_RAW_DISABLED "filter-raw-disabled"
+#define RESOURCES_ICON_FILTER_FLAGGED "filter-flagged"
+#define RESOURCES_ICON_FILTER_FLAGGED_DISABLED "filter-flagged-disabled"
 LibraryWindow* library_window_get_app (void);
-GtkAction* app_window_get_common_action (AppWindow* self, const gchar* name);
+static GVariant* _variant_new31 (gboolean value);
 void search_filter_toolbar_update (SearchFilterToolbar* self);
+static GVariant* _variant_new32 (gboolean value);
 void search_filter_toolbar_set_view_filter (SearchFilterToolbar* self, SearchViewFilter* search_filter);
 void search_filter_toolbar_unset_view_filter (SearchFilterToolbar* self);
 void library_window_show_search_bar (LibraryWindow* self, gboolean display);
 void search_filter_toolbar_rating_filter_button_set_filter_icon (SearchFilterToolbarRatingFilterButton* self, RatingFilter filter);
-static void search_filter_toolbar_position_filter_popup (SearchFilterToolbar* self, GtkMenu* menu, gint* x, gint* y, gboolean* push_in);
-AppWindow* app_window_get_instance (void);
-Page* page_window_get_current_page (PageWindow* self);
-GtkMenuBar* page_get_menubar (Page* self);
-GType configuration_facade_get_type (void) G_GNUC_CONST;
-GType config_facade_get_type (void) G_GNUC_CONST;
-ConfigFacade* config_facade_get_instance (void);
-gint configuration_facade_get_sidebar_position (ConfigurationFacade* self);
-static void _search_filter_toolbar_position_filter_popup_gtk_menu_position_func (GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer self);
 static void search_filter_toolbar_on_savedsearch_selected (SearchFilterToolbar* self, SavedSearch* saved_search);
 static void search_filter_toolbar_disable_savedsearch (SearchFilterToolbar* self);
 static void search_filter_toolbar_edit_dialog (SearchFilterToolbar* self, SavedSearch* search);
@@ -1410,8 +1355,6 @@ static void search_filter_toolbar_label_tool_item_finalize (GObject* obj);
 enum  {
 	SEARCH_FILTER_TOOLBAR_TOGGLE_ACTION_TOOL_BUTTON_DUMMY_PROPERTY
 };
-static void search_filter_toolbar_toggle_action_tool_button_on_button_activate (SearchFilterToolbarToggleActionToolButton* self);
-static void _search_filter_toolbar_toggle_action_tool_button_on_button_activate_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void search_filter_toolbar_toggle_action_tool_button_finalize (GObject* obj);
 #define SEARCH_FILTER_TOOLBAR_SEARCH_BOX_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), SEARCH_FILTER_TOOLBAR_TYPE_SEARCH_BOX, SearchFilterToolbarSearchBoxPrivate))
 enum  {
@@ -1433,14 +1376,7 @@ static void search_filter_toolbar_search_box_finalize (GObject* obj);
 enum  {
 	SEARCH_FILTER_TOOLBAR_RATING_FILTER_BUTTON_DUMMY_PROPERTY
 };
-static void search_filter_toolbar_rating_filter_button_on_clicked (SearchFilterToolbarRatingFilterButton* self);
-static void _search_filter_toolbar_rating_filter_button_on_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static GtkWidget* search_filter_toolbar_rating_filter_button_get_filter_icon (SearchFilterToolbarRatingFilterButton* self, RatingFilter filter);
-#define RESOURCES_ICON_FILTER_ONE_OR_BETTER "one-star-filter-plus.svg"
-#define RESOURCES_ICON_FILTER_TWO_OR_BETTER "two-star-filter-plus.svg"
-#define RESOURCES_ICON_FILTER_THREE_OR_BETTER "three-star-filter-plus.svg"
-#define RESOURCES_ICON_FILTER_FOUR_OR_BETTER "four-star-filter-plus.svg"
-#define RESOURCES_ICON_FILTER_FIVE "five-star-filter.svg"
 #define RESOURCES_ICON_FILTER_REJECTED_OR_BETTER "all-rejected.png"
 #define RESOURCES_ICON_RATING_REJECTED "rejected.svg"
 #define RESOURCES_ICON_FILTER_UNRATED_OR_BETTER "shotwell-16.png"
@@ -1485,8 +1421,8 @@ GeeCollection* saved_search_table_get_all (SavedSearchTable* self);
 gchar* data_object_get_name (DataObject* self);
 static SearchFilterToolbarSavedSearchPopoverDataButton* search_filter_toolbar_saved_search_popover_data_button_new (SavedSearch* search, const gchar* name);
 static SearchFilterToolbarSavedSearchPopoverDataButton* search_filter_toolbar_saved_search_popover_data_button_construct (GType object_type, SavedSearch* search, const gchar* name);
-static void _vala_array_add351 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value);
-static void _vala_array_add352 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value);
+static void _vala_array_add133 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value);
+static void _vala_array_add134 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value);
 void search_filter_toolbar_saved_search_popover_restyle (SearchFilterToolbarSavedSearchPopover* self);
 static void search_filter_toolbar_saved_search_popover_data_button_restyle (SearchFilterToolbarSavedSearchPopoverDataButton* self);
 static gboolean search_filter_toolbar_saved_search_popover_is_search_row (SearchFilterToolbarSavedSearchPopover* self, GtkListBoxRow* row);
@@ -1509,6 +1445,7 @@ static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNoti
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static gint _vala_array_length (gpointer array);
 
+static const GActionEntry SEARCH_FILTER_ACTIONS_entries[5] = {{"display.rating", _search_filter_actions_on_action_radio_gsimple_action_activate_callback, "s", "'2'", _search_filter_actions_on_rating_changed_gsimple_action_change_state_callback}, {"display.flagged", _search_filter_actions_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _search_filter_actions_on_flagged_toggled_gsimple_action_change_state_callback}, {"display.photos", _search_filter_actions_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _search_filter_actions_on_photos_toggled_gsimple_action_change_state_callback}, {"display.videos", _search_filter_actions_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _search_filter_actions_on_videos_toggled_gsimple_action_change_state_callback}, {"display.raw", _search_filter_actions_on_action_toggle_gsimple_action_activate_callback, NULL, "false", _search_filter_actions_on_raw_toggled_gsimple_action_change_state_callback}};
 
 GType search_filter_criteria_get_type (void) {
 	static volatile gsize search_filter_criteria_type_id__volatile = 0;
@@ -1539,7 +1476,7 @@ static guint search_view_filter_real_get_criteria (SearchViewFilter* self) {
 	g_critical ("Type `%s' does not implement abstract method `search_view_filter_get_criteria'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
 #line 65 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return 0U;
-#line 1543 "SearchFilter.c"
+#line 1480 "SearchFilter.c"
 }
 
 
@@ -1548,7 +1485,7 @@ guint search_view_filter_get_criteria (SearchViewFilter* self) {
 	g_return_val_if_fail (IS_SEARCH_VIEW_FILTER (self), 0U);
 #line 65 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return SEARCH_VIEW_FILTER_GET_CLASS (self)->get_criteria (self);
-#line 1552 "SearchFilter.c"
+#line 1489 "SearchFilter.c"
 }
 
 
@@ -1567,7 +1504,7 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 	switch (_tmp1_) {
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_REJECTED_ONLY:
-#line 1571 "SearchFilter.c"
+#line 1508 "SearchFilter.c"
 		{
 #line 71 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_REJECTED;
@@ -1575,11 +1512,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 73 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1579 "SearchFilter.c"
+#line 1516 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_REJECTED_OR_HIGHER:
-#line 1583 "SearchFilter.c"
+#line 1520 "SearchFilter.c"
 		{
 #line 76 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_REJECTED;
@@ -1587,11 +1524,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 78 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1591 "SearchFilter.c"
+#line 1528 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_ONE_OR_HIGHER:
-#line 1595 "SearchFilter.c"
+#line 1532 "SearchFilter.c"
 		{
 #line 81 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_ONE;
@@ -1599,11 +1536,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 83 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1603 "SearchFilter.c"
+#line 1540 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_ONE_ONLY:
-#line 1607 "SearchFilter.c"
+#line 1544 "SearchFilter.c"
 		{
 #line 86 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_ONE;
@@ -1611,11 +1548,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 88 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1615 "SearchFilter.c"
+#line 1552 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_TWO_OR_HIGHER:
-#line 1619 "SearchFilter.c"
+#line 1556 "SearchFilter.c"
 		{
 #line 91 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_TWO;
@@ -1623,11 +1560,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 93 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1627 "SearchFilter.c"
+#line 1564 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_TWO_ONLY:
-#line 1631 "SearchFilter.c"
+#line 1568 "SearchFilter.c"
 		{
 #line 96 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_TWO;
@@ -1635,11 +1572,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 98 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1639 "SearchFilter.c"
+#line 1576 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_THREE_OR_HIGHER:
-#line 1643 "SearchFilter.c"
+#line 1580 "SearchFilter.c"
 		{
 #line 101 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_THREE;
@@ -1647,11 +1584,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 103 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1651 "SearchFilter.c"
+#line 1588 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_THREE_ONLY:
-#line 1655 "SearchFilter.c"
+#line 1592 "SearchFilter.c"
 		{
 #line 106 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_THREE;
@@ -1659,11 +1596,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 108 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1663 "SearchFilter.c"
+#line 1600 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FOUR_OR_HIGHER:
-#line 1667 "SearchFilter.c"
+#line 1604 "SearchFilter.c"
 		{
 #line 111 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_FOUR;
@@ -1671,11 +1608,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1675 "SearchFilter.c"
+#line 1612 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FOUR_ONLY:
-#line 1679 "SearchFilter.c"
+#line 1616 "SearchFilter.c"
 		{
 #line 116 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_FOUR;
@@ -1683,11 +1620,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 118 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1687 "SearchFilter.c"
+#line 1624 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FIVE_OR_HIGHER:
-#line 1691 "SearchFilter.c"
+#line 1628 "SearchFilter.c"
 		{
 #line 121 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_FIVE;
@@ -1695,11 +1632,11 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 123 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1699 "SearchFilter.c"
+#line 1636 "SearchFilter.c"
 		}
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FIVE_ONLY:
-#line 1703 "SearchFilter.c"
+#line 1640 "SearchFilter.c"
 		{
 #line 126 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_FIVE;
@@ -1707,12 +1644,12 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = FALSE;
 #line 128 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1711 "SearchFilter.c"
+#line 1648 "SearchFilter.c"
 		}
 		default:
 #line 69 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_UNRATED_OR_HIGHER:
-#line 1716 "SearchFilter.c"
+#line 1653 "SearchFilter.c"
 		{
 #line 132 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->rating = RATING_UNRATED;
@@ -1720,7 +1657,7 @@ void search_view_filter_set_rating_filter (SearchViewFilter* self, RatingFilter 
 			self->priv->rating_allow_higher = TRUE;
 #line 134 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 1724 "SearchFilter.c"
+#line 1661 "SearchFilter.c"
 		}
 	}
 }
@@ -1740,7 +1677,7 @@ gboolean search_view_filter_has_search_filter (SearchViewFilter* self) {
 	result = !_tmp1_;
 #line 139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1744 "SearchFilter.c"
+#line 1681 "SearchFilter.c"
 }
 
 
@@ -1755,7 +1692,7 @@ const gchar* search_view_filter_get_search_filter (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 143 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1759 "SearchFilter.c"
+#line 1696 "SearchFilter.c"
 }
 
 
@@ -1779,34 +1716,34 @@ gchar** search_view_filter_get_search_filter_words (SearchViewFilter* self, int*
 	if (result_length1) {
 #line 147 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*result_length1 = _tmp1__length1;
-#line 1783 "SearchFilter.c"
+#line 1720 "SearchFilter.c"
 	}
 #line 147 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp1_;
 #line 147 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1789 "SearchFilter.c"
+#line 1726 "SearchFilter.c"
 }
 
 
-static gchar** _vala_array_dup33 (gchar** self, int length) {
+static gchar** _vala_array_dup32 (gchar** self, int length) {
 	gchar** result;
 	int i;
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = g_new0 (gchar*, length + 1);
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	for (i = 0; i < length; i++) {
-#line 1800 "SearchFilter.c"
+#line 1737 "SearchFilter.c"
 		gchar* _tmp0_ = NULL;
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = g_strdup (self[i]);
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		result[i] = _tmp0_;
-#line 1806 "SearchFilter.c"
+#line 1743 "SearchFilter.c"
 	}
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1810 "SearchFilter.c"
+#line 1747 "SearchFilter.c"
 }
 
 
@@ -1829,7 +1766,7 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 	_tmp2_ = is_string_empty (_tmp1_);
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (!_tmp2_) {
-#line 1833 "SearchFilter.c"
+#line 1770 "SearchFilter.c"
 		const gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -1840,13 +1777,13 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 		_g_free0 (_tmp0_);
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = _tmp4_;
-#line 1844 "SearchFilter.c"
+#line 1781 "SearchFilter.c"
 	} else {
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_free0 (_tmp0_);
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = NULL;
-#line 1850 "SearchFilter.c"
+#line 1787 "SearchFilter.c"
 	}
 #line 151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = g_strdup (_tmp0_);
@@ -1858,7 +1795,7 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 	_tmp7_ = self->priv->search_filter;
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp7_ != NULL) {
-#line 1862 "SearchFilter.c"
+#line 1799 "SearchFilter.c"
 		const gchar* _tmp8_ = NULL;
 		gchar** _tmp9_ = NULL;
 		gchar** _tmp10_ = NULL;
@@ -1874,7 +1811,7 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 		_tmp6__length1 = _vala_array_length (_tmp9_);
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		__tmp6__size_ = _tmp6__length1;
-#line 1878 "SearchFilter.c"
+#line 1815 "SearchFilter.c"
 	} else {
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp6_ = (_vala_array_free (_tmp6_, _tmp6__length1, (GDestroyNotify) g_free), NULL);
@@ -1884,10 +1821,10 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 		_tmp6__length1 = 0;
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		__tmp6__size_ = _tmp6__length1;
-#line 1888 "SearchFilter.c"
+#line 1825 "SearchFilter.c"
 	}
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = (_tmp6_ != NULL) ? _vala_array_dup33 (_tmp6_, _tmp6__length1) : ((gpointer) _tmp6_);
+	_tmp11_ = (_tmp6_ != NULL) ? _vala_array_dup32 (_tmp6_, _tmp6__length1) : ((gpointer) _tmp6_);
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11__length1 = _tmp6__length1;
 #line 152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -1902,7 +1839,7 @@ void search_view_filter_set_search_filter (SearchViewFilter* self, const gchar* 
 	_tmp6_ = (_vala_array_free (_tmp6_, _tmp6__length1, (GDestroyNotify) g_free), NULL);
 #line 150 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_free0 (_tmp0_);
-#line 1906 "SearchFilter.c"
+#line 1843 "SearchFilter.c"
 }
 
 
@@ -1921,7 +1858,7 @@ void search_view_filter_clear_search_filter (SearchViewFilter* self) {
 	self->priv->search_filter_words_length1 = 0;
 #line 157 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_search_filter_words_size_ = self->priv->search_filter_words_length1;
-#line 1925 "SearchFilter.c"
+#line 1862 "SearchFilter.c"
 }
 
 
@@ -1936,7 +1873,7 @@ gboolean search_view_filter_has_saved_search (SearchViewFilter* self) {
 	result = _tmp0_ != NULL;
 #line 161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1940 "SearchFilter.c"
+#line 1877 "SearchFilter.c"
 }
 
 
@@ -1951,7 +1888,7 @@ gboolean search_view_filter_get_rating_allow_higher (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1955 "SearchFilter.c"
+#line 1892 "SearchFilter.c"
 }
 
 
@@ -1966,7 +1903,7 @@ Rating search_view_filter_get_rating (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 1970 "SearchFilter.c"
+#line 1907 "SearchFilter.c"
 }
 
 
@@ -1984,31 +1921,31 @@ gboolean search_view_filter_filter_by_media_type (SearchViewFilter* self) {
 	if (_tmp3_) {
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = TRUE;
-#line 1988 "SearchFilter.c"
+#line 1925 "SearchFilter.c"
 	} else {
 		gboolean _tmp4_ = FALSE;
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = self->priv->_show_media_photos;
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = _tmp4_;
-#line 1995 "SearchFilter.c"
+#line 1932 "SearchFilter.c"
 	}
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp2_) {
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp1_ = TRUE;
-#line 2001 "SearchFilter.c"
+#line 1938 "SearchFilter.c"
 	} else {
 		gboolean _tmp5_ = FALSE;
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = self->priv->_show_media_raw;
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp1_ = _tmp5_;
-#line 2008 "SearchFilter.c"
+#line 1945 "SearchFilter.c"
 	}
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp1_) {
-#line 2012 "SearchFilter.c"
+#line 1949 "SearchFilter.c"
 		gboolean _tmp6_ = FALSE;
 		gboolean _tmp7_ = FALSE;
 		gboolean _tmp8_ = FALSE;
@@ -2016,45 +1953,45 @@ gboolean search_view_filter_filter_by_media_type (SearchViewFilter* self) {
 		_tmp8_ = self->priv->_show_media_video;
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp8_) {
-#line 2020 "SearchFilter.c"
+#line 1957 "SearchFilter.c"
 			gboolean _tmp9_ = FALSE;
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp9_ = self->priv->_show_media_photos;
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp7_ = _tmp9_;
-#line 2026 "SearchFilter.c"
+#line 1963 "SearchFilter.c"
 		} else {
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp7_ = FALSE;
-#line 2030 "SearchFilter.c"
+#line 1967 "SearchFilter.c"
 		}
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp7_) {
-#line 2034 "SearchFilter.c"
+#line 1971 "SearchFilter.c"
 			gboolean _tmp10_ = FALSE;
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp10_ = self->priv->_show_media_raw;
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp6_ = _tmp10_;
-#line 2040 "SearchFilter.c"
+#line 1977 "SearchFilter.c"
 		} else {
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp6_ = FALSE;
-#line 2044 "SearchFilter.c"
+#line 1981 "SearchFilter.c"
 		}
 #line 174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = !_tmp6_;
-#line 2048 "SearchFilter.c"
+#line 1985 "SearchFilter.c"
 	} else {
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = FALSE;
-#line 2052 "SearchFilter.c"
+#line 1989 "SearchFilter.c"
 	}
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
 #line 173 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2058 "SearchFilter.c"
+#line 1995 "SearchFilter.c"
 }
 
 
@@ -2064,7 +2001,7 @@ SearchViewFilter* search_view_filter_construct (GType object_type) {
 	self = (SearchViewFilter*) view_filter_construct (object_type);
 #line 39 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 2068 "SearchFilter.c"
+#line 2005 "SearchFilter.c"
 }
 
 
@@ -2079,7 +2016,7 @@ gboolean search_view_filter_get_flagged (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 48 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2083 "SearchFilter.c"
+#line 2020 "SearchFilter.c"
 }
 
 
@@ -2091,7 +2028,7 @@ void search_view_filter_set_flagged (SearchViewFilter* self, gboolean value) {
 	_tmp0_ = value;
 #line 48 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_flagged = _tmp0_;
-#line 2095 "SearchFilter.c"
+#line 2032 "SearchFilter.c"
 }
 
 
@@ -2106,7 +2043,7 @@ gboolean search_view_filter_get_show_media_video (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 51 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2110 "SearchFilter.c"
+#line 2047 "SearchFilter.c"
 }
 
 
@@ -2118,7 +2055,7 @@ void search_view_filter_set_show_media_video (SearchViewFilter* self, gboolean v
 	_tmp0_ = value;
 #line 51 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_show_media_video = _tmp0_;
-#line 2122 "SearchFilter.c"
+#line 2059 "SearchFilter.c"
 }
 
 
@@ -2133,7 +2070,7 @@ gboolean search_view_filter_get_show_media_photos (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 52 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2137 "SearchFilter.c"
+#line 2074 "SearchFilter.c"
 }
 
 
@@ -2145,7 +2082,7 @@ void search_view_filter_set_show_media_photos (SearchViewFilter* self, gboolean 
 	_tmp0_ = value;
 #line 52 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_show_media_photos = _tmp0_;
-#line 2149 "SearchFilter.c"
+#line 2086 "SearchFilter.c"
 }
 
 
@@ -2160,7 +2097,7 @@ gboolean search_view_filter_get_show_media_raw (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 53 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2164 "SearchFilter.c"
+#line 2101 "SearchFilter.c"
 }
 
 
@@ -2172,7 +2109,7 @@ void search_view_filter_set_show_media_raw (SearchViewFilter* self, gboolean val
 	_tmp0_ = value;
 #line 53 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_show_media_raw = _tmp0_;
-#line 2176 "SearchFilter.c"
+#line 2113 "SearchFilter.c"
 }
 
 
@@ -2187,14 +2124,14 @@ SavedSearch* search_view_filter_get_saved_search (SearchViewFilter* self) {
 	result = _tmp0_;
 #line 60 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2191 "SearchFilter.c"
+#line 2128 "SearchFilter.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 60 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 2198 "SearchFilter.c"
+#line 2135 "SearchFilter.c"
 }
 
 
@@ -2211,7 +2148,7 @@ void search_view_filter_set_saved_search (SearchViewFilter* self, SavedSearch* v
 	_g_object_unref0 (self->priv->_saved_search);
 #line 60 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_saved_search = _tmp1_;
-#line 2215 "SearchFilter.c"
+#line 2152 "SearchFilter.c"
 }
 
 
@@ -2224,7 +2161,7 @@ static void search_view_filter_class_init (SearchViewFilterClass * klass) {
 	g_type_class_add_private (klass, sizeof (SearchViewFilterPrivate));
 #line 39 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	((SearchViewFilterClass *) klass)->get_criteria = search_view_filter_real_get_criteria;
-#line 2228 "SearchFilter.c"
+#line 2165 "SearchFilter.c"
 }
 
 
@@ -2255,7 +2192,7 @@ static void search_view_filter_instance_init (SearchViewFilter * self) {
 	self->priv->_search_filter_words_size_ = self->priv->search_filter_words_length1;
 #line 60 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_saved_search = NULL;
-#line 2259 "SearchFilter.c"
+#line 2196 "SearchFilter.c"
 }
 
 
@@ -2271,7 +2208,7 @@ static void search_view_filter_finalize (ViewFilter* obj) {
 	_g_object_unref0 (self->priv->_saved_search);
 #line 39 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	VIEW_FILTER_CLASS (search_view_filter_parent_class)->finalize (obj);
-#line 2275 "SearchFilter.c"
+#line 2212 "SearchFilter.c"
 }
 
 
@@ -2303,7 +2240,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2307 "SearchFilter.c"
+#line 2244 "SearchFilter.c"
 }
 
 
@@ -2341,14 +2278,14 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 	_tmp3_ = criteria;
 #line 186 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((SEARCH_FILTER_CRITERIA_RATING & _tmp3_) != 0) {
-#line 2345 "SearchFilter.c"
+#line 2282 "SearchFilter.c"
 		gboolean _tmp4_ = FALSE;
 		gboolean _tmp5_ = FALSE;
 #line 187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = search_view_filter_get_rating_allow_higher (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp5_) {
-#line 2352 "SearchFilter.c"
+#line 2289 "SearchFilter.c"
 			MediaSource* _tmp6_ = NULL;
 			Rating _tmp7_ = 0;
 			Rating _tmp8_ = 0;
@@ -2360,11 +2297,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp8_ = search_view_filter_get_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp4_ = _tmp7_ < _tmp8_;
-#line 2364 "SearchFilter.c"
+#line 2301 "SearchFilter.c"
 		} else {
 #line 187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp4_ = FALSE;
-#line 2368 "SearchFilter.c"
+#line 2305 "SearchFilter.c"
 		}
 #line 187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp4_) {
@@ -2374,7 +2311,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_g_object_unref0 (source);
 #line 188 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 2378 "SearchFilter.c"
+#line 2315 "SearchFilter.c"
 		} else {
 			gboolean _tmp9_ = FALSE;
 			gboolean _tmp10_ = FALSE;
@@ -2382,7 +2319,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp10_ = search_view_filter_get_rating_allow_higher (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (!_tmp10_) {
-#line 2386 "SearchFilter.c"
+#line 2323 "SearchFilter.c"
 				MediaSource* _tmp11_ = NULL;
 				Rating _tmp12_ = 0;
 				Rating _tmp13_ = 0;
@@ -2394,11 +2331,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 				_tmp13_ = search_view_filter_get_rating (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp9_ = _tmp12_ != _tmp13_;
-#line 2398 "SearchFilter.c"
+#line 2335 "SearchFilter.c"
 			} else {
 #line 189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp9_ = FALSE;
-#line 2402 "SearchFilter.c"
+#line 2339 "SearchFilter.c"
 			}
 #line 189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (_tmp9_) {
@@ -2408,7 +2345,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 				_g_object_unref0 (source);
 #line 190 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				return result;
-#line 2412 "SearchFilter.c"
+#line 2349 "SearchFilter.c"
 			}
 		}
 	}
@@ -2416,7 +2353,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 	_tmp14_ = criteria;
 #line 194 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((SEARCH_FILTER_CRITERIA_FLAG & _tmp14_) != 0) {
-#line 2420 "SearchFilter.c"
+#line 2357 "SearchFilter.c"
 		gboolean _tmp15_ = FALSE;
 		gboolean _tmp16_ = FALSE;
 		gboolean _tmp17_ = FALSE;
@@ -2427,21 +2364,21 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 		_tmp18_ = _tmp17_;
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp18_) {
-#line 2431 "SearchFilter.c"
+#line 2368 "SearchFilter.c"
 			MediaSource* _tmp19_ = NULL;
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp19_ = source;
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp16_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp19_, TYPE_FLAGGABLE);
-#line 2437 "SearchFilter.c"
+#line 2374 "SearchFilter.c"
 		} else {
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp16_ = FALSE;
-#line 2441 "SearchFilter.c"
+#line 2378 "SearchFilter.c"
 		}
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp16_) {
-#line 2445 "SearchFilter.c"
+#line 2382 "SearchFilter.c"
 			MediaSource* _tmp20_ = NULL;
 			gboolean _tmp21_ = FALSE;
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2450,11 +2387,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp21_ = flaggable_is_flagged (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, TYPE_FLAGGABLE, Flaggable));
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp15_ = !_tmp21_;
-#line 2454 "SearchFilter.c"
+#line 2391 "SearchFilter.c"
 		} else {
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp15_ = FALSE;
-#line 2458 "SearchFilter.c"
+#line 2395 "SearchFilter.c"
 		}
 #line 195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp15_) {
@@ -2464,34 +2401,34 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_g_object_unref0 (source);
 #line 196 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 2468 "SearchFilter.c"
+#line 2405 "SearchFilter.c"
 		}
 	}
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp23_ = criteria;
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((SEARCH_FILTER_CRITERIA_MEDIA & _tmp23_) != 0) {
-#line 2475 "SearchFilter.c"
+#line 2412 "SearchFilter.c"
 		gboolean _tmp24_ = FALSE;
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp24_ = search_view_filter_filter_by_media_type (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp22_ = _tmp24_;
-#line 2481 "SearchFilter.c"
+#line 2418 "SearchFilter.c"
 	} else {
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp22_ = FALSE;
-#line 2485 "SearchFilter.c"
+#line 2422 "SearchFilter.c"
 	}
 #line 200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp22_) {
-#line 2489 "SearchFilter.c"
+#line 2426 "SearchFilter.c"
 		MediaSource* _tmp25_ = NULL;
 #line 201 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp25_ = source;
 #line 201 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp25_, TYPE_VIDEO_SOURCE)) {
-#line 2495 "SearchFilter.c"
+#line 2432 "SearchFilter.c"
 			gboolean _tmp26_ = FALSE;
 			gboolean _tmp27_ = FALSE;
 #line 202 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2506,7 +2443,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 				_g_object_unref0 (source);
 #line 203 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				return result;
-#line 2510 "SearchFilter.c"
+#line 2447 "SearchFilter.c"
 			}
 		} else {
 			MediaSource* _tmp28_ = NULL;
@@ -2514,7 +2451,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp28_ = source;
 #line 204 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp28_, TYPE_PHOTO)) {
-#line 2518 "SearchFilter.c"
+#line 2455 "SearchFilter.c"
 				Photo* photo = NULL;
 				MediaSource* _tmp29_ = NULL;
 				Photo* _tmp30_ = NULL;
@@ -2532,7 +2469,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 				_tmp32_ = photo_get_master_file_format (_tmp31_);
 #line 206 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				if (_tmp32_ == PHOTO_FILE_FORMAT_RAW) {
-#line 2536 "SearchFilter.c"
+#line 2473 "SearchFilter.c"
 					Photo* _tmp33_ = NULL;
 					gboolean _tmp34_ = FALSE;
 #line 207 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2541,7 +2478,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 					_tmp34_ = photo_is_raw_developer_available (_tmp33_, RAW_DEVELOPER_CAMERA);
 #line 207 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp34_) {
-#line 2545 "SearchFilter.c"
+#line 2482 "SearchFilter.c"
 						gboolean _tmp35_ = FALSE;
 						gboolean _tmp36_ = FALSE;
 						gboolean _tmp37_ = FALSE;
@@ -2551,7 +2488,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 						_tmp37_ = _tmp36_;
 #line 208 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						if (!_tmp37_) {
-#line 2555 "SearchFilter.c"
+#line 2492 "SearchFilter.c"
 							gboolean _tmp38_ = FALSE;
 							gboolean _tmp39_ = FALSE;
 #line 208 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2560,11 +2497,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 							_tmp39_ = _tmp38_;
 #line 208 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							_tmp35_ = !_tmp39_;
-#line 2564 "SearchFilter.c"
+#line 2501 "SearchFilter.c"
 						} else {
 #line 208 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							_tmp35_ = FALSE;
-#line 2568 "SearchFilter.c"
+#line 2505 "SearchFilter.c"
 						}
 #line 208 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						if (_tmp35_) {
@@ -2576,7 +2513,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 							_g_object_unref0 (source);
 #line 209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							return result;
-#line 2580 "SearchFilter.c"
+#line 2517 "SearchFilter.c"
 						}
 					} else {
 						gboolean _tmp40_ = FALSE;
@@ -2595,7 +2532,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 							_g_object_unref0 (source);
 #line 211 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							return result;
-#line 2599 "SearchFilter.c"
+#line 2536 "SearchFilter.c"
 						}
 					}
 				} else {
@@ -2615,12 +2552,12 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 						_g_object_unref0 (source);
 #line 214 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						return result;
-#line 2619 "SearchFilter.c"
+#line 2556 "SearchFilter.c"
 					}
 				}
 #line 204 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (photo);
-#line 2624 "SearchFilter.c"
+#line 2561 "SearchFilter.c"
 			}
 		}
 	}
@@ -2628,21 +2565,21 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 	_tmp45_ = criteria;
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((SEARCH_FILTER_CRITERIA_TEXT & _tmp45_) != 0) {
-#line 2632 "SearchFilter.c"
+#line 2569 "SearchFilter.c"
 		gboolean _tmp46_ = FALSE;
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp46_ = search_view_filter_has_search_filter (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp44_ = _tmp46_;
-#line 2638 "SearchFilter.c"
+#line 2575 "SearchFilter.c"
 	} else {
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp44_ = FALSE;
-#line 2642 "SearchFilter.c"
+#line 2579 "SearchFilter.c"
 	}
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp44_) {
-#line 2646 "SearchFilter.c"
+#line 2583 "SearchFilter.c"
 		const gchar* media_keywords = NULL;
 		MediaSource* _tmp47_ = NULL;
 		const gchar* _tmp48_ = NULL;
@@ -2678,7 +2615,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 		_tmp51_ = event;
 #line 224 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp51_ != NULL) {
-#line 2682 "SearchFilter.c"
+#line 2619 "SearchFilter.c"
 			Event* _tmp52_ = NULL;
 			const gchar* _tmp53_ = NULL;
 #line 225 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2687,7 +2624,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp53_ = indexable_get_indexable_keywords (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, TYPE_INDEXABLE, Indexable));
 #line 225 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			event_keywords = _tmp53_;
-#line 2691 "SearchFilter.c"
+#line 2628 "SearchFilter.c"
 		}
 #line 227 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp54_ = tag_global;
@@ -2701,7 +2638,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 		_tmp58_ = tags;
 #line 228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp58_ != NULL) {
-#line 2705 "SearchFilter.c"
+#line 2642 "SearchFilter.c"
 			GeeList* _tmp59_ = NULL;
 			gint _tmp60_ = 0;
 			gint _tmp61_ = 0;
@@ -2713,17 +2650,17 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			_tmp61_ = _tmp60_;
 #line 228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp57_ = _tmp61_;
-#line 2717 "SearchFilter.c"
+#line 2654 "SearchFilter.c"
 		} else {
 #line 228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp57_ = 0;
-#line 2721 "SearchFilter.c"
+#line 2658 "SearchFilter.c"
 		}
 #line 228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		tags_size = _tmp57_;
 #line 230 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp63_ = search_view_filter_get_search_filter_words (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter), &_tmp62_);
-#line 2727 "SearchFilter.c"
+#line 2664 "SearchFilter.c"
 		{
 			gchar** word_collection = NULL;
 			gint word_collection_length1 = 0;
@@ -2735,11 +2672,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 			word_collection_length1 = _tmp62_;
 #line 230 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			for (word_it = 0; word_it < _tmp62_; word_it = word_it + 1) {
-#line 2739 "SearchFilter.c"
+#line 2676 "SearchFilter.c"
 				const gchar* word = NULL;
 #line 230 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				word = word_collection[word_it];
-#line 2743 "SearchFilter.c"
+#line 2680 "SearchFilter.c"
 				{
 					gboolean _tmp64_ = FALSE;
 					const gchar* _tmp65_ = NULL;
@@ -2750,7 +2687,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 					_tmp65_ = media_keywords;
 #line 231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp65_ != NULL) {
-#line 2754 "SearchFilter.c"
+#line 2691 "SearchFilter.c"
 						const gchar* _tmp66_ = NULL;
 						const gchar* _tmp67_ = NULL;
 						gboolean _tmp68_ = FALSE;
@@ -2762,23 +2699,23 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 						_tmp68_ = string_contains (_tmp66_, _tmp67_);
 #line 231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						_tmp64_ = _tmp68_;
-#line 2766 "SearchFilter.c"
+#line 2703 "SearchFilter.c"
 					} else {
 #line 231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						_tmp64_ = FALSE;
-#line 2770 "SearchFilter.c"
+#line 2707 "SearchFilter.c"
 					}
 #line 231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp64_) {
 #line 232 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						continue;
-#line 2776 "SearchFilter.c"
+#line 2713 "SearchFilter.c"
 					}
 #line 234 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					_tmp70_ = event_keywords;
 #line 234 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp70_ != NULL) {
-#line 2782 "SearchFilter.c"
+#line 2719 "SearchFilter.c"
 						const gchar* _tmp71_ = NULL;
 						const gchar* _tmp72_ = NULL;
 						gboolean _tmp73_ = FALSE;
@@ -2790,40 +2727,40 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 						_tmp73_ = string_contains (_tmp71_, _tmp72_);
 #line 234 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						_tmp69_ = _tmp73_;
-#line 2794 "SearchFilter.c"
+#line 2731 "SearchFilter.c"
 					} else {
 #line 234 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						_tmp69_ = FALSE;
-#line 2798 "SearchFilter.c"
+#line 2735 "SearchFilter.c"
 					}
 #line 234 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp69_) {
 #line 235 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						continue;
-#line 2804 "SearchFilter.c"
+#line 2741 "SearchFilter.c"
 					}
 #line 237 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					_tmp74_ = tags_size;
 #line 237 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					if (_tmp74_ > 0) {
-#line 2810 "SearchFilter.c"
+#line 2747 "SearchFilter.c"
 						gboolean found = FALSE;
 						gboolean _tmp90_ = FALSE;
 #line 238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 						found = FALSE;
-#line 2815 "SearchFilter.c"
+#line 2752 "SearchFilter.c"
 						{
 							gint ctr = 0;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							ctr = 0;
-#line 2820 "SearchFilter.c"
+#line 2757 "SearchFilter.c"
 							{
 								gboolean _tmp75_ = FALSE;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 								_tmp75_ = TRUE;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 								while (TRUE) {
-#line 2827 "SearchFilter.c"
+#line 2764 "SearchFilter.c"
 									gint _tmp77_ = 0;
 									gint _tmp78_ = 0;
 									const gchar* tag_keywords = NULL;
@@ -2837,13 +2774,13 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 									const gchar* _tmp86_ = NULL;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 									if (!_tmp75_) {
-#line 2841 "SearchFilter.c"
+#line 2778 "SearchFilter.c"
 										gint _tmp76_ = 0;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										_tmp76_ = ctr;
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										ctr = _tmp76_ + 1;
-#line 2847 "SearchFilter.c"
+#line 2784 "SearchFilter.c"
 									}
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 									_tmp75_ = FALSE;
@@ -2855,7 +2792,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 									if (!(_tmp77_ < _tmp78_)) {
 #line 239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										break;
-#line 2859 "SearchFilter.c"
+#line 2796 "SearchFilter.c"
 									}
 #line 240 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 									_tmp79_ = tags;
@@ -2877,7 +2814,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 									_tmp86_ = tag_keywords;
 #line 241 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 									if (_tmp86_ != NULL) {
-#line 2881 "SearchFilter.c"
+#line 2818 "SearchFilter.c"
 										const gchar* _tmp87_ = NULL;
 										const gchar* _tmp88_ = NULL;
 										gboolean _tmp89_ = FALSE;
@@ -2889,11 +2826,11 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 										_tmp89_ = string_contains (_tmp87_, _tmp88_);
 #line 241 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										_tmp85_ = _tmp89_;
-#line 2893 "SearchFilter.c"
+#line 2830 "SearchFilter.c"
 									} else {
 #line 241 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										_tmp85_ = FALSE;
-#line 2897 "SearchFilter.c"
+#line 2834 "SearchFilter.c"
 									}
 #line 241 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 									if (_tmp85_) {
@@ -2901,7 +2838,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 										found = TRUE;
 #line 244 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 										break;
-#line 2905 "SearchFilter.c"
+#line 2842 "SearchFilter.c"
 									}
 								}
 							}
@@ -2912,7 +2849,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 						if (_tmp90_) {
 #line 249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 							continue;
-#line 2916 "SearchFilter.c"
+#line 2853 "SearchFilter.c"
 						}
 					}
 #line 254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -2925,7 +2862,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 					_g_object_unref0 (source);
 #line 254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 					return result;
-#line 2929 "SearchFilter.c"
+#line 2866 "SearchFilter.c"
 				}
 			}
 		}
@@ -2933,27 +2870,27 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 		_g_object_unref0 (tags);
 #line 219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (event);
-#line 2937 "SearchFilter.c"
+#line 2874 "SearchFilter.c"
 	}
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp92_ = criteria;
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((SEARCH_FILTER_CRITERIA_SAVEDSEARCH & _tmp92_) != 0) {
-#line 2943 "SearchFilter.c"
+#line 2880 "SearchFilter.c"
 		gboolean _tmp93_ = FALSE;
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp93_ = search_view_filter_has_saved_search (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp91_ = _tmp93_;
-#line 2949 "SearchFilter.c"
+#line 2886 "SearchFilter.c"
 	} else {
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp91_ = FALSE;
-#line 2953 "SearchFilter.c"
+#line 2890 "SearchFilter.c"
 	}
 #line 259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp91_) {
-#line 2957 "SearchFilter.c"
+#line 2894 "SearchFilter.c"
 		SavedSearch* _tmp94_ = NULL;
 		SavedSearch* _tmp95_ = NULL;
 		MediaSource* _tmp96_ = NULL;
@@ -2972,7 +2909,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 		_g_object_unref0 (source);
 #line 260 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return result;
-#line 2976 "SearchFilter.c"
+#line 2913 "SearchFilter.c"
 	}
 #line 263 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = TRUE;
@@ -2980,7 +2917,7 @@ static gboolean default_search_view_filter_real_predicate (ViewFilter* base, Dat
 	_g_object_unref0 (source);
 #line 263 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 2984 "SearchFilter.c"
+#line 2921 "SearchFilter.c"
 }
 
 
@@ -2990,7 +2927,7 @@ DefaultSearchViewFilter* default_search_view_filter_construct (GType object_type
 	self = (DefaultSearchViewFilter*) search_view_filter_construct (object_type);
 #line 180 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 2994 "SearchFilter.c"
+#line 2931 "SearchFilter.c"
 }
 
 
@@ -2999,7 +2936,7 @@ static void default_search_view_filter_class_init (DefaultSearchViewFilterClass 
 	default_search_view_filter_parent_class = g_type_class_peek_parent (klass);
 #line 180 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	((ViewFilterClass *) klass)->predicate = default_search_view_filter_real_predicate;
-#line 3003 "SearchFilter.c"
+#line 2940 "SearchFilter.c"
 }
 
 
@@ -3030,7 +2967,7 @@ static gboolean disabled_view_filter_real_predicate (ViewFilter* base, DataView*
 	result = TRUE;
 #line 269 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3034 "SearchFilter.c"
+#line 2971 "SearchFilter.c"
 }
 
 
@@ -3043,7 +2980,7 @@ static guint disabled_view_filter_real_get_criteria (SearchViewFilter* base) {
 	result = (guint) SEARCH_FILTER_CRITERIA_RATING;
 #line 273 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3047 "SearchFilter.c"
+#line 2984 "SearchFilter.c"
 }
 
 
@@ -3053,14 +2990,14 @@ DisabledViewFilter* disabled_view_filter_construct (GType object_type) {
 	self = (DisabledViewFilter*) search_view_filter_construct (object_type);
 #line 267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 3057 "SearchFilter.c"
+#line 2994 "SearchFilter.c"
 }
 
 
 DisabledViewFilter* disabled_view_filter_new (void) {
 #line 267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return disabled_view_filter_construct (TYPE_DISABLED_VIEW_FILTER);
-#line 3064 "SearchFilter.c"
+#line 3001 "SearchFilter.c"
 }
 
 
@@ -3071,7 +3008,7 @@ static void disabled_view_filter_class_init (DisabledViewFilterClass * klass) {
 	((ViewFilterClass *) klass)->predicate = disabled_view_filter_real_predicate;
 #line 267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	((SearchViewFilterClass *) klass)->get_criteria = disabled_view_filter_real_get_criteria;
-#line 3075 "SearchFilter.c"
+#line 3012 "SearchFilter.c"
 }
 
 
@@ -3107,14 +3044,14 @@ TextAction* text_action_construct (GType object_type, const gchar* init) {
 	self->priv->text = _tmp1_;
 #line 294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 3111 "SearchFilter.c"
+#line 3048 "SearchFilter.c"
 }
 
 
 TextAction* text_action_new (const gchar* init) {
 #line 294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return text_action_construct (TYPE_TEXT_ACTION, init);
-#line 3118 "SearchFilter.c"
+#line 3055 "SearchFilter.c"
 }
 
 
@@ -3129,7 +3066,7 @@ void text_action_set_text (TextAction* self, const gchar* text) {
 	_tmp1_ = text;
 #line 299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (g_strcmp0 (_tmp0_, _tmp1_) != 0) {
-#line 3133 "SearchFilter.c"
+#line 3070 "SearchFilter.c"
 		const gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -3145,7 +3082,7 @@ void text_action_set_text (TextAction* self, const gchar* text) {
 		_tmp4_ = text;
 #line 301 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_signal_emit_by_name (self, "text-changed", _tmp4_);
-#line 3149 "SearchFilter.c"
+#line 3086 "SearchFilter.c"
 	}
 }
 
@@ -3155,7 +3092,7 @@ void text_action_clear (TextAction* self) {
 	g_return_if_fail (IS_TEXT_ACTION (self));
 #line 306 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	text_action_set_text (self, NULL);
-#line 3159 "SearchFilter.c"
+#line 3096 "SearchFilter.c"
 }
 
 
@@ -3170,7 +3107,7 @@ gboolean text_action_is_sensitive (TextAction* self) {
 	result = _tmp0_;
 #line 310 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3174 "SearchFilter.c"
+#line 3111 "SearchFilter.c"
 }
 
 
@@ -3185,7 +3122,7 @@ void text_action_set_sensitive (TextAction* self, gboolean sensitive) {
 	_tmp1_ = sensitive;
 #line 314 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_ != _tmp1_) {
-#line 3189 "SearchFilter.c"
+#line 3126 "SearchFilter.c"
 		gboolean _tmp2_ = FALSE;
 		gboolean _tmp3_ = FALSE;
 #line 315 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -3196,7 +3133,7 @@ void text_action_set_sensitive (TextAction* self, gboolean sensitive) {
 		_tmp3_ = sensitive;
 #line 316 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_signal_emit_by_name (self, "sensitivity-changed", _tmp3_);
-#line 3200 "SearchFilter.c"
+#line 3137 "SearchFilter.c"
 	}
 }
 
@@ -3212,7 +3149,7 @@ gboolean text_action_is_visible (TextAction* self) {
 	result = _tmp0_;
 #line 321 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3216 "SearchFilter.c"
+#line 3153 "SearchFilter.c"
 }
 
 
@@ -3227,7 +3164,7 @@ void text_action_set_visible (TextAction* self, gboolean visible) {
 	_tmp1_ = visible;
 #line 325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_ != _tmp1_) {
-#line 3231 "SearchFilter.c"
+#line 3168 "SearchFilter.c"
 		gboolean _tmp2_ = FALSE;
 		gboolean _tmp3_ = FALSE;
 #line 326 "/home/jens/Source/shotwell/src/SearchFilter.vala"
@@ -3238,7 +3175,7 @@ void text_action_set_visible (TextAction* self, gboolean visible) {
 		_tmp3_ = visible;
 #line 327 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_signal_emit_by_name (self, "visibility-changed", _tmp3_);
-#line 3242 "SearchFilter.c"
+#line 3179 "SearchFilter.c"
 	}
 }
 
@@ -3254,14 +3191,14 @@ const gchar* text_action_get_value (TextAction* self) {
 	result = _tmp0_;
 #line 280 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3258 "SearchFilter.c"
+#line 3195 "SearchFilter.c"
 }
 
 
 static void value_text_action_init (GValue* value) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	value->data[0].v_pointer = NULL;
-#line 3265 "SearchFilter.c"
+#line 3202 "SearchFilter.c"
 }
 
 
@@ -3270,7 +3207,7 @@ static void value_text_action_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		text_action_unref (value->data[0].v_pointer);
-#line 3274 "SearchFilter.c"
+#line 3211 "SearchFilter.c"
 	}
 }
 
@@ -3280,11 +3217,11 @@ static void value_text_action_copy_value (const GValue* src_value, GValue* dest_
 	if (src_value->data[0].v_pointer) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = text_action_ref (src_value->data[0].v_pointer);
-#line 3284 "SearchFilter.c"
+#line 3221 "SearchFilter.c"
 	} else {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 3288 "SearchFilter.c"
+#line 3225 "SearchFilter.c"
 	}
 }
 
@@ -3292,37 +3229,37 @@ static void value_text_action_copy_value (const GValue* src_value, GValue* dest_
 static gpointer value_text_action_peek_pointer (const GValue* value) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 3296 "SearchFilter.c"
+#line 3233 "SearchFilter.c"
 }
 
 
 static gchar* value_text_action_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (collect_values[0].v_pointer) {
-#line 3303 "SearchFilter.c"
+#line 3240 "SearchFilter.c"
 		TextAction* object;
 		object = collect_values[0].v_pointer;
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3310 "SearchFilter.c"
+#line 3247 "SearchFilter.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 3314 "SearchFilter.c"
+#line 3251 "SearchFilter.c"
 		}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = text_action_ref (object);
-#line 3318 "SearchFilter.c"
+#line 3255 "SearchFilter.c"
 	} else {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 3322 "SearchFilter.c"
+#line 3259 "SearchFilter.c"
 	}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 3326 "SearchFilter.c"
+#line 3263 "SearchFilter.c"
 }
 
 
@@ -3333,25 +3270,25 @@ static gchar* value_text_action_lcopy_value (const GValue* value, guint n_collec
 	if (!object_p) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 3337 "SearchFilter.c"
+#line 3274 "SearchFilter.c"
 	}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (!value->data[0].v_pointer) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = NULL;
-#line 3343 "SearchFilter.c"
+#line 3280 "SearchFilter.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = value->data[0].v_pointer;
-#line 3347 "SearchFilter.c"
+#line 3284 "SearchFilter.c"
 	} else {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = text_action_ref (value->data[0].v_pointer);
-#line 3351 "SearchFilter.c"
+#line 3288 "SearchFilter.c"
 	}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 3355 "SearchFilter.c"
+#line 3292 "SearchFilter.c"
 }
 
 
@@ -3365,7 +3302,7 @@ GParamSpec* param_spec_text_action (const gchar* name, const gchar* nick, const 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return G_PARAM_SPEC (spec);
-#line 3369 "SearchFilter.c"
+#line 3306 "SearchFilter.c"
 }
 
 
@@ -3374,7 +3311,7 @@ gpointer value_get_text_action (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_TEXT_ACTION), NULL);
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 3378 "SearchFilter.c"
+#line 3315 "SearchFilter.c"
 }
 
 
@@ -3394,17 +3331,17 @@ void value_set_text_action (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		text_action_ref (value->data[0].v_pointer);
-#line 3398 "SearchFilter.c"
+#line 3335 "SearchFilter.c"
 	} else {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 3402 "SearchFilter.c"
+#line 3339 "SearchFilter.c"
 	}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		text_action_unref (old);
-#line 3408 "SearchFilter.c"
+#line 3345 "SearchFilter.c"
 	}
 }
 
@@ -3423,17 +3360,17 @@ void value_take_text_action (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = v_object;
-#line 3427 "SearchFilter.c"
+#line 3364 "SearchFilter.c"
 	} else {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 3431 "SearchFilter.c"
+#line 3368 "SearchFilter.c"
 	}
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		text_action_unref (old);
-#line 3437 "SearchFilter.c"
+#line 3374 "SearchFilter.c"
 	}
 }
 
@@ -3451,7 +3388,7 @@ static void text_action_class_init (TextActionClass * klass) {
 	g_signal_new ("sensitivity_changed", TYPE_TEXT_ACTION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("visibility_changed", TYPE_TEXT_ACTION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-#line 3455 "SearchFilter.c"
+#line 3392 "SearchFilter.c"
 }
 
 
@@ -3466,7 +3403,7 @@ static void text_action_instance_init (TextAction * self) {
 	self->priv->visible = TRUE;
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->ref_count = 1;
-#line 3470 "SearchFilter.c"
+#line 3407 "SearchFilter.c"
 }
 
 
@@ -3478,7 +3415,7 @@ static void text_action_finalize (TextAction* obj) {
 	g_signal_handlers_destroy (self);
 #line 284 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_free0 (self->priv->text);
-#line 3482 "SearchFilter.c"
+#line 3419 "SearchFilter.c"
 }
 
 
@@ -3503,7 +3440,7 @@ gpointer text_action_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return instance;
-#line 3507 "SearchFilter.c"
+#line 3444 "SearchFilter.c"
 }
 
 
@@ -3516,15 +3453,64 @@ void text_action_unref (gpointer instance) {
 		TEXT_ACTION_GET_CLASS (self)->finalize (self);
 #line 277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 3520 "SearchFilter.c"
+#line 3457 "SearchFilter.c"
 	}
+}
+
+
+static void _search_filter_actions_on_action_radio_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_action_radio ((SearchFilterActions*) self, action, parameter);
+#line 3465 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_rating_changed_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_rating_changed ((SearchFilterActions*) self, action, value);
+#line 3472 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_action_toggle_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_action_toggle ((SearchFilterActions*) self, action, parameter);
+#line 3479 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_flagged_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_flagged_toggled ((SearchFilterActions*) self, action, value);
+#line 3486 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_photos_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_photos_toggled ((SearchFilterActions*) self, action, value);
+#line 3493 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_videos_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_videos_toggled ((SearchFilterActions*) self, action, value);
+#line 3500 "SearchFilter.c"
+}
+
+
+static void _search_filter_actions_on_raw_toggled_gsimple_action_change_state_callback (GSimpleAction* action, GVariant* value, gpointer self) {
+#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_on_raw_toggled ((SearchFilterActions*) self, action, value);
+#line 3507 "SearchFilter.c"
 }
 
 
 static void _search_filter_actions_on_text_changed_text_action_text_changed (TextAction* _sender, const gchar* text, gpointer self) {
 #line 410 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_on_text_changed ((SearchFilterActions*) self, _sender, text);
-#line 3528 "SearchFilter.c"
+#line 3514 "SearchFilter.c"
 }
 
 
@@ -3544,194 +3530,257 @@ SearchFilterActions* search_filter_actions_construct (GType object_type) {
 	g_signal_connect (_tmp1_, "text-changed", (GCallback) _search_filter_actions_on_text_changed_text_action_text_changed, self);
 #line 406 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 3548 "SearchFilter.c"
+#line 3534 "SearchFilter.c"
 }
 
 
 SearchFilterActions* search_filter_actions_new (void) {
 #line 406 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_actions_construct (TYPE_SEARCH_FILTER_ACTIONS);
-#line 3555 "SearchFilter.c"
-}
-
-
-GtkActionGroup* search_filter_actions_get_action_group (SearchFilterActions* self) {
-	GtkActionGroup* result = NULL;
-	GtkActionGroup* _tmp0_ = NULL;
-	GtkActionGroup* _tmp1_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
-#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->priv->action_group;
-#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = _tmp1_;
-#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	return result;
-#line 3573 "SearchFilter.c"
+#line 3541 "SearchFilter.c"
 }
 
 
 SearchFilterCriteria search_filter_actions_get_criteria (SearchFilterActions* self) {
 	SearchFilterCriteria result = 0;
 	SearchFilterCriteria _tmp0_ = 0;
-#line 417 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 413 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), 0);
-#line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->criteria;
+#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	result = _tmp0_;
+#line 414 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return result;
+#line 3556 "SearchFilter.c"
+}
+
+
+GActionEntry* search_filter_actions_get_actions (SearchFilterActions* self, int* result_length1) {
+	GActionEntry* result = NULL;
+	GActionEntry* _tmp0_ = NULL;
+	gint _tmp0__length1 = 0;
+#line 417 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
+#line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = SEARCH_FILTER_ACTIONS_entries;
+#line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0__length1 = G_N_ELEMENTS (SEARCH_FILTER_ACTIONS_entries);
+#line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	if (result_length1) {
+#line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		*result_length1 = _tmp0__length1;
+#line 3574 "SearchFilter.c"
+	}
 #line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
 #line 418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3588 "SearchFilter.c"
+#line 3580 "SearchFilter.c"
 }
 
 
-GtkAction* search_filter_actions_get_action (SearchFilterActions* self, const gchar* name) {
-	GtkAction* result = NULL;
-	GtkActionGroup* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
+GSimpleAction* search_filter_actions_get_action (SearchFilterActions* self, const gchar* name) {
+	GSimpleAction* result = NULL;
+	LibraryWindow* lw = NULL;
+	AppWindow* _tmp0_ = NULL;
+	LibraryWindow* _tmp1_ = NULL;
+	LibraryWindow* _tmp2_ = NULL;
 #line 421 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 421 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (name != NULL, NULL);
 #line 422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->priv->action_group;
+	_tmp0_ = app_window_get_instance ();
 #line 422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = name;
+	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_LIBRARY_WINDOW) ? ((LibraryWindow*) _tmp0_) : NULL;
 #line 422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = gtk_action_group_get_action (_tmp0_, _tmp1_);
+	if (_tmp1_ == NULL) {
 #line 422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = _tmp2_;
+		_g_object_unref0 (_tmp0_);
+#line 3602 "SearchFilter.c"
+	}
 #line 422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	lw = _tmp1_;
+#line 423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = lw;
+#line 423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	if (_tmp2_ != NULL) {
+#line 3610 "SearchFilter.c"
+		LibraryWindow* _tmp3_ = NULL;
+		const gchar* _tmp4_ = NULL;
+		GAction* _tmp5_ = NULL;
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp3_ = lw;
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp4_ = name;
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp5_ = g_action_map_lookup_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, g_action_map_get_type (), GActionMap), _tmp4_);
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp5_) : NULL;
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_g_object_unref0 (lw);
+#line 424 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		return result;
+#line 3626 "SearchFilter.c"
+	}
+#line 427 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	result = NULL;
+#line 427 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (lw);
+#line 427 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 3611 "SearchFilter.c"
+#line 3634 "SearchFilter.c"
 }
 
 
 void search_filter_actions_set_action_sensitive (SearchFilterActions* self, const gchar* name, gboolean sensitive) {
-	GtkAction* action = NULL;
+	GSimpleAction* action = NULL;
 	const gchar* _tmp0_ = NULL;
-	GtkAction* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-	GtkAction* _tmp3_ = NULL;
-#line 425 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GSimpleAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+#line 431 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 425 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 431 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (name != NULL);
-#line 426 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = name;
-#line 426 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = search_filter_actions_get_action (self, _tmp0_);
-#line 426 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = _g_object_ref0 (_tmp1_);
-#line 426 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	action = _tmp2_;
-#line 427 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 433 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = action;
-#line 427 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 433 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp3_ != NULL) {
-#line 3637 "SearchFilter.c"
-		GtkAction* _tmp4_ = NULL;
+#line 3660 "SearchFilter.c"
+		GSimpleAction* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
-#line 428 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = action;
-#line 428 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = sensitive;
-#line 428 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_action_set_sensitive (_tmp4_, _tmp5_);
-#line 3646 "SearchFilter.c"
+#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		g_simple_action_set_enabled (_tmp4_, _tmp5_);
+#line 3669 "SearchFilter.c"
 	}
-#line 425 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 431 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (action);
-#line 3650 "SearchFilter.c"
+#line 3673 "SearchFilter.c"
+}
+
+
+static GVariant* _variant_new28 (gchar* value) {
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return g_variant_ref_sink (g_variant_new_string (value));
+#line 3680 "SearchFilter.c"
 }
 
 
 void search_filter_actions_reset (SearchFilterActions* self) {
-	GtkToggleAction* _tmp0_ = NULL;
-	GtkToggleAction* _tmp1_ = NULL;
-	GtkToggleAction* _tmp2_ = NULL;
-	GtkToggleAction* _tmp3_ = NULL;
-	GtkToggleAction* _tmp4_ = NULL;
-	GtkToggleAction* _tmp5_ = NULL;
-	GtkToggleAction* _tmp6_ = NULL;
-	GtkToggleAction* _tmp7_ = NULL;
-	GtkRadioAction* _tmp8_ = NULL;
-	GtkRadioAction* _tmp9_ = NULL;
-	TextAction* _tmp10_ = NULL;
-	TextAction* _tmp11_ = NULL;
-#line 431 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GSimpleAction* _tmp0_ = NULL;
+	GSimpleAction* _tmp1_ = NULL;
+	GSimpleAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+	GSimpleAction* _tmp4_ = NULL;
+	GSimpleAction* _tmp5_ = NULL;
+	GSimpleAction* _tmp6_ = NULL;
+	GSimpleAction* _tmp7_ = NULL;
+	GVariant* v = NULL;
+	gchar* _tmp8_ = NULL;
+	gchar* _tmp9_ = NULL;
+	GVariant* _tmp10_ = NULL;
+	GVariant* _tmp11_ = NULL;
+	GSimpleAction* _tmp12_ = NULL;
+	GSimpleAction* _tmp13_ = NULL;
+	TextAction* _tmp14_ = NULL;
+	TextAction* _tmp15_ = NULL;
+#line 438 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_flagged (self);
-#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 439 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = search_filter_actions_get_rating (self);
+#line 439 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_;
-#line 432 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toggle_action_set_active (_tmp1_, FALSE);
-#line 433 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 439 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_enabled (_tmp1_, FALSE);
+#line 440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search_filter_actions_get_photos (self);
-#line 433 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_;
-#line 433 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toggle_action_set_active (_tmp3_, FALSE);
-#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_enabled (_tmp3_, FALSE);
+#line 441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = search_filter_actions_get_raw (self);
-#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = _tmp4_;
-#line 434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toggle_action_set_active (_tmp5_, FALSE);
-#line 435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_enabled (_tmp5_, FALSE);
+#line 442 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = search_filter_actions_get_videos (self);
-#line 435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 442 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = _tmp6_;
-#line 435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toggle_action_set_active (_tmp7_, FALSE);
-#line 436 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = search_filter_actions_get_rating (self);
-#line 436 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 442 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_enabled (_tmp7_, FALSE);
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp8_ = g_strdup_printf ("'%d'", (gint) RATING_FILTER_UNRATED_OR_HIGHER);
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = _tmp8_;
-#line 436 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_radio_action_set_current_value (_tmp9_, (gint) RATING_FILTER_UNRATED_OR_HIGHER);
-#line 437 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = search_filter_actions_get_text (self);
-#line 437 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp10_ = _variant_new28 (_tmp9_);
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = _tmp10_;
-#line 437 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	text_action_set_text (_tmp11_, NULL);
-#line 3705 "SearchFilter.c"
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_free0 (_tmp9_);
+#line 443 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	v = _tmp11_;
+#line 444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp12_ = search_filter_actions_get_rating (self);
+#line 444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp13_ = _tmp12_;
+#line 444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_state (_tmp13_, v);
+#line 446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp14_ = search_filter_actions_get_text (self);
+#line 446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp15_ = _tmp14_;
+#line 446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	text_action_set_text (_tmp15_, NULL);
+#line 438 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (v);
+#line 3754 "SearchFilter.c"
 }
 
 
 void search_filter_actions_set_sensitive_for_search_criteria (SearchFilterActions* self, SearchFilterCriteria criteria) {
 	SearchFilterCriteria _tmp0_ = 0;
-#line 440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 449 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = criteria;
-#line 441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->criteria = _tmp0_;
-#line 442 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_update_sensitivities (self);
-#line 445 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 454 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "criteria-changed");
-#line 3721 "SearchFilter.c"
+#line 3770 "SearchFilter.c"
 }
 
 
 static void _search_filter_actions_on_media_tracker_updated_core_tracker_updated (CoreTracker* _sender, gpointer self) {
-#line 453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_on_media_tracker_updated ((SearchFilterActions*) self, _sender);
-#line 3728 "SearchFilter.c"
+#line 3777 "SearchFilter.c"
 }
 
 
 static void _search_filter_actions_on_camera_tracker_updated_core_tracker_updated (CoreTracker* _sender, gpointer self) {
-#line 455 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_on_camera_tracker_updated ((SearchFilterActions*) self, _sender);
-#line 3735 "SearchFilter.c"
+#line 3784 "SearchFilter.c"
 }
 
 
@@ -3744,172 +3793,172 @@ void search_filter_actions_monitor_page_contents (SearchFilterActions* self, Pag
 	Page* _tmp11_ = NULL;
 	CheckerboardPage* _tmp12_ = NULL;
 	CheckerboardPage* _tmp13_ = NULL;
-#line 448 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 448 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail ((old_page == NULL) || IS_PAGE (old_page));
-#line 448 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail ((new_page == NULL) || IS_PAGE (new_page));
-#line 449 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = old_page;
-#line 449 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_CHECKERBOARD_PAGE) ? ((CheckerboardPage*) _tmp0_) : NULL);
-#line 449 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	old_tracked_page = _tmp1_;
-#line 450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = old_tracked_page;
-#line 450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp2_ != NULL) {
-#line 3764 "SearchFilter.c"
+#line 3813 "SearchFilter.c"
 		CoreViewTracker* tracker = NULL;
 		CheckerboardPage* _tmp3_ = NULL;
 		CoreViewTracker* _tmp4_ = NULL;
 		CoreViewTracker* _tmp5_ = NULL;
-#line 451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 460 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp3_ = old_tracked_page;
-#line 451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 460 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = checkerboard_page_get_view_tracker (_tmp3_);
-#line 451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 460 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		tracker = _tmp4_;
-#line 452 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 461 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = tracker;
-#line 452 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 461 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, TYPE_MEDIA_VIEW_TRACKER)) {
-#line 3779 "SearchFilter.c"
+#line 3828 "SearchFilter.c"
 			CoreViewTracker* _tmp6_ = NULL;
 			guint _tmp7_ = 0U;
-#line 453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp6_ = tracker;
-#line 453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_parse_name ("updated", CORE_TYPE_TRACKER, &_tmp7_, NULL, FALSE);
-#line 453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, CORE_TYPE_TRACKER, CoreTracker), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _search_filter_actions_on_media_tracker_updated_core_tracker_updated, self);
-#line 3788 "SearchFilter.c"
+#line 3837 "SearchFilter.c"
 		} else {
 			CoreViewTracker* _tmp8_ = NULL;
-#line 454 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 463 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp8_ = tracker;
-#line 454 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 463 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp8_, TYPE_CAMERA_VIEW_TRACKER)) {
-#line 3795 "SearchFilter.c"
+#line 3844 "SearchFilter.c"
 				CoreViewTracker* _tmp9_ = NULL;
 				guint _tmp10_ = 0U;
-#line 455 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp9_ = tracker;
-#line 455 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("updated", CORE_TYPE_TRACKER, &_tmp10_, NULL, FALSE);
-#line 455 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, CORE_TYPE_TRACKER, CoreTracker), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp10_, 0, NULL, (GCallback) _search_filter_actions_on_camera_tracker_updated_core_tracker_updated, self);
-#line 3804 "SearchFilter.c"
+#line 3853 "SearchFilter.c"
 			}
 		}
-#line 450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_core_tracker_unref0 (tracker);
-#line 3809 "SearchFilter.c"
+#line 3858 "SearchFilter.c"
 	}
-#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = new_page;
-#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp11_, TYPE_CHECKERBOARD_PAGE) ? ((CheckerboardPage*) _tmp11_) : NULL);
-#line 458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	new_tracked_page = _tmp12_;
-#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp13_ = new_tracked_page;
-#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp13_ != NULL) {
-#line 3821 "SearchFilter.c"
+#line 3870 "SearchFilter.c"
 		CoreViewTracker* tracker = NULL;
 		CheckerboardPage* _tmp14_ = NULL;
 		CoreViewTracker* _tmp15_ = NULL;
 		CoreViewTracker* _tmp16_ = NULL;
-#line 460 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		self->priv->can_filter_by_stars = TRUE;
-#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 471 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp14_ = new_tracked_page;
-#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 471 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp15_ = checkerboard_page_get_view_tracker (_tmp14_);
-#line 462 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 471 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		tracker = _tmp15_;
-#line 463 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp16_ = tracker;
-#line 463 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp16_, TYPE_MEDIA_VIEW_TRACKER)) {
-#line 3838 "SearchFilter.c"
+#line 3887 "SearchFilter.c"
 			CoreViewTracker* _tmp17_ = NULL;
 			CoreViewTracker* _tmp18_ = NULL;
-#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 473 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp17_ = tracker;
-#line 464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 473 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, CORE_TYPE_TRACKER, CoreTracker), "updated", (GCallback) _search_filter_actions_on_media_tracker_updated_core_tracker_updated, self);
-#line 465 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 474 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp18_ = tracker;
-#line 465 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 474 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			search_filter_actions_on_media_tracker_updated (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, CORE_TYPE_TRACKER, CoreTracker));
-#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_core_tracker_unref0 (tracker);
-#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (new_tracked_page);
-#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (old_tracked_page);
-#line 467 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return;
-#line 3857 "SearchFilter.c"
+#line 3906 "SearchFilter.c"
 		} else {
 			CoreViewTracker* _tmp19_ = NULL;
-#line 468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp19_ = tracker;
-#line 468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (G_TYPE_CHECK_INSTANCE_TYPE (_tmp19_, TYPE_CAMERA_VIEW_TRACKER)) {
-#line 3864 "SearchFilter.c"
+#line 3913 "SearchFilter.c"
 				CoreViewTracker* _tmp20_ = NULL;
 				CoreViewTracker* _tmp21_ = NULL;
-#line 469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp20_ = tracker;
-#line 469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, CORE_TYPE_TRACKER, CoreTracker), "updated", (GCallback) _search_filter_actions_on_camera_tracker_updated_core_tracker_updated, self);
-#line 470 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp21_ = tracker;
-#line 470 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				search_filter_actions_on_camera_tracker_updated (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, CORE_TYPE_TRACKER, CoreTracker));
-#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 481 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_core_tracker_unref0 (tracker);
-#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 481 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (new_tracked_page);
-#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 481 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (old_tracked_page);
-#line 472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 481 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				return;
-#line 3883 "SearchFilter.c"
+#line 3932 "SearchFilter.c"
 			}
 		}
-#line 459 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_core_tracker_unref0 (tracker);
-#line 3888 "SearchFilter.c"
+#line 3937 "SearchFilter.c"
 	}
-#line 477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_flagged = FALSE;
-#line 478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_photos = FALSE;
-#line 479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 488 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_videos = FALSE;
-#line 480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_raw = FALSE;
-#line 481 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 490 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->can_filter_by_stars = FALSE;
-#line 483 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 492 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_update_sensitivities (self);
-#line 448 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (new_tracked_page);
-#line 448 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (old_tracked_page);
-#line 3906 "SearchFilter.c"
+#line 3955 "SearchFilter.c"
 }
 
 
 static gpointer _core_tracker_ref0 (gpointer self) {
-#line 487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 496 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self ? core_tracker_ref (self) : NULL;
-#line 3913 "SearchFilter.c"
+#line 3962 "SearchFilter.c"
 }
 
 
@@ -3925,45 +3974,45 @@ static void search_filter_actions_on_media_tracker_updated (SearchFilterActions*
 	gint _tmp7_ = 0;
 	MediaAccumulator* _tmp8_ = NULL;
 	gint _tmp9_ = 0;
-#line 486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 495 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 495 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (CORE_IS_TRACKER (t));
-#line 487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 496 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = t;
-#line 487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 496 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _core_tracker_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_MEDIA_VIEW_TRACKER, MediaViewTracker));
-#line 487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 496 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	tracker = _tmp1_;
-#line 489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = tracker->all;
-#line 489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_->flagged;
-#line 489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_flagged = _tmp3_ > 0;
-#line 490 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 499 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = tracker->all;
-#line 490 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 499 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = _tmp4_->photos;
-#line 490 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 499 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_photos = _tmp5_ > 0;
-#line 491 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 500 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = tracker->all;
-#line 491 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 500 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = _tmp6_->videos;
-#line 491 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 500 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_videos = _tmp7_ > 0;
-#line 492 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = tracker->all;
-#line 492 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = _tmp8_->raw;
-#line 492 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_raw = _tmp9_ > 0;
-#line 494 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 503 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_update_sensitivities (self);
-#line 486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 495 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_core_tracker_unref0 (tracker);
-#line 3967 "SearchFilter.c"
+#line 4016 "SearchFilter.c"
 }
 
 
@@ -3980,1240 +4029,461 @@ static void search_filter_actions_on_camera_tracker_updated (SearchFilterActions
 	CameraAccumulator* _tmp8_ = NULL;
 	gint _tmp9_ = 0;
 	gint _tmp10_ = 0;
-#line 497 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 506 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 497 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 506 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (CORE_IS_TRACKER (t));
-#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 507 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = t;
-#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 507 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _core_tracker_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_CAMERA_VIEW_TRACKER, CameraViewTracker));
-#line 498 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 507 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	tracker = _tmp1_;
-#line 500 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_flagged = FALSE;
-#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = tracker->all;
-#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = camera_accumulator_get_photos (_tmp2_);
-#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = _tmp3_;
-#line 501 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_photos = _tmp4_ > 0;
-#line 502 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 511 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = tracker->all;
-#line 502 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 511 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = camera_accumulator_get_videos (_tmp5_);
-#line 502 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 511 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = _tmp6_;
-#line 502 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 511 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_videos = _tmp7_ > 0;
-#line 503 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = tracker->all;
-#line 503 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = camera_accumulator_get_raw (_tmp8_);
-#line 503 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = _tmp9_;
-#line 503 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_raw = _tmp10_ > 0;
-#line 505 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 514 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_update_sensitivities (self);
-#line 497 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 506 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_core_tracker_unref0 (tracker);
-#line 4024 "SearchFilter.c"
+#line 4073 "SearchFilter.c"
 }
 
 
 static void search_filter_actions_update_sensitivities (SearchFilterActions* self) {
-	const gchar* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	SearchFilterCriteria _tmp2_ = 0;
-	GtkToggleAction* _tmp4_ = NULL;
-	GtkToggleAction* _tmp5_ = NULL;
-	gboolean allow_media = FALSE;
-	SearchFilterCriteria _tmp6_ = 0;
-	const gchar* _tmp7_ = NULL;
-	gboolean _tmp8_ = FALSE;
-	gboolean _tmp9_ = FALSE;
-	GtkToggleAction* _tmp11_ = NULL;
-	GtkToggleAction* _tmp12_ = NULL;
-	const gchar* _tmp13_ = NULL;
-	gboolean _tmp14_ = FALSE;
-	gboolean _tmp15_ = FALSE;
-	GtkToggleAction* _tmp17_ = NULL;
-	GtkToggleAction* _tmp18_ = NULL;
-	const gchar* _tmp19_ = NULL;
-	gboolean _tmp20_ = FALSE;
-	gboolean _tmp21_ = FALSE;
-	GtkToggleAction* _tmp23_ = NULL;
-	GtkToggleAction* _tmp24_ = NULL;
 	gboolean allow_ratings = FALSE;
-	SearchFilterCriteria _tmp25_ = 0;
-	gboolean _tmp26_ = FALSE;
-	gboolean _tmp27_ = FALSE;
-	gboolean _tmp28_ = FALSE;
-	gboolean _tmp29_ = FALSE;
-	gboolean _tmp30_ = FALSE;
-	gboolean _tmp31_ = FALSE;
-	gboolean _tmp32_ = FALSE;
-	gboolean _tmp33_ = FALSE;
-	TextAction* _tmp34_ = NULL;
-	TextAction* _tmp35_ = NULL;
-	gboolean _tmp36_ = FALSE;
-	gboolean _tmp37_ = FALSE;
-	gboolean _tmp38_ = FALSE;
-	gboolean _tmp39_ = FALSE;
-#line 508 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	SearchFilterCriteria _tmp0_ = 0;
+	gboolean _tmp1_ = FALSE;
+	TextAction* _tmp2_ = NULL;
+	TextAction* _tmp3_ = NULL;
+	gboolean _tmp4_ = FALSE;
+	gboolean _tmp5_ = FALSE;
+	gboolean _tmp6_ = FALSE;
+	gboolean _tmp7_ = FALSE;
+#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = self->priv->criteria;
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((SEARCH_FILTER_CRITERIA_FLAG & _tmp2_) != 0) {
-#line 4073 "SearchFilter.c"
-		gboolean _tmp3_ = FALSE;
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp3_ = self->priv->has_flagged;
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp1_ = _tmp3_;
-#line 4079 "SearchFilter.c"
-	} else {
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp1_ = FALSE;
-#line 4083 "SearchFilter.c"
-	}
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp1_) {
-#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp0_ = RESOURCES_ICON_FILTER_FLAGGED;
-#line 4089 "SearchFilter.c"
-	} else {
-#line 510 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp0_ = RESOURCES_ICON_FILTER_FLAGGED_DISABLED;
-#line 4093 "SearchFilter.c"
-	}
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = search_filter_actions_get_flagged (self);
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_ = _tmp4_;
-#line 509 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_set_stock_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_action_get_type (), GtkAction), _tmp0_);
-#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp6_ = self->priv->criteria;
-#line 512 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	allow_media = (SEARCH_FILTER_CRITERIA_MEDIA & _tmp6_) != 0;
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_ = allow_media;
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp9_) {
-#line 4109 "SearchFilter.c"
-		gboolean _tmp10_ = FALSE;
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp10_ = self->priv->has_videos;
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp8_ = _tmp10_;
-#line 4115 "SearchFilter.c"
-	} else {
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp8_ = FALSE;
-#line 4119 "SearchFilter.c"
-	}
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp8_) {
-#line 514 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp7_ = RESOURCES_ICON_FILTER_VIDEOS;
-#line 4125 "SearchFilter.c"
-	} else {
-#line 514 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp7_ = RESOURCES_ICON_FILTER_VIDEOS_DISABLED;
-#line 4129 "SearchFilter.c"
-	}
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = search_filter_actions_get_videos (self);
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_ = _tmp11_;
-#line 513 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_set_stock_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_action_get_type (), GtkAction), _tmp7_);
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp15_ = allow_media;
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp15_) {
-#line 4141 "SearchFilter.c"
-		gboolean _tmp16_ = FALSE;
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp16_ = self->priv->has_photos;
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp14_ = _tmp16_;
-#line 4147 "SearchFilter.c"
-	} else {
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp14_ = FALSE;
-#line 4151 "SearchFilter.c"
-	}
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp14_) {
-#line 516 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp13_ = RESOURCES_ICON_FILTER_PHOTOS;
-#line 4157 "SearchFilter.c"
-	} else {
-#line 516 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp13_ = RESOURCES_ICON_FILTER_PHOTOS_DISABLED;
-#line 4161 "SearchFilter.c"
-	}
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_ = search_filter_actions_get_photos (self);
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp18_ = _tmp17_;
-#line 515 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_set_stock_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_action_get_type (), GtkAction), _tmp13_);
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp21_ = allow_media;
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp21_) {
-#line 4173 "SearchFilter.c"
-		gboolean _tmp22_ = FALSE;
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp22_ = self->priv->has_raw;
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp20_ = _tmp22_;
-#line 4179 "SearchFilter.c"
-	} else {
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp20_ = FALSE;
-#line 4183 "SearchFilter.c"
-	}
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp20_) {
 #line 518 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp19_ = RESOURCES_ICON_FILTER_RAW;
-#line 4189 "SearchFilter.c"
-	} else {
+	_tmp0_ = self->priv->criteria;
 #line 518 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp19_ = RESOURCES_ICON_FILTER_RAW_DISABLED;
-#line 4193 "SearchFilter.c"
-	}
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp23_ = search_filter_actions_get_raw (self);
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp24_ = _tmp23_;
-#line 517 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_set_stock_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_action_get_type (), GtkAction), _tmp19_);
-#line 520 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25_ = self->priv->criteria;
-#line 520 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	allow_ratings = (SEARCH_FILTER_CRITERIA_RATING & _tmp25_) != 0;
-#line 521 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp26_ = self->priv->can_filter_by_stars;
-#line 521 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayRejectedOnly", allow_ratings & _tmp26_);
-#line 522 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_ = self->priv->can_filter_by_stars;
-#line 522 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayRejectedOrHigher", allow_ratings & _tmp27_);
+	allow_ratings = (SEARCH_FILTER_CRITERIA_RATING & _tmp0_) != 0;
+#line 519 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = self->priv->can_filter_by_stars;
+#line 519 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_actions_set_action_sensitive (self, "display.rating", allow_ratings & _tmp1_);
 #line 523 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp28_ = self->priv->can_filter_by_stars;
+	_tmp2_ = search_filter_actions_get_text (self);
 #line 523 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayUnratedOrHigher", allow_ratings & _tmp28_);
-#line 524 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp29_ = self->priv->can_filter_by_stars;
-#line 524 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayOneOrHigher", allow_ratings & _tmp29_);
+	_tmp3_ = _tmp2_;
+#line 523 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	text_action_set_sensitive (_tmp3_, TRUE);
 #line 525 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp30_ = self->priv->can_filter_by_stars;
+	_tmp4_ = self->priv->has_photos;
 #line 525 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayTwoOrHigher", allow_ratings & _tmp30_);
-#line 526 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp31_ = self->priv->can_filter_by_stars;
-#line 526 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayThreeOrHigher", allow_ratings & _tmp31_);
-#line 527 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_ = self->priv->can_filter_by_stars;
-#line 527 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayFourOrHigher", allow_ratings & _tmp32_);
-#line 528 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp33_ = self->priv->can_filter_by_stars;
-#line 528 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_set_action_sensitive (self, "CommonDisplayFiveOrHigher", allow_ratings & _tmp33_);
-#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp34_ = search_filter_actions_get_text (self);
-#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp35_ = _tmp34_;
-#line 532 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	text_action_set_sensitive (_tmp35_, TRUE);
-#line 534 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp36_ = self->priv->has_photos;
-#line 534 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp37_ = self->priv->has_videos;
-#line 534 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp38_ = self->priv->has_raw;
-#line 534 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp39_ = self->priv->has_flagged;
-#line 534 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "media-context-changed", _tmp36_, _tmp37_, _tmp38_, _tmp39_);
-#line 4253 "SearchFilter.c"
+	_tmp5_ = self->priv->has_videos;
+#line 525 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp6_ = self->priv->has_raw;
+#line 525 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp7_ = self->priv->has_flagged;
+#line 525 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_emit_by_name (self, "media-context-changed", _tmp4_, _tmp5_, _tmp6_, _tmp7_);
+#line 4113 "SearchFilter.c"
 }
 
 
 static void search_filter_actions_on_text_changed (SearchFilterActions* self, TextAction* action, const gchar* text) {
 	const gchar* _tmp0_ = NULL;
-#line 537 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 528 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 537 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 528 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_TEXT_ACTION (action));
-#line 538 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 529 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = text;
-#line 538 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 529 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "text-changed", _tmp0_);
-#line 4267 "SearchFilter.c"
+#line 4127 "SearchFilter.c"
 }
 
 
-static void _vala_array_add339 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4278 "SearchFilter.c"
-	}
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4282 "SearchFilter.c"
+static void search_filter_actions_on_action_radio (SearchFilterActions* self, GSimpleAction* action, GVariant* parameter) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+#line 540 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
+#line 540 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = action;
+#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = parameter;
+#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_emit_by_name (_tmp0_, "change-state", _tmp1_);
+#line 4144 "SearchFilter.c"
 }
 
 
-static void _vala_array_add340 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4293 "SearchFilter.c"
-	}
-#line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4297 "SearchFilter.c"
+static gboolean _variant_get29 (GVariant* value) {
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return g_variant_get_boolean (value);
+#line 4151 "SearchFilter.c"
 }
 
 
-static void _vala_array_add341 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4308 "SearchFilter.c"
-	}
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4312 "SearchFilter.c"
+static GVariant* _variant_new30 (gboolean value) {
+#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 4158 "SearchFilter.c"
 }
 
 
-static void _vala_array_add342 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4323 "SearchFilter.c"
-	}
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4327 "SearchFilter.c"
-}
-
-
-static void _vala_array_add343 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4338 "SearchFilter.c"
-	}
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4342 "SearchFilter.c"
-}
-
-
-static void _vala_array_add344 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4353 "SearchFilter.c"
-	}
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4357 "SearchFilter.c"
-}
-
-
-static void _vala_array_add345 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4368 "SearchFilter.c"
-	}
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4372 "SearchFilter.c"
-}
-
-
-static void _vala_array_add346 (GtkRadioActionEntry** array, int* length, int* size, const GtkRadioActionEntry* value) {
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkRadioActionEntry, *array, *size);
-#line 4383 "SearchFilter.c"
-	}
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4387 "SearchFilter.c"
-}
-
-
-static void _search_filter_actions_on_rating_changed_gtk_radio_action_callback (GtkAction* action, GtkAction* current, gpointer self) {
-#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_on_rating_changed ((SearchFilterActions*) self, action, current);
-#line 4394 "SearchFilter.c"
-}
-
-
-static void _search_filter_actions_on_flagged_toggled_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_on_flagged_toggled ((SearchFilterActions*) self, action);
-#line 4401 "SearchFilter.c"
-}
-
-
-static void _vala_array_add347 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 4412 "SearchFilter.c"
-	}
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4416 "SearchFilter.c"
-}
-
-
-static void _search_filter_actions_on_photos_toggled_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_on_photos_toggled ((SearchFilterActions*) self, action);
-#line 4423 "SearchFilter.c"
-}
-
-
-static void _vala_array_add348 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 4434 "SearchFilter.c"
-	}
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4438 "SearchFilter.c"
-}
-
-
-static void _search_filter_actions_on_videos_toggled_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_on_videos_toggled ((SearchFilterActions*) self, action);
-#line 4445 "SearchFilter.c"
-}
-
-
-static void _vala_array_add349 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 4456 "SearchFilter.c"
-	}
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4460 "SearchFilter.c"
-}
-
-
-static void _search_filter_actions_on_raw_toggled_gtk_action_callback (GtkAction* action, gpointer self) {
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_actions_on_raw_toggled ((SearchFilterActions*) self, action);
-#line 4467 "SearchFilter.c"
-}
-
-
-static void _vala_array_add350 (GtkToggleActionEntry** array, int* length, int* size, const GtkToggleActionEntry* value) {
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if ((*length) == (*size)) {
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*array = g_renew (GtkToggleActionEntry, *array, *size);
-#line 4478 "SearchFilter.c"
-	}
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	(*array)[(*length)++] = *value;
-#line 4482 "SearchFilter.c"
+static void search_filter_actions_on_action_toggle (SearchFilterActions* self, GSimpleAction* action, GVariant* parameter) {
+	gboolean state = FALSE;
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+	gboolean _tmp4_ = FALSE;
+	GSimpleAction* _tmp5_ = NULL;
+	GVariant* _tmp6_ = NULL;
+#line 545 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
+#line 545 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = action;
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, g_action_get_type (), GAction));
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = _tmp1_;
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = _variant_get29 (_tmp2_);
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp4_ = _tmp3_;
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp2_);
+#line 547 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	state = _tmp4_;
+#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp5_ = action;
+#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp6_ = _variant_new30 (!state);
+#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_emit_by_name (_tmp5_, "change-state", _tmp6_);
+#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp6_);
+#line 4197 "SearchFilter.c"
 }
 
 
 static void search_filter_actions_register (SearchFilterActions* self) {
 	TextAction* _tmp0_ = NULL;
-	GtkRadioActionEntry* view_filter_actions = NULL;
-	GtkRadioActionEntry* _tmp1_ = NULL;
-	gint view_filter_actions_length1 = 0;
-	gint _view_filter_actions_size_ = 0;
-	GtkRadioActionEntry rejected_only = {0};
-	GtkRadioActionEntry _tmp2_ = {0};
-	GtkRadioActionEntry* _tmp3_ = NULL;
-	gint _tmp3__length1 = 0;
-	GtkRadioActionEntry _tmp4_ = {0};
-	GtkRadioActionEntry rejected_or_higher = {0};
-	GtkRadioActionEntry _tmp5_ = {0};
-	const gchar* _tmp6_ = NULL;
-	GtkRadioActionEntry* _tmp7_ = NULL;
-	gint _tmp7__length1 = 0;
-	GtkRadioActionEntry _tmp8_ = {0};
-	GtkRadioActionEntry unrated_or_higher = {0};
-	GtkRadioActionEntry _tmp9_ = {0};
-	GtkRadioActionEntry* _tmp10_ = NULL;
-	gint _tmp10__length1 = 0;
-	GtkRadioActionEntry _tmp11_ = {0};
-	GtkRadioActionEntry one_or_higher = {0};
-	GtkRadioActionEntry _tmp12_ = {0};
-	const gchar* _tmp13_ = NULL;
-	const gchar* _tmp14_ = NULL;
-	GtkRadioActionEntry* _tmp15_ = NULL;
-	gint _tmp15__length1 = 0;
-	GtkRadioActionEntry _tmp16_ = {0};
-	GtkRadioActionEntry two_or_higher = {0};
-	GtkRadioActionEntry _tmp17_ = {0};
-	const gchar* _tmp18_ = NULL;
-	const gchar* _tmp19_ = NULL;
-	GtkRadioActionEntry* _tmp20_ = NULL;
-	gint _tmp20__length1 = 0;
-	GtkRadioActionEntry _tmp21_ = {0};
-	GtkRadioActionEntry three_or_higher = {0};
-	GtkRadioActionEntry _tmp22_ = {0};
-	const gchar* _tmp23_ = NULL;
-	const gchar* _tmp24_ = NULL;
-	GtkRadioActionEntry* _tmp25_ = NULL;
-	gint _tmp25__length1 = 0;
-	GtkRadioActionEntry _tmp26_ = {0};
-	GtkRadioActionEntry four_or_higher = {0};
-	GtkRadioActionEntry _tmp27_ = {0};
-	const gchar* _tmp28_ = NULL;
-	const gchar* _tmp29_ = NULL;
-	GtkRadioActionEntry* _tmp30_ = NULL;
-	gint _tmp30__length1 = 0;
-	GtkRadioActionEntry _tmp31_ = {0};
-	GtkRadioActionEntry five_or_higher = {0};
-	GtkRadioActionEntry _tmp32_ = {0};
-	const gchar* _tmp33_ = NULL;
-	const gchar* _tmp34_ = NULL;
-	GtkRadioActionEntry* _tmp35_ = NULL;
-	gint _tmp35__length1 = 0;
-	GtkRadioActionEntry _tmp36_ = {0};
-	GtkActionGroup* _tmp37_ = NULL;
-	GtkRadioActionEntry* _tmp38_ = NULL;
-	gint _tmp38__length1 = 0;
-	GtkToggleActionEntry* toggle_actions = NULL;
-	GtkToggleActionEntry* _tmp39_ = NULL;
-	gint toggle_actions_length1 = 0;
-	gint _toggle_actions_size_ = 0;
-	GtkToggleActionEntry flagged_action = {0};
-	GtkToggleActionEntry _tmp40_ = {0};
-	const gchar* _tmp41_ = NULL;
-	const gchar* _tmp42_ = NULL;
-	GtkToggleActionEntry* _tmp43_ = NULL;
-	gint _tmp43__length1 = 0;
-	GtkToggleActionEntry _tmp44_ = {0};
-	GtkToggleActionEntry photos_action = {0};
-	GtkToggleActionEntry _tmp45_ = {0};
-	const gchar* _tmp46_ = NULL;
-	const gchar* _tmp47_ = NULL;
-	GtkToggleActionEntry* _tmp48_ = NULL;
-	gint _tmp48__length1 = 0;
-	GtkToggleActionEntry _tmp49_ = {0};
-	GtkToggleActionEntry videos_action = {0};
-	GtkToggleActionEntry _tmp50_ = {0};
-	const gchar* _tmp51_ = NULL;
-	const gchar* _tmp52_ = NULL;
-	GtkToggleActionEntry* _tmp53_ = NULL;
-	gint _tmp53__length1 = 0;
-	GtkToggleActionEntry _tmp54_ = {0};
-	GtkToggleActionEntry raw_action = {0};
-	GtkToggleActionEntry _tmp55_ = {0};
-	const gchar* _tmp56_ = NULL;
-	const gchar* _tmp57_ = NULL;
-	GtkToggleActionEntry* _tmp58_ = NULL;
-	gint _tmp58__length1 = 0;
-	GtkToggleActionEntry _tmp59_ = {0};
-	GtkActionGroup* _tmp60_ = NULL;
-	GtkToggleActionEntry* _tmp61_ = NULL;
-	gint _tmp61__length1 = 0;
-#line 541 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 551 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = text_action_new (NULL);
-#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_text_action_unref0 (self->priv->_text);
-#line 542 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_text = _tmp0_;
-#line 544 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = g_new0 (GtkRadioActionEntry, 0);
-#line 544 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	view_filter_actions = _tmp1_;
-#line 544 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	view_filter_actions_length1 = 0;
-#line 544 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_view_filter_actions_size_ = view_filter_actions_length1;
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.name = "CommonDisplayRejectedOnly";
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.stock_id = NULL;
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.label = TRANSLATABLE;
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.accelerator = "<Ctrl>8";
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.tooltip = TRANSLATABLE;
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_.value = (gint) RATING_FILTER_REJECTED_ONLY;
-#line 546 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_only = _tmp2_;
-#line 548 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_only.label = RESOURCES_DISPLAY_REJECTED_ONLY_MENU;
-#line 549 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_only.tooltip = RESOURCES_DISPLAY_REJECTED_ONLY_TOOLTIP;
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = view_filter_actions;
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3__length1 = view_filter_actions_length1;
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = rejected_only;
-#line 550 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add339 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp4_);
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.name = "CommonDisplayRejectedOrHigher";
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.stock_id = NULL;
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.label = TRANSLATABLE;
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.accelerator = "<Ctrl>9";
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.tooltip = TRANSLATABLE;
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_.value = (gint) RATING_FILTER_REJECTED_OR_HIGHER;
-#line 552 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_or_higher = _tmp5_;
-#line 554 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_or_higher.label = RESOURCES_DISPLAY_REJECTED_OR_HIGHER_MENU;
+#line 4211 "SearchFilter.c"
+}
+
+
+static void search_filter_actions_on_rating_changed (SearchFilterActions* self, GSimpleAction* action, GVariant* value) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	RatingFilter filter = 0;
+	GVariant* _tmp2_ = NULL;
+	const gchar* _tmp3_ = NULL;
+	gint _tmp4_ = 0;
 #line 555 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp6_ = g_dpgettext2 (NULL, "Tooltip", RESOURCES_DISPLAY_REJECTED_OR_HIGHER_TOOLTIP);
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
 #line 555 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rejected_or_higher.tooltip = _tmp6_;
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 555 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (value != NULL);
 #line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp7_ = view_filter_actions;
+	_tmp0_ = action;
 #line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp7__length1 = view_filter_actions_length1;
+	_tmp1_ = value;
 #line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = rejected_or_higher;
-#line 557 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add340 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp8_);
+	g_simple_action_set_state (_tmp0_, _tmp1_);
+#line 558 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = value;
+#line 558 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = g_variant_get_string (_tmp2_, NULL);
+#line 558 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp4_ = atoi (_tmp3_);
+#line 558 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	filter = (RatingFilter) _tmp4_;
 #line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.name = "CommonDisplayUnratedOrHigher";
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.stock_id = NULL;
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.label = TRANSLATABLE;
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.accelerator = "<Ctrl>0";
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.tooltip = TRANSLATABLE;
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_.value = (gint) RATING_FILTER_UNRATED_OR_HIGHER;
-#line 559 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	unrated_or_higher = _tmp9_;
-#line 561 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	unrated_or_higher.label = RESOURCES_DISPLAY_UNRATED_OR_HIGHER_MENU;
+	g_signal_emit_by_name (self, "rating-changed", filter);
+#line 4244 "SearchFilter.c"
+}
+
+
+static void search_filter_actions_on_flagged_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
 #line 562 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	unrated_or_higher.tooltip = RESOURCES_DISPLAY_UNRATED_OR_HIGHER_TOOLTIP;
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = view_filter_actions;
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10__length1 = view_filter_actions_length1;
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = unrated_or_higher;
-#line 563 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add341 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp11_);
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
+#line 562 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 562 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (value != NULL);
+#line 564 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = action;
+#line 564 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = value;
+#line 564 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_state (_tmp0_, _tmp1_);
 #line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.name = "CommonDisplayOneOrHigher";
+	_tmp2_ = value;
 #line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.stock_id = NULL;
+	_tmp3_ = g_variant_get_boolean (_tmp2_);
 #line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.label = TRANSLATABLE;
-#line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.accelerator = "<Ctrl>1";
-#line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.tooltip = TRANSLATABLE;
-#line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_.value = (gint) RATING_FILTER_ONE_OR_HIGHER;
-#line 565 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	one_or_higher = _tmp12_;
-#line 567 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp13_ = resources_DISPLAY_ONE_OR_HIGHER_MENU;
-#line 567 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	one_or_higher.label = _tmp13_;
+	g_signal_emit_by_name (self, "flagged-toggled", _tmp3_);
+#line 4271 "SearchFilter.c"
+}
+
+
+static void search_filter_actions_on_photos_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
 #line 568 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp14_ = resources_DISPLAY_ONE_OR_HIGHER_TOOLTIP;
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
 #line 568 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	one_or_higher.tooltip = _tmp14_;
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp15_ = view_filter_actions;
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp15__length1 = view_filter_actions_length1;
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp16_ = one_or_higher;
-#line 569 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add342 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp16_);
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 568 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (value != NULL);
+#line 570 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = action;
+#line 570 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = value;
+#line 570 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_state (_tmp0_, _tmp1_);
 #line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.name = "CommonDisplayTwoOrHigher";
+	_tmp2_ = value;
 #line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.stock_id = NULL;
+	_tmp3_ = g_variant_get_boolean (_tmp2_);
 #line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.label = TRANSLATABLE;
-#line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.accelerator = "<Ctrl>2";
-#line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.tooltip = TRANSLATABLE;
-#line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_.value = (gint) RATING_FILTER_TWO_OR_HIGHER;
-#line 571 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	two_or_higher = _tmp17_;
-#line 573 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp18_ = resources_DISPLAY_TWO_OR_HIGHER_MENU;
-#line 573 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	two_or_higher.label = _tmp18_;
+	g_signal_emit_by_name (self, "photos-toggled", _tmp3_);
+#line 4298 "SearchFilter.c"
+}
+
+
+static void search_filter_actions_on_videos_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
 #line 574 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp19_ = resources_DISPLAY_TWO_OR_HIGHER_TOOLTIP;
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
 #line 574 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	two_or_higher.tooltip = _tmp19_;
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp20_ = view_filter_actions;
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp20__length1 = view_filter_actions_length1;
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp21_ = two_or_higher;
-#line 575 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add343 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp21_);
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 574 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (value != NULL);
+#line 576 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = action;
+#line 576 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = value;
+#line 576 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_state (_tmp0_, _tmp1_);
 #line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.name = "CommonDisplayThreeOrHigher";
+	_tmp2_ = value;
 #line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.stock_id = NULL;
+	_tmp3_ = g_variant_get_boolean (_tmp2_);
 #line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.label = TRANSLATABLE;
-#line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.accelerator = "<Ctrl>3";
-#line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.tooltip = TRANSLATABLE;
-#line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_.value = (gint) RATING_FILTER_THREE_OR_HIGHER;
-#line 577 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	three_or_higher = _tmp22_;
-#line 579 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp23_ = resources_DISPLAY_THREE_OR_HIGHER_MENU;
-#line 579 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	three_or_higher.label = _tmp23_;
+	g_signal_emit_by_name (self, "videos-toggled", _tmp3_);
+#line 4325 "SearchFilter.c"
+}
+
+
+static void search_filter_actions_on_raw_toggled (SearchFilterActions* self, GSimpleAction* action, GVariant* value) {
+	GSimpleAction* _tmp0_ = NULL;
+	GVariant* _tmp1_ = NULL;
+	GVariant* _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
 #line 580 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp24_ = resources_DISPLAY_THREE_OR_HIGHER_TOOLTIP;
+	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
 #line 580 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	three_or_higher.tooltip = _tmp24_;
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25_ = view_filter_actions;
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25__length1 = view_filter_actions_length1;
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp26_ = three_or_higher;
-#line 581 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add344 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp26_);
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.name = "CommonDisplayFourOrHigher";
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.stock_id = NULL;
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.label = TRANSLATABLE;
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.accelerator = "<Ctrl>4";
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.tooltip = TRANSLATABLE;
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_.value = (gint) RATING_FILTER_FOUR_OR_HIGHER;
-#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	four_or_higher = _tmp27_;
-#line 585 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp28_ = resources_DISPLAY_FOUR_OR_HIGHER_MENU;
-#line 585 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	four_or_higher.label = _tmp28_;
-#line 586 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp29_ = resources_DISPLAY_FOUR_OR_HIGHER_TOOLTIP;
-#line 586 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	four_or_higher.tooltip = _tmp29_;
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp30_ = view_filter_actions;
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp30__length1 = view_filter_actions_length1;
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp31_ = four_or_higher;
-#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add345 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp31_);
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.name = "CommonDisplayFiveOrHigher";
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.stock_id = NULL;
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.label = TRANSLATABLE;
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.accelerator = "<Ctrl>5";
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.tooltip = TRANSLATABLE;
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_.value = (gint) RATING_FILTER_FIVE_OR_HIGHER;
-#line 589 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	five_or_higher = _tmp32_;
-#line 591 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp33_ = resources_DISPLAY_FIVE_OR_HIGHER_MENU;
-#line 591 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	five_or_higher.label = _tmp33_;
-#line 592 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp34_ = resources_DISPLAY_FIVE_OR_HIGHER_TOOLTIP;
-#line 592 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	five_or_higher.tooltip = _tmp34_;
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp35_ = view_filter_actions;
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp35__length1 = view_filter_actions_length1;
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp36_ = five_or_higher;
-#line 593 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add346 (&view_filter_actions, &view_filter_actions_length1, &_view_filter_actions_size_, &_tmp36_);
-#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp37_ = self->priv->action_group;
-#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp38_ = view_filter_actions;
-#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp38__length1 = view_filter_actions_length1;
-#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_group_add_radio_actions (_tmp37_, _tmp38_, _tmp38__length1, (gint) RATING_FILTER_UNRATED_OR_HIGHER, (GCallback) _search_filter_actions_on_rating_changed_gtk_radio_action_callback, self);
-#line 598 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp39_ = g_new0 (GtkToggleActionEntry, 0);
-#line 598 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	toggle_actions = _tmp39_;
-#line 598 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	toggle_actions_length1 = 0;
-#line 598 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_toggle_actions_size_ = toggle_actions_length1;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.name = "CommonDisplayFlagged";
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.stock_id = RESOURCES_ICON_FILTER_FLAGGED;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.label = TRANSLATABLE;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.accelerator = NULL;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.tooltip = TRANSLATABLE;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.callback = (GCallback) _search_filter_actions_on_flagged_toggled_gtk_action_callback;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_.is_active = FALSE;
-#line 600 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	flagged_action = _tmp40_;
-#line 602 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp41_ = _ ("Flagged");
-#line 602 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	flagged_action.label = _tmp41_;
-#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp42_ = _ ("Flagged");
-#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	flagged_action.tooltip = _tmp42_;
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp43_ = toggle_actions;
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp43__length1 = toggle_actions_length1;
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp44_ = flagged_action;
-#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add347 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp44_);
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.name = "CommonDisplayPhotos";
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.stock_id = RESOURCES_ICON_FILTER_PHOTOS;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.label = TRANSLATABLE;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.accelerator = NULL;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.tooltip = TRANSLATABLE;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.callback = (GCallback) _search_filter_actions_on_photos_toggled_gtk_action_callback;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_.is_active = FALSE;
-#line 606 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	photos_action = _tmp45_;
-#line 608 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp46_ = _ ("Photos");
-#line 608 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	photos_action.label = _tmp46_;
-#line 609 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp47_ = _ ("Photos");
-#line 609 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	photos_action.tooltip = _tmp47_;
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp48_ = toggle_actions;
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp48__length1 = toggle_actions_length1;
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp49_ = photos_action;
-#line 610 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add348 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp49_);
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.name = "CommonDisplayVideos";
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.stock_id = RESOURCES_ICON_FILTER_VIDEOS;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.label = TRANSLATABLE;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.accelerator = NULL;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.tooltip = TRANSLATABLE;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.callback = (GCallback) _search_filter_actions_on_videos_toggled_gtk_action_callback;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_.is_active = FALSE;
-#line 612 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	videos_action = _tmp50_;
-#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp51_ = _ ("Videos");
-#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	videos_action.label = _tmp51_;
-#line 615 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp52_ = _ ("Videos");
-#line 615 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	videos_action.tooltip = _tmp52_;
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp53_ = toggle_actions;
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp53__length1 = toggle_actions_length1;
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp54_ = videos_action;
-#line 616 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add349 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp54_);
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.name = "CommonDisplayRaw";
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.stock_id = RESOURCES_ICON_FILTER_RAW;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.label = TRANSLATABLE;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.accelerator = NULL;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.tooltip = TRANSLATABLE;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.callback = (GCallback) _search_filter_actions_on_raw_toggled_gtk_action_callback;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_.is_active = FALSE;
-#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	raw_action = _tmp55_;
-#line 620 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp56_ = _ ("RAW Photos");
-#line 620 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	raw_action.label = _tmp56_;
-#line 621 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp57_ = _ ("RAW photos");
-#line 621 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	raw_action.tooltip = _tmp57_;
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp58_ = toggle_actions;
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp58__length1 = toggle_actions_length1;
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp59_ = raw_action;
-#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_array_add350 (&toggle_actions, &toggle_actions_length1, &_toggle_actions_size_, &_tmp59_);
-#line 624 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp60_ = self->priv->action_group;
-#line 624 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp61_ = toggle_actions;
-#line 624 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp61__length1 = toggle_actions_length1;
-#line 624 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_group_add_toggle_actions (_tmp60_, _tmp61_, _tmp61__length1, self);
-#line 541 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	toggle_actions = (g_free (toggle_actions), NULL);
-#line 541 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	view_filter_actions = (g_free (view_filter_actions), NULL);
-#line 4983 "SearchFilter.c"
-}
-
-
-static void search_filter_actions_on_rating_changed (SearchFilterActions* self, GtkAction* action, GtkAction* current) {
-	GtkAction* _tmp0_ = NULL;
-	gint _tmp1_ = 0;
-#line 627 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 627 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 627 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (current));
-#line 628 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = current;
-#line 628 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = gtk_radio_action_get_current_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_radio_action_get_type (), GtkRadioAction));
-#line 628 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "rating-changed", (RatingFilter) _tmp1_);
-#line 5002 "SearchFilter.c"
-}
-
-
-static void search_filter_actions_on_flagged_toggled (SearchFilterActions* self, GtkAction* action) {
-	GtkAction* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	gboolean _tmp2_ = FALSE;
-#line 631 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 631 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (G_IS_SIMPLE_ACTION (action));
+#line 580 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_if_fail (value != NULL);
+#line 582 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = action;
-#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = _tmp1_;
-#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "flagged-toggled", _tmp2_);
-#line 5022 "SearchFilter.c"
-}
-
-
-static void search_filter_actions_on_photos_toggled (SearchFilterActions* self, GtkAction* action) {
-	GtkAction* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	gboolean _tmp2_ = FALSE;
-#line 635 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 635 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = action;
-#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = _tmp1_;
-#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "photos-toggled", _tmp2_);
-#line 5042 "SearchFilter.c"
-}
-
-
-static void search_filter_actions_on_videos_toggled (SearchFilterActions* self, GtkAction* action) {
-	GtkAction* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	gboolean _tmp2_ = FALSE;
-#line 639 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 639 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = action;
-#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = _tmp1_;
-#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "videos-toggled", _tmp2_);
-#line 5062 "SearchFilter.c"
-}
-
-
-static void search_filter_actions_on_raw_toggled (SearchFilterActions* self, GtkAction* action) {
-	GtkAction* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	gboolean _tmp2_ = FALSE;
-#line 643 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_ACTIONS (self));
-#line 643 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_ACTION (action));
-#line 644 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = action;
-#line 644 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = gtk_toggle_action_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_action_get_type (), GtkToggleAction));
-#line 644 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = _tmp1_;
-#line 644 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "raw-toggled", _tmp2_);
-#line 5082 "SearchFilter.c"
+#line 582 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = value;
+#line 582 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_simple_action_set_state (_tmp0_, _tmp1_);
+#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = value;
+#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = g_variant_get_boolean (_tmp2_);
+#line 583 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_emit_by_name (self, "raw-toggled", _tmp3_);
+#line 4352 "SearchFilter.c"
 }
 
 
 gboolean search_filter_actions_get_has_photos (SearchFilterActions* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 586 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), FALSE);
-#line 648 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->has_photos;
-#line 648 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
-#line 648 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 587 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5097 "SearchFilter.c"
+#line 4367 "SearchFilter.c"
 }
 
 
 gboolean search_filter_actions_get_has_videos (SearchFilterActions* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 651 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 590 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), FALSE);
-#line 652 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 591 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->has_videos;
-#line 652 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 591 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
-#line 652 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 591 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5112 "SearchFilter.c"
+#line 4382 "SearchFilter.c"
 }
 
 
 gboolean search_filter_actions_get_has_raw (SearchFilterActions* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 655 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 594 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), FALSE);
-#line 656 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->has_raw;
-#line 656 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
-#line 656 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 595 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5127 "SearchFilter.c"
+#line 4397 "SearchFilter.c"
 }
 
 
 gboolean search_filter_actions_get_has_flagged (SearchFilterActions* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 659 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 598 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), FALSE);
-#line 660 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 599 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->has_flagged;
-#line 660 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 599 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
-#line 660 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 599 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5142 "SearchFilter.c"
+#line 4412 "SearchFilter.c"
 }
 
 
-GtkToggleAction* search_filter_actions_get_flagged (SearchFilterActions* self) {
-	GtkToggleAction* result;
-	GtkAction* _tmp0_ = NULL;
+GSimpleAction* search_filter_actions_get_flagged (SearchFilterActions* self) {
+	GSimpleAction* result;
+	GSimpleAction* _tmp0_ = NULL;
 #line 335 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 336 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_action (self, "CommonDisplayFlagged");
+	_tmp0_ = search_filter_actions_get_action (self, "display.flagged");
 #line 336 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp0_) : NULL;
+	result = _tmp0_;
 #line 336 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5157 "SearchFilter.c"
+#line 4427 "SearchFilter.c"
 }
 
 
-GtkToggleAction* search_filter_actions_get_photos (SearchFilterActions* self) {
-	GtkToggleAction* result;
-	GtkAction* _tmp0_ = NULL;
+GSimpleAction* search_filter_actions_get_photos (SearchFilterActions* self) {
+	GSimpleAction* result;
+	GSimpleAction* _tmp0_ = NULL;
 #line 341 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_action (self, "CommonDisplayPhotos");
+	_tmp0_ = search_filter_actions_get_action (self, "display.photos");
 #line 342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp0_) : NULL;
+	result = _tmp0_;
 #line 342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5172 "SearchFilter.c"
+#line 4442 "SearchFilter.c"
 }
 
 
-GtkToggleAction* search_filter_actions_get_videos (SearchFilterActions* self) {
-	GtkToggleAction* result;
-	GtkAction* _tmp0_ = NULL;
+GSimpleAction* search_filter_actions_get_videos (SearchFilterActions* self) {
+	GSimpleAction* result;
+	GSimpleAction* _tmp0_ = NULL;
 #line 347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_action (self, "CommonDisplayVideos");
+	_tmp0_ = search_filter_actions_get_action (self, "display.videos");
 #line 348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp0_) : NULL;
+	result = _tmp0_;
 #line 348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5187 "SearchFilter.c"
+#line 4457 "SearchFilter.c"
 }
 
 
-GtkToggleAction* search_filter_actions_get_raw (SearchFilterActions* self) {
-	GtkToggleAction* result;
-	GtkAction* _tmp0_ = NULL;
+GSimpleAction* search_filter_actions_get_raw (SearchFilterActions* self) {
+	GSimpleAction* result;
+	GSimpleAction* _tmp0_ = NULL;
 #line 353 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_action (self, "CommonDisplayRaw");
+	_tmp0_ = search_filter_actions_get_action (self, "display.raw");
 #line 354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp0_) : NULL;
+	result = _tmp0_;
 #line 354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5202 "SearchFilter.c"
+#line 4472 "SearchFilter.c"
 }
 
 
-GtkRadioAction* search_filter_actions_get_rating (SearchFilterActions* self) {
-	GtkRadioAction* result;
-	GtkAction* _tmp0_ = NULL;
+GSimpleAction* search_filter_actions_get_rating (SearchFilterActions* self) {
+	GSimpleAction* result;
+	GSimpleAction* _tmp0_ = NULL;
 #line 359 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (self), NULL);
 #line 360 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = search_filter_actions_get_action (self, "CommonDisplayUnratedOrHigher");
+	_tmp0_ = search_filter_actions_get_action (self, "display.rating");
 #line 360 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	result = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, gtk_radio_action_get_type ()) ? ((GtkRadioAction*) _tmp0_) : NULL;
+	result = _tmp0_;
 #line 360 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5217 "SearchFilter.c"
+#line 4487 "SearchFilter.c"
 }
 
 
@@ -5233,7 +4503,7 @@ TextAction* search_filter_actions_get_text (SearchFilterActions* self) {
 	result = _tmp1_;
 #line 367 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5237 "SearchFilter.c"
+#line 4507 "SearchFilter.c"
 }
 
 
@@ -5252,26 +4522,26 @@ static void g_cclosure_user_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN (GClos
 		data1 = closure->data;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 5256 "SearchFilter.c"
+#line 4526 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		data2 = closure->data;
-#line 5262 "SearchFilter.c"
+#line 4532 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	callback = (GMarshalFunc_VOID__BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	callback (data1, g_value_get_boolean (param_values + 1), g_value_get_boolean (param_values + 2), g_value_get_boolean (param_values + 3), g_value_get_boolean (param_values + 4), data2);
-#line 5268 "SearchFilter.c"
+#line 4538 "SearchFilter.c"
 }
 
 
 static void value_search_filter_actions_init (GValue* value) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	value->data[0].v_pointer = NULL;
-#line 5275 "SearchFilter.c"
+#line 4545 "SearchFilter.c"
 }
 
 
@@ -5280,7 +4550,7 @@ static void value_search_filter_actions_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_actions_unref (value->data[0].v_pointer);
-#line 5284 "SearchFilter.c"
+#line 4554 "SearchFilter.c"
 	}
 }
 
@@ -5290,11 +4560,11 @@ static void value_search_filter_actions_copy_value (const GValue* src_value, GVa
 	if (src_value->data[0].v_pointer) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = search_filter_actions_ref (src_value->data[0].v_pointer);
-#line 5294 "SearchFilter.c"
+#line 4564 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 5298 "SearchFilter.c"
+#line 4568 "SearchFilter.c"
 	}
 }
 
@@ -5302,37 +4572,37 @@ static void value_search_filter_actions_copy_value (const GValue* src_value, GVa
 static gpointer value_search_filter_actions_peek_pointer (const GValue* value) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 5306 "SearchFilter.c"
+#line 4576 "SearchFilter.c"
 }
 
 
 static gchar* value_search_filter_actions_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (collect_values[0].v_pointer) {
-#line 5313 "SearchFilter.c"
+#line 4583 "SearchFilter.c"
 		SearchFilterActions* object;
 		object = collect_values[0].v_pointer;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5320 "SearchFilter.c"
+#line 4590 "SearchFilter.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5324 "SearchFilter.c"
+#line 4594 "SearchFilter.c"
 		}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = search_filter_actions_ref (object);
-#line 5328 "SearchFilter.c"
+#line 4598 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 5332 "SearchFilter.c"
+#line 4602 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 5336 "SearchFilter.c"
+#line 4606 "SearchFilter.c"
 }
 
 
@@ -5343,25 +4613,25 @@ static gchar* value_search_filter_actions_lcopy_value (const GValue* value, guin
 	if (!object_p) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 5347 "SearchFilter.c"
+#line 4617 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (!value->data[0].v_pointer) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = NULL;
-#line 5353 "SearchFilter.c"
+#line 4623 "SearchFilter.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = value->data[0].v_pointer;
-#line 5357 "SearchFilter.c"
+#line 4627 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = search_filter_actions_ref (value->data[0].v_pointer);
-#line 5361 "SearchFilter.c"
+#line 4631 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 5365 "SearchFilter.c"
+#line 4635 "SearchFilter.c"
 }
 
 
@@ -5375,7 +4645,7 @@ GParamSpec* param_spec_search_filter_actions (const gchar* name, const gchar* ni
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return G_PARAM_SPEC (spec);
-#line 5379 "SearchFilter.c"
+#line 4649 "SearchFilter.c"
 }
 
 
@@ -5384,7 +4654,7 @@ gpointer value_get_search_filter_actions (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_SEARCH_FILTER_ACTIONS), NULL);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 5388 "SearchFilter.c"
+#line 4658 "SearchFilter.c"
 }
 
 
@@ -5404,17 +4674,17 @@ void value_set_search_filter_actions (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_actions_ref (value->data[0].v_pointer);
-#line 5408 "SearchFilter.c"
+#line 4678 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 5412 "SearchFilter.c"
+#line 4682 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_actions_unref (old);
-#line 5418 "SearchFilter.c"
+#line 4688 "SearchFilter.c"
 	}
 }
 
@@ -5433,17 +4703,17 @@ void value_take_search_filter_actions (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = v_object;
-#line 5437 "SearchFilter.c"
+#line 4707 "SearchFilter.c"
 	} else {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 5441 "SearchFilter.c"
+#line 4711 "SearchFilter.c"
 	}
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_actions_unref (old);
-#line 5447 "SearchFilter.c"
+#line 4717 "SearchFilter.c"
 	}
 }
 
@@ -5467,7 +4737,7 @@ static void search_filter_actions_class_init (SearchFilterActionsClass * klass) 
 	g_signal_new ("rating_changed", TYPE_SEARCH_FILTER_ACTIONS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__ENUM, G_TYPE_NONE, 1, TYPE_RATING_FILTER);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("text_changed", TYPE_SEARCH_FILTER_ACTIONS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
-#line 5471 "SearchFilter.c"
+#line 4741 "SearchFilter.c"
 	/**
 	     * fired when the kinds of media present in the current view change (e.g., a video becomes
 	     * available in the view through a new import operation or no raw photos are available in
@@ -5477,35 +4747,30 @@ static void search_filter_actions_class_init (SearchFilterActionsClass * klass) 
 	g_signal_new ("media_context_changed", TYPE_SEARCH_FILTER_ACTIONS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN, G_TYPE_NONE, 4, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("criteria_changed", TYPE_SEARCH_FILTER_ACTIONS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 5481 "SearchFilter.c"
+#line 4751 "SearchFilter.c"
 }
 
 
 static void search_filter_actions_instance_init (SearchFilterActions * self) {
-	GtkActionGroup* _tmp0_ = NULL;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_ACTIONS_GET_PRIVATE (self);
 #line 371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = gtk_action_group_new ("SearchFilterActionGroup");
-#line 371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->action_group = _tmp0_;
-#line 372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->criteria = SEARCH_FILTER_CRITERIA_ALL;
-#line 373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_text = NULL;
-#line 374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_flagged = TRUE;
-#line 375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_photos = TRUE;
-#line 376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_videos = TRUE;
-#line 377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->has_raw = TRUE;
-#line 378 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->can_filter_by_stars = TRUE;
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->ref_count = 1;
-#line 5509 "SearchFilter.c"
+#line 4774 "SearchFilter.c"
 }
 
 
@@ -5515,11 +4780,9 @@ static void search_filter_actions_finalize (SearchFilterActions* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SEARCH_FILTER_ACTIONS, SearchFilterActions);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_destroy (self);
-#line 371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->action_group);
-#line 373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_text_action_unref0 (self->priv->_text);
-#line 5523 "SearchFilter.c"
+#line 4786 "SearchFilter.c"
 }
 
 
@@ -5544,7 +4807,7 @@ gpointer search_filter_actions_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return instance;
-#line 5548 "SearchFilter.c"
+#line 4811 "SearchFilter.c"
 }
 
 
@@ -5557,101 +4820,94 @@ void search_filter_actions_unref (gpointer instance) {
 		SEARCH_FILTER_ACTIONS_GET_CLASS (self)->finalize (self);
 #line 333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 5561 "SearchFilter.c"
+#line 4824 "SearchFilter.c"
 	}
 }
 
 
 static void _search_filter_toolbar_on_media_context_changed_search_filter_actions_media_context_changed (SearchFilterActions* _sender, gboolean has_photos, gboolean has_videos, gboolean has_raw, gboolean has_flagged, gpointer self) {
-#line 1244 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_media_context_changed ((SearchFilterToolbar*) self, has_photos, has_videos, has_raw, has_flagged);
-#line 5569 "SearchFilter.c"
+#line 4832 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_flagged_toggled_search_filter_actions_flagged_toggled (SearchFilterActions* _sender, gboolean on, gpointer self) {
-#line 1246 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_flagged_toggled ((SearchFilterToolbar*) self);
-#line 5576 "SearchFilter.c"
+#line 4839 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_photos_toggled_search_filter_actions_photos_toggled (SearchFilterActions* _sender, gboolean on, gpointer self) {
-#line 1247 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_photos_toggled ((SearchFilterToolbar*) self);
-#line 5583 "SearchFilter.c"
+#line 4846 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_videos_toggled_search_filter_actions_videos_toggled (SearchFilterActions* _sender, gboolean on, gpointer self) {
-#line 1248 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1163 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_videos_toggled ((SearchFilterToolbar*) self);
-#line 5590 "SearchFilter.c"
+#line 4853 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_raw_toggled_search_filter_actions_raw_toggled (SearchFilterActions* _sender, gboolean on, gpointer self) {
-#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1164 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_raw_toggled ((SearchFilterToolbar*) self);
-#line 5597 "SearchFilter.c"
+#line 4860 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_rating_changed_search_filter_actions_rating_changed (SearchFilterActions* _sender, RatingFilter filter, gpointer self) {
-#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_rating_changed ((SearchFilterToolbar*) self);
-#line 5604 "SearchFilter.c"
+#line 4867 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_search_text_changed_search_filter_actions_text_changed (SearchFilterActions* _sender, const gchar* text, gpointer self) {
-#line 1251 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_search_text_changed ((SearchFilterToolbar*) self);
-#line 5611 "SearchFilter.c"
+#line 4874 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_criteria_changed_search_filter_actions_criteria_changed (SearchFilterActions* _sender, gpointer self) {
-#line 1252 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1167 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_criteria_changed ((SearchFilterToolbar*) self);
-#line 5618 "SearchFilter.c"
+#line 4881 "SearchFilter.c"
 }
 
 
 static gboolean _search_filter_toolbar_on_context_menu_requested_gtk_toolbar_popup_context_menu (GtkToolbar* _sender, gint x, gint y, gint button_number, gpointer self) {
 	gboolean result;
 	result = search_filter_toolbar_on_context_menu_requested ((SearchFilterToolbar*) self, x, y, button_number);
-#line 1254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 5627 "SearchFilter.c"
+#line 4890 "SearchFilter.c"
 }
 
 
 static gpointer _search_filter_actions_ref0 (gpointer self) {
-#line 1136 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self ? search_filter_actions_ref (self) : NULL;
-#line 5634 "SearchFilter.c"
+#line 4897 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_context_menu_close_chosen_gtk_menu_item_activate (GtkMenuItem* _sender, gpointer self) {
-#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_context_menu_close_chosen ((SearchFilterToolbar*) self);
-#line 5641 "SearchFilter.c"
-}
-
-
-static void _search_filter_toolbar_on_filter_button_clicked_search_filter_toolbar_rating_filter_button_clicked (SearchFilterToolbarRatingFilterButton* _sender, gpointer self) {
-#line 1201 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_on_filter_button_clicked ((SearchFilterToolbar*) self);
-#line 5648 "SearchFilter.c"
+#line 4904 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_saved_search_button_clicked_search_filter_toolbar_saved_search_filter_button_clicked (SearchFilterToolbarSavedSearchFilterButton* _sender, gpointer self) {
-#line 1212 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1127 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_saved_search_button_clicked ((SearchFilterToolbar*) self);
-#line 5655 "SearchFilter.c"
+#line 4911 "SearchFilter.c"
 }
 
 
@@ -5667,643 +4923,499 @@ SearchFilterToolbar* search_filter_toolbar_construct (GType object_type, SearchF
 	SearchFilterToolbarSearchBox* _tmp7_ = NULL;
 	GtkToolbar* _tmp8_ = NULL;
 	GtkToolbar* _tmp9_ = NULL;
-	GFile* ui_file = NULL;
-	GFile* _tmp10_ = NULL;
-	GtkUIManager* _tmp21_ = NULL;
-	SearchFilterActions* _tmp22_ = NULL;
-	GtkActionGroup* _tmp23_ = NULL;
-	GtkActionGroup* _tmp24_ = NULL;
-	GtkMenuItem* _tmp25_ = NULL;
-	const gchar* _tmp26_ = NULL;
-	GtkMenuItem* _tmp27_ = NULL;
-	GtkMenuItem* _tmp28_ = NULL;
-	GtkMenu* _tmp29_ = NULL;
-	GtkMenuItem* _tmp30_ = NULL;
+	GtkMenuItem* _tmp16_ = NULL;
+	const gchar* _tmp17_ = NULL;
+	GtkMenuItem* _tmp18_ = NULL;
+	GtkMenuItem* _tmp19_ = NULL;
+	GtkMenu* _tmp20_ = NULL;
+	GtkMenuItem* _tmp21_ = NULL;
+	const gchar* _tmp22_ = NULL;
+	SearchFilterToolbarLabelToolItem* _tmp23_ = NULL;
+	GtkToolbar* _tmp24_ = NULL;
+	SearchFilterToolbarLabelToolItem* _tmp25_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp26_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp27_ = NULL;
+	const gchar* _tmp28_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp29_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp30_ = NULL;
 	const gchar* _tmp31_ = NULL;
-	SearchFilterToolbarLabelToolItem* _tmp32_ = NULL;
-	GtkToolbar* _tmp33_ = NULL;
-	SearchFilterToolbarLabelToolItem* _tmp34_ = NULL;
-	SearchFilterActions* _tmp35_ = NULL;
-	GtkToggleAction* _tmp36_ = NULL;
-	GtkToggleAction* _tmp37_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp32_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp33_ = NULL;
+	const gchar* _tmp34_ = NULL;
+	GtkToolbar* _tmp35_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp36_ = NULL;
+	GtkToolbar* _tmp37_ = NULL;
 	SearchFilterToolbarToggleActionToolButton* _tmp38_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp39_ = NULL;
-	SearchFilterActions* _tmp40_ = NULL;
-	GtkActionGroup* _tmp41_ = NULL;
-	GtkActionGroup* _tmp42_ = NULL;
-	GtkAction* _tmp43_ = NULL;
-	const gchar* _tmp44_ = NULL;
-	const gchar* _tmp45_ = NULL;
-	SearchFilterActions* _tmp46_ = NULL;
-	GtkToggleAction* _tmp47_ = NULL;
-	GtkToggleAction* _tmp48_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp49_ = NULL;
+	GtkToolbar* _tmp39_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp40_ = NULL;
+	GtkSeparatorToolItem* _tmp41_ = NULL;
+	GtkToolbar* _tmp42_ = NULL;
+	GtkSeparatorToolItem* _tmp43_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp44_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp45_ = NULL;
+	const gchar* _tmp46_ = NULL;
+	SearchFilterToolbarToggleActionToolButton* _tmp47_ = NULL;
+	const gchar* _tmp48_ = NULL;
+	GtkToolbar* _tmp49_ = NULL;
 	SearchFilterToolbarToggleActionToolButton* _tmp50_ = NULL;
-	SearchFilterActions* _tmp51_ = NULL;
-	GtkActionGroup* _tmp52_ = NULL;
-	GtkActionGroup* _tmp53_ = NULL;
-	GtkAction* _tmp54_ = NULL;
-	const gchar* _tmp55_ = NULL;
-	const gchar* _tmp56_ = NULL;
-	SearchFilterActions* _tmp57_ = NULL;
-	GtkToggleAction* _tmp58_ = NULL;
-	GtkToggleAction* _tmp59_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp60_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp61_ = NULL;
-	SearchFilterActions* _tmp62_ = NULL;
-	GtkActionGroup* _tmp63_ = NULL;
-	GtkActionGroup* _tmp64_ = NULL;
-	GtkAction* _tmp65_ = NULL;
-	const gchar* _tmp66_ = NULL;
-	const gchar* _tmp67_ = NULL;
-	GtkToolbar* _tmp68_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp69_ = NULL;
-	GtkToolbar* _tmp70_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp71_ = NULL;
+	GtkSeparatorToolItem* _tmp51_ = NULL;
+	GtkToolbar* _tmp52_ = NULL;
+	GtkSeparatorToolItem* _tmp53_ = NULL;
+	GMenuModel* model = NULL;
+	GtkBuilder* _tmp54_ = NULL;
+	GObject* _tmp55_ = NULL;
+	GMenuModel* _tmp56_ = NULL;
+	SearchFilterToolbarRatingFilterButton* _tmp57_ = NULL;
+	SearchFilterToolbarRatingFilterButton* _tmp58_ = NULL;
+	const gchar* _tmp59_ = NULL;
+	SearchFilterToolbarRatingFilterButton* _tmp60_ = NULL;
+	GtkToolbar* _tmp61_ = NULL;
+	SearchFilterToolbarRatingFilterButton* _tmp62_ = NULL;
+	GtkSeparatorToolItem* _tmp63_ = NULL;
+	GtkToolbar* _tmp64_ = NULL;
+	GtkSeparatorToolItem* _tmp65_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp66_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp67_ = NULL;
+	const gchar* _tmp68_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp69_ = NULL;
+	const gchar* _tmp70_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp71_ = NULL;
 	GtkToolbar* _tmp72_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp73_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp73_ = NULL;
+	GtkSeparatorToolItem* separator_align = NULL;
 	GtkSeparatorToolItem* _tmp74_ = NULL;
 	GtkToolbar* _tmp75_ = NULL;
-	GtkSeparatorToolItem* _tmp76_ = NULL;
-	SearchFilterActions* _tmp77_ = NULL;
-	GtkToggleAction* _tmp78_ = NULL;
-	GtkToggleAction* _tmp79_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp80_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp81_ = NULL;
-	const gchar* _tmp82_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp83_ = NULL;
+	GtkToolbar* _tmp76_ = NULL;
+	SearchFilterToolbarSearchBox* _tmp77_ = NULL;
+	GtkToolbar* _tmp78_ = NULL;
+	SearchFilterActions* _tmp79_ = NULL;
+	SearchFilterActions* _tmp80_ = NULL;
+	SearchFilterActions* _tmp81_ = NULL;
+	SearchFilterActions* _tmp82_ = NULL;
+	SearchFilterActions* _tmp83_ = NULL;
 	SearchFilterActions* _tmp84_ = NULL;
-	GtkActionGroup* _tmp85_ = NULL;
-	GtkActionGroup* _tmp86_ = NULL;
-	GtkAction* _tmp87_ = NULL;
-	const gchar* _tmp88_ = NULL;
-	const gchar* _tmp89_ = NULL;
-	GtkToolbar* _tmp90_ = NULL;
-	SearchFilterToolbarToggleActionToolButton* _tmp91_ = NULL;
-	GtkSeparatorToolItem* _tmp92_ = NULL;
-	GtkToolbar* _tmp93_ = NULL;
-	GtkSeparatorToolItem* _tmp94_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp95_ = NULL;
-	GtkUIManager* _tmp96_ = NULL;
-	GtkWidget* _tmp97_ = NULL;
-	GtkMenu* _tmp98_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp99_ = NULL;
-	const gchar* _tmp100_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp101_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp102_ = NULL;
-	GtkToolbar* _tmp103_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp104_ = NULL;
-	GtkSeparatorToolItem* _tmp105_ = NULL;
-	GtkToolbar* _tmp106_ = NULL;
-	GtkSeparatorToolItem* _tmp107_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp108_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp109_ = NULL;
-	const gchar* _tmp110_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp111_ = NULL;
-	const gchar* _tmp112_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp113_ = NULL;
-	GtkToolbar* _tmp114_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp115_ = NULL;
-	GtkSeparatorToolItem* separator_align = NULL;
-	GtkSeparatorToolItem* _tmp116_ = NULL;
-	GtkToolbar* _tmp117_ = NULL;
-	GtkToolbar* _tmp118_ = NULL;
-	SearchFilterToolbarSearchBox* _tmp119_ = NULL;
-	GtkToolbar* _tmp120_ = NULL;
-	SearchFilterActions* _tmp121_ = NULL;
-	SearchFilterActions* _tmp122_ = NULL;
-	SearchFilterActions* _tmp123_ = NULL;
-	SearchFilterActions* _tmp124_ = NULL;
-	SearchFilterActions* _tmp125_ = NULL;
-	SearchFilterActions* _tmp126_ = NULL;
-	SearchFilterActions* _tmp127_ = NULL;
-	GtkToolbar* _tmp128_ = NULL;
-	SearchFilterActions* _tmp129_ = NULL;
-	gboolean _tmp130_ = FALSE;
-	SearchFilterActions* _tmp131_ = NULL;
-	gboolean _tmp132_ = FALSE;
-	SearchFilterActions* _tmp133_ = NULL;
-	gboolean _tmp134_ = FALSE;
-	SearchFilterActions* _tmp135_ = NULL;
-	gboolean _tmp136_ = FALSE;
+	SearchFilterActions* _tmp85_ = NULL;
+	GtkToolbar* _tmp86_ = NULL;
+	SearchFilterActions* _tmp87_ = NULL;
+	gboolean _tmp88_ = FALSE;
+	SearchFilterActions* _tmp89_ = NULL;
+	gboolean _tmp90_ = FALSE;
+	SearchFilterActions* _tmp91_ = NULL;
+	gboolean _tmp92_ = FALSE;
+	SearchFilterActions* _tmp93_ = NULL;
+	gboolean _tmp94_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_ACTIONS (actions), NULL);
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbar*) g_object_new (object_type, NULL);
-#line 1136 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = actions;
-#line 1136 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _search_filter_actions_ref0 (_tmp0_);
-#line 1136 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_search_filter_actions_unref0 (self->priv->actions);
-#line 1136 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->actions = _tmp1_;
-#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = (GtkToolbar*) gtk_toolbar_new ();
-#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp2_);
-#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbar);
-#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->toolbar = _tmp2_;
-#line 1138 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1056 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = actions;
-#line 1138 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1056 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp3_, "media-context-changed", (GCallback) _search_filter_toolbar_on_media_context_changed_search_filter_actions_media_context_changed, self, 0);
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = actions;
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = search_filter_actions_get_text (_tmp4_);
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = _tmp5_;
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = search_filter_toolbar_search_box_new (_tmp6_);
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp7_);
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->search_box);
-#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1057 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->search_box = _tmp7_;
-#line 1141 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1059 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = self->priv->toolbar;
-#line 1141 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1059 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_buildable_set_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GTK_TYPE_BUILDABLE, GtkBuildable), "search-filter-toolbar");
-#line 1142 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1060 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = self->priv->toolbar;
-#line 1142 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1060 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_toolbar_set_icon_size (_tmp9_, GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 1144 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = resources_get_ui ("search_bar.ui");
-#line 1144 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	ui_file = _tmp10_;
-#line 5841 "SearchFilter.c"
+#line 5055 "SearchFilter.c"
 	{
-		GtkUIManager* _tmp11_ = NULL;
-		gchar* _tmp12_ = NULL;
-		gchar* _tmp13_ = NULL;
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp11_ = self->ui;
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp12_ = g_file_get_path (ui_file);
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp13_ = _tmp12_;
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_ui_manager_add_ui_from_file (_tmp11_, _tmp13_, &_inner_error_);
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_free0 (_tmp13_);
-#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		GtkBuilder* _tmp10_ = NULL;
+#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp10_ = self->builder;
+#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gtk_builder_add_from_resource (_tmp10_, "/org/gnome/Shotwell/search_bar.ui", &_inner_error_);
+#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5858 "SearchFilter.c"
-			goto __catch593_g_error;
+#line 5064 "SearchFilter.c"
+			goto __catch590_g_error;
 		}
 	}
-	goto __finally593;
-	__catch593_g_error:
+	goto __finally590;
+	__catch590_g_error:
 	{
 		GError* err = NULL;
-		const gchar* _tmp14_ = NULL;
+		const gchar* _tmp11_ = NULL;
+		GError* _tmp12_ = NULL;
+		const gchar* _tmp13_ = NULL;
+		gchar* _tmp14_ = NULL;
 		gchar* _tmp15_ = NULL;
-		gchar* _tmp16_ = NULL;
-		GError* _tmp17_ = NULL;
-		const gchar* _tmp18_ = NULL;
-		gchar* _tmp19_ = NULL;
-		gchar* _tmp20_ = NULL;
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		err = _inner_error_;
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_inner_error_ = NULL;
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp14_ = _ ("Error loading UI file %s: %s");
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp15_ = g_file_get_path (ui_file);
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp16_ = _tmp15_;
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp17_ = err;
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp18_ = _tmp17_->message;
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp19_ = g_strdup_printf (_tmp14_, _tmp16_, _tmp18_);
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp20_ = _tmp19_;
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		app_window_panic (_tmp20_);
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_free0 (_tmp20_);
-#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_free0 (_tmp16_);
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp11_ = _ ("Error loading search bar UI: %s");
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp12_ = err;
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp13_ = _tmp12_->message;
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp14_ = g_strdup_printf (_tmp11_, _tmp13_);
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp15_ = _tmp14_;
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		app_window_panic (_tmp15_);
+#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_g_free0 (_tmp15_);
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_error_free0 (err);
-#line 5899 "SearchFilter.c"
+#line 5097 "SearchFilter.c"
 	}
-	__finally593:
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	__finally590:
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_object_unref0 (ui_file);
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_clear_error (&_inner_error_);
-#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return NULL;
-#line 5912 "SearchFilter.c"
+#line 5108 "SearchFilter.c"
 	}
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp21_ = self->ui;
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_ = actions;
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp23_ = search_filter_actions_get_action_group (_tmp22_);
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp24_ = _tmp23_;
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_ui_manager_insert_action_group (_tmp21_, _tmp24_, 0);
-#line 1152 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp24_);
-#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25_ = self->priv->close_item;
-#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp26_ = _ ("Close");
-#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_menu_item_set_label (_tmp25_, _tmp26_);
-#line 1160 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp27_ = self->priv->close_item;
-#line 1160 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_widget_get_type (), GtkWidget));
-#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp28_ = self->priv->close_item;
-#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp28_, "activate", (GCallback) _search_filter_toolbar_on_context_menu_close_chosen_gtk_menu_item_activate, self, 0);
-#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp29_ = self->priv->close_menu;
-#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp30_ = self->priv->close_item;
-#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_menu_shell_append (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_menu_shell_get_type (), GtkMenuShell), (GtkWidget*) _tmp30_);
-#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp31_ = _ ("Type");
-#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_ = search_filter_toolbar_label_tool_item_new (_tmp31_, 10, 5);
-#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp32_);
-#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1074 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp16_ = self->priv->close_item;
+#line 1074 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp17_ = _ ("Close");
+#line 1074 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_menu_item_set_label (_tmp16_, _tmp17_);
+#line 1075 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp18_ = self->priv->close_item;
+#line 1075 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_show (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_widget_get_type (), GtkWidget));
+#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp19_ = self->priv->close_item;
+#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp19_, "activate", (GCallback) _search_filter_toolbar_on_context_menu_close_chosen_gtk_menu_item_activate, self, 0);
+#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp20_ = self->priv->close_menu;
+#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp21_ = self->priv->close_item;
+#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_menu_shell_append (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_menu_shell_get_type (), GtkMenuShell), (GtkWidget*) _tmp21_);
+#line 1080 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp22_ = _ ("Type");
+#line 1080 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp23_ = search_filter_toolbar_label_tool_item_new (_tmp22_, 10, 5);
+#line 1080 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp23_);
+#line 1080 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->label_type);
-#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->label_type = _tmp32_;
-#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp33_ = self->priv->toolbar;
-#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp34_ = self->priv->label_type;
-#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp33_, G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp35_ = actions;
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp36_ = search_filter_actions_get_photos (_tmp35_);
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp37_ = _tmp36_;
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp38_ = search_filter_toolbar_toggle_action_tool_button_new (_tmp37_);
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp38_);
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1080 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->label_type = _tmp23_;
+#line 1081 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp24_ = self->priv->toolbar;
+#line 1081 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp25_ = self->priv->label_type;
+#line 1081 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp26_ = search_filter_toolbar_toggle_action_tool_button_new ("win.display.photos");
+#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp26_);
+#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbtn_photos);
-#line 1168 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->toolbtn_photos = _tmp38_;
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp39_ = self->priv->toolbtn_photos;
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_ = actions;
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp41_ = search_filter_actions_get_action_group (_tmp40_);
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp42_ = _tmp41_;
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp43_ = gtk_action_group_get_action (_tmp42_, "CommonDisplayPhotos");
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp44_ = gtk_action_get_tooltip (_tmp43_);
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_ = _tmp44_;
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_tool_item_get_type (), GtkToolItem), _tmp45_);
-#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp42_);
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp46_ = actions;
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp47_ = search_filter_actions_get_videos (_tmp46_);
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp48_ = _tmp47_;
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp49_ = search_filter_toolbar_toggle_action_tool_button_new (_tmp48_);
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp49_);
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->toolbtn_photos = _tmp26_;
+#line 1084 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp27_ = self->priv->toolbtn_photos;
+#line 1084 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp28_ = _ ("Photos");
+#line 1084 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_tool_item_get_type (), GtkToolItem), _tmp28_);
+#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp29_ = search_filter_toolbar_toggle_action_tool_button_new ("win.display.videos");
+#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp29_);
+#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbtn_videos);
-#line 1171 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->toolbtn_videos = _tmp49_;
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_ = self->priv->toolbtn_videos;
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp51_ = actions;
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp52_ = search_filter_actions_get_action_group (_tmp51_);
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp53_ = _tmp52_;
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp54_ = gtk_action_group_get_action (_tmp53_, "CommonDisplayVideos");
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_ = gtk_action_get_tooltip (_tmp54_);
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp56_ = _tmp55_;
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_tool_item_get_type (), GtkToolItem), _tmp56_);
-#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp53_);
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp57_ = actions;
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp58_ = search_filter_actions_get_raw (_tmp57_);
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp59_ = _tmp58_;
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp60_ = search_filter_toolbar_toggle_action_tool_button_new (_tmp59_);
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp60_);
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->toolbtn_videos = _tmp29_;
+#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp30_ = self->priv->toolbtn_videos;
+#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp31_ = _ ("Videos");
+#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_tool_item_get_type (), GtkToolItem), _tmp31_);
+#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp32_ = search_filter_toolbar_toggle_action_tool_button_new ("win.display.raw");
+#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp32_);
+#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbtn_raw);
-#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->toolbtn_raw = _tmp60_;
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp61_ = self->priv->toolbtn_raw;
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp62_ = actions;
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp63_ = search_filter_actions_get_action_group (_tmp62_);
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp64_ = _tmp63_;
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp65_ = gtk_action_group_get_action (_tmp64_, "CommonDisplayRaw");
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp66_ = gtk_action_get_tooltip (_tmp65_);
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp67_ = _tmp66_;
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_tool_item_get_type (), GtkToolItem), _tmp67_);
-#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp64_);
-#line 1177 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp68_ = self->priv->toolbar;
-#line 1177 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp69_ = self->priv->toolbtn_photos;
-#line 1177 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp68_, G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1178 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp70_ = self->priv->toolbar;
-#line 1178 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp71_ = self->priv->toolbtn_videos;
-#line 1178 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp70_, G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1179 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp72_ = self->priv->toolbar;
-#line 1179 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp73_ = self->priv->toolbtn_raw;
-#line 1179 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp72_, G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp74_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
-#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp74_);
-#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->toolbtn_raw = _tmp32_;
+#line 1090 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp33_ = self->priv->toolbtn_raw;
+#line 1090 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp34_ = _ ("RAW Photos");
+#line 1090 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_tool_item_get_type (), GtkToolItem), _tmp34_);
+#line 1092 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp35_ = self->priv->toolbar;
+#line 1092 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp36_ = self->priv->toolbtn_photos;
+#line 1092 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp35_, G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1093 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp37_ = self->priv->toolbar;
+#line 1093 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp38_ = self->priv->toolbtn_videos;
+#line 1093 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp37_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1094 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp39_ = self->priv->toolbar;
+#line 1094 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp40_ = self->priv->toolbtn_raw;
+#line 1094 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp39_, G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp41_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
+#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp41_);
+#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->sepr_mediatype_flagged);
-#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->sepr_mediatype_flagged = _tmp74_;
-#line 1183 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp75_ = self->priv->toolbar;
-#line 1183 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp76_ = self->priv->sepr_mediatype_flagged;
-#line 1183 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp75_, G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp77_ = actions;
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp78_ = search_filter_actions_get_flagged (_tmp77_);
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp79_ = _tmp78_;
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp80_ = search_filter_toolbar_toggle_action_tool_button_new (_tmp79_);
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp80_);
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->sepr_mediatype_flagged = _tmp41_;
+#line 1098 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp42_ = self->priv->toolbar;
+#line 1098 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp43_ = self->priv->sepr_mediatype_flagged;
+#line 1098 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp42_, G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1102 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp44_ = search_filter_toolbar_toggle_action_tool_button_new ("win.display.flagged");
+#line 1102 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp44_);
+#line 1102 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbtn_flag);
-#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->toolbtn_flag = _tmp80_;
-#line 1188 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp81_ = self->priv->toolbtn_flag;
-#line 1188 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp82_ = _ ("Flagged");
-#line 1188 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_toggle_action_tool_button_set_label (_tmp81_, _tmp82_);
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp83_ = self->priv->toolbtn_flag;
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp84_ = actions;
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp85_ = search_filter_actions_get_action_group (_tmp84_);
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp86_ = _tmp85_;
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp87_ = gtk_action_group_get_action (_tmp86_, "CommonDisplayFlagged");
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp88_ = gtk_action_get_tooltip (_tmp87_);
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp89_ = _tmp88_;
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, gtk_tool_item_get_type (), GtkToolItem), _tmp89_);
-#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp86_);
-#line 1191 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp90_ = self->priv->toolbar;
-#line 1191 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp91_ = self->priv->toolbtn_flag;
-#line 1191 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp90_, G_TYPE_CHECK_INSTANCE_CAST (_tmp91_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1194 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp92_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
-#line 1194 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp92_);
-#line 1194 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1102 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->toolbtn_flag = _tmp44_;
+#line 1103 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp45_ = self->priv->toolbtn_flag;
+#line 1103 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp46_ = _ ("Flagged");
+#line 1103 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_toolbar_toggle_action_tool_button_set_label (_tmp45_, _tmp46_);
+#line 1104 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp47_ = self->priv->toolbtn_flag;
+#line 1104 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp48_ = _ ("Flagged");
+#line 1104 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_tool_item_get_type (), GtkToolItem), _tmp48_);
+#line 1106 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp49_ = self->priv->toolbar;
+#line 1106 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp50_ = self->priv->toolbtn_flag;
+#line 1106 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp49_, G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp51_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
+#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp51_);
+#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->sepr_flagged_rating);
-#line 1194 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->sepr_flagged_rating = _tmp92_;
-#line 1195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp93_ = self->priv->toolbar;
-#line 1195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp94_ = self->priv->sepr_flagged_rating;
-#line 1195 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp93_, G_TYPE_CHECK_INSTANCE_CAST (_tmp94_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp95_ = self->priv->rating_button;
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp96_ = self->ui;
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp97_ = gtk_ui_manager_get_widget (_tmp96_, "/FilterPopupMenu");
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp98_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp97_, gtk_menu_get_type (), GtkMenu));
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp95_->filter_popup);
-#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp95_->filter_popup = _tmp98_;
-#line 1199 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp99_ = self->priv->rating_button;
-#line 1199 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp100_ = _ ("Rating");
-#line 1199 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_rating_filter_button_set_label (_tmp99_, _tmp100_);
-#line 1200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp101_ = self->priv->rating_button;
-#line 1200 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_expand (G_TYPE_CHECK_INSTANCE_CAST (_tmp101_, gtk_tool_item_get_type (), GtkToolItem), FALSE);
-#line 1201 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp102_ = self->priv->rating_button;
-#line 1201 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp102_, "clicked", (GCallback) _search_filter_toolbar_on_filter_button_clicked_search_filter_toolbar_rating_filter_button_clicked, self, 0);
-#line 1202 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp103_ = self->priv->toolbar;
-#line 1202 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp104_ = self->priv->rating_button;
-#line 1202 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp103_, G_TYPE_CHECK_INSTANCE_CAST (_tmp104_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1205 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp105_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
-#line 1205 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp105_);
-#line 1205 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->sepr_flagged_rating = _tmp51_;
+#line 1110 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp52_ = self->priv->toolbar;
+#line 1110 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp53_ = self->priv->sepr_flagged_rating;
+#line 1110 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp52_, G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp54_ = self->builder;
+#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp55_ = gtk_builder_get_object (_tmp54_, "popup-menu");
+#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp56_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp55_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp55_) : NULL);
+#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	model = _tmp56_;
+#line 1114 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp57_ = search_filter_toolbar_rating_filter_button_new (model);
+#line 1114 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp57_);
+#line 1114 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->rating_button);
+#line 1114 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->rating_button = _tmp57_;
+#line 1115 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp58_ = self->priv->rating_button;
+#line 1115 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp59_ = _ ("Rating");
+#line 1115 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_toolbar_rating_filter_button_set_label (_tmp58_, _tmp59_);
+#line 1116 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp60_ = self->priv->rating_button;
+#line 1116 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_expand (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_tool_item_get_type (), GtkToolItem), FALSE);
+#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp61_ = self->priv->toolbar;
+#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp62_ = self->priv->rating_button;
+#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp61_, G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp63_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
+#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp63_);
+#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->sepr_rating_saved);
-#line 1205 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->sepr_rating_saved = _tmp105_;
-#line 1206 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp106_ = self->priv->toolbar;
-#line 1206 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp107_ = self->priv->sepr_rating_saved;
-#line 1206 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp106_, G_TYPE_CHECK_INSTANCE_CAST (_tmp107_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp108_ = self->priv->saved_search_button;
-#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_expand (G_TYPE_CHECK_INSTANCE_CAST (_tmp108_, gtk_tool_item_get_type (), GtkToolItem), FALSE);
-#line 1210 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp109_ = self->priv->saved_search_button;
-#line 1210 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp110_ = _ ("Saved Search");
-#line 1210 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_saved_search_filter_button_set_label (_tmp109_, _tmp110_);
-#line 1211 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp111_ = self->priv->saved_search_button;
-#line 1211 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp112_ = _ ("Use a saved search to filter items in the current view");
-#line 1211 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp111_, gtk_tool_item_get_type (), GtkToolItem), _tmp112_);
-#line 1212 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp113_ = self->priv->saved_search_button;
-#line 1212 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp113_, "clicked", (GCallback) _search_filter_toolbar_on_saved_search_button_clicked_search_filter_toolbar_saved_search_filter_button_clicked, self, 0);
-#line 1213 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp114_ = self->priv->toolbar;
-#line 1213 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp115_ = self->priv->saved_search_button;
-#line 1213 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp114_, G_TYPE_CHECK_INSTANCE_CAST (_tmp115_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1216 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp116_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
-#line 1216 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp116_);
-#line 1216 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	separator_align = _tmp116_;
-#line 1217 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->sepr_rating_saved = _tmp63_;
+#line 1121 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp64_ = self->priv->toolbar;
+#line 1121 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp65_ = self->priv->sepr_rating_saved;
+#line 1121 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp64_, G_TYPE_CHECK_INSTANCE_CAST (_tmp65_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1124 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp66_ = self->priv->saved_search_button;
+#line 1124 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_expand (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, gtk_tool_item_get_type (), GtkToolItem), FALSE);
+#line 1125 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp67_ = self->priv->saved_search_button;
+#line 1125 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp68_ = _ ("Saved Search");
+#line 1125 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_toolbar_saved_search_filter_button_set_label (_tmp67_, _tmp68_);
+#line 1126 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp69_ = self->priv->saved_search_button;
+#line 1126 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp70_ = _ ("Use a saved search to filter items in the current view");
+#line 1126 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, gtk_tool_item_get_type (), GtkToolItem), _tmp70_);
+#line 1127 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp71_ = self->priv->saved_search_button;
+#line 1127 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp71_, "clicked", (GCallback) _search_filter_toolbar_on_saved_search_button_clicked_search_filter_toolbar_saved_search_filter_button_clicked, self, 0);
+#line 1128 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp72_ = self->priv->toolbar;
+#line 1128 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp73_ = self->priv->saved_search_button;
+#line 1128 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp72_, G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1131 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp74_ = (GtkSeparatorToolItem*) gtk_separator_tool_item_new ();
+#line 1131 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp74_);
+#line 1131 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	separator_align = _tmp74_;
+#line 1132 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_tool_item_set_expand (G_TYPE_CHECK_INSTANCE_CAST (separator_align, gtk_tool_item_get_type (), GtkToolItem), TRUE);
-#line 1218 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1133 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_separator_tool_item_set_draw (separator_align, FALSE);
-#line 1219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp117_ = self->priv->toolbar;
-#line 1219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp117_, G_TYPE_CHECK_INSTANCE_CAST (separator_align, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1222 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp118_ = self->priv->toolbar;
-#line 1222 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp119_ = self->priv->search_box;
-#line 1222 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toolbar_insert (_tmp118_, G_TYPE_CHECK_INSTANCE_CAST (_tmp119_, gtk_tool_item_get_type (), GtkToolItem), -1);
-#line 1224 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp120_ = self->priv->toolbar;
-#line 1224 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, gtk_widget_get_type (), GtkWidget));
-#line 1227 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp121_ = actions;
-#line 1227 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp121_, "flagged-toggled", (GCallback) _search_filter_toolbar_on_flagged_toggled_search_filter_actions_flagged_toggled, self, 0);
-#line 1228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp122_ = actions;
-#line 1228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp122_, "photos-toggled", (GCallback) _search_filter_toolbar_on_photos_toggled_search_filter_actions_photos_toggled, self, 0);
-#line 1229 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp123_ = actions;
-#line 1229 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp123_, "videos-toggled", (GCallback) _search_filter_toolbar_on_videos_toggled_search_filter_actions_videos_toggled, self, 0);
-#line 1230 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp124_ = actions;
-#line 1230 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp124_, "raw-toggled", (GCallback) _search_filter_toolbar_on_raw_toggled_search_filter_actions_raw_toggled, self, 0);
-#line 1231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp125_ = actions;
-#line 1231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp125_, "rating-changed", (GCallback) _search_filter_toolbar_on_rating_changed_search_filter_actions_rating_changed, self, 0);
-#line 1232 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp126_ = actions;
-#line 1232 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp126_, "text-changed", (GCallback) _search_filter_toolbar_on_search_text_changed_search_filter_actions_text_changed, self, 0);
-#line 1233 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp127_ = actions;
-#line 1233 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp127_, "criteria-changed", (GCallback) _search_filter_toolbar_on_criteria_changed_search_filter_actions_criteria_changed, self, 0);
-#line 1236 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp128_ = self->priv->toolbar;
-#line 1236 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp128_, "popup-context-menu", (GCallback) _search_filter_toolbar_on_context_menu_requested_gtk_toolbar_popup_context_menu, self, 0);
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp129_ = actions;
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp130_ = search_filter_actions_get_has_photos (_tmp129_);
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp131_ = actions;
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp132_ = search_filter_actions_get_has_videos (_tmp131_);
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp133_ = actions;
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp134_ = search_filter_actions_get_has_raw (_tmp133_);
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp135_ = actions;
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp136_ = search_filter_actions_get_has_flagged (_tmp135_);
-#line 1238 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_on_media_context_changed (self, _tmp130_, _tmp132_, _tmp134_, _tmp136_);
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1134 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp75_ = self->priv->toolbar;
+#line 1134 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp75_, G_TYPE_CHECK_INSTANCE_CAST (separator_align, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp76_ = self->priv->toolbar;
+#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp77_ = self->priv->search_box;
+#line 1137 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_toolbar_insert (_tmp76_, G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_tool_item_get_type (), GtkToolItem), -1);
+#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp78_ = self->priv->toolbar;
+#line 1139 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, gtk_widget_get_type (), GtkWidget));
+#line 1142 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp79_ = actions;
+#line 1142 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp79_, "flagged-toggled", (GCallback) _search_filter_toolbar_on_flagged_toggled_search_filter_actions_flagged_toggled, self, 0);
+#line 1143 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp80_ = actions;
+#line 1143 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp80_, "photos-toggled", (GCallback) _search_filter_toolbar_on_photos_toggled_search_filter_actions_photos_toggled, self, 0);
+#line 1144 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp81_ = actions;
+#line 1144 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp81_, "videos-toggled", (GCallback) _search_filter_toolbar_on_videos_toggled_search_filter_actions_videos_toggled, self, 0);
+#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp82_ = actions;
+#line 1145 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp82_, "raw-toggled", (GCallback) _search_filter_toolbar_on_raw_toggled_search_filter_actions_raw_toggled, self, 0);
+#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp83_ = actions;
+#line 1146 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp83_, "rating-changed", (GCallback) _search_filter_toolbar_on_rating_changed_search_filter_actions_rating_changed, self, 0);
+#line 1147 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp84_ = actions;
+#line 1147 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp84_, "text-changed", (GCallback) _search_filter_toolbar_on_search_text_changed_search_filter_actions_text_changed, self, 0);
+#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp85_ = actions;
+#line 1148 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp85_, "criteria-changed", (GCallback) _search_filter_toolbar_on_criteria_changed_search_filter_actions_criteria_changed, self, 0);
+#line 1151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp86_ = self->priv->toolbar;
+#line 1151 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_connect_object (_tmp86_, "popup-context-menu", (GCallback) _search_filter_toolbar_on_context_menu_requested_gtk_toolbar_popup_context_menu, self, 0);
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp87_ = actions;
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp88_ = search_filter_actions_get_has_photos (_tmp87_);
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp89_ = actions;
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp90_ = search_filter_actions_get_has_videos (_tmp89_);
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp91_ = actions;
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp92_ = search_filter_actions_get_has_raw (_tmp91_);
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp93_ = actions;
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp94_ = search_filter_actions_get_has_flagged (_tmp93_);
+#line 1153 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_toolbar_on_media_context_changed (self, _tmp88_, _tmp90_, _tmp92_, _tmp94_);
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (separator_align);
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (ui_file);
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (model);
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 6300 "SearchFilter.c"
+#line 5412 "SearchFilter.c"
 }
 
 
 SearchFilterToolbar* search_filter_toolbar_new (SearchFilterActions* actions) {
-#line 1135 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_construct (TYPE_SEARCH_FILTER_TOOLBAR, actions);
-#line 6307 "SearchFilter.c"
+#line 5419 "SearchFilter.c"
 }
 
 
@@ -6312,83 +5424,83 @@ static void search_filter_toolbar_on_media_context_changed (SearchFilterToolbar*
 	gboolean _tmp3_ = FALSE;
 	gboolean _tmp6_ = FALSE;
 	gboolean _tmp9_ = FALSE;
-#line 1257 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1172 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = has_photos;
-#line 1259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1174 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_) {
-#line 6322 "SearchFilter.c"
+#line 5434 "SearchFilter.c"
 		SearchFilterToolbarToggleActionToolButton* _tmp1_ = NULL;
-#line 1260 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp1_ = self->priv->toolbtn_photos;
-#line 1260 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1175 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp1_, RESOURCES_ICON_FILTER_PHOTOS);
-#line 6328 "SearchFilter.c"
+#line 5440 "SearchFilter.c"
 	} else {
 		SearchFilterToolbarToggleActionToolButton* _tmp2_ = NULL;
-#line 1262 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1177 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = self->priv->toolbtn_photos;
-#line 1262 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1177 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp2_, RESOURCES_ICON_FILTER_PHOTOS_DISABLED);
-#line 6335 "SearchFilter.c"
+#line 5447 "SearchFilter.c"
 	}
-#line 1264 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1179 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = has_videos;
-#line 1264 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1179 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp3_) {
-#line 6341 "SearchFilter.c"
+#line 5453 "SearchFilter.c"
 		SearchFilterToolbarToggleActionToolButton* _tmp4_ = NULL;
-#line 1265 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1180 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = self->priv->toolbtn_videos;
-#line 1265 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1180 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp4_, RESOURCES_ICON_FILTER_VIDEOS);
-#line 6347 "SearchFilter.c"
+#line 5459 "SearchFilter.c"
 	} else {
 		SearchFilterToolbarToggleActionToolButton* _tmp5_ = NULL;
-#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = self->priv->toolbtn_videos;
-#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1182 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp5_, RESOURCES_ICON_FILTER_VIDEOS_DISABLED);
-#line 6354 "SearchFilter.c"
+#line 5466 "SearchFilter.c"
 	}
-#line 1269 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1184 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = has_raw;
-#line 1269 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1184 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp6_) {
-#line 6360 "SearchFilter.c"
+#line 5472 "SearchFilter.c"
 		SearchFilterToolbarToggleActionToolButton* _tmp7_ = NULL;
-#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1185 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp7_ = self->priv->toolbtn_raw;
-#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1185 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp7_, RESOURCES_ICON_FILTER_RAW);
-#line 6366 "SearchFilter.c"
+#line 5478 "SearchFilter.c"
 	} else {
 		SearchFilterToolbarToggleActionToolButton* _tmp8_ = NULL;
-#line 1272 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp8_ = self->priv->toolbtn_raw;
-#line 1272 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1187 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp8_, RESOURCES_ICON_FILTER_RAW_DISABLED);
-#line 6373 "SearchFilter.c"
+#line 5485 "SearchFilter.c"
 	}
-#line 1274 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = has_flagged;
-#line 1274 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1189 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp9_) {
-#line 6379 "SearchFilter.c"
+#line 5491 "SearchFilter.c"
 		SearchFilterToolbarToggleActionToolButton* _tmp10_ = NULL;
-#line 1275 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1190 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp10_ = self->priv->toolbtn_flag;
-#line 1275 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1190 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp10_, RESOURCES_ICON_FILTER_FLAGGED);
-#line 6385 "SearchFilter.c"
+#line 5497 "SearchFilter.c"
 	} else {
 		SearchFilterToolbarToggleActionToolButton* _tmp11_ = NULL;
-#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1192 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp11_ = self->priv->toolbtn_flag;
-#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1192 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_toggle_action_tool_button_set_icon_name (_tmp11_, RESOURCES_ICON_FILTER_FLAGGED_DISABLED);
-#line 6392 "SearchFilter.c"
+#line 5504 "SearchFilter.c"
 	}
 }
 
@@ -6398,114 +5510,127 @@ static gboolean search_filter_toolbar_on_context_menu_requested (SearchFilterToo
 	GtkMenu* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
 	guint32 _tmp2_ = 0U;
-#line 1281 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1196 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SEARCH_FILTER_TOOLBAR (self), FALSE);
-#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1197 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->close_menu;
-#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1197 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = button;
-#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1197 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = gtk_get_current_event_time ();
-#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1197 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_menu_popup (_tmp0_, NULL, NULL, NULL, NULL, (guint) _tmp1_, _tmp2_);
-#line 1283 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = FALSE;
-#line 1283 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1198 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 6416 "SearchFilter.c"
+#line 5528 "SearchFilter.c"
+}
+
+
+static GVariant* _variant_new31 (gboolean value) {
+#line 1215 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 5535 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_context_menu_close_chosen (SearchFilterToolbar* self) {
 	AppWindow* aw = NULL;
 	LibraryWindow* _tmp0_ = NULL;
-	GtkToggleAction* searchbar_toggle = NULL;
+	GSimpleAction* action = NULL;
 	AppWindow* _tmp1_ = NULL;
-	GtkAction* _tmp2_ = NULL;
-	GtkToggleAction* _tmp3_ = NULL;
-	GtkToggleAction* _tmp4_ = NULL;
-#line 1288 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GAction* _tmp2_ = NULL;
+	GSimpleAction* _tmp3_ = NULL;
+	GSimpleAction* _tmp4_ = NULL;
+#line 1203 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1204 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = library_window_get_app ();
-#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1204 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	aw = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_APP_WINDOW, AppWindow);
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = aw;
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = app_window_get_common_action (_tmp1_, "CommonDisplaySearchbar");
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp2_) : NULL;
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp3_ == NULL) {
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_object_unref0 (_tmp2_);
-#line 6444 "SearchFilter.c"
-	}
-#line 1294 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	searchbar_toggle = _tmp3_;
-#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = searchbar_toggle;
-#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = g_action_map_lookup_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, g_action_map_get_type (), GActionMap), "CommonDisplaySearchbar");
+#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp2_) : NULL);
+#line 1209 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	action = _tmp3_;
+#line 1213 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp4_ = action;
+#line 1213 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp4_ != NULL) {
-#line 6452 "SearchFilter.c"
-		GtkToggleAction* _tmp5_ = NULL;
-#line 1299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp5_ = searchbar_toggle;
-#line 1299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_toggle_action_set_active (_tmp5_, FALSE);
-#line 6458 "SearchFilter.c"
+#line 5565 "SearchFilter.c"
+		GSimpleAction* _tmp5_ = NULL;
+		GVariant* _tmp6_ = NULL;
+#line 1215 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp5_ = action;
+#line 1215 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp6_ = _variant_new31 (FALSE);
+#line 1215 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		g_simple_action_set_state (_tmp5_, _tmp6_);
+#line 1215 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_g_variant_unref0 (_tmp6_);
+#line 5576 "SearchFilter.c"
 	}
-#line 1288 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (searchbar_toggle);
-#line 1288 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1203 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (action);
+#line 1203 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (aw);
-#line 6464 "SearchFilter.c"
+#line 5582 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_flagged_toggled (SearchFilterToolbar* self) {
-#line 1303 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1219 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1304 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1220 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6473 "SearchFilter.c"
+#line 5591 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_videos_toggled (SearchFilterToolbar* self) {
-#line 1307 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1223 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1308 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1224 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6482 "SearchFilter.c"
+#line 5600 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_photos_toggled (SearchFilterToolbar* self) {
-#line 1311 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1227 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1312 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1228 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6491 "SearchFilter.c"
+#line 5609 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_raw_toggled (SearchFilterToolbar* self) {
-#line 1315 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1231 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1316 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1232 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6500 "SearchFilter.c"
+#line 5618 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_search_text_changed (SearchFilterToolbar* self) {
-#line 1319 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1235 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1320 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1236 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6509 "SearchFilter.c"
+#line 5627 "SearchFilter.c"
+}
+
+
+static GVariant* _variant_new32 (gboolean value) {
+#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return g_variant_ref_sink (g_variant_new_boolean (value));
+#line 5634 "SearchFilter.c"
 }
 
 
@@ -6513,76 +5638,75 @@ static void search_filter_toolbar_on_rating_changed (SearchFilterToolbar* self) 
 	AppWindow* aw = NULL;
 	LibraryWindow* _tmp0_ = NULL;
 	AppWindow* _tmp1_ = NULL;
-	GtkToggleAction* searchbar_toggle = NULL;
+	GSimpleAction* action = NULL;
 	AppWindow* _tmp2_ = NULL;
-	GtkAction* _tmp3_ = NULL;
-	GtkToggleAction* _tmp4_ = NULL;
-	GtkToggleAction* _tmp5_ = NULL;
-#line 1323 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GAction* _tmp3_ = NULL;
+	GSimpleAction* _tmp4_ = NULL;
+	GSimpleAction* _tmp5_ = NULL;
+#line 1239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1240 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = library_window_get_app ();
-#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1240 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	aw = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_APP_WINDOW, AppWindow);
-#line 1326 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1242 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = aw;
-#line 1326 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1242 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp1_ == NULL) {
-#line 1327 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1243 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (aw);
-#line 1327 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1243 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return;
-#line 6536 "SearchFilter.c"
+#line 5661 "SearchFilter.c"
 	}
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1245 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = aw;
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = app_window_get_common_action (_tmp2_, "CommonDisplaySearchbar");
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, gtk_toggle_action_get_type ()) ? ((GtkToggleAction*) _tmp3_) : NULL;
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp4_ == NULL) {
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_object_unref0 (_tmp3_);
-#line 6548 "SearchFilter.c"
-	}
-#line 1329 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	searchbar_toggle = _tmp4_;
-#line 1330 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_ = searchbar_toggle;
-#line 1330 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1245 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = g_action_map_lookup_action (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_action_map_get_type (), GActionMap), "CommonDisplaySearchbar");
+#line 1245 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, g_simple_action_get_type ()) ? ((GSimpleAction*) _tmp3_) : NULL);
+#line 1245 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	action = _tmp4_;
+#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp5_ = action;
+#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp5_ != NULL) {
-#line 6556 "SearchFilter.c"
-		GtkToggleAction* _tmp6_ = NULL;
-#line 1331 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp6_ = searchbar_toggle;
-#line 1331 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_toggle_action_set_active (_tmp6_, TRUE);
-#line 6562 "SearchFilter.c"
+#line 5675 "SearchFilter.c"
+		GSimpleAction* _tmp6_ = NULL;
+		GVariant* _tmp7_ = NULL;
+#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp6_ = action;
+#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp7_ = _variant_new32 (TRUE);
+#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		g_simple_action_set_state (_tmp6_, _tmp7_);
+#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_g_variant_unref0 (_tmp7_);
+#line 5686 "SearchFilter.c"
 	}
-#line 1333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1253 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 1323 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (searchbar_toggle);
-#line 1323 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (action);
+#line 1239 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (aw);
-#line 6570 "SearchFilter.c"
+#line 5694 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_criteria_changed (SearchFilterToolbar* self) {
-#line 1339 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1259 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1340 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1260 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6579 "SearchFilter.c"
+#line 5703 "SearchFilter.c"
 }
 
 
 static gpointer _view_filter_ref0 (gpointer self) {
-#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self ? view_filter_ref (self) : NULL;
-#line 6586 "SearchFilter.c"
+#line 5710 "SearchFilter.c"
 }
 
 
@@ -6597,64 +5721,64 @@ void search_filter_toolbar_set_view_filter (SearchFilterToolbar* self, SearchVie
 	SearchFilterToolbarRatingFilterButton* _tmp7_ = NULL;
 	SearchViewFilter* _tmp8_ = NULL;
 	guint _tmp9_ = 0U;
-#line 1343 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1263 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1343 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1263 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_VIEW_FILTER (search_filter));
-#line 1344 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1264 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = search_filter;
-#line 1344 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1264 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->priv->search_filter;
-#line 1344 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1264 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_ == _tmp1_) {
-#line 1345 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1265 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return;
-#line 6613 "SearchFilter.c"
+#line 5737 "SearchFilter.c"
 	}
-#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search_filter;
-#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _view_filter_ref0 (_tmp2_);
-#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_view_filter_unref0 (self->priv->search_filter);
-#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1267 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->search_filter = _tmp3_;
-#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->actions;
-#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = search_filter;
-#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = search_view_filter_get_criteria (_tmp5_);
-#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1270 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_actions_set_sensitive_for_search_criteria (_tmp4_, (SearchFilterCriteria) _tmp6_);
-#line 1351 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1271 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = self->priv->rating_button;
-#line 1351 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1271 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = search_filter;
-#line 1351 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1271 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = search_view_filter_get_criteria (_tmp8_);
-#line 1351 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1271 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), (SEARCH_FILTER_CRITERIA_RATING & _tmp9_) != 0);
-#line 1353 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1273 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 6641 "SearchFilter.c"
+#line 5765 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_unset_view_filter (SearchFilterToolbar* self) {
 	DisabledViewFilter* _tmp0_ = NULL;
 	DisabledViewFilter* _tmp1_ = NULL;
-#line 1356 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1276 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1357 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = disabled_view_filter_new ();
-#line 1357 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_;
-#line 1357 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_set_view_filter (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_SEARCH_VIEW_FILTER, SearchViewFilter));
-#line 1357 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1277 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_view_filter_unref0 (_tmp1_);
-#line 6658 "SearchFilter.c"
+#line 5782 "SearchFilter.c"
 }
 
 
@@ -6669,550 +5793,418 @@ void search_filter_toolbar_update (SearchFilterToolbar* self) {
 	const gchar* _tmp9_ = NULL;
 	SearchViewFilter* _tmp10_ = NULL;
 	SearchFilterActions* _tmp11_ = NULL;
-	GtkToggleAction* _tmp12_ = NULL;
-	GtkToggleAction* _tmp13_ = NULL;
-	gboolean _tmp14_ = FALSE;
-	gboolean _tmp15_ = FALSE;
-	SearchViewFilter* _tmp16_ = NULL;
-	SearchFilterActions* _tmp17_ = NULL;
-	GtkToggleAction* _tmp18_ = NULL;
-	GtkToggleAction* _tmp19_ = NULL;
-	gboolean _tmp20_ = FALSE;
-	gboolean _tmp21_ = FALSE;
-	SearchViewFilter* _tmp22_ = NULL;
-	SearchFilterActions* _tmp23_ = NULL;
-	GtkToggleAction* _tmp24_ = NULL;
-	GtkToggleAction* _tmp25_ = NULL;
-	gboolean _tmp26_ = FALSE;
-	gboolean _tmp27_ = FALSE;
-	SearchViewFilter* _tmp28_ = NULL;
-	SearchFilterActions* _tmp29_ = NULL;
-	GtkToggleAction* _tmp30_ = NULL;
-	GtkToggleAction* _tmp31_ = NULL;
-	gboolean _tmp32_ = FALSE;
-	gboolean _tmp33_ = FALSE;
+	GSimpleAction* _tmp12_ = NULL;
+	GSimpleAction* _tmp13_ = NULL;
+	GVariant* _tmp14_ = NULL;
+	GVariant* _tmp15_ = NULL;
+	gboolean _tmp16_ = FALSE;
+	SearchViewFilter* _tmp17_ = NULL;
+	SearchFilterActions* _tmp18_ = NULL;
+	GSimpleAction* _tmp19_ = NULL;
+	GSimpleAction* _tmp20_ = NULL;
+	GVariant* _tmp21_ = NULL;
+	GVariant* _tmp22_ = NULL;
+	gboolean _tmp23_ = FALSE;
+	SearchViewFilter* _tmp24_ = NULL;
+	SearchFilterActions* _tmp25_ = NULL;
+	GSimpleAction* _tmp26_ = NULL;
+	GSimpleAction* _tmp27_ = NULL;
+	GVariant* _tmp28_ = NULL;
+	GVariant* _tmp29_ = NULL;
+	gboolean _tmp30_ = FALSE;
+	SearchViewFilter* _tmp31_ = NULL;
+	SearchFilterActions* _tmp32_ = NULL;
+	GSimpleAction* _tmp33_ = NULL;
+	GSimpleAction* _tmp34_ = NULL;
+	GVariant* _tmp35_ = NULL;
+	GVariant* _tmp36_ = NULL;
+	gboolean _tmp37_ = FALSE;
 	RatingFilter filter = 0;
-	SearchFilterActions* _tmp34_ = NULL;
-	GtkRadioAction* _tmp35_ = NULL;
-	GtkRadioAction* _tmp36_ = NULL;
-	gint _tmp37_ = 0;
-	gint _tmp38_ = 0;
-	SearchViewFilter* _tmp39_ = NULL;
-	RatingFilter _tmp40_ = 0;
-	SearchFilterToolbarRatingFilterButton* _tmp41_ = NULL;
-	RatingFilter _tmp42_ = 0;
-	SearchViewFilter* _tmp43_ = NULL;
-	SavedSearch* _tmp44_ = NULL;
+	SearchFilterActions* _tmp38_ = NULL;
+	GSimpleAction* _tmp39_ = NULL;
+	GSimpleAction* _tmp40_ = NULL;
+	GVariant* _tmp41_ = NULL;
+	GVariant* _tmp42_ = NULL;
+	const gchar* _tmp43_ = NULL;
+	gint _tmp44_ = 0;
+	RatingFilter _tmp45_ = 0;
+	SearchViewFilter* _tmp46_ = NULL;
+	RatingFilter _tmp47_ = 0;
+	SearchFilterToolbarRatingFilterButton* _tmp48_ = NULL;
+	RatingFilter _tmp49_ = 0;
+	SearchViewFilter* _tmp50_ = NULL;
+	SavedSearch* _tmp51_ = NULL;
 	SearchFilterCriteria criteria = 0;
-	SearchFilterActions* _tmp45_ = NULL;
-	SearchFilterCriteria _tmp46_ = 0;
-	SearchFilterToolbarSearchBox* _tmp47_ = NULL;
-	SearchFilterCriteria _tmp48_ = 0;
-	SearchFilterToolbarRatingFilterButton* _tmp49_ = NULL;
-	SearchFilterCriteria _tmp50_ = 0;
-	SearchFilterToolbarToggleActionToolButton* _tmp51_ = NULL;
-	SearchFilterCriteria _tmp52_ = 0;
-	SearchFilterToolbarLabelToolItem* _tmp53_ = NULL;
-	SearchFilterCriteria _tmp54_ = 0;
-	SearchFilterToolbarToggleActionToolButton* _tmp55_ = NULL;
-	SearchFilterCriteria _tmp56_ = 0;
-	SearchFilterToolbarToggleActionToolButton* _tmp57_ = NULL;
-	SearchFilterCriteria _tmp58_ = 0;
-	SearchFilterToolbarToggleActionToolButton* _tmp59_ = NULL;
-	SearchFilterCriteria _tmp60_ = 0;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp61_ = NULL;
-	SearchFilterCriteria _tmp62_ = 0;
-	gboolean _tmp63_ = FALSE;
-	SearchFilterToolbarLabelToolItem* _tmp64_ = NULL;
-	gboolean _tmp65_ = FALSE;
-	gboolean _tmp66_ = FALSE;
-	GtkSeparatorToolItem* _tmp70_ = NULL;
-	gboolean _tmp71_ = FALSE;
+	SearchFilterActions* _tmp52_ = NULL;
+	SearchFilterCriteria _tmp53_ = 0;
+	SearchFilterToolbarSearchBox* _tmp54_ = NULL;
+	SearchFilterCriteria _tmp55_ = 0;
+	SearchFilterToolbarRatingFilterButton* _tmp56_ = NULL;
+	SearchFilterCriteria _tmp57_ = 0;
+	SearchFilterToolbarToggleActionToolButton* _tmp58_ = NULL;
+	SearchFilterCriteria _tmp59_ = 0;
+	SearchFilterToolbarLabelToolItem* _tmp60_ = NULL;
+	SearchFilterCriteria _tmp61_ = 0;
+	SearchFilterToolbarToggleActionToolButton* _tmp62_ = NULL;
+	SearchFilterCriteria _tmp63_ = 0;
+	SearchFilterToolbarToggleActionToolButton* _tmp64_ = NULL;
+	SearchFilterCriteria _tmp65_ = 0;
+	SearchFilterToolbarToggleActionToolButton* _tmp66_ = NULL;
+	SearchFilterCriteria _tmp67_ = 0;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp68_ = NULL;
+	SearchFilterCriteria _tmp69_ = 0;
+	gboolean _tmp70_ = FALSE;
+	SearchFilterToolbarLabelToolItem* _tmp71_ = NULL;
 	gboolean _tmp72_ = FALSE;
-	SearchFilterToolbarLabelToolItem* _tmp73_ = NULL;
-	gboolean _tmp74_ = FALSE;
-	gboolean _tmp75_ = FALSE;
-	GtkSeparatorToolItem* _tmp86_ = NULL;
-	SearchViewFilter* _tmp87_ = NULL;
-#line 1361 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gboolean _tmp73_ = FALSE;
+	GtkSeparatorToolItem* _tmp77_ = NULL;
+	gboolean _tmp78_ = FALSE;
+	gboolean _tmp79_ = FALSE;
+	SearchFilterToolbarLabelToolItem* _tmp80_ = NULL;
+	gboolean _tmp81_ = FALSE;
+	gboolean _tmp82_ = FALSE;
+	GtkSeparatorToolItem* _tmp93_ = NULL;
+	SearchViewFilter* _tmp94_ = NULL;
+#line 1281 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1362 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->search_filter;
-#line 1362 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1282 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (NULL == _tmp0_) {
-#line 6744 "SearchFilter.c"
+#line 5875 "SearchFilter.c"
 		LibraryWindow* _tmp1_ = NULL;
 		LibraryWindow* _tmp2_ = NULL;
-#line 1364 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1284 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp1_ = library_window_get_app ();
-#line 1364 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1284 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = _tmp1_;
-#line 1364 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1284 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		library_window_show_search_bar (_tmp2_, TRUE);
-#line 1364 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1284 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (_tmp2_);
-#line 6755 "SearchFilter.c"
+#line 5886 "SearchFilter.c"
 	}
-#line 1367 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1287 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->priv->search_filter;
-#line 1367 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1287 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_vala_assert (NULL != _tmp3_, "null != search_filter");
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->search_filter;
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->priv->actions;
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = search_filter_actions_get_text (_tmp5_);
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = _tmp6_;
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = text_action_get_value (_tmp7_);
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = _tmp8_;
-#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1289 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_view_filter_set_search_filter (_tmp4_, _tmp9_);
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = self->priv->search_filter;
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = self->priv->actions;
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = search_filter_actions_get_flagged (_tmp11_);
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp13_ = _tmp12_;
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp14_ = gtk_toggle_action_get_active (_tmp13_);
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp14_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, g_action_get_type (), GAction));
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp15_ = _tmp14_;
-#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_flagged (_tmp10_, _tmp15_);
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp16_ = self->priv->search_filter;
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_ = self->priv->actions;
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp18_ = search_filter_actions_get_videos (_tmp17_);
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp19_ = _tmp18_;
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp20_ = gtk_toggle_action_get_active (_tmp19_);
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp21_ = _tmp20_;
-#line 1371 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_show_media_video (_tmp16_, _tmp21_);
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_ = self->priv->search_filter;
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp23_ = self->priv->actions;
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp24_ = search_filter_actions_get_photos (_tmp23_);
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25_ = _tmp24_;
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp26_ = gtk_toggle_action_get_active (_tmp25_);
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp16_ = g_variant_get_boolean (_tmp15_);
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_flagged (_tmp10_, _tmp16_);
+#line 1290 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp15_);
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp17_ = self->priv->search_filter;
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp18_ = self->priv->actions;
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp19_ = search_filter_actions_get_videos (_tmp18_);
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp20_ = _tmp19_;
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp21_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, g_action_get_type (), GAction));
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp22_ = _tmp21_;
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp23_ = g_variant_get_boolean (_tmp22_);
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_show_media_video (_tmp17_, _tmp23_);
+#line 1291 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp22_);
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp24_ = self->priv->search_filter;
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp25_ = self->priv->actions;
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp26_ = search_filter_actions_get_photos (_tmp25_);
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp27_ = _tmp26_;
-#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_show_media_photos (_tmp22_, _tmp27_);
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp28_ = self->priv->search_filter;
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp29_ = self->priv->actions;
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp30_ = search_filter_actions_get_raw (_tmp29_);
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp31_ = _tmp30_;
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp32_ = gtk_toggle_action_get_active (_tmp31_);
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp33_ = _tmp32_;
-#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_show_media_raw (_tmp28_, _tmp33_);
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp34_ = self->priv->actions;
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp35_ = search_filter_actions_get_rating (_tmp34_);
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp28_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, g_action_get_type (), GAction));
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp29_ = _tmp28_;
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp30_ = g_variant_get_boolean (_tmp29_);
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_show_media_photos (_tmp24_, _tmp30_);
+#line 1293 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp29_);
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp31_ = self->priv->search_filter;
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp32_ = self->priv->actions;
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp33_ = search_filter_actions_get_raw (_tmp32_);
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp34_ = _tmp33_;
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp35_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, g_action_get_type (), GAction));
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp36_ = _tmp35_;
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp37_ = gtk_radio_action_get_current_value (_tmp36_);
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp38_ = _tmp37_;
-#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	filter = (RatingFilter) _tmp38_;
-#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp39_ = self->priv->search_filter;
-#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp40_ = filter;
-#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_rating_filter (_tmp39_, _tmp40_);
-#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp41_ = self->priv->rating_button;
-#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp42_ = filter;
-#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_rating_filter_button_set_filter_icon (_tmp41_, _tmp42_);
-#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp43_ = self->priv->search_filter;
-#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp44_ = self->priv->saved_search;
-#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_view_filter_set_saved_search (_tmp43_, _tmp44_);
-#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp45_ = self->priv->actions;
-#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp46_ = search_filter_actions_get_criteria (_tmp45_);
-#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	criteria = _tmp46_;
-#line 1385 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp47_ = self->priv->search_box;
-#line 1385 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp48_ = criteria;
-#line 1385 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_widget_get_type (), GtkWidget), (_tmp48_ & SEARCH_FILTER_CRITERIA_TEXT) != 0);
-#line 1387 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp49_ = self->priv->rating_button;
-#line 1387 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp50_ = criteria;
-#line 1387 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, gtk_widget_get_type (), GtkWidget), (_tmp50_ & SEARCH_FILTER_CRITERIA_RATING) != 0);
-#line 1389 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp51_ = self->priv->toolbtn_flag;
-#line 1389 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp52_ = criteria;
-#line 1389 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, gtk_widget_get_type (), GtkWidget), (_tmp52_ & SEARCH_FILTER_CRITERIA_FLAG) != 0);
-#line 1391 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp53_ = self->priv->label_type;
-#line 1391 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp54_ = criteria;
-#line 1391 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_widget_get_type (), GtkWidget), (_tmp54_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
-#line 1392 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp55_ = self->priv->toolbtn_photos;
-#line 1392 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp56_ = criteria;
-#line 1392 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, gtk_widget_get_type (), GtkWidget), (_tmp56_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
-#line 1393 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp57_ = self->priv->toolbtn_videos;
-#line 1393 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp58_ = criteria;
-#line 1393 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp57_, gtk_widget_get_type (), GtkWidget), (_tmp58_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
-#line 1394 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp59_ = self->priv->toolbtn_raw;
-#line 1394 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp60_ = criteria;
-#line 1394 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, gtk_widget_get_type (), GtkWidget), (_tmp60_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
-#line 1396 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp61_ = self->priv->saved_search_button;
-#line 1396 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp62_ = criteria;
-#line 1396 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_widget_get_type (), GtkWidget), (_tmp62_ & SEARCH_FILTER_CRITERIA_SAVEDSEARCH) != 0);
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp64_ = self->priv->label_type;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp65_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_widget_get_type (), GtkWidget));
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp66_ = _tmp65_;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp66_) {
-#line 6923 "SearchFilter.c"
-		SearchFilterToolbarToggleActionToolButton* _tmp67_ = NULL;
-		gboolean _tmp68_ = FALSE;
-		gboolean _tmp69_ = FALSE;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp67_ = self->priv->toolbtn_flag;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp68_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp67_, gtk_widget_get_type (), GtkWidget));
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp69_ = _tmp68_;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp63_ = _tmp69_;
-#line 6935 "SearchFilter.c"
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp37_ = g_variant_get_boolean (_tmp36_);
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_show_media_raw (_tmp31_, _tmp37_);
+#line 1295 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp36_);
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp38_ = self->priv->actions;
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp39_ = search_filter_actions_get_rating (_tmp38_);
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp40_ = _tmp39_;
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp41_ = g_action_get_state (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, g_action_get_type (), GAction));
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp42_ = _tmp41_;
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp43_ = g_variant_get_string (_tmp42_, NULL);
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp44_ = atoi (_tmp43_);
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp45_ = (RatingFilter) _tmp44_;
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_variant_unref0 (_tmp42_);
+#line 1297 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	filter = _tmp45_;
+#line 1298 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp46_ = self->priv->search_filter;
+#line 1298 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp47_ = filter;
+#line 1298 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_rating_filter (_tmp46_, _tmp47_);
+#line 1299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp48_ = self->priv->rating_button;
+#line 1299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp49_ = filter;
+#line 1299 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_filter_toolbar_rating_filter_button_set_filter_icon (_tmp48_, _tmp49_);
+#line 1301 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp50_ = self->priv->search_filter;
+#line 1301 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp51_ = self->priv->saved_search;
+#line 1301 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	search_view_filter_set_saved_search (_tmp50_, _tmp51_);
+#line 1305 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp52_ = self->priv->actions;
+#line 1305 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp53_ = search_filter_actions_get_criteria (_tmp52_);
+#line 1305 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	criteria = _tmp53_;
+#line 1307 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp54_ = self->priv->search_box;
+#line 1307 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp55_ = criteria;
+#line 1307 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, gtk_widget_get_type (), GtkWidget), (_tmp55_ & SEARCH_FILTER_CRITERIA_TEXT) != 0);
+#line 1309 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp56_ = self->priv->rating_button;
+#line 1309 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp57_ = criteria;
+#line 1309 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, gtk_widget_get_type (), GtkWidget), (_tmp57_ & SEARCH_FILTER_CRITERIA_RATING) != 0);
+#line 1311 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp58_ = self->priv->toolbtn_flag;
+#line 1311 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp59_ = criteria;
+#line 1311 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, gtk_widget_get_type (), GtkWidget), (_tmp59_ & SEARCH_FILTER_CRITERIA_FLAG) != 0);
+#line 1313 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp60_ = self->priv->label_type;
+#line 1313 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp61_ = criteria;
+#line 1313 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, gtk_widget_get_type (), GtkWidget), (_tmp61_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
+#line 1314 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp62_ = self->priv->toolbtn_photos;
+#line 1314 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp63_ = criteria;
+#line 1314 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp62_, gtk_widget_get_type (), GtkWidget), (_tmp63_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
+#line 1315 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp64_ = self->priv->toolbtn_videos;
+#line 1315 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp65_ = criteria;
+#line 1315 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_widget_get_type (), GtkWidget), (_tmp65_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
+#line 1316 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp66_ = self->priv->toolbtn_raw;
+#line 1316 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp67_ = criteria;
+#line 1316 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, gtk_widget_get_type (), GtkWidget), (_tmp67_ & SEARCH_FILTER_CRITERIA_MEDIA) != 0);
+#line 1318 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp68_ = self->priv->saved_search_button;
+#line 1318 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp69_ = criteria;
+#line 1318 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp68_, gtk_widget_get_type (), GtkWidget), (_tmp69_ & SEARCH_FILTER_CRITERIA_SAVEDSEARCH) != 0);
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp71_ = self->priv->label_type;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp72_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, gtk_widget_get_type (), GtkWidget));
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp73_ = _tmp72_;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	if (_tmp73_) {
+#line 6078 "SearchFilter.c"
+		SearchFilterToolbarToggleActionToolButton* _tmp74_ = NULL;
+		gboolean _tmp75_ = FALSE;
+		gboolean _tmp76_ = FALSE;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp74_ = self->priv->toolbtn_flag;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp75_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, gtk_widget_get_type (), GtkWidget));
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp76_ = _tmp75_;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp70_ = _tmp76_;
+#line 6090 "SearchFilter.c"
 	} else {
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp63_ = FALSE;
-#line 6939 "SearchFilter.c"
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp70_ = FALSE;
+#line 6094 "SearchFilter.c"
 	}
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp70_ = self->priv->sepr_mediatype_flagged;
-#line 1400 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, gtk_widget_get_type (), GtkWidget), _tmp63_);
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp73_ = self->priv->label_type;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp74_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_widget_get_type (), GtkWidget));
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp75_ = _tmp74_;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp75_) {
-#line 6953 "SearchFilter.c"
-		SearchFilterToolbarRatingFilterButton* _tmp76_ = NULL;
-		gboolean _tmp77_ = FALSE;
-		gboolean _tmp78_ = FALSE;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp76_ = self->priv->rating_button;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp77_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_widget_get_type (), GtkWidget));
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp78_ = _tmp77_;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp72_ = _tmp78_;
-#line 6965 "SearchFilter.c"
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp77_ = self->priv->sepr_mediatype_flagged;
+#line 1322 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_widget_get_type (), GtkWidget), _tmp70_);
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp80_ = self->priv->label_type;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp81_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget));
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp82_ = _tmp81_;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	if (_tmp82_) {
+#line 6108 "SearchFilter.c"
+		SearchFilterToolbarRatingFilterButton* _tmp83_ = NULL;
+		gboolean _tmp84_ = FALSE;
+		gboolean _tmp85_ = FALSE;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp83_ = self->priv->rating_button;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp84_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, gtk_widget_get_type (), GtkWidget));
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp85_ = _tmp84_;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp79_ = _tmp85_;
+#line 6120 "SearchFilter.c"
 	} else {
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp72_ = FALSE;
-#line 6969 "SearchFilter.c"
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp79_ = FALSE;
+#line 6124 "SearchFilter.c"
 	}
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (_tmp72_) {
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp71_ = TRUE;
-#line 6975 "SearchFilter.c"
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	if (_tmp79_) {
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp78_ = TRUE;
+#line 6130 "SearchFilter.c"
 	} else {
-		gboolean _tmp79_ = FALSE;
-		SearchFilterToolbarToggleActionToolButton* _tmp80_ = NULL;
-		gboolean _tmp81_ = FALSE;
-		gboolean _tmp82_ = FALSE;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp80_ = self->priv->toolbtn_flag;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp81_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget));
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp82_ = _tmp81_;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		if (_tmp82_) {
-#line 6989 "SearchFilter.c"
-			SearchFilterToolbarRatingFilterButton* _tmp83_ = NULL;
-			gboolean _tmp84_ = FALSE;
-			gboolean _tmp85_ = FALSE;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp83_ = self->priv->rating_button;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp84_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, gtk_widget_get_type (), GtkWidget));
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp85_ = _tmp84_;
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp79_ = _tmp85_;
-#line 7001 "SearchFilter.c"
+		gboolean _tmp86_ = FALSE;
+		SearchFilterToolbarToggleActionToolButton* _tmp87_ = NULL;
+		gboolean _tmp88_ = FALSE;
+		gboolean _tmp89_ = FALSE;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp87_ = self->priv->toolbtn_flag;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp88_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_widget_get_type (), GtkWidget));
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp89_ = _tmp88_;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		if (_tmp89_) {
+#line 6144 "SearchFilter.c"
+			SearchFilterToolbarRatingFilterButton* _tmp90_ = NULL;
+			gboolean _tmp91_ = FALSE;
+			gboolean _tmp92_ = FALSE;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp90_ = self->priv->rating_button;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp91_ = gtk_widget_get_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp90_, gtk_widget_get_type (), GtkWidget));
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp92_ = _tmp91_;
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp86_ = _tmp92_;
+#line 6156 "SearchFilter.c"
 		} else {
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp79_ = FALSE;
-#line 7005 "SearchFilter.c"
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp86_ = FALSE;
+#line 6160 "SearchFilter.c"
 		}
-#line 1403 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp71_ = _tmp79_;
-#line 7009 "SearchFilter.c"
+#line 1325 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp78_ = _tmp86_;
+#line 6164 "SearchFilter.c"
 	}
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp86_ = self->priv->sepr_flagged_rating;
-#line 1402 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp86_, gtk_widget_get_type (), GtkWidget), _tmp71_);
-#line 1406 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp87_ = self->priv->search_filter;
-#line 1406 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, TYPE_VIEW_FILTER, ViewFilter), "refresh");
-#line 7019 "SearchFilter.c"
-}
-
-
-static void search_filter_toolbar_position_filter_popup (SearchFilterToolbar* self, GtkMenu* menu, gint* x, gint* y, gboolean* push_in) {
-	gint _vala_x = 0;
-	gint _vala_y = 0;
-	gboolean _vala_push_in = FALSE;
-	GtkMenu* _tmp0_ = NULL;
-	gint rx = 0;
-	gint ry = 0;
-	SearchFilterToolbarRatingFilterButton* _tmp1_ = NULL;
-	GdkWindow* _tmp2_ = NULL;
-	gint _tmp3_ = 0;
-	gint _tmp4_ = 0;
-	GtkAllocation rating_button_allocation = {0};
-	SearchFilterToolbarRatingFilterButton* _tmp5_ = NULL;
-	GtkAllocation _tmp6_ = {0};
-	GtkAllocation menubar_allocation = {0};
-	AppWindow* _tmp7_ = NULL;
-	AppWindow* _tmp8_ = NULL;
-	Page* _tmp9_ = NULL;
-	Page* _tmp10_ = NULL;
-	GtkMenuBar* _tmp11_ = NULL;
-	GtkMenuBar* _tmp12_ = NULL;
-	GtkAllocation _tmp13_ = {0};
-	gint sidebar_w = 0;
-	ConfigFacade* _tmp14_ = NULL;
-	ConfigFacade* _tmp15_ = NULL;
-	gint _tmp16_ = 0;
-	gint _tmp17_ = 0;
-	GtkAllocation _tmp18_ = {0};
-	gint _tmp19_ = 0;
-	GtkAllocation _tmp20_ = {0};
-	gint _tmp21_ = 0;
-	GtkAllocation _tmp22_ = {0};
-	gint _tmp23_ = 0;
-	GtkAllocation _tmp24_ = {0};
-	gint _tmp25_ = 0;
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (GTK_IS_MENU (menu));
-#line 1410 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = menu;
-#line 1410 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_realize (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 1412 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = self->priv->rating_button;
-#line 1412 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = gtk_widget_get_window (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget));
-#line 1412 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gdk_window_get_root_origin (_tmp2_, &_tmp3_, &_tmp4_);
-#line 1412 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rx = _tmp3_;
-#line 1412 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	ry = _tmp4_;
-#line 1415 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_ = self->priv->rating_button;
-#line 1415 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_get_allocation (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), &_tmp6_);
-#line 1415 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	rating_button_allocation = _tmp6_;
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp7_ = app_window_get_instance ();
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = _tmp7_;
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_ = page_window_get_current_page (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_PAGE_WINDOW, PageWindow));
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = _tmp9_;
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = page_get_menubar (_tmp10_);
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_ = _tmp11_;
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_get_allocation (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget), &_tmp13_);
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	menubar_allocation = _tmp13_;
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp12_);
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp10_);
-#line 1418 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp8_);
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp14_ = config_facade_get_instance ();
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp15_ = _tmp14_;
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp16_ = configuration_facade_get_sidebar_position (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp17_ = _tmp16_;
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp15_);
-#line 1420 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	sidebar_w = _tmp17_;
-#line 1422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp18_ = rating_button_allocation;
-#line 1422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp19_ = _tmp18_.x;
-#line 1422 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_x = (rx + _tmp19_) + sidebar_w;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp20_ = rating_button_allocation;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp21_ = _tmp20_.y;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp22_ = rating_button_allocation;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp23_ = _tmp22_.height;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp24_ = menubar_allocation;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp25_ = _tmp24_.height;
-#line 1423 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_y = ((ry + _tmp21_) + _tmp23_) + _tmp25_;
-#line 1426 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_vala_push_in = FALSE;
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (x) {
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*x = _vala_x;
-#line 7142 "SearchFilter.c"
-	}
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (y) {
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*y = _vala_y;
-#line 7148 "SearchFilter.c"
-	}
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	if (push_in) {
-#line 1409 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		*push_in = _vala_push_in;
-#line 7154 "SearchFilter.c"
-	}
-}
-
-
-static void _search_filter_toolbar_position_filter_popup_gtk_menu_position_func (GtkMenu* menu, gint* x, gint* y, gboolean* push_in, gpointer self) {
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_position_filter_popup ((SearchFilterToolbar*) self, menu, x, y, push_in);
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_unref (self);
-#line 7164 "SearchFilter.c"
-}
-
-
-static void search_filter_toolbar_on_filter_button_clicked (SearchFilterToolbar* self) {
-	SearchFilterToolbarRatingFilterButton* _tmp0_ = NULL;
-	GtkMenu* _tmp1_ = NULL;
-	guint32 _tmp2_ = 0U;
-#line 1429 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->priv->rating_button;
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = _tmp0_->filter_popup;
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = gtk_get_current_event_time ();
-#line 1430 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_menu_popup (_tmp1_, NULL, NULL, _search_filter_toolbar_position_filter_popup_gtk_menu_position_func, g_object_ref (self), (guint) 0, _tmp2_);
-#line 7182 "SearchFilter.c"
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp93_ = self->priv->sepr_flagged_rating;
+#line 1324 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (_tmp93_, gtk_widget_get_type (), GtkWidget), _tmp78_);
+#line 1328 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp94_ = self->priv->search_filter;
+#line 1328 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp94_, TYPE_VIEW_FILTER, ViewFilter), "refresh");
+#line 6174 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_savedsearch_selected (SearchFilterToolbar* self, SavedSearch* saved_search) {
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearch* _tmp1_ = NULL;
-#line 1434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1331 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1434 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1331 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SAVED_SEARCH (saved_search));
-#line 1435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1332 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = saved_search;
-#line 1435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1332 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1332 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->saved_search);
-#line 1435 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1332 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->saved_search = _tmp1_;
-#line 1436 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1333 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 7203 "SearchFilter.c"
+#line 6195 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_disable_savedsearch (SearchFilterToolbar* self) {
-#line 1439 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1336 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1337 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->saved_search);
-#line 1440 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1337 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->saved_search = NULL;
-#line 1441 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1338 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_update (self);
-#line 7216 "SearchFilter.c"
+#line 6208 "SearchFilter.c"
 }
 
 
@@ -7222,27 +6214,27 @@ static void search_filter_toolbar_edit_dialog (SearchFilterToolbar* self, SavedS
 	SavedSearchDialog* ssd = NULL;
 	SavedSearch* _tmp2_ = NULL;
 	SavedSearchDialog* _tmp3_ = NULL;
-#line 1444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1341 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1341 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SAVED_SEARCH (search));
-#line 1445 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->saved_search_button;
-#line 1445 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_->filter_popup;
-#line 1445 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1342 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_hide (_tmp1_);
-#line 1446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1343 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search;
-#line 1446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1343 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = saved_search_dialog_new_edit_existing (_tmp2_);
-#line 1446 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1343 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	ssd = _tmp3_;
-#line 1447 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1344 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	saved_search_dialog_show (ssd);
-#line 1444 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1341 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_saved_search_dialog_unref0 (ssd);
-#line 7246 "SearchFilter.c"
+#line 6238 "SearchFilter.c"
 }
 
 
@@ -7251,45 +6243,45 @@ static void search_filter_toolbar_delete_dialog (SearchFilterToolbar* self, Save
 	SearchFilterToolbarSavedSearchPopover* _tmp1_ = NULL;
 	SavedSearch* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 1450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1450 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1347 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SAVED_SEARCH (search));
-#line 1451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->saved_search_button;
-#line 1451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_->filter_popup;
-#line 1451 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1348 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_hide (_tmp1_);
-#line 1452 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1349 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search;
-#line 1452 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1349 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = dialogs_confirm_delete_saved_search (_tmp2_);
-#line 1452 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1349 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp3_) {
-#line 7271 "SearchFilter.c"
+#line 6263 "SearchFilter.c"
 		CommandManager* _tmp4_ = NULL;
 		CommandManager* _tmp5_ = NULL;
 		SavedSearch* _tmp6_ = NULL;
 		DeleteSavedSearchCommand* _tmp7_ = NULL;
 		DeleteSavedSearchCommand* _tmp8_ = NULL;
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = app_window_get_command_manager ();
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = _tmp4_;
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp6_ = search;
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp7_ = delete_saved_search_command_new (_tmp6_);
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp8_ = _tmp7_;
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		command_manager_execute (_tmp5_, G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_COMMAND, Command));
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (_tmp8_);
-#line 1453 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1350 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_command_manager_unref0 (_tmp5_);
-#line 7293 "SearchFilter.c"
+#line 6285 "SearchFilter.c"
 	}
 }
 
@@ -7299,23 +6291,23 @@ static void search_filter_toolbar_add_dialog (SearchFilterToolbar* self) {
 	SearchFilterToolbarSavedSearchPopover* _tmp1_ = NULL;
 	SavedSearchDialog* _tmp2_ = NULL;
 	SavedSearchDialog* _tmp3_ = NULL;
-#line 1456 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1353 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->saved_search_button;
-#line 1457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_->filter_popup;
-#line 1457 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1354 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_hide (_tmp1_);
-#line 1458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1355 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = saved_search_dialog_new ();
-#line 1458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1355 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_;
-#line 1458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1355 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	saved_search_dialog_show (_tmp3_);
-#line 1458 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1355 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_saved_search_dialog_unref0 (_tmp3_);
-#line 7319 "SearchFilter.c"
+#line 6311 "SearchFilter.c"
 }
 
 
@@ -7324,104 +6316,104 @@ static void search_filter_toolbar_on_popover_closed (SearchFilterToolbar* self) 
 	SavedSearch* _tmp1_ = NULL;
 	SearchFilterToolbarSavedSearchFilterButton* _tmp2_ = NULL;
 	SearchFilterToolbarSavedSearchPopover* _tmp3_ = NULL;
-#line 1461 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1358 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1463 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1360 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->elide_showing_again = TRUE;
-#line 1464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1361 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->saved_search_button;
-#line 1464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1361 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->priv->saved_search;
-#line 1464 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1361 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_filter_button_set_active (_tmp0_, _tmp1_ != NULL);
-#line 1465 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1362 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = self->priv->saved_search_button;
-#line 1465 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1362 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_->filter_popup;
-#line 1465 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1362 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_hide (_tmp3_);
-#line 7344 "SearchFilter.c"
+#line 6336 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_edit_dialog_search_filter_toolbar_saved_search_popover_edit_clicked (SearchFilterToolbarSavedSearchPopover* _sender, SavedSearch* search, gpointer self) {
-#line 1476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_edit_dialog ((SearchFilterToolbar*) self, search);
-#line 7351 "SearchFilter.c"
+#line 6343 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_savedsearch_selected_search_filter_toolbar_saved_search_popover_search_activated (SearchFilterToolbarSavedSearchPopover* _sender, SavedSearch* search, gpointer self) {
-#line 1477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_savedsearch_selected ((SearchFilterToolbar*) self, search);
-#line 7358 "SearchFilter.c"
+#line 6350 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_delete_dialog_search_filter_toolbar_saved_search_popover_delete_clicked (SearchFilterToolbarSavedSearchPopover* _sender, SavedSearch* search, gpointer self) {
-#line 1478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_delete_dialog ((SearchFilterToolbar*) self, search);
-#line 7365 "SearchFilter.c"
+#line 6357 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_add_dialog_search_filter_toolbar_saved_search_popover_add_clicked (SearchFilterToolbarSavedSearchPopover* _sender, gpointer self) {
-#line 1479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_add_dialog ((SearchFilterToolbar*) self);
-#line 7372 "SearchFilter.c"
+#line 6364 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_on_popover_closed_search_filter_toolbar_saved_search_popover_closed (SearchFilterToolbarSavedSearchPopover* _sender, gpointer self) {
-#line 1480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_on_popover_closed ((SearchFilterToolbar*) self);
-#line 7379 "SearchFilter.c"
+#line 6371 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_on_saved_search_button_clicked (SearchFilterToolbar* self) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 1468 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1365 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->priv->elide_showing_again;
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp1_) {
-#line 7392 "SearchFilter.c"
+#line 6384 "SearchFilter.c"
 		SavedSearch* _tmp2_ = NULL;
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = self->priv->saved_search;
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = _tmp2_ == NULL;
-#line 7398 "SearchFilter.c"
+#line 6390 "SearchFilter.c"
 	} else {
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = FALSE;
-#line 7402 "SearchFilter.c"
+#line 6394 "SearchFilter.c"
 	}
-#line 1469 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1366 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_) {
-#line 7406 "SearchFilter.c"
+#line 6398 "SearchFilter.c"
 	} else {
 		SavedSearch* _tmp3_ = NULL;
-#line 1470 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1367 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp3_ = self->priv->saved_search;
-#line 1470 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1367 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (_tmp3_ != NULL) {
-#line 7413 "SearchFilter.c"
+#line 6405 "SearchFilter.c"
 			SearchFilterToolbarSavedSearchFilterButton* _tmp4_ = NULL;
-#line 1471 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1368 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (self->priv->saved_search);
-#line 1471 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1368 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			self->priv->saved_search = NULL;
-#line 1472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp4_ = self->priv->saved_search_button;
-#line 1472 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1369 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			search_filter_toolbar_saved_search_filter_button_set_active (_tmp4_, FALSE);
-#line 1473 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1370 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			search_filter_toolbar_disable_savedsearch (self);
-#line 7425 "SearchFilter.c"
+#line 6417 "SearchFilter.c"
 		} else {
 			SearchFilterToolbarSavedSearchFilterButton* _tmp5_ = NULL;
 			SearchFilterToolbarSavedSearchPopover* _tmp6_ = NULL;
@@ -7440,13 +6432,13 @@ static void search_filter_toolbar_on_saved_search_button_clicked (SearchFilterTo
 			SearchFilterToolbarSavedSearchPopover* _tmp34_ = NULL;
 			SearchFilterToolbarSavedSearchFilterButton* _tmp35_ = NULL;
 			SearchFilterToolbarSavedSearchPopover* _tmp36_ = NULL;
-#line 1475 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp5_ = self->priv->saved_search_button;
-#line 1475 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp6_ = _tmp5_->filter_popup;
-#line 1475 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1372 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (_tmp6_ != NULL) {
-#line 7450 "SearchFilter.c"
+#line 6442 "SearchFilter.c"
 				SearchFilterToolbarSavedSearchFilterButton* _tmp7_ = NULL;
 				SearchFilterToolbarSavedSearchPopover* _tmp8_ = NULL;
 				guint _tmp9_ = 0U;
@@ -7462,112 +6454,112 @@ static void search_filter_toolbar_on_saved_search_button_clicked (SearchFilterTo
 				SearchFilterToolbarSavedSearchFilterButton* _tmp19_ = NULL;
 				SearchFilterToolbarSavedSearchPopover* _tmp20_ = NULL;
 				guint _tmp21_ = 0U;
-#line 1476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp7_ = self->priv->saved_search_button;
-#line 1476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp8_ = _tmp7_->filter_popup;
-#line 1476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("edit-clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, &_tmp9_, NULL, FALSE);
-#line 1476 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1373 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _search_filter_toolbar_edit_dialog_search_filter_toolbar_saved_search_popover_edit_clicked, self);
-#line 1477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp10_ = self->priv->saved_search_button;
-#line 1477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp11_ = _tmp10_->filter_popup;
-#line 1477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("search-activated", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, &_tmp12_, NULL, FALSE);
-#line 1477 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1374 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp11_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp12_, 0, NULL, (GCallback) _search_filter_toolbar_on_savedsearch_selected_search_filter_toolbar_saved_search_popover_search_activated, self);
-#line 1478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp13_ = self->priv->saved_search_button;
-#line 1478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp14_ = _tmp13_->filter_popup;
-#line 1478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("delete-clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, &_tmp15_, NULL, FALSE);
-#line 1478 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1375 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp14_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp15_, 0, NULL, (GCallback) _search_filter_toolbar_delete_dialog_search_filter_toolbar_saved_search_popover_delete_clicked, self);
-#line 1479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp16_ = self->priv->saved_search_button;
-#line 1479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp17_ = _tmp16_->filter_popup;
-#line 1479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("add-clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, &_tmp18_, NULL, FALSE);
-#line 1479 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1376 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp17_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp18_, 0, NULL, (GCallback) _search_filter_toolbar_add_dialog_search_filter_toolbar_saved_search_popover_add_clicked, self);
-#line 1480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp19_ = self->priv->saved_search_button;
-#line 1480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp20_ = _tmp19_->filter_popup;
-#line 1480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("closed", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, &_tmp21_, NULL, FALSE);
-#line 1480 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1377 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp20_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp21_, 0, NULL, (GCallback) _search_filter_toolbar_on_popover_closed_search_filter_toolbar_saved_search_popover_closed, self);
-#line 7506 "SearchFilter.c"
+#line 6498 "SearchFilter.c"
 			}
-#line 1482 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp22_ = self->priv->saved_search_button;
-#line 1482 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp23_ = self->priv->saved_search_button;
-#line 1482 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp24_ = search_filter_toolbar_saved_search_popover_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget));
-#line 1482 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_search_filter_toolbar_saved_search_popover_unref0 (_tmp22_->filter_popup);
-#line 1482 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1379 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp22_->filter_popup = _tmp24_;
-#line 1483 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1380 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp25_ = self->priv->saved_search_button;
-#line 1483 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1380 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp26_ = _tmp25_->filter_popup;
-#line 1483 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1380 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect_object (_tmp26_, "edit-clicked", (GCallback) _search_filter_toolbar_edit_dialog_search_filter_toolbar_saved_search_popover_edit_clicked, self, 0);
-#line 1484 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1381 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp27_ = self->priv->saved_search_button;
-#line 1484 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1381 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp28_ = _tmp27_->filter_popup;
-#line 1484 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1381 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect_object (_tmp28_, "search-activated", (GCallback) _search_filter_toolbar_on_savedsearch_selected_search_filter_toolbar_saved_search_popover_search_activated, self, 0);
-#line 1485 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1382 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp29_ = self->priv->saved_search_button;
-#line 1485 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1382 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp30_ = _tmp29_->filter_popup;
-#line 1485 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1382 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect_object (_tmp30_, "delete-clicked", (GCallback) _search_filter_toolbar_delete_dialog_search_filter_toolbar_saved_search_popover_delete_clicked, self, 0);
-#line 1486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp31_ = self->priv->saved_search_button;
-#line 1486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp32_ = _tmp31_->filter_popup;
-#line 1486 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1383 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect_object (_tmp32_, "add-clicked", (GCallback) _search_filter_toolbar_add_dialog_search_filter_toolbar_saved_search_popover_add_clicked, self, 0);
-#line 1487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1384 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp33_ = self->priv->saved_search_button;
-#line 1487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1384 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp34_ = _tmp33_->filter_popup;
-#line 1487 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1384 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect_object (_tmp34_, "closed", (GCallback) _search_filter_toolbar_on_popover_closed_search_filter_toolbar_saved_search_popover_closed, self, 0);
-#line 1489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1386 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp35_ = self->priv->saved_search_button;
-#line 1489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1386 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp36_ = _tmp35_->filter_popup;
-#line 1489 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1386 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			search_filter_toolbar_saved_search_popover_show_all (_tmp36_);
-#line 7554 "SearchFilter.c"
+#line 6546 "SearchFilter.c"
 		}
 	}
-#line 1491 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1388 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->elide_showing_again = FALSE;
-#line 7559 "SearchFilter.c"
+#line 6551 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_take_focus (SearchFilterToolbar* self) {
 	SearchFilterToolbarSearchBox* _tmp0_ = NULL;
-#line 1494 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1391 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SEARCH_FILTER_TOOLBAR (self));
-#line 1495 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1392 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->search_box;
-#line 1495 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1392 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_get_focus (_tmp0_);
-#line 7571 "SearchFilter.c"
+#line 6563 "SearchFilter.c"
 }
 
 
@@ -7577,126 +6569,111 @@ static SearchFilterToolbarLabelToolItem* search_filter_toolbar_label_tool_item_c
 	GtkLabel* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gint _tmp3_ = 0;
-#line 678 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GtkLabel* _tmp11_ = NULL;
+#line 617 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (s != NULL, NULL);
-#line 678 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 617 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarLabelToolItem*) g_object_new (object_type, NULL);
-#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = s;
-#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = (GtkLabel*) gtk_label_new (_tmp0_);
-#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp1_);
-#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->label);
-#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 618 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->label = _tmp1_;
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = left_padding;
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp3_ != 0) {
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = TRUE;
-#line 7601 "SearchFilter.c"
+#line 6594 "SearchFilter.c"
 	} else {
 		gint _tmp4_ = 0;
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = right_padding;
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = _tmp4_ != 0;
-#line 7608 "SearchFilter.c"
+#line 6601 "SearchFilter.c"
 	}
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 619 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp2_) {
-#line 7612 "SearchFilter.c"
-		GtkAlignment* alignment = NULL;
-		GtkAlignment* _tmp5_ = NULL;
-		GtkAlignment* _tmp6_ = NULL;
+#line 6605 "SearchFilter.c"
+		GtkLabel* _tmp5_ = NULL;
+		GtkLabel* _tmp6_ = NULL;
 		GtkLabel* _tmp7_ = NULL;
-		GtkAlignment* _tmp8_ = NULL;
-		gint _tmp9_ = 0;
-		GtkAlignment* _tmp10_ = NULL;
-		gint _tmp11_ = 0;
-		GtkAlignment* _tmp12_ = NULL;
-#line 681 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp5_ = (GtkAlignment*) gtk_alignment_new ((gfloat) 0, 0.5f, (gfloat) 0, (gfloat) 0);
-#line 681 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		g_object_ref_sink (_tmp5_);
-#line 681 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		alignment = _tmp5_;
-#line 682 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp6_ = alignment;
-#line 682 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gint _tmp8_ = 0;
+		GtkLabel* _tmp9_ = NULL;
+		gint _tmp10_ = 0;
+#line 620 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp5_ = self->priv->label;
+#line 620 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
+#line 621 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp6_ = self->priv->label;
+#line 621 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp7_ = self->priv->label;
-#line 682 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 683 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp8_ = alignment;
-#line 683 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp9_ = left_padding;
-#line 683 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		g_object_set (_tmp8_, "left-padding", (guint) _tmp9_, NULL);
-#line 684 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp10_ = alignment;
-#line 684 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp11_ = right_padding;
-#line 684 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		g_object_set (_tmp10_, "right-padding", (guint) _tmp11_, NULL);
-#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp12_ = alignment;
-#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget));
-#line 680 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_g_object_unref0 (alignment);
-#line 7652 "SearchFilter.c"
-	} else {
-		GtkLabel* _tmp13_ = NULL;
-#line 687 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		_tmp13_ = self->priv->label;
-#line 687 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, gtk_widget_get_type (), GtkWidget));
-#line 7659 "SearchFilter.c"
+#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp8_ = left_padding;
+#line 622 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), _tmp8_);
+#line 623 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp9_ = self->priv->label;
+#line 623 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		_tmp10_ = right_padding;
+#line 623 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), _tmp10_);
+#line 6632 "SearchFilter.c"
 	}
-#line 678 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 625 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp11_ = self->priv->label;
+#line 625 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget));
+#line 617 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 7663 "SearchFilter.c"
+#line 6640 "SearchFilter.c"
 }
 
 
 static SearchFilterToolbarLabelToolItem* search_filter_toolbar_label_tool_item_new (const gchar* s, gint left_padding, gint right_padding) {
-#line 678 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 617 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_label_tool_item_construct (SEARCH_FILTER_TOOLBAR_TYPE_LABEL_TOOL_ITEM, s, left_padding, right_padding);
-#line 7670 "SearchFilter.c"
+#line 6647 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_label_tool_item_class_init (SearchFilterToolbarLabelToolItemClass * klass) {
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_label_tool_item_parent_class = g_type_class_peek_parent (klass);
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarLabelToolItemPrivate));
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_label_tool_item_finalize;
-#line 7681 "SearchFilter.c"
+#line 6658 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_label_tool_item_instance_init (SearchFilterToolbarLabelToolItem * self) {
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_LABEL_TOOL_ITEM_GET_PRIVATE (self);
-#line 7688 "SearchFilter.c"
+#line 6665 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_label_tool_item_finalize (GObject* obj) {
 	SearchFilterToolbarLabelToolItem * self;
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_LABEL_TOOL_ITEM, SearchFilterToolbarLabelToolItem);
-#line 676 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 615 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->label);
-#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 614 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_label_tool_item_parent_class)->finalize (obj);
-#line 7700 "SearchFilter.c"
+#line 6677 "SearchFilter.c"
 }
 
 
@@ -7712,104 +6689,64 @@ static GType search_filter_toolbar_label_tool_item_get_type (void) {
 }
 
 
-static void _search_filter_toolbar_toggle_action_tool_button_on_button_activate_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_toggle_action_tool_button_on_button_activate ((SearchFilterToolbarToggleActionToolButton*) self);
-#line 7719 "SearchFilter.c"
-}
-
-
-static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_construct (GType object_type, GtkToggleAction* action) {
+static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_construct (GType object_type, const gchar* action) {
 	SearchFilterToolbarToggleActionToolButton * self = NULL;
-	GtkToggleAction* _tmp0_ = NULL;
-	GtkToggleAction* _tmp1_ = NULL;
+	GtkToggleButton* _tmp0_ = NULL;
+	GtkToggleButton* _tmp1_ = NULL;
 	GtkToggleButton* _tmp2_ = NULL;
-	GtkToggleButton* _tmp3_ = NULL;
+	const gchar* _tmp3_ = NULL;
 	GtkToggleButton* _tmp4_ = NULL;
-	GtkToggleAction* _tmp5_ = NULL;
-	gboolean _tmp6_ = FALSE;
-	gboolean _tmp7_ = FALSE;
-	GtkToggleButton* _tmp8_ = NULL;
-	GtkToggleButton* _tmp9_ = NULL;
-	GtkToggleButton* _tmp10_ = NULL;
-	GtkToggleButton* _tmp11_ = NULL;
-	GtkToggleButton* _tmp12_ = NULL;
-#line 696 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_val_if_fail (GTK_IS_TOGGLE_ACTION (action), NULL);
-#line 696 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GtkToggleButton* _tmp5_ = NULL;
+	GtkToggleButton* _tmp6_ = NULL;
+	GtkToggleButton* _tmp7_ = NULL;
+#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_val_if_fail (action != NULL, NULL);
+#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarToggleActionToolButton*) g_object_new (object_type, NULL);
-#line 697 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = action;
-#line 697 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 697 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->action);
-#line 697 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->action = _tmp1_;
-#line 698 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = (GtkToggleButton*) gtk_toggle_button_new ();
-#line 698 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp2_);
-#line 698 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 633 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = (GtkToggleButton*) gtk_toggle_button_new ();
+#line 633 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp0_);
+#line 633 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->button);
-#line 698 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->button = _tmp2_;
-#line 699 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = self->priv->button;
-#line 699 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 700 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 633 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->button = _tmp0_;
+#line 634 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = self->priv->button;
+#line 634 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 635 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = self->priv->button;
+#line 635 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = action;
+#line 635 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_actionable_set_action_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GTK_TYPE_ACTIONABLE, GtkActionable), _tmp3_);
+#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->button;
-#line 700 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_ = action;
-#line 700 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp6_ = gtk_toggle_action_get_active (_tmp5_);
-#line 700 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp7_ = _tmp6_;
-#line 700 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_toggle_button_set_active (_tmp4_, _tmp7_);
-#line 701 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = self->priv->button;
-#line 701 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _search_filter_toolbar_toggle_action_tool_button_on_button_activate_gtk_button_clicked, self, 0);
-#line 702 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_ = self->priv->button;
-#line 702 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_has_tooltip (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 703 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = self->priv->button;
-#line 703 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_relief (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_button_get_type (), GtkButton), GTK_RELIEF_NONE);
-#line 704 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = self->priv->button;
-#line 704 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_widget_get_type (), GtkWidget), 2);
-#line 706 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_ = self->priv->button;
-#line 706 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_widget_get_type (), GtkWidget));
-#line 696 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 636 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_has_tooltip (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 637 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp5_ = self->priv->button;
+#line 637 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_button_set_relief (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_button_get_type (), GtkButton), GTK_RELIEF_NONE);
+#line 638 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp6_ = self->priv->button;
+#line 638 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), 2);
+#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp7_ = self->priv->button;
+#line 640 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
+#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 7794 "SearchFilter.c"
+#line 6743 "SearchFilter.c"
 }
 
 
-static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_new (GtkToggleAction* action) {
-#line 696 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+static SearchFilterToolbarToggleActionToolButton* search_filter_toolbar_toggle_action_tool_button_new (const gchar* action) {
+#line 632 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_toggle_action_tool_button_construct (SEARCH_FILTER_TOOLBAR_TYPE_TOGGLE_ACTION_TOOL_BUTTON, action);
-#line 7801 "SearchFilter.c"
-}
-
-
-static void search_filter_toolbar_toggle_action_tool_button_on_button_activate (SearchFilterToolbarToggleActionToolButton* self) {
-	GtkToggleAction* _tmp0_ = NULL;
-#line 713 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_TOGGLE_ACTION_TOOL_BUTTON (self));
-#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->priv->action;
-#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_action_activate (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_action_get_type (), GtkAction));
-#line 7813 "SearchFilter.c"
+#line 6750 "SearchFilter.c"
 }
 
 
@@ -7821,121 +6758,111 @@ static void search_filter_toolbar_toggle_action_tool_button_set_icon_name (Searc
 	GtkImage* _tmp7_ = NULL;
 	GtkToggleButton* _tmp8_ = NULL;
 	GtkImage* _tmp9_ = NULL;
-#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 643 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_TOGGLE_ACTION_TOOL_BUTTON (self));
-#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 643 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (icon_name != NULL);
-#line 718 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 644 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	image = NULL;
-#line 719 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 645 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->button;
-#line 719 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 645 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_always_show_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), TRUE);
-#line 720 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 646 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = icon_name;
-#line 720 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 646 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = string_contains (_tmp1_, "disabled");
-#line 720 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 646 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp2_) {
-#line 7841 "SearchFilter.c"
+#line 6778 "SearchFilter.c"
 		const gchar* _tmp3_ = NULL;
 		GtkImage* _tmp4_ = NULL;
-#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp3_ = icon_name;
-#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = (GtkImage*) gtk_image_new_from_stock (_tmp3_, GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_object_ref_sink (_tmp4_);
-#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (image);
-#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 647 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		image = _tmp4_;
-#line 7854 "SearchFilter.c"
+#line 6791 "SearchFilter.c"
 	} else {
 		const gchar* _tmp5_ = NULL;
 		GtkImage* _tmp6_ = NULL;
-#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 649 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp5_ = icon_name;
-#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 649 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp6_ = (GtkImage*) gtk_image_new_from_icon_name (_tmp5_, GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 649 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_object_ref_sink (_tmp6_);
-#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 649 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (image);
-#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 649 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		image = _tmp6_;
-#line 7868 "SearchFilter.c"
+#line 6805 "SearchFilter.c"
 	}
-#line 724 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 650 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = image;
-#line 724 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 650 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget), 6);
-#line 725 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 651 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = self->priv->button;
-#line 725 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 651 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = image;
-#line 725 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 651 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_button_get_type (), GtkButton), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
-#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 643 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (image);
-#line 7882 "SearchFilter.c"
+#line 6819 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_toggle_action_tool_button_set_label (SearchFilterToolbarToggleActionToolButton* self, const gchar* label) {
 	GtkToggleButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 728 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 654 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_TOGGLE_ACTION_TOOL_BUTTON (self));
-#line 728 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 654 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (label != NULL);
-#line 729 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 655 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->button;
-#line 729 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 655 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = label;
-#line 729 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 655 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), _tmp1_);
-#line 7899 "SearchFilter.c"
+#line 6836 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_toggle_action_tool_button_class_init (SearchFilterToolbarToggleActionToolButtonClass * klass) {
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_toggle_action_tool_button_parent_class = g_type_class_peek_parent (klass);
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarToggleActionToolButtonPrivate));
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_toggle_action_tool_button_finalize;
-#line 7910 "SearchFilter.c"
+#line 6847 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_toggle_action_tool_button_instance_init (SearchFilterToolbarToggleActionToolButton * self) {
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_TOGGLE_ACTION_TOOL_BUTTON_GET_PRIVATE (self);
-#line 7917 "SearchFilter.c"
+#line 6854 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_toggle_action_tool_button_finalize (GObject* obj) {
 	SearchFilterToolbarToggleActionToolButton * self;
-	GtkToggleButton* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_TOGGLE_ACTION_TOOL_BUTTON, SearchFilterToolbarToggleActionToolButton);
-#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->priv->button;
-#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp1_, NULL, FALSE);
-#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_toggle_action_tool_button_on_button_activate_gtk_button_clicked, self);
-#line 693 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 630 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->button);
-#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->action);
-#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 629 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_toggle_action_tool_button_parent_class)->finalize (obj);
-#line 7939 "SearchFilter.c"
+#line 6866 "SearchFilter.c"
 }
 
 
@@ -7952,53 +6879,53 @@ static GType search_filter_toolbar_toggle_action_tool_button_get_type (void) {
 
 
 static void _search_filter_toolbar_search_box_on_action_text_changed_text_action_text_changed (TextAction* _sender, const gchar* text, gpointer self) {
-#line 764 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 690 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_on_action_text_changed ((SearchFilterToolbarSearchBox*) self, text);
-#line 7958 "SearchFilter.c"
+#line 6885 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_search_box_on_sensitivity_changed_text_action_sensitivity_changed (TextAction* _sender, gboolean sensitive, gpointer self) {
-#line 765 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 691 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_on_sensitivity_changed ((SearchFilterToolbarSearchBox*) self, sensitive);
-#line 7965 "SearchFilter.c"
+#line 6892 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_search_box_on_visibility_changed_text_action_visibility_changed (TextAction* _sender, gboolean visible, gpointer self) {
-#line 766 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_on_visibility_changed ((SearchFilterToolbarSearchBox*) self, visible);
-#line 7972 "SearchFilter.c"
+#line 6899 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_deleted_text (GtkEntryBuffer* _sender, guint position, guint n_chars, gpointer self) {
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_on_entry_changed ((SearchFilterToolbarSearchBox*) self);
-#line 7979 "SearchFilter.c"
+#line 6906 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_inserted_text (GtkEntryBuffer* _sender, guint position, const gchar* chars, guint n_chars, gpointer self) {
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_on_entry_changed ((SearchFilterToolbarSearchBox*) self);
-#line 7986 "SearchFilter.c"
+#line 6913 "SearchFilter.c"
 }
 
 
 static gpointer _text_action_ref0 (gpointer self) {
-#line 746 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 672 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self ? text_action_ref (self) : NULL;
-#line 7993 "SearchFilter.c"
+#line 6920 "SearchFilter.c"
 }
 
 
 static gboolean _search_filter_toolbar_search_box_on_escape_key_gtk_widget_key_press_event (GtkWidget* _sender, GdkEventKey* event, gpointer self) {
 	gboolean result;
 	result = search_filter_toolbar_search_box_on_escape_key ((SearchFilterToolbarSearchBox*) self, event);
-#line 750 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 676 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 8002 "SearchFilter.c"
+#line 6929 "SearchFilter.c"
 }
 
 
@@ -8022,96 +6949,96 @@ SearchFilterToolbarSearchBox* search_filter_toolbar_search_box_construct (GType 
 	GtkSearchEntry* _tmp15_ = NULL;
 	GtkEntryBuffer* _tmp16_ = NULL;
 	GtkEntryBuffer* _tmp17_ = NULL;
-#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 671 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_TEXT_ACTION (action), NULL);
-#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 671 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarSearchBox*) g_object_new (object_type, NULL);
-#line 746 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 672 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = action;
-#line 746 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 672 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _text_action_ref0 (_tmp0_);
-#line 746 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 672 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_text_action_unref0 (self->priv->action);
-#line 746 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 672 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->action = _tmp1_;
-#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 673 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = (GtkSearchEntry*) gtk_search_entry_new ();
-#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 673 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp2_);
-#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 673 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->search_entry);
-#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 673 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->search_entry = _tmp2_;
-#line 749 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->priv->search_entry;
-#line 749 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 675 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_entry_set_width_chars (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_entry_get_type (), GtkEntry), 23);
-#line 750 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 676 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->search_entry;
-#line 750 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 676 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), "key-press-event", (GCallback) _search_filter_toolbar_search_box_on_escape_key_gtk_widget_key_press_event, self, 0);
-#line 751 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 677 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->priv->search_entry;
-#line 751 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 677 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 753 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = action;
-#line 753 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = text_action_get_value (_tmp6_);
-#line 753 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = _tmp7_;
-#line 753 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 679 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_set_nullable_text (self, _tmp8_);
-#line 755 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 681 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = action;
-#line 755 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 681 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp9_, "text-changed", (GCallback) _search_filter_toolbar_search_box_on_action_text_changed_text_action_text_changed, self, 0);
-#line 756 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 682 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = action;
-#line 756 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 682 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp10_, "sensitivity-changed", (GCallback) _search_filter_toolbar_search_box_on_sensitivity_changed_text_action_sensitivity_changed, self, 0);
-#line 757 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 683 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = action;
-#line 757 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 683 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp11_, "visibility-changed", (GCallback) _search_filter_toolbar_search_box_on_visibility_changed_text_action_visibility_changed, self, 0);
-#line 759 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = self->priv->search_entry;
-#line 759 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp13_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_entry_get_type (), GtkEntry));
-#line 759 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp14_ = _tmp13_;
-#line 759 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 685 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp14_, "deleted-text", (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_deleted_text, self, 0);
-#line 760 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 686 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp15_ = self->priv->search_entry;
-#line 760 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 686 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp16_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_entry_get_type (), GtkEntry));
-#line 760 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 686 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp17_ = _tmp16_;
-#line 760 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 686 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp17_, "inserted-text", (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_inserted_text, self, 0);
-#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 671 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 8096 "SearchFilter.c"
+#line 7023 "SearchFilter.c"
 }
 
 
 SearchFilterToolbarSearchBox* search_filter_toolbar_search_box_new (TextAction* action) {
-#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 671 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_search_box_construct (SEARCH_FILTER_TOOLBAR_TYPE_SEARCH_BOX, action);
-#line 8103 "SearchFilter.c"
+#line 7030 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_search_box_get_focus (SearchFilterToolbarSearchBox* self) {
 	GtkSearchEntry* _tmp0_ = NULL;
-#line 772 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 698 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 773 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 699 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->search_entry;
-#line 773 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 699 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), "has-focus", TRUE, NULL);
-#line 8115 "SearchFilter.c"
+#line 7042 "SearchFilter.c"
 }
 
 
@@ -8120,31 +7047,31 @@ static gboolean search_filter_toolbar_search_box_on_escape_key (SearchFilterTool
 	GdkEventKey* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
 	const gchar* _tmp2_ = NULL;
-#line 778 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 704 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self), FALSE);
-#line 778 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 704 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (e != NULL, FALSE);
-#line 779 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 705 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = e;
-#line 779 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 705 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _tmp0_->keyval;
-#line 779 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 705 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = gdk_keyval_name (_tmp1_);
-#line 779 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 705 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (g_strcmp0 (_tmp2_, "Escape") == 0) {
-#line 8136 "SearchFilter.c"
+#line 7063 "SearchFilter.c"
 		TextAction* _tmp3_ = NULL;
-#line 780 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 706 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp3_ = self->priv->action;
-#line 780 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 706 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		text_action_clear (_tmp3_);
-#line 8142 "SearchFilter.c"
+#line 7069 "SearchFilter.c"
 	}
-#line 784 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = FALSE;
-#line 784 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 710 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 8148 "SearchFilter.c"
+#line 7075 "SearchFilter.c"
 }
 
 
@@ -8164,49 +7091,49 @@ static void search_filter_toolbar_search_box_on_action_text_changed (SearchFilte
 	GtkSearchEntry* _tmp12_ = NULL;
 	GtkEntryBuffer* _tmp13_ = NULL;
 	GtkEntryBuffer* _tmp14_ = NULL;
-#line 787 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 713 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->search_entry;
-#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_entry_get_type (), GtkEntry));
-#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = _tmp1_;
-#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("deleted-text", gtk_entry_buffer_get_type (), &_tmp3_, NULL, FALSE);
-#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 714 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_deleted_text, self);
-#line 789 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 715 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->search_entry;
-#line 789 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 715 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_entry_get_type (), GtkEntry));
-#line 789 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 715 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = _tmp5_;
-#line 789 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 715 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("inserted-text", gtk_entry_buffer_get_type (), &_tmp7_, NULL, FALSE);
-#line 789 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 715 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_inserted_text, self);
-#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 716 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = text;
-#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 716 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_set_nullable_text (self, _tmp8_);
-#line 791 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = self->priv->search_entry;
-#line 791 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_entry_get_type (), GtkEntry));
-#line 791 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = _tmp10_;
-#line 791 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 717 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp11_, "deleted-text", (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_deleted_text, self, 0);
-#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 718 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = self->priv->search_entry;
-#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 718 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp13_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_entry_get_type (), GtkEntry));
-#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 718 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp14_ = _tmp13_;
-#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 718 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp14_, "inserted-text", (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_inserted_text, self, 0);
-#line 8210 "SearchFilter.c"
+#line 7137 "SearchFilter.c"
 }
 
 
@@ -8217,51 +7144,51 @@ static void search_filter_toolbar_search_box_on_entry_changed (SearchFilterToolb
 	GtkSearchEntry* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	TextAction* _tmp5_ = NULL;
-#line 795 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 721 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 722 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->action;
-#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 722 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("text-changed", TYPE_TEXT_ACTION, &_tmp1_, NULL, FALSE);
-#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 722 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_action_text_changed_text_action_text_changed, self);
-#line 797 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = self->priv->action;
-#line 797 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->priv->search_entry;
-#line 797 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = gtk_entry_get_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_entry_get_type (), GtkEntry));
-#line 797 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 723 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	text_action_set_text (_tmp2_, _tmp4_);
-#line 798 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 724 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->priv->action;
-#line 798 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 724 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp5_, "text-changed", (GCallback) _search_filter_toolbar_search_box_on_action_text_changed_text_action_text_changed, self, 0);
-#line 8241 "SearchFilter.c"
+#line 7168 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_search_box_on_sensitivity_changed (SearchFilterToolbarSearchBox* self, gboolean sensitive) {
 	gboolean _tmp0_ = FALSE;
-#line 801 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 727 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 802 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 728 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = sensitive;
-#line 802 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 728 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp0_);
-#line 8253 "SearchFilter.c"
+#line 7180 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_search_box_on_visibility_changed (SearchFilterToolbarSearchBox* self, gboolean visible) {
 	gboolean _tmp0_ = FALSE;
-#line 805 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 731 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 806 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 732 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = visible;
-#line 806 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 732 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_visible (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp0_);
-#line 8265 "SearchFilter.c"
+#line 7192 "SearchFilter.c"
 }
 
 
@@ -8269,47 +7196,47 @@ static void search_filter_toolbar_search_box_set_nullable_text (SearchFilterTool
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	GtkSearchEntry* _tmp3_ = NULL;
-#line 809 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 735 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SEARCH_BOX (self));
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = text;
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp1_ != NULL) {
-#line 8279 "SearchFilter.c"
+#line 7206 "SearchFilter.c"
 		const gchar* _tmp2_ = NULL;
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = text;
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = _tmp2_;
-#line 8285 "SearchFilter.c"
+#line 7212 "SearchFilter.c"
 	} else {
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp0_ = "";
-#line 8289 "SearchFilter.c"
+#line 7216 "SearchFilter.c"
 	}
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->priv->search_entry;
-#line 810 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 736 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_entry_set_text (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_entry_get_type (), GtkEntry), _tmp0_);
-#line 8295 "SearchFilter.c"
+#line 7222 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_search_box_class_init (SearchFilterToolbarSearchBoxClass * klass) {
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_search_box_parent_class = g_type_class_peek_parent (klass);
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarSearchBoxPrivate));
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_search_box_finalize;
-#line 8306 "SearchFilter.c"
+#line 7233 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_search_box_instance_init (SearchFilterToolbarSearchBox * self) {
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_SEARCH_BOX_GET_PRIVATE (self);
-#line 8313 "SearchFilter.c"
+#line 7240 "SearchFilter.c"
 }
 
 
@@ -8329,53 +7256,53 @@ static void search_filter_toolbar_search_box_finalize (GObject* obj) {
 	GtkEntryBuffer* _tmp11_ = NULL;
 	GtkEntryBuffer* _tmp12_ = NULL;
 	guint _tmp13_ = 0U;
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_SEARCH_BOX, SearchFilterToolbarSearchBox);
-#line 764 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 690 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->action;
-#line 764 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 690 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("text-changed", TYPE_TEXT_ACTION, &_tmp1_, NULL, FALSE);
-#line 764 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 690 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_action_text_changed_text_action_text_changed, self);
-#line 765 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 691 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = self->priv->action;
-#line 765 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 691 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("sensitivity-changed", TYPE_TEXT_ACTION, &_tmp3_, NULL, FALSE);
-#line 765 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 691 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_sensitivity_changed_text_action_sensitivity_changed, self);
-#line 766 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->action;
-#line 766 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("visibility-changed", TYPE_TEXT_ACTION, &_tmp5_, NULL, FALSE);
-#line 766 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 692 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_visibility_changed_text_action_visibility_changed, self);
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = self->priv->search_entry;
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_entry_get_type (), GtkEntry));
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = _tmp7_;
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("deleted-text", gtk_entry_buffer_get_type (), &_tmp9_, NULL, FALSE);
-#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 694 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_deleted_text, self);
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = self->priv->search_entry;
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = gtk_entry_get_buffer (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_entry_get_type (), GtkEntry));
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = _tmp11_;
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("inserted-text", gtk_entry_buffer_get_type (), &_tmp13_, NULL, FALSE);
-#line 769 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 695 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp12_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp13_, 0, NULL, (GCallback) _search_filter_toolbar_search_box_on_entry_changed_gtk_entry_buffer_inserted_text, self);
-#line 742 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 668 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->search_entry);
-#line 743 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 669 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_text_action_unref0 (self->priv->action);
-#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 667 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_search_box_parent_class)->finalize (obj);
-#line 8379 "SearchFilter.c"
+#line 7306 "SearchFilter.c"
 }
 
 
@@ -8391,85 +7318,74 @@ GType search_filter_toolbar_search_box_get_type (void) {
 }
 
 
-static void _search_filter_toolbar_rating_filter_button_on_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	search_filter_toolbar_rating_filter_button_on_clicked ((SearchFilterToolbarRatingFilterButton*) self);
-#line 8398 "SearchFilter.c"
-}
-
-
-SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_construct (GType object_type) {
+SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_construct (GType object_type, GMenuModel* model) {
 	SearchFilterToolbarRatingFilterButton * self = NULL;
-	GtkButton* _tmp0_ = NULL;
-	GtkButton* _tmp1_ = NULL;
+	GtkMenuButton* _tmp0_ = NULL;
+	GtkMenuButton* _tmp1_ = NULL;
 	GtkWidget* _tmp2_ = NULL;
 	GtkWidget* _tmp3_ = NULL;
-	GtkButton* _tmp4_ = NULL;
-	GtkButton* _tmp5_ = NULL;
-	GtkButton* _tmp6_ = NULL;
-	GtkButton* _tmp7_ = NULL;
-	GtkButton* _tmp8_ = NULL;
-#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GtkMenuButton* _tmp4_ = NULL;
+	GtkMenuButton* _tmp5_ = NULL;
+	GtkMenuButton* _tmp6_ = NULL;
+	GtkMenuButton* _tmp7_ = NULL;
+	GMenuModel* _tmp8_ = NULL;
+	GtkMenuButton* _tmp9_ = NULL;
+#line 744 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+#line 744 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarRatingFilterButton*) g_object_new (object_type, NULL);
-#line 822 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = (GtkButton*) gtk_button_new ();
-#line 822 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp0_ = (GtkMenuButton*) gtk_menu_button_new ();
+#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp0_);
-#line 822 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->button);
-#line 822 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 745 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->button = _tmp0_;
-#line 823 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->button;
-#line 823 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search_filter_toolbar_rating_filter_button_get_filter_icon (self, RATING_FILTER_UNRATED_OR_HIGHER);
-#line 823 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_;
-#line 823 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_image (_tmp1_, _tmp3_);
-#line 823 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_button_set_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_button_get_type (), GtkButton), _tmp3_);
+#line 747 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (_tmp3_);
-#line 824 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 748 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->button;
-#line 824 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 748 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 825 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 749 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->button;
-#line 825 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_relief (_tmp5_, GTK_RELIEF_NONE);
-#line 826 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 749 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_button_set_relief (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_button_get_type (), GtkButton), GTK_RELIEF_NONE);
+#line 750 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = self->button;
-#line 826 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 750 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), 2);
-#line 828 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 751 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = self->button;
-#line 828 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_connect_object (_tmp7_, "clicked", (GCallback) _search_filter_toolbar_rating_filter_button_on_clicked_gtk_button_clicked, self, 0);
-#line 830 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 751 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp8_ = model;
+#line 751 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_menu_button_set_menu_model (_tmp7_, _tmp8_);
+#line 753 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_tool_item_set_homogeneous (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tool_item_get_type (), GtkToolItem), FALSE);
-#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = self->button;
-#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_widget_get_type (), GtkWidget));
-#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 755 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp9_ = self->button;
+#line 755 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_widget_get_type (), GtkWidget));
+#line 744 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 8457 "SearchFilter.c"
+#line 7382 "SearchFilter.c"
 }
 
 
-SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_new (void) {
-#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	return search_filter_toolbar_rating_filter_button_construct (SEARCH_FILTER_TOOLBAR_TYPE_RATING_FILTER_BUTTON);
-#line 8464 "SearchFilter.c"
-}
-
-
-static void search_filter_toolbar_rating_filter_button_on_clicked (SearchFilterToolbarRatingFilterButton* self) {
-#line 839 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self));
-#line 840 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_emit_by_name (self, "clicked");
-#line 8473 "SearchFilter.c"
+SearchFilterToolbarRatingFilterButton* search_filter_toolbar_rating_filter_button_new (GMenuModel* model) {
+#line 744 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	return search_filter_toolbar_rating_filter_button_construct (SEARCH_FILTER_TOOLBAR_TYPE_RATING_FILTER_BUTTON, model);
+#line 7389 "SearchFilter.c"
 }
 
 
@@ -8478,172 +7394,97 @@ static GtkWidget* search_filter_toolbar_rating_filter_button_get_filter_icon (Se
 	gchar* filename = NULL;
 	RatingFilter _tmp0_ = 0;
 	GtkImage* image = NULL;
-	const gchar* _tmp9_ = NULL;
-	RatingFilter _tmp10_ = 0;
-	gint _tmp11_ = 0;
-	GdkPixbuf* _tmp12_ = NULL;
-	GdkPixbuf* _tmp13_ = NULL;
-	GtkImage* _tmp14_ = NULL;
-	GtkImage* _tmp15_ = NULL;
-#line 843 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	const gchar* _tmp4_ = NULL;
+	RatingFilter _tmp5_ = 0;
+	gint _tmp6_ = 0;
+	GdkPixbuf* _tmp7_ = NULL;
+	GdkPixbuf* _tmp8_ = NULL;
+	GtkImage* _tmp9_ = NULL;
+	GtkImage* _tmp10_ = NULL;
+#line 758 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self), NULL);
-#line 844 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 759 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	filename = NULL;
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 761 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = filter;
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 761 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	switch (_tmp0_) {
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_ONE_OR_HIGHER:
-#line 8499 "SearchFilter.c"
+#line 761 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_REJECTED_OR_HIGHER:
+#line 7415 "SearchFilter.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 848 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp1_ = g_strdup (RESOURCES_ICON_FILTER_ONE_OR_BETTER);
-#line 848 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 763 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp1_ = g_strdup (RESOURCES_ICON_FILTER_REJECTED_OR_BETTER);
+#line 763 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_free0 (filename);
-#line 848 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 763 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			filename = _tmp1_;
-#line 849 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 764 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 8510 "SearchFilter.c"
+#line 7426 "SearchFilter.c"
 		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_TWO_OR_HIGHER:
-#line 8514 "SearchFilter.c"
+#line 761 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_REJECTED_ONLY:
+#line 7430 "SearchFilter.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp2_ = g_strdup (RESOURCES_ICON_FILTER_TWO_OR_BETTER);
-#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 767 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp2_ = g_strdup (RESOURCES_ICON_RATING_REJECTED);
+#line 767 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_free0 (filename);
-#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 767 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			filename = _tmp2_;
-#line 853 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 768 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 8525 "SearchFilter.c"
-		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_THREE_OR_HIGHER:
-#line 8529 "SearchFilter.c"
-		{
-			gchar* _tmp3_ = NULL;
-#line 856 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp3_ = g_strdup (RESOURCES_ICON_FILTER_THREE_OR_BETTER);
-#line 856 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_g_free0 (filename);
-#line 856 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp3_;
-#line 857 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			break;
-#line 8540 "SearchFilter.c"
-		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_FOUR_OR_HIGHER:
-#line 8544 "SearchFilter.c"
-		{
-			gchar* _tmp4_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp4_ = g_strdup (RESOURCES_ICON_FILTER_FOUR_OR_BETTER);
-#line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_g_free0 (filename);
-#line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp4_;
-#line 861 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			break;
-#line 8555 "SearchFilter.c"
-		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_FIVE_OR_HIGHER:
-#line 8559 "SearchFilter.c"
-		{
-			gchar* _tmp5_ = NULL;
-#line 864 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp5_ = g_strdup (RESOURCES_ICON_FILTER_FIVE);
-#line 864 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_g_free0 (filename);
-#line 864 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp5_;
-#line 865 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			break;
-#line 8570 "SearchFilter.c"
-		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_REJECTED_OR_HIGHER:
-#line 8574 "SearchFilter.c"
-		{
-			gchar* _tmp6_ = NULL;
-#line 868 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp6_ = g_strdup (RESOURCES_ICON_FILTER_REJECTED_OR_BETTER);
-#line 868 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_g_free0 (filename);
-#line 868 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp6_;
-#line 869 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			break;
-#line 8585 "SearchFilter.c"
-		}
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-		case RATING_FILTER_REJECTED_ONLY:
-#line 8589 "SearchFilter.c"
-		{
-			gchar* _tmp7_ = NULL;
-#line 872 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp7_ = g_strdup (RESOURCES_ICON_RATING_REJECTED);
-#line 872 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_g_free0 (filename);
-#line 872 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp7_;
-#line 873 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			break;
-#line 8600 "SearchFilter.c"
+#line 7441 "SearchFilter.c"
 		}
 		default:
-#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 761 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_UNRATED_OR_HIGHER:
-#line 8605 "SearchFilter.c"
+#line 7446 "SearchFilter.c"
 		{
-			gchar* _tmp8_ = NULL;
-#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_tmp8_ = g_strdup (RESOURCES_ICON_FILTER_UNRATED_OR_BETTER);
-#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gchar* _tmp3_ = NULL;
+#line 772 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp3_ = g_strdup (RESOURCES_ICON_FILTER_UNRATED_OR_BETTER);
+#line 772 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_free0 (filename);
-#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			filename = _tmp8_;
-#line 878 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 772 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			filename = _tmp3_;
+#line 773 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			break;
-#line 8616 "SearchFilter.c"
+#line 7457 "SearchFilter.c"
 		}
 	}
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_ = filename;
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = filter;
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp11_ = search_filter_toolbar_rating_filter_button_get_filter_icon_size (self, _tmp10_);
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_ = resources_load_icon (_tmp9_, _tmp11_);
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp13_ = _tmp12_;
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp14_ = (GtkImage*) gtk_image_new_from_pixbuf (_tmp13_);
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp14_);
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp15_ = _tmp14_;
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp13_);
-#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	image = _tmp15_;
-#line 883 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp4_ = filename;
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp5_ = filter;
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp6_ = search_filter_toolbar_rating_filter_button_get_filter_icon_size (self, _tmp5_);
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp7_ = resources_load_icon (_tmp4_, _tmp6_);
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp8_ = _tmp7_;
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp9_ = (GtkImage*) gtk_image_new_from_pixbuf (_tmp8_);
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_object_ref_sink (_tmp9_);
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp10_ = _tmp9_;
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (_tmp8_);
+#line 776 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	image = _tmp10_;
+#line 778 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (image, gtk_widget_get_type (), GtkWidget), 6);
-#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 780 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (image, gtk_widget_get_type (), GtkWidget);
-#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 780 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_free0 (filename);
-#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 780 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 8647 "SearchFilter.c"
+#line 7488 "SearchFilter.c"
 }
 
 
@@ -8653,189 +7494,291 @@ static gint search_filter_toolbar_rating_filter_button_get_filter_icon_size (Sea
 	gint icon_star_base = 0;
 	gint icon_plus = 0;
 	RatingFilter _tmp0_ = 0;
-#line 888 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 783 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self), 0);
-#line 889 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 784 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	icon_base = (gint) (SEARCH_FILTER_TOOLBAR_FILTER_ICON_BASE_WIDTH * SEARCH_FILTER_TOOLBAR_FILTER_ICON_SCALE);
-#line 890 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 785 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	icon_star_base = (gint) (SEARCH_FILTER_TOOLBAR_FILTER_ICON_BASE_WIDTH * SEARCH_FILTER_TOOLBAR_FILTER_ICON_STAR_SCALE);
-#line 891 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 786 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	icon_plus = (gint) (SEARCH_FILTER_TOOLBAR_FILTER_ICON_PLUS_WIDTH * SEARCH_FILTER_TOOLBAR_FILTER_ICON_STAR_SCALE);
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = filter;
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	switch (_tmp0_) {
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_ONE_OR_HIGHER:
-#line 8671 "SearchFilter.c"
+#line 7512 "SearchFilter.c"
 		{
 			gint _tmp1_ = 0;
 			gint _tmp2_ = 0;
-#line 895 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp1_ = icon_star_base;
-#line 895 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp2_ = icon_plus;
-#line 895 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = _tmp1_ + _tmp2_;
-#line 895 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 790 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8683 "SearchFilter.c"
+#line 7524 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_TWO_OR_HIGHER:
-#line 8687 "SearchFilter.c"
+#line 7528 "SearchFilter.c"
 		{
 			gint _tmp3_ = 0;
 			gint _tmp4_ = 0;
-#line 897 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp3_ = icon_star_base;
-#line 897 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp4_ = icon_plus;
-#line 897 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = (_tmp3_ * 2) + _tmp4_;
-#line 897 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 792 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8699 "SearchFilter.c"
+#line 7540 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_THREE_OR_HIGHER:
-#line 8703 "SearchFilter.c"
+#line 7544 "SearchFilter.c"
 		{
 			gint _tmp5_ = 0;
 			gint _tmp6_ = 0;
-#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 794 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp5_ = icon_star_base;
-#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 794 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp6_ = icon_plus;
-#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 794 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = (_tmp5_ * 3) + _tmp6_;
-#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 794 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8715 "SearchFilter.c"
+#line 7556 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FOUR_OR_HIGHER:
-#line 8719 "SearchFilter.c"
+#line 7560 "SearchFilter.c"
 		{
 			gint _tmp7_ = 0;
 			gint _tmp8_ = 0;
-#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp7_ = icon_star_base;
-#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp8_ = icon_plus;
-#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = (_tmp7_ * 4) + _tmp8_;
-#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 796 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8731 "SearchFilter.c"
+#line 7572 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FIVE_OR_HIGHER:
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_FIVE_ONLY:
-#line 8737 "SearchFilter.c"
+#line 7578 "SearchFilter.c"
 		{
 			gint _tmp9_ = 0;
-#line 904 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 799 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp9_ = icon_star_base;
-#line 904 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 799 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = _tmp9_ * 5;
-#line 904 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 799 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8746 "SearchFilter.c"
+#line 7587 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_REJECTED_OR_HIGHER:
-#line 8750 "SearchFilter.c"
+#line 7591 "SearchFilter.c"
 		{
-#line 906 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 801 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = RESOURCES_ICON_FILTER_REJECTED_OR_BETTER_FIXED_SIZE;
-#line 906 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 801 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8756 "SearchFilter.c"
+#line 7597 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_UNRATED_OR_HIGHER:
-#line 8760 "SearchFilter.c"
+#line 7601 "SearchFilter.c"
 		{
-#line 908 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 803 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = RESOURCES_ICON_FILTER_UNRATED_OR_BETTER_FIXED_SIZE;
-#line 908 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 803 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8766 "SearchFilter.c"
+#line 7607 "SearchFilter.c"
 		}
-#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 788 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case RATING_FILTER_REJECTED_ONLY:
-#line 8770 "SearchFilter.c"
+#line 7611 "SearchFilter.c"
 		{
-#line 910 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 805 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = icon_plus;
-#line 910 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 805 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8776 "SearchFilter.c"
+#line 7617 "SearchFilter.c"
 		}
 		default:
 		{
-#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 807 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			result = icon_base;
-#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 807 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return result;
-#line 8784 "SearchFilter.c"
+#line 7625 "SearchFilter.c"
 		}
 	}
 }
 
 
 void search_filter_toolbar_rating_filter_button_set_filter_icon (SearchFilterToolbarRatingFilterButton* self, RatingFilter filter) {
-	GtkButton* _tmp0_ = NULL;
-	GtkButton* _tmp1_ = NULL;
-	RatingFilter _tmp2_ = 0;
-	GtkWidget* _tmp3_ = NULL;
-	GtkWidget* _tmp4_ = NULL;
-	RatingFilter _tmp5_ = 0;
-	gint _tmp6_ = 0;
-	RatingFilter _tmp7_ = 0;
-	gchar* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GtkMenuButton* _tmp0_ = NULL;
+	RatingFilter _tmp1_ = 0;
+	RatingFilter _tmp18_ = 0;
+	gint _tmp19_ = 0;
+	RatingFilter _tmp20_ = 0;
+	gchar* _tmp21_ = NULL;
+	gchar* _tmp22_ = NULL;
+#line 811 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self));
-#line 917 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 812 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 917 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_always_show_image (_tmp0_, TRUE);
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp1_ = self->button;
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = filter;
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = search_filter_toolbar_rating_filter_button_get_filter_icon (self, _tmp2_);
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = _tmp3_;
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_image (_tmp1_, _tmp4_);
-#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (_tmp4_);
-#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp5_ = filter;
-#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp6_ = search_filter_toolbar_rating_filter_button_get_filter_button_size (self, _tmp5_);
-#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp6_, -1);
-#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp7_ = filter;
-#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp8_ = resources_get_rating_filter_tooltip (_tmp7_);
-#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp9_ = _tmp8_;
-#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tool_item_get_type (), GtkToolItem), _tmp9_);
-#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_free0 (_tmp9_);
-#line 921 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 812 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_button_set_always_show_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), TRUE);
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp1_ = filter;
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	switch (_tmp1_) {
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_ONE_OR_HIGHER:
+#line 7651 "SearchFilter.c"
+		{
+			GtkMenuButton* _tmp2_ = NULL;
+			const gchar* _tmp3_ = NULL;
+#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp2_ = self->button;
+#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp3_ = _ ("★+ Rating");
+#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_button_get_type (), GtkButton), _tmp3_);
+#line 816 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7663 "SearchFilter.c"
+		}
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_TWO_OR_HIGHER:
+#line 7667 "SearchFilter.c"
+		{
+			GtkMenuButton* _tmp4_ = NULL;
+			const gchar* _tmp5_ = NULL;
+#line 818 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp4_ = self->button;
+#line 818 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp5_ = _ ("★★+ Rating");
+#line 818 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_button_get_type (), GtkButton), _tmp5_);
+#line 819 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7679 "SearchFilter.c"
+		}
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_THREE_OR_HIGHER:
+#line 7683 "SearchFilter.c"
+		{
+			GtkMenuButton* _tmp6_ = NULL;
+			const gchar* _tmp7_ = NULL;
+#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp6_ = self->button;
+#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp7_ = _ ("★★★+ Rating");
+#line 821 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_button_get_type (), GtkButton), _tmp7_);
+#line 822 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7695 "SearchFilter.c"
+		}
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_FOUR_OR_HIGHER:
+#line 7699 "SearchFilter.c"
+		{
+			GtkMenuButton* _tmp8_ = NULL;
+			const gchar* _tmp9_ = NULL;
+#line 824 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp8_ = self->button;
+#line 824 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp9_ = _ ("★★★★+ Rating");
+#line 824 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_button_get_type (), GtkButton), _tmp9_);
+#line 825 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7711 "SearchFilter.c"
+		}
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_FIVE_ONLY:
+#line 813 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+		case RATING_FILTER_FIVE_OR_HIGHER:
+#line 7717 "SearchFilter.c"
+		{
+			GtkMenuButton* _tmp10_ = NULL;
+			const gchar* _tmp11_ = NULL;
+#line 828 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp10_ = self->button;
+#line 828 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp11_ = _ ("★★★★★+ Rating");
+#line 828 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_button_get_type (), GtkButton), _tmp11_);
+#line 829 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7729 "SearchFilter.c"
+		}
+		default:
+		{
+			GtkMenuButton* _tmp12_ = NULL;
+			const gchar* _tmp13_ = NULL;
+			GtkMenuButton* _tmp14_ = NULL;
+			RatingFilter _tmp15_ = 0;
+			GtkWidget* _tmp16_ = NULL;
+			GtkWidget* _tmp17_ = NULL;
+#line 831 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp12_ = self->button;
+#line 831 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp13_ = _ ("Rating");
+#line 831 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_button_get_type (), GtkButton), _tmp13_);
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp14_ = self->button;
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp15_ = filter;
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp16_ = search_filter_toolbar_rating_filter_button_get_filter_icon (self, _tmp15_);
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_tmp17_ = _tmp16_;
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			gtk_button_set_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_button_get_type (), GtkButton), _tmp17_);
+#line 832 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_g_object_unref0 (_tmp17_);
+#line 833 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			break;
+#line 7759 "SearchFilter.c"
+		}
+	}
+#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp18_ = filter;
+#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp19_ = search_filter_toolbar_rating_filter_button_get_filter_button_size (self, _tmp18_);
+#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), _tmp19_, -1);
+#line 837 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp20_ = filter;
+#line 837 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp21_ = resources_get_rating_filter_tooltip (_tmp20_);
+#line 837 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp22_ = _tmp21_;
+#line 837 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_tool_item_set_tooltip_text (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tool_item_get_type (), GtkToolItem), _tmp22_);
+#line 837 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_free0 (_tmp22_);
+#line 838 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_has_tooltip (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 922 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 839 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 8839 "SearchFilter.c"
+#line 7782 "SearchFilter.c"
 }
 
 
@@ -8843,74 +7786,59 @@ static gint search_filter_toolbar_rating_filter_button_get_filter_button_size (S
 	gint result = 0;
 	RatingFilter _tmp0_ = 0;
 	gint _tmp1_ = 0;
-#line 925 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 842 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self), 0);
-#line 926 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 843 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = filter;
-#line 926 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 843 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = search_filter_toolbar_rating_filter_button_get_filter_icon_size (self, _tmp0_);
-#line 926 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 843 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp1_ + (2 * SEARCH_FILTER_TOOLBAR_FILTER_BUTTON_MARGIN);
-#line 926 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 843 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 8857 "SearchFilter.c"
+#line 7800 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_rating_filter_button_set_label (SearchFilterToolbarRatingFilterButton* self, const gchar* label) {
-	GtkButton* _tmp0_ = NULL;
+	GtkMenuButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_RATING_FILTER_BUTTON (self));
-#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 846 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (label != NULL);
-#line 930 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 847 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 930 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 847 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = label;
-#line 930 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	gtk_button_set_label (_tmp0_, _tmp1_);
-#line 8874 "SearchFilter.c"
+#line 847 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), _tmp1_);
+#line 7817 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_rating_filter_button_class_init (SearchFilterToolbarRatingFilterButtonClass * klass) {
-#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_rating_filter_button_parent_class = g_type_class_peek_parent (klass);
-#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_rating_filter_button_finalize;
-#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_new ("clicked", SEARCH_FILTER_TOOLBAR_TYPE_RATING_FILTER_BUTTON, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 8885 "SearchFilter.c"
+#line 7826 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_rating_filter_button_instance_init (SearchFilterToolbarRatingFilterButton * self) {
-#line 816 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->filter_popup = NULL;
-#line 8892 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_rating_filter_button_finalize (GObject* obj) {
 	SearchFilterToolbarRatingFilterButton * self;
-	GtkButton* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_RATING_FILTER_BUTTON, SearchFilterToolbarRatingFilterButton);
-#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp0_ = self->button;
-#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp1_, NULL, FALSE);
-#line 836 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_rating_filter_button_on_clicked_gtk_button_clicked, self);
-#line 816 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->filter_popup);
-#line 817 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 742 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->button);
-#line 815 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 741 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_rating_filter_button_parent_class)->finalize (obj);
-#line 8914 "SearchFilter.c"
+#line 7842 "SearchFilter.c"
 }
 
 
@@ -8927,9 +7855,9 @@ GType search_filter_toolbar_rating_filter_button_get_type (void) {
 
 
 static void _search_filter_toolbar_saved_search_filter_button_on_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 960 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_filter_button_on_clicked ((SearchFilterToolbarSavedSearchFilterButton*) self);
-#line 8933 "SearchFilter.c"
+#line 7861 "SearchFilter.c"
 }
 
 
@@ -8943,136 +7871,136 @@ SearchFilterToolbarSavedSearchFilterButton* search_filter_toolbar_saved_search_f
 	GtkToggleButton* _tmp4_ = NULL;
 	GtkToggleButton* _tmp5_ = NULL;
 	GtkToggleButton* _tmp6_ = NULL;
-#line 941 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 858 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarSavedSearchFilterButton*) g_object_new (object_type, NULL);
-#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 859 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = (GtkToggleButton*) gtk_toggle_button_new ();
-#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 859 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp0_);
-#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 859 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->button);
-#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 859 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->button = _tmp0_;
-#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->button;
-#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_always_show_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_button_get_type (), GtkButton), TRUE);
-#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = (GtkImage*) gtk_image_new_from_icon_name ("find", GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp2_);
-#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	image = _tmp2_;
-#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 863 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_margin_end (G_TYPE_CHECK_INSTANCE_CAST (image, gtk_widget_get_type (), GtkWidget), 6);
-#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 864 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->button;
-#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 864 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_button_get_type (), GtkButton), G_TYPE_CHECK_INSTANCE_CAST (image, gtk_widget_get_type (), GtkWidget));
-#line 948 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 865 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->button;
-#line 948 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 865 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_can_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 950 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 867 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->button;
-#line 950 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 867 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _search_filter_toolbar_saved_search_filter_button_on_clicked_gtk_button_clicked, self, 0);
-#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 869 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_filter_button_restyle (self);
-#line 954 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 871 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_tool_item_set_homogeneous (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_tool_item_get_type (), GtkToolItem), FALSE);
-#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 873 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = self->button;
-#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 873 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget));
-#line 941 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 858 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (image);
-#line 941 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 858 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 8993 "SearchFilter.c"
+#line 7921 "SearchFilter.c"
 }
 
 
 SearchFilterToolbarSavedSearchFilterButton* search_filter_toolbar_saved_search_filter_button_new (void) {
-#line 941 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 858 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_saved_search_filter_button_construct (SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_FILTER_BUTTON);
-#line 9000 "SearchFilter.c"
+#line 7928 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_filter_button_on_clicked (SearchFilterToolbarSavedSearchFilterButton* self) {
-#line 963 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 880 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_FILTER_BUTTON (self));
-#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 881 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "clicked");
-#line 9009 "SearchFilter.c"
+#line 7937 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_filter_button_set_active (SearchFilterToolbarSavedSearchFilterButton* self, gboolean active) {
 	GtkToggleButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 967 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 884 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_FILTER_BUTTON (self));
-#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = active;
-#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 885 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_toggle_button_set_active (_tmp0_, _tmp1_);
-#line 9024 "SearchFilter.c"
+#line 7952 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_filter_button_set_label (SearchFilterToolbarSavedSearchFilterButton* self, const gchar* label) {
 	GtkToggleButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 888 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_FILTER_BUTTON (self));
-#line 971 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 888 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (label != NULL);
-#line 972 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 889 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 972 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 889 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = label;
-#line 972 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 889 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_label (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), _tmp1_);
-#line 9041 "SearchFilter.c"
+#line 7969 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_filter_button_restyle (SearchFilterToolbarSavedSearchFilterButton* self) {
 	GtkToggleButton* _tmp0_ = NULL;
 	GtkToggleButton* _tmp1_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 892 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_FILTER_BUTTON (self));
-#line 976 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 976 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 893 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), 24, 24);
-#line 977 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 894 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->button;
-#line 977 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 894 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_relief (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_button_get_type (), GtkButton), GTK_RELIEF_NONE);
-#line 9058 "SearchFilter.c"
+#line 7986 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_filter_button_class_init (SearchFilterToolbarSavedSearchFilterButtonClass * klass) {
-#line 935 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_filter_button_parent_class = g_type_class_peek_parent (klass);
-#line 935 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_saved_search_filter_button_finalize;
-#line 935 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_FILTER_BUTTON, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 9069 "SearchFilter.c"
+#line 7997 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_filter_button_instance_init (SearchFilterToolbarSavedSearchFilterButton * self) {
-#line 936 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 853 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->filter_popup = NULL;
-#line 9076 "SearchFilter.c"
+#line 8004 "SearchFilter.c"
 }
 
 
@@ -9080,21 +8008,21 @@ static void search_filter_toolbar_saved_search_filter_button_finalize (GObject* 
 	SearchFilterToolbarSavedSearchFilterButton * self;
 	GtkToggleButton* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 935 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_FILTER_BUTTON, SearchFilterToolbarSavedSearchFilterButton);
-#line 960 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->button;
-#line 960 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp1_, NULL, FALSE);
-#line 960 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 877 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_button_get_type (), GtkButton), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_filter_button_on_clicked_gtk_button_clicked, self);
-#line 936 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 853 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_search_filter_toolbar_saved_search_popover_unref0 (self->filter_popup);
-#line 937 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 854 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->button);
-#line 935 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 852 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_saved_search_filter_button_parent_class)->finalize (obj);
-#line 9098 "SearchFilter.c"
+#line 8026 "SearchFilter.c"
 }
 
 
@@ -9111,71 +8039,71 @@ GType search_filter_toolbar_saved_search_filter_button_get_type (void) {
 
 
 static void _search_filter_toolbar_saved_search_popover_on_edit_click_search_filter_toolbar_saved_search_popover_data_button_clicked (SearchFilterToolbarSavedSearchPopoverDataButton* _sender, SavedSearch* search, gpointer self) {
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_on_edit_click ((SearchFilterToolbarSavedSearchPopover*) self, search);
-#line 9117 "SearchFilter.c"
+#line 8045 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_saved_search_popover_on_delete_click_search_filter_toolbar_saved_search_popover_data_button_clicked (SearchFilterToolbarSavedSearchPopoverDataButton* _sender, SavedSearch* search, gpointer self) {
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_on_delete_click ((SearchFilterToolbarSavedSearchPopover*) self, search);
-#line 9124 "SearchFilter.c"
+#line 8052 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_saved_search_popover_on_add_click_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1064 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_on_add_click ((SearchFilterToolbarSavedSearchPopover*) self);
-#line 9131 "SearchFilter.c"
+#line 8059 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_saved_search_popover_on_activate_row_gtk_list_box_row_activated (GtkListBox* _sender, GtkListBoxRow* row, gpointer self) {
-#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 982 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_on_activate_row ((SearchFilterToolbarSavedSearchPopover*) self, row);
-#line 9138 "SearchFilter.c"
+#line 8066 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_saved_search_popover_on_popover_closed_gtk_popover_closed (GtkPopover* _sender, gpointer self) {
-#line 1066 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 983 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_on_popover_closed ((SearchFilterToolbarSavedSearchPopover*) self);
-#line 9145 "SearchFilter.c"
+#line 8073 "SearchFilter.c"
 }
 
 
-static void _vala_array_add351 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value) {
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+static void _vala_array_add133 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value) {
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((*length) == (*size)) {
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*array = g_renew (SearchFilterToolbarSavedSearchPopoverDataButton*, *array, (*size) + 1);
-#line 9156 "SearchFilter.c"
+#line 8084 "SearchFilter.c"
 	}
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	(*array)[(*length)++] = value;
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	(*array)[*length] = NULL;
-#line 9162 "SearchFilter.c"
+#line 8090 "SearchFilter.c"
 }
 
 
-static void _vala_array_add352 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value) {
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+static void _vala_array_add134 (SearchFilterToolbarSavedSearchPopoverDataButton*** array, int* length, int* size, SearchFilterToolbarSavedSearchPopoverDataButton* value) {
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if ((*length) == (*size)) {
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*array = g_renew (SearchFilterToolbarSavedSearchPopoverDataButton*, *array, (*size) + 1);
-#line 9173 "SearchFilter.c"
+#line 8101 "SearchFilter.c"
 	}
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	(*array)[(*length)++] = value;
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	(*array)[*length] = NULL;
-#line 9179 "SearchFilter.c"
+#line 8107 "SearchFilter.c"
 }
 
 
@@ -9195,53 +8123,53 @@ SearchFilterToolbarSavedSearchPopover* search_filter_toolbar_saved_search_popove
 	GtkListBox* _tmp49_ = NULL;
 	GtkPopover* _tmp50_ = NULL;
 	GtkListBox* _tmp51_ = NULL;
-#line 1025 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (GTK_IS_WIDGET (relative_to), NULL);
-#line 1025 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarSavedSearchPopover*) g_type_create_instance (object_type);
-#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = relative_to;
-#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = (GtkPopover*) gtk_popover_new (_tmp0_);
-#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp1_);
-#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->popover);
-#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 943 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->popover = _tmp1_;
-#line 1027 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 944 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = self->priv->popover;
-#line 1027 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 944 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect (_tmp2_, "closed", (GCallback) _search_filter_toolbar_saved_search_popover_on_popover_closed_gtk_popover_closed, self);
-#line 1028 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = (GtkListBox*) gtk_list_box_new ();
-#line 1028 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp3_);
-#line 1028 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->list_box);
-#line 1028 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 945 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->list_box = _tmp3_;
-#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = g_new0 (SearchFilterToolbarSavedSearchPopoverDataButton*, 0 + 1);
-#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons = (_vala_array_free (self->priv->edit_buttons, self->priv->edit_buttons_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons = _tmp4_;
-#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons_length1 = 0;
-#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 946 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_edit_buttons_size_ = self->priv->edit_buttons_length1;
-#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = g_new0 (SearchFilterToolbarSavedSearchPopoverDataButton*, 0 + 1);
-#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons = (_vala_array_free (self->priv->delete_buttons, self->priv->delete_buttons_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons = _tmp5_;
-#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons_length1 = 0;
-#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 947 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_delete_buttons_size_ = self->priv->delete_buttons_length1;
-#line 9245 "SearchFilter.c"
+#line 8173 "SearchFilter.c"
 	{
 		GeeIterator* _search_it = NULL;
 		SavedSearchTable* _tmp6_ = NULL;
@@ -9250,27 +8178,27 @@ SearchFilterToolbarSavedSearchPopover* search_filter_toolbar_saved_search_popove
 		GeeCollection* _tmp9_ = NULL;
 		GeeIterator* _tmp10_ = NULL;
 		GeeIterator* _tmp11_ = NULL;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp6_ = saved_search_table_get_instance ();
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp7_ = _tmp6_;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp8_ = saved_search_table_get_all (_tmp7_);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp9_ = _tmp8_;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp10_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp11_ = _tmp10_;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (_tmp9_);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_saved_search_table_unref0 (_tmp7_);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_search_it = _tmp11_;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		while (TRUE) {
-#line 9274 "SearchFilter.c"
+#line 8202 "SearchFilter.c"
 			GeeIterator* _tmp12_ = NULL;
 			gboolean _tmp13_ = FALSE;
 			SavedSearch* search = NULL;
@@ -9310,180 +8238,180 @@ SearchFilterToolbarSavedSearchPopover* search_filter_toolbar_saved_search_popove
 			SearchFilterToolbarSavedSearchPopoverDataButton* _tmp41_ = NULL;
 			GtkListBox* _tmp42_ = NULL;
 			GtkBox* _tmp43_ = NULL;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp12_ = _search_it;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp13_ = gee_iterator_next (_tmp12_);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			if (!_tmp13_) {
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				break;
-#line 9322 "SearchFilter.c"
+#line 8250 "SearchFilter.c"
 			}
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp14_ = _search_it;
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp15_ = gee_iterator_get (_tmp14_);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			search = (SavedSearch*) _tmp15_;
-#line 1033 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 950 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp16_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 1);
-#line 1033 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 950 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_object_ref_sink (_tmp16_);
-#line 1033 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 950 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			row = _tmp16_;
-#line 1034 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 951 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp17_ = row;
-#line 1034 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 951 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_box_set_homogeneous (_tmp17_, FALSE);
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp18_ = search;
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp19_ = data_object_get_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, TYPE_DATA_OBJECT, DataObject));
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp20_ = _tmp19_;
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp21_ = (GtkLabel*) gtk_label_new (_tmp20_);
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_object_ref_sink (_tmp21_);
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp22_ = _tmp21_;
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_free0 (_tmp20_);
-#line 1035 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 952 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			label = _tmp22_;
-#line 1036 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 953 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp23_ = label;
-#line 1036 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 953 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
-#line 1037 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 954 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp24_ = row;
-#line 1037 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 954 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp25_ = label;
-#line 1037 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 954 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_box_pack_start (_tmp24_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 3);
-#line 1039 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp26_ = search;
-#line 1039 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp27_ = search_filter_toolbar_saved_search_popover_data_button_new (_tmp26_, "edit-delete-symbolic");
-#line 1039 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_object_ref_sink (_tmp27_);
-#line 1039 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 956 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			delete_button = _tmp27_;
-#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 957 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp28_ = row;
-#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 957 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp29_ = delete_button;
-#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 957 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_box_pack_end (_tmp28_, G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1041 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 958 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp30_ = delete_button;
-#line 1041 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 958 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect (_tmp30_, "clicked", (GCallback) _search_filter_toolbar_saved_search_popover_on_delete_click_search_filter_toolbar_saved_search_popover_data_button_clicked, self);
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp31_ = self->priv->delete_buttons;
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp31__length1 = self->priv->delete_buttons_length1;
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp32_ = delete_button;
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp33_ = _g_object_ref0 (_tmp32_);
-#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_vala_array_add351 (&self->priv->delete_buttons, &self->priv->delete_buttons_length1, &self->priv->_delete_buttons_size_, _tmp33_);
-#line 1044 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 959 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_vala_array_add133 (&self->priv->delete_buttons, &self->priv->delete_buttons_length1, &self->priv->_delete_buttons_size_, _tmp33_);
+#line 961 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp34_ = search;
-#line 1044 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 961 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp35_ = search_filter_toolbar_saved_search_popover_data_button_new (_tmp34_, "text-editor-symbolic");
-#line 1044 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 961 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_object_ref_sink (_tmp35_);
-#line 1044 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 961 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			edit_button = _tmp35_;
-#line 1045 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 962 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp36_ = row;
-#line 1045 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 962 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp37_ = edit_button;
-#line 1045 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 962 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_box_pack_end (_tmp36_, G_TYPE_CHECK_INSTANCE_CAST (_tmp37_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 1046 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 963 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp38_ = edit_button;
-#line 1046 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 963 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			g_signal_connect (_tmp38_, "clicked", (GCallback) _search_filter_toolbar_saved_search_popover_on_edit_click_search_filter_toolbar_saved_search_popover_data_button_clicked, self);
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp39_ = self->priv->edit_buttons;
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp39__length1 = self->priv->edit_buttons_length1;
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp40_ = edit_button;
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp41_ = _g_object_ref0 (_tmp40_);
-#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-			_vala_array_add352 (&self->priv->edit_buttons, &self->priv->edit_buttons_length1, &self->priv->_edit_buttons_size_, _tmp41_);
-#line 1049 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 964 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+			_vala_array_add134 (&self->priv->edit_buttons, &self->priv->edit_buttons_length1, &self->priv->_edit_buttons_size_, _tmp41_);
+#line 966 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp42_ = self->priv->list_box;
-#line 1049 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 966 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp43_ = row;
-#line 1049 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 966 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			gtk_list_box_insert (_tmp42_, G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, gtk_widget_get_type (), GtkWidget), -1);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (edit_button);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (delete_button);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (label);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (row);
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_g_object_unref0 (search);
-#line 9438 "SearchFilter.c"
+#line 8366 "SearchFilter.c"
 		}
-#line 1032 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 949 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (_search_it);
-#line 9442 "SearchFilter.c"
+#line 8370 "SearchFilter.c"
 	}
-#line 1051 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp44_ = (GtkButton*) gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON);
-#line 1051 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp44_);
-#line 1051 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->add);
-#line 1051 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 968 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->add = _tmp44_;
-#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 969 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp45_ = self->priv->add;
-#line 1052 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 969 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect (_tmp45_, "clicked", (GCallback) _search_filter_toolbar_saved_search_popover_on_add_click_gtk_button_clicked, self);
-#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 970 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp46_ = self->priv->list_box;
-#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 970 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp47_ = self->priv->add;
-#line 1053 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 970 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_list_box_insert (_tmp46_, G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_widget_get_type (), GtkWidget), -1);
-#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 971 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp48_ = self->priv->list_box;
-#line 1054 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 971 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect (_tmp48_, "row-activated", (GCallback) _search_filter_toolbar_saved_search_popover_on_activate_row_gtk_list_box_row_activated, self);
-#line 1055 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 972 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp49_ = self->priv->list_box;
-#line 1055 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 972 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_list_box_set_selection_mode (_tmp49_, GTK_SELECTION_NONE);
-#line 1056 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 973 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp50_ = self->priv->popover;
-#line 1056 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 973 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp51_ = self->priv->list_box;
-#line 1056 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 973 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, gtk_widget_get_type (), GtkWidget));
-#line 1058 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 975 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_restyle (self);
-#line 1025 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 9480 "SearchFilter.c"
+#line 8408 "SearchFilter.c"
 }
 
 
 SearchFilterToolbarSavedSearchPopover* search_filter_toolbar_saved_search_popover_new (GtkWidget* relative_to) {
-#line 1025 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 942 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_saved_search_popover_construct (SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, relative_to);
-#line 9487 "SearchFilter.c"
+#line 8415 "SearchFilter.c"
 }
 
 
@@ -9493,81 +8421,81 @@ void search_filter_toolbar_saved_search_popover_restyle (SearchFilterToolbarSave
 	gint _tmp1__length1 = 0;
 	SearchFilterToolbarSavedSearchPopoverDataButton** _tmp4_ = NULL;
 	gint _tmp4__length1 = 0;
-#line 1069 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 986 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1070 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 987 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->add;
-#line 1070 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 987 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_relief (_tmp0_, GTK_RELIEF_NONE);
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->priv->edit_buttons;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1__length1 = self->priv->edit_buttons_length1;
-#line 9507 "SearchFilter.c"
+#line 8435 "SearchFilter.c"
 	{
 		SearchFilterToolbarSavedSearchPopoverDataButton** button_collection = NULL;
 		gint button_collection_length1 = 0;
 		gint _button_collection_size_ = 0;
 		gint button_it = 0;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection = _tmp1_;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection_length1 = _tmp1__length1;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		for (button_it = 0; button_it < _tmp1__length1; button_it = button_it + 1) {
-#line 9519 "SearchFilter.c"
+#line 8447 "SearchFilter.c"
 			SearchFilterToolbarSavedSearchPopoverDataButton* _tmp2_ = NULL;
 			SearchFilterToolbarSavedSearchPopoverDataButton* button = NULL;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp2_ = _g_object_ref0 (button_collection[button_it]);
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			button = _tmp2_;
-#line 9526 "SearchFilter.c"
+#line 8454 "SearchFilter.c"
 			{
 				SearchFilterToolbarSavedSearchPopoverDataButton* _tmp3_ = NULL;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp3_ = button;
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				search_filter_toolbar_saved_search_popover_data_button_restyle (_tmp3_);
-#line 1071 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 988 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (button);
-#line 9535 "SearchFilter.c"
+#line 8463 "SearchFilter.c"
 			}
 		}
 	}
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->delete_buttons;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4__length1 = self->priv->delete_buttons_length1;
-#line 9543 "SearchFilter.c"
+#line 8471 "SearchFilter.c"
 	{
 		SearchFilterToolbarSavedSearchPopoverDataButton** button_collection = NULL;
 		gint button_collection_length1 = 0;
 		gint _button_collection_size_ = 0;
 		gint button_it = 0;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection = _tmp4_;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection_length1 = _tmp4__length1;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		for (button_it = 0; button_it < _tmp4__length1; button_it = button_it + 1) {
-#line 9555 "SearchFilter.c"
+#line 8483 "SearchFilter.c"
 			SearchFilterToolbarSavedSearchPopoverDataButton* _tmp5_ = NULL;
 			SearchFilterToolbarSavedSearchPopoverDataButton* button = NULL;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp5_ = _g_object_ref0 (button_collection[button_it]);
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			button = _tmp5_;
-#line 9562 "SearchFilter.c"
+#line 8490 "SearchFilter.c"
 			{
 				SearchFilterToolbarSavedSearchPopoverDataButton* _tmp6_ = NULL;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp6_ = button;
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				search_filter_toolbar_saved_search_popover_data_button_restyle (_tmp6_);
-#line 1072 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 989 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (button);
-#line 9571 "SearchFilter.c"
+#line 8499 "SearchFilter.c"
 			}
 		}
 	}
@@ -9583,47 +8511,47 @@ static gboolean search_filter_toolbar_saved_search_popover_is_search_row (Search
 	GList* _tmp4_ = NULL;
 	gconstpointer _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
-#line 1075 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 992 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self), FALSE);
-#line 1075 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 992 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail ((row == NULL) || GTK_IS_LIST_BOX_ROW (row), FALSE);
-#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 993 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = row;
-#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 993 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp0_ == NULL) {
-#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 993 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		result = FALSE;
-#line 1076 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 993 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return result;
-#line 9599 "SearchFilter.c"
+#line 8527 "SearchFilter.c"
 	}
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = row;
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = gtk_container_get_children (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_container_get_type (), GtkContainer));
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = _tmp2_;
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = g_list_last (_tmp3_);
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = _tmp4_->data;
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = G_TYPE_CHECK_INSTANCE_TYPE ((GtkWidget*) _tmp5_, gtk_button_get_type ());
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_list_free0 (_tmp3_);
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp6_) {
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		result = FALSE;
-#line 1077 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 994 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return result;
-#line 9621 "SearchFilter.c"
+#line 8549 "SearchFilter.c"
 	}
-#line 1078 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = TRUE;
-#line 1078 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 9627 "SearchFilter.c"
+#line 8555 "SearchFilter.c"
 }
 
 
@@ -9646,55 +8574,55 @@ static SavedSearch* search_filter_toolbar_saved_search_popover_get_search (Searc
 	SavedSearch* _tmp13_ = NULL;
 	SavedSearch* _tmp14_ = NULL;
 	SavedSearch* _tmp15_ = NULL;
-#line 1081 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 998 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self), NULL);
-#line 1081 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 998 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), NULL);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = row;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = gtk_container_get_children (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_container_get_type (), GtkContainer));
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = _tmp1_;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = g_list_first (_tmp2_);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = _tmp3_->data;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = (GtkWidget*) _tmp4_;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = gtk_container_get_children (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_box_get_type ()) ? ((GtkBox*) _tmp5_) : NULL, gtk_container_get_type (), GtkContainer));
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp7_ = _tmp6_;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = g_list_last (_tmp7_);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp9_ = _tmp8_->data;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = (GtkWidget*) _tmp9_;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp11_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp10_, SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON) ? ((SearchFilterToolbarSavedSearchPopoverDataButton*) _tmp10_) : NULL);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = _tmp11_;
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_list_free0 (_tmp7_);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_list_free0 (_tmp2_);
-#line 1082 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 999 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	button = _tmp12_;
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp13_ = search_filter_toolbar_saved_search_popover_data_button_get_search (button);
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp14_ = _tmp13_;
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp15_ = _g_object_ref0 (_tmp14_);
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp15_;
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (button);
-#line 1083 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1000 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 9698 "SearchFilter.c"
+#line 8626 "SearchFilter.c"
 }
 
 
@@ -9702,114 +8630,114 @@ static void search_filter_toolbar_saved_search_popover_on_activate_row (SearchFi
 	GtkListBoxRow* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	GtkPopover* _tmp5_ = NULL;
-#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1003 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1086 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1003 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail ((row == NULL) || GTK_IS_LIST_BOX_ROW (row));
-#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1004 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = row;
-#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1004 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = search_filter_toolbar_saved_search_popover_is_search_row (self, _tmp0_);
-#line 1087 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1004 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (_tmp1_) {
-#line 9716 "SearchFilter.c"
+#line 8644 "SearchFilter.c"
 		GtkListBoxRow* _tmp2_ = NULL;
 		SavedSearch* _tmp3_ = NULL;
 		SavedSearch* _tmp4_ = NULL;
-#line 1088 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1005 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp2_ = row;
-#line 1088 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1005 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp3_ = search_filter_toolbar_saved_search_popover_get_search (self, _tmp2_);
-#line 1088 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1005 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_tmp4_ = _tmp3_;
-#line 1088 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1005 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_signal_emit_by_name (self, "search-activated", _tmp4_);
-#line 1088 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1005 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		_g_object_unref0 (_tmp4_);
-#line 9730 "SearchFilter.c"
+#line 8658 "SearchFilter.c"
 	}
-#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1006 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp5_ = self->priv->popover;
-#line 1089 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1006 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 9736 "SearchFilter.c"
+#line 8664 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_on_edit_click (SearchFilterToolbarSavedSearchPopover* self, SavedSearch* search) {
 	SavedSearch* _tmp0_ = NULL;
-#line 1092 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1009 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1092 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1009 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SAVED_SEARCH (search));
-#line 1093 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1010 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = search;
-#line 1093 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1010 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "edit-clicked", _tmp0_);
-#line 9750 "SearchFilter.c"
+#line 8678 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_on_delete_click (SearchFilterToolbarSavedSearchPopover* self, SavedSearch* search) {
 	SavedSearch* _tmp0_ = NULL;
-#line 1096 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1013 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1096 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1013 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (IS_SAVED_SEARCH (search));
-#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1014 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = search;
-#line 1097 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1014 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "delete-clicked", _tmp0_);
-#line 9764 "SearchFilter.c"
+#line 8692 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_on_add_click (SearchFilterToolbarSavedSearchPopover* self) {
-#line 1100 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1017 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1101 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1018 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "add-clicked");
-#line 9773 "SearchFilter.c"
+#line 8701 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_on_popover_closed (SearchFilterToolbarSavedSearchPopover* self) {
-#line 1104 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1021 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1105 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1022 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "closed");
-#line 9782 "SearchFilter.c"
+#line 8710 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_popover_show_all (SearchFilterToolbarSavedSearchPopover* self) {
 	GtkPopover* _tmp0_ = NULL;
-#line 1108 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1025 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->popover;
-#line 1109 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1026 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 9794 "SearchFilter.c"
+#line 8722 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_popover_hide (SearchFilterToolbarSavedSearchPopover* self) {
 	GtkPopover* _tmp0_ = NULL;
-#line 1112 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1029 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_IS_SAVED_SEARCH_POPOVER (self));
-#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->popover;
-#line 1113 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1030 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 9806 "SearchFilter.c"
+#line 8734 "SearchFilter.c"
 }
 
 
 static void _search_filter_toolbar_saved_search_popover_data_button_on_click_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1012 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_data_button_on_click ((SearchFilterToolbarSavedSearchPopoverDataButton*) self);
-#line 9813 "SearchFilter.c"
+#line 8741 "SearchFilter.c"
 }
 
 
@@ -9820,137 +8748,137 @@ static SearchFilterToolbarSavedSearchPopoverDataButton* search_filter_toolbar_sa
 	SavedSearch* _tmp2_ = NULL;
 	GtkButton* _tmp3_ = NULL;
 	GtkButton* _tmp4_ = NULL;
-#line 1001 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (IS_SAVED_SEARCH (search), NULL);
-#line 1001 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 1001 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = (SearchFilterToolbarSavedSearchPopoverDataButton*) g_object_new (object_type, NULL);
-#line 1002 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = name;
-#line 1002 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = (GtkButton*) gtk_button_new_from_icon_name (_tmp0_, GTK_ICON_SIZE_SMALL_TOOLBAR);
-#line 1002 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp1_);
-#line 1002 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->button);
-#line 1002 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 919 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->button = _tmp1_;
-#line 1003 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = search;
-#line 1003 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 920 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_data_button_set_search (self, _tmp2_);
-#line 1004 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 921 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp3_ = self->priv->button;
-#line 1004 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 921 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget));
-#line 1006 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 923 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_data_button_restyle (self);
-#line 1008 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 925 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->button;
-#line 1008 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 925 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_connect_object (_tmp4_, "clicked", (GCallback) _search_filter_toolbar_saved_search_popover_data_button_on_click_gtk_button_clicked, self, 0);
-#line 1001 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return self;
-#line 9856 "SearchFilter.c"
+#line 8784 "SearchFilter.c"
 }
 
 
 static SearchFilterToolbarSavedSearchPopoverDataButton* search_filter_toolbar_saved_search_popover_data_button_new (SavedSearch* search, const gchar* name) {
-#line 1001 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 918 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return search_filter_toolbar_saved_search_popover_data_button_construct (SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, search, name);
-#line 9863 "SearchFilter.c"
+#line 8791 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_data_button_restyle (SearchFilterToolbarSavedSearchPopoverDataButton* self) {
 	GtkButton* _tmp0_ = NULL;
 	GtkButton* _tmp1_ = NULL;
-#line 1015 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 932 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_IS_DATA_BUTTON (self));
-#line 1016 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 933 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->button;
-#line 1016 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 933 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), 24, 24);
-#line 1017 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 934 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = self->priv->button;
-#line 1017 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 934 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_relief (_tmp1_, GTK_RELIEF_NONE);
-#line 9880 "SearchFilter.c"
+#line 8808 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_data_button_on_click (SearchFilterToolbarSavedSearchPopoverDataButton* self) {
 	SavedSearch* _tmp0_ = NULL;
-#line 1020 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 937 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_IS_DATA_BUTTON (self));
-#line 1021 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 938 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->_search;
-#line 1021 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 938 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_emit_by_name (self, "clicked", _tmp0_);
-#line 9892 "SearchFilter.c"
+#line 8820 "SearchFilter.c"
 }
 
 
 static SavedSearch* search_filter_toolbar_saved_search_popover_data_button_get_search (SearchFilterToolbarSavedSearchPopoverDataButton* self) {
 	SavedSearch* result;
 	SavedSearch* _tmp0_ = NULL;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_IS_DATA_BUTTON (self), NULL);
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->_search;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	result = _tmp0_;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return result;
-#line 9907 "SearchFilter.c"
+#line 8835 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_data_button_set_search (SearchFilterToolbarSavedSearchPopoverDataButton* self, SavedSearch* value) {
 	SavedSearch* _tmp0_ = NULL;
 	SavedSearch* _tmp1_ = NULL;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_IS_DATA_BUTTON (self));
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = value;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->_search);
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_search = _tmp1_;
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_notify ((GObject *) self, "search");
-#line 9926 "SearchFilter.c"
+#line 8854 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_data_button_class_init (SearchFilterToolbarSavedSearchPopoverDataButtonClass * klass) {
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_data_button_parent_class = g_type_class_peek_parent (klass);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarSavedSearchPopoverDataButtonPrivate));
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->get_property = _vala_search_filter_toolbar_saved_search_popover_data_button_get_property;
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->set_property = _vala_search_filter_toolbar_saved_search_popover_data_button_set_property;
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_saved_search_popover_data_button_finalize;
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_DATA_BUTTON_SEARCH, g_param_spec_object ("search", "search", "search", TYPE_SAVED_SEARCH, G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB | G_PARAM_READABLE));
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("clicked", SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, TYPE_SAVED_SEARCH);
-#line 9945 "SearchFilter.c"
+#line 8873 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_data_button_instance_init (SearchFilterToolbarSavedSearchPopoverDataButton * self) {
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_DATA_BUTTON_GET_PRIVATE (self);
-#line 996 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 913 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->button = NULL;
-#line 9954 "SearchFilter.c"
+#line 8882 "SearchFilter.c"
 }
 
 
@@ -9958,21 +8886,21 @@ static void search_filter_toolbar_saved_search_popover_data_button_finalize (GOb
 	SearchFilterToolbarSavedSearchPopoverDataButton * self;
 	GtkButton* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, SearchFilterToolbarSavedSearchPopoverDataButton);
-#line 1012 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->button;
-#line 1012 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp1_, NULL, FALSE);
-#line 1012 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 929 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_data_button_on_click_gtk_button_clicked, self);
-#line 996 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 913 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->button);
-#line 997 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 914 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->_search);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_saved_search_popover_data_button_parent_class)->finalize (obj);
-#line 9976 "SearchFilter.c"
+#line 8904 "SearchFilter.c"
 }
 
 
@@ -9991,21 +8919,21 @@ static GType search_filter_toolbar_saved_search_popover_data_button_get_type (vo
 static void _vala_search_filter_toolbar_saved_search_popover_data_button_get_property (GObject * object, guint property_id, GValue * value, GParamSpec * pspec) {
 	SearchFilterToolbarSavedSearchPopoverDataButton * self;
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, SearchFilterToolbarSavedSearchPopoverDataButton);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	switch (property_id) {
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_DATA_BUTTON_SEARCH:
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_value_set_object (value, search_filter_toolbar_saved_search_popover_data_button_get_search (self));
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		break;
-#line 10003 "SearchFilter.c"
+#line 8931 "SearchFilter.c"
 		default:
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		break;
-#line 10009 "SearchFilter.c"
+#line 8937 "SearchFilter.c"
 	}
 }
 
@@ -10013,250 +8941,250 @@ static void _vala_search_filter_toolbar_saved_search_popover_data_button_get_pro
 static void _vala_search_filter_toolbar_saved_search_popover_data_button_set_property (GObject * object, guint property_id, const GValue * value, GParamSpec * pspec) {
 	SearchFilterToolbarSavedSearchPopoverDataButton * self;
 	self = G_TYPE_CHECK_INSTANCE_CAST (object, SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, SearchFilterToolbarSavedSearchPopoverDataButton);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	switch (property_id) {
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		case SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_DATA_BUTTON_SEARCH:
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_saved_search_popover_data_button_set_search (self, g_value_get_object (value));
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		break;
-#line 10025 "SearchFilter.c"
+#line 8953 "SearchFilter.c"
 		default:
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-#line 995 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 912 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		break;
-#line 10031 "SearchFilter.c"
+#line 8959 "SearchFilter.c"
 	}
 }
 
 
 static void search_filter_toolbar_value_saved_search_popover_init (GValue* value) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	value->data[0].v_pointer = NULL;
-#line 10039 "SearchFilter.c"
+#line 8967 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_value_saved_search_popover_free_value (GValue* value) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (value->data[0].v_pointer) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_saved_search_popover_unref (value->data[0].v_pointer);
-#line 10048 "SearchFilter.c"
+#line 8976 "SearchFilter.c"
 	}
 }
 
 
 static void search_filter_toolbar_value_saved_search_popover_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (src_value->data[0].v_pointer) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = search_filter_toolbar_saved_search_popover_ref (src_value->data[0].v_pointer);
-#line 10058 "SearchFilter.c"
+#line 8986 "SearchFilter.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 10062 "SearchFilter.c"
+#line 8990 "SearchFilter.c"
 	}
 }
 
 
 static gpointer search_filter_toolbar_value_saved_search_popover_peek_pointer (const GValue* value) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 10070 "SearchFilter.c"
+#line 8998 "SearchFilter.c"
 }
 
 
 static gchar* search_filter_toolbar_value_saved_search_popover_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (collect_values[0].v_pointer) {
-#line 10077 "SearchFilter.c"
+#line 9005 "SearchFilter.c"
 		SearchFilterToolbarSavedSearchPopover* object;
 		object = collect_values[0].v_pointer;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10084 "SearchFilter.c"
+#line 9012 "SearchFilter.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10088 "SearchFilter.c"
+#line 9016 "SearchFilter.c"
 		}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = search_filter_toolbar_saved_search_popover_ref (object);
-#line 10092 "SearchFilter.c"
+#line 9020 "SearchFilter.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 10096 "SearchFilter.c"
+#line 9024 "SearchFilter.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 10100 "SearchFilter.c"
+#line 9028 "SearchFilter.c"
 }
 
 
 static gchar* search_filter_toolbar_value_saved_search_popover_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	SearchFilterToolbarSavedSearchPopover** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (!object_p) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 10111 "SearchFilter.c"
+#line 9039 "SearchFilter.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (!value->data[0].v_pointer) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = NULL;
-#line 10117 "SearchFilter.c"
+#line 9045 "SearchFilter.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = value->data[0].v_pointer;
-#line 10121 "SearchFilter.c"
+#line 9049 "SearchFilter.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		*object_p = search_filter_toolbar_saved_search_popover_ref (value->data[0].v_pointer);
-#line 10125 "SearchFilter.c"
+#line 9053 "SearchFilter.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return NULL;
-#line 10129 "SearchFilter.c"
+#line 9057 "SearchFilter.c"
 }
 
 
 GParamSpec* search_filter_toolbar_param_spec_saved_search_popover (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	SearchFilterToolbarParamSpecSavedSearchPopover* spec;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER), NULL);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return G_PARAM_SPEC (spec);
-#line 10143 "SearchFilter.c"
+#line 9071 "SearchFilter.c"
 }
 
 
 gpointer search_filter_toolbar_value_get_saved_search_popover (const GValue* value) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER), NULL);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return value->data[0].v_pointer;
-#line 10152 "SearchFilter.c"
+#line 9080 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_value_set_saved_search_popover (GValue* value, gpointer v_object) {
 	SearchFilterToolbarSavedSearchPopover* old;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	old = value->data[0].v_pointer;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (v_object) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = v_object;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_saved_search_popover_ref (value->data[0].v_pointer);
-#line 10172 "SearchFilter.c"
+#line 9100 "SearchFilter.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 10176 "SearchFilter.c"
+#line 9104 "SearchFilter.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_saved_search_popover_unref (old);
-#line 10182 "SearchFilter.c"
+#line 9110 "SearchFilter.c"
 	}
 }
 
 
 void search_filter_toolbar_value_take_saved_search_popover (GValue* value, gpointer v_object) {
 	SearchFilterToolbarSavedSearchPopover* old;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	old = value->data[0].v_pointer;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (v_object) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = v_object;
-#line 10201 "SearchFilter.c"
+#line 9129 "SearchFilter.c"
 	} else {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		value->data[0].v_pointer = NULL;
-#line 10205 "SearchFilter.c"
+#line 9133 "SearchFilter.c"
 	}
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (old) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		search_filter_toolbar_saved_search_popover_unref (old);
-#line 10211 "SearchFilter.c"
+#line 9139 "SearchFilter.c"
 	}
 }
 
 
 static void search_filter_toolbar_saved_search_popover_class_init (SearchFilterToolbarSavedSearchPopoverClass * klass) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_saved_search_popover_parent_class = g_type_class_peek_parent (klass);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	((SearchFilterToolbarSavedSearchPopoverClass *) klass)->finalize = search_filter_toolbar_saved_search_popover_finalize;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarSavedSearchPopoverPrivate));
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("search_activated", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, TYPE_SAVED_SEARCH);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("edit_clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, TYPE_SAVED_SEARCH);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("delete_clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, TYPE_SAVED_SEARCH);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("add_clicked", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_new ("closed", SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 10233 "SearchFilter.c"
+#line 9161 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_saved_search_popover_instance_init (SearchFilterToolbarSavedSearchPopover * self) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_GET_PRIVATE (self);
-#line 982 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->popover = NULL;
-#line 983 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 900 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->list_box = NULL;
-#line 984 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons = NULL;
-#line 984 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons_length1 = 0;
-#line 984 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_edit_buttons_size_ = self->priv->edit_buttons_length1;
-#line 985 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 902 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons = NULL;
-#line 985 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 902 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons_length1 = 0;
-#line 985 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 902 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->_delete_buttons_size_ = self->priv->delete_buttons_length1;
-#line 986 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 903 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->add = NULL;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->ref_count = 1;
-#line 10260 "SearchFilter.c"
+#line 9188 "SearchFilter.c"
 }
 
 
@@ -10272,117 +9200,117 @@ static void search_filter_toolbar_saved_search_popover_finalize (SearchFilterToo
 	guint _tmp11_ = 0U;
 	GtkPopover* _tmp12_ = NULL;
 	guint _tmp13_ = 0U;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, SEARCH_FILTER_TOOLBAR_TYPE_SAVED_SEARCH_POPOVER, SearchFilterToolbarSavedSearchPopover);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_destroy (self);
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->edit_buttons;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0__length1 = self->priv->edit_buttons_length1;
-#line 10284 "SearchFilter.c"
+#line 9212 "SearchFilter.c"
 	{
 		SearchFilterToolbarSavedSearchPopoverDataButton** button_collection = NULL;
 		gint button_collection_length1 = 0;
 		gint _button_collection_size_ = 0;
 		gint button_it = 0;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection = _tmp0_;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection_length1 = _tmp0__length1;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		for (button_it = 0; button_it < _tmp0__length1; button_it = button_it + 1) {
-#line 10296 "SearchFilter.c"
+#line 9224 "SearchFilter.c"
 			SearchFilterToolbarSavedSearchPopoverDataButton* _tmp1_ = NULL;
 			SearchFilterToolbarSavedSearchPopoverDataButton* button = NULL;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp1_ = _g_object_ref0 (button_collection[button_it]);
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			button = _tmp1_;
-#line 10303 "SearchFilter.c"
+#line 9231 "SearchFilter.c"
 			{
 				SearchFilterToolbarSavedSearchPopoverDataButton* _tmp2_ = NULL;
 				guint _tmp3_ = 0U;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp2_ = button;
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("clicked", SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, &_tmp3_, NULL, FALSE);
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_edit_click_search_filter_toolbar_saved_search_popover_data_button_clicked, self);
-#line 1062 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 979 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (button);
-#line 10315 "SearchFilter.c"
+#line 9243 "SearchFilter.c"
 			}
 		}
 	}
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->delete_buttons;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4__length1 = self->priv->delete_buttons_length1;
-#line 10323 "SearchFilter.c"
+#line 9251 "SearchFilter.c"
 	{
 		SearchFilterToolbarSavedSearchPopoverDataButton** button_collection = NULL;
 		gint button_collection_length1 = 0;
 		gint _button_collection_size_ = 0;
 		gint button_it = 0;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection = _tmp4_;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		button_collection_length1 = _tmp4__length1;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		for (button_it = 0; button_it < _tmp4__length1; button_it = button_it + 1) {
-#line 10335 "SearchFilter.c"
+#line 9263 "SearchFilter.c"
 			SearchFilterToolbarSavedSearchPopoverDataButton* _tmp5_ = NULL;
 			SearchFilterToolbarSavedSearchPopoverDataButton* button = NULL;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			_tmp5_ = _g_object_ref0 (button_collection[button_it]);
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 			button = _tmp5_;
-#line 10342 "SearchFilter.c"
+#line 9270 "SearchFilter.c"
 			{
 				SearchFilterToolbarSavedSearchPopoverDataButton* _tmp6_ = NULL;
 				guint _tmp7_ = 0U;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_tmp6_ = button;
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_parse_name ("clicked", SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_TYPE_DATA_BUTTON, &_tmp7_, NULL, FALSE);
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_delete_click_search_filter_toolbar_saved_search_popover_data_button_clicked, self);
-#line 1063 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 980 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 				_g_object_unref0 (button);
-#line 10354 "SearchFilter.c"
+#line 9282 "SearchFilter.c"
 			}
 		}
 	}
-#line 1064 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = self->priv->add;
-#line 1064 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp9_, NULL, FALSE);
-#line 1064 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_add_click_gtk_button_clicked, self);
-#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp10_ = self->priv->list_box;
-#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_parse_name ("row-activated", gtk_list_box_get_type (), &_tmp11_, NULL, FALSE);
-#line 1065 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_handlers_disconnect_matched (_tmp10_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_activate_row_gtk_list_box_row_activated, self);
-#line 1066 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp12_ = self->priv->popover;
-#line 1066 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_parse_name ("closed", gtk_popover_get_type (), &_tmp13_, NULL, FALSE);
-#line 1066 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_signal_handlers_disconnect_matched (_tmp12_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp13_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_popover_closed_gtk_popover_closed, self);
 #line 982 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->popover);
+	_tmp10_ = self->priv->list_box;
+#line 982 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_parse_name ("row-activated", gtk_list_box_get_type (), &_tmp11_, NULL, FALSE);
+#line 982 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_handlers_disconnect_matched (_tmp10_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_activate_row_gtk_list_box_row_activated, self);
 #line 983 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp12_ = self->priv->popover;
+#line 983 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_parse_name ("closed", gtk_popover_get_type (), &_tmp13_, NULL, FALSE);
+#line 983 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	g_signal_handlers_disconnect_matched (_tmp12_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp13_, 0, NULL, (GCallback) _search_filter_toolbar_saved_search_popover_on_popover_closed_gtk_popover_closed, self);
+#line 899 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->popover);
+#line 900 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->list_box);
-#line 984 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 901 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->edit_buttons = (_vala_array_free (self->priv->edit_buttons, self->priv->edit_buttons_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 985 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 902 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->delete_buttons = (_vala_array_free (self->priv->delete_buttons, self->priv->delete_buttons_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 986 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 903 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->add);
-#line 10386 "SearchFilter.c"
+#line 9314 "SearchFilter.c"
 }
 
 
@@ -10403,82 +9331,75 @@ GType search_filter_toolbar_saved_search_popover_get_type (void) {
 gpointer search_filter_toolbar_saved_search_popover_ref (gpointer instance) {
 	SearchFilterToolbarSavedSearchPopover* self;
 	self = instance;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	return instance;
-#line 10411 "SearchFilter.c"
+#line 9339 "SearchFilter.c"
 }
 
 
 void search_filter_toolbar_saved_search_popover_unref (gpointer instance) {
 	SearchFilterToolbarSavedSearchPopover* self;
 	self = instance;
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		SEARCH_FILTER_TOOLBAR_SAVED_SEARCH_POPOVER_GET_CLASS (self)->finalize (self);
-#line 981 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 898 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 10424 "SearchFilter.c"
+#line 9352 "SearchFilter.c"
 	}
 }
 
 
 static void search_filter_toolbar_class_init (SearchFilterToolbarClass * klass) {
-#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	search_filter_toolbar_parent_class = g_type_class_peek_parent (klass);
-#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_type_class_add_private (klass, sizeof (SearchFilterToolbarPrivate));
-#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (klass)->finalize = search_filter_toolbar_finalize;
-#line 10436 "SearchFilter.c"
+#line 9364 "SearchFilter.c"
 }
 
 
 static void search_filter_toolbar_instance_init (SearchFilterToolbar * self) {
 	GtkMenu* _tmp0_ = NULL;
 	GtkMenuItem* _tmp1_ = NULL;
-	GtkUIManager* _tmp2_ = NULL;
-	SearchFilterToolbarRatingFilterButton* _tmp3_ = NULL;
-	SearchFilterToolbarSavedSearchFilterButton* _tmp4_ = NULL;
-#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	GtkBuilder* _tmp2_ = NULL;
+	SearchFilterToolbarSavedSearchFilterButton* _tmp3_ = NULL;
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv = SEARCH_FILTER_TOOLBAR_GET_PRIVATE (self);
-#line 737 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 663 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = (GtkMenu*) gtk_menu_new ();
-#line 737 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 663 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp0_);
-#line 737 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 663 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->close_menu = _tmp0_;
-#line 738 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp1_ = (GtkMenuItem*) gtk_menu_item_new ();
-#line 738 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp1_);
-#line 738 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->close_item = _tmp1_;
-#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = gtk_ui_manager_new ();
-#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->ui = _tmp2_;
-#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1034 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp2_ = gtk_builder_new ();
+#line 1034 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->builder = _tmp2_;
+#line 1037 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->saved_search = NULL;
-#line 1122 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp3_ = search_filter_toolbar_rating_filter_button_new ();
-#line 1122 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_tmp3_ = search_filter_toolbar_saved_search_filter_button_new ();
+#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp3_);
-#line 1122 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->rating_button = _tmp3_;
-#line 1123 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp4_ = search_filter_toolbar_saved_search_filter_button_new ();
-#line 1123 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	g_object_ref_sink (_tmp4_);
-#line 1123 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	self->priv->saved_search_button = _tmp4_;
-#line 1124 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	self->priv->saved_search_button = _tmp3_;
+#line 1041 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->elide_showing_again = FALSE;
-#line 1125 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self->priv->search_filter = NULL;
-#line 10482 "SearchFilter.c"
+#line 9403 "SearchFilter.c"
 }
 
 
@@ -10502,101 +9423,101 @@ static void search_filter_toolbar_finalize (GObject* obj) {
 	guint _tmp15_ = 0U;
 	GtkToolbar* _tmp16_ = NULL;
 	guint _tmp17_ = 0U;
-#line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_SEARCH_FILTER_TOOLBAR, SearchFilterToolbar);
-#line 1244 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp0_ = self->priv->actions;
-#line 1244 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("media-context-changed", TYPE_SEARCH_FILTER_ACTIONS, &_tmp1_, NULL, FALSE);
-#line 1244 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1159 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _search_filter_toolbar_on_media_context_changed_search_filter_actions_media_context_changed, self);
-#line 1246 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp2_ = self->priv->actions;
-#line 1246 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("flagged-toggled", TYPE_SEARCH_FILTER_ACTIONS, &_tmp3_, NULL, FALSE);
-#line 1246 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1161 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _search_filter_toolbar_on_flagged_toggled_search_filter_actions_flagged_toggled, self);
-#line 1247 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp4_ = self->priv->actions;
-#line 1247 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("photos-toggled", TYPE_SEARCH_FILTER_ACTIONS, &_tmp5_, NULL, FALSE);
-#line 1247 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1162 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _search_filter_toolbar_on_photos_toggled_search_filter_actions_photos_toggled, self);
-#line 1248 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1163 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp6_ = self->priv->actions;
-#line 1248 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1163 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("videos-toggled", TYPE_SEARCH_FILTER_ACTIONS, &_tmp7_, NULL, FALSE);
-#line 1248 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1163 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _search_filter_toolbar_on_videos_toggled_search_filter_actions_videos_toggled, self);
-#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1164 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp8_ = self->priv->actions;
-#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1164 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("raw-toggled", TYPE_SEARCH_FILTER_ACTIONS, &_tmp9_, NULL, FALSE);
-#line 1249 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1164 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp8_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp9_, 0, NULL, (GCallback) _search_filter_toolbar_on_raw_toggled_search_filter_actions_raw_toggled, self);
-#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp10_ = self->priv->actions;
-#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("rating-changed", TYPE_SEARCH_FILTER_ACTIONS, &_tmp11_, NULL, FALSE);
-#line 1250 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1165 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp10_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _search_filter_toolbar_on_rating_changed_search_filter_actions_rating_changed, self);
-#line 1251 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp12_ = self->priv->actions;
-#line 1251 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("text-changed", TYPE_SEARCH_FILTER_ACTIONS, &_tmp13_, NULL, FALSE);
-#line 1251 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1166 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp12_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp13_, 0, NULL, (GCallback) _search_filter_toolbar_on_search_text_changed_search_filter_actions_text_changed, self);
-#line 1252 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1167 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp14_ = self->priv->actions;
-#line 1252 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1167 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("criteria-changed", TYPE_SEARCH_FILTER_ACTIONS, &_tmp15_, NULL, FALSE);
-#line 1252 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1167 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp14_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp15_, 0, NULL, (GCallback) _search_filter_toolbar_on_criteria_changed_search_filter_actions_criteria_changed, self);
-#line 1254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_tmp16_ = self->priv->toolbar;
-#line 1254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_parse_name ("popup-context-menu", gtk_toolbar_get_type (), &_tmp17_, NULL, FALSE);
-#line 1254 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 1169 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_signal_handlers_disconnect_matched (_tmp16_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp17_, 0, NULL, (GCallback) _search_filter_toolbar_on_context_menu_requested_gtk_toolbar_popup_context_menu, self);
-#line 665 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 604 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->toolbar);
-#line 737 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+#line 663 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	_g_object_unref0 (self->priv->close_menu);
-#line 738 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->close_item);
-#line 1117 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->ui);
-#line 1119 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_search_filter_actions_unref0 (self->priv->actions);
-#line 1120 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->saved_search);
-#line 1121 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->search_box);
-#line 1122 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->rating_button);
-#line 1123 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->saved_search_button);
-#line 1125 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_view_filter_unref0 (self->priv->search_filter);
-#line 1126 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->label_type);
-#line 1127 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->toolbtn_photos);
-#line 1128 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->toolbtn_videos);
-#line 1129 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->toolbtn_raw);
-#line 1130 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->toolbtn_flag);
-#line 1131 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->sepr_mediatype_flagged);
-#line 1132 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->sepr_flagged_rating);
-#line 1133 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_g_object_unref0 (self->priv->sepr_rating_saved);
 #line 664 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->close_item);
+#line 1034 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->builder);
+#line 1036 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_search_filter_actions_unref0 (self->priv->actions);
+#line 1037 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->saved_search);
+#line 1038 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->search_box);
+#line 1039 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->rating_button);
+#line 1040 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->saved_search_button);
+#line 1042 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_view_filter_unref0 (self->priv->search_filter);
+#line 1043 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->label_type);
+#line 1044 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->toolbtn_photos);
+#line 1045 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->toolbtn_videos);
+#line 1046 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->toolbtn_raw);
+#line 1047 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->toolbtn_flag);
+#line 1048 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->sepr_mediatype_flagged);
+#line 1049 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->sepr_flagged_rating);
+#line 1050 "/home/jens/Source/shotwell/src/SearchFilter.vala"
+	_g_object_unref0 (self->priv->sepr_rating_saved);
+#line 603 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	G_OBJECT_CLASS (search_filter_toolbar_parent_class)->finalize (obj);
-#line 10600 "SearchFilter.c"
+#line 9521 "SearchFilter.c"
 }
 
 

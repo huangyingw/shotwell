@@ -3376,7 +3376,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 3379 "GSettingsEngine.c"
-				goto __catch202_g_regex_error;
+				goto __catch201_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3401,7 +3401,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 3404 "GSettingsEngine.c"
-				goto __catch202_g_regex_error;
+				goto __catch201_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -3427,8 +3427,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 3429 "GSettingsEngine.c"
 	}
-	goto __finally202;
-	__catch202_g_regex_error:
+	goto __finally201;
+	__catch201_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -3441,7 +3441,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 3443 "GSettingsEngine.c"
 	}
-	__finally202:
+	__finally201:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4600,7 +4600,7 @@ static gboolean gsettings_configuration_engine_real_get_plugin_bool (Configurati
 #line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 4603 "GSettingsEngine.c"
-				goto __catch203_configuration_error;
+				goto __catch202_configuration_error;
 			}
 #line 373 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -4620,8 +4620,8 @@ static gboolean gsettings_configuration_engine_real_get_plugin_bool (Configurati
 		return result;
 #line 4622 "GSettingsEngine.c"
 	}
-	goto __finally203;
-	__catch203_configuration_error:
+	goto __finally202;
+	__catch202_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -4649,7 +4649,7 @@ static gboolean gsettings_configuration_engine_real_get_plugin_bool (Configurati
 		return result;
 #line 4651 "GSettingsEngine.c"
 	}
-	__finally203:
+	__finally202:
 #line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
 #line 372 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -4708,7 +4708,7 @@ static void gsettings_configuration_engine_real_set_plugin_bool (ConfigurationEn
 #line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 4711 "GSettingsEngine.c"
-				goto __catch204_configuration_error;
+				goto __catch203_configuration_error;
 			}
 #line 384 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -4721,8 +4721,8 @@ static void gsettings_configuration_engine_real_set_plugin_bool (ConfigurationEn
 #line 4722 "GSettingsEngine.c"
 		}
 	}
-	goto __finally204;
-	__catch204_configuration_error:
+	goto __finally203;
+	__catch203_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -4741,7 +4741,7 @@ static void gsettings_configuration_engine_real_set_plugin_bool (ConfigurationEn
 		_g_error_free0 (err);
 #line 4743 "GSettingsEngine.c"
 	}
-	__finally204:
+	__finally203:
 #line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 383 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -4811,7 +4811,7 @@ static gdouble gsettings_configuration_engine_real_get_plugin_double (Configurat
 #line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 4814 "GSettingsEngine.c"
-				goto __catch205_configuration_error;
+				goto __catch204_configuration_error;
 			}
 #line 394 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -4831,8 +4831,8 @@ static gdouble gsettings_configuration_engine_real_get_plugin_double (Configurat
 		return result;
 #line 4833 "GSettingsEngine.c"
 	}
-	goto __finally205;
-	__catch205_configuration_error:
+	goto __finally204;
+	__catch204_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -4860,7 +4860,7 @@ static gdouble gsettings_configuration_engine_real_get_plugin_double (Configurat
 		return result;
 #line 4862 "GSettingsEngine.c"
 	}
-	__finally205:
+	__finally204:
 #line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
 #line 393 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -4919,7 +4919,7 @@ static void gsettings_configuration_engine_real_set_plugin_double (Configuration
 #line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 4922 "GSettingsEngine.c"
-				goto __catch206_configuration_error;
+				goto __catch205_configuration_error;
 			}
 #line 405 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -4932,8 +4932,8 @@ static void gsettings_configuration_engine_real_set_plugin_double (Configuration
 #line 4933 "GSettingsEngine.c"
 		}
 	}
-	goto __finally206;
-	__catch206_configuration_error:
+	goto __finally205;
+	__catch205_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -4952,7 +4952,7 @@ static void gsettings_configuration_engine_real_set_plugin_double (Configuration
 		_g_error_free0 (err);
 #line 4954 "GSettingsEngine.c"
 	}
-	__finally206:
+	__finally205:
 #line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 404 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5022,7 +5022,7 @@ static gint gsettings_configuration_engine_real_get_plugin_int (ConfigurationEng
 #line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5025 "GSettingsEngine.c"
-				goto __catch207_configuration_error;
+				goto __catch206_configuration_error;
 			}
 #line 415 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -5042,8 +5042,8 @@ static gint gsettings_configuration_engine_real_get_plugin_int (ConfigurationEng
 		return result;
 #line 5044 "GSettingsEngine.c"
 	}
-	goto __finally207;
-	__catch207_configuration_error:
+	goto __finally206;
+	__catch206_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -5071,7 +5071,7 @@ static gint gsettings_configuration_engine_real_get_plugin_int (ConfigurationEng
 		return result;
 #line 5073 "GSettingsEngine.c"
 	}
-	__finally207:
+	__finally206:
 #line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
 #line 414 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5130,7 +5130,7 @@ static void gsettings_configuration_engine_real_set_plugin_int (ConfigurationEng
 #line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5133 "GSettingsEngine.c"
-				goto __catch208_configuration_error;
+				goto __catch207_configuration_error;
 			}
 #line 426 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -5143,8 +5143,8 @@ static void gsettings_configuration_engine_real_set_plugin_int (ConfigurationEng
 #line 5144 "GSettingsEngine.c"
 		}
 	}
-	goto __finally208;
-	__catch208_configuration_error:
+	goto __finally207;
+	__catch207_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -5163,7 +5163,7 @@ static void gsettings_configuration_engine_real_set_plugin_int (ConfigurationEng
 		_g_error_free0 (err);
 #line 5165 "GSettingsEngine.c"
 	}
-	__finally208:
+	__finally207:
 #line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 425 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5234,7 +5234,7 @@ static gchar* gsettings_configuration_engine_real_get_plugin_string (Configurati
 #line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5237 "GSettingsEngine.c"
-				goto __catch209_configuration_error;
+				goto __catch208_configuration_error;
 			}
 #line 436 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -5260,8 +5260,8 @@ static gchar* gsettings_configuration_engine_real_get_plugin_string (Configurati
 		return result;
 #line 5262 "GSettingsEngine.c"
 	}
-	goto __finally209;
-	__catch209_configuration_error:
+	goto __finally208;
+	__catch208_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -5292,7 +5292,7 @@ static gchar* gsettings_configuration_engine_real_get_plugin_string (Configurati
 		return result;
 #line 5294 "GSettingsEngine.c"
 	}
-	__finally209:
+	__finally208:
 #line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (schema_name);
 #line 435 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5351,7 +5351,7 @@ static void gsettings_configuration_engine_real_set_plugin_string (Configuration
 #line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5354 "GSettingsEngine.c"
-				goto __catch210_configuration_error;
+				goto __catch209_configuration_error;
 			}
 #line 447 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -5364,8 +5364,8 @@ static void gsettings_configuration_engine_real_set_plugin_string (Configuration
 #line 5365 "GSettingsEngine.c"
 		}
 	}
-	goto __finally210;
-	__catch210_configuration_error:
+	goto __finally209;
+	__catch209_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -5384,7 +5384,7 @@ static void gsettings_configuration_engine_real_set_plugin_string (Configuration
 		_g_error_free0 (err);
 #line 5386 "GSettingsEngine.c"
 	}
-	__finally210:
+	__finally209:
 #line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 446 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5446,7 +5446,7 @@ static void gsettings_configuration_engine_real_unset_plugin_key (ConfigurationE
 #line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5449 "GSettingsEngine.c"
-				goto __catch211_configuration_error;
+				goto __catch210_configuration_error;
 			}
 #line 457 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (schema_name);
@@ -5459,8 +5459,8 @@ static void gsettings_configuration_engine_real_unset_plugin_key (ConfigurationE
 #line 5460 "GSettingsEngine.c"
 		}
 	}
-	goto __finally211;
-	__catch211_configuration_error:
+	goto __finally210;
+	__catch210_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -5479,7 +5479,7 @@ static void gsettings_configuration_engine_real_unset_plugin_key (ConfigurationE
 		_g_error_free0 (err);
 #line 5481 "GSettingsEngine.c"
 	}
-	__finally211:
+	__finally210:
 #line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 456 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5529,7 +5529,7 @@ static FuzzyPropertyState gsettings_configuration_engine_real_is_plugin_enabled 
 #line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5532 "GSettingsEngine.c"
-				goto __catch212_configuration_error;
+				goto __catch211_configuration_error;
 			}
 #line 467 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (enable_disable_name);
@@ -5559,8 +5559,8 @@ static FuzzyPropertyState gsettings_configuration_engine_real_is_plugin_enabled 
 		return result;
 #line 5561 "GSettingsEngine.c"
 	}
-	goto __finally212;
-	__catch212_configuration_error:
+	goto __finally211;
+	__catch211_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -5585,7 +5585,7 @@ static FuzzyPropertyState gsettings_configuration_engine_real_is_plugin_enabled 
 		return result;
 #line 5587 "GSettingsEngine.c"
 	}
-	__finally212:
+	__finally211:
 #line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	_g_free0 (enable_disable_name);
 #line 466 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5626,7 +5626,7 @@ static void gsettings_configuration_engine_real_set_plugin_enabled (Configuratio
 #line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
 #line 5629 "GSettingsEngine.c"
-				goto __catch213_configuration_error;
+				goto __catch212_configuration_error;
 			}
 #line 479 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 			_g_free0 (enable_disable_name);
@@ -5639,8 +5639,8 @@ static void gsettings_configuration_engine_real_set_plugin_enabled (Configuratio
 #line 5640 "GSettingsEngine.c"
 		}
 	}
-	goto __finally213;
-	__catch213_configuration_error:
+	goto __finally212;
+	__catch212_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -5659,7 +5659,7 @@ static void gsettings_configuration_engine_real_set_plugin_enabled (Configuratio
 		_g_error_free0 (err);
 #line 5661 "GSettingsEngine.c"
 	}
-	__finally213:
+	__finally212:
 #line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 478 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
@@ -5712,11 +5712,11 @@ void gsettings_configuration_engine_run_gsettings_migrator (void) {
 #line 493 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5715 "GSettingsEngine.c"
-			goto __catch214_g_error;
+			goto __catch213_g_error;
 		}
 	}
-	goto __finally214;
-	__catch214_g_error:
+	goto __finally213;
+	__catch213_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -5735,7 +5735,7 @@ void gsettings_configuration_engine_run_gsettings_migrator (void) {
 		_g_error_free0 (err);
 #line 5737 "GSettingsEngine.c"
 	}
-	__finally214:
+	__finally213:
 #line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 492 "/home/jens/Source/shotwell/src/config/GSettingsEngine.vala"

@@ -3785,7 +3785,7 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 #line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 3784 "DirectoryMonitor.c"
-				goto __catch482_g_error;
+				goto __catch479_g_error;
 			}
 #line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp15_ = NULL;
@@ -3801,8 +3801,8 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 			_g_object_unref0 (_data_->_tmp11_);
 #line 3799 "DirectoryMonitor.c"
 		}
-		goto __finally482;
-		__catch482_g_error:
+		goto __finally479;
+		__catch479_g_error:
 		{
 #line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->err = _data_->_inner_error_;
@@ -3858,7 +3858,7 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 			return FALSE;
 #line 3856 "DirectoryMonitor.c"
 		}
-		__finally482:
+		__finally479:
 #line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -4089,7 +4089,7 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 #line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 4088 "DirectoryMonitor.c"
-			goto __catch483_g_error;
+			goto __catch480_g_error;
 		}
 		{
 #line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -4129,7 +4129,7 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 #line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_data_->enumerator);
 #line 4128 "DirectoryMonitor.c"
-					goto __catch483_g_error;
+					goto __catch480_g_error;
 				}
 #line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp55_ = NULL;
@@ -4371,8 +4371,8 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 		_g_object_unref0 (_data_->enumerator);
 #line 4369 "DirectoryMonitor.c"
 	}
-	goto __finally483;
-	__catch483_g_error:
+	goto __finally480;
+	__catch480_g_error:
 	{
 #line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->err2 = _data_->_inner_error_;
@@ -4432,7 +4432,7 @@ static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsync
 		return FALSE;
 #line 4430 "DirectoryMonitor.c"
 	}
-	__finally483:
+	__finally480:
 #line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -5058,7 +5058,7 @@ static gboolean directory_monitor_add_monitor (DirectoryMonitor* self, GFile* di
 #line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 5057 "DirectoryMonitor.c"
-			goto __catch484_g_error;
+			goto __catch481_g_error;
 		}
 #line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = _tmp9_;
@@ -5072,8 +5072,8 @@ static gboolean directory_monitor_add_monitor (DirectoryMonitor* self, GFile* di
 		_g_object_unref0 (_tmp9_);
 #line 5070 "DirectoryMonitor.c"
 	}
-	goto __finally484;
-	__catch484_g_error:
+	goto __finally481;
+	__catch481_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp13_ = NULL;
@@ -5111,7 +5111,7 @@ static gboolean directory_monitor_add_monitor (DirectoryMonitor* self, GFile* di
 		return result;
 #line 5109 "DirectoryMonitor.c"
 	}
-	__finally484:
+	__finally481:
 #line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -7557,7 +7557,7 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7554 "DirectoryMonitor.c"
-			goto __catch485_g_error;
+			goto __catch482_g_error;
 		}
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = _tmp2_;
@@ -7571,8 +7571,8 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 		_g_object_unref0 (_tmp2_);
 #line 7567 "DirectoryMonitor.c"
 	}
-	goto __finally485;
-	__catch485_g_error:
+	goto __finally482;
+	__catch482_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -7593,7 +7593,7 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 		_g_error_free0 (err);
 #line 7589 "DirectoryMonitor.c"
 	}
-	__finally485:
+	__finally482:
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -8696,7 +8696,7 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 #line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8693 "DirectoryMonitor.c"
-			goto __catch486_g_error;
+			goto __catch483_g_error;
 		}
 #line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = _tmp3_;
@@ -8710,8 +8710,8 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 		_g_object_unref0 (_tmp3_);
 #line 8706 "DirectoryMonitor.c"
 	}
-	goto __finally486;
-	__catch486_g_error:
+	goto __finally483;
+	__catch483_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp8_ = NULL;
@@ -8747,7 +8747,7 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 		return result;
 #line 8743 "DirectoryMonitor.c"
 	}
-	__finally486:
+	__finally483:
 #line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"

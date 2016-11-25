@@ -308,7 +308,7 @@ public class TumblrPublisher : Spit.Publishing.Publisher, GLib.Object {
             
             if (split_pair.length != 2)
                 host.post_error(new Spit.Publishing.PublishingError.MALFORMED_RESPONSE(
-                    _("“%s” isn’t a valid response to an OAuth authentication request")));
+                    _("“%s” isn’t a valid response to an OAuth authentication request"), response));
 
             if (split_pair[0] == "oauth_token")
                 oauth_token = split_pair[1];
@@ -318,7 +318,7 @@ public class TumblrPublisher : Spit.Publishing.Publisher, GLib.Object {
         
         if (oauth_token == null || oauth_token_secret == null)
             host.post_error(new Spit.Publishing.PublishingError.MALFORMED_RESPONSE(
-                _("“%s” isn’t a valid response to an OAuth authentication request")));
+                _("“%s” isn’t a valid response to an OAuth authentication request"), response));
         
         session.set_access_phase_credentials(oauth_token, oauth_token_secret);
     }
@@ -602,7 +602,7 @@ internal class AuthenticationPane : Spit.Publishing.DialogPane, Object {
             builder = new Gtk.Builder();
             builder.add_from_resource (Resources.RESOURCE_PATH + "/tumblr_authentication_pane.ui");
             builder.connect_signals(null);
-            Gtk.Alignment align = builder.get_object("alignment") as Gtk.Alignment;
+            var content = builder.get_object ("content") as Gtk.Widget;
             
             Gtk.Label message_label = builder.get_object("message_label") as Gtk.Label;
             switch (mode) {
@@ -628,7 +628,8 @@ internal class AuthenticationPane : Spit.Publishing.DialogPane, Object {
             password_entry.changed.connect(on_password_changed);
             login_button.clicked.connect(on_login_button_clicked);
 
-            align.reparent(pane_widget);
+            content.parent.remove (content);
+            pane_widget.add (content);
             publisher.get_host().set_dialog_default_widget(login_button);
         } catch (Error e) {
             warning(_("Could not load UI: %s"), e.message);

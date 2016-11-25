@@ -1311,7 +1311,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1314 "HierarchicalTagUtilities.c"
-				goto __catch54_g_regex_error;
+				goto __catch53_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -1336,7 +1336,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1339 "HierarchicalTagUtilities.c"
-				goto __catch54_g_regex_error;
+				goto __catch53_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -1362,8 +1362,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 1364 "HierarchicalTagUtilities.c"
 	}
-	goto __finally54;
-	__catch54_g_regex_error:
+	goto __finally53;
+	__catch53_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1376,7 +1376,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 1378 "HierarchicalTagUtilities.c"
 	}
-	__finally54:
+	__finally53:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

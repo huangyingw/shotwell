@@ -111,6 +111,7 @@ enum  {
 };
 void application_set_raw_thumbs_fix_required (Application* self, gboolean should_fixup);
 gboolean application_get_raw_thumbs_fix_required (Application* self);
+GtkApplication* application_get_system_app (Application* self);
 static Application* application_new (gboolean is_direct);
 static Application* application_construct (GType object_type, gboolean is_direct);
 void application_panic (Application* self);
@@ -124,6 +125,8 @@ Application* application_get_instance (void);
 void application_present_primary_instance (void);
 gboolean application_get_is_remote (void);
 gboolean application_get_is_direct (void);
+void application_set_accels_for_action (const gchar* action, gchar** accel, int accel_length1);
+void application_set_menubar (GMenuModel* model);
 GType page_window_get_type (void) G_GNUC_CONST;
 GType app_window_get_type (void) G_GNUC_CONST;
 GType library_window_get_type (void) G_GNUC_CONST;
@@ -153,7 +156,7 @@ void application_set_raw_thumbs_fix_required (Application* self, gboolean should
 	_tmp0_ = should_fixup;
 #line 25 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->fixup_raw_thumbs = _tmp0_;
-#line 157 "Application.c"
+#line 160 "Application.c"
 }
 
 
@@ -168,30 +171,55 @@ gboolean application_get_raw_thumbs_fix_required (Application* self) {
 	result = _tmp0_;
 #line 29 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 172 "Application.c"
+#line 175 "Application.c"
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 182 "Application.c"
+}
+
+
+GtkApplication* application_get_system_app (Application* self) {
+	GtkApplication* result = NULL;
+	GtkApplication* _tmp0_ = NULL;
+	GtkApplication* _tmp1_ = NULL;
+#line 32 "/home/jens/Source/shotwell/src/Application.vala"
+	g_return_val_if_fail (IS_APPLICATION (self), NULL);
+#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp0_ = self->priv->system_app;
+#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp1_ = _g_object_ref0 (_tmp0_);
+#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+	result = _tmp1_;
+#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+	return result;
+#line 200 "Application.c"
 }
 
 
 static gint _application_on_command_line_g_application_command_line (GApplication* _sender, GApplicationCommandLine* command_line, gpointer self) {
 	gint result;
 	result = application_on_command_line (command_line);
-#line 61 "/home/jens/Source/shotwell/src/Application.vala"
+#line 65 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 181 "Application.c"
+#line 209 "Application.c"
 }
 
 
 static void _application_on_activated_g_application_activate (GApplication* _sender, gpointer self) {
-#line 64 "/home/jens/Source/shotwell/src/Application.vala"
+#line 68 "/home/jens/Source/shotwell/src/Application.vala"
 	application_on_activated ();
-#line 188 "Application.c"
+#line 216 "Application.c"
 }
 
 
 static void _application_on_activated_g_application_startup (GApplication* _sender, gpointer self) {
-#line 65 "/home/jens/Source/shotwell/src/Application.vala"
+#line 69 "/home/jens/Source/shotwell/src/Application.vala"
 	application_on_activated ();
-#line 195 "Application.c"
+#line 223 "Application.c"
 }
 
 
@@ -203,102 +231,102 @@ static Application* application_construct (GType object_type, gboolean is_direct
 	GtkApplication* _tmp7_ = NULL;
 	GtkApplication* _tmp8_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 35 "/home/jens/Source/shotwell/src/Application.vala"
+#line 39 "/home/jens/Source/shotwell/src/Application.vala"
 	self = (Application*) g_type_create_instance (object_type);
-#line 36 "/home/jens/Source/shotwell/src/Application.vala"
+#line 40 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = is_direct;
-#line 36 "/home/jens/Source/shotwell/src/Application.vala"
+#line 40 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp0_) {
-#line 213 "Application.c"
+#line 241 "Application.c"
 		GtkApplication* _tmp1_ = NULL;
-#line 41 "/home/jens/Source/shotwell/src/Application.vala"
+#line 45 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp1_ = gtk_application_new ("org.yorba.shotwell-direct", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE);
-#line 41 "/home/jens/Source/shotwell/src/Application.vala"
+#line 45 "/home/jens/Source/shotwell/src/Application.vala"
 		_g_object_unref0 (self->priv->system_app);
-#line 41 "/home/jens/Source/shotwell/src/Application.vala"
+#line 45 "/home/jens/Source/shotwell/src/Application.vala"
 		self->priv->system_app = _tmp1_;
-#line 221 "Application.c"
+#line 249 "Application.c"
 	} else {
 		GtkApplication* _tmp2_ = NULL;
-#line 47 "/home/jens/Source/shotwell/src/Application.vala"
+#line 51 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp2_ = gtk_application_new ("org.yorba.shotwell", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_HANDLES_COMMAND_LINE);
-#line 47 "/home/jens/Source/shotwell/src/Application.vala"
+#line 51 "/home/jens/Source/shotwell/src/Application.vala"
 		_g_object_unref0 (self->priv->system_app);
-#line 47 "/home/jens/Source/shotwell/src/Application.vala"
+#line 51 "/home/jens/Source/shotwell/src/Application.vala"
 		self->priv->system_app = _tmp2_;
-#line 230 "Application.c"
+#line 258 "Application.c"
 	}
 	{
 		GtkApplication* _tmp3_ = NULL;
-#line 53 "/home/jens/Source/shotwell/src/Application.vala"
+#line 57 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp3_ = self->priv->system_app;
-#line 53 "/home/jens/Source/shotwell/src/Application.vala"
+#line 57 "/home/jens/Source/shotwell/src/Application.vala"
 		g_application_register (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, g_application_get_type (), GApplication), NULL, &_inner_error_);
-#line 53 "/home/jens/Source/shotwell/src/Application.vala"
+#line 57 "/home/jens/Source/shotwell/src/Application.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 240 "Application.c"
-			goto __catch560_g_error;
+#line 268 "Application.c"
+			goto __catch557_g_error;
 		}
 	}
-	goto __finally560;
-	__catch560_g_error:
+	goto __finally557;
+	__catch557_g_error:
 	{
 		GError* e = NULL;
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		e = _inner_error_;
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		_inner_error_ = NULL;
-#line 55 "/home/jens/Source/shotwell/src/Application.vala"
+#line 59 "/home/jens/Source/shotwell/src/Application.vala"
 		application_panic (self);
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		_g_error_free0 (e);
-#line 256 "Application.c"
+#line 284 "Application.c"
 	}
-	__finally560:
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+	__finally557:
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		g_clear_error (&_inner_error_);
-#line 52 "/home/jens/Source/shotwell/src/Application.vala"
+#line 56 "/home/jens/Source/shotwell/src/Application.vala"
 		return NULL;
-#line 267 "Application.c"
-	}
-#line 58 "/home/jens/Source/shotwell/src/Application.vala"
-	_tmp4_ = is_direct;
-#line 58 "/home/jens/Source/shotwell/src/Application.vala"
-	self->priv->direct = _tmp4_;
-#line 60 "/home/jens/Source/shotwell/src/Application.vala"
-	_tmp5_ = self->priv->direct;
-#line 60 "/home/jens/Source/shotwell/src/Application.vala"
-	if (!_tmp5_) {
-#line 277 "Application.c"
-		GtkApplication* _tmp6_ = NULL;
-#line 61 "/home/jens/Source/shotwell/src/Application.vala"
-		_tmp6_ = self->priv->system_app;
-#line 61 "/home/jens/Source/shotwell/src/Application.vala"
-		g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, g_application_get_type (), GApplication), "command-line", (GCallback) _application_on_command_line_g_application_command_line, NULL);
-#line 283 "Application.c"
-	}
-#line 64 "/home/jens/Source/shotwell/src/Application.vala"
-	_tmp7_ = self->priv->system_app;
-#line 64 "/home/jens/Source/shotwell/src/Application.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, g_application_get_type (), GApplication), "activate", (GCallback) _application_on_activated_g_application_activate, NULL);
-#line 65 "/home/jens/Source/shotwell/src/Application.vala"
-	_tmp8_ = self->priv->system_app;
-#line 65 "/home/jens/Source/shotwell/src/Application.vala"
-	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, g_application_get_type (), GApplication), "startup", (GCallback) _application_on_activated_g_application_startup, NULL);
-#line 35 "/home/jens/Source/shotwell/src/Application.vala"
-	return self;
 #line 295 "Application.c"
+	}
+#line 62 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp4_ = is_direct;
+#line 62 "/home/jens/Source/shotwell/src/Application.vala"
+	self->priv->direct = _tmp4_;
+#line 64 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp5_ = self->priv->direct;
+#line 64 "/home/jens/Source/shotwell/src/Application.vala"
+	if (!_tmp5_) {
+#line 305 "Application.c"
+		GtkApplication* _tmp6_ = NULL;
+#line 65 "/home/jens/Source/shotwell/src/Application.vala"
+		_tmp6_ = self->priv->system_app;
+#line 65 "/home/jens/Source/shotwell/src/Application.vala"
+		g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, g_application_get_type (), GApplication), "command-line", (GCallback) _application_on_command_line_g_application_command_line, NULL);
+#line 311 "Application.c"
+	}
+#line 68 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp7_ = self->priv->system_app;
+#line 68 "/home/jens/Source/shotwell/src/Application.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, g_application_get_type (), GApplication), "activate", (GCallback) _application_on_activated_g_application_activate, NULL);
+#line 69 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp8_ = self->priv->system_app;
+#line 69 "/home/jens/Source/shotwell/src/Application.vala"
+	g_signal_connect (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, g_application_get_type (), GApplication), "startup", (GCallback) _application_on_activated_g_application_startup, NULL);
+#line 39 "/home/jens/Source/shotwell/src/Application.vala"
+	return self;
+#line 323 "Application.c"
 }
 
 
 static Application* application_new (gboolean is_direct) {
-#line 35 "/home/jens/Source/shotwell/src/Application.vala"
+#line 39 "/home/jens/Source/shotwell/src/Application.vala"
 	return application_construct (TYPE_APPLICATION, is_direct);
-#line 302 "Application.c"
+#line 330 "Application.c"
 }
 
 
@@ -313,21 +341,21 @@ void application_send_to_primary_instance (gchar** argv, int argv_length1) {
 	GtkApplication* _tmp2_ = NULL;
 	gchar** _tmp3_ = NULL;
 	gint _tmp3__length1 = 0;
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_->priv->system_app;
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = argv;
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3__length1 = argv_length1;
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	g_application_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_application_get_type (), GApplication), _tmp3__length1, _tmp3_);
-#line 74 "/home/jens/Source/shotwell/src/Application.vala"
+#line 78 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 331 "Application.c"
+#line 359 "Application.c"
 }
 
 
@@ -340,17 +368,17 @@ void application_present_primary_instance (void) {
 	Application* _tmp0_ = NULL;
 	Application* _tmp1_ = NULL;
 	GtkApplication* _tmp2_ = NULL;
-#line 83 "/home/jens/Source/shotwell/src/Application.vala"
+#line 87 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 83 "/home/jens/Source/shotwell/src/Application.vala"
+#line 87 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 83 "/home/jens/Source/shotwell/src/Application.vala"
+#line 87 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_->priv->system_app;
-#line 83 "/home/jens/Source/shotwell/src/Application.vala"
+#line 87 "/home/jens/Source/shotwell/src/Application.vala"
 	g_application_activate (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_application_get_type (), GApplication));
-#line 83 "/home/jens/Source/shotwell/src/Application.vala"
+#line 87 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 354 "Application.c"
+#line 382 "Application.c"
 }
 
 
@@ -361,23 +389,23 @@ gboolean application_get_is_remote (void) {
 	GtkApplication* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
 	gboolean _tmp4_ = FALSE;
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_->priv->system_app;
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = g_application_get_is_remote (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, g_application_get_type (), GApplication));
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp4_ = _tmp3_;
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	result = _tmp4_;
-#line 87 "/home/jens/Source/shotwell/src/Application.vala"
+#line 91 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 381 "Application.c"
+#line 409 "Application.c"
 }
 
 
@@ -387,21 +415,73 @@ gboolean application_get_is_direct (void) {
 	Application* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_->priv->direct;
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = _tmp2_;
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	result = _tmp3_;
-#line 91 "/home/jens/Source/shotwell/src/Application.vala"
+#line 95 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 405 "Application.c"
+#line 433 "Application.c"
+}
+
+
+void application_set_accels_for_action (const gchar* action, gchar** accel, int accel_length1) {
+	Application* _tmp0_ = NULL;
+	Application* _tmp1_ = NULL;
+	GtkApplication* _tmp2_ = NULL;
+	const gchar* _tmp3_ = NULL;
+	gchar** _tmp4_ = NULL;
+	gint _tmp4__length1 = 0;
+#line 98 "/home/jens/Source/shotwell/src/Application.vala"
+	g_return_if_fail (action != NULL);
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp0_ = application_get_instance ();
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp1_ = _tmp0_;
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp2_ = _tmp1_->priv->system_app;
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp3_ = action;
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp4_ = accel;
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp4__length1 = accel_length1;
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	gtk_application_set_accels_for_action (_tmp2_, _tmp3_, _tmp4_);
+#line 99 "/home/jens/Source/shotwell/src/Application.vala"
+	_application_unref0 (_tmp1_);
+#line 462 "Application.c"
+}
+
+
+void application_set_menubar (GMenuModel* model) {
+	Application* _tmp0_ = NULL;
+	Application* _tmp1_ = NULL;
+	GtkApplication* _tmp2_ = NULL;
+	GMenuModel* _tmp3_ = NULL;
+#line 102 "/home/jens/Source/shotwell/src/Application.vala"
+	g_return_if_fail ((model == NULL) || G_IS_MENU_MODEL (model));
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp0_ = application_get_instance ();
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp1_ = _tmp0_;
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp2_ = _tmp1_->priv->system_app;
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	_tmp3_ = model;
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	gtk_application_set_menubar (_tmp2_, _tmp3_);
+#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+	_application_unref0 (_tmp1_);
+#line 485 "Application.c"
 }
 
 
@@ -421,58 +501,58 @@ void application_on_activated (void) {
 	LibraryWindow* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
 	LibraryWindow* _tmp5_ = NULL;
-#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+#line 115 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+#line 115 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 103 "/home/jens/Source/shotwell/src/Application.vala"
+#line 115 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 105 "/home/jens/Source/shotwell/src/Application.vala"
+#line 117 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = app_window_get_instance ();
-#line 105 "/home/jens/Source/shotwell/src/Application.vala"
+#line 117 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, TYPE_LIBRARY_WINDOW) ? ((LibraryWindow*) _tmp2_) : NULL;
-#line 105 "/home/jens/Source/shotwell/src/Application.vala"
+#line 117 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp3_ == NULL) {
-#line 105 "/home/jens/Source/shotwell/src/Application.vala"
+#line 117 "/home/jens/Source/shotwell/src/Application.vala"
 		_g_object_unref0 (_tmp2_);
-#line 439 "Application.c"
+#line 519 "Application.c"
 	}
-#line 105 "/home/jens/Source/shotwell/src/Application.vala"
+#line 117 "/home/jens/Source/shotwell/src/Application.vala"
 	lw = _tmp3_;
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp5_ = lw;
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp5_ != NULL) {
-#line 447 "Application.c"
+#line 527 "Application.c"
 		gboolean _tmp6_ = FALSE;
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp6_ = application_get_is_direct ();
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp4_ = !_tmp6_;
-#line 453 "Application.c"
+#line 533 "Application.c"
 	} else {
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp4_ = FALSE;
-#line 457 "Application.c"
+#line 537 "Application.c"
 	}
-#line 106 "/home/jens/Source/shotwell/src/Application.vala"
+#line 118 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp4_) {
-#line 461 "Application.c"
+#line 541 "Application.c"
 		LibraryWindow* _tmp7_ = NULL;
 		LibraryWindow* _tmp8_ = NULL;
-#line 107 "/home/jens/Source/shotwell/src/Application.vala"
+#line 119 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp7_ = library_window_get_app ();
-#line 107 "/home/jens/Source/shotwell/src/Application.vala"
+#line 119 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp8_ = _tmp7_;
-#line 107 "/home/jens/Source/shotwell/src/Application.vala"
+#line 119 "/home/jens/Source/shotwell/src/Application.vala"
 		gtk_window_present (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_window_get_type (), GtkWindow));
-#line 107 "/home/jens/Source/shotwell/src/Application.vala"
+#line 119 "/home/jens/Source/shotwell/src/Application.vala"
 		_g_object_unref0 (_tmp8_);
-#line 472 "Application.c"
+#line 552 "Application.c"
 	}
-#line 102 "/home/jens/Source/shotwell/src/Application.vala"
+#line 114 "/home/jens/Source/shotwell/src/Application.vala"
 	_g_object_unref0 (lw);
-#line 476 "Application.c"
+#line 556 "Application.c"
 }
 
 
@@ -494,101 +574,101 @@ gint application_on_command_line (GApplicationCommandLine* acl) {
 	gint _argv_size_ = 0;
 	gchar** _tmp3_ = NULL;
 	gint _tmp3__length1 = 0;
-#line 119 "/home/jens/Source/shotwell/src/Application.vala"
+#line 131 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_val_if_fail (G_IS_APPLICATION_COMMAND_LINE (acl), 0);
-#line 120 "/home/jens/Source/shotwell/src/Application.vala"
+#line 132 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = acl;
-#line 120 "/home/jens/Source/shotwell/src/Application.vala"
+#line 132 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = g_application_command_line_get_arguments (_tmp0_, &_tmp1_);
-#line 120 "/home/jens/Source/shotwell/src/Application.vala"
+#line 132 "/home/jens/Source/shotwell/src/Application.vala"
 	argv = _tmp2_;
-#line 120 "/home/jens/Source/shotwell/src/Application.vala"
+#line 132 "/home/jens/Source/shotwell/src/Application.vala"
 	argv_length1 = _tmp1_;
-#line 120 "/home/jens/Source/shotwell/src/Application.vala"
+#line 132 "/home/jens/Source/shotwell/src/Application.vala"
 	_argv_size_ = argv_length1;
-#line 122 "/home/jens/Source/shotwell/src/Application.vala"
+#line 134 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = argv;
-#line 122 "/home/jens/Source/shotwell/src/Application.vala"
+#line 134 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3__length1 = argv_length1;
-#line 122 "/home/jens/Source/shotwell/src/Application.vala"
+#line 134 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp3_ != NULL) {
-#line 516 "Application.c"
+#line 596 "Application.c"
 		gchar** _tmp4_ = NULL;
 		gint _tmp4__length1 = 0;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp4_ = argv;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp4__length1 = argv_length1;
-#line 523 "Application.c"
+#line 603 "Application.c"
 		{
 			gchar** s_collection = NULL;
 			gint s_collection_length1 = 0;
 			gint _s_collection_size_ = 0;
 			gint s_it = 0;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 			s_collection = _tmp4_;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 			s_collection_length1 = _tmp4__length1;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 			for (s_it = 0; s_it < _tmp4__length1; s_it = s_it + 1) {
-#line 535 "Application.c"
+#line 615 "Application.c"
 				gchar* _tmp5_ = NULL;
 				gchar* s = NULL;
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 				_tmp5_ = g_strdup (s_collection[s_it]);
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 				s = _tmp5_;
-#line 542 "Application.c"
+#line 622 "Application.c"
 				{
 					LibraryWindow* lw = NULL;
 					AppWindow* _tmp6_ = NULL;
 					LibraryWindow* _tmp7_ = NULL;
 					LibraryWindow* _tmp8_ = NULL;
-#line 124 "/home/jens/Source/shotwell/src/Application.vala"
+#line 136 "/home/jens/Source/shotwell/src/Application.vala"
 					_tmp6_ = app_window_get_instance ();
-#line 124 "/home/jens/Source/shotwell/src/Application.vala"
+#line 136 "/home/jens/Source/shotwell/src/Application.vala"
 					_tmp7_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp6_, TYPE_LIBRARY_WINDOW) ? ((LibraryWindow*) _tmp6_) : NULL;
-#line 124 "/home/jens/Source/shotwell/src/Application.vala"
+#line 136 "/home/jens/Source/shotwell/src/Application.vala"
 					if (_tmp7_ == NULL) {
-#line 124 "/home/jens/Source/shotwell/src/Application.vala"
+#line 136 "/home/jens/Source/shotwell/src/Application.vala"
 						_g_object_unref0 (_tmp6_);
-#line 556 "Application.c"
+#line 636 "Application.c"
 					}
-#line 124 "/home/jens/Source/shotwell/src/Application.vala"
+#line 136 "/home/jens/Source/shotwell/src/Application.vala"
 					lw = _tmp7_;
-#line 125 "/home/jens/Source/shotwell/src/Application.vala"
+#line 137 "/home/jens/Source/shotwell/src/Application.vala"
 					_tmp8_ = lw;
-#line 125 "/home/jens/Source/shotwell/src/Application.vala"
+#line 137 "/home/jens/Source/shotwell/src/Application.vala"
 					if (_tmp8_ != NULL) {
-#line 564 "Application.c"
+#line 644 "Application.c"
 						LibraryWindow* _tmp9_ = NULL;
 						const gchar* _tmp10_ = NULL;
-#line 126 "/home/jens/Source/shotwell/src/Application.vala"
+#line 138 "/home/jens/Source/shotwell/src/Application.vala"
 						_tmp9_ = lw;
-#line 126 "/home/jens/Source/shotwell/src/Application.vala"
+#line 138 "/home/jens/Source/shotwell/src/Application.vala"
 						_tmp10_ = s;
-#line 126 "/home/jens/Source/shotwell/src/Application.vala"
+#line 138 "/home/jens/Source/shotwell/src/Application.vala"
 						library_window_mounted_camera_shell_notification (_tmp9_, _tmp10_, FALSE);
-#line 573 "Application.c"
+#line 653 "Application.c"
 					}
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 					_g_object_unref0 (lw);
-#line 123 "/home/jens/Source/shotwell/src/Application.vala"
+#line 135 "/home/jens/Source/shotwell/src/Application.vala"
 					_g_free0 (s);
-#line 579 "Application.c"
+#line 659 "Application.c"
 				}
 			}
 		}
 	}
-#line 130 "/home/jens/Source/shotwell/src/Application.vala"
+#line 142 "/home/jens/Source/shotwell/src/Application.vala"
 	application_on_activated ();
-#line 131 "/home/jens/Source/shotwell/src/Application.vala"
+#line 143 "/home/jens/Source/shotwell/src/Application.vala"
 	result = 0;
-#line 131 "/home/jens/Source/shotwell/src/Application.vala"
+#line 143 "/home/jens/Source/shotwell/src/Application.vala"
 	argv = (_vala_array_free (argv, argv_length1, (GDestroyNotify) g_free), NULL);
-#line 131 "/home/jens/Source/shotwell/src/Application.vala"
+#line 143 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 592 "Application.c"
+#line 672 "Application.c"
 }
 
 
@@ -605,22 +685,22 @@ gint application_on_command_line (GApplicationCommandLine* acl) {
      */
 void application_init (gboolean is_direct) {
 	Application* _tmp0_ = NULL;
-#line 146 "/home/jens/Source/shotwell/src/Application.vala"
+#line 158 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_instance;
-#line 146 "/home/jens/Source/shotwell/src/Application.vala"
+#line 158 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp0_ == NULL) {
-#line 613 "Application.c"
+#line 693 "Application.c"
 		gboolean _tmp1_ = FALSE;
 		Application* _tmp2_ = NULL;
-#line 147 "/home/jens/Source/shotwell/src/Application.vala"
+#line 159 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp1_ = is_direct;
-#line 147 "/home/jens/Source/shotwell/src/Application.vala"
+#line 159 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp2_ = application_new (_tmp1_);
-#line 147 "/home/jens/Source/shotwell/src/Application.vala"
+#line 159 "/home/jens/Source/shotwell/src/Application.vala"
 		_application_unref0 (application_instance);
-#line 147 "/home/jens/Source/shotwell/src/Application.vala"
+#line 159 "/home/jens/Source/shotwell/src/Application.vala"
 		application_instance = _tmp2_;
-#line 624 "Application.c"
+#line 704 "Application.c"
 	}
 }
 
@@ -628,22 +708,22 @@ void application_init (gboolean is_direct) {
 void application_terminate (void) {
 	Application* _tmp0_ = NULL;
 	Application* _tmp1_ = NULL;
-#line 151 "/home/jens/Source/shotwell/src/Application.vala"
+#line 163 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_get_instance ();
-#line 151 "/home/jens/Source/shotwell/src/Application.vala"
+#line 163 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = _tmp0_;
-#line 151 "/home/jens/Source/shotwell/src/Application.vala"
+#line 163 "/home/jens/Source/shotwell/src/Application.vala"
 	application_exit (_tmp1_);
-#line 151 "/home/jens/Source/shotwell/src/Application.vala"
+#line 163 "/home/jens/Source/shotwell/src/Application.vala"
 	_application_unref0 (_tmp1_);
-#line 640 "Application.c"
+#line 720 "Application.c"
 }
 
 
 static gpointer _application_ref0 (gpointer self) {
-#line 157 "/home/jens/Source/shotwell/src/Application.vala"
+#line 169 "/home/jens/Source/shotwell/src/Application.vala"
 	return self ? application_ref (self) : NULL;
-#line 647 "Application.c"
+#line 727 "Application.c"
 }
 
 
@@ -652,19 +732,19 @@ Application* application_get_instance (void) {
 	Application* _tmp0_ = NULL;
 	Application* _tmp1_ = NULL;
 	Application* _tmp2_ = NULL;
-#line 155 "/home/jens/Source/shotwell/src/Application.vala"
+#line 167 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = application_instance;
-#line 155 "/home/jens/Source/shotwell/src/Application.vala"
+#line 167 "/home/jens/Source/shotwell/src/Application.vala"
 	_vala_assert (_tmp0_ != NULL, "instance != null");
-#line 157 "/home/jens/Source/shotwell/src/Application.vala"
+#line 169 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = application_instance;
-#line 157 "/home/jens/Source/shotwell/src/Application.vala"
+#line 169 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _application_ref0 (_tmp1_);
-#line 157 "/home/jens/Source/shotwell/src/Application.vala"
+#line 169 "/home/jens/Source/shotwell/src/Application.vala"
 	result = _tmp2_;
-#line 157 "/home/jens/Source/shotwell/src/Application.vala"
+#line 169 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 668 "Application.c"
+#line 748 "Application.c"
 }
 
 
@@ -684,78 +764,78 @@ void application_start (Application* self, gchar** argv, int argv_length1) {
 	guint _tmp13_ = 0U;
 	GtkApplication* _tmp14_ = NULL;
 	guint _tmp15_ = 0U;
-#line 160 "/home/jens/Source/shotwell/src/Application.vala"
+#line 172 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_if_fail (IS_APPLICATION (self));
-#line 161 "/home/jens/Source/shotwell/src/Application.vala"
+#line 173 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = self->priv->running;
-#line 161 "/home/jens/Source/shotwell/src/Application.vala"
+#line 173 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp0_) {
-#line 162 "/home/jens/Source/shotwell/src/Application.vala"
+#line 174 "/home/jens/Source/shotwell/src/Application.vala"
 		return;
-#line 696 "Application.c"
+#line 776 "Application.c"
 	}
-#line 164 "/home/jens/Source/shotwell/src/Application.vala"
+#line 176 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->running = TRUE;
-#line 166 "/home/jens/Source/shotwell/src/Application.vala"
+#line 178 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_emit_by_name (self, "starting");
-#line 168 "/home/jens/Source/shotwell/src/Application.vala"
+#line 180 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = app_window_get_instance ();
-#line 168 "/home/jens/Source/shotwell/src/Application.vala"
+#line 180 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_;
-#line 168 "/home/jens/Source/shotwell/src/Application.vala"
+#line 180 "/home/jens/Source/shotwell/src/Application.vala"
 	_vala_assert (_tmp2_ != NULL, "AppWindow.get_instance() != null");
-#line 168 "/home/jens/Source/shotwell/src/Application.vala"
+#line 180 "/home/jens/Source/shotwell/src/Application.vala"
 	_g_object_unref0 (_tmp2_);
-#line 169 "/home/jens/Source/shotwell/src/Application.vala"
+#line 181 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = self->priv->system_app;
-#line 169 "/home/jens/Source/shotwell/src/Application.vala"
+#line 181 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp4_ = app_window_get_instance ();
-#line 169 "/home/jens/Source/shotwell/src/Application.vala"
+#line 181 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp5_ = _tmp4_;
-#line 169 "/home/jens/Source/shotwell/src/Application.vala"
+#line 181 "/home/jens/Source/shotwell/src/Application.vala"
 	gtk_application_add_window (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_window_get_type (), GtkWindow));
-#line 169 "/home/jens/Source/shotwell/src/Application.vala"
+#line 181 "/home/jens/Source/shotwell/src/Application.vala"
 	_g_object_unref0 (_tmp5_);
-#line 170 "/home/jens/Source/shotwell/src/Application.vala"
+#line 182 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp6_ = self->priv->system_app;
-#line 170 "/home/jens/Source/shotwell/src/Application.vala"
+#line 182 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp7_ = argv;
-#line 170 "/home/jens/Source/shotwell/src/Application.vala"
+#line 182 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp7__length1 = argv_length1;
-#line 170 "/home/jens/Source/shotwell/src/Application.vala"
+#line 182 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp8_ = g_application_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, g_application_get_type (), GApplication), _tmp7__length1, _tmp7_);
-#line 170 "/home/jens/Source/shotwell/src/Application.vala"
+#line 182 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->system_app_run_retval = _tmp8_;
-#line 172 "/home/jens/Source/shotwell/src/Application.vala"
+#line 184 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp9_ = self->priv->direct;
-#line 172 "/home/jens/Source/shotwell/src/Application.vala"
+#line 184 "/home/jens/Source/shotwell/src/Application.vala"
 	if (!_tmp9_) {
-#line 734 "Application.c"
+#line 814 "Application.c"
 		GtkApplication* _tmp10_ = NULL;
 		guint _tmp11_ = 0U;
-#line 173 "/home/jens/Source/shotwell/src/Application.vala"
+#line 185 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp10_ = self->priv->system_app;
-#line 173 "/home/jens/Source/shotwell/src/Application.vala"
+#line 185 "/home/jens/Source/shotwell/src/Application.vala"
 		g_signal_parse_name ("command-line", g_application_get_type (), &_tmp11_, NULL, FALSE);
-#line 173 "/home/jens/Source/shotwell/src/Application.vala"
+#line 185 "/home/jens/Source/shotwell/src/Application.vala"
 		g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, g_application_get_type (), GApplication), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp11_, 0, NULL, (GCallback) _application_on_command_line_g_application_command_line, NULL);
-#line 743 "Application.c"
+#line 823 "Application.c"
 	}
-#line 176 "/home/jens/Source/shotwell/src/Application.vala"
+#line 188 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp12_ = self->priv->system_app;
-#line 176 "/home/jens/Source/shotwell/src/Application.vala"
+#line 188 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_parse_name ("activate", g_application_get_type (), &_tmp13_, NULL, FALSE);
-#line 176 "/home/jens/Source/shotwell/src/Application.vala"
+#line 188 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, g_application_get_type (), GApplication), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp13_, 0, NULL, (GCallback) _application_on_activated_g_application_activate, NULL);
-#line 177 "/home/jens/Source/shotwell/src/Application.vala"
+#line 189 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp14_ = self->priv->system_app;
-#line 177 "/home/jens/Source/shotwell/src/Application.vala"
+#line 189 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_parse_name ("startup", g_application_get_type (), &_tmp15_, NULL, FALSE);
-#line 177 "/home/jens/Source/shotwell/src/Application.vala"
+#line 189 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, g_application_get_type (), GApplication), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp15_, 0, NULL, (GCallback) _application_on_activated_g_application_startup, NULL);
-#line 179 "/home/jens/Source/shotwell/src/Application.vala"
+#line 191 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->running = FALSE;
-#line 759 "Application.c"
+#line 839 "Application.c"
 }
 
 
@@ -763,58 +843,58 @@ void application_exit (Application* self) {
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	GtkApplication* _tmp3_ = NULL;
-#line 182 "/home/jens/Source/shotwell/src/Application.vala"
+#line 194 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_if_fail (IS_APPLICATION (self));
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = self->priv->exiting_fired;
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp1_) {
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp0_ = TRUE;
-#line 775 "Application.c"
+#line 855 "Application.c"
 	} else {
 		gboolean _tmp2_ = FALSE;
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp2_ = self->priv->running;
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 		_tmp0_ = !_tmp2_;
-#line 782 "Application.c"
+#line 862 "Application.c"
 	}
-#line 185 "/home/jens/Source/shotwell/src/Application.vala"
+#line 197 "/home/jens/Source/shotwell/src/Application.vala"
 	if (_tmp0_) {
-#line 186 "/home/jens/Source/shotwell/src/Application.vala"
+#line 198 "/home/jens/Source/shotwell/src/Application.vala"
 		return;
-#line 788 "Application.c"
+#line 868 "Application.c"
 	}
-#line 188 "/home/jens/Source/shotwell/src/Application.vala"
+#line 200 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->exiting_fired = TRUE;
-#line 190 "/home/jens/Source/shotwell/src/Application.vala"
+#line 202 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_emit_by_name (self, "exiting", FALSE);
-#line 192 "/home/jens/Source/shotwell/src/Application.vala"
+#line 204 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = self->priv->system_app;
-#line 192 "/home/jens/Source/shotwell/src/Application.vala"
+#line 204 "/home/jens/Source/shotwell/src/Application.vala"
 	g_application_release (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, g_application_get_type (), GApplication));
-#line 798 "Application.c"
+#line 878 "Application.c"
 }
 
 
 void application_panic (Application* self) {
 	gboolean _tmp0_ = FALSE;
-#line 197 "/home/jens/Source/shotwell/src/Application.vala"
+#line 209 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_if_fail (IS_APPLICATION (self));
-#line 198 "/home/jens/Source/shotwell/src/Application.vala"
+#line 210 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = self->priv->exiting_fired;
-#line 198 "/home/jens/Source/shotwell/src/Application.vala"
+#line 210 "/home/jens/Source/shotwell/src/Application.vala"
 	if (!_tmp0_) {
-#line 199 "/home/jens/Source/shotwell/src/Application.vala"
+#line 211 "/home/jens/Source/shotwell/src/Application.vala"
 		self->priv->exiting_fired = TRUE;
-#line 200 "/home/jens/Source/shotwell/src/Application.vala"
+#line 212 "/home/jens/Source/shotwell/src/Application.vala"
 		g_signal_emit_by_name (self, "exiting", TRUE);
-#line 814 "Application.c"
+#line 894 "Application.c"
 	}
-#line 202 "/home/jens/Source/shotwell/src/Application.vala"
+#line 214 "/home/jens/Source/shotwell/src/Application.vala"
 	exit (1);
-#line 818 "Application.c"
+#line 898 "Application.c"
 }
 
 
@@ -834,29 +914,29 @@ guint application_inhibit (Application* self, GtkApplicationInhibitFlags what, c
 	const gchar* _tmp4_ = NULL;
 	guint _tmp5_ = 0U;
 	guint _tmp6_ = 0U;
-#line 212 "/home/jens/Source/shotwell/src/Application.vala"
+#line 224 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_val_if_fail (IS_APPLICATION (self), 0U);
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = self->priv->system_app;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = app_window_get_instance ();
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp2_ = _tmp1_;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp3_ = what;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp4_ = reason;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp5_ = gtk_application_inhibit (_tmp0_, G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_window_get_type (), GtkWindow), _tmp3_, _tmp4_);
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp6_ = _tmp5_;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	_g_object_unref0 (_tmp2_);
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	result = _tmp6_;
-#line 213 "/home/jens/Source/shotwell/src/Application.vala"
+#line 225 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 860 "Application.c"
+#line 940 "Application.c"
 }
 
 
@@ -867,30 +947,30 @@ guint application_inhibit (Application* self, GtkApplicationInhibitFlags what, c
 void application_uninhibit (Application* self, guint cookie) {
 	GtkApplication* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 220 "/home/jens/Source/shotwell/src/Application.vala"
+#line 232 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_if_fail (IS_APPLICATION (self));
-#line 221 "/home/jens/Source/shotwell/src/Application.vala"
+#line 233 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = self->priv->system_app;
-#line 221 "/home/jens/Source/shotwell/src/Application.vala"
+#line 233 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp1_ = cookie;
-#line 221 "/home/jens/Source/shotwell/src/Application.vala"
+#line 233 "/home/jens/Source/shotwell/src/Application.vala"
 	gtk_application_uninhibit (_tmp0_, _tmp1_);
-#line 879 "Application.c"
+#line 959 "Application.c"
 }
 
 
 gint application_get_run_return_value (Application* self) {
 	gint result = 0;
 	gint _tmp0_ = 0;
-#line 224 "/home/jens/Source/shotwell/src/Application.vala"
+#line 236 "/home/jens/Source/shotwell/src/Application.vala"
 	g_return_val_if_fail (IS_APPLICATION (self), 0);
-#line 225 "/home/jens/Source/shotwell/src/Application.vala"
+#line 237 "/home/jens/Source/shotwell/src/Application.vala"
 	_tmp0_ = self->priv->system_app_run_retval;
-#line 225 "/home/jens/Source/shotwell/src/Application.vala"
+#line 237 "/home/jens/Source/shotwell/src/Application.vala"
 	result = _tmp0_;
-#line 225 "/home/jens/Source/shotwell/src/Application.vala"
+#line 237 "/home/jens/Source/shotwell/src/Application.vala"
 	return result;
-#line 894 "Application.c"
+#line 974 "Application.c"
 }
 
 
@@ -909,7 +989,7 @@ static void application_real_init_done (Application* self) {
 static void value_application_init (GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	value->data[0].v_pointer = NULL;
-#line 913 "Application.c"
+#line 993 "Application.c"
 }
 
 
@@ -918,7 +998,7 @@ static void value_application_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		application_unref (value->data[0].v_pointer);
-#line 922 "Application.c"
+#line 1002 "Application.c"
 	}
 }
 
@@ -928,11 +1008,11 @@ static void value_application_copy_value (const GValue* src_value, GValue* dest_
 	if (src_value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		dest_value->data[0].v_pointer = application_ref (src_value->data[0].v_pointer);
-#line 932 "Application.c"
+#line 1012 "Application.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 936 "Application.c"
+#line 1016 "Application.c"
 	}
 }
 
@@ -940,37 +1020,37 @@ static void value_application_copy_value (const GValue* src_value, GValue* dest_
 static gpointer value_application_peek_pointer (const GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return value->data[0].v_pointer;
-#line 944 "Application.c"
+#line 1024 "Application.c"
 }
 
 
 static gchar* value_application_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	if (collect_values[0].v_pointer) {
-#line 951 "Application.c"
+#line 1031 "Application.c"
 		Application* object;
 		object = collect_values[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 958 "Application.c"
+#line 1038 "Application.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 962 "Application.c"
+#line 1042 "Application.c"
 		}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		value->data[0].v_pointer = application_ref (object);
-#line 966 "Application.c"
+#line 1046 "Application.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		value->data[0].v_pointer = NULL;
-#line 970 "Application.c"
+#line 1050 "Application.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return NULL;
-#line 974 "Application.c"
+#line 1054 "Application.c"
 }
 
 
@@ -981,25 +1061,25 @@ static gchar* value_application_lcopy_value (const GValue* value, guint n_collec
 	if (!object_p) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 985 "Application.c"
+#line 1065 "Application.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	if (!value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		*object_p = NULL;
-#line 991 "Application.c"
+#line 1071 "Application.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		*object_p = value->data[0].v_pointer;
-#line 995 "Application.c"
+#line 1075 "Application.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		*object_p = application_ref (value->data[0].v_pointer);
-#line 999 "Application.c"
+#line 1079 "Application.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return NULL;
-#line 1003 "Application.c"
+#line 1083 "Application.c"
 }
 
 
@@ -1013,7 +1093,7 @@ GParamSpec* param_spec_application (const gchar* name, const gchar* nick, const 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return G_PARAM_SPEC (spec);
-#line 1017 "Application.c"
+#line 1097 "Application.c"
 }
 
 
@@ -1022,7 +1102,7 @@ gpointer value_get_application (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_APPLICATION), NULL);
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return value->data[0].v_pointer;
-#line 1026 "Application.c"
+#line 1106 "Application.c"
 }
 
 
@@ -1042,17 +1122,17 @@ void value_set_application (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		application_ref (value->data[0].v_pointer);
-#line 1046 "Application.c"
+#line 1126 "Application.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		value->data[0].v_pointer = NULL;
-#line 1050 "Application.c"
+#line 1130 "Application.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		application_unref (old);
-#line 1056 "Application.c"
+#line 1136 "Application.c"
 	}
 }
 
@@ -1071,17 +1151,17 @@ void value_take_application (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		value->data[0].v_pointer = v_object;
-#line 1075 "Application.c"
+#line 1155 "Application.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		value->data[0].v_pointer = NULL;
-#line 1079 "Application.c"
+#line 1159 "Application.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		application_unref (old);
-#line 1085 "Application.c"
+#line 1165 "Application.c"
 	}
 }
 
@@ -1105,7 +1185,7 @@ static void application_class_init (ApplicationClass * klass) {
 	g_signal_new ("exiting", TYPE_APPLICATION, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (ApplicationClass, exiting), NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	g_signal_new ("init_done", TYPE_APPLICATION, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (ApplicationClass, init_done), NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 1109 "Application.c"
+#line 1189 "Application.c"
 }
 
 
@@ -1118,13 +1198,13 @@ static void application_instance_init (Application * self) {
 	self->priv->system_app_run_retval = 0;
 #line 22 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->fixup_raw_thumbs = FALSE;
-#line 32 "/home/jens/Source/shotwell/src/Application.vala"
+#line 36 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->running = FALSE;
-#line 33 "/home/jens/Source/shotwell/src/Application.vala"
+#line 37 "/home/jens/Source/shotwell/src/Application.vala"
 	self->priv->exiting_fired = FALSE;
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	self->ref_count = 1;
-#line 1128 "Application.c"
+#line 1208 "Application.c"
 }
 
 
@@ -1136,7 +1216,7 @@ static void application_finalize (Application* obj) {
 	g_signal_handlers_destroy (self);
 #line 9 "/home/jens/Source/shotwell/src/Application.vala"
 	_g_object_unref0 (self->priv->system_app);
-#line 1140 "Application.c"
+#line 1220 "Application.c"
 }
 
 
@@ -1161,7 +1241,7 @@ gpointer application_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 	return instance;
-#line 1165 "Application.c"
+#line 1245 "Application.c"
 }
 
 
@@ -1174,7 +1254,7 @@ void application_unref (gpointer instance) {
 		APPLICATION_GET_CLASS (self)->finalize (self);
 #line 7 "/home/jens/Source/shotwell/src/Application.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1178 "Application.c"
+#line 1258 "Application.c"
 	}
 }
 
