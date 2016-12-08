@@ -1,9 +1,9 @@
 shotwell (0.25.1-1) unstable; urgency=medium
 
   * New upstream release.
-    - Fix uses 100% cpu for minutes at startup on a recent cpu
-      (Closes: #777499).
-    - Refresh debian/patches/0100-ios8.patch.
+    - Fix issue with indexes on PhotoTable (Closes: #777499).
+  * debian/patches:
+    - Refresh 0100-ios8.patch.
   * debian/control:
     - Add libgcr-3-dev to Build-Depends.
     - Bump libgexiv2-dev B-D minimum version to 0.10.4.
