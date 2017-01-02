@@ -329,15 +329,15 @@ public abstract class MediaPage : CheckerboardPage {
         get_config_photos_sort(out sort_order, out sort_by);
 
         AppWindow.get_instance ().add_action_entries (entries, this);
-        (get_action ("ViewTitle") as GLib.SimpleAction).set_state (Config.Facade.get_instance ().get_display_photo_titles ());
-        (get_action ("ViewComment") as GLib.SimpleAction).set_state (Config.Facade.get_instance ().get_display_photo_comments ());
-        (get_action ("ViewRatings") as GLib.SimpleAction).set_state (Config.Facade.get_instance ().get_display_photo_ratings ());
-        (get_action ("ViewTags") as GLib.SimpleAction).set_state (Config.Facade.get_instance ().get_display_photo_tags ());
-        (get_action ("SortBy") as GLib.SimpleAction).set_state ("%d".printf (sort_by));
-        (get_action ("Sort") as GLib.SimpleAction).set_state (sort_order ? "'ascending'" : "'descending'");
+        get_action ("ViewTitle").change_state (Config.Facade.get_instance ().get_display_photo_titles ());
+        get_action ("ViewComment").change_state (Config.Facade.get_instance ().get_display_photo_comments ());
+        get_action ("ViewRatings").change_state (Config.Facade.get_instance ().get_display_photo_ratings ());
+        get_action ("ViewTags").change_state (Config.Facade.get_instance ().get_display_photo_tags ());
+        get_action ("SortBy").change_state ("%d".printf (sort_by));
+        get_action ("Sort").change_state (sort_order ? "ascending" : "descending");
+
         var d = Config.Facade.get_instance().get_default_raw_developer();
-        var action = get_action ("RawDeveloper") as GLib.SimpleAction;
-        action.set_state (d == RawDeveloper.SHOTWELL ? "'Shotwell'" : "'Camera'");
+        get_action ("RawDeveloper").change_state (d == RawDeveloper.SHOTWELL ? "Shotwell" : "Camera");
     }
     
     protected override void update_actions(int selected_count, int count) {
@@ -881,13 +881,13 @@ public abstract class MediaPage : CheckerboardPage {
     protected abstract void set_config_photos_sort(bool sort_order, int sort_by);
 
     public virtual void on_sort_changed(GLib.SimpleAction action, Variant? value) {
+        action.set_state (value);
+
         int sort_by = get_menu_sort_by();
         bool sort_order = get_menu_sort_order();
         
         set_view_comparator(sort_by, sort_order);
         set_config_photos_sort(sort_order, sort_by);
-
-        action.set_state (value);
     }
     
     public void on_raw_developer_shotwell() {
@@ -979,7 +979,7 @@ public abstract class MediaPage : CheckerboardPage {
     
     protected void set_menu_sort_by(int val) {
         var sort = "%d".printf (val);
-        (sort_by_title_action() as GLib.SimpleAction).set_state (sort);
+        sort_by_title_action().change_state (sort);
     }
     
     protected bool get_menu_sort_order() {
@@ -988,8 +988,7 @@ public abstract class MediaPage : CheckerboardPage {
     }
     
     protected void set_menu_sort_order(bool ascending) {
-        (sort_ascending_action() as GLib.SimpleAction).set_state (
-            ascending ? "'ascending'" : "'descending'");
+        sort_ascending_action().change_state (ascending ? "ascending" : "descending");
     }
     
     void set_view_comparator(int sort_by, bool ascending) {

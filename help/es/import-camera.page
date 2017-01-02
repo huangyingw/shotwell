@@ -41,9 +41,9 @@
      <p>If you like, you can choose a set of specific photos to import. To do this, hold down the <key>Ctrl</key> key and click to select individual photos. You can hold down <key>Shift</key> and click to select a range of photos too.</p>
     </item>
     <item>
-     <p>Click either <gui>Import Selected</gui> or <gui>Import All</gui>. The photos will be copied from the camera and saved on your computer.</p>
+     <p>Pulse <gui>Importar seleccionadas</gui> o <gui> Importar todo</gui>. Las fotos se copiarán de la cámara y se guardarán en el ordenador.</p>
     </item>
    </steps>
    
-    <p>Once the import is complete, you can open the <gui>Last Import</gui> view (in the sidebar) to see all photos that were imported. The Events list (also in the sidebar) will also show the new photos, organized by date.</p>
+    <p>Una vez finalizada la importación, puede abrir la vista <gui>Última importación</gui> (en la barra lateral) para ver todas las fotos que se importaron. La lista de Eventos (también en la barra lateral) también mostrará las nuevas fotos, organizadas por fecha.</p>
 </page>

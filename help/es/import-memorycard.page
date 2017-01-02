@@ -38,12 +38,12 @@
   <p>El lector de tarjetas y la tarjeta se deberían detectar automáticamente.</p>
  </item>
  <item>
-  <p>Follow the instructions for <link xref="import-file">importing photos from your hard disk</link>. If you click <guiseq><gui>File</gui><gui>Import From Folder...</gui></guiseq>, the memory card should be visible as a folder in the side bar of the file selection window.</p>
+  <p>Siga las instrucciones para <link xref="import-file">importar fotos desde el disco duro</link>. Si pulsa en <guiseq><gui>Archivo</gui><gui>Importar desde la carpeta...</gui></guiseq>, la tarjeta de memoria será visible como una carpeta en la barra lateral de la ventana de selección de archivos.</p>
  </item>
 </steps>
 
 <p>Shotwell puede importar fotos de una tarjeta de memoria que sea compatible con su lector de tarjetas.</p>
 
-<p>If the card is not detected automatically, your card reader may not have been recognized. Try unplugging it and then plugging it in again. If that doesn't work, you should still be able to import photos by <link xref="import-camera">connecting your camera directly to the computer</link>, though.</p>
+<p>Si la tarjeta no se detecta automáticamente, es posible que su lector de tarjetas no se haya reconocido. Intente desenchufarlo y vuelva a enchufarlo. Sin embargo, si eso no funciona, podrá importar fotos mediante <link xref="import-camera">conectar su cámara directamente al ordenador</link>.</p>
 
 </page>

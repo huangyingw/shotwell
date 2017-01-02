@@ -75,7 +75,7 @@ public abstract class CollectionPage : MediaPage {
         group.add_separator();
         group.add_menu_item(_("_Publish"), "Publish", "<Primary><Shift>p");
         group.add_menu_item(_("Send _To…"), "SendTo");
-        group.add_menu_item(_("Set as _Desktop Background"), "SetBackground");
+        group.add_menu_item(_("Set as _Desktop Background"), "SetBackground", "<Primary>b");
         
         return group;
     }
@@ -269,12 +269,10 @@ public abstract class CollectionPage : MediaPage {
         set_action_sensitive("SetBackground", (!selection_has_videos) && has_selected );
         if (has_selected) {
             debug ("Setting action label for SetBackground...");
-/*            Gtk.Action? set_background = get_action("SetBackground");
-            if (set_background != null) {
-                set_background.label = one_selected
+            var label = one_selected
                     ? Resources.SET_BACKGROUND_MENU
                     : Resources.SET_BACKGROUND_SLIDESHOW_MENU;
-            } */
+            this.update_menu_item_label ("SetBackground", label);
         }
     }
 

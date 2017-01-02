@@ -28,16 +28,16 @@
 
 	<title>Quitar los ojos rojos</title>
 
-    <p>Red-eye occurs when the camera's flash reflects off the pupil of someone's eye. To eliminate this in a photo, use the Red-eye tool.</p>
+    <p>Los ojos rojos aparecen cuando el flash de la cámara se refleja en las pupilas de los ojos. Para eliminar esto en una foto, utilice la herramienta Ojos rojos.</p>
     <steps>
      <item>
       <p>Pulse en <gui>Ojos Rojos</gui>. Un círculo aparecerá en la foto.</p>
      </item>
      <item>
-      <p>Drag the circle over the affected pupil, adjust its size with the slider control, and press <gui>Apply</gui>. The redness will be removed.</p>
+      <p>Arrastre el círculo sobre la pupila afectada, ajuste su tamaño con el control deslizante y presione <gui>Aplicar</gui>. Se eliminará el color rojo.</p>
      </item>
      <item>
-      <p>Repeat this process for all red pupils in your photo. Press <gui>Close</gui> when finished.</p>
+      <p>Repita este proceso para todas las pupilas rojas en su foto. Pulse <gui>Cerrar</gui> cuando haya terminado.</p>
      </item>
     </steps>
 </page>

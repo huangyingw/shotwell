@@ -30,8 +30,8 @@
 
 <p>To adjust the date and time of photos, select the photos you would like to adjust, choose <guiseq><gui>Photos</gui><gui>Adjust Date and Time...</gui></guiseq> and select a new date and time.</p>
 
-<p>If you are changing the date and time of multiple photos at once, you can choose to shift all the photos by the same amount of time or to set all the photos to the same time.</p>
+<p>Si está cambiando la fecha y la hora de varias fotos a la vez, puede elegir cambiar todas las fotos en la misma cantidad de horas o establecer todas las fotos en la misma hora.</p>
 
-<p>By default, the date and time are only changed inside Shotwell. You can also choose to modify the date and time in the original file, but this cannot be undone once you exit Shotwell.</p>
+<p>De manera predeterminada, la fecha y la hora sólo se cambian dentro de Shotwell. También puede optar por modificar la fecha y la hora en el archivo original, pero esto no se puede deshacer una vez que salga de Shotwell.</p>
 
 </page>

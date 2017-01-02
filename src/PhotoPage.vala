@@ -2438,10 +2438,10 @@ public class LibraryPhotoPage : EditingHostPage {
         base.add_actions ();
 
         AppWindow.get_instance ().add_action_entries (entries, this);
-        (get_action ("ViewRatings") as GLib.SimpleAction).set_state (Config.Facade.get_instance ().get_display_photo_ratings ());
+        (get_action ("ViewRatings") as GLib.SimpleAction).change_state (Config.Facade.get_instance ().get_display_photo_ratings ());
         var d = Config.Facade.get_instance().get_default_raw_developer();
         var action = get_action ("RawDeveloper") as GLib.SimpleAction;
-        action.set_state (d == RawDeveloper.SHOTWELL ? "'Shotwell'" : "'Camera'");
+        action.change_state (d == RawDeveloper.SHOTWELL ? "Shotwell" : "Camera");
     }
 
     protected override InjectionGroup[] init_collect_injection_groups() {
@@ -2458,7 +2458,7 @@ public class LibraryPhotoPage : EditingHostPage {
         groups += publish_group;
         
         InjectionGroup bg_group = new InjectionGroup("SetBackgroundPlaceholder");
-        bg_group.add_menu_item(_("Set as _Desktop Background"), "SetBackground");
+        bg_group.add_menu_item(_("Set as _Desktop Background"), "SetBackground", "<Primary>b");
         
         groups += bg_group;
         
@@ -2569,18 +2569,7 @@ public class LibraryPhotoPage : EditingHostPage {
     }
     
     private void update_flag_action() {
-        if (has_photo()) {
-            var action = get_action("Flag") as GLib.SimpleAction;
-            assert(action != null);
-            
-//            bool is_flagged = ((LibraryPhoto) get_photo()).is_flagged();
-            
-            debug ("Setting label of action flagged");
-//            action.label = is_flagged ? Resources.UNFLAG_MENU : Resources.FLAG_MENU;
-            action.set_enabled (true);
-        } else {
-            set_action_sensitive("Flag", false);
-        }
+        set_action_sensitive ("Flag", has_photo());
     }
     
     // Displays a photo from a specific CollectionPage.  When the user exits this view,
@@ -3094,12 +3083,12 @@ public class LibraryPhotoPage : EditingHostPage {
             // Set active developer in menu.
             switch (get_photo().get_raw_developer()) {
                 case RawDeveloper.SHOTWELL:
-                    get_action ("RawDeveloper").change_state ("'Shotwell'");
+                    get_action ("RawDeveloper").change_state ("Shotwell");
                     break;
                 
                 case RawDeveloper.CAMERA:
                 case RawDeveloper.EMBEDDED:
-                    get_action ("RawDeveloper").change_state ("'Camera'");
+                    get_action ("RawDeveloper").change_state ("Camera");
                     break;
                 
                 default:

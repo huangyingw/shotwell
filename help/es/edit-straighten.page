@@ -28,11 +28,11 @@
     
     	<title>Enderezar fotos</title>
     	
-<p>The straighten tools allows photos to be leveled and straightened. The straighten tool is only available in full-window or fullscreen mode. </p>
+<p>Las herramientas de enderezar permiten que las fotos se nivelen y enderecen. La herramienta de enderezado sólo está disponible en modo de pantalla completa.</p>
 
  <steps>
      <item>
-      <p>Click <gui>Straighten</gui>. The straighten slider will appear. Alternatively, use the keyboard shortcut <keyseq><key>Ctrl</key><key>A</key></keyseq>.</p>
+      <p>Pulse en <gui>Enderezar</gui>. Aparecerá el control deslizante de enderezamiento. También puede utilizar el atajo de teclado <keyseq><key>Ctrl</key><key>A</key></keyseq>.</p>
      </item>
      <item>
       <p>Arrastre el control deslizante para conseguir el grado que quiera de enderezamiento.</p>

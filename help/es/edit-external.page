@@ -38,25 +38,13 @@
 
     <p>Una vez que los editores se han establecido, seleccione una foto y elija <guiseq><gui>Fotos</gui> <gui>Abrir con un editor externo</gui></guiseq> para abrir la foto con un editor externo. De la misma manera, si la foto original es un archivo RAW, seleccione <guiseq><gui>Fotos</gui><gui>Abrir con un editor RAW</gui></guiseq> para editar el archivo RAW directamente con un editor RAW establecido.</p>
 
-    <p>
-        When you complete your edits and save the file, Shotwell will detect the changes and 
-        update the photo.   When external edits have been made, press and hold the 
-        <key>Shift</key> key in full-window view to show the original photo rather than the 
-        externally-edited one.
-    </p>
+    <p>Cuando complete sus ediciones y guarde el archivo, Shotwell detectará los cambios y actualizará la foto. Cuando se hayan realizado ediciones externas, mantenga pulsada la tecla <tecla>Mayús</tecla> en la vista de la pantalla completa para mostrar la foto original en lugar de la editada externamente.</p>
                             
     <p>Revertir al original borrará cualquier cambio externo.</p>
     
     <note>
-        <p>
-            If you externally edit a RAW photo and save the result to another image, such as a
-            JPEG or PNG, Shotwell cannot automatically determine that the original RAW and the 
-            new image should be paired.
-        </p>
+        <p>Si edita de manera externa una foto RAW y guarda el resultado en otra imagen, como un archivo JPEG o PNG, Shotwell no puede determinar automáticamente que la RAW original y la nueva imagen deberían estar emparejadas.</p>
             
-        <p>    
-            If you want to work within the resulting image within Shotwell, you'll need to 
-            import it yourself.
-        </p>
+        <p>Si quiere trabajar sobre la imagen resultante con Shotwell, tendrá que importarla usted mismo.</p>
     </note>    
 </page>

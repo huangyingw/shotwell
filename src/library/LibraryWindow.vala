@@ -137,6 +137,7 @@ public class LibraryWindow : AppWindow {
     private Gtk.Stack stack = new Gtk.Stack();
     private Gtk.Box layout = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
     private Gtk.Box right_vbox;
+    private Gtk.Revealer toolbar_revealer = new Gtk.Revealer ();
     
     private int current_progress_priority = 0;
     private uint background_progress_pulse_id = 0;
@@ -275,14 +276,9 @@ public class LibraryWindow : AppWindow {
         { "CommonDisplayBasicProperties", on_action_toggle, null, "false", on_display_basic_properties },
         { "CommonDisplayExtendedProperties", on_action_toggle, null, "false", on_display_extended_properties },
 
-#if 0
-        { "CommonDisplaySearchbar", on_display_searchbar, null, is_search_toolbar_visible.to_string () },
-        { "CommonDisplaySidebar", on_display_sidebar, null, is_sidebar_visible ().to_string () },
-        { "CommonDisplayToolbar", on_display_toolbar, null, is_toolbar_visible ().to_string () }
-#endif
-        { "CommonDisplaySearchbar", on_action_toggle, null, "false", on_display_searchbar },
+        { "CommonDisplaySearchbar", null, null, "false", on_display_searchbar },
         { "CommonDisplaySidebar", on_action_toggle, null, "true", on_display_sidebar },
-        { "CommonDisplayToolbar", on_action_toggle, null, "true", on_display_toolbar },
+        { "CommonDisplayToolbar", null, null, "true", on_display_toolbar },
 
         { "CommonSortEvents", on_action_radio, "s", "'ascending'", on_events_sort_changed }
     };
@@ -291,6 +287,10 @@ public class LibraryWindow : AppWindow {
         base.add_actions ();
         this.add_action_entries (common_actions, this);
         this.add_action_entries (search_actions.get_actions (), search_actions);
+
+        lookup_action ("CommonDisplaySearchbar").change_state (Config.Facade.get_instance().get_display_search_bar());
+        lookup_action ("CommonDisplaySidebar").change_state (is_sidebar_visible ());
+        lookup_action ("CommonDisplayToolbar").change_state (is_toolbar_visible ());
     }
 
     protected override void switched_pages(Page? old_page, Page? new_page) {
@@ -686,8 +686,7 @@ public class LibraryWindow : AppWindow {
 
         Config.Facade.get_instance().set_display_search_bar(is_shown);
         show_search_bar(is_shown);
-
-        action.set_state (value);
+        action.set_state (is_shown);
     }
     
     public void show_search_bar(bool display) {
@@ -722,9 +721,13 @@ public class LibraryWindow : AppWindow {
     }
 
     private void set_toolbar_visible (bool visible) {
+        if (get_current_page() == null) {
+            return;
+        }
+
         var toolbar = get_current_page ().get_toolbar ();
         if (toolbar != null) {
-            toolbar.set_visible (visible);
+            this.toolbar_revealer.set_reveal_child (visible);
         }
         Config.Facade.get_instance().set_display_toolbar (visible);
     }
@@ -1170,6 +1173,7 @@ public class LibraryWindow : AppWindow {
         right_vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
         right_vbox.pack_start(search_toolbar, false, false, 0);
         right_vbox.pack_start(stack, true, true, 0);
+        right_vbox.add (toolbar_revealer);
         
         client_paned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
         client_paned.pack1(sidebar_paned, false, false);
@@ -1182,6 +1186,9 @@ public class LibraryWindow : AppWindow {
         layout.pack_end(client_paned, true, true, 0);
         
         add(layout);
+
+        var builder = new Gtk.Builder.from_resource ("/org/gnome/Shotwell/appmenu.ui");
+        Application.set_appmenu (builder.get_object ("appmenu") as GLib.Menu);
 
         switch_to_page(start_page);
         start_page.grab_focus();
@@ -1210,7 +1217,7 @@ public class LibraryWindow : AppWindow {
 
             Gtk.Toolbar toolbar = current_page.get_toolbar();
             if (toolbar != null)
-                right_vbox.remove(toolbar);
+                toolbar_revealer.remove(toolbar);
 
             current_page.switching_from();
             
@@ -1268,9 +1275,9 @@ public class LibraryWindow : AppWindow {
         
         Gtk.Toolbar toolbar = page.get_toolbar();
         if (toolbar != null) {
-            right_vbox.add(toolbar);
+            toolbar_revealer.add(toolbar);
             toolbar.show_all();
-            toolbar.set_visible (this.is_toolbar_visible ());
+            toolbar_revealer.set_reveal_child (this.is_toolbar_visible ());
         }
 
         page.ready();
