@@ -485,7 +485,7 @@ am_shotwell_OBJECTS = src/unit/shotwell-Unit.$(OBJEXT) \
 	src/.unitize/shotwell-_FoldersInternals.$(OBJEXT) \
 	src/.unitize/shotwell-_Library_unitize_entry.$(OBJEXT) \
 	src/.unitize/shotwell-_Direct_unitize_entry.$(OBJEXT)
-nodist_shotwell_OBJECTS = src/shotwell-resource.$(OBJEXT)
+nodist_shotwell_OBJECTS = shotwell-resource.$(OBJEXT)
 shotwell_OBJECTS = $(am_shotwell_OBJECTS) $(nodist_shotwell_OBJECTS)
 shotwell_DEPENDENCIES = src/plugins/libplugin.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
@@ -576,7 +576,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__dist_noinst_DATA_DIST = src/org.gnome.Shotwell.gresource.xml \
+am__dist_noinst_DATA_DIST = org.gnome.Shotwell.gresource.xml \
 	plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/flickr.png \
 	plugins/shotwell-publishing/picasa.png \
@@ -1123,7 +1123,7 @@ plugin_LTLIBRARIES =  \
 	plugins/shotwell-data-imports/shotwell-data-imports.la
 dist_plugin_DATA = 
 dist_pkglibexec_SCRIPTS = $(top_srcdir)/settings-migrator/shotwell-settings-migrator
-dist_noinst_DATA = $(NULL) src/org.gnome.Shotwell.gresource.xml \
+dist_noinst_DATA = $(NULL) org.gnome.Shotwell.gresource.xml \
 	plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/flickr.png \
 	plugins/shotwell-publishing/picasa.png \
@@ -1147,7 +1147,7 @@ dist_noinst_DATA = $(NULL) src/org.gnome.Shotwell.gresource.xml \
 	plugins/shotwell-plugin-common.h vapi/gphoto.h \
 	vapi/libexif.vapi vapi/libgphoto2.vapi vapi/libraw.vapi \
 	vapi/unity.deps vapi/unity.vapi vapi/misc.vapi
-MOSTLYCLEANFILES = $(NULL) src/resource.c \
+MOSTLYCLEANFILES = $(NULL) resource.c \
 	plugins/shotwell-publishing/resource.c $(am__append_5) \
 	plugins/shotwell-transitions/resource.c \
 	plugins/shotwell-data-imports/resource.c
@@ -1184,16 +1184,16 @@ shotwell_VALAFLAGS = $(COMMON_VALAFLAGS) \
 	--pkg libgphoto2 --pkg posix --pkg libraw --pkg gexiv2 \
 	--pkg libexif --pkg gudev-1.0 --pkg gstreamer-1.0 \
 	--pkg gstreamer-pbutils-1.0 --pkg misc \
+	--gresources $(abs_top_srcdir)/org.gnome.Shotwell.gresource.xml \
 	$(UNITY_VALAFLAGS) \
 	$(COMMON_VALAFLAGS_POST)
 
 nodist_shotwell_SOURCES = \
-	src/resource.c
+	resource.c
 
-shotwell_resource_deps = $(shell $(GLIB_COMPILE_RESOURCES) \
-		--sourcedir=$(abs_top_srcdir)/icons \
-		--sourcedir=$(abs_top_srcdir)/ui \
-		--generate-dependencies $(abs_top_srcdir)/src/org.gnome.Shotwell.gresource.xml)
+shotwell_resource_deps := $(shell $(GLIB_COMPILE_RESOURCES) \
+	--sourcedir=$(abs_top_srcdir) \
+	--generate-dependencies $(abs_top_srcdir)/org.gnome.Shotwell.gresource.xml)
 
 shotwell_SOURCES = \
 	src/unit/Unit.vala \
@@ -2573,8 +2573,6 @@ src/.unitize/shotwell-_Library_unitize_entry.$(OBJEXT):  \
 src/.unitize/shotwell-_Direct_unitize_entry.$(OBJEXT):  \
 	src/.unitize/$(am__dirstamp) \
 	src/.unitize/$(DEPDIR)/$(am__dirstamp)
-src/shotwell-resource.$(OBJEXT): src/$(am__dirstamp) \
-	src/$(DEPDIR)/$(am__dirstamp)
 
 shotwell$(EXEEXT): $(shotwell_OBJECTS) $(shotwell_DEPENDENCIES) $(EXTRA_shotwell_DEPENDENCIES) 
 	@rm -f shotwell$(EXEEXT)
@@ -2668,6 +2666,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shotwell-resource.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-BuilderPane.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-RESTSupport.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-Resources.Plo@am__quote@
@@ -2765,7 +2764,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/shotwell-VideoMonitor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/shotwell-VideoSupport.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/shotwell-main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/shotwell-resource.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/.unitize/$(DEPDIR)/shotwell-_CameraInternals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/.unitize/$(DEPDIR)/shotwell-_ConfigInternals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/.unitize/$(DEPDIR)/shotwell-_CoreInternals.Po@am__quote@
@@ -5944,19 +5942,19 @@ src/.unitize/shotwell-_Direct_unitize_entry.obj: src/.unitize/_Direct_unitize_en
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -c -o src/.unitize/shotwell-_Direct_unitize_entry.obj `if test -f 'src/.unitize/_Direct_unitize_entry.c'; then $(CYGPATH_W) 'src/.unitize/_Direct_unitize_entry.c'; else $(CYGPATH_W) '$(srcdir)/src/.unitize/_Direct_unitize_entry.c'; fi`
 
-src/shotwell-resource.o: src/resource.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -MT src/shotwell-resource.o -MD -MP -MF src/$(DEPDIR)/shotwell-resource.Tpo -c -o src/shotwell-resource.o `test -f 'src/resource.c' || echo '$(srcdir)/'`src/resource.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/shotwell-resource.Tpo src/$(DEPDIR)/shotwell-resource.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/resource.c' object='src/shotwell-resource.o' libtool=no @AMDEPBACKSLASH@
+shotwell-resource.o: resource.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -MT shotwell-resource.o -MD -MP -MF $(DEPDIR)/shotwell-resource.Tpo -c -o shotwell-resource.o `test -f 'resource.c' || echo '$(srcdir)/'`resource.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/shotwell-resource.Tpo $(DEPDIR)/shotwell-resource.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='resource.c' object='shotwell-resource.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -c -o src/shotwell-resource.o `test -f 'src/resource.c' || echo '$(srcdir)/'`src/resource.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -c -o shotwell-resource.o `test -f 'resource.c' || echo '$(srcdir)/'`resource.c
 
-src/shotwell-resource.obj: src/resource.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -MT src/shotwell-resource.obj -MD -MP -MF src/$(DEPDIR)/shotwell-resource.Tpo -c -o src/shotwell-resource.obj `if test -f 'src/resource.c'; then $(CYGPATH_W) 'src/resource.c'; else $(CYGPATH_W) '$(srcdir)/src/resource.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/shotwell-resource.Tpo src/$(DEPDIR)/shotwell-resource.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='src/resource.c' object='src/shotwell-resource.obj' libtool=no @AMDEPBACKSLASH@
+shotwell-resource.obj: resource.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -MT shotwell-resource.obj -MD -MP -MF $(DEPDIR)/shotwell-resource.Tpo -c -o shotwell-resource.obj `if test -f 'resource.c'; then $(CYGPATH_W) 'resource.c'; else $(CYGPATH_W) '$(srcdir)/resource.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/shotwell-resource.Tpo $(DEPDIR)/shotwell-resource.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='resource.c' object='shotwell-resource.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -c -o src/shotwell-resource.obj `if test -f 'src/resource.c'; then $(CYGPATH_W) 'src/resource.c'; else $(CYGPATH_W) '$(srcdir)/src/resource.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(shotwell_CFLAGS) $(CFLAGS) -c -o shotwell-resource.obj `if test -f 'resource.c'; then $(CYGPATH_W) 'resource.c'; else $(CYGPATH_W) '$(srcdir)/resource.c'; fi`
 
 thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.o: thumbnailer/shotwell-video-thumbnailer.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(thumbnailer_shotwell_video_thumbnailer_CFLAGS) $(CFLAGS) -MT thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.o -MD -MP -MF thumbnailer/$(DEPDIR)/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.Tpo -c -o thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.o `test -f 'thumbnailer/shotwell-video-thumbnailer.c' || echo '$(srcdir)/'`thumbnailer/shotwell-video-thumbnailer.c
@@ -5971,6 +5969,15 @@ thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.ob
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='thumbnailer/shotwell-video-thumbnailer.c' object='thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(thumbnailer_shotwell_video_thumbnailer_CFLAGS) $(CFLAGS) -c -o thumbnailer/thumbnailer_shotwell_video_thumbnailer-shotwell-video-thumbnailer.obj `if test -f 'thumbnailer/shotwell-video-thumbnailer.c'; then $(CYGPATH_W) 'thumbnailer/shotwell-video-thumbnailer.c'; else $(CYGPATH_W) '$(srcdir)/thumbnailer/shotwell-video-thumbnailer.c'; fi`
+$(srcdir)/thumbnailer/shotwell-video-thumbnailer.c: $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp; \
+	fi
+$(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp: thumbnailer/shotwell-video-thumbnailer.vala
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(thumbnailer_shotwell_video_thumbnailer_VALAFLAGS) $(VALAFLAGS) -C thumbnailer/shotwell-video-thumbnailer.vala
+	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/src/unit/Unit.c: $(srcdir)/shotwell_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/shotwell_vala.stamp; fi
 	@if test -f $@; then :; else \
@@ -6930,39 +6937,6 @@ $(srcdir)/shotwell_vala.stamp: src/unit/Unit.vala src/util/Util.vala src/util/fi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(shotwell_VALAFLAGS) $(VALAFLAGS) -C src/unit/Unit.vala src/util/Util.vala src/util/file.vala src/util/image.vala src/util/misc.vala src/util/string.vala src/util/system.vala src/util/KeyValueMap.vala src/util/ui.vala src/threads/Threads.vala src/threads/Workers.vala src/threads/BackgroundJob.vala src/threads/Semaphore.vala src/db/Db.vala src/db/DatabaseTable.vala src/db/PhotoTable.vala src/db/EventTable.vala src/db/TagTable.vala src/db/TombstoneTable.vala src/db/VideoTable.vala src/db/VersionTable.vala src/db/SavedSearchDBTable.vala src/editing_tools/EditingTools.vala src/editing_tools/StraightenTool.vala src/slideshow/Slideshow.vala src/slideshow/TransitionEffects.vala src/photos/Photos.vala src/photos/PhotoFileAdapter.vala src/photos/PhotoFileFormat.vala src/photos/PhotoFileSniffer.vala src/photos/PhotoMetadata.vala src/photos/GRaw.vala src/photos/GdkSupport.vala src/photos/JfifSupport.vala src/photos/BmpSupport.vala src/photos/RawSupport.vala src/photos/PngSupport.vala src/photos/TiffSupport.vala src/plugins/Plugins.vala src/plugins/StandardHostInterface.vala src/plugins/ManifestWidget.vala src/publishing/Publishing.vala src/publishing/PublishingUI.vala src/publishing/PublishingPluginHost.vala src/publishing/APIGlue.vala src/library/Library.vala src/library/LibraryWindow.vala src/library/Branch.vala src/library/TrashSidebarEntry.vala src/library/OfflineSidebarEntry.vala src/library/FlaggedSidebarEntry.vala src/library/LastImportSidebarEntry.vala src/library/ImportQueueSidebarEntry.vala src/library/FlaggedPage.vala src/library/ImportQueuePage.vala src/library/LastImportPage.vala src/library/OfflinePage.vala src/library/TrashPage.vala src/direct/Direct.vala src/direct/DirectWindow.vala src/direct/DirectPhoto.vala src/direct/DirectPhotoPage.vala src/direct/DirectView.vala src/core/Core.vala src/core/DataCollection.vala src/core/DataSet.vala src/core/util.vala src/core/SourceCollection.vala src/core/SourceHoldingTank.vala src/core/DatabaseSourceCollection.vala src/core/ContainerSourceCollection.vala src/core/ViewCollection.vala src/core/DataObject.vala src/core/Alteration.vala src/core/DataSource.vala src/core/DataSourceTypes.vala src/core/DataView.vala src/core/DataViewTypes.vala src/core/Tracker.vala src/core/SourceInterfaces.vala src/sidebar/Sidebar.vala src/sidebar/Branch.vala src/sidebar/Entry.vala src/sidebar/Tree.vala src/sidebar/common.vala src/events/Events.vala src/events/Branch.vala src/events/EventsDirectoryPage.vala src/events/EventPage.vala src/events/EventDirectoryItem.vala src/tags/Tags.vala src/tags/Branch.vala src/tags/TagPage.vala src/tags/HierarchicalTagIndex.vala src/tags/HierarchicalTagUtilities.vala src/camera/Camera.vala src/camera/Branch.vala src/camera/CameraTable.vala src/camera/GPhoto.vala src/camera/ImportPage.vala src/searches/Searches.vala src/searches/Branch.vala src/searches/SearchBoolean.vala src/searches/SavedSearchPage.vala src/searches/SavedSearchDialog.vala src/config/Config.vala src/config/ConfigurationInterfaces.vala src/config/GSettingsEngine.vala src/data_imports/DataImports.vala src/data_imports/DataImportsPluginHost.vala src/data_imports/DataImportsUI.vala src/data_imports/DataImportJob.vala src/data_imports/DataImportSource.vala src/folders/Folders.vala src/folders/Branch.vala src/folders/Page.vala src/main.vala src/AppWindow.vala src/CollectionPage.vala src/NaturalCollate.vala src/Thumbnail.vala src/ThumbnailCache.vala src/CheckerboardLayout.vala src/PhotoPage.vala src/Page.vala src/SortedList.vala src/Dimensions.vala src/Box.vala src/Photo.vala src/Orientation.vala src/BatchImport.vala src/Dialogs.vala src/Resources.vala src/Debug.vala src/ColorTransformation.vala src/Properties.vala src/CustomComponents.vala src/Event.vala src/International.vala src/AppDirs.vala src/PixbufCache.vala src/CommandManager.vala src/Commands.vala src/SlideshowPage.vala src/LibraryFiles.vala src/Printing.vala src/Tag.vala src/Screensaver.vala src/Exporter.vala src/DirectoryMonitor.vala src/LibraryMonitor.vala src/VideoSupport.vala src/Tombstone.vala src/MetadataWriter.vala src/Application.vala src/TimedQueue.vala src/MediaPage.vala src/MediaDataRepresentation.vala src/DesktopIntegration.vala src/MediaInterfaces.vala src/MediaMetadata.vala src/VideoMetadata.vala src/MediaMonitor.vala src/PhotoMonitor.vala src/VideoMonitor.vala src/SearchFilter.vala src/MediaViewTracker.vala src/UnityProgressBar.vala src/Upgrades.vala src/.unitize/_UnitInternals.vala src/.unitize/_UtilInternals.vala src/.unitize/_ThreadsInternals.vala src/.unitize/_DbInternals.vala src/.unitize/_EditingToolsInternals.vala src/.unitize/_PluginsInternals.vala src/.unitize/_SlideshowInternals.vala src/.unitize/_PhotosInternals.vala src/.unitize/_PublishingInternals.vala src/.unitize/_LibraryInternals.vala src/.unitize/_DirectInternals.vala src/.unitize/_CoreInternals.vala src/.unitize/_SidebarInternals.vala src/.unitize/_EventsInternals.vala src/.unitize/_TagsInternals.vala src/.unitize/_CameraInternals.vala src/.unitize/_SearchesInternals.vala src/.unitize/_ConfigInternals.vala src/.unitize/_DataImportsInternals.vala src/.unitize/_FoldersInternals.vala src/.unitize/_Library_unitize_entry.vala src/.unitize/_Direct_unitize_entry.vala plugins/shotwell-plugin-dev-1.0.vapi
 	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/thumbnailer/shotwell-video-thumbnailer.c: $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp; \
-	fi
-$(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp: thumbnailer/shotwell-video-thumbnailer.vala
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(thumbnailer_shotwell_video_thumbnailer_VALAFLAGS) $(VALAFLAGS) -C thumbnailer/shotwell-video-thumbnailer.vala
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/common/RESTSupport.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/common/Resources.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/common/WebAuthenticationPane.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/common/BuilderPane.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp: plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/common/BuilderPane.vala plugins/shotwell-plugin-dev-1.0.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_common_libshotwell_plugin_common_la_VALAFLAGS) $(VALAFLAGS) -C plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/common/BuilderPane.vala plugins/shotwell-plugin-dev-1.0.vapi
-	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/plugins/shotwell-publishing-extras/GalleryConnector.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
 	@if test -f $@; then :; else \
@@ -6991,64 +6965,6 @@ $(srcdir)/plugins/shotwell-publishing-extras/YandexPublishing.c: $(srcdir)/plugi
 $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp: plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/shotwell-publishing/shotwell-publishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/FacebookPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/PicasaPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/FlickrPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/YouTubePublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing/PiwigoPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
 	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
@@ -7182,6 +7098,88 @@ $(srcdir)/plugins/shotwell-transitions/StripesEffect.c: $(srcdir)/plugins_shotwe
 $(srcdir)/plugins_shotwell_transitions_shotwell_transitions_la_vala.stamp: plugins/shotwell-transitions/BlindsEffect.vala plugins/shotwell-transitions/ChessEffect.vala plugins/shotwell-transitions/CircleEffect.vala plugins/shotwell-transitions/CirclesEffect.vala plugins/shotwell-transitions/ClockEffect.vala plugins/shotwell-transitions/CrumbleEffect.vala plugins/shotwell-transitions/FadeEffect.vala plugins/shotwell-transitions/shotwell-transitions.vala plugins/shotwell-transitions/SlideEffect.vala plugins/shotwell-transitions/SquaresEffect.vala plugins/shotwell-transitions/StripesEffect.vala plugins/shotwell-plugin-common.vapi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_transitions_shotwell_transitions_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-transitions/BlindsEffect.vala plugins/shotwell-transitions/ChessEffect.vala plugins/shotwell-transitions/CircleEffect.vala plugins/shotwell-transitions/CirclesEffect.vala plugins/shotwell-transitions/ClockEffect.vala plugins/shotwell-transitions/CrumbleEffect.vala plugins/shotwell-transitions/FadeEffect.vala plugins/shotwell-transitions/shotwell-transitions.vala plugins/shotwell-transitions/SlideEffect.vala plugins/shotwell-transitions/SquaresEffect.vala plugins/shotwell-transitions/StripesEffect.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/common/RESTSupport.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/common/Resources.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/common/WebAuthenticationPane.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/common/BuilderPane.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp: plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/common/BuilderPane.vala plugins/shotwell-plugin-dev-1.0.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_common_libshotwell_plugin_common_la_VALAFLAGS) $(VALAFLAGS) -C plugins/common/RESTSupport.vala plugins/common/Resources.vala plugins/common/WebAuthenticationPane.vala plugins/common/BuilderPane.vala plugins/shotwell-plugin-dev-1.0.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/shotwell-publishing/shotwell-publishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/FacebookPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/PicasaPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/FlickrPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/YouTubePublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing/PiwigoPublishing.c: $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
 	$(AM_V_at)mv -f $@-t $@
 
 mostlyclean-libtool:
@@ -8104,7 +8102,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -8153,7 +8151,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -8230,10 +8228,9 @@ plugins/shotwell-plugin-dev-1.0.vapi plugins/shotwell-plugin-dev-1.0.h: src_plug
 
 -include $(top_srcdir)/git.mk
 
-src/resource.c: src/org.gnome.Shotwell.gresource.xml $(shotwell_resource_deps)
+resource.c: org.gnome.Shotwell.gresource.xml $(shotwell_resource_deps)
 	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) --target=$@ \
-		--sourcedir=$(abs_top_srcdir)/icons \
-		--sourcedir=$(abs_top_srcdir)/ui \
+		--sourcedir=$(abs_top_srcdir) \
 		--generate $<
 
 plugins/shotwell-publishing/resource.c: $(PUBLISHING_RESOURCE_DEPS) $(PUBLISHING_RESOURCE_FILE)

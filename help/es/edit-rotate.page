@@ -28,14 +28,14 @@
 
 	<title>Girar o voltear una foto</title>
 
-    <p>You can rotate your photos left and right (clockwise and counterclockwise) with the <gui>Rotate</gui> button on the toolbar of most views. You can also make a mirror image of any photo.</p>
+    <p>Puede girar las fotos a la izquierda y a la derecha con el botón <gui>Girar</gui> en la barra de herramientas de la mayoría de las vistas. También puede hacer una imagen reflejada de cualquier foto.</p>
     
     <p>To rotate right, click on the <gui>Rotate</gui> button. To rotate left, press and hold the <key>Ctrl</key> key and then click the button. Both commands are available in the <gui>Photos</gui> menu too.  Alternatively, use the following keyboard shortcuts:</p>
     <list>
     <item><p>rotar a la izquierda: <keyseq><key>Mayús</key><key>Ctrl</key><key>R</key></keyseq> o <key>[</key></p></item>
     <item><p>rotar a la derecha: <keyseq><key>Ctrl</key><key>R</key></keyseq> or <key>]</key></p></item>
     </list>
-    <p>To create a mirror image of a photo, use the <gui>Flip Horizontally</gui> command in the <gui>Photos</gui> menu. To flip an image vertically, use the <gui>Flip Vertically</gui> command in the same menu.</p>
+    <p>Para crear una imagen reflejada de una foto, utilice el comando <gui>Voltear horizontalmente</gui> en el menú <gui>Fotos</gui>. Para voltear una imagen verticalmente, utilice el comando <gui>Voltear verticalmente</gui> en el mismo menú.</p>
     
     <note>
      <p>Si selecciona más de una imagen, puede girar todas ellas al mismo tiempo.</p>

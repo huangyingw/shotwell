@@ -17,24 +17,23 @@ shotwell_VALAFLAGS = $(COMMON_VALAFLAGS) \
 	--pkg libgphoto2 --pkg posix --pkg libraw --pkg gexiv2 \
 	--pkg libexif --pkg gudev-1.0 --pkg gstreamer-1.0 \
 	--pkg gstreamer-pbutils-1.0 --pkg misc \
+	--gresources $(abs_top_srcdir)/org.gnome.Shotwell.gresource.xml \
 	$(UNITY_VALAFLAGS) \
 	$(COMMON_VALAFLAGS_POST)
 
-dist_noinst_DATA += src/org.gnome.Shotwell.gresource.xml
+dist_noinst_DATA += org.gnome.Shotwell.gresource.xml
 
 nodist_shotwell_SOURCES = \
-	src/resource.c
-MOSTLYCLEANFILES += src/resource.c
+	resource.c
+MOSTLYCLEANFILES += resource.c
 
-shotwell_resource_deps = $(shell $(GLIB_COMPILE_RESOURCES) \
-		--sourcedir=$(abs_top_srcdir)/icons \
-		--sourcedir=$(abs_top_srcdir)/ui \
-		--generate-dependencies $(abs_top_srcdir)/src/org.gnome.Shotwell.gresource.xml)
+shotwell_resource_deps := $(shell $(GLIB_COMPILE_RESOURCES) \
+	--sourcedir=$(abs_top_srcdir) \
+	--generate-dependencies $(abs_top_srcdir)/org.gnome.Shotwell.gresource.xml)
 
-src/resource.c: src/org.gnome.Shotwell.gresource.xml $(shotwell_resource_deps)
+resource.c: org.gnome.Shotwell.gresource.xml $(shotwell_resource_deps)
 	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) --target=$@ \
-		--sourcedir=$(abs_top_srcdir)/icons \
-		--sourcedir=$(abs_top_srcdir)/ui \
+		--sourcedir=$(abs_top_srcdir) \
 		--generate $<
 
 shotwell_SOURCES = \

@@ -1,6 +1,465 @@
+commit e2940082c6e44526d9494a13443064f544a597ba
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Dec 12 18:19:56 2016 +0100
+
+    Prepare 0.25.2
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit 1b117dcf0161697a137e955727ef868f1bee9f2f
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Mon Dec 12 15:12:25 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit e59f3184266543c057c96290b95a5392c31d9bbf
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 11 16:15:04 2016 +0100
+
+    Fix make distcheck
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	shotwell.am
+
+commit 76e8dabf9d043773f6335269e536c876c3cd21e9
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 9 23:52:00 2016 +0100
+
+    Fix context menu on import page
+
+    More left-over from the GLib.Action rework
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/camera/ImportPage.vala
+
+commit 7794d0401071d180b23741f1950b598340048307
+Author: Alan Mortensen <alanmortensen.am@gmail.com>
+Date:	Thu Dec 8 20:27:38 2016 +0100
+
+    Updated Danish translation
+
+M	po/da.po
+
+commit 00e3e01fee5b9a062b40c055f527442b191178fe
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Wed Dec 7 08:28:59 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 81c6c321ab01313b4a55b24fc8c645d43561e85e
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Dec 5 23:42:05 2016 +0100
+
+    Fix Undo/Redo adaptive labeling
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+M	src/Page.vala
+
+commit 01da01587dc184a940a9bbf2d84ab0647dcf30d5
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Dec 5 23:27:43 2016 +0100
+
+    Re-add label switching for background menu item
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/CollectionPage.vala
+M	src/Page.vala
+M	src/PhotoPage.vala
+
+commit 3b7754f2a92a34180d82bc2627f99e23d330109c
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Dec 5 22:42:49 2016 +0100
+
+    One more missing SetBackground shortcut
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/CollectionPage.vala
+
+commit 25ef3e05e3573bf39efd8d07fe038c6a61fccd20
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Dec 5 20:57:51 2016 +0100
+
+    Make two dialogs Template-based
+
+    Also fixes an issue with upcoming vala release
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	org.gnome.Shotwell.gresource.xml
+M	shotwell.am
+M	src/Dialogs.vala
+M	ui/Makefile.am
+M	ui/set_background_dialog.ui
+M	ui/set_background_slideshow_dialog.ui
+
+commit 7da6f0ea5fe79cc377ef01af685e8458c0a8e05a
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 4 20:55:26 2016 +0100
+
+    Move gresource to top-level
+
+    Prepare for vala --gresources which does not have the --sourcedir
+    parameter so
+    it looks for the referenced files next to the resource file
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+A	org.gnome.Shotwell.gresource.xml
+M	shotwell.am
+D	src/org.gnome.Shotwell.gresource.xml
+
+commit a6e8b19ed137682917cb2d7e600476f8ff265a5f
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 4 20:12:30 2016 +0100
+
+    Add missing shortcut for Set Background
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/PhotoPage.vala
+M	src/direct/DirectPhotoPage.vala
+
+commit e2a9987638ef1e12ad30d7559ccfe508a4d8afed
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Dec 3 23:28:43 2016 +0100
+
+    Fix opacity of disabled icons
+
+    The icons added in 7589900c4ee3f790fd57474a64978193bd839424 were
+    darker than
+    the "original" disabled icons; apply the missing opacity change to
+    the PNGs
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	icons/filter-flagged-disabled.png
+M	icons/filter-photos-disabled.png
+M	icons/filter-raw-disabled.png
+M	icons/filter-videos-disabled.png
+
+commit b3a37f6bbbd5fd147b73a8f29eb776085c0ee42c
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Dec 3 23:23:37 2016 +0100
+
+    Small clean-up
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/editing_tools/EditingTools.vala
+M	src/util/misc.vala
+
+commit 545ea734a93befc34a59b63090d67e5df34bf3a9
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Fri Dec 2 07:31:24 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit c430023b92ef28aa6a5cdae8abd2b2bda366944c
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Thu Dec 1 07:38:52 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 832f4aaa24e663682e27add8c916407e334af8de
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Thu Dec 1 03:16:55 2016 +0100
+
+    Update POTFILES.in
+
+M	po/POTFILES.in
+
+commit 7589900c4ee3f790fd57474a64978193bd839424
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 1 01:31:50 2016 +0100
+
+    Remove Gtk.IconFactory
+
+    Use Gtk.IconTheme and add the four -disabled variants used in
+    SearchBar.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+A	icons/filter-flagged-disabled.png
+A	icons/filter-photos-disabled.png
+A	icons/filter-raw-disabled.png
+A	icons/filter-videos-disabled.png
+M	src/Resources.vala
+M	src/SearchFilter.vala
+M	src/util/image.vala
+
+commit b954655410f5d8351067bd3fb7aef1f6267ffdb7
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 1 01:27:41 2016 +0100
+
+    Fix initial searchbar state
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit cbe584674eba4c1196135c6f5d8df0ce3ff09a31
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 1 01:18:07 2016 +0100
+
+    Fix type filter action for search bar
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+
+commit 003c7fd16cb896b20dd664a9bd1ccb870098de9c
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 30 23:21:29 2016 +0100
+
+    debian: Fix makeshlibs
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/rules
+
+commit 708d0aca71a2369a6b56ba2292c9c77792b196fd
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Nov 29 23:57:43 2016 +0100
+
+    Suppress error on git version check
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 6e6a51b3a5b939322e0a40c2f2766367969721c2
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Nov 26 10:14:59 2016 +0100
+
+    Use AppMenu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=719279
+
+M	src/Application.vala
+M	src/direct/DirectWindow.vala
+M	src/library/LibraryWindow.vala
+M	src/org.gnome.Shotwell.gresource.xml
+A	ui/appmenu.ui
+M	ui/direct.ui
+M	ui/event.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/tags.ui
+M	ui/trash.ui
+
+commit cf253ba83df8e7b64431ba47ce6f6eaecd4290e9
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Wed Nov 30 08:06:53 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit abefe41125206a8bd13fd2d3b8d514104c8490bd
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Nov 27 17:26:40 2016 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 63766d02e16c88dc0906d25760fd789586949c7a
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Sat Nov 26 10:52:56 2016 +0000
+
+    Update German translation
+
+M	po/de.po
+
+commit 2d7aae3e2d66e09efb58b32fbc9828962dfc5898
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Nov 26 09:06:38 2016 +0100
+
+    Fix c&p error in publishing result
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/publishing/PublishingUI.vala
+
+commit c1bfc20645f388150d62680388a565e7c14f5d59
+Author: gogo <trebelnik2@gmail.com>
+Date:	Fri Nov 25 22:09:44 2016 +0000
+
+    Update Croatian translation
+    (cherry picked from commit ea4d90848de74ec9eb20b18332bfafb31795ac37)
+
+M	po/hr.po
+
+commit 1bc0b23c1c9f264fd5158a883e6e65c051684a77
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 25 20:20:56 2016 +0100
+
+    Wrap bottom toolbar into a Gtk.Revealer
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit d9c46b697a7b888240a4436752788dec036389d4
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 25 19:58:04 2016 +0100
+
+    Fix disabled rating filter menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+
+commit 070a14ee74d49669b1e49b787c5322549d047e65
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 25 19:52:58 2016 +0100
+
+    Fix search header hiding
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+M	src/library/LibraryWindow.vala
+
+commit c5f5ae947573591f6536fbe2942ef58772bdb67d
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 25 19:05:08 2016 +0100
+
+    Fix initial sort order
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/MediaPage.vala
+
+commit d50fc3d02eb804144159ba58fbb218f5b35900c9
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 24 23:02:03 2016 +0100
+
+    Prevent cricial on start-up
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit 1763804167a4afd0b024eaa38cdde011806800c4
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Nov 24 23:01:44 2016 +0100
+
+    Use proper strings for states
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/MediaPage.vala
+M	src/PhotoPage.vala
+M	src/SearchFilter.vala
+
+commit aae874a437d5074562887eced6fd38ceae33fb9e
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 23 23:47:55 2016 +0100
+
+    Fix typo
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/events/EventsDirectoryPage.vala
+
+commit 78d4241ece3c6679b2cec7a226dac9a18c85a30e
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 23 23:15:08 2016 +0100
+
+    Add forgotton initialisation for states
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit 368c897bb6ddced1e120ec74765390ae803361f1
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 23 23:14:36 2016 +0100
+
+    Use change_state to set initial action state
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/MediaPage.vala
+M	src/PhotoPage.vala
+M	src/SearchFilter.vala
+M	src/camera/ImportPage.vala
+M	src/events/EventsDirectoryPage.vala
+
+commit 4bcd9e9bfc3fdaf61e30fad4a9fe0d509727cb01
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 23 22:52:07 2016 +0100
+
+    Update README
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	README
+
+commit 38347d6e03930e479c1fdcceb63291694fe383e5
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Nov 23 18:53:26 2016 +0100
+
+    Add missing About action
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=774901
+
+M	src/AppWindow.vala
+
+commit c7ee3bffae33fb8445d63419985bc84a881d2b1a
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Tue Nov 22 23:15:11 2016 +0000
+
+    Update Hungarian translation
+
+M	po/hu.po
+
+commit 2bd9761ba434353114215d15e397e9e9b0fba6eb
+Author: Marek Cernocky <marek_cernocky@conel.cz>
+Date:	Tue Nov 22 13:28:43 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 8dd5b215d3ada4e2061b5e468e341c3336d4d0dc
+Author: Marek Cernocky <marek_cernocky@conel.cz>
+Date:	Tue Nov 22 13:26:54 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
 commit 9984f365ab9407791f58792a71b71d15d974b64e
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Nov 21 20:30:37 2016 +0100
+Date:	Mon Nov 21 20:30:37 2016 +0100
 
     Prepare 0.25.1
 

@@ -436,12 +436,12 @@ public class SearchFilterActions {
     }
     
     public void reset() {
-        rating.set_enabled (false);
-        photos.set_enabled (false);
-        raw.set_enabled (false);
-        videos.set_enabled (false);
-        Variant v = "'%d'".printf (RatingFilter.UNRATED_OR_HIGHER);
-        rating.set_state (v);
+        flagged.change_state (false);
+        photos.change_state (false);
+        raw.change_state (false);
+        videos.change_state (false);
+        Variant v = "%d".printf (RatingFilter.UNRATED_OR_HIGHER);
+        rating.change_state (v);
 
         text.set_text(null);
     }
@@ -554,8 +554,11 @@ public class SearchFilterActions {
 
     private void on_rating_changed (GLib.SimpleAction action,
                                     GLib.Variant      value) {
-        action.set_state (value);
+        if (value.get_string () == action.get_state().get_string ())
+            return;
+
         var filter = (RatingFilter) int.parse (value.get_string ());
+        action.set_state (value);
         rating_changed(filter);
     }
     
@@ -643,10 +646,7 @@ public class SearchFilterToolbar : Gtk.Revealer {
         public void set_icon_name(string icon_name) {
             Gtk.Image? image = null;
             button.set_always_show_image(true);
-            if (icon_name.contains("disabled"))
-                image = new Gtk.Image.from_stock(icon_name, Gtk.IconSize.SMALL_TOOLBAR);
-            else
-                image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.SMALL_TOOLBAR);
+            image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.SMALL_TOOLBAR);
             image.set_margin_end(6);
             button.set_image(image);
         }
@@ -1212,7 +1212,7 @@ public class SearchFilterToolbar : Gtk.Revealer {
         // Could we find the appropriate action?
         if(action != null) {
             // Yes, hide the search bar.
-            action.set_state(false);
+            action.change_state(false);
         }
     }
     
@@ -1247,7 +1247,7 @@ public class SearchFilterToolbar : Gtk.Revealer {
 
         // Could we find the appropriate action?
         if(action != null) {
-            action.set_state(true);
+            action.change_state(true);
         }
 
         update();

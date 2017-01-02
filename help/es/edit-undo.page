@@ -30,10 +30,10 @@
 
 	<title>Deshacer cambios</title>
     
-    <p>Because Shotwell is a non-destructive photo editor, you can undo any alterations you make to a photograph.</p>
+    <p>Gracias a que Shotwell es un editor de fotos no destructivo, puede deshacer cualquier alteración que realice en una foto.</p>
     
     <p>If you want to see what a photo looked like before your modifications, press the <key>Shift</key> key. The original photo will be displayed as long as you hold the key down.</p>
 
-    <p>To completely undo all the changes you've made to a photo, click <guiseq><gui>Photos</gui><gui>Revert to Original</gui></guiseq>. The only exception is that time and date adjustments will not be reverted.</p>
+    <p>Para deshacer por completo todos los cambios realizados en una foto, haga clic en <guiseq><gui>Fotos</gui><gui>Volver al original</gui></guiseq>. La única excepción es que los ajustes de hora y fecha no se revertirán.</p>
 
 </page>
