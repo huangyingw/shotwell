@@ -1,6 +1,8 @@
-shotwell (0.25.2-1) UNRELEASED; urgency=medium
+shotwell (0.25.3-1) UNRELEASED; urgency=medium
 
-  * New upstream release (Closes: #849688).
+  * New upstream release (Closes: #849688, #851711).
+  * debian/copyright:
+    - Update copyright years for 2017.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Mon, 02 Jan 2017 11:26:56 +0100
 
