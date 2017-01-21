@@ -34,7 +34,7 @@
 <section id="delete-remove">
 	<title>Quitar fotos de la biblioteca</title>
     <p>Seleccione las fotos que quiere quitar y elija <guiseq><gui>Editar</gui><gui>Mover a la papelera</gui></guiseq>. (También puede pulsar la tecla <key>Supr</key>.) Las fotos se moverán de su biblioteca a la papelera de Shotwell.</p>
-    <p>If you want to remove photos from Shotwell without having them pass through the trash, simply select the photos to be removed and choose <guiseq><gui>Edit</gui><gui>Remove From Library</gui></guiseq>.  The photo files will be left in place on disk.</p>
+    <p>Si quiere quitar las fotos de Shotwell sin tener que moverlas a la papelera, simplemente seleccione las fotos que va a quitar y elija <guiseq><gui>Editar</gui><gui>Eliminar de la biblioteca</gui></guiseq>. Los archivos de fotos se dejarán en su lugar en el disco.</p>
 </section>
 
 <section id="delete-empty">

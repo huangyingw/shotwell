@@ -27,10 +27,7 @@
   </info>
 
 	<title>Complementos</title>
-        <p>
-            Shotwell can be used with <em>plugins</em>, which are companion shared libraries that can
-            add support for new publishing destinations or new slideshow transitions.
-        </p>
+        <p>Shotwell se puede usar con <em>complementos</em>, que son bibliotecas compartidas complementarias que pueden agregar soporte para nuevos destinos de publicación o nuevas transiciones de presentación de diapositivas.</p>
         
         <p>Para ver una lista de los complementos instalados, elija <guiseq><gui>Editar</gui><gui>Preferencias</gui></guiseq>, y en la ventana de <gui>Preferencias</gui> pulse en la pestaña <gui>Complementos</gui>. Verá una lista de los complementos actualmente instalados, cada uno con una casilla mediante la que puede activarlos o desactivarlos por su nombre.</p>
         

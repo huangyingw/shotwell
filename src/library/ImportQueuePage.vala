@@ -63,12 +63,19 @@ public class ImportQueuePage : SinglePhotoPage {
         {"Stop", on_stop }
     };
 
-    protected override void add_actions () {
-        base.add_actions ();
+    protected override void add_actions (GLib.ActionMap map) {
+        base.add_actions(map);
 
-        AppWindow.get_instance ().add_action_entries (entries, this);
+        map.add_action_entries(entries, this);
     }
-    
+
+    protected override void remove_actions(GLib.ActionMap map) {
+        base.remove_actions(map);
+        foreach (var entry in entries) {
+            map.remove_action(entry.name);
+        }
+    }
+
     public void enqueue_and_schedule(BatchImport batch_import, bool allow_user_cancel) {
         assert(!queue.contains(batch_import));
         

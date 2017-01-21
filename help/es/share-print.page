@@ -28,14 +28,9 @@
 
 	<title>Imprimir</title>
 
-    <p>To print a photo, select it and choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>.</p>
+    <p>Para imprimir una foto, selecciónela y elija <guiseq><gui>Archivo</gui><gui>Imprimir</gui></guiseq>.</p>
      
-    <p>
-    Shotwell can also print multiple images in one page; to do this, select multiple images, 
-    choose <guiseq><gui>File</gui><gui>Print...</gui></guiseq>, and in the <gui>Print</gui> dialog,
-    choose the <gui>Image Settings</gui> tab. In <gui>Image Settings</gui>, choose one of the 
-    multiple-image-per-page options under <gui>Autosize</gui>.
-    </p>
+    <p>Shotwell puede también imprimir varias imágenes en una página; para hacer esto, seleccione las imágenes, elija <guiseq><gui>Archivo</gui><gui>Imprimir</gui></guiseq> y en el cuadro de diálogo <gui>Imprimir</gui>, seleccione la pestaña <gui>Configuraciones de la imagen</gui>. En<gui>Configuración de la imagen</gui>, elija una de las opciones múltiples imágenes por página en <gui>Tamaño automático</gui>.</p>
 
     <p>Si quiere establecer el formato, el tamaño del papel, y la orientación, seleccione la pestaña <gui>Configuración de la página</gui>en el cuadro de diálogo <gui>Imprimir</gui> antes de imprimir.</p>
 </page>

@@ -30,6 +30,6 @@
 
 <p>El panel de información básica aparece en la parte inferior de la barra lateral, y muestra un breve resumen de las fotos que ha seleccionado. Si no se ha seleccionado ninguna foto, muestra un resumen de la colección completa. Puede cambiar la visibilidad de este panel usando el comando <guiseq><gui>Ver</gui><gui>Información básica</gui></guiseq>.</p>
 
-<p>The floating Extended Information window displays more information about the selected photo.  The <guiseq><gui>View</gui><gui>Extended Information</gui></guiseq> command or <keyseq><key>Ctrl</key><key>Shift</key><key>X</key></keyseq> toggles the display of this window.</p>
+<p>La ventana flotante de información extendida muestra más información sobre la foto seleccionada. El comando <guiseq><gui>Vista</gui><gui>Información extendida</gui></guiseq> o <keyseq><key>Ctrl</key><key>Shift</key><key>X</key></keyseq> activa la visualización de esta ventana.</p>
 
 </page>

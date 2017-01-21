@@ -84,12 +84,14 @@ public class LibraryWindow : AppWindow {
             base.switched_to();
         }
 
+        public override void switching_from() {
+        }
+
         protected override void init_collect_ui_filenames(Gee.List<string> ui_filenames) {
             // We intentionally don't call the base class here since we don't want the
             // top-level menu in photo.ui.
             ui_filenames.add("photo_context.ui");
         }
-        
     }
 
     private string import_dir = Environment.get_home_dir();
@@ -209,7 +211,11 @@ public class LibraryWindow : AppWindow {
         CameraTable.get_instance().camera_added.connect(on_camera_added);
         
         background_progress_bar.set_show_text(true);
-        
+
+        // Need to re-install F8 here as it will overwrite the binding created
+        // by the menu
+        const string[] accels = { "<Primary>f", "F8", null };
+        Application.set_accels_for_action("win.CommonDisplaySearchbar", accels);
     }
 
     ~LibraryWindow() {
@@ -1187,9 +1193,6 @@ public class LibraryWindow : AppWindow {
         
         add(layout);
 
-        var builder = new Gtk.Builder.from_resource ("/org/gnome/Shotwell/appmenu.ui");
-        Application.set_appmenu (builder.get_object ("appmenu") as GLib.Menu);
-
         switch_to_page(start_page);
         start_page.grab_focus();
     }
@@ -1272,6 +1275,9 @@ public class LibraryWindow : AppWindow {
 
         Application.set_menubar (page.get_menubar ());
         set_show_menubar (true);
+        var old = get_settings().gtk_shell_shows_menubar;
+        get_settings().gtk_shell_shows_menubar = !old;
+        get_settings().gtk_shell_shows_menubar = old;
         
         Gtk.Toolbar toolbar = page.get_toolbar();
         if (toolbar != null) {

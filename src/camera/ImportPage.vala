@@ -338,14 +338,22 @@ class ImportPreview : MediaSourceItem {
                 uint64 filesize = get_import_source().get_filesize();
                 // unlikely to be a problem, but what the hay
                 if (filesize <= int64.MAX) {
-                    if (LibraryPhoto.global.has_basename_filesize_duplicate(
-                        get_import_source().get_filename(), (int64) filesize)) {
+                    PhotoID duplicated_photo_id = LibraryPhoto.global.get_basename_filesize_duplicate(
+                                get_import_source().get_filename(), (int64) filesize);
+
+                    if (duplicated_photo_id.is_valid()) {
+                        // Check exposure timestamp
+                        LibraryPhoto duplicated_photo = LibraryPhoto.global.fetch(duplicated_photo_id);
+                        time_t photo_exposure_time = photo_import_source.get_exposure_time();
+                        time_t duplicated_photo_exposure_time = duplicated_photo.get_exposure_time();
                         
-                        duplicated_file = DuplicatedFile.create_from_photo_id(
-                            LibraryPhoto.global.get_basename_filesize_duplicate(
-                            get_import_source().get_filename(), (int64) filesize));
-                        
-                        return true;
+                        if (photo_exposure_time == duplicated_photo_exposure_time) {
+                            duplicated_file = DuplicatedFile.create_from_photo_id(
+                                LibraryPhoto.global.get_basename_filesize_duplicate(
+                                get_import_source().get_filename(), (int64) filesize));
+
+                            return true;
+                        }
                     }
                 }
             }
@@ -801,6 +809,7 @@ public class ImportPage : CheckerboardPage {
             
             // Find button
             Gtk.ToggleToolButton find_button = new Gtk.ToggleToolButton();
+            find_button.set_icon_name("edit-find");
             find_button.set_action_name ("win.CommonDisplaySearchbar");
             
             toolbar.insert(find_button, -1);
@@ -810,14 +819,20 @@ public class ImportPage : CheckerboardPage {
             
             // Import selected
             Gtk.ToolButton import_selected_button = new Gtk.ToolButton(null, null);
-            import_selected_button.set_icon_name(Resources.IMPORT);
+            import_selected_button.set_icon_name("import");
+            import_selected_button.set_label(_("Import _Selected"));
+            import_selected_button.is_important = true;
+            import_selected_button.use_underline = true;
             import_selected_button.set_action_name ("win.ImportSelected");
             
             toolbar.insert(import_selected_button, -1);
             
             // Import all
             Gtk.ToolButton import_all_button = new Gtk.ToolButton(null, null);
-            import_all_button.set_icon_name(Resources.IMPORT_ALL);
+            import_all_button.set_icon_name("import-all");
+            import_all_button.set_label(_("Import _All"));
+            import_all_button.is_important = true;
+            import_all_button.use_underline = true;
             import_all_button.set_action_name ("win.ImportAll");
             
             toolbar.insert(import_all_button, -1);
@@ -872,14 +887,21 @@ public class ImportPage : CheckerboardPage {
         { "ViewTitle", on_action_toggle, null, "false", on_display_titles },
     };
 
-    protected override void add_actions () {
-        base.add_actions ();
+    protected override void add_actions (GLib.ActionMap map) {
+        base.add_actions (map);
 
-        AppWindow.get_instance ().add_action_entries (entries, this);
+        map.add_action_entries (entries, this);
 
         get_action ("ViewTitle").change_state (Config.Facade.get_instance ().get_display_photo_titles ());
     }
-    
+
+    protected override void remove_actions(GLib.ActionMap map) {
+        base.remove_actions(map);
+        foreach (var entry in entries) {
+            map.remove_action(entry.name);
+        }
+    }
+
     public GPhoto.Camera get_camera() {
         return camera;
     }

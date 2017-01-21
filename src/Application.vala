@@ -103,16 +103,12 @@ public class Application {
         get_instance().system_app.set_menubar (model);
     }
 
-    public static void set_appmenu (GLib.MenuModel? model) {
-        get_instance().system_app.set_app_menu (model);
-    }
-
     /**
      * @brief Signal handler for GApplication's 'command-line' signal.
      *
      * The most likely scenario for this to be fired is if the user
      * either tried to run us twice in library mode, or we've just gotten
-     * a camera/removeable-storage mount; in either case, the remote instance
+     * a camera/removable-storage mount; in either case, the remote instance
      * will trigger this and exit, and we'll need to bring the window back up...
      */
     public static void on_activated() {

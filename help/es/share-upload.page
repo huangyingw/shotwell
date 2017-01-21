@@ -41,10 +41,8 @@
     
     <p>Para publicar las fotos seleccionadas en una colección, elija <guiseq><gui>Editar</gui><gui>Preferencias</gui></guiseq> y pulse en la pestaña <gui>Complementos</gui> para activar el complemento del servicio en el que quiere publicar. A continuación, elija <guiseq><gui>Archivo</gui><gui>Publicar</gui></guiseq>, pulse el botón <gui>Publicar</gui> en la barra de herramientas o pulse <keyseq><key>Ctrl</key><key>P</key></keyseq>. Verá un diálogo que le permite elegir el servicio de publicación. Necesitará iniciar sesión o crear una cuenta.</p>
     
-    <p>Publishing to Facebook requires you to grant certain permissions to the Shotwell Facebook application.
-    You only need to grant these permissions once, when you first associate Shotwell with your Facebook account.
-</p>
-    <note style="advanced"><p>You will be only able to publish images with at most the permission you granted to the Shotwell Facebook application</p></note>
+    <p>Publicar en Facebook requiere que conceda ciertos permisos a la aplicación Conectar Shotwell con Facebook. Solo necesita conceder los permisos una vez, la primera vez que asocie Shotwell con su cuenta de Facebook.</p>
+    <note style="advanced"><p>Solo podrá publicar imágenes con el permiso que concedió a la aplicación Facebook de Shotwell</p></note>
     
     <p>Del mismo modo, publicar en Flickr requiere que inicie sesión y permita que Shotwell Connect acceda a su cuenta.</p>
     

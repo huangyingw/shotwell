@@ -28,7 +28,7 @@
 
 	<title>Varias bibliotecas</title>
 
-<p>Shotwell normally stores its database and photo thumbnails in the directory <file>~/.shotwell</file> . This directory does not hold photos, but the database in this directory contains a list of all the photos in the Shotwell library.</p>
+<p>Normalmente, Shotwell almacena su base de datos y miniaturas de fotos en la carpeta <file>~/.shotwell</file>. Esta carpeta no contiene fotos, pero la base de datos de esta carpeta contiene una lista de todas las fotos de la biblioteca de Shotwell.</p>
 
 <p>Como característica avanzada, es posible tener varias bibliotecas de Shotwell, cada una de ellas con su propio conjunto de fotos. Cada biblioteca necesita su propia carpeta de base de datos. Para ejecutar Shotwell con una biblioteca diferente, especifique una base de datos alternativa en la línea de comandos como sigue:</p>
 

@@ -30,10 +30,6 @@
 
     <p>Para establecer una única foto como fondo del escritorio, seleccione la foto y escriba <guiseq><gui>Archivo</gui><gui>Establecer como fondo del escritorio</gui></guiseq>.</p>
     
-    <p>You can also set your background to a slideshow of photos.  To do this, select the photos for
-    the slideshow and choose <guiseq><gui>File</gui><gui>Set as Desktop Slideshow...</gui></guiseq>.
-    Shotwell will prompt you for a slideshow delay, which can be any interval up to one day in length.
-    The background slideshow will proceed even when Shotwell is not running.
-    </p>
+    <p>También puede configurar su fondo para una presentación de fotos. Para ello, seleccione las fotos de la presentación y elija <guiseq><gui>Archivo</gui><gui>Establecer como presentación de diapositivas de escritorio...</gui></guiseq>. Shotwell le pedirá el tiempo de duración de cada diapositiva, que puede ser desde cualquier intervalo de tiempo hasta un día. La presentación de diapositivas de fondo continuará incluso cuando Shotwell no esté funcionando.</p>
     
 </page>

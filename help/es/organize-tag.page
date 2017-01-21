@@ -40,40 +40,13 @@
 		<item><p>Arrastre las fotos y suéltelas en la etiqueta que quiera.</p></item>
     </list>
      
-    <p>
-		When you use <keyseq><key>Ctrl</key><key>T</key></keyseq> or 
-		<guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq> you can type
-		in the names of one or more tags, separated by commas.
-		Once you have created a tag, you can rename it by selecting that 
-		tag in the sidebar and choosing 
-		<guiseq><gui>Tags</gui><gui>Rename Tag "[name]"...</gui></guiseq>,
-		by rightclicking on it and choose <gui>Rename...</gui> or
-		double-click on the tag in the sidebar.
-	</p>
+    <p>Cuando pulse <keyseq><key>Ctrl</key><key>T</key></keyseq> o <guiseq><gui>Etiquetas</gui><gui>Añadir etiquetas...</gui></guiseq> puede escribir los nombres de una o más etiquetas, separadas por comas. Una vez que haya creado una etiqueta, puede renombrarla seleccionando esa etiqueta en la barra lateral y eligiendo <guiseq><gui>Etiquetas</gui><gui>Renombrar etiqueta "[nombre]"...</gui></guiseq> pulsando con el botón derecho y eligiendo <gui>Renombrar...</gui> o pulsando dos veces en la etiqueta de la barra lateral. </p>
     
-    <p>
-		To change which tags are associated with a particular photo, 
-		select that photo, choose 
-		<guiseq><gui>Tags</gui><gui>Modify Tags...</gui></guiseq> or
-		right-click on a photo and select <gui>Modify Tags...</gui> and
-		edit the comma separated list.
-		To remove a tag from one or more photos, first select that tag 
-		in the sidebar, then select the photos you would like to remove, 
-		and choose 
-		<guiseq><gui>Tags</gui><gui>Remove Tag "[name]" from Photos</gui></guiseq> 
-		or right-click on the photos an select 
-		<gui>Remove Tag "[name]" from Photos</gui>.
-	</p>
+    <p>Para cambiar las etiquetas asociadas a una foto en particular, seleccione esa foto, elija <guiseq><gui>Etiquetas</gui><gui>Modificar etiquetas...</gui></guiseq> o pulse con el botón derecho en una foto y seleccione <gui>Modificar etiquetas...</gui> y edite la lista separada por comas. Para quitar una etiqueta de una o más fotos, primero seleccione esa etiqueta en la barra lateral, luego seleccione las fotos que quiere quitar y elija <guiseq><gui>Etiquetas</gui><gui>Quitar etiquetas "[nombre]" de fotos</gui></guiseq> o pulse con el botón derecho en las fotos y seleccione <gui>Quitar etiquetas "[nombre]" de fotos</gui>.</p>
     
     <p>Para eliminar por completo una etiqueta, selecciónela en la barra latera y elija <guiseq><gui>Etiquetas</gui><gui>Eliminar etiqueta «nombre»</gui></guiseq> o púlsela con el botón derecho y elija <gui>Eliminar etiqueta «nombre»</gui>.</p>
 
-    <p>
-		When you create a tag, it will appear in the sidebar under the 
-		<gui>Tags</gui> item, which is hidden if there are no tags. Photos
-		can have multiple tags attached to them, and when you click on the
-		name of a given tag in the sidebar, you will see all the photos
-		associated with that tag.
-	</p>
+    <p>Cuando crea una etiqueta, aparecerá en la barra lateral bajo el elemento <gui>Etiquetas</gui>, que se oculta si no hay etiquetas. Las fotos pueden tener múltiples etiquetas relacionadas con las mismas. Cuando posiciona el cursor sobre el nombre de una etiqueta en la barra lateral, podrá ver todas las fotos asociadas a esa etiqueta.</p>
     
     <section id="hierarchaicaltags">
         <title>Etiquetas jerárquicas</title>

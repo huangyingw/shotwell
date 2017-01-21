@@ -62,7 +62,7 @@
     <section>
     <title>Cambiar la foto usada para representar cada evento</title>
 
-    <p>If you select the <gui>Events</gui> item in the sidebar, you'll see a single photo which represents each event. This is called the key photo.</p>
+    <p>Si selecciona <gui>Eventos</gui> en la barra lateral, verá una única foto que representa cada evento. Esto se denomina «foto clave».</p>
 
     <p>De manera predeterminada, Shotwell utiliza la primera foto de cada evento como su vista de miniatura. Para utilizar una foto distinta, seleccione la foto y elija <guiseq><gui>Fotos</gui><gui>Definir vista de miniatura de eventos </gui></guiseq>.</p>
     
