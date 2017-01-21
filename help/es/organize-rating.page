@@ -34,13 +34,12 @@
 <list>
 <item><p>Seleccione las fotos y luego escoja una puntuación en el menú <guiseq><gui>Foto</gui><gui>Establecer puntuación</gui></guiseq> del nivel superior.</p></item>
 <item><p>Pulse con el botón derecho en las fotos y luego escoja su puntuación en el menú contextual «Establecer puntuación».</p></item>
-<item><p>Select the photo(s), then press any of the shortcut keys <key>1</key>, <key>2</key>, <key>3</key>, <key>4</key> or <key>5</key> to assign a rating. Or press <key>9</key> to mark the photo(s) as rejected or <key>0</key> to clear the rating(s).</p></item>
+<item><p>Seleccione la foto o las fotos, luego pulse cualquiera de los atajos del teclado <key>1</key>, <key>2</key>, <key>3</key>, <key>4</key> o <key>5</key> para asignar una puntuación. Pulse <key>9</key> para marcar las fotos como rechazadas o pulse <key>0</key> para borrar las puntuaciones.</p></item>
 </list>
 
-<p>
-Normally Shotwell displays all photos except rejected photos. You can set a different rating filter using the <guiseq><gui>View</gui><gui>Filter Photos</gui></guiseq> menu - for example, you can display only photos rated with 3 stars or higher, or you can display all photos including those marked rejected. The Shotwell icon on the toolbar displays the current rating filter and can also be used to set the filter.</p>
+<p>Normalmente, Shotwell muestra todas las fotos excepto las rechazadas. Puede establecer un filtro de puntuaciones diferente utilizando el menú <guiseq><gui>Vista</gui><gui>Filtrar fotos</gui></guiseq>. Por ejemplo, puede mostrar sólo las fotos con puntuación de 3 estrellas o más, o puede mostrar todas las fotos, incluidas las marcadas como rechazadas. El icono Shotwell de la barra de herramientas muestra el filtro de puntuación actual y también se puede utilizar para configurar el filtro.</p>
 
-<p>Shotwell normally displays each photo's rating in its lower left-hand corner. You can turn off the display of ratings using the <guiseq><gui>View</gui><gui>Ratings</gui></guiseq> menu item.</p>
+<p>Shotwell normalmente muestra la puntuación de cada foto en su esquina inferior izquierda. Puede desactivar la visualización de las puntuaciones utilzando el elemento del menú <guiseq><gui>Vista</gui><gui>Valoraciones</gui></guiseq>.</p>
 
-<p>You can increase or decrease a photo's rating using the <guiseq><gui>Set Rating</gui><gui>Increase</gui></guiseq> and <guiseq><gui>Set Rating</gui><gui>Decrease</gui></guiseq> commands, or the keyboard shortcuts <key>&lt;</key> and <key>&gt;</key>. </p>
+<p>Puede aumentar o disminuir la puntuación de una foto utilizando los comandos <guiseq><gui>Establecer puntuación</gui><gui>Aumentar</gui></guiseq> y <guiseq><gui>Establecer puntuación</gui><gui>Disminuir</gui></guiseq>, o los atajos del teclado <key>&lt;</key> y <key>&gt;</key>.</p>
 </page>

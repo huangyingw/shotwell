@@ -47,10 +47,17 @@ public class TagPage : CollectionPage {
         { "NewChildTagSidebar", on_new_child_tag_sidebar }
     };
 
-    protected override void add_actions () {
-        base.add_actions ();
+    protected override void add_actions(GLib.ActionMap map) {
+        base.add_actions(map);
 
-        AppWindow.get_instance ().add_action_entries (entries, this);
+        map.add_action_entries(entries, this);
+    }
+
+    protected override void remove_actions(GLib.ActionMap map) {
+        base.remove_actions(map);
+        foreach (var entry in entries) {
+            map.remove_action(entry.name);
+        }
     }
 
     private void on_tags_altered(Gee.Map<DataObject, Alteration> map) {

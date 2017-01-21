@@ -1,6 +1,602 @@
+commit e5a192163148d01708684bc38c4442824fda8178
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Jan 16 20:36:27 2017 +0100
+
+    Prepare 0.25.3
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+
+commit dfe59ea0fa04633d233be973e8578af037ea822a
+Author: Alan Mortensen <alanmortensen.am@gmail.com>
+Date:	Sun Jan 15 02:01:13 2017 +0100
+
+    Updated Danish translation
+
+M	po/da.po
+
+commit a246cf45e80204bf05419cb0a76d9a145940373a
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Thu Jan 12 13:45:29 2017 +0100
+
+    Fix Icon filename in Serbian and Korean translations
+
+M	po/ko.po
+M	po/sr.po
+M	po/sr@latin.po
+
+commit 14b44bdee2cfff20018dc66053dd6defb7cb03f0
+Author: Andreas Brauchli <andreas.brauchli@sensirion.com>
+Date:	Thu Dec 8 16:09:32 2016 +0100
+
+    More reliable duplicate detection
+
+    Never compare thumbnail_md5 when the full md5 can be used to avoid
+    false
+    positive. Otherwise fall back to comparing thubnail_md5 where false
+    positives are possible.
+
+M	src/db/PhotoTable.vala
+
+commit 59da83435bfe4f14a716312f5cc871f9c04d6774
+Author: Amos Brocco <amos.brocco@gmail.com>
+Date:	Sun Nov 27 22:17:00 2016 +0000
+
+    Improved Raw duplicate detection
+
+    Use exposure timestamp comparison as well as file name to distinguish
+    between
+    different files with the same name
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=775196
+
+M	src/camera/ImportPage.vala
+
+commit 33b101fa36c685d24179a2f25aec91d0ae5102f6
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Jan 4 12:45:42 2017 +0100
+
+    piwigo: Fix title and coments on uploaded files
+
+    Boolean is hard, part II.
+
+    Regression introduced by 9d2b698023366e95baddbb677118a50e27bd6e8e
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776664
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 809b4cdd20ec6ec795c51ec046999f6f5106c07a
+Author: Richard B. Kreckel <kreckel@ginac.de>
+Date:	Tue Jan 3 23:00:00 2017 +0000
+
+    Fix various typos in comments and code
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776839
+
+M	src/Application.vala
+M	src/BatchImport.vala
+M	src/CheckerboardLayout.vala
+M	src/CollectionPage.vala
+M	src/Commands.vala
+M	src/Dialogs.vala
+M	src/Dimensions.vala
+M	src/Photo.vala
+M	src/PhotoPage.vala
+M	src/Printing.vala
+M	src/Tombstone.vala
+M	src/Upgrades.vala
+M	src/camera/GPhoto.vala
+M	src/core/SourceInterfaces.vala
+M	src/photos/PhotoMetadata.vala
+
+commit 719fc9935a3f8c36009e028e8e893347e0b730ab
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Dec 31 00:41:06 2016 +0100
+
+    Fix actions for fullscreen
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776614
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/CollectionPage.vala
+M	src/MediaPage.vala
+M	src/Page.vala
+M	src/PhotoPage.vala
+M	src/camera/ImportPage.vala
+M	src/direct/DirectPhotoPage.vala
+M	src/events/EventPage.vala
+M	src/events/EventsDirectoryPage.vala
+M	src/library/ImportQueuePage.vala
+M	src/library/LibraryWindow.vala
+M	src/library/OfflinePage.vala
+M	src/library/TrashPage.vala
+M	src/searches/SavedSearchPage.vala
+M	src/tags/TagPage.vala
+
+commit 0f3a1eee7ab9ce0ce211227e695e197bba53188a
+Author: Dušan Kazik <prescott66@gmail.com>
+Date:	Sun Jan 1 20:01:53 2017 +0000
+
+    Update Slovak translation
+
+M	po/sk.po
+
+commit b24bde8bbcc42aac8cd5e5390db12cd3fb08725a
+Author: Dušan Kazik <prescott66@gmail.com>
+Date:	Sun Jan 1 19:37:20 2017 +0000
+
+    Update Slovak translation
+    (cherry picked from commit 3e41d1eab5df8a0693946bb22406c886f2799e7a)
+
+M	po/sk.po
+
+commit 6c2eea964babf24a9901f9569a32247282cfe40c
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Dec 31 00:39:51 2016 +0100
+
+    Fix action state when switching back in library
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776527
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Page.vala
+
+commit f98a958b83245c9ced25e4c646c0de83a6bb0d1d
+Author: Richard B. Kreckel <kreckel@ginac.de>
+Date:	Thu Dec 29 18:47:00 2016 +0000
+
+    Import button labels are swapped
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776589
+
+M	src/camera/ImportPage.vala
+
+commit 092a86ec0c9901385c257cd84eb178469da01b65
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 28 00:08:16 2016 +0100
+
+    Remove local actions from Page when switching away
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776527
+
+M	src/CollectionPage.vala
+M	src/MediaPage.vala
+M	src/Page.vala
+M	src/PhotoPage.vala
+M	src/camera/ImportPage.vala
+M	src/direct/DirectPhotoPage.vala
+M	src/events/EventPage.vala
+M	src/events/EventsDirectoryPage.vala
+M	src/library/ImportQueuePage.vala
+M	src/library/OfflinePage.vala
+M	src/library/TrashPage.vala
+M	src/searches/SavedSearchPage.vala
+M	src/tags/TagPage.vala
+
+commit 6fc591233cfc6e1ca690c3a637b8e21bb3d47f65
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 28 12:45:05 2016 +0100
+
+    Revert "Remove deprecated Soup API"
+
+    Breaks flick upload
+
+    This reverts commit 8999db51f67aeab1507d182742adc689dfbd9bb1.
+
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing-extras/YandexPublishing.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 587ce09a54124839697ee178334eaa3cd4843c46
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Wed Dec 28 11:37:04 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit acbe3c3e5bb00996536e7a8f449ed45c95271d93
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 27 19:38:43 2016 +0100
+
+    Fix LeaveFullscreen action
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+
+commit f74c9b715553cd3a6b85e8707d0112f2310626e8
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Mon Dec 26 09:09:24 2016 +0000
+
+    Update Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit b212f161c6745914a91158b15eb83253f8ceaec9
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Dec 25 21:38:13 2016 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 7ed7d8c8d10d95b8dd76bce3a4a8856b5c478c03
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Dec 25 21:37:09 2016 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit cb09b73d966f7876ac97041f2815a0561175316f
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sat Dec 24 14:47:04 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit d94d02049889b72fd653ab22e790cb0a7949f86a
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Fri Dec 23 01:17:49 2016 +0100
+
+    Update POTFILES.in
+
+M	po/POTFILES.in
+
+commit 235c28bccd1f0f8f5277e1d792bcfd9a04f0b31e
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 22:17:14 2016 +0100
+
+    flickr: Use format_size_full for the remaining quota string
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+
+commit e8622e25c3753fb9191e871c479685bc036fecb6
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 21:08:18 2016 +0100
+
+    Revert "Use AppMenu"
+
+    Not good. Help is not easily discoverable. Needs some more thinking
+
+    This reverts commit 6e6a51b3a5b939322e0a40c2f2766367969721c2.
+
+M	org.gnome.Shotwell.gresource.xml
+M	src/Application.vala
+M	src/direct/DirectWindow.vala
+M	src/library/LibraryWindow.vala
+M	ui/Makefile.am
+D	ui/appmenu.ui
+M	ui/direct.ui
+M	ui/event.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/tags.ui
+M	ui/trash.ui
+
+commit 248bb1463f967073df05228c37b0410de7506d52
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 21:07:09 2016 +0100
+
+    Revert "Add Quit menu item to File menu"
+
+    This reverts commit 0fa222a858adee5014c91dd2a8de0658b3a4ec24.
+
+M	src/Page.vala
+M	ui/direct.ui
+M	ui/event.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/tags.ui
+M	ui/trash.ui
+
+commit b9feec526de83b4ad94a7dacc8916a9c65967841
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Thu Dec 22 16:47:54 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit a9e4ef6df60822cf2feb8eb621f81d82504e4806
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 13:23:30 2016 +0100
+
+    Add <Ctrl>-f as shortcut for search bar
+
+    As mentioned in the documentation
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit f576f5956f71dccf6ef127fccc9940824a8dd9d5
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 13:23:11 2016 +0100
+
+    Accellerators need to be null-terminated
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/AppWindow.vala
+
+commit 684eb82f81d90947f0c0b5bb26d12a5f3cc6b74b
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 21 15:15:27 2016 +0100
+
+    flickr: Simplify OAuth result parsing
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+
+commit 95d62f14086662dc97684d13cf34e6eb53868812
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 21 12:26:09 2016 +0100
+
+    yandex: Update glade file
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/yandex_publish_model.ui
+
+commit e6b9ffe51765e616b388232a338a437809687eaf
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 21 12:17:13 2016 +0100
+
+    tumblr: Update glade files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/tumblr_authentication_pane.ui
+M
+plugins/shotwell-publishing-extras/tumblr_publishing_options_pane.ui
+
+commit 6fb98fbc7ec5c97486600961502db8cc961130d1
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 21 12:06:26 2016 +0100
+
+    rajce: Update glade files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/rajce_authentication_pane.ui
+M
+plugins/shotwell-publishing-extras/rajce_publishing_options_pane.ui
+
+commit d5f2b6505c61dc9dfab71392534a91a6ecc242b1
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Dec 21 11:52:19 2016 +0100
+
+    gallery3: Update glade files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/gallery3_authentication_pane.ui
+M
+plugins/shotwell-publishing-extras/gallery3_publishing_options_pane.ui
+
+commit 5dad7406da9c1c3adc63c57e508de06cd86b3a2c
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 20 21:24:18 2016 +0100
+
+    piwigo: Update glade files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/piwigo_authentication_pane.ui
+M	plugins/shotwell-publishing/piwigo_publishing_options_pane.ui
+M	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui
+
+commit d24ea86ff22911454b26157d223377bec498fe88
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 20 21:23:56 2016 +0100
+
+    picasa: Update glade file
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/picasa_publishing_options_pane.ui
+
+commit 68b0fb3debbcce1e3683f732a40ef771f56b6a21
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 20 21:19:36 2016 +0100
+
+    facebook: Update publishing pane
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/facebook_publishing_options_pane.ui
+
+commit c4eac442dea23bc35c772250e27bfa7226067a79
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 20 20:59:29 2016 +0100
+
+    flickr: Update glade files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/flickr_pin_entry_pane.ui
+M	plugins/shotwell-publishing/flickr_publishing_options_pane.ui
+
+commit eb8612cd6fafcac7d42baacd33697958e198941e
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 20 13:28:13 2016 +0100
+
+    Fix toolbar in camera import page
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=776298
+
+M	src/Resources.vala
+M	src/camera/ImportPage.vala
+
+commit 021d6bc3a0540b5a8cb3b752faa22f5b7e688c4e
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Tue Dec 20 12:17:48 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 0fa222a858adee5014c91dd2a8de0658b3a4ec24
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 18 20:05:44 2016 +0100
+
+    Add Quit menu item to File menu
+
+    If the shell does have AppMenu. Not having itbroke my workflow
+    quite badly.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Page.vala
+M	ui/direct.ui
+M	ui/event.ui
+M	ui/events_directory.ui
+M	ui/import.ui
+M	ui/import_queue.ui
+M	ui/media.ui
+M	ui/offline.ui
+M	ui/photo.ui
+M	ui/tags.ui
+M	ui/trash.ui
+
+commit 9df5346f7428d3359e22c8281e1572adad85e7c9
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sat Dec 17 17:02:59 2016 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 3591a7977872b7134afd76bb94e847d115784f11
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 23:11:51 2016 +0100
+
+    Fix item in Tag page context menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/tags.ui
+
+commit a4e8bd539157381f8bd962b017b2d9966df6cada
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 23:11:32 2016 +0100
+
+    Fix actions on sidebar context menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/sidebar_default_context.ui
+M	ui/tag_sidebar_context.ui
+
+commit fdf099ed0902a2b7553ee78b17a548e1b560f8de
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 23:11:14 2016 +0100
+
+    Fix critical when re-using popup menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/sidebar/Tree.vala
+
+commit ae78abb368cf0928e47fc28756a3675b5de5872c
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 22:22:33 2016 +0100
+
+    Fix rating action
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/SearchFilter.vala
+M	ui/import.ui
+M	ui/offline.ui
+M	ui/trash.ui
+
+commit 5fea37e591b98968121dbc05679c0a5e8755fb74
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 22:16:01 2016 +0100
+
+    Hack to switch menubar in the application window
+
+    Apparently the Gtk.ApplicationWindow only reloads the menu bar
+    from the
+    Application if the gtk-shell-shows-menubar property changes
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/library/LibraryWindow.vala
+
+commit 48a0f15cf9c76ee91e8c85b2625099daa53db303
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Dec 16 21:31:32 2016 +0100
+
+    Add missing tags context menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/tags.ui
+
+commit da0e59545f50f2545a8c6f5619a3e0f7f0b25b04
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 15 08:57:01 2016 +0100
+
+    Guess convert when UTF-8 validation fails
+
+    If validation of a text is requested and it fails, try to convert from
+    current locale if not UTF-8, otherwise fall-back to windows-1252 and
+    iso-8859-1.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=718107
+
+M	src/util/string.vala
+
+commit 3da461946b4148d338fc9b9a116191ef7ad85bc6
+Author: Marina Prado <mapraro93@hotmail.com>
+Date:	Thu Dec 15 08:39:08 2016 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit 057c8d8a470db9f971225c4e866de82b964433d1
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Dec 13 19:25:47 2016 +0100
+
+    Fix event page context menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/events/EventPage.vala
+
 commit e2940082c6e44526d9494a13443064f544a597ba
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Dec 12 18:19:56 2016 +0100
+Date:	Mon Dec 12 18:19:56 2016 +0100
 
     Prepare 0.25.2
 

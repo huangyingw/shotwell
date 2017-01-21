@@ -2431,17 +2431,26 @@ public class LibraryPhotoPage : EditingHostPage {
         { "ViewRatings", on_action_toggle, null, "false", on_display_ratings },
 
         // Radio actions
-        { "RawDeveloper", on_action_radio, "s", "'Shotwell'", on_raw_developer_changed }
     };
 
-    protected override void add_actions () {
-        base.add_actions ();
+    protected override void add_actions (GLib.ActionMap map) {
+        base.add_actions (map);
 
-        AppWindow.get_instance ().add_action_entries (entries, this);
+        map.add_action_entries (entries, this);
         (get_action ("ViewRatings") as GLib.SimpleAction).change_state (Config.Facade.get_instance ().get_display_photo_ratings ());
         var d = Config.Facade.get_instance().get_default_raw_developer();
-        var action = get_action ("RawDeveloper") as GLib.SimpleAction;
-        action.change_state (d == RawDeveloper.SHOTWELL ? "Shotwell" : "Camera");
+        var action = new GLib.SimpleAction.stateful("RawDeveloper",
+                GLib.VariantType.STRING, d == RawDeveloper.SHOTWELL ? "Shotwell" : "Camera");
+        action.change_state.connect(on_raw_developer_changed);
+        action.set_enabled(true);
+        map.add_action(action);
+    }
+
+    protected override void remove_actions(GLib.ActionMap map) {
+        base.remove_actions(map);
+        foreach (var entry in entries) {
+            map.remove_action(entry.name);
+        }
     }
 
     protected override InjectionGroup[] init_collect_injection_groups() {
@@ -2573,7 +2582,7 @@ public class LibraryPhotoPage : EditingHostPage {
     }
     
     // Displays a photo from a specific CollectionPage.  When the user exits this view,
-    // they will be sent back to the return_page. The optional view paramters is for using
+    // they will be sent back to the return_page. The optional view parameters is for using
     // a ViewCollection other than the one inside return_page; this is necessary if the 
     // view and return_page have different filters.
     public void display_for_collection(CollectionPage return_page, Photo photo, 
@@ -2607,6 +2616,14 @@ public class LibraryPhotoPage : EditingHostPage {
         update_rating_menu_item_sensitivity();
         
         set_display_ratings(Config.Facade.get_instance().get_display_photo_ratings());
+    }
+
+
+    public override void switching_from() {
+        base.switching_from();
+        foreach (var entry in entries) {
+            AppWindow.get_instance().remove_action(entry.name);
+        }
     }
     
     protected override Gdk.Pixbuf? get_bottom_left_trinket(int scale) {
@@ -3123,6 +3140,5 @@ public class LibraryPhotoPage : EditingHostPage {
         
         get_command_manager().execute(new ModifyTagsCommand(photo, new_tags));
     }
-
 }
 

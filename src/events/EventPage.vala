@@ -13,7 +13,7 @@ public class EventPage : CollectionPage {
         this.page_event = page_event;
         page_event.mirror_photos(get_view(), create_thumbnail);
         
-        init_page_context_menu("/EventContextMenu");
+        init_page_context_menu("EventContextMenu");
         
         Event.global.items_altered.connect(on_events_altered);
     }
@@ -53,10 +53,17 @@ public class EventPage : CollectionPage {
         { "EditEventComment", on_edit_comment }
     };
 
-    protected override void add_actions () {
-        base.add_actions ();
+    protected override void add_actions(GLib.ActionMap map) {
+        base.add_actions(map);
 
-        AppWindow.get_instance ().add_action_entries (entries, this);
+        map.add_action_entries(entries, this);
+    }
+
+    protected override void remove_actions(GLib.ActionMap map) {
+        base.remove_actions(map);
+        foreach (var entry in entries) {
+            map.remove_action(entry.name);
+        }
     }
 
     protected override void init_actions(int selected_count, int count) {

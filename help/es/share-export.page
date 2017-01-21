@@ -30,10 +30,7 @@
 
 <p>Para exportar fotos desde Shotwell usando arrastrar y soltar, arrastre desde Shotwell hacia una ventana de manejador de archivos o su escritorio. Los archivos nuevos serán copias de tamaño completo de las fotos de su biblioteca.</p>
 
-<p>
-Alternatively, select a set of photos and choose the <guiseq><gui>File</gui><gui>Export...</gui></guiseq> command or press <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq>, which exports photos while letting you fine-tune the size and dimensions of your photo files.
-A window will appear allowing you to make several choices:
-</p>
+<p>Alternativamente, seleccione un conjunto de fotos y elija el comando <guiseq><gui>Archivo</gui><gui>Exportar...</gui></guiseq> o pulse <keyseq><key>Shift</key><key>Ctrl</key><key>E</key></keyseq> , para exportar las fotos y al mismo tiempo ajustar el tamaño y las dimensiones de sus archivos de fotos. Aparecerá una ventana que le permitirá realizar varias opciones:</p>
 
 <list>
 <item><p>Un formato al que exportar.</p>
@@ -45,7 +42,7 @@ A window will appear allowing you to make several choices:
 </item>
 <item><p>La calidad de la imagen al exportarla (baja, media, alta o máxima).</p></item>
 <item><p>Una restricción de la escala (que significa cómo Shotwell va a decidir reducir la escala proporcionalmente), y el tamaño de píxel requerido.</p></item>
-<item><p>The option whether you like to export metadatas such as tags or ratings. This can help to save your privacy if you have geolocation tags or tags which shouldn't be seen by anyone.</p></item>
+<item><p>La opción de si quiere exportar metadatos como etiquetas o puntuaciones puede ayudar a preservar su privacidad en caso de que tenga etiquetas o etiquetas de geolocalización que nadie debería ver.</p></item>
 </list>
 
 <p>Si está seleccionada, Shotwell escribirá etiquetas, títulos y otros metadatos a los nuevos archivos.</p>

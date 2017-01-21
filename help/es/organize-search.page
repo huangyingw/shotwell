@@ -28,29 +28,13 @@
 
     <title>Búsqueda</title>
     
-    <p>
-        There are two ways to search in Shotwell: the filter toolbar, and with a saved search.  The search 
-        bar allows you to quickly search the current view for certain criteria.  Saved Searches feature
-        more complex search criteria and persist in the sidebar between sessions.
-    </p>
+    <p>Hay dos maneras de hacer una búsqueda en Shotwell: con la barra de herramientas de filtro, y con una búsqueda guardada. La barra de búsqueda le permite buscar rápidamente la vista actual para ciertos criterios. Las búsquedas guardadas tienen criterios de búsqueda más complejos y se mantienen en la barra lateral entre sesiones.</p>
     
     <section id="searchbar">
         <title>Barra de búsqueda</title>
-            <p>
-                The <guiseq><gui>View</gui><gui>Search Bar</gui></guiseq> checkbox toggles the display of the
-                search bar.  You can also hit <keyseq><key>Ctrl</key><key>F</key></keyseq> or <key>F8</key> to
-                bring up the search bar. From this bar, you can find, show and hide photos and videos based on
-                title, tag, rating or other options.
-            </p>
+            <p>La casilla <guiseq><gui>Vista</gui><gui>Barra de búsqueda</gui></guiseq> activa la visualización de la barra de búsqueda. También puede pulsar <keyseq><key>Ctrl</key><key>F</key></keyseq> o <key>F8</key> para abrir la barra de búsqueda. Desde esta barra, puede encontrar, mostrar y ocultar fotos y vídeos basados en su título, etiqueta, valoración u otras opciones.</p>
             
-            <p>
-                To begin searching, simply enter a search keyword in the text box, or click on <gui>Flagged</gui>,
-                <gui>Rating</gui> or <gui>Type</gui>. The text search matches your keywords across tag names, 
-                photo or video titles and photos' original filenames. The <gui>Flagged</gui>,
-                <gui>Rating</gui> and <gui>Type</gui> buttons allow you to filter your collection by 
-                whether photos are flagged, their current number of stars, and whether the items shown are
-                images, videos, or raw camera files, respectively. 
-            </p>
+            <p>Para comenzar la búsqueda, simplemente introduzca una palabra clave de búsqueda en el cuadro de texto o pulse en <gui>Marcada</gui>, <gui>Puntuación</gui> o <gui>Tipo</gui>. La búsqueda de texto compara sus palabras clave con los nombres de las etiquetas, los títulos de fotos o vídeos y los nombres de los archivos originales de las fotos. Los botones <gui>Marcada</gui>, <gui>Puntuación</gui> y <gui>Tipo</gui> le permiten filtrar su colección según las fotos marcadas, su número actual de estrellas y si los elementos mostrados son imágenes, vídeos o archivos de cámara RAW, respectivamente.</p>
             
             <p>Desactivar la barra de búsqueda o salir de Shotwell reinicia automáticamente la barra de búsqueda.</p>
     </section>
@@ -59,17 +43,9 @@
         <title>Búsqueda guardada</title>
             <p>Una búsqueda guardada se mantiene entre sesiones de Shotwell, y se actualiza con las fotos y vídeos que se añaden o quitan de su biblioteca de Shotwell.</p>
             
-            <p>
-                Create a new saved search with <guiseq><gui>Edit</gui><gui>New Saved Search...</gui></guiseq> or by hitting
-                <keyseq><key>Ctrl</key><key>S</key></keyseq>. The dialog box allows you to enter a name for the
-                search and select whether you want to meet Any, All, or None of the criteria in the following rows.
-            </p>
+            <p>Cree una nueva búsqueda guardada con <guiseq><gui>Editar</gui><gui>Nueva búsqueda guardada...</gui></guiseq> o pulsando <keyseq><key>Ctrl</key><key>S</key></keyseq>. El cuadro de diálogo le permite introducir un nombre para la búsqueda y seleccionar si quiere marcar alguno, todos o ninguno de los criterios de las siguientes filas.</p>
             
-            <p>
-                Each row represents a search criterion.  Use the <gui>+</gui> button to add more rows, and the
-                <gui>-</gui> button to remove a specific row.  The combo box on the left of each row selects the type
-                of criteria. Criteria must be entered correctly before the <gui>OK</gui> button becomes available.
-            </p>
+            <p>Cada fila representa un criterio de búsqueda. Pulse el botón <gui>+</gui> para añadir más filas y el botón <gui>-</gui> para eliminar una fila específica. El cuadro combinado de la izquierda de cada fila selecciona el tipo de criterios. Los criterios se deben introducir correctamente antes de que el botón <gui>Aceptar</gui> esté disponible.</p>
     </section>
 
 </page>

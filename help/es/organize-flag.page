@@ -30,21 +30,13 @@
 
     <p>Shotwell le permite <em>marcar</em> sus fotos. Cuando se marca una foto, aparece un pequeño icono de una bandera en su esquina superior derecha. Puede seleccionar el elemento <gui>Marcada</gui> en la barra lateral para ver todas las fotos que se han marcado.</p>
     
-    <p>Flagging a photo marks it as special.  You can interpret this in any way you like.  For example,
-    you might flag all photos which need visual
-    adjustment, or all photos which you want to share with a friend.</p>
+    <p>Marcar una foto hace que esta sea especial. Puede interpretar esto de la manera que quiera. Por ejemplo, puede marcar todas las fotos que necesitan un ajuste visual o todas las fotos que quiere compartir con un amigo.</p>
     
-    <p>Flagging
-    is also useful because you can operate on all flagged photos as a set.  For example, you can
-    select the <gui>Flagged</gui> view and then upload all flagged photos to a publishing service.</p>
+    <p>Marcar fotos es útil porque también puede trabajar en todas las fotos marcadas como un conjunto. Por ejemplo, puede seleccionar la vista <gui>Marcada</gui> y luego subir todas las fotos marcadas a un servicio de publicación.</p>
     
     <section>
     <title>Para marcar o desmarcar una foto</title>
-    <p>
-    To flag or unflag a photo, right-click the photo and choose <gui>Flag</gui> or <gui>Unflag</gui>
-    from the context menu.  Or use the <keyseq><key>Ctrl</key><key>G</key></keyseq> or <key>/</key>
-    shortcut keys.
-    </p>
+    <p>Para marcar o desmarcar una foto, pulse con el botón derecho en la foto y seleccione <gui>Marcar</gui> o <gui>Desmarcar</gui> desde el menú contextual. O pulse use los atajos del teclado <keyseq><key>Ctrl</key><key>G</key></keyseq> o <key>/</key>.</p>
     </section>
     
 </page>
