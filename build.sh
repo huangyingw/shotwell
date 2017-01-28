@@ -5,7 +5,8 @@ cd "$SCRIPTPATH"
 
 [ -f configure ] || ./autogen.sh
 ./configure
-make
-make install
+make \
+    && make install \
+    && echo success
 
 cd -
