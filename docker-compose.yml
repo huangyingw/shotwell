@@ -1,0 +1,10 @@
+version: '2.1'
+services:
+    shotwell:
+        extends:
+            file: ~/myproject/git/docker/dbuntu/docker-compose.yml
+            service: dbuntu
+        volumes:
+            - ./:/shotwell
+            - ./var/log/:/var/log/
+        command: /bin/sh -c "/shotwell/build.sh > /var/log/containner.log 2>&1"
