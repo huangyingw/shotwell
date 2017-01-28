@@ -1,0 +1,6 @@
+.bzr
+.bzrignore
+.pc
+config.log
+debian/files
+var/
