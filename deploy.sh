@@ -5,6 +5,7 @@ cd "$SCRIPTPATH"
 
 server=u1604
 rsync -aHv --force --progress \
+    --exclude-from="excludeFile" \
     . \
     "$server":~/shotwell
 ssh -n "$server" "~/shotwell/build.sh"
