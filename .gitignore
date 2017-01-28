@@ -24,6 +24,7 @@
 /src/libshotwell.deps
 /src/libshotwell.vapi
 /thumbnailer/shotwell-video-thumbnailer
+help/*
 shotwell
 var/log
 var/logs
