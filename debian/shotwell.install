@@ -1,0 +1,3 @@
+apport/shotwell.py usr/share/apport/package-hooks/
+usr/bin
+usr/lib
