@@ -4,32 +4,30 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
+using Publishing.Accounts;
+
 extern string hmac_sha1(string key, string message);
 
-public class FlickrService : Object, Spit.Pluggable, Spit.Publishing.Service {
+public class FlickrService : UOAPublishingService {
     private const string ICON_FILENAME = "flickr.png";
 
     private static Gdk.Pixbuf[] icon_pixbuf_set = null;
     
     public FlickrService(GLib.File resource_directory) {
+        base("flickr");
         if (icon_pixbuf_set == null)
             icon_pixbuf_set = Resources.load_icon_set(resource_directory.get_child(ICON_FILENAME));
     }
 
-    public int get_pluggable_interface(int min_host_interface, int max_host_interface) {
-        return Spit.negotiate_interfaces(min_host_interface, max_host_interface,
-            Spit.Publishing.CURRENT_INTERFACE);
-    }
-    
-    public unowned string get_id() {
+    public override unowned string get_id() {
         return "org.yorba.shotwell.publishing.flickr";
     }
     
-    public unowned string get_pluggable_name() {
+    public override unowned string get_pluggable_name() {
         return "Flickr";
     }
     
-    public void get_info(ref Spit.PluggableInfo info) {
+    public override void get_info(ref Spit.PluggableInfo info) {
         info.authors = "Lucas Beeler";
         info.copyright = _("Copyright 2009-2015 Yorba Foundation");
         info.translators = Resources.TRANSLATORS;
@@ -41,14 +39,12 @@ public class FlickrService : Object, Spit.Pluggable, Spit.Publishing.Service {
         info.icons = icon_pixbuf_set;
     }
 
-    public void activation(bool enabled) {
-    }
-
-    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host) {
-        return new Publishing.Flickr.FlickrPublisher(this, host);
+    public override Spit.Publishing.Publisher create_publisher(string? account_name, Spit.Publishing.PluginHost host) {
+        SharingAccount account = find_account(account_name);
+        return new Publishing.Flickr.FlickrPublisher(this, account, host);
     }
     
-    public Spit.Publishing.Publisher.MediaType get_supported_media() {
+    public override Spit.Publishing.Publisher.MediaType get_supported_media() {
         return (Spit.Publishing.Publisher.MediaType.PHOTO |
             Spit.Publishing.Publisher.MediaType.VIDEO);
     }
@@ -62,8 +58,6 @@ internal const string SERVICE_WELCOME_MESSAGE =
 internal const string RESTART_ERROR_MESSAGE = 
     _("You have already logged in and out of Flickr during this Shotwell session.\nTo continue publishing to Flickr, quit and restart Shotwell, then try publishing again.");
 internal const string ENDPOINT_URL = "https://api.flickr.com/services/rest";
-internal const string API_KEY = "60dd96d4a2ad04888b09c9e18d82c26f";
-internal const string API_SECRET = "d0960565e03547c1";
 internal const int ORIGINAL_SIZE = -1;
 internal const string EXPIRED_SESSION_ERROR_CODE = "98";
 internal const string ENCODE_RFC_3986_EXTRA = "!*'();:@&=+$,/?%#[] \\";
@@ -105,60 +99,32 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
     private bool was_started = false;
     private Session session = null;
     private PublishingOptionsPane publishing_options_pane = null;
+    private UOAPublisherAuthenticator authenticator = null;
    
     private PublishingParameters parameters = null;
 
     public FlickrPublisher(Spit.Publishing.Service service,
+        SharingAccount account,
         Spit.Publishing.PluginHost host) {
         debug("FlickrPublisher instantiated.");
         this.service = service;
         this.host = host;
         this.session = new Session();
+        authenticator = new UOAPublisherAuthenticator(account, host,
+                                                      SERVICE_WELCOME_MESSAGE);
         this.parameters = new PublishingParameters();
         
         session.authenticated.connect(on_session_authenticated);
+        Variant data = authenticator.get_authentication_data();
+        session.set_api_credentials(data.lookup_value("ConsumerKey", null).get_string(),
+                                    data.lookup_value("ConsumerSecret", null).get_string());
+        authenticator.authenticated.connect(on_authenticator_authenticated);
     }
     
     ~FlickrPublisher() {
         session.authenticated.disconnect(on_session_authenticated);
     }
     
-    private void invalidate_persistent_session() {
-        set_persistent_access_phase_token("");
-        set_persistent_access_phase_token_secret("");
-        set_persistent_access_phase_username("");
-    }
-    
-    private bool is_persistent_session_valid() {
-        return (get_persistent_access_phase_username() != null &&
-                get_persistent_access_phase_token() != null &&
-                get_persistent_access_phase_token_secret() != null);
-    }
-    
-    private string? get_persistent_access_phase_username() {
-        return host.get_config_string("access_phase_username", null);
-    }
-    
-    private void set_persistent_access_phase_username(string username) {
-        host.set_config_string("access_phase_username", username);
-    }
-
-    private string? get_persistent_access_phase_token() {
-        return host.get_config_string("access_phase_token", null);
-    }
-
-    private void set_persistent_access_phase_token(string token) {
-        host.set_config_string("access_phase_token", token);
-    }
-
-    private string? get_persistent_access_phase_token_secret() {
-        return host.get_config_string("access_phase_token_secret", null);
-    }
-
-    private void set_persistent_access_phase_token_secret(string secret) {
-        host.set_config_string("access_phase_token_secret", secret);
-    }
-
     private bool get_persistent_strip_metadata() {
         return host.get_config_bool("strip_metadata", false);
     }
@@ -167,94 +133,17 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         host.set_config_bool("strip_metadata", strip_metadata);
     }    
 
-    private void on_welcome_pane_login_clicked() {
-        if (!running)
-            return;
+    public void on_authenticator_authenticated(owned Variant session_data) {
+        host.set_service_locked(true);
+        host.install_account_fetch_wait_pane();
 
-        debug("EVENT: user clicked 'Login' button in the welcome pane");
-        
-        do_run_authentication_request_transaction();
+        string token = session_data.lookup_value("AccessToken", null).get_string();
+        string token_secret = session_data.lookup_value("TokenSecret", null).get_string();
+        string username = session_data.lookup_value("username", null).get_string();
+        debug("Access Token: %s, %s, %s", token, token_secret, username);
+        session.set_access_phase_credentials(token, token_secret, username);
     }
 
-    private void on_auth_request_txn_completed(Publishing.RESTSupport.Transaction txn) {
-        txn.completed.disconnect(on_auth_request_txn_completed);
-        txn.network_error.disconnect(on_auth_request_txn_error);
-
-        if (!is_running())
-            return;
-
-        debug("EVENT: OAuth authentication request transaction completed; response = '%s'",
-            txn.get_response());
-
-        do_parse_token_info_from_auth_request(txn.get_response());
-    }
-
-    private void on_auth_request_txn_error(Publishing.RESTSupport.Transaction txn,
-        Spit.Publishing.PublishingError err) {
-        txn.completed.disconnect(on_auth_request_txn_completed);
-        txn.network_error.disconnect(on_auth_request_txn_error);
-
-        if (!is_running())
-            return;
-
-        debug("EVENT: OAuth authentication request transaction caused a network error");
-        host.post_error(err);
-    }
-    
-    private void on_authentication_token_available(string token, string token_secret) {
-        debug("EVENT: OAuth authentication token (%s) and token secret (%s) available",
-            token, token_secret);
-
-        session.set_request_phase_credentials(token, token_secret);
-
-        do_launch_system_browser(token);
-    }
-    
-    private void on_system_browser_launched() {
-        if (!is_running())
-            return;
-
-        debug("EVENT: system browser launched.");
-        
-        do_show_pin_entry_pane();
-    }
-    
-    private void on_pin_entry_proceed(PinEntryPane sender, string pin) {
-        sender.proceed.disconnect(on_pin_entry_proceed);
-        
-        if (!is_running())
-            return;
-
-        debug("EVENT: user clicked 'Continue' in PIN entry pane.");
-        
-        do_verify_pin(pin);
-    }
-
-    private void on_access_token_fetch_txn_completed(Publishing.RESTSupport.Transaction txn) {
-        txn.completed.disconnect(on_access_token_fetch_txn_completed);
-        txn.network_error.disconnect(on_access_token_fetch_error);
-        
-        if (!is_running())
-            return;
-        
-        debug("EVENT: fetching OAuth access token over the network succeeded");
-        
-        do_extract_access_phase_credentials_from_reponse(txn.get_response());
-    }
-
-    private void on_access_token_fetch_error(Publishing.RESTSupport.Transaction txn,
-        Spit.Publishing.PublishingError err) {
-        txn.completed.disconnect(on_access_token_fetch_txn_completed);
-        txn.network_error.disconnect(on_access_token_fetch_error);
-        
-        if (!is_running())
-            return;
-
-        debug("EVENT: fetching OAuth access token over the network caused an error.");
-        
-        host.post_error(err);
-    }
-    
     private void on_session_authenticated() {
         if (!is_running())
             return;
@@ -262,10 +151,6 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         debug("EVENT: a fully authenticated session has become available");
         
         parameters.username = session.get_username();
-        
-        set_persistent_access_phase_token(session.get_access_phase_token());
-        set_persistent_access_phase_token_secret(session.get_access_phase_token_secret());
-        set_persistent_access_phase_username(session.get_username());
         
         do_fetch_account_info();
     }
@@ -303,25 +188,12 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
 
     private void on_publishing_options_pane_publish(bool strip_metadata) {
         publishing_options_pane.publish.disconnect(on_publishing_options_pane_publish);
-        publishing_options_pane.logout.disconnect(on_publishing_options_pane_logout);
         
         if (!is_running())
             return;
 
         debug("EVENT: user clicked the 'Publish' button in the publishing options pane");
         do_publish(strip_metadata);
-    }
-
-    private void on_publishing_options_pane_logout() {
-        publishing_options_pane.publish.disconnect(on_publishing_options_pane_publish);
-        publishing_options_pane.logout.disconnect(on_publishing_options_pane_logout);
-
-        if (!is_running())
-            return;
-
-        debug("EVENT: user clicked the 'Logout' button in the publishing options pane");
-
-        do_logout();
     }
 
     private void on_upload_status_updated(int file_number, double completed_fraction) {
@@ -359,148 +231,6 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         uploader.upload_error.disconnect(on_upload_error);
 
         host.post_error(err);
-    }
-
-    private void do_show_login_welcome_pane() {
-        debug("ACTION: installing login welcome pane");
-
-        host.set_service_locked(false);
-        host.install_welcome_pane(SERVICE_WELCOME_MESSAGE, on_welcome_pane_login_clicked);
-    }
-    
-    private void do_run_authentication_request_transaction() {
-        debug("ACTION: running authentication request transaction");
-
-        host.set_service_locked(true);
-        host.install_static_message_pane(_("Preparing for login..."));
-
-        AuthenticationRequestTransaction txn = new AuthenticationRequestTransaction(session);
-        txn.completed.connect(on_auth_request_txn_completed);
-        txn.network_error.connect(on_auth_request_txn_error);
-        
-        try {
-            txn.execute();
-        } catch (Spit.Publishing.PublishingError err) {
-            host.post_error(err);
-        }
-    }
-    
-    private void do_parse_token_info_from_auth_request(string response) {
-        debug("ACTION: parsing authorization request response '%s' into token and secret", response);
-        
-        string? oauth_token = null;
-        string? oauth_token_secret = null;
-        
-        string[] key_value_pairs = response.split("&");
-        foreach (string pair in key_value_pairs) {
-            string[] split_pair = pair.split("=");
-            
-            if (split_pair.length != 2)
-                host.post_error(new Spit.Publishing.PublishingError.MALFORMED_RESPONSE(
-                    "'%s' isn't a valid response to an OAuth authentication request", response));
-
-            if (split_pair[0] == "oauth_token")
-                oauth_token = split_pair[1];
-            else if (split_pair[0] == "oauth_token_secret")
-                oauth_token_secret = split_pair[1];
-        }
-        
-        if (oauth_token == null || oauth_token_secret == null)
-            host.post_error(new Spit.Publishing.PublishingError.MALFORMED_RESPONSE(
-                "'%s' isn't a valid response to an OAuth authentication request", response));
-        
-        
-        on_authentication_token_available(oauth_token, oauth_token_secret);
-    }
-    
-    private void do_launch_system_browser(string token) {
-        string login_uri = "https://www.flickr.com/services/oauth/authorize?oauth_token=" + token +
-            "&perms=write";
-        
-        debug("ACTION: launching system browser with uri = '%s'", login_uri);
-        
-        try {
-            Process.spawn_command_line_async("xdg-open " + login_uri);
-        } catch (SpawnError e) {
-            host.post_error(new Spit.Publishing.PublishingError.LOCAL_FILE_ERROR(
-                "couldn't launch system web browser to complete Flickr login"));
-            return;
-        }
-        
-        on_system_browser_launched();
-    }
-    
-    private void do_show_pin_entry_pane() {
-        debug("ACTION: showing PIN entry pane");
-        
-        Gtk.Builder builder = new Gtk.Builder();
-        
-        try {
-            builder.add_from_file(host.get_module_file().get_parent().get_child("flickr_pin_entry_pane.glade").get_path());
-        } catch (Error e) {
-            warning("Could not parse UI file! Error: %s.", e.message);
-            host.post_error(
-                new Spit.Publishing.PublishingError.LOCAL_FILE_ERROR(
-                    _("A file required for publishing is unavailable. Publishing to Flickr can't continue.")));
-            return;        
-        }
-        
-        PinEntryPane pin_entry_pane = new PinEntryPane(builder);
-        pin_entry_pane.proceed.connect(on_pin_entry_proceed);
-        host.install_dialog_pane(pin_entry_pane);
-    }
-    
-    private void do_verify_pin(string pin) {
-        debug("ACTION: validating authorization PIN %s", pin);
-        
-        host.set_service_locked(true);
-        host.install_static_message_pane(_("Verifying authorization..."));
-        
-        AccessTokenFetchTransaction txn = new AccessTokenFetchTransaction(session, pin);
-        txn.completed.connect(on_access_token_fetch_txn_completed);
-        txn.network_error.connect(on_access_token_fetch_error);
-        
-        try {
-            txn.execute();
-        } catch (Spit.Publishing.PublishingError err) {
-            host.post_error(err);
-        }
-    }
-    
-    private void do_extract_access_phase_credentials_from_reponse(string response) {
-        debug("ACTION: extracting access phase credentials from '%s'", response);
-        
-        string[] key_value_pairs = response.split("&");
-
-        string? token = null;
-        string? token_secret = null;
-        string? username = null;
-        foreach (string key_value_pair in key_value_pairs) {
-            string[] split_pair = key_value_pair.split("=");
-
-            if (split_pair.length != 2)
-                continue;
-
-            string key = split_pair[0];
-            string value = split_pair[1];
-            
-            if (key == "oauth_token")
-                token = value;
-            else if (key == "oauth_token_secret")
-                token_secret = value;
-            else if (key == "username")
-                username = value;
-        }
-        
-        debug("access phase credentials: { token = '%s'; token_secret = '%s'; username = '%s' }",
-            token, token_secret, username);
-        
-        if (token == null || token_secret == null || username == null)
-            host.post_error(new Spit.Publishing.PublishingError.MALFORMED_RESPONSE("expected " +
-                "access phase credentials to contain token, token secret, and username but at " +
-                "least one of these is absent"));
-
-        session.set_access_phase_credentials(token, token_secret, username);
     }
 
     private void do_fetch_account_info() {
@@ -568,7 +298,6 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         debug("ACTION: logging user out, deauthenticating session, and erasing stored credentials");
 
         session.deauthenticate();
-        invalidate_persistent_session();
 
         running = false;
 
@@ -599,7 +328,6 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         publishing_options_pane = new PublishingOptionsPane(this, parameters,
             host.get_publishable_media_type(), builder, get_persistent_strip_metadata());
         publishing_options_pane.publish.connect(on_publishing_options_pane_publish);
-        publishing_options_pane.logout.connect(on_publishing_options_pane_logout);
         host.install_dialog_pane(publishing_options_pane);
     }
     
@@ -674,16 +402,7 @@ public class FlickrPublisher : Spit.Publishing.Publisher, GLib.Object {
         running = true;
         was_started = true;
         
-        if (is_persistent_session_valid()) {
-            debug("attempt start: a persistent session is available; using it");
-
-            session.authenticate_from_persistent_credentials(get_persistent_access_phase_token(),
-                get_persistent_access_phase_token_secret(), get_persistent_access_phase_username());
-        } else {
-            debug("attempt start: no persistent session available; showing login welcome pane");
-
-            do_show_login_welcome_pane();
-        }
+        authenticator.authenticate();
     }
     
     public void start() {
@@ -772,7 +491,7 @@ internal class Transaction : Publishing.RESTSupport.Transaction {
         add_argument("oauth_version", "1.0");
         add_argument("oauth_callback", "oob");
         add_argument("oauth_timestamp", session.get_oauth_timestamp());
-        add_argument("oauth_consumer_key", API_KEY);
+        add_argument("oauth_consumer_key", session.get_api_key());
     }
     
     public Transaction.with_uri(Session session, string uri,
@@ -784,7 +503,7 @@ internal class Transaction : Publishing.RESTSupport.Transaction {
         add_argument("oauth_version", "1.0");
         add_argument("oauth_callback", "oob");
         add_argument("oauth_timestamp", session.get_oauth_timestamp());
-        add_argument("oauth_consumer_key", API_KEY);
+        add_argument("oauth_consumer_key", session.get_api_key());
     }
 
     public override void execute() throws Spit.Publishing.PublishingError {
@@ -842,22 +561,6 @@ internal class Transaction : Publishing.RESTSupport.Transaction {
     }
 }
 
-internal class AuthenticationRequestTransaction : Transaction {
-    public AuthenticationRequestTransaction(Session session) {
-        base.with_uri(session, "https://www.flickr.com/services/oauth/request_token",
-            Publishing.RESTSupport.HttpMethod.GET);
-    }
-}
-
-internal class AccessTokenFetchTransaction : Transaction {
-    public AccessTokenFetchTransaction(Session session, string user_verifier) {
-        base.with_uri(session, "https://www.flickr.com/services/oauth/access_token",
-            Publishing.RESTSupport.HttpMethod.GET);
-        add_argument("oauth_verifier", user_verifier);
-        add_argument("oauth_token", session.get_request_phase_token());
-    }
-}
-
 internal class AccountInfoFetchTransaction : Transaction {
     public AccountInfoFetchTransaction(Session session) {
         base(session, Publishing.RESTSupport.HttpMethod.GET);
@@ -884,7 +587,7 @@ private class UploadTransaction : Publishing.RESTSupport.UploadTransaction {
         add_authorization_header_field("oauth_version", "1.0");
         add_authorization_header_field("oauth_callback", "oob");
         add_authorization_header_field("oauth_timestamp", session.get_oauth_timestamp());
-        add_authorization_header_field("oauth_consumer_key", API_KEY);
+        add_authorization_header_field("oauth_consumer_key", session.get_api_key());
         add_authorization_header_field("oauth_token", session.get_access_phase_token());
         
         add_argument("is_public", ("%d".printf(parameters.visibility_specification.everyone_level)));
@@ -944,11 +647,11 @@ private class UploadTransaction : Publishing.RESTSupport.UploadTransaction {
 }
 
 internal class Session : Publishing.RESTSupport.Session {
-    private string? request_phase_token = null;
-    private string? request_phase_token_secret = null;
     private string? access_phase_token = null;
     private string? access_phase_token_secret = null;
     private string? username = null;
+    private string? api_key = null;
+    private string? api_secret = null;
 
     public Session() {
         base(ENDPOINT_URL);
@@ -959,15 +662,6 @@ internal class Session : Publishing.RESTSupport.Session {
             username != null);
     }
 
-    public void authenticate_from_persistent_credentials(string token, string secret,
-        string username) {
-        this.access_phase_token = token;
-        this.access_phase_token_secret = secret;
-        this.username = username;
-        
-        authenticated();
-    }
-    
     public void deauthenticate() {
         access_phase_token = null;
         access_phase_token_secret = null;
@@ -1008,16 +702,12 @@ internal class Session : Publishing.RESTSupport.Session {
         if (access_phase_token_secret != null) {
             debug("access phase token secret available; using it as signing key");
 
-            signing_key = API_SECRET + "&" + access_phase_token_secret;
-        } else if (request_phase_token_secret != null) {
-            debug("request phase token secret available; using it as signing key");
-
-            signing_key = API_SECRET + "&" + request_phase_token_secret;
+            signing_key = api_secret + "&" + access_phase_token_secret;
         } else {
-            debug("neither access phase nor request phase token secrets available; using API " +
+            debug("access token secret not available; using API " +
                 "key as signing key");
 
-            signing_key = API_SECRET + "&";
+            signing_key = api_secret + "&";
         }
         
         string signature_base_string = http_method + "&" + Soup.URI.encode(
@@ -1040,11 +730,11 @@ internal class Session : Publishing.RESTSupport.Session {
             txn.add_argument("oauth_signature", signature);
     }
     
-    public void set_request_phase_credentials(string token, string secret) {
-        this.request_phase_token = token;
-        this.request_phase_token_secret = secret;
+    public void set_api_credentials(string api_key, string api_secret) {
+        this.api_key = api_key;
+        this.api_secret = api_secret;
     }
-    
+
     public void set_access_phase_credentials(string token, string secret, string username) {
         this.access_phase_token = token;
         this.access_phase_token_secret = secret;
@@ -1065,19 +755,14 @@ internal class Session : Publishing.RESTSupport.Session {
         return GLib.get_real_time().to_string().substring(0, 10);
     }
     
-    public string get_request_phase_token() {
-        assert(request_phase_token != null);
-        return request_phase_token;
+    public string get_api_key() {
+        assert(api_key != null);
+        return api_key;
     }
-    
+
     public string get_access_phase_token() {
         assert(access_phase_token != null);
         return access_phase_token;
-    }
-    
-    public string get_access_phase_token_secret() {
-        assert(access_phase_token_secret != null);
-        return access_phase_token_secret;
     }
     
     public string get_username() {
@@ -1112,7 +797,6 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
     private Gtk.Label visibility_label = null;
     private Gtk.Label upload_info_label = null;
     private Gtk.Label size_label = null;
-    private Gtk.Button logout_button = null;
     private Gtk.Button publish_button = null;
     private Gtk.ComboBoxText visibility_combo = null;
     private Gtk.ComboBoxText size_combo = null;
@@ -1124,7 +808,6 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
     private Spit.Publishing.Publisher.MediaType media_type;
 
     public signal void publish(bool strip_metadata);
-    public signal void logout();
 
     public PublishingOptionsPane(FlickrPublisher publisher, PublishingParameters parameters,
         Spit.Publishing.Publisher.MediaType media_type, Gtk.Builder builder, bool strip_metadata) {
@@ -1136,7 +819,6 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         pane_widget = (Gtk.Box) this.builder.get_object("flickr_pane");
         visibility_label = (Gtk.Label) this.builder.get_object("visibility_label");
         upload_info_label = (Gtk.Label) this.builder.get_object("upload_info_label");
-        logout_button = (Gtk.Button) this.builder.get_object("logout_button");
         publish_button = (Gtk.Button) this.builder.get_object("publish_button");
         visibility_combo = (Gtk.ComboBoxText) this.builder.get_object("visibility_combo");
         size_combo = (Gtk.ComboBoxText) this.builder.get_object("size_combo");
@@ -1186,12 +868,7 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         
         strip_metadata_check.set_active(strip_metadata);
 
-        logout_button.clicked.connect(on_logout_clicked);
         publish_button.clicked.connect(on_publish_clicked);
-    }
-
-    private void on_logout_clicked() {
-        logout();
     }
 
     private void on_publish_clicked() {
@@ -1260,10 +937,6 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         publish(strip_metadata_check.get_active());
     }
     
-    protected void notify_logout() {
-        logout();
-    }
-
     public Gtk.Widget get_widget() {
         return pane_widget;
     }
@@ -1274,12 +947,10 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
     
     public void on_pane_installed() {        
         publish.connect(notify_publish);
-        logout.connect(notify_logout);
     }
     
     public void on_pane_uninstalled() {
         publish.disconnect(notify_publish);
-        logout.disconnect(notify_logout);
     }
 }
 

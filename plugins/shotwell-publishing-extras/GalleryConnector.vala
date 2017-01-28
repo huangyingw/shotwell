@@ -97,7 +97,7 @@ public class Gallery3Service : Object, Spit.Pluggable,
     }
 
     public Spit.Publishing.Publisher create_publisher(
-            Spit.Publishing.PluginHost host) {
+            string? account, Spit.Publishing.PluginHost host) {
         return new Publishing.Gallery3.GalleryPublisher(this, host);
     }
 

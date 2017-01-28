@@ -42,7 +42,7 @@ public class PiwigoService : Object, Spit.Pluggable, Spit.Publishing.Service {
     public void activation(bool enabled) {
     }
 
-    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host) {
+    public Spit.Publishing.Publisher create_publisher(string? account, Spit.Publishing.PluginHost host) {
         return new Publishing.Piwigo.PiwigoPublisher(this, host);
     }
     

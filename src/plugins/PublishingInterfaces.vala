@@ -494,6 +494,7 @@ public interface PluginHost : GLib.Object, Spit.HostInterface {
      */
     public abstract Spit.Publishing.Publisher.MediaType get_publishable_media_type();
     
+    public abstract ulong get_dialog_xid();
     //
     // For future expansion.
     //
@@ -581,18 +582,26 @@ public interface Service : Object, Spit.Pluggable {
      * A factory method that instantiates and returns a new {@link Publisher} object that
      * encapsulates a connection to the remote publishing service that this Service describes.
      */
-    public abstract Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host);
+    public abstract Spit.Publishing.Publisher create_publisher(string? account, Spit.Publishing.PluginHost host);
 
     /**
      * Returns the kinds of media that this service can work with.
      */
     public abstract Spit.Publishing.Publisher.MediaType get_supported_media();
     
+    /**
+     * Checks whether the service is enabled.
+     */
+    public virtual bool is_enabled() { return true; }
+
+    /**
+     * List the accounts available for this service.
+     */
+    public virtual string[] list_account_names() { return {}; }
+
     //
     // For future expansion.
     //
-    protected virtual void reserved0() {}
-    protected virtual void reserved1() {}
     protected virtual void reserved2() {}
     protected virtual void reserved3() {}
     protected virtual void reserved4() {}
