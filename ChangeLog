@@ -1,6 +1,74 @@
+commit 8d2e927e78abb7699f1e9c8e9fd60119ea01999a
+Author: Jens Georg <mail@jensge.org>
+Date:   Tue Jan 31 21:25:06 2017 +0100
+
+    Prepare 0.25.4
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	debian/changelog
+
+commit 107353fa1f9d01aec430a801403b8e1ea7761250
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Jan 29 22:58:22 2017 +0100
+
+    publishing: Use HTTPS everywhere
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing-extras/TumblrPublishing.vala
+M	plugins/shotwell-publishing-extras/YandexPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 1950b080aac8d57868ef0df8a9aa8f942d7c76a5
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Jan 27 19:59:24 2017 +0100
+
+    Update debian
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/changelog
+
+commit 2e5f0c48ac99c43401d6a4efc7064f0408d21cb0
+Author: Daniel Korostil <ted.korostiled@gmail.com>
+Date:	Tue Jan 24 21:11:50 2017 +0000
+
+    Update Ukrainian translation
+
+M	po/uk.po
+
+commit c5f4dba59aa01f74df6bbee02dacdb8a2bd0e722
+Author: Marek Černocký <marek@manet.cz>
+Date:	Mon Jan 23 00:17:42 2017 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit aa09c071d73ea8840fb6c14040bd57e2fe341fbc
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Wed Jan 18 23:12:40 2017 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 8e7eb9fa324b2f6fb399e78d5e4a0935e57c6be3
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Jan 16 21:17:05 2017 +0100
+
+    Post-release version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
 commit e5a192163148d01708684bc38c4442824fda8178
 Author: Jens Georg <mail@jensge.org>
-Date:   Mon Jan 16 20:36:27 2017 +0100
+Date:	Mon Jan 16 20:36:27 2017 +0100
 
     Prepare 0.25.3
 
