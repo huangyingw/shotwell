@@ -460,11 +460,11 @@ static void publishing_picasa_album_finalize (PublishingPicasaAlbum* obj);
 enum  {
 	PUBLISHING_PICASA_ALBUM_DIRECTORY_TRANSACTION_DUMMY_PROPERTY
 };
-#define PUBLISHING_PICASA_ALBUM_DIRECTORY_TRANSACTION_ENDPOINT_URL "http://picasaweb.google.com/data/feed/api/user/" "default"
+#define PUBLISHING_PICASA_ALBUM_DIRECTORY_TRANSACTION_ENDPOINT_URL "https://picasaweb.google.com/data/feed/api/user/" "default"
 enum  {
 	PUBLISHING_PICASA_ALBUM_CREATION_TRANSACTION_DUMMY_PROPERTY
 };
-#define PUBLISHING_PICASA_ALBUM_CREATION_TRANSACTION_ENDPOINT_URL "http://picasaweb.google.com/data/feed/api/user/" "default"
+#define PUBLISHING_PICASA_ALBUM_CREATION_TRANSACTION_ENDPOINT_URL "https://picasaweb.google.com/data/feed/api/user/" "default"
 #define PUBLISHING_PICASA_ALBUM_CREATION_TRANSACTION_ALBUM_ENTRY_TEMPLATE "<?xml version='1.0' encoding='utf-8'?><entry xmlns='http://www.w3.org/" \
 "2005/Atom' xmlns:gphoto='http://schemas.google.com/photos/2007'><title" \
 " type='text'>%s</title><gphoto:access>%s</gphoto:access><category sche" \
@@ -888,7 +888,7 @@ PublishingPicasaPicasaPublisher* publishing_picasa_picasa_publisher_construct (G
 #line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp1_ = host;
 #line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
-	self = (PublishingPicasaPicasaPublisher*) publishing_rest_support_google_publisher_construct (object_type, _tmp0_, _tmp1_, "http://picasaweb.google.com/data/");
+	self = (PublishingPicasaPicasaPublisher*) publishing_rest_support_google_publisher_construct (object_type, _tmp0_, _tmp1_, "https://picasaweb.google.com/data/");
 #line 72 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"
 	_tmp2_ = publishing_picasa_publishing_parameters_new ();
 #line 72 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PicasaPublishing.vala"

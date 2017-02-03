@@ -376,7 +376,7 @@ static void publishing_you_tube_you_tube_publisher_real_do_logout (PublishingRES
 enum  {
 	PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_CHANNEL_DIRECTORY_TRANSACTION_DUMMY_PROPERTY
 };
-#define PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_CHANNEL_DIRECTORY_TRANSACTION_ENDPOINT_URL "http://gdata.youtube.com/feeds/users/default"
+#define PUBLISHING_YOU_TUBE_YOU_TUBE_PUBLISHER_CHANNEL_DIRECTORY_TRANSACTION_ENDPOINT_URL "https://gdata.youtube.com/feeds/users/default"
 static void publishing_you_tube_you_tube_publisher_finalize (GObject* obj);
 static gpointer publishing_you_tube_publishing_options_pane_privacy_description_ref (gpointer instance);
 static void publishing_you_tube_publishing_options_pane_privacy_description_unref (gpointer instance);
@@ -414,7 +414,7 @@ GType publishing_you_tube_upload_transaction_get_type (void) G_GNUC_CONST;
 enum  {
 	PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_DUMMY_PROPERTY
 };
-#define PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_ENDPOINT_URL "http://uploads.gdata.youtube.com/feeds/api/users/default/uploads"
+#define PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_ENDPOINT_URL "https://uploads.gdata.youtube.com/feeds/api/users/default/uploads"
 #define PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_UNLISTED_XML "<yt:accessControl action='list' permission='denied'/>"
 #define PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_PRIVATE_XML "<yt:private/>"
 #define PUBLISHING_YOU_TUBE_UPLOAD_TRANSACTION_METADATA_TEMPLATE "<?xml version='1.0'?>\n" \

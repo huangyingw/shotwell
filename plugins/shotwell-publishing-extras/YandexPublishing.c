@@ -542,7 +542,7 @@ static void yandex_service_real_get_info (SpitPluggable* base, SpitPluggableInfo
 #line 25 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	(*info).website_name = _tmp6_;
 #line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp7_ = g_strdup ("http://fotki.yandex.ru/");
+	_tmp7_ = g_strdup ("https://fotki.yandex.ru/");
 #line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_g_free0 ((*info).website_url);
 #line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
@@ -4556,7 +4556,7 @@ void publishing_yandex_yandex_publisher_fetch_account_information (PublishingYan
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = self->priv->session;
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp3_ = publishing_yandex_transaction_new_with_url (_tmp2_, "http://api-fotki.yandex.ru/api/me/", PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
+	_tmp3_ = publishing_yandex_transaction_new_with_url (_tmp2_, "https://api-fotki.yandex.ru/api/me/", PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
 #line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	t = _tmp3_;
 #line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
@@ -4692,7 +4692,7 @@ static void publishing_yandex_yandex_publisher_start_web_auth (PublishingYandexY
 #line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
-	_tmp1_ = g_strdup_printf ("http://oauth.yandex.ru/authorize?client_id=%s&response_type=token", PUBLISHING_YANDEX_client_id);
+	_tmp1_ = g_strdup_printf ("https://oauth.yandex.ru/authorize?client_id=%s&response_type=token", PUBLISHING_YANDEX_client_id);
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"
 	_tmp2_ = _tmp1_;
 #line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/YandexPublishing.vala"

@@ -422,7 +422,7 @@ GType publishing_tumblr_tumblr_publisher_get_type (void) G_GNUC_CONST;
 static SpitPublishingPublisherMediaType tumblr_service_real_get_supported_media (SpitPublishingService* base);
 static void tumblr_service_finalize (GObject* obj);
 #define PUBLISHING_TUMBLR_SERVICE_NAME "Tumblr"
-#define PUBLISHING_TUMBLR_ENDPOINT_URL "http://www.tumblr.com/"
+#define PUBLISHING_TUMBLR_ENDPOINT_URL "https://www.tumblr.com/"
 #define PUBLISHING_TUMBLR_API_KEY "NdXvXQuKVccOsCOj0H4k9HUJcbcjDBYSo2AkaHzXFECHGNuP9k"
 #define PUBLISHING_TUMBLR_API_SECRET "BN0Uoig0MwbeD27OgA0IwYlp3Uvonyfsrl9pf1cnnMj1QoEUvi"
 #define PUBLISHING_TUMBLR_ENCODE_RFC_3986_EXTRA "!*'();:@&=+$,/?%#[] \\"
@@ -5594,7 +5594,7 @@ PublishingTumblrTumblrPublisherUserInfoFetchTransaction* publishing_tumblr_tumbl
 #line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp0_ = session;
 #line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	self = (PublishingTumblrTumblrPublisherUserInfoFetchTransaction*) publishing_tumblr_tumblr_publisher_transaction_construct_with_uri (object_type, _tmp0_, "http://api.tumblr.com/v2/user/info", PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
+	self = (PublishingTumblrTumblrPublisherUserInfoFetchTransaction*) publishing_tumblr_tumblr_publisher_transaction_construct_with_uri (object_type, _tmp0_, "https://api.tumblr.com/v2/user/info", PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST);
 #line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	return self;
 #line 5583 "TumblrPublishing.c"
@@ -5791,7 +5791,7 @@ PublishingTumblrTumblrPublisherUploadTransaction* publishing_tumblr_tumblr_publi
 #line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp2_ = blog_url;
 #line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
-	_tmp3_ = g_strdup_printf ("http://api.tumblr.com/v2/blog/%s/post", _tmp2_);
+	_tmp3_ = g_strdup_printf ("https://api.tumblr.com/v2/blog/%s/post", _tmp2_);
 #line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
 	_tmp4_ = _tmp3_;
 #line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing-extras/TumblrPublishing.vala"
