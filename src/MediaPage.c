@@ -4068,11 +4068,11 @@ void media_page_on_play_video (MediaPage* self) {
 #line 501 "/home/jens/Source/shotwell/src/MediaPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4071 "MediaPage.c"
-			goto __catch558_g_error;
+			goto __catch560_g_error;
 		}
 	}
-	goto __finally558;
-	__catch558_g_error:
+	goto __finally560;
+	__catch560_g_error:
 	{
 		GError* e = NULL;
 		const gchar* _tmp17_ = NULL;
@@ -4102,7 +4102,7 @@ void media_page_on_play_video (MediaPage* self) {
 		_g_error_free0 (e);
 #line 4104 "MediaPage.c"
 	}
-	__finally558:
+	__finally560:
 #line 500 "/home/jens/Source/shotwell/src/MediaPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 500 "/home/jens/Source/shotwell/src/MediaPage.vala"

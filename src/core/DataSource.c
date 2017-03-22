@@ -2387,7 +2387,7 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 #line 370 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2389 "DataSource.c"
-				goto __catch49_g_error;
+				goto __catch50_g_error;
 			}
 #line 370 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 			ret = _tmp1_;
@@ -2409,8 +2409,8 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 #line 2409 "DataSource.c"
 			}
 		}
-		goto __finally49;
-		__catch49_g_error:
+		goto __finally50;
+		__catch50_g_error:
 		{
 			GError* err = NULL;
 			gchar* _tmp6_ = NULL;
@@ -2439,7 +2439,7 @@ gboolean data_source_destroy_orphan (DataSource* self, gboolean delete_backing) 
 			_g_error_free0 (err);
 #line 2440 "DataSource.c"
 		}
-		__finally49:
+		__finally50:
 #line 369 "/home/jens/Source/shotwell/src/core/DataSource.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 369 "/home/jens/Source/shotwell/src/core/DataSource.vala"

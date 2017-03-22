@@ -757,14 +757,14 @@ static gboolean source_collection_destroy_and_delete_source (SourceCollection* s
 #line 115 "/home/jens/Source/shotwell/src/core/SourceCollection.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 760 "SourceCollection.c"
-			goto __catch48_g_error;
+			goto __catch49_g_error;
 		}
 #line 115 "/home/jens/Source/shotwell/src/core/SourceCollection.vala"
 		success = _tmp0_;
 #line 765 "SourceCollection.c"
 	}
-	goto __finally48;
-	__catch48_g_error:
+	goto __finally49;
+	__catch49_g_error:
 	{
 		GError* err = NULL;
 #line 114 "/home/jens/Source/shotwell/src/core/SourceCollection.vala"
@@ -777,7 +777,7 @@ static gboolean source_collection_destroy_and_delete_source (SourceCollection* s
 		_g_error_free0 (err);
 #line 779 "SourceCollection.c"
 	}
-	__finally48:
+	__finally49:
 #line 114 "/home/jens/Source/shotwell/src/core/SourceCollection.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 114 "/home/jens/Source/shotwell/src/core/SourceCollection.vala"

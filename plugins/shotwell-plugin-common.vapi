@@ -28,12 +28,12 @@ namespace Publishing {
 			}
 			protected GooglePublisher (Spit.Publishing.Service service, Spit.Publishing.PluginHost host, string scope);
 			protected abstract void do_logout ();
+			protected abstract Spit.Publishing.Authenticator get_authenticator ();
 			protected unowned Spit.Publishing.PluginHost get_host ();
 			protected Publishing.RESTSupport.GoogleSession get_session ();
 			public abstract bool is_running ();
 			protected abstract void on_login_flow_complete ();
 			public abstract void start ();
-			protected void start_oauth_flow (string? refresh_token = null);
 			public abstract void stop ();
 		}
 		[CCode (cheader_filename = "shotwell-plugin-common.h")]
@@ -41,7 +41,6 @@ namespace Publishing {
 			public GoogleSession ();
 			public abstract void deauthenticate ();
 			public abstract string get_access_token ();
-			public abstract string get_refresh_token ();
 			public abstract string get_user_name ();
 		}
 		[CCode (cheader_filename = "shotwell-plugin-common.h")]

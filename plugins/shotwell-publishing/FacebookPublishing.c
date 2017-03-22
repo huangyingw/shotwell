@@ -16,13 +16,12 @@
 #include <gio/gio.h>
 #include "shotwell-plugin-common.h"
 #include <glib/gi18n-lib.h>
+#include "shotwell-authenticator.h"
 #include <json-glib/json-glib.h>
 #include <gtk/gtk.h>
-#include <libsoup/soup.h>
 #include <float.h>
 #include <math.h>
-#include <locale.h>
-#include <webkit2/webkit2.h>
+#include <libsoup/soup.h>
 #include <gobject/gvaluecollector.h>
 
 
@@ -76,16 +75,6 @@ typedef struct _PublishingFacebookPublishingParametersPrivate PublishingFacebook
 typedef struct _PublishingFacebookParamSpecPublishingParameters PublishingFacebookParamSpecPublishingParameters;
 typedef struct _PublishingFacebookFacebookPublisherPrivate PublishingFacebookFacebookPublisherPrivate;
 
-#define PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE (publishing_facebook_web_authentication_pane_get_type ())
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, PublishingFacebookWebAuthenticationPane))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, PublishingFacebookWebAuthenticationPaneClass))
-#define PUBLISHING_FACEBOOK_IS_WEB_AUTHENTICATION_PANE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE))
-#define PUBLISHING_FACEBOOK_IS_WEB_AUTHENTICATION_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, PublishingFacebookWebAuthenticationPaneClass))
-
-typedef struct _PublishingFacebookWebAuthenticationPane PublishingFacebookWebAuthenticationPane;
-typedef struct _PublishingFacebookWebAuthenticationPaneClass PublishingFacebookWebAuthenticationPaneClass;
-
 #define PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION (publishing_facebook_graph_session_get_type ())
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION, PublishingFacebookGraphSession))
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION, PublishingFacebookGraphSessionClass))
@@ -134,21 +123,8 @@ typedef struct _PublishingFacebookGraphMessageClass PublishingFacebookGraphMessa
 #define __vala_JsonNode_free0(var) ((var == NULL) ? NULL : (var = (_vala_JsonNode_free (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 #define _json_array_unref0(var) ((var == NULL) ? NULL : (var = (json_array_unref (var), NULL)))
-#define _g_regex_unref0(var) ((var == NULL) ? NULL : (var = (g_regex_unref (var), NULL)))
-typedef struct _PublishingFacebookWebAuthenticationPanePrivate PublishingFacebookWebAuthenticationPanePrivate;
-
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP (publishing_facebook_web_authentication_pane_locale_lookup_get_type ())
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_LOCALE_LOOKUP(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP, PublishingFacebookWebAuthenticationPaneLocaleLookup))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_LOCALE_LOOKUP_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP, PublishingFacebookWebAuthenticationPaneLocaleLookupClass))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_IS_LOCALE_LOOKUP(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_IS_LOCALE_LOOKUP_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP))
-#define PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_LOCALE_LOOKUP_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP, PublishingFacebookWebAuthenticationPaneLocaleLookupClass))
-
-typedef struct _PublishingFacebookWebAuthenticationPaneLocaleLookup PublishingFacebookWebAuthenticationPaneLocaleLookup;
-typedef struct _PublishingFacebookWebAuthenticationPaneLocaleLookupClass PublishingFacebookWebAuthenticationPaneLocaleLookupClass;
-typedef struct _PublishingFacebookWebAuthenticationPaneLocaleLookupPrivate PublishingFacebookWebAuthenticationPaneLocaleLookupPrivate;
-#define _publishing_facebook_web_authentication_pane_locale_lookup_unref0(var) ((var == NULL) ? NULL : (var = (publishing_facebook_web_authentication_pane_locale_lookup_unref (var), NULL)))
-typedef struct _PublishingFacebookWebAuthenticationPaneParamSpecLocaleLookup PublishingFacebookWebAuthenticationPaneParamSpecLocaleLookup;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
+#define _g_hash_table_unref0(var) ((var == NULL) ? NULL : (var = (g_hash_table_unref (var), NULL)))
 typedef struct _PublishingFacebookPublishingOptionsPanePrivate PublishingFacebookPublishingOptionsPanePrivate;
 
 #define PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION (publishing_facebook_publishing_options_pane_privacy_description_get_type ())
@@ -181,16 +157,6 @@ typedef struct _PublishingFacebookGraphSessionGraphMessageImpl PublishingFaceboo
 typedef struct _PublishingFacebookGraphSessionGraphMessageImplClass PublishingFacebookGraphSessionGraphMessageImplClass;
 typedef struct _PublishingFacebookGraphSessionGraphMessageImplPrivate PublishingFacebookGraphSessionGraphMessageImplPrivate;
 
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE (publishing_facebook_graph_session_graph_endpoint_probe_message_get_type ())
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessage))
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessageClass))
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_ENDPOINT_PROBE_MESSAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE))
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_ENDPOINT_PROBE_MESSAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE))
-#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessageClass))
-
-typedef struct _PublishingFacebookGraphSessionGraphEndpointProbeMessage PublishingFacebookGraphSessionGraphEndpointProbeMessage;
-typedef struct _PublishingFacebookGraphSessionGraphEndpointProbeMessageClass PublishingFacebookGraphSessionGraphEndpointProbeMessageClass;
-
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_QUERY_MESSAGE (publishing_facebook_graph_session_graph_query_message_get_type ())
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_QUERY_MESSAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_QUERY_MESSAGE, PublishingFacebookGraphSessionGraphQueryMessage))
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_QUERY_MESSAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_QUERY_MESSAGE, PublishingFacebookGraphSessionGraphQueryMessageClass))
@@ -220,8 +186,19 @@ typedef struct _PublishingFacebookGraphSessionGraphUploadMessageClass Publishing
 
 typedef struct _PublishingFacebookGraphSessionGraphCreateAlbumMessage PublishingFacebookGraphSessionGraphCreateAlbumMessage;
 typedef struct _PublishingFacebookGraphSessionGraphCreateAlbumMessageClass PublishingFacebookGraphSessionGraphCreateAlbumMessageClass;
+#define _g_regex_unref0(var) ((var == NULL) ? NULL : (var = (g_regex_unref (var), NULL)))
 typedef struct _PublishingFacebookGraphSessionGraphQueryMessagePrivate PublishingFacebookGraphSessionGraphQueryMessagePrivate;
 #define __vala_SoupURI_free0(var) ((var == NULL) ? NULL : (var = (_vala_SoupURI_free (var), NULL)))
+
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE (publishing_facebook_graph_session_graph_endpoint_probe_message_get_type ())
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessage))
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessageClass))
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_ENDPOINT_PROBE_MESSAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE))
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_ENDPOINT_PROBE_MESSAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE))
+#define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, PublishingFacebookGraphSessionGraphEndpointProbeMessageClass))
+
+typedef struct _PublishingFacebookGraphSessionGraphEndpointProbeMessage PublishingFacebookGraphSessionGraphEndpointProbeMessage;
+typedef struct _PublishingFacebookGraphSessionGraphEndpointProbeMessageClass PublishingFacebookGraphSessionGraphEndpointProbeMessageClass;
 typedef struct _PublishingFacebookGraphSessionGraphEndpointProbeMessagePrivate PublishingFacebookGraphSessionGraphEndpointProbeMessagePrivate;
 typedef struct _PublishingFacebookGraphSessionGraphUploadMessagePrivate PublishingFacebookGraphSessionGraphUploadMessagePrivate;
 #define _g_mapped_file_unref0(var) ((var == NULL) ? NULL : (var = (g_mapped_file_unref (var), NULL)))
@@ -303,47 +280,17 @@ struct _PublishingFacebookFacebookPublisherClass {
 struct _PublishingFacebookFacebookPublisherPrivate {
 	PublishingFacebookPublishingParameters* publishing_params;
 	SpitPublishingPluginHost* host;
-	PublishingFacebookWebAuthenticationPane* web_auth_pane;
 	SpitPublishingProgressCallback progress_reporter;
 	gpointer progress_reporter_target;
 	GDestroyNotify progress_reporter_target_destroy_notify;
 	SpitPublishingService* service;
+	SpitPublishingAuthenticator* authenticator;
 	gboolean running;
 	PublishingFacebookGraphSession* graph_session;
 	PublishingFacebookPublishingOptionsPane* publishing_options_pane;
 	PublishingFacebookUploader* uploader;
 	gchar* uid;
 	gchar* username;
-};
-
-struct _PublishingFacebookWebAuthenticationPane {
-	ShotwellPluginsCommonWebAuthenticationPane parent_instance;
-	PublishingFacebookWebAuthenticationPanePrivate * priv;
-};
-
-struct _PublishingFacebookWebAuthenticationPaneClass {
-	ShotwellPluginsCommonWebAuthenticationPaneClass parent_class;
-};
-
-struct _PublishingFacebookWebAuthenticationPaneLocaleLookup {
-	GTypeInstance parent_instance;
-	volatile int ref_count;
-	PublishingFacebookWebAuthenticationPaneLocaleLookupPrivate * priv;
-	gchar* prefix;
-	gchar* translation;
-	gchar* exception_code;
-	gchar* exception_translation;
-	gchar* exception_code_2;
-	gchar* exception_translation_2;
-};
-
-struct _PublishingFacebookWebAuthenticationPaneLocaleLookupClass {
-	GTypeClass parent_class;
-	void (*finalize) (PublishingFacebookWebAuthenticationPaneLocaleLookup *self);
-};
-
-struct _PublishingFacebookWebAuthenticationPaneParamSpecLocaleLookup {
-	GParamSpec parent_instance;
 };
 
 struct _PublishingFacebookPublishingOptionsPane {
@@ -538,15 +485,6 @@ static gpointer publishing_facebook_album_parent_class = NULL;
 static gpointer publishing_facebook_publishing_parameters_parent_class = NULL;
 static gpointer publishing_facebook_facebook_publisher_parent_class = NULL;
 static SpitPublishingPublisherIface* publishing_facebook_facebook_publisher_spit_publishing_publisher_parent_iface = NULL;
-static gpointer publishing_facebook_web_authentication_pane_parent_class = NULL;
-static gboolean publishing_facebook_web_authentication_pane_cache_dirty;
-static gboolean publishing_facebook_web_authentication_pane_cache_dirty = FALSE;
-static PublishingFacebookWebAuthenticationPaneLocaleLookup** publishing_facebook_web_authentication_pane_locale_lookup_table;
-static gint publishing_facebook_web_authentication_pane_locale_lookup_table_length1;
-static PublishingFacebookWebAuthenticationPaneLocaleLookup** publishing_facebook_web_authentication_pane_locale_lookup_table = NULL;
-static gint publishing_facebook_web_authentication_pane_locale_lookup_table_length1 = 0;
-static gint _publishing_facebook_web_authentication_pane_locale_lookup_table_size_ = 0;
-static gpointer publishing_facebook_web_authentication_pane_locale_lookup_parent_class = NULL;
 static gpointer publishing_facebook_publishing_options_pane_parent_class = NULL;
 static gpointer publishing_facebook_publishing_options_pane_privacy_description_parent_class = NULL;
 static SpitPublishingDialogPaneIface* publishing_facebook_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = NULL;
@@ -580,19 +518,7 @@ static SpitPublishingPublisherMediaType facebook_service_real_get_supported_medi
 static void facebook_service_finalize (GObject* obj);
 #define PUBLISHING_FACEBOOK_SERVICE_NAME "facebook"
 #define PUBLISHING_FACEBOOK_USER_VISIBLE_NAME "Facebook"
-#define PUBLISHING_FACEBOOK_APPLICATION_ID "1612018629063184"
 #define PUBLISHING_FACEBOOK_DEFAULT_ALBUM_NAME _ ("Shotwell Connect")
-#define PUBLISHING_FACEBOOK_SERVICE_WELCOME_MESSAGE _ ("You are not currently logged into Facebook.\n" \
-"\n" \
-"If you don’t yet have a Facebook account, you can create one during th" \
-"e login process. During login, Shotwell Connect may ask you for permis" \
-"sion to upload photos and publish to your feed. These permissions are " \
-"required for Shotwell Connect to function.")
-#define PUBLISHING_FACEBOOK_RESTART_ERROR_MESSAGE _ ("You have already logged in and out of Facebook during this Shotwell se" \
-"ssion.\n" \
-"To continue publishing to Facebook, quit and restart Shotwell, then tr" \
-"y publishing again.")
-#define PUBLISHING_FACEBOOK_USER_AGENT "Java/1.6.0_16"
 #define PUBLISHING_FACEBOOK_EXPIRED_SESSION_STATUS_CODE 400
 gpointer publishing_facebook_album_ref (gpointer instance);
 void publishing_facebook_album_unref (gpointer instance);
@@ -630,7 +556,6 @@ void publishing_facebook_publishing_parameters_set_target_album_by_name (Publish
 gchar* publishing_facebook_publishing_parameters_get_target_album_name (PublishingFacebookPublishingParameters* self);
 gchar* publishing_facebook_publishing_parameters_get_target_album_id (PublishingFacebookPublishingParameters* self);
 static void publishing_facebook_publishing_parameters_finalize (PublishingFacebookPublishingParameters* obj);
-GType publishing_facebook_web_authentication_pane_get_type (void) G_GNUC_CONST;
 gpointer publishing_facebook_graph_session_ref (gpointer instance);
 void publishing_facebook_graph_session_unref (gpointer instance);
 GParamSpec* publishing_facebook_param_spec_graph_session (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -654,18 +579,11 @@ PublishingFacebookGraphSession* publishing_facebook_graph_session_new (void);
 PublishingFacebookGraphSession* publishing_facebook_graph_session_construct (GType object_type);
 static void publishing_facebook_facebook_publisher_on_session_authenticated (PublishingFacebookFacebookPublisher* self);
 static void _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated (PublishingFacebookGraphSession* _sender, gpointer self);
-static gboolean publishing_facebook_facebook_publisher_is_persistent_session_valid (PublishingFacebookFacebookPublisher* self);
-static gchar* publishing_facebook_facebook_publisher_get_persistent_access_token (PublishingFacebookFacebookPublisher* self);
 static gboolean publishing_facebook_facebook_publisher_get_persistent_strip_metadata (PublishingFacebookFacebookPublisher* self);
-static void publishing_facebook_facebook_publisher_set_persistent_access_token (PublishingFacebookFacebookPublisher* self, const gchar* access_token);
 static void publishing_facebook_facebook_publisher_set_persistent_strip_metadata (PublishingFacebookFacebookPublisher* self, gboolean strip_metadata);
 gint publishing_facebook_facebook_publisher_get_persistent_default_size (PublishingFacebookFacebookPublisher* self);
 void publishing_facebook_facebook_publisher_set_persistent_default_size (PublishingFacebookFacebookPublisher* self, gint size);
-static void publishing_facebook_facebook_publisher_invalidate_persistent_session (PublishingFacebookFacebookPublisher* self);
-static void publishing_facebook_facebook_publisher_do_show_service_welcome_pane (PublishingFacebookFacebookPublisher* self);
-static void publishing_facebook_facebook_publisher_on_login_clicked (PublishingFacebookFacebookPublisher* self);
-static void _publishing_facebook_facebook_publisher_on_login_clicked_spit_publishing_login_callback (gpointer self);
-static void publishing_facebook_facebook_publisher_do_test_connection_to_endpoint (PublishingFacebookFacebookPublisher* self);
+static void publishing_facebook_facebook_publisher_do_fetch_user_info (PublishingFacebookFacebookPublisher* self);
 gpointer publishing_facebook_graph_message_ref (gpointer instance);
 void publishing_facebook_graph_message_unref (gpointer instance);
 GParamSpec* publishing_facebook_param_spec_graph_message (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -673,18 +591,12 @@ void publishing_facebook_value_set_graph_message (GValue* value, gpointer v_obje
 void publishing_facebook_value_take_graph_message (GValue* value, gpointer v_object);
 gpointer publishing_facebook_value_get_graph_message (const GValue* value);
 GType publishing_facebook_graph_message_get_type (void) G_GNUC_CONST;
-PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_endpoint_test (PublishingFacebookGraphSession* self);
-static void publishing_facebook_facebook_publisher_on_endpoint_test_completed (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message);
-static void _publishing_facebook_facebook_publisher_on_endpoint_test_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self);
-static void publishing_facebook_facebook_publisher_on_endpoint_test_error (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message, GError* _error_);
-static void _publishing_facebook_facebook_publisher_on_endpoint_test_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self);
-void publishing_facebook_graph_session_send_message (PublishingFacebookGraphSession* self, PublishingFacebookGraphMessage* message);
-static void publishing_facebook_facebook_publisher_do_fetch_user_info (PublishingFacebookFacebookPublisher* self);
 PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_query (PublishingFacebookGraphSession* self, const gchar* resource_path);
 static void publishing_facebook_facebook_publisher_on_fetch_user_info_completed (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message);
 static void _publishing_facebook_facebook_publisher_on_fetch_user_info_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self);
 static void publishing_facebook_facebook_publisher_on_fetch_user_info_error (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message, GError* _error_);
 static void _publishing_facebook_facebook_publisher_on_fetch_user_info_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self);
+void publishing_facebook_graph_session_send_message (PublishingFacebookGraphSession* self, PublishingFacebookGraphMessage* message);
 static void publishing_facebook_facebook_publisher_do_fetch_album_descriptions (PublishingFacebookFacebookPublisher* self);
 static void publishing_facebook_facebook_publisher_on_fetch_albums_completed (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message);
 static void _publishing_facebook_facebook_publisher_on_fetch_albums_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self);
@@ -703,8 +615,8 @@ static void _publishing_facebook_facebook_publisher_on_create_album_completed_pu
 static void publishing_facebook_facebook_publisher_on_create_album_error (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message, GError* err);
 static void _publishing_facebook_facebook_publisher_on_create_album_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self);
 static void publishing_facebook_facebook_publisher_do_show_publishing_options_pane (PublishingFacebookFacebookPublisher* self);
-PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_new (const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata);
-PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_construct (GType object_type, const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata);
+PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_new (const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata, gboolean can_logout);
+PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_construct (GType object_type, const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata, gboolean can_logout);
 static void publishing_facebook_facebook_publisher_on_publishing_options_pane_logout (PublishingFacebookFacebookPublisher* self);
 static void _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout (PublishingFacebookPublishingOptionsPane* _sender, gpointer self);
 static void publishing_facebook_facebook_publisher_on_publishing_options_pane_publish (PublishingFacebookFacebookPublisher* self, const gchar* target_album, const gchar* privacy_setting, PublishingFacebookResolution resolution, gboolean strip_metadata);
@@ -712,17 +624,10 @@ static void _publishing_facebook_facebook_publisher_on_publishing_options_pane_p
 static void publishing_facebook_facebook_publisher_do_logout (PublishingFacebookFacebookPublisher* self);
 static void publishing_facebook_facebook_publisher_do_add_new_local_album_from_json (PublishingFacebookFacebookPublisher* self, const gchar* album_name, const gchar* json);
 static void publishing_facebook_facebook_publisher_do_upload (PublishingFacebookFacebookPublisher* self);
-static void publishing_facebook_facebook_publisher_do_hosted_web_authentication (PublishingFacebookFacebookPublisher* self);
-PublishingFacebookWebAuthenticationPane* publishing_facebook_web_authentication_pane_new (void);
-PublishingFacebookWebAuthenticationPane* publishing_facebook_web_authentication_pane_construct (GType object_type);
-static void publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded (PublishingFacebookFacebookPublisher* self, const gchar* success_url);
-static void _publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded_publishing_facebook_web_authentication_pane_login_succeeded (PublishingFacebookWebAuthenticationPane* _sender, const gchar* success_url, gpointer self);
-static void publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed (PublishingFacebookFacebookPublisher* self);
-static void _publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed_publishing_facebook_web_authentication_pane_login_failed (PublishingFacebookWebAuthenticationPane* _sender, gpointer self);
-static void publishing_facebook_facebook_publisher_do_authenticate_session (PublishingFacebookFacebookPublisher* self, const gchar* good_login_uri);
+static void publishing_facebook_facebook_publisher_on_authenticator_succeeded (PublishingFacebookFacebookPublisher* self);
+static void publishing_facebook_facebook_publisher_do_authenticate_session (PublishingFacebookFacebookPublisher* self);
+static void publishing_facebook_facebook_publisher_on_authenticator_failed (PublishingFacebookFacebookPublisher* self);
 void publishing_facebook_graph_session_authenticate (PublishingFacebookGraphSession* self, const gchar* access_token);
-static void publishing_facebook_facebook_publisher_do_save_session_information (PublishingFacebookFacebookPublisher* self);
-gchar* publishing_facebook_graph_session_get_access_token (PublishingFacebookGraphSession* self);
 PublishingFacebookUploader* publishing_facebook_uploader_new (PublishingFacebookGraphSession* session, PublishingFacebookPublishingParameters* publishing_params, SpitPublishingPublishable** publishables, int publishables_length1);
 PublishingFacebookUploader* publishing_facebook_uploader_construct (GType object_type, PublishingFacebookGraphSession* session, PublishingFacebookPublishingParameters* publishing_params, SpitPublishingPublishable** publishables, int publishables_length1);
 static void publishing_facebook_facebook_publisher_on_upload_complete (PublishingFacebookFacebookPublisher* self, PublishingFacebookUploader* uploader, gint num_published);
@@ -740,31 +645,12 @@ static SpitPublishingService* publishing_facebook_facebook_publisher_real_get_se
 gchar* publishing_facebook_facebook_publisher_get_service_name (PublishingFacebookFacebookPublisher* self);
 gchar* publishing_facebook_facebook_publisher_get_user_visible_name (PublishingFacebookFacebookPublisher* self);
 static void publishing_facebook_facebook_publisher_real_start (SpitPublishingPublisher* base);
-gboolean publishing_facebook_web_authentication_pane_is_cache_dirty (void);
+static void _publishing_facebook_facebook_publisher_on_authenticator_succeeded_spit_publishing_authenticator_authenticated (SpitPublishingAuthenticator* _sender, gpointer self);
+static void _publishing_facebook_facebook_publisher_on_authenticator_failed_spit_publishing_authenticator_authentication_failed (SpitPublishingAuthenticator* _sender, gpointer self);
 static void publishing_facebook_facebook_publisher_real_stop (SpitPublishingPublisher* base);
 void publishing_facebook_graph_session_stop_transactions (PublishingFacebookGraphSession* self);
 static gboolean publishing_facebook_facebook_publisher_real_is_running (SpitPublishingPublisher* base);
 static void publishing_facebook_facebook_publisher_finalize (GObject* obj);
-enum  {
-	PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_DUMMY_PROPERTY
-};
-static gpointer publishing_facebook_web_authentication_pane_locale_lookup_ref (gpointer instance);
-static void publishing_facebook_web_authentication_pane_locale_lookup_unref (gpointer instance);
-static GParamSpec* publishing_facebook_web_authentication_pane_param_spec_locale_lookup (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) G_GNUC_UNUSED;
-static void publishing_facebook_web_authentication_pane_value_set_locale_lookup (GValue* value, gpointer v_object) G_GNUC_UNUSED;
-static void publishing_facebook_web_authentication_pane_value_take_locale_lookup (GValue* value, gpointer v_object) G_GNUC_UNUSED;
-static gpointer publishing_facebook_web_authentication_pane_value_get_locale_lookup (const GValue* value) G_GNUC_UNUSED;
-static GType publishing_facebook_web_authentication_pane_locale_lookup_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
-static PublishingFacebookWebAuthenticationPaneLocaleLookup* publishing_facebook_web_authentication_pane_locale_lookup_new (const gchar* prefix, const gchar* translation, const gchar* exception_code, const gchar* exception_translation, const gchar* exception_code_2, const gchar* exception_translation_2);
-static PublishingFacebookWebAuthenticationPaneLocaleLookup* publishing_facebook_web_authentication_pane_locale_lookup_construct (GType object_type, const gchar* prefix, const gchar* translation, const gchar* exception_code, const gchar* exception_translation, const gchar* exception_code_2, const gchar* exception_translation_2);
-static gchar* publishing_facebook_web_authentication_pane_get_login_url (void);
-static gchar* publishing_facebook_web_authentication_pane_get_system_locale_as_facebook_locale (void);
-static void publishing_facebook_web_authentication_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base);
-enum  {
-	PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_LOCALE_LOOKUP_DUMMY_PROPERTY
-};
-static void publishing_facebook_web_authentication_pane_locale_lookup_finalize (PublishingFacebookWebAuthenticationPaneLocaleLookup* obj);
-static void publishing_facebook_web_authentication_pane_finalize (GObject* obj);
 static gpointer publishing_facebook_publishing_options_pane_privacy_description_ref (gpointer instance);
 static void publishing_facebook_publishing_options_pane_privacy_description_unref (gpointer instance);
 static GParamSpec* publishing_facebook_publishing_options_pane_param_spec_privacy_description (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) G_GNUC_UNUSED;
@@ -841,9 +727,6 @@ static void publishing_facebook_graph_session_unmanage_message (PublishingFacebo
 static GType publishing_facebook_graph_session_graph_message_impl_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
 static void publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data (PublishingFacebookGraphSessionGraphMessageImpl* self, SoupBuffer* chunk);
 static void _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data (SoupMessage* _sender, SoupBuffer* chunk, gpointer self);
-static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_facebook_graph_session_graph_endpoint_probe_message_new (PublishingFacebookGraphSession* host_session);
-static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_facebook_graph_session_graph_endpoint_probe_message_construct (GType object_type, PublishingFacebookGraphSession* host_session);
-static GType publishing_facebook_graph_session_graph_endpoint_probe_message_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
 static PublishingFacebookGraphSessionGraphQueryMessage* publishing_facebook_graph_session_graph_query_message_new (PublishingFacebookGraphSession* host_session, const gchar* relative_uri, const gchar* access_token);
 static PublishingFacebookGraphSessionGraphQueryMessage* publishing_facebook_graph_session_graph_query_message_construct (GType object_type, PublishingFacebookGraphSession* host_session, const gchar* relative_uri, const gchar* access_token);
 static GType publishing_facebook_graph_session_graph_query_message_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
@@ -867,9 +750,12 @@ enum  {
 	PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_QUERY_MESSAGE_DUMMY_PROPERTY
 };
 static void _vala_SoupURI_free (SoupURI* self);
+static GType publishing_facebook_graph_session_graph_endpoint_probe_message_get_type (void) G_GNUC_CONST G_GNUC_UNUSED;
 enum  {
 	PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_ENDPOINT_PROBE_MESSAGE_DUMMY_PROPERTY
 };
+static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_facebook_graph_session_graph_endpoint_probe_message_new (PublishingFacebookGraphSession* host_session);
+static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_facebook_graph_session_graph_endpoint_probe_message_construct (GType object_type, PublishingFacebookGraphSession* host_session);
 #define PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_UPLOAD_MESSAGE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_UPLOAD_MESSAGE, PublishingFacebookGraphSessionGraphUploadMessagePrivate))
 enum  {
 	PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_UPLOAD_MESSAGE_DUMMY_PROPERTY
@@ -898,7 +784,6 @@ static void publishing_facebook_uploader_send_files (PublishingFacebookUploader*
 static void publishing_facebook_uploader_finalize (PublishingFacebookUploader* obj);
 static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func);
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func);
-static gint _vala_array_length (gpointer array);
 
 
 FacebookService* facebook_service_construct (GType object_type, GFile* resource_directory) {
@@ -915,7 +800,7 @@ FacebookService* facebook_service_construct (GType object_type, GFile* resource_
 	_tmp0__length1 = facebook_service_icon_pixbuf_set_length1;
 #line 13 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 911 "FacebookPublishing.c"
+#line 804 "FacebookPublishing.c"
 		gint _tmp1_ = 0;
 		GdkPixbuf** _tmp2_ = NULL;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
@@ -928,18 +813,18 @@ FacebookService* facebook_service_construct (GType object_type, GFile* resource_
 		facebook_service_icon_pixbuf_set_length1 = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_facebook_service_icon_pixbuf_set_size_ = facebook_service_icon_pixbuf_set_length1;
-#line 924 "FacebookPublishing.c"
+#line 817 "FacebookPublishing.c"
 	}
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 928 "FacebookPublishing.c"
+#line 821 "FacebookPublishing.c"
 }
 
 
 FacebookService* facebook_service_new (GFile* resource_directory) {
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return facebook_service_construct (TYPE_FACEBOOK_SERVICE, resource_directory);
-#line 935 "FacebookPublishing.c"
+#line 828 "FacebookPublishing.c"
 }
 
 
@@ -961,7 +846,7 @@ static gint facebook_service_real_get_pluggable_interface (SpitPluggable* base, 
 	result = _tmp2_;
 #line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 957 "FacebookPublishing.c"
+#line 850 "FacebookPublishing.c"
 }
 
 
@@ -974,7 +859,7 @@ static const gchar* facebook_service_real_get_id (SpitPluggable* base) {
 	result = "org.yorba.shotwell.publishing.facebook";
 #line 24 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 970 "FacebookPublishing.c"
+#line 863 "FacebookPublishing.c"
 }
 
 
@@ -987,14 +872,14 @@ static const gchar* facebook_service_real_get_pluggable_name (SpitPluggable* bas
 	result = "Facebook";
 #line 28 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 983 "FacebookPublishing.c"
+#line 876 "FacebookPublishing.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 990 "FacebookPublishing.c"
+#line 883 "FacebookPublishing.c"
 }
 
 
@@ -1005,17 +890,17 @@ static GdkPixbuf** _vala_array_dup1 (GdkPixbuf** self, int length) {
 	result = g_new0 (GdkPixbuf*, length + 1);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 1001 "FacebookPublishing.c"
+#line 894 "FacebookPublishing.c"
 		GdkPixbuf* _tmp0_ = NULL;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result[i] = _tmp0_;
-#line 1007 "FacebookPublishing.c"
+#line 900 "FacebookPublishing.c"
 	}
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 1011 "FacebookPublishing.c"
+#line 904 "FacebookPublishing.c"
 }
 
 
@@ -1097,7 +982,7 @@ static void facebook_service_real_get_info (SpitPluggable* base, SpitPluggableIn
 	(*info).icons = _tmp9_;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*info).icons_length1 = _tmp9__length1;
-#line 1093 "FacebookPublishing.c"
+#line 986 "FacebookPublishing.c"
 }
 
 
@@ -1105,7 +990,7 @@ static void facebook_service_real_activation (SpitPluggable* base, gboolean enab
 	FacebookService * self;
 #line 43 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FACEBOOK_SERVICE, FacebookService);
-#line 1101 "FacebookPublishing.c"
+#line 994 "FacebookPublishing.c"
 }
 
 
@@ -1126,7 +1011,7 @@ static SpitPublishingPublisher* facebook_service_real_create_publisher (SpitPubl
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher);
 #line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 1122 "FacebookPublishing.c"
+#line 1015 "FacebookPublishing.c"
 }
 
 
@@ -1139,7 +1024,7 @@ static SpitPublishingPublisherMediaType facebook_service_real_get_supported_medi
 	result = SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO;
 #line 51 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 1135 "FacebookPublishing.c"
+#line 1028 "FacebookPublishing.c"
 }
 
 
@@ -1148,7 +1033,7 @@ static void facebook_service_class_init (FacebookServiceClass * klass) {
 	facebook_service_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = facebook_service_finalize;
-#line 1144 "FacebookPublishing.c"
+#line 1037 "FacebookPublishing.c"
 }
 
 
@@ -1165,7 +1050,7 @@ static void facebook_service_spit_pluggable_interface_init (SpitPluggableIface *
 	iface->get_info = (void (*)(SpitPluggable*, SpitPluggableInfo*)) facebook_service_real_get_info;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->activation = (void (*)(SpitPluggable*, gboolean)) facebook_service_real_activation;
-#line 1161 "FacebookPublishing.c"
+#line 1054 "FacebookPublishing.c"
 }
 
 
@@ -1176,7 +1061,7 @@ static void facebook_service_spit_publishing_service_interface_init (SpitPublish
 	iface->create_publisher = (SpitPublishingPublisher* (*)(SpitPublishingService*, SpitPublishingPluginHost*)) facebook_service_real_create_publisher;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->get_supported_media = (SpitPublishingPublisherMediaType (*)(SpitPublishingService*)) facebook_service_real_get_supported_media;
-#line 1172 "FacebookPublishing.c"
+#line 1065 "FacebookPublishing.c"
 }
 
 
@@ -1190,7 +1075,7 @@ static void facebook_service_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FACEBOOK_SERVICE, FacebookService);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (facebook_service_parent_class)->finalize (obj);
-#line 1186 "FacebookPublishing.c"
+#line 1079 "FacebookPublishing.c"
 }
 
 
@@ -1216,248 +1101,248 @@ PublishingFacebookAlbum* publishing_facebook_album_construct (GType object_type,
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (name != NULL, NULL);
-#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookAlbum*) g_type_create_instance (object_type);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = name;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->name);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->name = _tmp1_;
-#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = id;
-#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->id);
-#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->id = _tmp3_;
-#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 1236 "FacebookPublishing.c"
+#line 1129 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookAlbum* publishing_facebook_album_new (const gchar* name, const gchar* id) {
-#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 68 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_album_construct (PUBLISHING_FACEBOOK_TYPE_ALBUM, name, id);
-#line 1243 "FacebookPublishing.c"
+#line 1136 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_album_init (GValue* value) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 1250 "FacebookPublishing.c"
+#line 1143 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_album_free_value (GValue* value) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_album_unref (value->data[0].v_pointer);
-#line 1259 "FacebookPublishing.c"
+#line 1152 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_album_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_album_ref (src_value->data[0].v_pointer);
-#line 1269 "FacebookPublishing.c"
+#line 1162 "FacebookPublishing.c"
 	} else {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1273 "FacebookPublishing.c"
+#line 1166 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_value_album_peek_pointer (const GValue* value) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1281 "FacebookPublishing.c"
+#line 1174 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_album_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 1288 "FacebookPublishing.c"
+#line 1181 "FacebookPublishing.c"
 		PublishingFacebookAlbum* object;
 		object = collect_values[0].v_pointer;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1295 "FacebookPublishing.c"
+#line 1188 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1299 "FacebookPublishing.c"
+#line 1192 "FacebookPublishing.c"
 		}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_album_ref (object);
-#line 1303 "FacebookPublishing.c"
+#line 1196 "FacebookPublishing.c"
 	} else {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1307 "FacebookPublishing.c"
+#line 1200 "FacebookPublishing.c"
 	}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 1311 "FacebookPublishing.c"
+#line 1204 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_album_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookAlbum** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1322 "FacebookPublishing.c"
+#line 1215 "FacebookPublishing.c"
 	}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 1328 "FacebookPublishing.c"
+#line 1221 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1332 "FacebookPublishing.c"
+#line 1225 "FacebookPublishing.c"
 	} else {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_album_ref (value->data[0].v_pointer);
-#line 1336 "FacebookPublishing.c"
+#line 1229 "FacebookPublishing.c"
 	}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 1340 "FacebookPublishing.c"
+#line 1233 "FacebookPublishing.c"
 }
 
 
 GParamSpec* publishing_facebook_param_spec_album (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookParamSpecAlbum* spec;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_TYPE_ALBUM), NULL);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 1354 "FacebookPublishing.c"
+#line 1247 "FacebookPublishing.c"
 }
 
 
 gpointer publishing_facebook_value_get_album (const GValue* value) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_ALBUM), NULL);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1363 "FacebookPublishing.c"
+#line 1256 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_value_set_album (GValue* value, gpointer v_object) {
 	PublishingFacebookAlbum* old;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_ALBUM));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_ALBUM));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_album_ref (value->data[0].v_pointer);
-#line 1383 "FacebookPublishing.c"
+#line 1276 "FacebookPublishing.c"
 	} else {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1387 "FacebookPublishing.c"
+#line 1280 "FacebookPublishing.c"
 	}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_album_unref (old);
-#line 1393 "FacebookPublishing.c"
+#line 1286 "FacebookPublishing.c"
 	}
 }
 
 
 void publishing_facebook_value_take_album (GValue* value, gpointer v_object) {
 	PublishingFacebookAlbum* old;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_ALBUM));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_ALBUM));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1412 "FacebookPublishing.c"
+#line 1305 "FacebookPublishing.c"
 	} else {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1416 "FacebookPublishing.c"
+#line 1309 "FacebookPublishing.c"
 	}
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_album_unref (old);
-#line 1422 "FacebookPublishing.c"
+#line 1315 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_album_class_init (PublishingFacebookAlbumClass * klass) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_album_parent_class = g_type_class_peek_parent (klass);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookAlbumClass *) klass)->finalize = publishing_facebook_album_finalize;
-#line 1432 "FacebookPublishing.c"
+#line 1325 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_album_instance_init (PublishingFacebookAlbum * self) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 1439 "FacebookPublishing.c"
+#line 1332 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_album_finalize (PublishingFacebookAlbum* obj) {
 	PublishingFacebookAlbum * self;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_ALBUM, PublishingFacebookAlbum);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 71 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 65 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->name);
-#line 72 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 66 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->id);
-#line 1453 "FacebookPublishing.c"
+#line 1346 "FacebookPublishing.c"
 }
 
 
@@ -1478,72 +1363,72 @@ GType publishing_facebook_album_get_type (void) {
 gpointer publishing_facebook_album_ref (gpointer instance) {
 	PublishingFacebookAlbum* self;
 	self = instance;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 1478 "FacebookPublishing.c"
+#line 1371 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_album_unref (gpointer instance) {
 	PublishingFacebookAlbum* self;
 	self = instance;
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_ALBUM_GET_CLASS (self)->finalize (self);
-#line 70 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 64 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1491 "FacebookPublishing.c"
+#line 1384 "FacebookPublishing.c"
 	}
 }
 
 
 gchar* publishing_facebook_resolution_get_name (PublishingFacebookResolution self) {
 	gchar* result = NULL;
-#line 85 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 79 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	switch (self) {
-#line 85 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 79 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_RESOLUTION_STANDARD:
-#line 1502 "FacebookPublishing.c"
+#line 1395 "FacebookPublishing.c"
 		{
 			const gchar* _tmp0_ = NULL;
 			gchar* _tmp1_ = NULL;
-#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp0_ = _ ("Standard (720 pixels)");
-#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp1_ = g_strdup (_tmp0_);
-#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = _tmp1_;
-#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 1514 "FacebookPublishing.c"
+#line 1407 "FacebookPublishing.c"
 		}
-#line 85 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 79 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_RESOLUTION_HIGH:
-#line 1518 "FacebookPublishing.c"
+#line 1411 "FacebookPublishing.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 84 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp2_ = _ ("Large (2048 pixels)");
-#line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 84 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 84 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = _tmp3_;
-#line 90 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 84 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 1530 "FacebookPublishing.c"
+#line 1423 "FacebookPublishing.c"
 		}
 		default:
 		{
 			GEnumValue* _tmp4_;
-#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp4_ = g_enum_get_value (g_type_class_ref (PUBLISHING_FACEBOOK_TYPE_RESOLUTION), self);
-#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			g_error ("FacebookPublishing.vala:93: Unknown resolution %s", (_tmp4_ != NULL) ? _tmp4_->value_name : NULL);
-#line 1539 "FacebookPublishing.c"
+#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+			g_error ("FacebookPublishing.vala:87: Unknown resolution %s", (_tmp4_ != NULL) ? _tmp4_->value_name : NULL);
+#line 1432 "FacebookPublishing.c"
 		}
 	}
 }
@@ -1551,36 +1436,36 @@ gchar* publishing_facebook_resolution_get_name (PublishingFacebookResolution sel
 
 gint publishing_facebook_resolution_get_pixels (PublishingFacebookResolution self) {
 	gint result = 0;
-#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	switch (self) {
-#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_RESOLUTION_STANDARD:
-#line 1551 "FacebookPublishing.c"
+#line 1444 "FacebookPublishing.c"
 		{
-#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = 720;
-#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 1557 "FacebookPublishing.c"
+#line 1450 "FacebookPublishing.c"
 		}
-#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_RESOLUTION_HIGH:
-#line 1561 "FacebookPublishing.c"
+#line 1454 "FacebookPublishing.c"
 		{
-#line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = 2048;
-#line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 1567 "FacebookPublishing.c"
+#line 1460 "FacebookPublishing.c"
 		}
 		default:
 		{
 			GEnumValue* _tmp0_;
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp0_ = g_enum_get_value (g_type_class_ref (PUBLISHING_FACEBOOK_TYPE_RESOLUTION), self);
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			g_error ("FacebookPublishing.vala:106: Unknown resolution %s", (_tmp0_ != NULL) ? _tmp0_->value_name : NULL);
-#line 1576 "FacebookPublishing.c"
+#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+			g_error ("FacebookPublishing.vala:100: Unknown resolution %s", (_tmp0_ != NULL) ? _tmp0_->value_name : NULL);
+#line 1469 "FacebookPublishing.c"
 		}
 	}
 }
@@ -1600,64 +1485,64 @@ GType publishing_facebook_resolution_get_type (void) {
 
 PublishingFacebookPublishingParameters* publishing_facebook_publishing_parameters_construct (GType object_type) {
 	PublishingFacebookPublishingParameters* self = NULL;
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookPublishingParameters*) g_type_create_instance (object_type);
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->albums = (_vala_array_free (self->albums, self->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->albums = NULL;
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->albums_length1 = 0;
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->_albums_size_ = self->albums_length1;
-#line 127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->privacy_object);
-#line 127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->privacy_object = NULL;
-#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->target_album = PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM;
-#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->new_album_name);
-#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->new_album_name = NULL;
-#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 124 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->strip_metadata = FALSE;
-#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->resolution = PUBLISHING_FACEBOOK_RESOLUTION_HIGH;
 #line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->resolution = PUBLISHING_FACEBOOK_RESOLUTION_HIGH;
+#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 1622 "FacebookPublishing.c"
+#line 1515 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookPublishingParameters* publishing_facebook_publishing_parameters_new (void) {
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_publishing_parameters_construct (PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS);
-#line 1629 "FacebookPublishing.c"
+#line 1522 "FacebookPublishing.c"
 }
 
 
 static gpointer _publishing_facebook_album_ref0 (gpointer self) {
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? publishing_facebook_album_ref (self) : NULL;
-#line 1636 "FacebookPublishing.c"
+#line 1529 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add6 (PublishingFacebookAlbum*** array, int* length, int* size, PublishingFacebookAlbum* value) {
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookAlbum*, *array, (*size) + 1);
-#line 1647 "FacebookPublishing.c"
+#line 1540 "FacebookPublishing.c"
 	}
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[*length] = NULL;
-#line 1653 "FacebookPublishing.c"
+#line 1546 "FacebookPublishing.c"
 }
 
 
@@ -1671,80 +1556,80 @@ void publishing_facebook_publishing_parameters_add_album (PublishingFacebookPubl
 	PublishingFacebookAlbum** _tmp5_ = NULL;
 	gint _tmp5__length1 = 0;
 	PublishingFacebookAlbum* _tmp6_ = NULL;
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_PARAMETERS (self));
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (name != NULL);
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (id != NULL);
-#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->albums;
-#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->albums_length1;
-#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 1679 "FacebookPublishing.c"
+#line 1572 "FacebookPublishing.c"
 		PublishingFacebookAlbum** _tmp1_ = NULL;
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = g_new0 (PublishingFacebookAlbum*, 0 + 1);
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->albums = (_vala_array_free (self->albums, self->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->albums = _tmp1_;
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->albums_length1 = 0;
-#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->_albums_size_ = self->albums_length1;
-#line 1691 "FacebookPublishing.c"
+#line 1584 "FacebookPublishing.c"
 	}
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = name;
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = id;
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = publishing_facebook_album_new (_tmp2_, _tmp3_);
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	new_album = _tmp4_;
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = self->albums;
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5__length1 = self->albums_length1;
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _publishing_facebook_album_ref0 (new_album);
-#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add6 (&self->albums, &self->albums_length1, &self->_albums_size_, _tmp6_);
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_album_unref0 (new_album);
-#line 1711 "FacebookPublishing.c"
+#line 1604 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_publishing_parameters_set_target_album_by_name (PublishingFacebookPublishingParameters* self, const gchar* name) {
 	const gchar* _tmp0_ = NULL;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_PARAMETERS (self));
-#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = name;
-#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->target_album = PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM;
-#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 1727 "FacebookPublishing.c"
+#line 1620 "FacebookPublishing.c"
 	}
 	{
 		gint i = 0;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		i = 0;
-#line 1733 "FacebookPublishing.c"
+#line 1626 "FacebookPublishing.c"
 		{
 			gboolean _tmp1_ = FALSE;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp1_ = TRUE;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			while (TRUE) {
-#line 1740 "FacebookPublishing.c"
+#line 1633 "FacebookPublishing.c"
 				gint _tmp3_ = 0;
 				PublishingFacebookAlbum** _tmp4_ = NULL;
 				gint _tmp4__length1 = 0;
@@ -1754,60 +1639,60 @@ void publishing_facebook_publishing_parameters_set_target_album_by_name (Publish
 				PublishingFacebookAlbum* _tmp7_ = NULL;
 				const gchar* _tmp8_ = NULL;
 				const gchar* _tmp9_ = NULL;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				if (!_tmp1_) {
-#line 1752 "FacebookPublishing.c"
+#line 1645 "FacebookPublishing.c"
 					gint _tmp2_ = 0;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp2_ = i;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					i = _tmp2_ + 1;
-#line 1758 "FacebookPublishing.c"
+#line 1651 "FacebookPublishing.c"
 				}
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp1_ = FALSE;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp3_ = i;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp4_ = self->albums;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp4__length1 = self->albums_length1;
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				if (!(_tmp3_ < _tmp4__length1)) {
-#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					break;
-#line 1772 "FacebookPublishing.c"
+#line 1665 "FacebookPublishing.c"
 				}
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp5_ = self->albums;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp5__length1 = self->albums_length1;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp6_ = i;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp7_ = _tmp5_[_tmp6_];
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp8_ = _tmp7_->name;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp9_ = name;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				if (g_strcmp0 (_tmp8_, _tmp9_) == 0) {
-#line 1788 "FacebookPublishing.c"
+#line 1681 "FacebookPublishing.c"
 					gint _tmp10_ = 0;
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp10_ = i;
-#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					self->target_album = _tmp10_;
-#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					return;
-#line 1796 "FacebookPublishing.c"
+#line 1689 "FacebookPublishing.c"
 				}
 			}
 		}
 	}
-#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->target_album = PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM;
-#line 1803 "FacebookPublishing.c"
+#line 1696 "FacebookPublishing.c"
 }
 
 
@@ -1822,50 +1707,50 @@ gchar* publishing_facebook_publishing_parameters_get_target_album_name (Publishi
 	PublishingFacebookAlbum* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 159 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_PARAMETERS (self), NULL);
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->albums;
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = self->albums_length1;
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp1_ == NULL) {
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = TRUE;
-#line 1828 "FacebookPublishing.c"
+#line 1721 "FacebookPublishing.c"
 	} else {
 		gint _tmp2_ = 0;
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = self->target_album;
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _tmp2_ == PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM;
-#line 1835 "FacebookPublishing.c"
+#line 1728 "FacebookPublishing.c"
 	}
-#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_) {
-#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result = NULL;
-#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 155 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return result;
-#line 1843 "FacebookPublishing.c"
+#line 1736 "FacebookPublishing.c"
 	}
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->albums;
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3__length1 = self->albums_length1;
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = self->target_album;
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _tmp5_->name;
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = g_strdup (_tmp6_);
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp7_;
-#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 1861 "FacebookPublishing.c"
+#line 1754 "FacebookPublishing.c"
 }
 
 
@@ -1880,262 +1765,262 @@ gchar* publishing_facebook_publishing_parameters_get_target_album_id (Publishing
 	PublishingFacebookAlbum* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_PARAMETERS (self), NULL);
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->albums;
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = self->albums_length1;
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp1_ == NULL) {
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = TRUE;
-#line 1886 "FacebookPublishing.c"
+#line 1779 "FacebookPublishing.c"
 	} else {
 		gint _tmp2_ = 0;
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = self->target_album;
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _tmp2_ == PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM;
-#line 1893 "FacebookPublishing.c"
+#line 1786 "FacebookPublishing.c"
 	}
-#line 167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_) {
-#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result = NULL;
-#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return result;
-#line 1901 "FacebookPublishing.c"
+#line 1794 "FacebookPublishing.c"
 	}
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->albums;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3__length1 = self->albums_length1;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = self->target_album;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp3_[_tmp4_];
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _tmp5_->id;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = g_strdup (_tmp6_);
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp7_;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 1919 "FacebookPublishing.c"
+#line 1812 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_publishing_parameters_init (GValue* value) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 1926 "FacebookPublishing.c"
+#line 1819 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_publishing_parameters_free_value (GValue* value) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_unref (value->data[0].v_pointer);
-#line 1935 "FacebookPublishing.c"
+#line 1828 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_publishing_parameters_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_publishing_parameters_ref (src_value->data[0].v_pointer);
-#line 1945 "FacebookPublishing.c"
+#line 1838 "FacebookPublishing.c"
 	} else {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1949 "FacebookPublishing.c"
+#line 1842 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_value_publishing_parameters_peek_pointer (const GValue* value) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1957 "FacebookPublishing.c"
+#line 1850 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_publishing_parameters_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 1964 "FacebookPublishing.c"
+#line 1857 "FacebookPublishing.c"
 		PublishingFacebookPublishingParameters* object;
 		object = collect_values[0].v_pointer;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1971 "FacebookPublishing.c"
+#line 1864 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1975 "FacebookPublishing.c"
+#line 1868 "FacebookPublishing.c"
 		}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_publishing_parameters_ref (object);
-#line 1979 "FacebookPublishing.c"
+#line 1872 "FacebookPublishing.c"
 	} else {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1983 "FacebookPublishing.c"
+#line 1876 "FacebookPublishing.c"
 	}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 1987 "FacebookPublishing.c"
+#line 1880 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_publishing_parameters_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookPublishingParameters** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1998 "FacebookPublishing.c"
+#line 1891 "FacebookPublishing.c"
 	}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 2004 "FacebookPublishing.c"
+#line 1897 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2008 "FacebookPublishing.c"
+#line 1901 "FacebookPublishing.c"
 	} else {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_publishing_parameters_ref (value->data[0].v_pointer);
-#line 2012 "FacebookPublishing.c"
+#line 1905 "FacebookPublishing.c"
 	}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 2016 "FacebookPublishing.c"
+#line 1909 "FacebookPublishing.c"
 }
 
 
 GParamSpec* publishing_facebook_param_spec_publishing_parameters (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookParamSpecPublishingParameters* spec;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 2030 "FacebookPublishing.c"
+#line 1923 "FacebookPublishing.c"
 }
 
 
 gpointer publishing_facebook_value_get_publishing_parameters (const GValue* value) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 2039 "FacebookPublishing.c"
+#line 1932 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_value_set_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingFacebookPublishingParameters* old;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_ref (value->data[0].v_pointer);
-#line 2059 "FacebookPublishing.c"
+#line 1952 "FacebookPublishing.c"
 	} else {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 2063 "FacebookPublishing.c"
+#line 1956 "FacebookPublishing.c"
 	}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_unref (old);
-#line 2069 "FacebookPublishing.c"
+#line 1962 "FacebookPublishing.c"
 	}
 }
 
 
 void publishing_facebook_value_take_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingFacebookPublishingParameters* old;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 2088 "FacebookPublishing.c"
+#line 1981 "FacebookPublishing.c"
 	} else {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 2092 "FacebookPublishing.c"
+#line 1985 "FacebookPublishing.c"
 	}
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_unref (old);
-#line 2098 "FacebookPublishing.c"
+#line 1991 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_publishing_parameters_class_init (PublishingFacebookPublishingParametersClass * klass) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_parameters_parent_class = g_type_class_peek_parent (klass);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookPublishingParametersClass *) klass)->finalize = publishing_facebook_publishing_parameters_finalize;
-#line 2108 "FacebookPublishing.c"
+#line 2001 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_parameters_instance_init (PublishingFacebookPublishingParameters * self) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 2115 "FacebookPublishing.c"
+#line 2008 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_parameters_finalize (PublishingFacebookPublishingParameters* obj) {
 	PublishingFacebookPublishingParameters * self;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_PARAMETERS, PublishingFacebookPublishingParameters);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->albums = (_vala_array_free (self->albums, self->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->new_album_name);
-#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->privacy_object);
-#line 2131 "FacebookPublishing.c"
+#line 2024 "FacebookPublishing.c"
 }
 
 
@@ -2156,32 +2041,32 @@ GType publishing_facebook_publishing_parameters_get_type (void) {
 gpointer publishing_facebook_publishing_parameters_ref (gpointer instance) {
 	PublishingFacebookPublishingParameters* self;
 	self = instance;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 2156 "FacebookPublishing.c"
+#line 2049 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_publishing_parameters_unref (gpointer instance) {
 	PublishingFacebookPublishingParameters* self;
 	self = instance;
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_GET_CLASS (self)->finalize (self);
-#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2169 "FacebookPublishing.c"
+#line 2062 "FacebookPublishing.c"
 	}
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated (PublishingFacebookGraphSession* _sender, gpointer self) {
-#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_session_authenticated ((PublishingFacebookFacebookPublisher*) self);
-#line 2177 "FacebookPublishing.c"
+#line 2070 "FacebookPublishing.c"
 }
 
 
@@ -2190,109 +2075,68 @@ PublishingFacebookFacebookPublisher* publishing_facebook_facebook_publisher_cons
 	SpitPublishingService* _tmp0_ = NULL;
 	SpitPublishingPluginHost* _tmp1_ = NULL;
 	PublishingFacebookPublishingParameters* _tmp2_ = NULL;
-	PublishingFacebookGraphSession* _tmp3_ = NULL;
-	PublishingFacebookGraphSession* _tmp4_ = NULL;
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	PublishingAuthenticatorFactory* _tmp3_ = NULL;
+	PublishingAuthenticatorFactory* _tmp4_ = NULL;
+	SpitPublishingPluginHost* _tmp5_ = NULL;
+	SpitPublishingAuthenticator* _tmp6_ = NULL;
+	PublishingFacebookGraphSession* _tmp7_ = NULL;
+	PublishingFacebookGraphSession* _tmp8_ = NULL;
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (service), NULL);
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (host), NULL);
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookFacebookPublisher*) g_object_new (object_type, NULL);
-#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:189: FacebookPublisher instantiated.");
-#line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:183: FacebookPublisher instantiated.");
+#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = service;
-#line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->service = _tmp0_;
-#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = host;
-#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->host = _tmp1_;
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = publishing_facebook_publishing_parameters_new ();
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_publishing_parameters_unref0 (self->priv->publishing_params);
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishing_params = _tmp2_;
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = publishing_facebook_graph_session_new ();
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp3_ = publishing_authenticator_factory_get_instance ();
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp4_ = _tmp3_;
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp5_ = host;
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp6_ = spit_publishing_authenticator_factory_create (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactory), "facebook", _tmp5_);
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_object_unref0 (self->priv->authenticator);
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->authenticator = _tmp6_;
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_object_unref0 (_tmp4_);
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp7_ = publishing_facebook_graph_session_new ();
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_session_unref0 (self->priv->graph_session);
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->graph_session = _tmp3_;
-#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = self->priv->graph_session;
-#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp4_, "authenticated", (GCallback) _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated, self, 0);
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->graph_session = _tmp7_;
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp8_ = self->priv->graph_session;
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp8_, "authenticated", (GCallback) _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated, self, 0);
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 2222 "FacebookPublishing.c"
+#line 2133 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookFacebookPublisher* publishing_facebook_facebook_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host) {
-#line 187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_facebook_publisher_construct (PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, service, host);
-#line 2229 "FacebookPublishing.c"
-}
-
-
-static gboolean publishing_facebook_facebook_publisher_is_persistent_session_valid (PublishingFacebookFacebookPublisher* self) {
-	gboolean result = FALSE;
-	gchar* token = NULL;
-	gchar* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	const gchar* _tmp3_ = NULL;
-#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), FALSE);
-#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_facebook_publisher_get_persistent_access_token (self);
-#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	token = _tmp0_;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = token;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp1_ != NULL) {
-#line 2249 "FacebookPublishing.c"
-		const gchar* _tmp2_ = NULL;
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp2_ = token;
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_debug ("FacebookPublishing.vala:204: existing Facebook session found in config" \
-"uration database (access_token = %s).", _tmp2_);
-#line 2255 "FacebookPublishing.c"
-	} else {
-#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_debug ("FacebookPublishing.vala:207: no existing Facebook session available.");
-#line 2259 "FacebookPublishing.c"
-	}
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = token;
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp3_ != NULL;
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (token);
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 2269 "FacebookPublishing.c"
-}
-
-
-static gchar* publishing_facebook_facebook_publisher_get_persistent_access_token (PublishingFacebookFacebookPublisher* self) {
-	gchar* result = NULL;
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), NULL);
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = spit_host_interface_get_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_token", NULL);
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp1_;
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 2287 "FacebookPublishing.c"
+#line 2140 "FacebookPublishing.c"
 }
 
 
@@ -2300,49 +2144,32 @@ static gboolean publishing_facebook_facebook_publisher_get_persistent_strip_meta
 	gboolean result = FALSE;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), FALSE);
-#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_bool (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "strip_metadata", FALSE);
-#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp1_;
-#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 2305 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_set_persistent_access_token (PublishingFacebookFacebookPublisher* self, const gchar* access_token) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (access_token != NULL);
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = access_token;
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_token", _tmp1_);
-#line 2322 "FacebookPublishing.c"
+#line 2158 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_set_persistent_strip_metadata (PublishingFacebookFacebookPublisher* self, gboolean strip_metadata) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 224 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = strip_metadata;
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_host_interface_set_config_bool (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "strip_metadata", _tmp1_);
-#line 2337 "FacebookPublishing.c"
+#line 2173 "FacebookPublishing.c"
 }
 
 
@@ -2350,140 +2177,46 @@ gint publishing_facebook_facebook_publisher_get_persistent_default_size (Publish
 	gint result = 0;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), 0);
-#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "default_size", 0);
-#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp1_;
-#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 2355 "FacebookPublishing.c"
+#line 2191 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_facebook_publisher_set_persistent_default_size (PublishingFacebookFacebookPublisher* self, gint size) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = size;
-#line 235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_host_interface_set_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "default_size", _tmp1_);
-#line 2370 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_invalidate_persistent_session (PublishingFacebookFacebookPublisher* self) {
-#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:239: invalidating saved Facebook session.");
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_set_persistent_access_token (self, "");
-#line 2381 "FacebookPublishing.c"
-}
-
-
-static void _publishing_facebook_facebook_publisher_on_login_clicked_spit_publishing_login_callback (gpointer self) {
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_login_clicked ((PublishingFacebookFacebookPublisher*) self);
-#line 2388 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_do_show_service_welcome_pane (PublishingFacebookFacebookPublisher* self) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	SpitPublishingPluginHost* _tmp1_ = NULL;
-#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 245 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:245: ACTION: showing service welcome pane.");
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_install_welcome_pane (_tmp0_, PUBLISHING_FACEBOOK_SERVICE_WELCOME_MESSAGE, _publishing_facebook_facebook_publisher_on_login_clicked_spit_publishing_login_callback, self);
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = self->priv->host;
-#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp1_, FALSE);
-#line 2407 "FacebookPublishing.c"
-}
-
-
-static void _publishing_facebook_facebook_publisher_on_endpoint_test_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self) {
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_endpoint_test_completed ((PublishingFacebookFacebookPublisher*) self, _sender);
-#line 2414 "FacebookPublishing.c"
-}
-
-
-static void _publishing_facebook_facebook_publisher_on_endpoint_test_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self) {
-#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_endpoint_test_error ((PublishingFacebookFacebookPublisher*) self, _sender, err);
-#line 2421 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_do_test_connection_to_endpoint (PublishingFacebookFacebookPublisher* self) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	SpitPublishingPluginHost* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	PublishingFacebookGraphMessage* endpoint_test_message = NULL;
-	PublishingFacebookGraphSession* _tmp3_ = NULL;
-	PublishingFacebookGraphMessage* _tmp4_ = NULL;
-	PublishingFacebookGraphSession* _tmp5_ = NULL;
-#line 251 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:252: ACTION: testing connection to Facebook en" \
-"dpoint.");
-#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = self->priv->host;
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = _ ("Testing connection to Facebook…");
-#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_install_static_message_pane (_tmp1_, _tmp2_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = self->priv->graph_session;
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = publishing_facebook_graph_session_new_endpoint_test (_tmp3_);
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	endpoint_test_message = _tmp4_;
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (endpoint_test_message, "completed", (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_completed_publishing_facebook_graph_message_completed, self, 0);
-#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (endpoint_test_message, "failed", (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_error_publishing_facebook_graph_message_failed, self, 0);
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = self->priv->graph_session;
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_graph_session_send_message (_tmp5_, endpoint_test_message);
-#line 251 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_publishing_facebook_graph_message_unref0 (endpoint_test_message);
-#line 2463 "FacebookPublishing.c"
+#line 2206 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_fetch_user_info_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self) {
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_fetch_user_info_completed ((PublishingFacebookFacebookPublisher*) self, _sender);
-#line 2470 "FacebookPublishing.c"
+#line 2213 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_fetch_user_info_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self) {
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_fetch_user_info_error ((PublishingFacebookFacebookPublisher*) self, _sender, err);
-#line 2477 "FacebookPublishing.c"
+#line 2220 "FacebookPublishing.c"
 }
 
 
@@ -2494,49 +2227,49 @@ static void publishing_facebook_facebook_publisher_do_fetch_user_info (Publishin
 	PublishingFacebookGraphSession* _tmp2_ = NULL;
 	PublishingFacebookGraphMessage* _tmp3_ = NULL;
 	PublishingFacebookGraphSession* _tmp4_ = NULL;
-#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:265: ACTION: fetching user information.");
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:231: ACTION: fetching user information.");
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_install_account_fetch_wait_pane (_tmp1_);
-#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->graph_session;
-#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = publishing_facebook_graph_session_new_query (_tmp2_, "/me");
-#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	user_info_message = _tmp3_;
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (user_info_message, "completed", (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_completed_publishing_facebook_graph_message_completed, self, 0);
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (user_info_message, "failed", (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_error_publishing_facebook_graph_message_failed, self, 0);
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = self->priv->graph_session;
-#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_send_message (_tmp4_, user_info_message);
-#line 264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 230 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (user_info_message);
-#line 2516 "FacebookPublishing.c"
+#line 2259 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_fetch_albums_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self) {
-#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_fetch_albums_completed ((PublishingFacebookFacebookPublisher*) self, _sender);
-#line 2523 "FacebookPublishing.c"
+#line 2266 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_fetch_albums_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self) {
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_fetch_albums_error ((PublishingFacebookFacebookPublisher*) self, _sender, err);
-#line 2530 "FacebookPublishing.c"
+#line 2273 "FacebookPublishing.c"
 }
 
 
@@ -2551,86 +2284,86 @@ static void publishing_facebook_facebook_publisher_do_fetch_album_descriptions (
 	PublishingFacebookGraphMessage* _tmp6_ = NULL;
 	PublishingFacebookGraphMessage* _tmp7_ = NULL;
 	PublishingFacebookGraphSession* _tmp8_ = NULL;
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:279: ACTION: fetching album list.");
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 245 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:245: ACTION: fetching album list.");
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_install_account_fetch_wait_pane (_tmp1_);
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->graph_session;
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->uid;
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = g_strdup_printf ("/%s/albums", _tmp3_);
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_facebook_graph_session_new_query (_tmp2_, _tmp5_);
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp5_);
-#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	albums_message = _tmp7_;
-#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (albums_message, "completed", (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_completed_publishing_facebook_graph_message_completed, self, 0);
-#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (albums_message, "failed", (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_error_publishing_facebook_graph_message_failed, self, 0);
-#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = self->priv->graph_session;
-#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_send_message (_tmp8_, albums_message);
-#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (albums_message);
-#line 2583 "FacebookPublishing.c"
+#line 2326 "FacebookPublishing.c"
 }
 
 
 static JsonNode* _vala_JsonNode_copy (JsonNode* self) {
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return g_boxed_copy (json_node_get_type (), self);
-#line 2590 "FacebookPublishing.c"
+#line 2333 "FacebookPublishing.c"
 }
 
 
 static gpointer __vala_JsonNode_copy0 (gpointer self) {
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? _vala_JsonNode_copy (self) : NULL;
-#line 2597 "FacebookPublishing.c"
+#line 2340 "FacebookPublishing.c"
 }
 
 
 static gpointer _json_object_ref0 (gpointer self) {
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? json_object_ref (self) : NULL;
-#line 2604 "FacebookPublishing.c"
+#line 2347 "FacebookPublishing.c"
 }
 
 
 static void _vala_JsonNode_free (JsonNode* self) {
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_boxed_free (json_node_get_type (), self);
-#line 2611 "FacebookPublishing.c"
+#line 2354 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_do_extract_user_info_from_json (PublishingFacebookFacebookPublisher* self, const gchar* json) {
 	GError * _inner_error_ = NULL;
-#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (json != NULL);
-#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:293: ACTION: extracting user info from JSON re" \
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:259: ACTION: extracting user info from JSON re" \
 "sponse.");
-#line 2623 "FacebookPublishing.c"
+#line 2366 "FacebookPublishing.c"
 	{
 		JsonParser* parser = NULL;
 		JsonParser* _tmp0_ = NULL;
@@ -2650,66 +2383,66 @@ static void publishing_facebook_facebook_publisher_do_extract_user_info_from_jso
 		JsonObject* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = json_parser_new ();
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		parser = _tmp0_;
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = parser;
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = json;
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		json_parser_load_from_data (_tmp1_, _tmp2_, (gssize) -1, &_inner_error_);
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_object_unref0 (parser);
-#line 2657 "FacebookPublishing.c"
+#line 2400 "FacebookPublishing.c"
 			goto __catch0_g_error;
 		}
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = parser;
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = json_parser_get_root (_tmp3_);
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = __vala_JsonNode_copy0 (_tmp4_);
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		root = _tmp5_;
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = root;
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = json_node_get_object (_tmp6_);
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _json_object_ref0 (_tmp7_);
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		response_object = _tmp8_;
-#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = response_object;
-#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = json_object_get_string_member (_tmp9_, "id");
-#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = g_strdup (_tmp10_);
-#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (self->priv->uid);
-#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->priv->uid = _tmp11_;
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = response_object;
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = json_object_get_string_member (_tmp12_, "name");
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = g_strdup (_tmp13_);
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (self->priv->username);
-#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->priv->username = _tmp14_;
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_json_object_unref0 (response_object);
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		__vala_JsonNode_free0 (root);
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (parser);
-#line 2702 "FacebookPublishing.c"
+#line 2445 "FacebookPublishing.c"
 	}
 	goto __finally0;
 	__catch0_g_error:
@@ -2720,64 +2453,64 @@ static void publishing_facebook_facebook_publisher_do_extract_user_info_from_jso
 		const gchar* _tmp17_ = NULL;
 		GError* _tmp18_ = NULL;
 		GError* _tmp19_ = NULL;
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_error_ = _inner_error_;
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = self->priv->host;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = _error_;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = _tmp16_->message;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp18_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp17_);
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp19_ = _tmp18_;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp15_, _tmp19_);
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_tmp19_);
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_error_);
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 2735 "FacebookPublishing.c"
+#line 2478 "FacebookPublishing.c"
 	}
 	__finally0:
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 2746 "FacebookPublishing.c"
+#line 2489 "FacebookPublishing.c"
 	}
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_user_info_extracted (self);
-#line 2750 "FacebookPublishing.c"
+#line 2493 "FacebookPublishing.c"
 }
 
 
 static gpointer _json_array_ref0 (gpointer self) {
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? json_array_ref (self) : NULL;
-#line 2757 "FacebookPublishing.c"
+#line 2500 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_do_extract_albums_from_json (PublishingFacebookFacebookPublisher* self, const gchar* json) {
 	GError * _inner_error_ = NULL;
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (json != NULL);
-#line 312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:312: ACTION: extracting album info from JSON r" \
+#line 278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:278: ACTION: extracting album info from JSON r" \
 "esponse.");
-#line 2769 "FacebookPublishing.c"
+#line 2512 "FacebookPublishing.c"
 	{
 		JsonParser* parser = NULL;
 		JsonParser* _tmp0_ = NULL;
@@ -2797,72 +2530,72 @@ static void publishing_facebook_facebook_publisher_do_extract_albums_from_json (
 		JsonArray* _tmp11_ = NULL;
 		PublishingFacebookPublishingParameters* _tmp12_ = NULL;
 		PublishingFacebookAlbum** _tmp13_ = NULL;
-#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = json_parser_new ();
-#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		parser = _tmp0_;
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = parser;
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = json;
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		json_parser_load_from_data (_tmp1_, _tmp2_, (gssize) -1, &_inner_error_);
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_object_unref0 (parser);
-#line 2803 "FacebookPublishing.c"
+#line 2546 "FacebookPublishing.c"
 			goto __catch1_g_error;
 		}
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = parser;
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = json_parser_get_root (_tmp3_);
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = __vala_JsonNode_copy0 (_tmp4_);
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		root = _tmp5_;
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = root;
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = json_node_get_object (_tmp6_);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _json_object_ref0 (_tmp7_);
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		response_object = _tmp8_;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = response_object;
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = json_object_get_array_member (_tmp9_, "data");
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = _json_array_ref0 (_tmp10_);
-#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		album_list = _tmp11_;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = self->priv->publishing_params;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = g_new0 (PublishingFacebookAlbum*, 0 + 1);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_->albums = (_vala_array_free (_tmp12_->albums, _tmp12_->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_->albums = _tmp13_;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_->albums_length1 = 0;
-#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_->_albums_size_ = _tmp12_->albums_length1;
-#line 2842 "FacebookPublishing.c"
+#line 2585 "FacebookPublishing.c"
 		{
 			gint i = 0;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			i = 0;
-#line 2847 "FacebookPublishing.c"
+#line 2590 "FacebookPublishing.c"
 			{
 				gboolean _tmp14_ = FALSE;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp14_ = TRUE;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				while (TRUE) {
-#line 2854 "FacebookPublishing.c"
+#line 2597 "FacebookPublishing.c"
 					gint _tmp16_ = 0;
 					JsonArray* _tmp17_ = NULL;
 					guint _tmp18_ = 0U;
@@ -2882,83 +2615,83 @@ static void publishing_facebook_facebook_publisher_do_extract_albums_from_json (
 					PublishingFacebookPublishingParameters* _tmp29_ = NULL;
 					const gchar* _tmp30_ = NULL;
 					const gchar* _tmp31_ = NULL;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					if (!_tmp14_) {
-#line 2876 "FacebookPublishing.c"
+#line 2619 "FacebookPublishing.c"
 						gint _tmp15_ = 0;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp15_ = i;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						i = _tmp15_ + 1;
-#line 2882 "FacebookPublishing.c"
+#line 2625 "FacebookPublishing.c"
 					}
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp14_ = FALSE;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp16_ = i;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp17_ = album_list;
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp18_ = json_array_get_length (_tmp17_);
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					if (!(((guint) _tmp16_) < _tmp18_)) {
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						break;
-#line 2896 "FacebookPublishing.c"
+#line 2639 "FacebookPublishing.c"
 					}
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp19_ = album_list;
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp20_ = i;
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp21_ = json_array_get_object_element (_tmp19_, (guint) _tmp20_);
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp22_ = _json_object_ref0 (_tmp21_);
-#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					current_album = _tmp22_;
-#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp23_ = current_album;
-#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp24_ = json_object_get_string_member (_tmp23_, "id");
-#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp25_ = g_strdup (_tmp24_);
-#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					album_id = _tmp25_;
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp26_ = current_album;
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp27_ = json_object_get_string_member (_tmp26_, "name");
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp28_ = g_strdup (_tmp27_);
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					album_name = _tmp28_;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp29_ = self->priv->publishing_params;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp30_ = album_name;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp31_ = album_id;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					publishing_facebook_publishing_parameters_add_album (_tmp29_, _tmp30_, _tmp31_);
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_g_free0 (album_name);
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_g_free0 (album_id);
-#line 324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_json_object_unref0 (current_album);
-#line 2938 "FacebookPublishing.c"
+#line 2681 "FacebookPublishing.c"
 				}
 			}
 		}
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_json_array_unref0 (album_list);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_json_object_unref0 (response_object);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		__vala_JsonNode_free0 (root);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (parser);
-#line 2950 "FacebookPublishing.c"
+#line 2693 "FacebookPublishing.c"
 	}
 	goto __finally1;
 	__catch1_g_error:
@@ -2969,58 +2702,58 @@ static void publishing_facebook_facebook_publisher_do_extract_albums_from_json (
 		const gchar* _tmp34_ = NULL;
 		GError* _tmp35_ = NULL;
 		GError* _tmp36_ = NULL;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_error_ = _inner_error_;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp32_ = self->priv->host;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp33_ = _error_;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp34_ = _tmp33_->message;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp35_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp34_);
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp36_ = _tmp35_;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp32_, _tmp36_);
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_tmp36_);
-#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_error_);
-#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 2983 "FacebookPublishing.c"
+#line 2726 "FacebookPublishing.c"
 	}
 	__finally1:
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 2994 "FacebookPublishing.c"
+#line 2737 "FacebookPublishing.c"
 	}
-#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_albums_extracted (self);
-#line 2998 "FacebookPublishing.c"
+#line 2741 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_create_album_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self) {
-#line 353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_create_album_completed ((PublishingFacebookFacebookPublisher*) self, _sender);
-#line 3005 "FacebookPublishing.c"
+#line 2748 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_create_album_error_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self) {
-#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_create_album_error ((PublishingFacebookFacebookPublisher*) self, _sender, err);
-#line 3012 "FacebookPublishing.c"
+#line 2755 "FacebookPublishing.c"
 }
 
 
@@ -3038,64 +2771,64 @@ static void publishing_facebook_facebook_publisher_do_create_new_album (Publishi
 	const gchar* _tmp9_ = NULL;
 	PublishingFacebookGraphMessage* _tmp10_ = NULL;
 	PublishingFacebookGraphSession* _tmp11_ = NULL;
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publishing_params;
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _tmp0_->new_album_name;
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:345: ACTION: creating a new album named \"%s\"" \
+#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:311: ACTION: creating a new album named \"%s\"" \
 ".\n", _tmp1_);
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->host;
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp2_, TRUE);
-#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->host;
-#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = _ ("Creating album…");
-#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_install_static_message_pane (_tmp3_, _tmp4_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = self->priv->graph_session;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = self->priv->publishing_params;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_->new_album_name;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = self->priv->publishing_params;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = _tmp8_->privacy_object;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = publishing_facebook_graph_session_new_create_album (_tmp5_, _tmp7_, _tmp9_);
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	create_album_message = _tmp10_;
-#line 353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (create_album_message, "completed", (GCallback) _publishing_facebook_facebook_publisher_on_create_album_completed_publishing_facebook_graph_message_completed, self, 0);
-#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (create_album_message, "failed", (GCallback) _publishing_facebook_facebook_publisher_on_create_album_error_publishing_facebook_graph_message_failed, self, 0);
-#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = self->priv->graph_session;
-#line 356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_send_message (_tmp11_, create_album_message);
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (create_album_message);
-#line 3072 "FacebookPublishing.c"
+#line 2815 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout (PublishingFacebookPublishingOptionsPane* _sender, gpointer self) {
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_publishing_options_pane_logout ((PublishingFacebookFacebookPublisher*) self);
-#line 3079 "FacebookPublishing.c"
+#line 2822 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_publishing_options_pane_publish_publishing_facebook_publishing_options_pane_publish (PublishingFacebookPublishingOptionsPane* _sender, const gchar* target_album, const gchar* privacy_setting, PublishingFacebookResolution target_resolution, gboolean strip_metadata, gpointer self) {
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_publishing_options_pane_publish ((PublishingFacebookFacebookPublisher*) self, target_album, privacy_setting, target_resolution, strip_metadata);
-#line 3086 "FacebookPublishing.c"
+#line 2829 "FacebookPublishing.c"
 }
 
 
@@ -3111,34 +2844,36 @@ static void publishing_facebook_facebook_publisher_do_show_publishing_options_pa
 	SpitPublishingPublisherMediaType _tmp13_ = 0;
 	GtkBuilder* _tmp14_ = NULL;
 	gboolean _tmp15_ = FALSE;
-	PublishingFacebookPublishingOptionsPane* _tmp16_ = NULL;
-	PublishingFacebookPublishingOptionsPane* _tmp17_ = NULL;
+	SpitPublishingAuthenticator* _tmp16_ = NULL;
+	gboolean _tmp17_ = FALSE;
 	PublishingFacebookPublishingOptionsPane* _tmp18_ = NULL;
-	SpitPublishingPluginHost* _tmp19_ = NULL;
+	PublishingFacebookPublishingOptionsPane* _tmp19_ = NULL;
 	PublishingFacebookPublishingOptionsPane* _tmp20_ = NULL;
+	SpitPublishingPluginHost* _tmp21_ = NULL;
+	PublishingFacebookPublishingOptionsPane* _tmp22_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:360: ACTION: showing publishing options pane.");
-#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:326: ACTION: showing publishing options pane.");
+#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = gtk_builder_new ();
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	builder = _tmp1_;
-#line 3120 "FacebookPublishing.c"
+#line 2865 "FacebookPublishing.c"
 	{
 		GtkBuilder* _tmp2_ = NULL;
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = builder;
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_builder_add_from_resource (_tmp2_, PLUGIN_RESOURCE_PATH "/" "facebook_publishing_options_pane.ui", &_inner_error_);
-#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3129 "FacebookPublishing.c"
+#line 2874 "FacebookPublishing.c"
 			goto __catch2_g_error;
 		}
 	}
@@ -3152,105 +2887,112 @@ static void publishing_facebook_facebook_publisher_do_show_publishing_options_pa
 		const gchar* _tmp6_ = NULL;
 		GError* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		e = _inner_error_;
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = e;
-#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = _tmp3_->message;
-#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_warning ("FacebookPublishing.vala:371: Could not parse UI file! Error: %s.", _tmp4_);
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		g_warning ("FacebookPublishing.vala:337: Could not parse UI file! Error: %s.", _tmp4_);
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = self->priv->host;
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = _ ("A file required for publishing is unavailable. Publishing to Facebook " \
 "can’t continue.");
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp6_);
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _tmp7_;
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp5_, _tmp8_);
-#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_tmp8_);
-#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (e);
-#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (builder);
-#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 3171 "FacebookPublishing.c"
+#line 2916 "FacebookPublishing.c"
 	}
 	__finally2:
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (builder);
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 3184 "FacebookPublishing.c"
+#line 2929 "FacebookPublishing.c"
 	}
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = self->priv->username;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = self->priv->publishing_params;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = _tmp10_->albums;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11__length1 = _tmp10_->albums_length1;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = self->priv->host;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = spit_publishing_plugin_host_get_publishable_media_type (_tmp12_);
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = builder;
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp15_ = publishing_facebook_facebook_publisher_get_persistent_strip_metadata (self);
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp16_ = publishing_facebook_publishing_options_pane_new (_tmp9_, _tmp11_, _tmp11__length1, _tmp13_, self, _tmp14_, _tmp15_);
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp16_ = self->priv->authenticator;
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp17_ = spit_publishing_authenticator_can_logout (_tmp16_);
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp18_ = publishing_facebook_publishing_options_pane_new (_tmp9_, _tmp11_, _tmp11__length1, _tmp13_, self, _tmp14_, _tmp15_, _tmp17_);
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publishing_options_pane);
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->publishing_options_pane = _tmp16_;
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp17_ = self->priv->publishing_options_pane;
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp17_, "logout", (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout, self, 0);
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp18_ = self->priv->publishing_options_pane;
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp18_, "publish", (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_publish_publishing_facebook_publishing_options_pane_publish, self, 0);
-#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp19_ = self->priv->host;
-#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->publishing_options_pane = _tmp18_;
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp19_ = self->priv->publishing_options_pane;
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp19_, "logout", (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout, self, 0);
+#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp20_ = self->priv->publishing_options_pane;
-#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_install_dialog_pane (_tmp19_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp20_, "publish", (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_publish_publishing_facebook_publishing_options_pane_publish, self, 0);
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp21_ = self->priv->host;
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp22_ = self->priv->publishing_options_pane;
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	spit_publishing_plugin_host_install_dialog_pane (_tmp21_, G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
+#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (builder);
-#line 3224 "FacebookPublishing.c"
+#line 2973 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_do_logout (PublishingFacebookFacebookPublisher* self) {
-#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
+#line 353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:387: ACTION: clearing persistent session infor" \
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:354: ACTION: clearing persistent session infor" \
 "mation and restaring interaction.");
-#line 389 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_invalidate_persistent_session (self);
-#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	spit_publishing_authenticator_logout (_tmp0_);
+#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->running = FALSE;
-#line 392 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_publisher_start (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 3239 "FacebookPublishing.c"
+#line 2991 "FacebookPublishing.c"
 }
 
 
@@ -3258,13 +3000,13 @@ static void publishing_facebook_facebook_publisher_do_add_new_local_album_from_j
 	PublishingFacebookPublishingParameters* _tmp20_ = NULL;
 	const gchar* _tmp21_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (album_name != NULL);
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (json != NULL);
-#line 3253 "FacebookPublishing.c"
+#line 3005 "FacebookPublishing.c"
 	{
 		JsonParser* parser = NULL;
 		JsonParser* _tmp0_ = NULL;
@@ -3285,64 +3027,64 @@ static void publishing_facebook_facebook_publisher_do_add_new_local_album_from_j
 		PublishingFacebookPublishingParameters* _tmp12_ = NULL;
 		const gchar* _tmp13_ = NULL;
 		const gchar* _tmp14_ = NULL;
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = json_parser_new ();
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		parser = _tmp0_;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = parser;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = json;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		json_parser_load_from_data (_tmp1_, _tmp2_, (gssize) -1, &_inner_error_);
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_object_unref0 (parser);
-#line 3288 "FacebookPublishing.c"
+#line 3040 "FacebookPublishing.c"
 			goto __catch3_g_error;
 		}
-#line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = parser;
-#line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = json_parser_get_root (_tmp3_);
-#line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = __vala_JsonNode_copy0 (_tmp4_);
-#line 400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		root = _tmp5_;
-#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = root;
-#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = json_node_get_object (_tmp6_);
-#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _json_object_ref0 (_tmp7_);
-#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		response_object = _tmp8_;
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = response_object;
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = json_object_get_string_member (_tmp9_, "id");
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = g_strdup (_tmp10_);
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		album_id = _tmp11_;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = self->priv->publishing_params;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = album_name;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = album_id;
-#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_add_album (_tmp12_, _tmp13_, _tmp14_);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (album_id);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_json_object_unref0 (response_object);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		__vala_JsonNode_free0 (root);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (parser);
-#line 3331 "FacebookPublishing.c"
+#line 3083 "FacebookPublishing.c"
 	}
 	goto __finally3;
 	__catch3_g_error:
@@ -3353,652 +3095,150 @@ static void publishing_facebook_facebook_publisher_do_add_new_local_album_from_j
 		const gchar* _tmp17_ = NULL;
 		GError* _tmp18_ = NULL;
 		GError* _tmp19_ = NULL;
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_error_ = _inner_error_;
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = self->priv->host;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = _error_;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = _tmp16_->message;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp18_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, _tmp17_);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp19_ = _tmp18_;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp15_, _tmp19_);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_tmp19_);
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_error_);
-#line 407 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 3364 "FacebookPublishing.c"
+#line 3116 "FacebookPublishing.c"
 	}
 	__finally3:
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 3375 "FacebookPublishing.c"
+#line 3127 "FacebookPublishing.c"
 	}
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp20_ = self->priv->publishing_params;
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = album_name;
-#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_parameters_set_target_album_by_name (_tmp20_, _tmp21_);
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_upload (self);
-#line 3385 "FacebookPublishing.c"
+#line 3137 "FacebookPublishing.c"
 }
 
 
-static void _publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded_publishing_facebook_web_authentication_pane_login_succeeded (PublishingFacebookWebAuthenticationPane* _sender, const gchar* success_url, gpointer self) {
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded ((PublishingFacebookFacebookPublisher*) self, success_url);
-#line 3392 "FacebookPublishing.c"
-}
-
-
-static void _publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed_publishing_facebook_web_authentication_pane_login_failed (PublishingFacebookWebAuthenticationPane* _sender, gpointer self) {
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed ((PublishingFacebookFacebookPublisher*) self);
-#line 3399 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_do_hosted_web_authentication (PublishingFacebookFacebookPublisher* self) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	PublishingFacebookWebAuthenticationPane* _tmp1_ = NULL;
-	PublishingFacebookWebAuthenticationPane* _tmp2_ = NULL;
-	PublishingFacebookWebAuthenticationPane* _tmp3_ = NULL;
-	SpitPublishingPluginHost* _tmp4_ = NULL;
-	PublishingFacebookWebAuthenticationPane* _tmp5_ = NULL;
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+static void publishing_facebook_facebook_publisher_on_authenticator_succeeded (PublishingFacebookFacebookPublisher* self) {
+#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:415: ACTION: doing hosted web authentication.");
-#line 417 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 417 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = publishing_facebook_web_authentication_pane_new ();
-#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_object_unref0 (self->priv->web_auth_pane);
-#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->web_auth_pane = _tmp1_;
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = self->priv->web_auth_pane;
-#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp2_, "login-succeeded", (GCallback) _publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded_publishing_facebook_web_authentication_pane_login_succeeded, self, 0);
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = self->priv->web_auth_pane;
-#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp3_, "login-failed", (GCallback) _publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed_publishing_facebook_web_authentication_pane_login_failed, self, 0);
-#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = self->priv->host;
-#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = self->priv->web_auth_pane;
-#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spit_publishing_plugin_host_install_dialog_pane (_tmp4_, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 3438 "FacebookPublishing.c"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:382: EVENT: Authenticator login succeeded.");
+#line 384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	publishing_facebook_facebook_publisher_do_authenticate_session (self);
+#line 3148 "FacebookPublishing.c"
 }
 
 
-static gint string_index_of (const gchar* self, const gchar* needle, gint start_index) {
-	gint result = 0;
-	gchar* _result_ = NULL;
-	gint _tmp0_ = 0;
-	const gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-#line 987 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, 0);
-#line 987 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (needle != NULL, 0);
-#line 988 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp0_ = start_index;
-#line 988 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp1_ = needle;
-#line 988 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp2_ = strstr (((gchar*) self) + _tmp0_, (gchar*) _tmp1_);
-#line 988 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_result_ = _tmp2_;
-#line 990 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp3_ = _result_;
-#line 990 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp3_ != NULL) {
-#line 3465 "FacebookPublishing.c"
-		gchar* _tmp4_ = NULL;
-#line 991 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp4_ = _result_;
-#line 991 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		result = (gint) (_tmp4_ - ((gchar*) self));
-#line 991 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return result;
-#line 3473 "FacebookPublishing.c"
-	} else {
-#line 993 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		result = -1;
-#line 993 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return result;
-#line 3479 "FacebookPublishing.c"
-	}
+static void publishing_facebook_facebook_publisher_on_authenticator_failed (PublishingFacebookFacebookPublisher* self) {
+#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
+#line 3155 "FacebookPublishing.c"
 }
 
 
-static gchar* string_slice (const gchar* self, glong start, glong end) {
-	gchar* result = NULL;
-	glong string_length = 0L;
-	gint _tmp0_ = 0;
-	gint _tmp1_ = 0;
-	glong _tmp2_ = 0L;
-	glong _tmp5_ = 0L;
-	gboolean _tmp8_ = FALSE;
-	glong _tmp9_ = 0L;
-	gboolean _tmp12_ = FALSE;
-	glong _tmp13_ = 0L;
-	glong _tmp16_ = 0L;
-	glong _tmp17_ = 0L;
-	glong _tmp18_ = 0L;
-	glong _tmp19_ = 0L;
-	glong _tmp20_ = 0L;
-	gchar* _tmp21_ = NULL;
-#line 1328 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, NULL);
-#line 1329 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp0_ = strlen (self);
-#line 1329 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp1_ = _tmp0_;
-#line 1329 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	string_length = (glong) _tmp1_;
-#line 1330 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp2_ = start;
-#line 1330 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp2_ < ((glong) 0)) {
-#line 3513 "FacebookPublishing.c"
-		glong _tmp3_ = 0L;
-		glong _tmp4_ = 0L;
-#line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp3_ = string_length;
-#line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp4_ = start;
-#line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		start = _tmp3_ + _tmp4_;
-#line 3522 "FacebookPublishing.c"
-	}
-#line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp5_ = end;
-#line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp5_ < ((glong) 0)) {
-#line 3528 "FacebookPublishing.c"
-		glong _tmp6_ = 0L;
-		glong _tmp7_ = 0L;
-#line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp6_ = string_length;
-#line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp7_ = end;
-#line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		end = _tmp6_ + _tmp7_;
-#line 3537 "FacebookPublishing.c"
-	}
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp9_ = start;
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp9_ >= ((glong) 0)) {
-#line 3543 "FacebookPublishing.c"
-		glong _tmp10_ = 0L;
-		glong _tmp11_ = 0L;
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp10_ = start;
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp11_ = string_length;
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp8_ = _tmp10_ <= _tmp11_;
-#line 3552 "FacebookPublishing.c"
-	} else {
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp8_ = FALSE;
-#line 3556 "FacebookPublishing.c"
-	}
-#line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (_tmp8_, NULL);
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp13_ = end;
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp13_ >= ((glong) 0)) {
-#line 3564 "FacebookPublishing.c"
-		glong _tmp14_ = 0L;
-		glong _tmp15_ = 0L;
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp14_ = end;
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp15_ = string_length;
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp12_ = _tmp14_ <= _tmp15_;
-#line 3573 "FacebookPublishing.c"
-	} else {
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp12_ = FALSE;
-#line 3577 "FacebookPublishing.c"
-	}
-#line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (_tmp12_, NULL);
-#line 1338 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp16_ = start;
-#line 1338 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp17_ = end;
-#line 1338 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (_tmp16_ <= _tmp17_, NULL);
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp18_ = start;
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp19_ = end;
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp20_ = start;
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp21_ = g_strndup (((gchar*) self) + _tmp18_, (gsize) (_tmp19_ - _tmp20_));
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	result = _tmp21_;
-#line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	return result;
-#line 3599 "FacebookPublishing.c"
+static gpointer _g_variant_ref0 (gpointer self) {
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	return self ? g_variant_ref (self) : NULL;
+#line 3162 "FacebookPublishing.c"
 }
 
 
-static gint string_index_of_char (const gchar* self, gunichar c, gint start_index) {
-	gint result = 0;
-	gchar* _result_ = NULL;
-	gint _tmp0_ = 0;
-	gunichar _tmp1_ = 0U;
-	gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-#line 1007 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, 0);
-#line 1008 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp0_ = start_index;
-#line 1008 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp1_ = c;
-#line 1008 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp2_ = g_utf8_strchr (((gchar*) self) + _tmp0_, (gssize) -1, _tmp1_);
-#line 1008 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_result_ = _tmp2_;
-#line 1010 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp3_ = _result_;
-#line 1010 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (_tmp3_ != NULL) {
-#line 3624 "FacebookPublishing.c"
-		gchar* _tmp4_ = NULL;
-#line 1011 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp4_ = _result_;
-#line 1011 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		result = (gint) (_tmp4_ - ((gchar*) self));
-#line 1011 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return result;
-#line 3632 "FacebookPublishing.c"
-	} else {
-#line 1013 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		result = -1;
-#line 1013 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return result;
-#line 3638 "FacebookPublishing.c"
-	}
-}
-
-
-static gchar* string_replace (const gchar* self, const gchar* old, const gchar* replacement) {
-	gchar* result = NULL;
-	GError * _inner_error_ = NULL;
-#line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, NULL);
-#line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (old != NULL, NULL);
-#line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (replacement != NULL, NULL);
-#line 3652 "FacebookPublishing.c"
-	{
-		GRegex* regex = NULL;
-		const gchar* _tmp0_ = NULL;
-		gchar* _tmp1_ = NULL;
-		gchar* _tmp2_ = NULL;
-		GRegex* _tmp3_ = NULL;
-		GRegex* _tmp4_ = NULL;
-		gchar* _tmp5_ = NULL;
-		GRegex* _tmp6_ = NULL;
-		const gchar* _tmp7_ = NULL;
-		gchar* _tmp8_ = NULL;
-		gchar* _tmp9_ = NULL;
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp0_ = old;
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp1_ = g_regex_escape_string (_tmp0_, -1);
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp2_ = _tmp1_;
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp3_ = g_regex_new (_tmp2_, 0, 0, &_inner_error_);
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp4_ = _tmp3_;
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_g_free0 (_tmp2_);
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		regex = _tmp4_;
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 3683 "FacebookPublishing.c"
-				goto __catch4_g_regex_error;
-			}
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			g_clear_error (&_inner_error_);
-#line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			return NULL;
-#line 3692 "FacebookPublishing.c"
-		}
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp6_ = regex;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp7_ = replacement;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp8_ = g_regex_replace_literal (_tmp6_, self, (gssize) -1, 0, _tmp7_, 0, &_inner_error_);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp5_ = _tmp8_;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			_g_regex_unref0 (regex);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 3708 "FacebookPublishing.c"
-				goto __catch4_g_regex_error;
-			}
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			_g_regex_unref0 (regex);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			g_clear_error (&_inner_error_);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-			return NULL;
-#line 3719 "FacebookPublishing.c"
-		}
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp9_ = _tmp5_;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_tmp5_ = NULL;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		result = _tmp9_;
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_g_free0 (_tmp5_);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_g_regex_unref0 (regex);
-#line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return result;
-#line 3733 "FacebookPublishing.c"
-	}
-	goto __finally4;
-	__catch4_g_regex_error:
-	{
-		GError* e = NULL;
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		e = _inner_error_;
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_inner_error_ = NULL;
-#line 1385 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
+static void publishing_facebook_facebook_publisher_do_authenticate_session (PublishingFacebookFacebookPublisher* self) {
+	GHashTable* parameter = NULL;
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
+	GHashTable* _tmp1_ = NULL;
+	GVariant* access_token = NULL;
+	gconstpointer _tmp2_ = NULL;
+	gboolean _tmp3_ = FALSE;
+	GVariant* _tmp4_ = NULL;
+	PublishingFacebookGraphSession* _tmp5_ = NULL;
+	PublishingFacebookGraphSession* _tmp6_ = NULL;
+	const gchar* _tmp7_ = NULL;
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp1_ = spit_publishing_authenticator_get_authentication_parameter (_tmp0_);
+#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	parameter = _tmp1_;
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp3_ = g_hash_table_lookup_extended (parameter, "AccessToken", NULL, &_tmp2_);
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_variant_unref0 (access_token);
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp4_ = _g_variant_ref0 (_tmp2_);
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	access_token = _tmp4_;
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if (!_tmp3_) {
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		g_critical ("FacebookPublishing.vala:394: Authenticator signalled success, but does" \
+" not provide access token");
+#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_assert_not_reached ();
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		_g_error_free0 (e);
-#line 3747 "FacebookPublishing.c"
+#line 3199 "FacebookPublishing.c"
 	}
-	__finally4:
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		g_clear_error (&_inner_error_);
-#line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-		return NULL;
-#line 3758 "FacebookPublishing.c"
-	}
-}
-
-
-static void publishing_facebook_facebook_publisher_do_authenticate_session (PublishingFacebookFacebookPublisher* self, const gchar* good_login_uri) {
-	const gchar* _tmp0_ = NULL;
-	gchar* decoded_uri = NULL;
-	const gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-	gchar* access_token = NULL;
-	gint index = 0;
-	const gchar* _tmp3_ = NULL;
-	gint _tmp4_ = 0;
-	gint _tmp5_ = 0;
-	const gchar* _tmp12_ = NULL;
-	gchar* trailing_params = NULL;
-	const gchar* _tmp16_ = NULL;
-	gint _tmp17_ = 0;
-	gint _tmp18_ = 0;
-	const gchar* _tmp25_ = NULL;
-	const gchar* _tmp29_ = NULL;
-	gchar* _tmp30_ = NULL;
-	PublishingFacebookGraphSession* _tmp31_ = NULL;
-	PublishingFacebookGraphSession* _tmp32_ = NULL;
-	const gchar* _tmp33_ = NULL;
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (good_login_uri != NULL);
-#line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = good_login_uri;
-#line 429 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:429: ACTION: preparing to extract session info" \
-"rmation encoded in uri = '%s'", _tmp0_);
-#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = good_login_uri;
-#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = soup_uri_decode (_tmp1_);
-#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	decoded_uri = _tmp2_;
-#line 436 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	access_token = NULL;
-#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = decoded_uri;
-#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = string_index_of (_tmp3_, "#access_token=", 0);
-#line 437 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	index = _tmp4_;
-#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = index;
-#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp5_ >= 0) {
-#line 3810 "FacebookPublishing.c"
-		const gchar* _tmp6_ = NULL;
-		gint _tmp7_ = 0;
-		const gchar* _tmp8_ = NULL;
-		gint _tmp9_ = 0;
-		gint _tmp10_ = 0;
-		gchar* _tmp11_ = NULL;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp6_ = decoded_uri;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp7_ = index;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp8_ = decoded_uri;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp9_ = strlen (_tmp8_);
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp10_ = _tmp9_;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp11_ = string_slice (_tmp6_, (glong) _tmp7_, (glong) _tmp10_);
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (access_token);
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		access_token = _tmp11_;
-#line 3833 "FacebookPublishing.c"
-	}
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp12_ = access_token;
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp12_ == NULL) {
-#line 3839 "FacebookPublishing.c"
-		SpitPublishingPluginHost* _tmp13_ = NULL;
-		GError* _tmp14_ = NULL;
-		GError* _tmp15_ = NULL;
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp13_ = self->priv->host;
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp14_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Server redirect URL contained no access token");
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp15_ = _tmp14_;
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp13_, _tmp15_);
-#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_error_free0 (_tmp15_);
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (access_token);
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (decoded_uri);
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 3859 "FacebookPublishing.c"
-	}
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	trailing_params = NULL;
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp16_ = access_token;
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp17_ = string_index_of_char (_tmp16_, (gunichar) '&', 0);
-#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	index = _tmp17_;
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp18_ = index;
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp18_ >= 0) {
-#line 3873 "FacebookPublishing.c"
-		const gchar* _tmp19_ = NULL;
-		gint _tmp20_ = 0;
-		const gchar* _tmp21_ = NULL;
-		gint _tmp22_ = 0;
-		gint _tmp23_ = 0;
-		gchar* _tmp24_ = NULL;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp19_ = access_token;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp20_ = index;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp21_ = access_token;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp22_ = strlen (_tmp21_);
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp23_ = _tmp22_;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp24_ = string_slice (_tmp19_, (glong) _tmp20_, (glong) _tmp23_);
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (trailing_params);
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		trailing_params = _tmp24_;
-#line 3896 "FacebookPublishing.c"
-	}
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp25_ = trailing_params;
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp25_ != NULL) {
-#line 3902 "FacebookPublishing.c"
-		const gchar* _tmp26_ = NULL;
-		const gchar* _tmp27_ = NULL;
-		gchar* _tmp28_ = NULL;
-#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp26_ = access_token;
-#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp27_ = trailing_params;
-#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp28_ = string_replace (_tmp26_, _tmp27_, "");
-#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (access_token);
-#line 452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		access_token = _tmp28_;
-#line 3916 "FacebookPublishing.c"
-	}
-#line 455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp29_ = access_token;
-#line 455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp30_ = string_replace (_tmp29_, "#access_token=", "");
-#line 455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (access_token);
-#line 455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	access_token = _tmp30_;
-#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp31_ = self->priv->graph_session;
-#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp31_, "authenticated", (GCallback) _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated, self, 0);
-#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp32_ = self->priv->graph_session;
-#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp33_ = access_token;
-#line 459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_graph_session_authenticate (_tmp32_, _tmp33_);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (trailing_params);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (access_token);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (decoded_uri);
-#line 3942 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_do_save_session_information (PublishingFacebookFacebookPublisher* self) {
-	PublishingFacebookGraphSession* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-#line 462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:463: ACTION: saving session information to con" \
-"figuration system.");
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = self->priv->graph_session;
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = publishing_facebook_graph_session_get_access_token (_tmp0_);
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = _tmp1_;
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_set_persistent_access_token (self, _tmp2_);
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (_tmp2_);
-#line 3964 "FacebookPublishing.c"
+#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp5_ = self->priv->graph_session;
+#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp5_, "authenticated", (GCallback) _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated, self, 0);
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp6_ = self->priv->graph_session;
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp7_ = g_variant_get_string (access_token, NULL);
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	publishing_facebook_graph_session_authenticate (_tmp6_, _tmp7_);
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_variant_unref0 (access_token);
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_hash_table_unref0 (parameter);
+#line 3215 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_upload_complete_publishing_facebook_uploader_upload_complete (PublishingFacebookUploader* _sender, gint num_photos_published, gpointer self) {
-#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_upload_complete ((PublishingFacebookFacebookPublisher*) self, _sender, num_photos_published);
-#line 3971 "FacebookPublishing.c"
+#line 3222 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_upload_error_publishing_facebook_uploader_upload_error (PublishingFacebookUploader* _sender, GError* err, gpointer self) {
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_upload_error ((PublishingFacebookFacebookPublisher*) self, _sender, err);
-#line 3978 "FacebookPublishing.c"
+#line 3229 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_facebook_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
-#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_upload_status_updated ((PublishingFacebookFacebookPublisher*) self, file_number, fraction_complete);
-#line 3985 "FacebookPublishing.c"
+#line 3236 "FacebookPublishing.c"
 }
 
 
@@ -4031,326 +3271,165 @@ static void publishing_facebook_facebook_publisher_do_upload (PublishingFacebook
 	PublishingFacebookUploader* _tmp24_ = NULL;
 	PublishingFacebookUploader* _tmp25_ = NULL;
 	PublishingFacebookUploader* _tmp26_ = NULL;
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->publishing_params;
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_->target_album;
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp2_ == PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM) {
-#line 4026 "FacebookPublishing.c"
+#line 3277 "FacebookPublishing.c"
 		gchar* _tmp3_ = NULL;
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = g_strdup ("(none)");
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp0_);
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 403 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _tmp3_;
-#line 4034 "FacebookPublishing.c"
+#line 3285 "FacebookPublishing.c"
 	} else {
 		PublishingFacebookPublishingParameters* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 471 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = self->priv->publishing_params;
-#line 471 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = publishing_facebook_publishing_parameters_get_target_album_name (_tmp4_);
-#line 471 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp0_);
-#line 471 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _tmp5_;
-#line 4046 "FacebookPublishing.c"
+#line 3297 "FacebookPublishing.c"
 	}
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:469: ACTION: uploading photos to album '%s'", _tmp0_);
-#line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:402: ACTION: uploading photos to album '%s'", _tmp0_);
+#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = self->priv->host;
-#line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp6_, TRUE);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = self->priv->host;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = self->priv->publishing_params;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = _tmp8_->resolution;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = publishing_facebook_resolution_get_pixels (_tmp9_);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = self->priv->publishing_params;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = _tmp11_->strip_metadata;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp15_ = spit_publishing_plugin_host_serialize_publishables (_tmp7_, _tmp10_, _tmp12_, &_tmp13_, &_tmp14_);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter = _tmp15_;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target = _tmp13_;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = _tmp14_;
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp16_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 415 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp16_) {
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp0_);
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4090 "FacebookPublishing.c"
+#line 3341 "FacebookPublishing.c"
 	}
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp17_ = self->priv->host;
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp19_ = spit_publishing_plugin_host_get_publishables (_tmp17_, &_tmp18_);
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishables = _tmp19_;
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishables_length1 = _tmp18_;
-#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishables_size_ = publishables_length1;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp20_ = self->priv->graph_session;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = self->priv->publishing_params;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = publishables;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22__length1 = publishables_length1;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = publishing_facebook_uploader_new (_tmp20_, _tmp21_, _tmp22_, _tmp22__length1);
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_uploader_unref0 (self->priv->uploader);
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->uploader = _tmp23_;
-#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp24_ = self->priv->uploader;
-#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (_tmp24_, "upload-complete", (GCallback) _publishing_facebook_facebook_publisher_on_upload_complete_publishing_facebook_uploader_upload_complete, self, 0);
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp25_ = self->priv->uploader;
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (_tmp25_, "upload-error", (GCallback) _publishing_facebook_facebook_publisher_on_upload_error_publishing_facebook_uploader_upload_error, self, 0);
-#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp26_ = self->priv->uploader;
-#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 424 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_upload (_tmp26_, _publishing_facebook_facebook_publisher_on_upload_status_updated_spit_publishing_progress_callback, self);
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp0_);
-#line 4132 "FacebookPublishing.c"
+#line 3383 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_do_show_success_pane (PublishingFacebookFacebookPublisher* self) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	SpitPublishingPluginHost* _tmp1_ = NULL;
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:495: ACTION: showing success pane.");
-#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:428: ACTION: showing success pane.");
+#line 430 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 430 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp1_);
-#line 4151 "FacebookPublishing.c"
+#line 3402 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_on_generic_error (PublishingFacebookFacebookPublisher* self, GError* _error_) {
 	GError* _tmp0_ = NULL;
-#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = _error_;
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_error_matches (_tmp0_, SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_EXPIRED_SESSION)) {
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 436 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_facebook_publisher_do_logout (self);
-#line 4165 "FacebookPublishing.c"
+#line 3416 "FacebookPublishing.c"
 	} else {
 		SpitPublishingPluginHost* _tmp1_ = NULL;
 		GError* _tmp2_ = NULL;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = self->priv->host;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = _error_;
-#line 505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp1_, _tmp2_);
-#line 4175 "FacebookPublishing.c"
+#line 3426 "FacebookPublishing.c"
 	}
-}
-
-
-static void publishing_facebook_facebook_publisher_on_login_clicked (PublishingFacebookFacebookPublisher* self) {
-	gboolean _tmp0_ = FALSE;
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 509 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!_tmp0_) {
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 4190 "FacebookPublishing.c"
-	}
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:512: EVENT: user clicked 'Login' on welcome pa" \
-"ne.");
-#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_do_test_connection_to_endpoint (self);
-#line 4196 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_on_endpoint_test_completed (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message) {
-	PublishingFacebookGraphMessage* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingFacebookGraphMessage* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = message;
-#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_completed_publishing_facebook_graph_message_completed, self);
-#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = message;
-#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_error_publishing_facebook_graph_message_failed, self);
-#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 521 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!_tmp4_) {
-#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 4228 "FacebookPublishing.c"
-	}
-#line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:524: EVENT: endpoint test transaction detected" \
-" that the Facebook endpoint is alive.");
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_do_hosted_web_authentication (self);
-#line 4234 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_on_endpoint_test_error (PublishingFacebookFacebookPublisher* self, PublishingFacebookGraphMessage* message, GError* _error_) {
-	PublishingFacebookGraphMessage* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingFacebookGraphMessage* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-	GError* _tmp5_ = NULL;
-	const gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	GError* _tmp9_ = NULL;
-#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = message;
-#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_completed_publishing_facebook_graph_message_completed, self);
-#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = message;
-#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_endpoint_test_error_publishing_facebook_graph_message_failed, self);
-#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!_tmp4_) {
-#line 535 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 4271 "FacebookPublishing.c"
-	}
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = _error_;
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp6_ = _tmp5_->message;
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp7_ = g_strconcat ("EVENT: endpoint test transaction failed to detect a connection to the " \
-"Facebook " "endpoint", _tmp6_, NULL);
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = _tmp7_;
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:537: %s", _tmp8_);
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (_tmp8_);
-#line 540 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp9_ = _error_;
-#line 540 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_on_generic_error (self, _tmp9_);
-#line 4289 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_on_web_auth_pane_login_succeeded (PublishingFacebookFacebookPublisher* self, const gchar* success_url) {
-	gboolean _tmp0_ = FALSE;
-	const gchar* _tmp1_ = NULL;
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (success_url != NULL);
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!_tmp0_) {
-#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 4306 "FacebookPublishing.c"
-	}
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:547: EVENT: hosted web login succeeded.");
-#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = success_url;
-#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_do_authenticate_session (self, _tmp1_);
-#line 4314 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_facebook_publisher_on_web_auth_pane_login_failed (PublishingFacebookFacebookPublisher* self) {
-	gboolean _tmp0_ = FALSE;
-#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!_tmp0_) {
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 4328 "FacebookPublishing.c"
-	}
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:558: EVENT: hosted web login failed.");
-#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_do_show_service_welcome_pane (self);
-#line 4334 "FacebookPublishing.c"
 }
 
 
@@ -4360,36 +3439,34 @@ static void publishing_facebook_facebook_publisher_on_session_authenticated (Pub
 	gboolean _tmp2_ = FALSE;
 	PublishingFacebookGraphSession* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->graph_session;
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("authenticated", PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION, &_tmp1_, NULL, FALSE);
-#line 570 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_session_authenticated_publishing_facebook_graph_session_authenticated, self);
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp2_) {
-#line 573 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4358 "FacebookPublishing.c"
+#line 3451 "FacebookPublishing.c"
 	}
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->graph_session;
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = publishing_facebook_graph_session_is_authenticated (_tmp3_);
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp4_, "graph_session.is_authenticated()");
-#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:576: EVENT: an authenticated session has becom" \
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:476: EVENT: an authenticated session has becom" \
 "e available.");
-#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_facebook_publisher_do_save_session_information (self);
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 478 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_fetch_user_info (self);
-#line 4372 "FacebookPublishing.c"
+#line 3463 "FacebookPublishing.c"
 }
 
 
@@ -4405,52 +3482,52 @@ static void publishing_facebook_facebook_publisher_on_fetch_user_info_completed 
 	PublishingFacebookGraphMessage* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
-#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_completed_publishing_facebook_graph_message_completed, self);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_error_publishing_facebook_graph_message_failed, self);
-#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4410 "FacebookPublishing.c"
+#line 3501 "FacebookPublishing.c"
 	}
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = message;
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_facebook_graph_message_get_response_body (_tmp5_);
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:589: EVENT: user info fetch completed; respons" \
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:488: EVENT: user info fetch completed; respons" \
 "e = '%s'.", _tmp7_);
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = message;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = publishing_facebook_graph_message_get_response_body (_tmp8_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_extract_user_info_from_json (self, _tmp10_);
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp10_);
-#line 4432 "FacebookPublishing.c"
+#line 3523 "FacebookPublishing.c"
 }
 
 
@@ -4461,38 +3538,38 @@ static void publishing_facebook_facebook_publisher_on_fetch_user_info_error (Pub
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
 	GError* _tmp5_ = NULL;
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_completed_publishing_facebook_graph_message_completed, self);
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_user_info_error_publishing_facebook_graph_message_failed, self);
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 499 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4465 "FacebookPublishing.c"
+#line 3556 "FacebookPublishing.c"
 	}
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:602: EVENT: fetching user info generated and e" \
+#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:501: EVENT: fetching user info generated and e" \
 "rror.");
-#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _error_;
-#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_generic_error (self, _tmp5_);
-#line 4473 "FacebookPublishing.c"
+#line 3564 "FacebookPublishing.c"
 }
 
 
@@ -4500,26 +3577,26 @@ static void publishing_facebook_facebook_publisher_on_user_info_extracted (Publi
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
-#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 507 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp0_) {
-#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4489 "FacebookPublishing.c"
+#line 3580 "FacebookPublishing.c"
 	}
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->uid;
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->username;
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:611: EVENT: user info extracted from JSON resp" \
+#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:510: EVENT: user info extracted from JSON resp" \
 "onse: uid = %s; name = %s.", _tmp1_, _tmp2_);
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_fetch_album_descriptions (self);
-#line 4499 "FacebookPublishing.c"
+#line 3590 "FacebookPublishing.c"
 }
 
 
@@ -4535,52 +3612,52 @@ static void publishing_facebook_facebook_publisher_on_fetch_albums_completed (Pu
 	PublishingFacebookGraphMessage* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_completed_publishing_facebook_graph_message_completed, self);
-#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_error_publishing_facebook_graph_message_failed, self);
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4537 "FacebookPublishing.c"
+#line 3628 "FacebookPublishing.c"
 	}
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = message;
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_facebook_graph_message_get_response_body (_tmp5_);
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:623: EVENT: album descriptions fetch transacti" \
+#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:522: EVENT: album descriptions fetch transacti" \
 "on completed; response = '%s'.", _tmp7_);
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 522 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = message;
-#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = publishing_facebook_graph_message_get_response_body (_tmp8_);
-#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_extract_albums_from_json (self, _tmp10_);
-#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp10_);
-#line 4559 "FacebookPublishing.c"
+#line 3650 "FacebookPublishing.c"
 }
 
 
@@ -4591,38 +3668,38 @@ static void publishing_facebook_facebook_publisher_on_fetch_albums_error (Publis
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
 	GError* _tmp5_ = NULL;
-#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_completed_publishing_facebook_graph_message_completed, self);
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_fetch_albums_error_publishing_facebook_graph_message_failed, self);
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4592 "FacebookPublishing.c"
+#line 3683 "FacebookPublishing.c"
 	}
-#line 637 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:637: EVENT: album description fetch attempt ge" \
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:536: EVENT: album description fetch attempt ge" \
 "nerated an error.");
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = err;
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_generic_error (self, _tmp5_);
-#line 4600 "FacebookPublishing.c"
+#line 3691 "FacebookPublishing.c"
 }
 
 
@@ -4631,28 +3708,28 @@ static void publishing_facebook_facebook_publisher_on_albums_extracted (Publishi
 	PublishingFacebookPublishingParameters* _tmp1_ = NULL;
 	PublishingFacebookAlbum** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 542 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp0_) {
-#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4617 "FacebookPublishing.c"
+#line 3708 "FacebookPublishing.c"
 	}
-#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->publishing_params;
-#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_->albums;
-#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2__length1 = _tmp1_->albums_length1;
-#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:646: EVENT: successfully extracted %d albums f" \
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:545: EVENT: successfully extracted %d albums f" \
 "rom JSON response", _tmp2__length1);
-#line 649 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_show_publishing_options_pane (self);
-#line 4629 "FacebookPublishing.c"
+#line 3720 "FacebookPublishing.c"
 }
 
 
@@ -4662,34 +3739,34 @@ static void publishing_facebook_facebook_publisher_on_publishing_options_pane_lo
 	PublishingFacebookPublishingOptionsPane* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
-#line 652 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publishing_options_pane;
-#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_publish_publishing_facebook_publishing_options_pane_publish, self);
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->publishing_options_pane;
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp3_, NULL, FALSE);
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout, self);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4659 "FacebookPublishing.c"
+#line 3750 "FacebookPublishing.c"
 	}
-#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:659: EVENT: user clicked 'Logout' in publishin" \
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:558: EVENT: user clicked 'Logout' in publishin" \
 "g options pane.");
-#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_logout (self);
-#line 4665 "FacebookPublishing.c"
+#line 3756 "FacebookPublishing.c"
 }
 
 
@@ -4709,109 +3786,109 @@ static void publishing_facebook_facebook_publisher_on_publishing_options_pane_pu
 	const gchar* _tmp12_ = NULL;
 	gchar* _tmp13_ = NULL;
 	const gchar* _tmp14_ = NULL;
-#line 664 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 664 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (privacy_setting != NULL);
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publishing_options_pane;
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_publish_publishing_facebook_publishing_options_pane_publish, self);
-#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->publishing_options_pane;
-#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp3_, NULL, FALSE);
-#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_publishing_options_pane_logout_publishing_facebook_publishing_options_pane_logout, self);
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4707 "FacebookPublishing.c"
+#line 3798 "FacebookPublishing.c"
 	}
-#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:672: EVENT: user clicked 'Publish' in publishi" \
+#line 571 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:571: EVENT: user clicked 'Publish' in publishi" \
 "ng options pane.");
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 573 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = self->priv->publishing_params;
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 573 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = strip_metadata;
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 573 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_->strip_metadata = _tmp6_;
-#line 675 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = strip_metadata;
-#line 675 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_set_persistent_strip_metadata (self, _tmp7_);
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = self->priv->publishing_params;
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = resolution;
-#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_->resolution = _tmp9_;
-#line 677 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = resolution;
-#line 677 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_set_persistent_default_size (self, (gint) _tmp10_);
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = self->priv->publishing_params;
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = privacy_setting;
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = g_strdup (_tmp12_);
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp11_->privacy_object);
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_->privacy_object = _tmp13_;
-#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = target_album;
-#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp14_ != NULL) {
-#line 4745 "FacebookPublishing.c"
+#line 3836 "FacebookPublishing.c"
 		PublishingFacebookPublishingParameters* _tmp15_ = NULL;
 		const gchar* _tmp16_ = NULL;
 		PublishingFacebookPublishingParameters* _tmp17_ = NULL;
 		gint _tmp18_ = 0;
-#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = self->priv->publishing_params;
-#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = target_album;
-#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_parameters_set_target_album_by_name (_tmp15_, _tmp16_);
-#line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = self->priv->publishing_params;
-#line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp18_ = _tmp17_->target_album;
-#line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (_tmp18_ != PUBLISHING_FACEBOOK_PUBLISHING_PARAMETERS_UNKNOWN_ALBUM) {
-#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			publishing_facebook_facebook_publisher_do_upload (self);
-#line 4764 "FacebookPublishing.c"
+#line 3855 "FacebookPublishing.c"
 		} else {
 			PublishingFacebookPublishingParameters* _tmp19_ = NULL;
 			const gchar* _tmp20_ = NULL;
 			gchar* _tmp21_ = NULL;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp19_ = self->priv->publishing_params;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp20_ = target_album;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp21_ = g_strdup (_tmp20_);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (_tmp19_->new_album_name);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp19_->new_album_name = _tmp21_;
-#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			publishing_facebook_facebook_publisher_do_create_new_album (self);
-#line 4781 "FacebookPublishing.c"
+#line 3872 "FacebookPublishing.c"
 		}
 	} else {
-#line 692 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_facebook_publisher_do_upload (self);
-#line 4786 "FacebookPublishing.c"
+#line 3877 "FacebookPublishing.c"
 	}
 }
 
@@ -4832,62 +3909,62 @@ static void publishing_facebook_facebook_publisher_on_create_album_completed (Pu
 	PublishingFacebookGraphMessage* _tmp12_ = NULL;
 	gchar* _tmp13_ = NULL;
 	gchar* _tmp14_ = NULL;
-#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_create_album_completed_publishing_facebook_graph_message_completed, self);
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_create_album_error_publishing_facebook_graph_message_failed, self);
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = self->priv->publishing_params;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_->new_album_name;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp5_ != NULL, "publishing_params.new_album_name != null");
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp6_) {
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4835 "FacebookPublishing.c"
+#line 3926 "FacebookPublishing.c"
 	}
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = message;
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = publishing_facebook_graph_message_get_response_body (_tmp7_);
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:705: EVENT: created new album resource on remo" \
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:604: EVENT: created new album resource on remo" \
 "te host; response body = %s.\n", _tmp9_);
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 604 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = self->priv->publishing_params;
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = _tmp10_->new_album_name;
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = message;
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = publishing_facebook_graph_message_get_response_body (_tmp12_);
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = _tmp13_;
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_add_new_local_album_from_json (self, _tmp11_, _tmp14_);
-#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp14_);
-#line 4861 "FacebookPublishing.c"
+#line 3952 "FacebookPublishing.c"
 }
 
 
@@ -4898,38 +3975,38 @@ static void publishing_facebook_facebook_publisher_on_create_album_error (Publis
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
 	GError* _tmp5_ = NULL;
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_create_album_completed_publishing_facebook_graph_message_completed, self);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_create_album_error_publishing_facebook_graph_message_failed, self);
-#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4894 "FacebookPublishing.c"
+#line 3985 "FacebookPublishing.c"
 	}
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:719: EVENT: attempt to create new album genera" \
+#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:618: EVENT: attempt to create new album genera" \
 "ted an error.");
-#line 721 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = err;
-#line 721 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_on_generic_error (self, _tmp5_);
-#line 4902 "FacebookPublishing.c"
+#line 3993 "FacebookPublishing.c"
 }
 
 
@@ -4942,38 +4019,38 @@ static void publishing_facebook_facebook_publisher_on_upload_status_updated (Pub
 	void* _tmp3__target = NULL;
 	gint _tmp4_ = 0;
 	gdouble _tmp5_ = 0.0;
-#line 724 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 725 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp0_) {
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4923 "FacebookPublishing.c"
+#line 4014 "FacebookPublishing.c"
 	}
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = completed_fraction;
-#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:728: EVENT: uploader reports upload %.2f perce" \
+#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:627: EVENT: uploader reports upload %.2f perce" \
 "nt complete.", 100.0 * _tmp1_);
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->progress_reporter;
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2__target = self->priv->progress_reporter_target;
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp2_ != NULL, "progress_reporter != null");
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->progress_reporter;
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3__target = self->priv->progress_reporter_target;
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = file_number;
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = completed_fraction;
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ (_tmp4_, _tmp5_, _tmp3__target);
-#line 4945 "FacebookPublishing.c"
+#line 4036 "FacebookPublishing.c"
 }
 
 
@@ -4984,38 +4061,38 @@ static void publishing_facebook_facebook_publisher_on_upload_complete (Publishin
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
 	gint _tmp5_ = 0;
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (uploader));
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = uploader;
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_FACEBOOK_TYPE_UPLOADER, &_tmp1_, NULL, FALSE);
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_upload_complete_publishing_facebook_uploader_upload_complete, self);
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = uploader;
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_FACEBOOK_TYPE_UPLOADER, &_tmp3_, NULL, FALSE);
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_upload_error_publishing_facebook_uploader_upload_error, self);
-#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 4978 "FacebookPublishing.c"
+#line 4069 "FacebookPublishing.c"
 	}
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 641 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = num_published;
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:742: EVENT: uploader reports upload complete; " \
+#line 641 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:641: EVENT: uploader reports upload complete; " \
 "%d items published.", _tmp5_);
-#line 744 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_do_show_success_pane (self);
-#line 4986 "FacebookPublishing.c"
+#line 4077 "FacebookPublishing.c"
 }
 
 
@@ -5029,44 +4106,44 @@ static void publishing_facebook_facebook_publisher_on_upload_error (PublishingFa
 	const gchar* _tmp6_ = NULL;
 	SpitPublishingPluginHost* _tmp7_ = NULL;
 	GError* _tmp8_ = NULL;
-#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self));
-#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (uploader));
-#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = uploader;
-#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_FACEBOOK_TYPE_UPLOADER, &_tmp1_, NULL, FALSE);
-#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_upload_complete_publishing_facebook_uploader_upload_complete, self);
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = uploader;
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_FACEBOOK_TYPE_UPLOADER, &_tmp3_, NULL, FALSE);
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 648 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_facebook_publisher_on_upload_error_publishing_facebook_uploader_upload_error, self);
-#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp4_) {
-#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 5022 "FacebookPublishing.c"
+#line 4113 "FacebookPublishing.c"
 	}
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = err;
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _tmp5_->message;
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:754: EVENT: uploader reports upload error = '%" \
+#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:653: EVENT: uploader reports upload error = '%" \
 "s'.", _tmp6_);
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 655 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = self->priv->host;
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 655 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = err;
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 655 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 5036 "FacebookPublishing.c"
+#line 4127 "FacebookPublishing.c"
 }
 
 
@@ -5075,47 +4152,61 @@ static SpitPublishingService* publishing_facebook_facebook_publisher_real_get_se
 	SpitPublishingService* result = NULL;
 	SpitPublishingService* _tmp0_ = NULL;
 	SpitPublishingService* _tmp1_ = NULL;
-#line 759 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, PublishingFacebookFacebookPublisher);
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->service;
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp1_;
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 5055 "FacebookPublishing.c"
+#line 4146 "FacebookPublishing.c"
 }
 
 
 gchar* publishing_facebook_facebook_publisher_get_service_name (PublishingFacebookFacebookPublisher* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 662 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), NULL);
-#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = g_strdup (PUBLISHING_FACEBOOK_SERVICE_NAME);
-#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp0_;
-#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 663 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 5070 "FacebookPublishing.c"
+#line 4161 "FacebookPublishing.c"
 }
 
 
 gchar* publishing_facebook_facebook_publisher_get_user_visible_name (PublishingFacebookFacebookPublisher* self) {
 	gchar* result = NULL;
 	gchar* _tmp0_ = NULL;
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (self), NULL);
-#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = g_strdup (PUBLISHING_FACEBOOK_USER_VISIBLE_NAME);
-#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp0_;
-#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 5085 "FacebookPublishing.c"
+#line 4176 "FacebookPublishing.c"
+}
+
+
+static void _publishing_facebook_facebook_publisher_on_authenticator_succeeded_spit_publishing_authenticator_authenticated (SpitPublishingAuthenticator* _sender, gpointer self) {
+#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	publishing_facebook_facebook_publisher_on_authenticator_succeeded ((PublishingFacebookFacebookPublisher*) self);
+#line 4183 "FacebookPublishing.c"
+}
+
+
+static void _publishing_facebook_facebook_publisher_on_authenticator_failed_spit_publishing_authenticator_authentication_failed (SpitPublishingAuthenticator* _sender, gpointer self) {
+#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	publishing_facebook_facebook_publisher_on_authenticator_failed ((PublishingFacebookFacebookPublisher*) self);
+#line 4190 "FacebookPublishing.c"
 }
 
 
@@ -5123,97 +4214,69 @@ static void publishing_facebook_facebook_publisher_real_start (SpitPublishingPub
 	PublishingFacebookFacebookPublisher * self;
 	gboolean _tmp0_ = FALSE;
 	PublishingFacebookPublishingParameters* _tmp1_ = NULL;
-	gboolean _tmp2_ = FALSE;
-#line 771 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	SpitPublishingAuthenticator* _tmp2_ = NULL;
+	SpitPublishingAuthenticator* _tmp3_ = NULL;
+	SpitPublishingAuthenticator* _tmp4_ = NULL;
+#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, PublishingFacebookFacebookPublisher);
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 671 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_) {
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 5102 "FacebookPublishing.c"
+#line 4209 "FacebookPublishing.c"
 	}
-#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:775: FacebookPublisher: starting interaction.");
-#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:674: FacebookPublisher: starting interaction.");
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->running = TRUE;
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = publishing_facebook_publishing_parameters_new ();
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_publishing_parameters_unref0 (self->priv->publishing_params);
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishing_params = _tmp1_;
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = publishing_facebook_facebook_publisher_is_persistent_session_valid (self);
-#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp2_) {
-#line 5118 "FacebookPublishing.c"
-		PublishingFacebookGraphSession* _tmp3_ = NULL;
-		gchar* _tmp4_ = NULL;
-		gchar* _tmp5_ = NULL;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp3_ = self->priv->graph_session;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp4_ = publishing_facebook_facebook_publisher_get_persistent_access_token (self);
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp5_ = _tmp4_;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_graph_session_authenticate (_tmp3_, _tmp5_);
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (_tmp5_);
-#line 5132 "FacebookPublishing.c"
-	} else {
-		gboolean _tmp6_ = FALSE;
-#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp6_ = publishing_facebook_web_authentication_pane_is_cache_dirty ();
-#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		if (_tmp6_) {
-#line 5139 "FacebookPublishing.c"
-			SpitPublishingPluginHost* _tmp7_ = NULL;
-			SpitPublishingPluginHost* _tmp8_ = NULL;
-#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			_tmp7_ = self->priv->host;
-#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			spit_publishing_plugin_host_set_service_locked (_tmp7_, FALSE);
-#line 791 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			_tmp8_ = self->priv->host;
-#line 791 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			spit_publishing_plugin_host_install_static_message_pane (_tmp8_, PUBLISHING_FACEBOOK_RESTART_ERROR_MESSAGE, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 5150 "FacebookPublishing.c"
-		} else {
-#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			publishing_facebook_facebook_publisher_do_show_service_welcome_pane (self);
-#line 5154 "FacebookPublishing.c"
-		}
-	}
+#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp2_ = self->priv->authenticator;
+#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp2_, "authenticated", (GCallback) _publishing_facebook_facebook_publisher_on_authenticator_succeeded_spit_publishing_authenticator_authenticated, self, 0);
+#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp3_ = self->priv->authenticator;
+#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp3_, "authentication-failed", (GCallback) _publishing_facebook_facebook_publisher_on_authenticator_failed_spit_publishing_authenticator_authentication_failed, self, 0);
+#line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp4_ = self->priv->authenticator;
+#line 684 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	spit_publishing_authenticator_authenticate (_tmp4_);
+#line 4233 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_real_stop (SpitPublishingPublisher* base) {
 	PublishingFacebookFacebookPublisher * self;
 	PublishingFacebookGraphSession* _tmp0_ = NULL;
-#line 799 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, PublishingFacebookFacebookPublisher);
-#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:800: FacebookPublisher: stop( ) invoked.");
-#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:688: FacebookPublisher: stop( ) invoked.");
+#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->graph_session;
-#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 5171 "FacebookPublishing.c"
+#line 4248 "FacebookPublishing.c"
 		PublishingFacebookGraphSession* _tmp1_ = NULL;
-#line 803 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = self->priv->graph_session;
-#line 803 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_stop_transactions (_tmp1_);
-#line 5177 "FacebookPublishing.c"
+#line 4254 "FacebookPublishing.c"
 	}
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->host = NULL;
-#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 694 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->running = FALSE;
-#line 5183 "FacebookPublishing.c"
+#line 4260 "FacebookPublishing.c"
 }
 
 
@@ -5221,98 +4284,98 @@ static gboolean publishing_facebook_facebook_publisher_real_is_running (SpitPubl
 	PublishingFacebookFacebookPublisher * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, PublishingFacebookFacebookPublisher);
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->running;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp0_;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 5199 "FacebookPublishing.c"
+#line 4276 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_class_init (PublishingFacebookFacebookPublisherClass * klass) {
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_parent_class = g_type_class_peek_parent (klass);
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFacebookFacebookPublisherPrivate));
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_facebook_facebook_publisher_finalize;
-#line 5210 "FacebookPublishing.c"
+#line 4287 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_spit_publishing_publisher_interface_init (SpitPublishingPublisherIface * iface) {
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_spit_publishing_publisher_parent_iface = g_type_interface_peek_parent (iface);
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->get_service = (SpitPublishingService* (*)(SpitPublishingPublisher*)) publishing_facebook_facebook_publisher_real_get_service;
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->start = (void (*)(SpitPublishingPublisher*)) publishing_facebook_facebook_publisher_real_start;
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->stop = (void (*)(SpitPublishingPublisher*)) publishing_facebook_facebook_publisher_real_stop;
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->is_running = (gboolean (*)(SpitPublishingPublisher*)) publishing_facebook_facebook_publisher_real_is_running;
-#line 5225 "FacebookPublishing.c"
+#line 4302 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_instance_init (PublishingFacebookFacebookPublisher * self) {
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv = PUBLISHING_FACEBOOK_FACEBOOK_PUBLISHER_GET_PRIVATE (self);
-#line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->host = NULL;
-#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->web_auth_pane = NULL;
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->service = NULL;
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->authenticator = NULL;
+#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->running = FALSE;
-#line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishing_options_pane = NULL;
-#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->uploader = NULL;
-#line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->uid = NULL;
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->username = NULL;
-#line 5250 "FacebookPublishing.c"
+#line 4327 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_facebook_publisher_finalize (GObject* obj) {
 	PublishingFacebookFacebookPublisher * self;
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_FACEBOOK_PUBLISHER, PublishingFacebookFacebookPublisher);
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_publishing_parameters_unref0 (self->priv->publishing_params);
-#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_object_unref0 (self->priv->web_auth_pane);
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 173 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_g_object_unref0 (self->priv->authenticator);
+#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_session_unref0 (self->priv->graph_session);
-#line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publishing_options_pane);
-#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_uploader_unref0 (self->priv->uploader);
-#line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->priv->uid);
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->priv->username);
-#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (publishing_facebook_facebook_publisher_parent_class)->finalize (obj);
-#line 5282 "FacebookPublishing.c"
+#line 4359 "FacebookPublishing.c"
 }
 
 
@@ -5330,1162 +4393,63 @@ GType publishing_facebook_facebook_publisher_get_type (void) {
 }
 
 
-PublishingFacebookWebAuthenticationPane* publishing_facebook_web_authentication_pane_construct (GType object_type) {
-	PublishingFacebookWebAuthenticationPane * self = NULL;
-	gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_web_authentication_pane_get_login_url ();
-#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = _tmp0_;
-#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self = (PublishingFacebookWebAuthenticationPane*) g_object_new (object_type, "login-uri", _tmp1_, NULL);
-#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (_tmp1_);
-#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return self;
-#line 5314 "FacebookPublishing.c"
-}
-
-
-PublishingFacebookWebAuthenticationPane* publishing_facebook_web_authentication_pane_new (void) {
-#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return publishing_facebook_web_authentication_pane_construct (PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE);
-#line 5321 "FacebookPublishing.c"
-}
-
-
-static gpointer _publishing_facebook_web_authentication_pane_locale_lookup_ref0 (gpointer self) {
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return self ? publishing_facebook_web_authentication_pane_locale_lookup_ref (self) : NULL;
-#line 5328 "FacebookPublishing.c"
-}
-
-
-static gboolean string_contains (const gchar* self, const gchar* needle) {
-	gboolean result = FALSE;
-	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 1376 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (self != NULL, FALSE);
-#line 1376 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	g_return_val_if_fail (needle != NULL, FALSE);
-#line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp0_ = needle;
-#line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	_tmp1_ = strstr ((gchar*) self, (gchar*) _tmp0_);
-#line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	result = _tmp1_ != NULL;
-#line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
-	return result;
-#line 5348 "FacebookPublishing.c"
-}
-
-
-static gchar* publishing_facebook_web_authentication_pane_get_system_locale_as_facebook_locale (void) {
-	gchar* result = NULL;
-	const gchar* raw_system_locale = NULL;
-	const gchar* _tmp0_ = NULL;
-	gboolean _tmp1_ = FALSE;
-	const gchar* _tmp2_ = NULL;
-	gchar* system_locale = NULL;
-	const gchar* _tmp5_ = NULL;
-	gchar** _tmp6_ = NULL;
-	gchar** _tmp7_ = NULL;
-	gchar** _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-	const gchar* _tmp9_ = NULL;
-	gchar* _tmp10_ = NULL;
-	gchar* _tmp11_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup** _tmp12_ = NULL;
-	gint _tmp12__length1 = 0;
-	gchar* _tmp43_ = NULL;
-#line 894 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = setlocale (LC_ALL, "");
-#line 894 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	raw_system_locale = _tmp0_;
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = raw_system_locale;
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp2_ == NULL) {
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp1_ = TRUE;
-#line 5380 "FacebookPublishing.c"
-	} else {
-		const gchar* _tmp3_ = NULL;
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp3_ = raw_system_locale;
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp1_ = g_strcmp0 (_tmp3_, "") == 0;
-#line 5387 "FacebookPublishing.c"
-	}
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp1_) {
-#line 5391 "FacebookPublishing.c"
-		gchar* _tmp4_ = NULL;
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp4_ = g_strdup ("www");
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		result = _tmp4_;
-#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return result;
-#line 5399 "FacebookPublishing.c"
-	}
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = raw_system_locale;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp7_ = _tmp6_ = g_strsplit (_tmp5_, ".", 0);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = _tmp7_;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8__length1 = _vala_array_length (_tmp6_);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp9_ = _tmp8_[0];
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp10_ = g_strdup (_tmp9_);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp11_ = _tmp10_;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = (_vala_array_free (_tmp8_, _tmp8__length1, (GDestroyNotify) g_free), NULL);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	system_locale = _tmp11_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp12_ = publishing_facebook_web_authentication_pane_locale_lookup_table;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp12__length1 = publishing_facebook_web_authentication_pane_locale_lookup_table_length1;
-#line 5423 "FacebookPublishing.c"
-	{
-		PublishingFacebookWebAuthenticationPaneLocaleLookup** locale_lookup_collection = NULL;
-		gint locale_lookup_collection_length1 = 0;
-		gint _locale_lookup_collection_size_ = 0;
-		gint locale_lookup_it = 0;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		locale_lookup_collection = _tmp12_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		locale_lookup_collection_length1 = _tmp12__length1;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		for (locale_lookup_it = 0; locale_lookup_it < _tmp12__length1; locale_lookup_it = locale_lookup_it + 1) {
-#line 5435 "FacebookPublishing.c"
-			PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp13_ = NULL;
-			PublishingFacebookWebAuthenticationPaneLocaleLookup* locale_lookup = NULL;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			_tmp13_ = _publishing_facebook_web_authentication_pane_locale_lookup_ref0 (locale_lookup_collection[locale_lookup_it]);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			locale_lookup = _tmp13_;
-#line 5442 "FacebookPublishing.c"
-			{
-				const gchar* _tmp14_ = NULL;
-				PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp15_ = NULL;
-				const gchar* _tmp16_ = NULL;
-				gboolean _tmp17_ = FALSE;
-				PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp18_ = NULL;
-				const gchar* _tmp19_ = NULL;
-				PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp29_ = NULL;
-				const gchar* _tmp30_ = NULL;
-				PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp40_ = NULL;
-				const gchar* _tmp41_ = NULL;
-				gchar* _tmp42_ = NULL;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp14_ = system_locale;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp15_ = locale_lookup;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp16_ = _tmp15_->prefix;
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp17_ = g_str_has_prefix (_tmp14_, _tmp16_);
-#line 901 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				if (!_tmp17_) {
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_publishing_facebook_web_authentication_pane_locale_lookup_unref0 (locale_lookup);
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					continue;
-#line 5469 "FacebookPublishing.c"
-				}
-#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp18_ = locale_lookup;
-#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp19_ = _tmp18_->exception_code;
-#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				if (_tmp19_ != NULL) {
-#line 5477 "FacebookPublishing.c"
-					PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp20_ = NULL;
-					const gchar* _tmp21_ = NULL;
-					const gchar* _tmp22_ = NULL;
-					PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp23_ = NULL;
-					const gchar* _tmp24_ = NULL;
-					gboolean _tmp25_ = FALSE;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp20_ = locale_lookup;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp21_ = _tmp20_->exception_translation;
-#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_vala_assert (_tmp21_ != NULL, "locale_lookup.exception_translation != null");
-#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp22_ = system_locale;
-#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp23_ = locale_lookup;
-#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp24_ = _tmp23_->exception_code;
-#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp25_ = string_contains (_tmp22_, _tmp24_);
-#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					if (_tmp25_) {
-#line 5500 "FacebookPublishing.c"
-						PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp26_ = NULL;
-						const gchar* _tmp27_ = NULL;
-						gchar* _tmp28_ = NULL;
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp26_ = locale_lookup;
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp27_ = _tmp26_->exception_translation;
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp28_ = g_strdup (_tmp27_);
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						result = _tmp28_;
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_publishing_facebook_web_authentication_pane_locale_lookup_unref0 (locale_lookup);
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_g_free0 (system_locale);
-#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						return result;
-#line 5518 "FacebookPublishing.c"
-					}
-				}
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp29_ = locale_lookup;
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp30_ = _tmp29_->exception_code_2;
-#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				if (_tmp30_ != NULL) {
-#line 5527 "FacebookPublishing.c"
-					PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp31_ = NULL;
-					const gchar* _tmp32_ = NULL;
-					const gchar* _tmp33_ = NULL;
-					PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp34_ = NULL;
-					const gchar* _tmp35_ = NULL;
-					gboolean _tmp36_ = FALSE;
-#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp31_ = locale_lookup;
-#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp32_ = _tmp31_->exception_translation_2;
-#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_vala_assert (_tmp32_ != NULL, "locale_lookup.exception_translation_2 != null");
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp33_ = system_locale;
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp34_ = locale_lookup;
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp35_ = _tmp34_->exception_code_2;
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					_tmp36_ = string_contains (_tmp33_, _tmp35_);
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-					if (_tmp36_) {
-#line 5550 "FacebookPublishing.c"
-						PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp37_ = NULL;
-						const gchar* _tmp38_ = NULL;
-						gchar* _tmp39_ = NULL;
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp37_ = locale_lookup;
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp38_ = _tmp37_->exception_translation_2;
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_tmp39_ = g_strdup (_tmp38_);
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						result = _tmp39_;
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_publishing_facebook_web_authentication_pane_locale_lookup_unref0 (locale_lookup);
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						_g_free0 (system_locale);
-#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-						return result;
-#line 5568 "FacebookPublishing.c"
-					}
-				}
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp40_ = locale_lookup;
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp41_ = _tmp40_->translation;
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_tmp42_ = g_strdup (_tmp41_);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				result = _tmp42_;
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_publishing_facebook_web_authentication_pane_locale_lookup_unref0 (locale_lookup);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				_g_free0 (system_locale);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				return result;
-#line 5585 "FacebookPublishing.c"
-			}
-		}
-	}
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp43_ = g_strdup ("www");
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp43_;
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (system_locale);
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 5597 "FacebookPublishing.c"
-}
-
-
-static gchar* publishing_facebook_web_authentication_pane_get_login_url (void) {
-	gchar* result = NULL;
-	gchar* facebook_locale = NULL;
-	gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_web_authentication_pane_get_system_locale_as_facebook_locale ();
-#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	facebook_locale = _tmp0_;
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = g_strdup_printf ("https://%s.facebook.com/dialog/oauth?client_id=%s&redirect_uri=https:/" \
-"/www.facebook.com/connect/login_success.html&display=popup&scope=publi" \
-"sh_actions,user_photos,user_videos&response_type=token", facebook_locale, PUBLISHING_FACEBOOK_APPLICATION_ID);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp1_;
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (facebook_locale);
-#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 5618 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_real_on_page_load (ShotwellPluginsCommonWebAuthenticationPane* base) {
-	PublishingFacebookWebAuthenticationPane * self;
-	gchar* loaded_url = NULL;
-	WebKitWebView* _tmp0_ = NULL;
-	WebKitWebView* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	const gchar* _tmp3_ = NULL;
-	gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-	const gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	const gchar* _tmp9_ = NULL;
-	gboolean _tmp10_ = FALSE;
-	const gchar* _tmp22_ = NULL;
-	gboolean _tmp23_ = FALSE;
-	const gchar* _tmp28_ = NULL;
-	gboolean _tmp29_ = FALSE;
-#line 931 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, PublishingFacebookWebAuthenticationPane);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = shotwell_plugins_common_web_authentication_pane_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane));
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = _tmp0_;
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = webkit_web_view_get_uri (_tmp1_);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = _tmp2_;
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = g_strdup (_tmp3_);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = _tmp4_;
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_object_unref0 (_tmp1_);
-#line 932 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	loaded_url = _tmp5_;
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp6_ = loaded_url;
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp7_ = g_strconcat ("loaded url: ", _tmp6_, NULL);
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = _tmp7_;
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:933: %s", _tmp8_);
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (_tmp8_);
-#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp9_ = loaded_url;
-#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp10_ = string_contains (_tmp9_, "?");
-#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp10_) {
-#line 5674 "FacebookPublishing.c"
-		gint index = 0;
-		const gchar* _tmp11_ = NULL;
-		gint _tmp12_ = 0;
-		gchar* params = NULL;
-		const gchar* _tmp13_ = NULL;
-		gint _tmp14_ = 0;
-		const gchar* _tmp15_ = NULL;
-		gint _tmp16_ = 0;
-		gint _tmp17_ = 0;
-		gchar* _tmp18_ = NULL;
-		const gchar* _tmp19_ = NULL;
-		const gchar* _tmp20_ = NULL;
-		gchar* _tmp21_ = NULL;
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp11_ = loaded_url;
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp12_ = string_index_of_char (_tmp11_, (gunichar) '?', 0);
-#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		index = _tmp12_;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp13_ = loaded_url;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp14_ = index;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp15_ = loaded_url;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp16_ = strlen (_tmp15_);
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp17_ = _tmp16_;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp18_ = string_slice (_tmp13_, (glong) _tmp14_, (glong) _tmp17_);
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		params = _tmp18_;
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp19_ = loaded_url;
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp20_ = params;
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp21_ = string_replace (_tmp19_, _tmp20_, "");
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (loaded_url);
-#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		loaded_url = _tmp21_;
-#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (params);
-#line 5720 "FacebookPublishing.c"
-	}
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp22_ = loaded_url;
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp23_ = string_contains (_tmp22_, "login_success");
-#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp23_) {
-#line 5728 "FacebookPublishing.c"
-		WebKitWebView* _tmp24_ = NULL;
-		WebKitWebView* _tmp25_ = NULL;
-		const gchar* _tmp26_ = NULL;
-		const gchar* _tmp27_ = NULL;
-#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_web_authentication_pane_cache_dirty = TRUE;
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp24_ = shotwell_plugins_common_web_authentication_pane_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, ShotwellPluginsCommonWebAuthenticationPane));
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp25_ = _tmp24_;
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp26_ = webkit_web_view_get_uri (_tmp25_);
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp27_ = _tmp26_;
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_signal_emit_by_name (self, "login-succeeded", _tmp27_);
-#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_object_unref0 (_tmp25_);
-#line 946 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (loaded_url);
-#line 946 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 5751 "FacebookPublishing.c"
-	}
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp28_ = loaded_url;
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp29_ = string_contains (_tmp28_, "login_failure");
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp29_) {
-#line 951 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_signal_emit_by_name (self, "login-failed");
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_g_free0 (loaded_url);
-#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return;
-#line 5765 "FacebookPublishing.c"
-	}
-#line 931 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (loaded_url);
-#line 5769 "FacebookPublishing.c"
-}
-
-
-gboolean publishing_facebook_web_authentication_pane_is_cache_dirty (void) {
-	gboolean result = FALSE;
-	gboolean _tmp0_ = FALSE;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_web_authentication_pane_cache_dirty;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp0_;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 5782 "FacebookPublishing.c"
-}
-
-
-static PublishingFacebookWebAuthenticationPaneLocaleLookup* publishing_facebook_web_authentication_pane_locale_lookup_construct (GType object_type, const gchar* prefix, const gchar* translation, const gchar* exception_code, const gchar* exception_translation, const gchar* exception_code_2, const gchar* exception_translation_2) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* self = NULL;
-	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-	const gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-	const gchar* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
-	const gchar* _tmp10_ = NULL;
-	gchar* _tmp11_ = NULL;
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (prefix != NULL, NULL);
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (translation != NULL, NULL);
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self = (PublishingFacebookWebAuthenticationPaneLocaleLookup*) g_type_create_instance (object_type);
-#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = prefix;
-#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = g_strdup (_tmp0_);
-#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->prefix);
-#line 835 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->prefix = _tmp1_;
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = translation;
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = g_strdup (_tmp2_);
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->translation);
-#line 836 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->translation = _tmp3_;
-#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = exception_code;
-#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = g_strdup (_tmp4_);
-#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_code);
-#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->exception_code = _tmp5_;
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp6_ = exception_translation;
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp7_ = g_strdup (_tmp6_);
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_translation);
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->exception_translation = _tmp7_;
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = exception_code_2;
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp9_ = g_strdup (_tmp8_);
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_code_2);
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->exception_code_2 = _tmp9_;
-#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp10_ = exception_translation_2;
-#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp11_ = g_strdup (_tmp10_);
-#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_translation_2);
-#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->exception_translation_2 = _tmp11_;
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return self;
-#line 5856 "FacebookPublishing.c"
-}
-
-
-static PublishingFacebookWebAuthenticationPaneLocaleLookup* publishing_facebook_web_authentication_pane_locale_lookup_new (const gchar* prefix, const gchar* translation, const gchar* exception_code, const gchar* exception_translation, const gchar* exception_code_2, const gchar* exception_translation_2) {
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return publishing_facebook_web_authentication_pane_locale_lookup_construct (PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP, prefix, translation, exception_code, exception_translation, exception_code_2, exception_translation_2);
-#line 5863 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_value_locale_lookup_init (GValue* value) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	value->data[0].v_pointer = NULL;
-#line 5870 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_value_locale_lookup_free_value (GValue* value) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (value->data[0].v_pointer) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_web_authentication_pane_locale_lookup_unref (value->data[0].v_pointer);
-#line 5879 "FacebookPublishing.c"
-	}
-}
-
-
-static void publishing_facebook_web_authentication_pane_value_locale_lookup_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (src_value->data[0].v_pointer) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		dest_value->data[0].v_pointer = publishing_facebook_web_authentication_pane_locale_lookup_ref (src_value->data[0].v_pointer);
-#line 5889 "FacebookPublishing.c"
-	} else {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		dest_value->data[0].v_pointer = NULL;
-#line 5893 "FacebookPublishing.c"
-	}
-}
-
-
-static gpointer publishing_facebook_web_authentication_pane_value_locale_lookup_peek_pointer (const GValue* value) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return value->data[0].v_pointer;
-#line 5901 "FacebookPublishing.c"
-}
-
-
-static gchar* publishing_facebook_web_authentication_pane_value_locale_lookup_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (collect_values[0].v_pointer) {
-#line 5908 "FacebookPublishing.c"
-		PublishingFacebookWebAuthenticationPaneLocaleLookup* object;
-		object = collect_values[0].v_pointer;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		if (object->parent_instance.g_class == NULL) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5915 "FacebookPublishing.c"
-		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 5919 "FacebookPublishing.c"
-		}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = publishing_facebook_web_authentication_pane_locale_lookup_ref (object);
-#line 5923 "FacebookPublishing.c"
-	} else {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = NULL;
-#line 5927 "FacebookPublishing.c"
-	}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return NULL;
-#line 5931 "FacebookPublishing.c"
-}
-
-
-static gchar* publishing_facebook_web_authentication_pane_value_locale_lookup_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup** object_p;
-	object_p = collect_values[0].v_pointer;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!object_p) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 5942 "FacebookPublishing.c"
-	}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (!value->data[0].v_pointer) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		*object_p = NULL;
-#line 5948 "FacebookPublishing.c"
-	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		*object_p = value->data[0].v_pointer;
-#line 5952 "FacebookPublishing.c"
-	} else {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		*object_p = publishing_facebook_web_authentication_pane_locale_lookup_ref (value->data[0].v_pointer);
-#line 5956 "FacebookPublishing.c"
-	}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return NULL;
-#line 5960 "FacebookPublishing.c"
-}
-
-
-static GParamSpec* publishing_facebook_web_authentication_pane_param_spec_locale_lookup (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
-	PublishingFacebookWebAuthenticationPaneParamSpecLocaleLookup* spec;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP), NULL);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return G_PARAM_SPEC (spec);
-#line 5974 "FacebookPublishing.c"
-}
-
-
-static gpointer publishing_facebook_web_authentication_pane_value_get_locale_lookup (const GValue* value) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP), NULL);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return value->data[0].v_pointer;
-#line 5983 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_value_set_locale_lookup (GValue* value, gpointer v_object) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* old;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	old = value->data[0].v_pointer;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (v_object) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = v_object;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_web_authentication_pane_locale_lookup_ref (value->data[0].v_pointer);
-#line 6003 "FacebookPublishing.c"
-	} else {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = NULL;
-#line 6007 "FacebookPublishing.c"
-	}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (old) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_web_authentication_pane_locale_lookup_unref (old);
-#line 6013 "FacebookPublishing.c"
-	}
-}
-
-
-static void publishing_facebook_web_authentication_pane_value_take_locale_lookup (GValue* value, gpointer v_object) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* old;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	old = value->data[0].v_pointer;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (v_object) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = v_object;
-#line 6032 "FacebookPublishing.c"
-	} else {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		value->data[0].v_pointer = NULL;
-#line 6036 "FacebookPublishing.c"
-	}
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (old) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		publishing_facebook_web_authentication_pane_locale_lookup_unref (old);
-#line 6042 "FacebookPublishing.c"
-	}
-}
-
-
-static void publishing_facebook_web_authentication_pane_locale_lookup_class_init (PublishingFacebookWebAuthenticationPaneLocaleLookupClass * klass) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_web_authentication_pane_locale_lookup_parent_class = g_type_class_peek_parent (klass);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	((PublishingFacebookWebAuthenticationPaneLocaleLookupClass *) klass)->finalize = publishing_facebook_web_authentication_pane_locale_lookup_finalize;
-#line 6052 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_locale_lookup_instance_init (PublishingFacebookWebAuthenticationPaneLocaleLookup * self) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->ref_count = 1;
-#line 6059 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_locale_lookup_finalize (PublishingFacebookWebAuthenticationPaneLocaleLookup* obj) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup * self;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_TYPE_LOCALE_LOOKUP, PublishingFacebookWebAuthenticationPaneLocaleLookup);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_handlers_destroy (self);
-#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->prefix);
-#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->translation);
-#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_code);
-#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_translation);
-#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_code_2);
-#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_g_free0 (self->exception_translation_2);
-#line 6081 "FacebookPublishing.c"
-}
-
-
-static GType publishing_facebook_web_authentication_pane_locale_lookup_get_type (void) {
-	static volatile gsize publishing_facebook_web_authentication_pane_locale_lookup_type_id__volatile = 0;
-	if (g_once_init_enter (&publishing_facebook_web_authentication_pane_locale_lookup_type_id__volatile)) {
-		static const GTypeValueTable g_define_type_value_table = { publishing_facebook_web_authentication_pane_value_locale_lookup_init, publishing_facebook_web_authentication_pane_value_locale_lookup_free_value, publishing_facebook_web_authentication_pane_value_locale_lookup_copy_value, publishing_facebook_web_authentication_pane_value_locale_lookup_peek_pointer, "p", publishing_facebook_web_authentication_pane_value_locale_lookup_collect_value, "p", publishing_facebook_web_authentication_pane_value_locale_lookup_lcopy_value };
-		static const GTypeInfo g_define_type_info = { sizeof (PublishingFacebookWebAuthenticationPaneLocaleLookupClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_facebook_web_authentication_pane_locale_lookup_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingFacebookWebAuthenticationPaneLocaleLookup), 0, (GInstanceInitFunc) publishing_facebook_web_authentication_pane_locale_lookup_instance_init, &g_define_type_value_table };
-		static const GTypeFundamentalInfo g_define_type_fundamental_info = { (G_TYPE_FLAG_CLASSED | G_TYPE_FLAG_INSTANTIATABLE | G_TYPE_FLAG_DERIVABLE | G_TYPE_FLAG_DEEP_DERIVABLE) };
-		GType publishing_facebook_web_authentication_pane_locale_lookup_type_id;
-		publishing_facebook_web_authentication_pane_locale_lookup_type_id = g_type_register_fundamental (g_type_fundamental_next (), "PublishingFacebookWebAuthenticationPaneLocaleLookup", &g_define_type_info, &g_define_type_fundamental_info, 0);
-		g_once_init_leave (&publishing_facebook_web_authentication_pane_locale_lookup_type_id__volatile, publishing_facebook_web_authentication_pane_locale_lookup_type_id);
-	}
-	return publishing_facebook_web_authentication_pane_locale_lookup_type_id__volatile;
-}
-
-
-static gpointer publishing_facebook_web_authentication_pane_locale_lookup_ref (gpointer instance) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* self;
-	self = instance;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_atomic_int_inc (&self->ref_count);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return instance;
-#line 6106 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_locale_lookup_unref (gpointer instance) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* self;
-	self = instance;
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		PUBLISHING_FACEBOOK_WEB_AUTHENTICATION_PANE_LOCALE_LOOKUP_GET_CLASS (self)->finalize (self);
-#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		g_type_free_instance ((GTypeInstance *) self);
-#line 6119 "FacebookPublishing.c"
-	}
-}
-
-
-static void publishing_facebook_web_authentication_pane_class_init (PublishingFacebookWebAuthenticationPaneClass * klass) {
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp0_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp1_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp2_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp3_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp4_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp5_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp6_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp7_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp8_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp9_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp10_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp11_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp12_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp13_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp14_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp15_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp16_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp17_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp18_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp19_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp20_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp21_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp22_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp23_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp24_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp25_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp26_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp27_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp28_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp29_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp30_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp31_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp32_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp33_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp34_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp35_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp36_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp37_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp38_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp39_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp40_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp41_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp42_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp43_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup* _tmp44_ = NULL;
-	PublishingFacebookWebAuthenticationPaneLocaleLookup** _tmp45_ = NULL;
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_web_authentication_pane_parent_class = g_type_class_peek_parent (klass);
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	((ShotwellPluginsCommonWebAuthenticationPaneClass *) klass)->on_page_load = publishing_facebook_web_authentication_pane_real_on_page_load;
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	G_OBJECT_CLASS (klass)->finalize = publishing_facebook_web_authentication_pane_finalize;
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_new ("login_succeeded", PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__STRING, G_TYPE_NONE, 1, G_TYPE_STRING);
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_new ("login_failed", PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("es", "es-la", "ES", "es-es", NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("en", "en-gb", "US", "en-us", NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("fr", "fr-fr", "CA", "fr-ca", NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp3_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("pt", "pt-br", "PT", "pt-pt", NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp4_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("zh", "zh-cn", "HK", "zh-hk", "TW", "zh-tw");
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp5_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("af", "af-za", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp6_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ar", "ar-ar", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp7_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("nb", "nb-no", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp8_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("no", "nb-no", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp9_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("id", "id-id", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp10_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ms", "ms-my", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp11_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ca", "ca-es", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp12_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("cs", "cs-cz", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp13_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("cy", "cy-gb", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp14_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("da", "da-dk", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp15_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("de", "de-de", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp16_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("tl", "tl-ph", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp17_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ko", "ko-kr", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp18_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("hr", "hr-hr", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp19_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("it", "it-it", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp20_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("lt", "lt-lt", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp21_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("hu", "hu-hu", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp22_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("nl", "nl-nl", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp23_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ja", "ja-jp", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp24_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("nb", "nb-no", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp25_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("no", "nb-no", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp26_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("pl", "pl-pl", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp27_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ro", "ro-ro", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp28_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ru", "ru-ru", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp29_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("sk", "sk-sk", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp30_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("sl", "sl-si", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp31_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("sv", "sv-se", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp32_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("th", "th-th", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp33_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("vi", "vi-vn", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp34_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("tr", "tr-tr", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp35_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("el", "el-gr", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp36_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("bg", "bg-bg", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp37_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("sr", "sr-rs", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp38_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("he", "he-il", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp39_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("hi", "hi-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp40_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("bn", "bn-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp41_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("pa", "pa-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp42_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ta", "ta-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp43_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("te", "te-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp44_ = publishing_facebook_web_authentication_pane_locale_lookup_new ("ml", "ml-in", NULL, NULL, NULL, NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_ = g_new0 (PublishingFacebookWebAuthenticationPaneLocaleLookup*, 45 + 1);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[0] = _tmp0_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[1] = _tmp1_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[2] = _tmp2_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[3] = _tmp3_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[4] = _tmp4_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[5] = _tmp5_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[6] = _tmp6_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[7] = _tmp7_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[8] = _tmp8_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[9] = _tmp9_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[10] = _tmp10_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[11] = _tmp11_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[12] = _tmp12_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[13] = _tmp13_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[14] = _tmp14_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[15] = _tmp15_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[16] = _tmp16_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[17] = _tmp17_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[18] = _tmp18_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[19] = _tmp19_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[20] = _tmp20_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[21] = _tmp21_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[22] = _tmp22_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[23] = _tmp23_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[24] = _tmp24_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[25] = _tmp25_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[26] = _tmp26_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[27] = _tmp27_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[28] = _tmp28_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[29] = _tmp29_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[30] = _tmp30_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[31] = _tmp31_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[32] = _tmp32_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[33] = _tmp33_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[34] = _tmp34_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[35] = _tmp35_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[36] = _tmp36_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[37] = _tmp37_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[38] = _tmp38_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[39] = _tmp39_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[40] = _tmp40_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[41] = _tmp41_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[42] = _tmp42_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[43] = _tmp43_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_[44] = _tmp44_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_web_authentication_pane_locale_lookup_table = _tmp45_;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	publishing_facebook_web_authentication_pane_locale_lookup_table_length1 = 45;
-#line 6367 "FacebookPublishing.c"
-}
-
-
-static void publishing_facebook_web_authentication_pane_instance_init (PublishingFacebookWebAuthenticationPane * self) {
-}
-
-
-static void publishing_facebook_web_authentication_pane_finalize (GObject* obj) {
-	PublishingFacebookWebAuthenticationPane * self;
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_WEB_AUTHENTICATION_PANE, PublishingFacebookWebAuthenticationPane);
-#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	G_OBJECT_CLASS (publishing_facebook_web_authentication_pane_parent_class)->finalize (obj);
-#line 6381 "FacebookPublishing.c"
-}
-
-
-GType publishing_facebook_web_authentication_pane_get_type (void) {
-	static volatile gsize publishing_facebook_web_authentication_pane_type_id__volatile = 0;
-	if (g_once_init_enter (&publishing_facebook_web_authentication_pane_type_id__volatile)) {
-		static const GTypeInfo g_define_type_info = { sizeof (PublishingFacebookWebAuthenticationPaneClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_facebook_web_authentication_pane_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingFacebookWebAuthenticationPane), 0, (GInstanceInitFunc) publishing_facebook_web_authentication_pane_instance_init, NULL };
-		GType publishing_facebook_web_authentication_pane_type_id;
-		publishing_facebook_web_authentication_pane_type_id = g_type_register_static (SHOTWELL_PLUGINS_COMMON_TYPE_WEB_AUTHENTICATION_PANE, "PublishingFacebookWebAuthenticationPane", &g_define_type_info, 0);
-		g_once_init_leave (&publishing_facebook_web_authentication_pane_type_id__volatile, publishing_facebook_web_authentication_pane_type_id);
-	}
-	return publishing_facebook_web_authentication_pane_type_id__volatile;
-}
-
-
 static PublishingFacebookAlbum** _vala_array_dup2 (PublishingFacebookAlbum** self, int length) {
 	PublishingFacebookAlbum** result;
 	int i;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = g_new0 (PublishingFacebookAlbum*, length + 1);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 6404 "FacebookPublishing.c"
+#line 4384 "FacebookPublishing.c"
 		PublishingFacebookAlbum* _tmp0_ = NULL;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _publishing_facebook_album_ref0 (self[i]);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result[i] = _tmp0_;
-#line 6410 "FacebookPublishing.c"
+#line 4390 "FacebookPublishing.c"
 	}
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 6414 "FacebookPublishing.c"
+#line 4394 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_on_create_new_toggled_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_on_create_new_toggled ((PublishingFacebookPublishingOptionsPane*) self);
-#line 6421 "FacebookPublishing.c"
+#line 4401 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_on_use_existing_toggled_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_on_use_existing_toggled ((PublishingFacebookPublishingOptionsPane*) self);
-#line 6428 "FacebookPublishing.c"
+#line 4408 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_on_publish_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_on_publish_button_clicked ((PublishingFacebookPublishingOptionsPane*) self);
-#line 6435 "FacebookPublishing.c"
+#line 4415 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_on_logout_button_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_on_logout_button_clicked ((PublishingFacebookPublishingOptionsPane*) self);
-#line 6442 "FacebookPublishing.c"
+#line 4422 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_on_size_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_on_size_changed ((PublishingFacebookPublishingOptionsPane*) self);
-#line 6449 "FacebookPublishing.c"
+#line 4429 "FacebookPublishing.c"
 }
 
 
-PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_construct (GType object_type, const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata) {
+PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_construct (GType object_type, const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata, gboolean can_logout) {
 	PublishingFacebookPublishingOptionsPane * self = NULL;
 	GtkBuilder* _tmp0_ = NULL;
 	GtkBuilder* _tmp1_ = NULL;
@@ -6527,467 +4491,489 @@ PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_
 	GtkBuilder* _tmp35_ = NULL;
 	GObject* _tmp36_ = NULL;
 	GtkButton* _tmp37_ = NULL;
-	GtkBuilder* _tmp38_ = NULL;
-	GObject* _tmp39_ = NULL;
-	GtkEntry* _tmp40_ = NULL;
-	GtkBuilder* _tmp41_ = NULL;
-	GObject* _tmp42_ = NULL;
-	GtkComboBoxText* _tmp43_ = NULL;
-	GtkBuilder* _tmp44_ = NULL;
-	GObject* _tmp45_ = NULL;
-	GtkLabel* _tmp46_ = NULL;
-	GtkBuilder* _tmp47_ = NULL;
-	GObject* _tmp48_ = NULL;
-	GtkCheckButton* _tmp49_ = NULL;
-	GtkRadioButton* _tmp50_ = NULL;
-	GtkRadioButton* _tmp51_ = NULL;
+	gboolean _tmp38_ = FALSE;
+	GtkBuilder* _tmp43_ = NULL;
+	GObject* _tmp44_ = NULL;
+	GtkEntry* _tmp45_ = NULL;
+	GtkBuilder* _tmp46_ = NULL;
+	GObject* _tmp47_ = NULL;
+	GtkComboBoxText* _tmp48_ = NULL;
+	GtkBuilder* _tmp49_ = NULL;
+	GObject* _tmp50_ = NULL;
+	GtkLabel* _tmp51_ = NULL;
+	GtkBuilder* _tmp52_ = NULL;
+	GObject* _tmp53_ = NULL;
+	GtkCheckButton* _tmp54_ = NULL;
+	GtkRadioButton* _tmp55_ = NULL;
+	GtkRadioButton* _tmp56_ = NULL;
 	gchar* label_text = NULL;
-	const gchar* _tmp52_ = NULL;
-	gchar* _tmp53_ = NULL;
-	SpitPublishingPublisherMediaType _tmp54_ = 0;
-	GtkLabel* _tmp57_ = NULL;
-	const gchar* _tmp58_ = NULL;
-	GtkCheckButton* _tmp59_ = NULL;
-	gboolean _tmp60_ = FALSE;
-	GtkComboBoxText* _tmp61_ = NULL;
-	GtkButton* _tmp62_ = NULL;
-	GtkButton* _tmp63_ = NULL;
-	GtkComboBoxText* _tmp64_ = NULL;
-	PublishingFacebookFacebookPublisher* _tmp65_ = NULL;
-	gint _tmp66_ = 0;
-	GtkComboBoxText* _tmp67_ = NULL;
-	gboolean _tmp68_ = FALSE;
-	gboolean _tmp69_ = FALSE;
-	GtkRadioButton* _tmp70_ = NULL;
-	GtkComboBoxText* _tmp75_ = NULL;
-	SpitPublishingPublisherMediaType _tmp76_ = 0;
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	const gchar* _tmp57_ = NULL;
+	gchar* _tmp58_ = NULL;
+	SpitPublishingPublisherMediaType _tmp59_ = 0;
+	GtkLabel* _tmp62_ = NULL;
+	const gchar* _tmp63_ = NULL;
+	GtkCheckButton* _tmp64_ = NULL;
+	gboolean _tmp65_ = FALSE;
+	GtkComboBoxText* _tmp66_ = NULL;
+	GtkButton* _tmp67_ = NULL;
+	GtkButton* _tmp68_ = NULL;
+	GtkComboBoxText* _tmp69_ = NULL;
+	PublishingFacebookFacebookPublisher* _tmp70_ = NULL;
+	gint _tmp71_ = 0;
+	GtkComboBoxText* _tmp72_ = NULL;
+	gboolean _tmp73_ = FALSE;
+	gboolean _tmp74_ = FALSE;
+	GtkRadioButton* _tmp75_ = NULL;
+	GtkComboBoxText* _tmp80_ = NULL;
+	SpitPublishingPublisherMediaType _tmp81_ = 0;
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (username != NULL, NULL);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_FACEBOOK_PUBLISHER (publisher), NULL);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookPublishingOptionsPane*) g_object_new (object_type, NULL);
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = builder;
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 1006 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->builder = _tmp1_;
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = builder;
-#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp2_ != NULL, "builder != null");
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = builder;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = gtk_builder_get_objects (_tmp3_);
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = g_slist_length (_tmp5_);
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp6_ > ((guint) 0), "builder.get_objects().length() > 0");
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_slist_free0 (_tmp5_);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = albums;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7__length1 = albums_length1;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = (_tmp7_ != NULL) ? _vala_array_dup2 (_tmp7_, _tmp7__length1) : ((gpointer) _tmp7_);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8__length1 = _tmp7__length1;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums = _tmp8_;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums_length1 = _tmp8__length1;
-#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->_albums_size_ = self->priv->albums_length1;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = publishing_facebook_publishing_options_pane_create_privacy_descriptions (self, &_tmp9_);
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->privacy_descriptions = (_vala_array_free (self->priv->privacy_descriptions, self->priv->privacy_descriptions_length1, (GDestroyNotify) publishing_facebook_publishing_options_pane_privacy_description_unref), NULL);
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->privacy_descriptions = _tmp10_;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->privacy_descriptions_length1 = _tmp9_;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->_privacy_descriptions_size_ = self->priv->privacy_descriptions_length1;
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = publishing_facebook_publishing_options_pane_create_resolution_list (self, &_tmp11_);
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->possible_resolutions = (g_free (self->priv->possible_resolutions), NULL);
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->possible_resolutions = _tmp12_;
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->possible_resolutions_length1 = _tmp11_;
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->_possible_resolutions_size_ = self->priv->possible_resolutions_length1;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = publisher;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = _g_object_ref0 (_tmp13_);
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publisher = _tmp14_;
-#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp15_ = media_type;
-#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->media_type = _tmp15_;
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp16_ = builder;
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp17_ = gtk_builder_get_object (_tmp16_, "facebook_pane_box");
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_box_get_type (), GtkBox));
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->pane_widget = _tmp18_;
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp19_ = self->priv->pane_widget;
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_container_get_type (), GtkContainer), (guint) 16);
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp20_ = self->priv->builder;
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = gtk_builder_get_object (_tmp20_, "use_existing_radio");
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_radio_button_get_type (), GtkRadioButton));
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->use_existing_radio);
-#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->use_existing_radio = _tmp22_;
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = self->priv->builder;
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp24_ = gtk_builder_get_object (_tmp23_, "create_new_radio");
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp25_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_radio_button_get_type (), GtkRadioButton));
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->create_new_radio);
-#line 1023 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->create_new_radio = _tmp25_;
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp26_ = self->priv->builder;
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp27_ = gtk_builder_get_object (_tmp26_, "existing_albums_combo");
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp28_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->existing_albums_combo);
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->existing_albums_combo = _tmp28_;
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp29_ = self->priv->builder;
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp30_ = gtk_builder_get_object (_tmp29_, "visibility_combo");
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp31_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_combo);
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->visibility_combo = _tmp31_;
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp32_ = self->priv->builder;
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp33_ = gtk_builder_get_object (_tmp32_, "publish_button");
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp34_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, gtk_button_get_type (), GtkButton));
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publish_button);
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publish_button = _tmp34_;
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp35_ = self->priv->builder;
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp36_ = gtk_builder_get_object (_tmp35_, "logout_button");
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp37_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, gtk_button_get_type (), GtkButton));
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 768 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->logout_button = _tmp37_;
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp38_ = self->priv->builder;
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp39_ = gtk_builder_get_object (_tmp38_, "new_album_entry");
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp40_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_entry_get_type (), GtkEntry));
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp38_ = can_logout;
+#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if (!_tmp38_) {
+#line 4668 "FacebookPublishing.c"
+		GtkButton* _tmp39_ = NULL;
+		GtkContainer* _tmp40_ = NULL;
+		GtkContainer* _tmp41_ = NULL;
+		GtkButton* _tmp42_ = NULL;
+#line 770 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp39_ = self->priv->logout_button;
+#line 770 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp40_ = gtk_widget_get_parent (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_widget_get_type (), GtkWidget));
+#line 770 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp41_ = _tmp40_;
+#line 770 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp42_ = self->priv->logout_button;
+#line 770 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_container_remove (_tmp41_, G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_widget_get_type (), GtkWidget));
+#line 4683 "FacebookPublishing.c"
+	}
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp43_ = self->priv->builder;
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp44_ = gtk_builder_get_object (_tmp43_, "new_album_entry");
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp45_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, gtk_entry_get_type (), GtkEntry));
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->new_album_entry);
-#line 1028 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->new_album_entry = _tmp40_;
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp41_ = self->priv->builder;
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp42_ = gtk_builder_get_object (_tmp41_, "resolution_combo");
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp43_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->new_album_entry = _tmp45_;
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp46_ = self->priv->builder;
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp47_ = gtk_builder_get_object (_tmp46_, "resolution_combo");
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp48_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, gtk_combo_box_text_get_type (), GtkComboBoxText));
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->resolution_combo);
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->resolution_combo = _tmp43_;
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp44_ = self->priv->builder;
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp45_ = gtk_builder_get_object (_tmp44_, "how_to_label");
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp46_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp45_, gtk_label_get_type (), GtkLabel));
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->resolution_combo = _tmp48_;
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp49_ = self->priv->builder;
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp50_ = gtk_builder_get_object (_tmp49_, "how_to_label");
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp51_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_label_get_type (), GtkLabel));
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->how_to_label);
-#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->how_to_label = _tmp46_;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp47_ = self->priv->builder;
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp48_ = gtk_builder_get_object (_tmp47_, "strip_metadata_check");
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp49_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_check_button_get_type (), GtkCheckButton));
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->how_to_label = _tmp51_;
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp52_ = self->priv->builder;
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp53_ = gtk_builder_get_object (_tmp52_, "strip_metadata_check");
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp54_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_check_button_get_type (), GtkCheckButton));
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->strip_metadata_check);
-#line 1031 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	self->priv->strip_metadata_check = _tmp49_;
-#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp50_ = self->priv->create_new_radio;
-#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_create_new_toggled_gtk_button_clicked, self, 0);
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp51_ = self->priv->use_existing_radio;
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_use_existing_toggled_gtk_button_clicked, self, 0);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp52_ = username;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp53_ = g_strdup_printf (PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_HEADER_LABEL_TEXT, _tmp52_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	label_text = _tmp53_;
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp54_ = media_type;
-#line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if ((_tmp54_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0) {
-#line 6741 "FacebookPublishing.c"
-		const gchar* _tmp55_ = NULL;
-		gchar* _tmp56_ = NULL;
-#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp55_ = label_text;
-#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp56_ = g_strconcat (_tmp55_, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_PHOTOS_LABEL_TEXT, NULL);
-#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	self->priv->strip_metadata_check = _tmp54_;
+#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp55_ = self->priv->create_new_radio;
+#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_create_new_toggled_gtk_button_clicked, self, 0);
+#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp56_ = self->priv->use_existing_radio;
+#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, gtk_button_get_type (), GtkButton), "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_use_existing_toggled_gtk_button_clicked, self, 0);
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp57_ = username;
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp58_ = g_strdup_printf (PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_HEADER_LABEL_TEXT, _tmp57_);
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	label_text = _tmp58_;
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp59_ = media_type;
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if ((_tmp59_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0) {
+#line 4743 "FacebookPublishing.c"
+		const gchar* _tmp60_ = NULL;
+		gchar* _tmp61_ = NULL;
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp60_ = label_text;
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp61_ = g_strconcat (_tmp60_, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_PHOTOS_LABEL_TEXT, NULL);
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (label_text);
-#line 1038 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		label_text = _tmp56_;
-#line 6752 "FacebookPublishing.c"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		label_text = _tmp61_;
+#line 4754 "FacebookPublishing.c"
 	}
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp57_ = self->priv->how_to_label;
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp58_ = label_text;
-#line 1039 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	gtk_label_set_label (_tmp57_, _tmp58_);
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp59_ = self->priv->strip_metadata_check;
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp60_ = strip_metadata;
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp59_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp60_);
-#line 1042 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp62_ = self->priv->how_to_label;
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp63_ = label_text;
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	gtk_label_set_label (_tmp62_, _tmp63_);
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp64_ = self->priv->strip_metadata_check;
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp65_ = strip_metadata;
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp65_);
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_setup_visibility_combo (self);
-#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp61_ = self->priv->visibility_combo;
-#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp62_ = self->priv->publish_button;
-#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp62_, "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_publish_button_clicked_gtk_button_clicked, self, 0);
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp63_ = self->priv->logout_button;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (_tmp63_, "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_logout_button_clicked_gtk_button_clicked, self, 0);
-#line 1048 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp66_ = self->priv->visibility_combo;
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp66_, gtk_combo_box_get_type (), GtkComboBox), 0);
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp67_ = self->priv->publish_button;
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp67_, "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_publish_button_clicked_gtk_button_clicked, self, 0);
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp68_ = self->priv->logout_button;
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (_tmp68_, "clicked", (GCallback) _publishing_facebook_publishing_options_pane_on_logout_button_clicked_gtk_button_clicked, self, 0);
+#line 792 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_setup_resolution_combo (self);
-#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp64_ = self->priv->resolution_combo;
-#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp65_ = publisher;
-#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp66_ = publishing_facebook_facebook_publisher_get_persistent_default_size (_tmp65_);
-#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp64_, gtk_combo_box_get_type (), GtkComboBox), _tmp66_);
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp67_ = self->priv->resolution_combo;
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp67_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_facebook_publishing_options_pane_on_size_changed_gtk_combo_box_changed, self, 0);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp70_ = self->priv->create_new_radio;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp70_ != NULL) {
-#line 6798 "FacebookPublishing.c"
-		GtkRadioButton* _tmp71_ = NULL;
-		gboolean _tmp72_ = FALSE;
-		gboolean _tmp73_ = FALSE;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp71_ = self->priv->create_new_radio;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp72_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp73_ = _tmp72_;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp69_ = _tmp73_;
-#line 6810 "FacebookPublishing.c"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp69_ = self->priv->resolution_combo;
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp70_ = publisher;
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp71_ = publishing_facebook_facebook_publisher_get_persistent_default_size (_tmp70_);
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, gtk_combo_box_get_type (), GtkComboBox), _tmp71_);
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp72_ = self->priv->resolution_combo;
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_facebook_publishing_options_pane_on_size_changed_gtk_combo_box_changed, self, 0);
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp75_ = self->priv->create_new_radio;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if (_tmp75_ != NULL) {
+#line 4800 "FacebookPublishing.c"
+		GtkRadioButton* _tmp76_ = NULL;
+		gboolean _tmp77_ = FALSE;
+		gboolean _tmp78_ = FALSE;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp76_ = self->priv->create_new_radio;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp77_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_toggle_button_get_type (), GtkToggleButton));
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp78_ = _tmp77_;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp74_ = _tmp78_;
+#line 4812 "FacebookPublishing.c"
 	} else {
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp69_ = FALSE;
-#line 6814 "FacebookPublishing.c"
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp74_ = FALSE;
+#line 4816 "FacebookPublishing.c"
 	}
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp69_) {
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp68_ = TRUE;
-#line 6820 "FacebookPublishing.c"
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if (_tmp74_) {
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp73_ = TRUE;
+#line 4822 "FacebookPublishing.c"
 	} else {
-		SpitPublishingPublisherMediaType _tmp74_ = 0;
-#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp74_ = media_type;
-#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp68_ = (_tmp74_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) != 0;
-#line 6827 "FacebookPublishing.c"
+		SpitPublishingPublisherMediaType _tmp79_ = 0;
+#line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp79_ = media_type;
+#line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp73_ = (_tmp79_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) != 0;
+#line 4829 "FacebookPublishing.c"
 	}
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp75_ = self->priv->visibility_combo;
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, gtk_widget_get_type (), GtkWidget), _tmp68_);
-#line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp76_ = media_type;
-#line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	if (_tmp76_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 6837 "FacebookPublishing.c"
-		GtkCheckButton* _tmp77_ = NULL;
-		GtkCheckButton* _tmp78_ = NULL;
-		GtkComboBoxText* _tmp79_ = NULL;
-		GtkRadioButton* _tmp80_ = NULL;
-		GtkRadioButton* _tmp81_ = NULL;
-		GtkComboBoxText* _tmp82_ = NULL;
-		GtkEntry* _tmp83_ = NULL;
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp77_ = self->priv->strip_metadata_check;
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_toggle_button_get_type (), GtkToggleButton), FALSE);
-#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp78_ = self->priv->strip_metadata_check;
-#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1063 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp79_ = self->priv->resolution_combo;
-#line 1063 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp79_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp80_ = self->priv->use_existing_radio;
-#line 1064 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp81_ = self->priv->create_new_radio;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp81_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp82_ = self->priv->existing_albums_combo;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-		_tmp83_ = self->priv->new_album_entry;
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 799 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp80_ = self->priv->visibility_combo;
+#line 799 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp80_, gtk_widget_get_type (), GtkWidget), _tmp73_);
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	_tmp81_ = media_type;
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	if (_tmp81_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
+#line 4839 "FacebookPublishing.c"
+		GtkCheckButton* _tmp82_ = NULL;
+		GtkCheckButton* _tmp83_ = NULL;
+		GtkComboBoxText* _tmp84_ = NULL;
+		GtkRadioButton* _tmp85_ = NULL;
+		GtkRadioButton* _tmp86_ = NULL;
+		GtkComboBoxText* _tmp87_ = NULL;
+		GtkEntry* _tmp88_ = NULL;
+#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp82_ = self->priv->strip_metadata_check;
+#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_toggle_button_get_type (), GtkToggleButton), FALSE);
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp83_ = self->priv->strip_metadata_check;
+#line 806 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 6873 "FacebookPublishing.c"
+#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp84_ = self->priv->resolution_combo;
+#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp85_ = self->priv->use_existing_radio;
+#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp85_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp86_ = self->priv->create_new_radio;
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp86_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp87_ = self->priv->existing_albums_combo;
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		_tmp88_ = self->priv->new_album_entry;
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp88_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 4875 "FacebookPublishing.c"
 	}
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (label_text);
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 6879 "FacebookPublishing.c"
+#line 4881 "FacebookPublishing.c"
 }
 
 
-PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_new (const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata) {
-#line 1002 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return publishing_facebook_publishing_options_pane_construct (PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, username, albums, albums_length1, media_type, publisher, builder, strip_metadata);
-#line 6886 "FacebookPublishing.c"
+PublishingFacebookPublishingOptionsPane* publishing_facebook_publishing_options_pane_new (const gchar* username, PublishingFacebookAlbum** albums, int albums_length1, SpitPublishingPublisherMediaType media_type, PublishingFacebookFacebookPublisher* publisher, GtkBuilder* builder, gboolean strip_metadata, gboolean can_logout) {
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	return publishing_facebook_publishing_options_pane_construct (PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, username, albums, albums_length1, media_type, publisher, builder, strip_metadata, can_logout);
+#line 4888 "FacebookPublishing.c"
 }
 
 
 static gboolean publishing_facebook_publishing_options_pane_publishing_photos (PublishingFacebookPublishingOptionsPane* self) {
 	gboolean result = FALSE;
 	SpitPublishingPublisherMediaType _tmp0_ = 0;
-#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 815 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self), FALSE);
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 816 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->media_type;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 816 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = (_tmp0_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 816 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 6901 "FacebookPublishing.c"
+#line 4903 "FacebookPublishing.c"
 }
 
 
 static gpointer _publishing_facebook_publishing_options_pane_privacy_description_ref0 (gpointer self) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? publishing_facebook_publishing_options_pane_privacy_description_ref (self) : NULL;
-#line 6908 "FacebookPublishing.c"
+#line 4910 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_setup_visibility_combo (PublishingFacebookPublishingOptionsPane* self) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription** _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->privacy_descriptions;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->priv->privacy_descriptions_length1;
-#line 6921 "FacebookPublishing.c"
+#line 4923 "FacebookPublishing.c"
 	{
 		PublishingFacebookPublishingOptionsPanePrivacyDescription** p_collection = NULL;
 		gint p_collection_length1 = 0;
 		gint _p_collection_size_ = 0;
 		gint p_it = 0;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		p_collection = _tmp0_;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		p_collection_length1 = _tmp0__length1;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		for (p_it = 0; p_it < _tmp0__length1; p_it = p_it + 1) {
-#line 6933 "FacebookPublishing.c"
+#line 4935 "FacebookPublishing.c"
 			PublishingFacebookPublishingOptionsPanePrivacyDescription* _tmp1_ = NULL;
 			PublishingFacebookPublishingOptionsPanePrivacyDescription* p = NULL;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp1_ = _publishing_facebook_publishing_options_pane_privacy_description_ref0 (p_collection[p_it]);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			p = _tmp1_;
-#line 6940 "FacebookPublishing.c"
+#line 4942 "FacebookPublishing.c"
 			{
 				GtkComboBoxText* _tmp2_ = NULL;
 				PublishingFacebookPublishingOptionsPanePrivacyDescription* _tmp3_ = NULL;
 				const gchar* _tmp4_ = NULL;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp2_ = self->priv->visibility_combo;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp3_ = p;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp4_ = _tmp3_->description;
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_combo_box_text_append_text (_tmp2_, _tmp4_);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_publishing_facebook_publishing_options_pane_privacy_description_unref0 (p);
-#line 6955 "FacebookPublishing.c"
+#line 4957 "FacebookPublishing.c"
 			}
 		}
 	}
@@ -6997,47 +4983,47 @@ static void publishing_facebook_publishing_options_pane_setup_visibility_combo (
 static void publishing_facebook_publishing_options_pane_setup_resolution_combo (PublishingFacebookPublishingOptionsPane* self) {
 	PublishingFacebookResolution* _tmp0_ = NULL;
 	gint _tmp0__length1 = 0;
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->possible_resolutions;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->priv->possible_resolutions_length1;
-#line 6971 "FacebookPublishing.c"
+#line 4973 "FacebookPublishing.c"
 	{
 		PublishingFacebookResolution* res_collection = NULL;
 		gint res_collection_length1 = 0;
 		gint _res_collection_size_ = 0;
 		gint res_it = 0;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		res_collection = _tmp0_;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		res_collection_length1 = _tmp0__length1;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		for (res_it = 0; res_it < _tmp0__length1; res_it = res_it + 1) {
-#line 6983 "FacebookPublishing.c"
+#line 4985 "FacebookPublishing.c"
 			PublishingFacebookResolution res = 0;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 825 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			res = res_collection[res_it];
-#line 6987 "FacebookPublishing.c"
+#line 4989 "FacebookPublishing.c"
 			{
 				GtkComboBoxText* _tmp1_ = NULL;
 				PublishingFacebookResolution _tmp2_ = 0;
 				gchar* _tmp3_ = NULL;
 				gchar* _tmp4_ = NULL;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp1_ = self->priv->resolution_combo;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp2_ = res;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp3_ = publishing_facebook_resolution_get_name (_tmp2_);
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp4_ = _tmp3_;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_combo_box_text_append_text (_tmp1_, _tmp4_);
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 826 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_free0 (_tmp4_);
-#line 7005 "FacebookPublishing.c"
+#line 5007 "FacebookPublishing.c"
 			}
 		}
 	}
@@ -7048,41 +5034,41 @@ static void publishing_facebook_publishing_options_pane_on_use_existing_toggled 
 	GtkRadioButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->use_existing_radio;
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp2_) {
-#line 7026 "FacebookPublishing.c"
+#line 5028 "FacebookPublishing.c"
 		GtkComboBoxText* _tmp3_ = NULL;
 		GtkEntry* _tmp4_ = NULL;
 		GtkComboBoxText* _tmp5_ = NULL;
 		SpitPublishingPublisherMediaType _tmp6_ = 0;
 		GtkComboBoxText* _tmp7_ = NULL;
-#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 831 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = self->priv->existing_albums_combo;
-#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 831 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = self->priv->new_album_entry;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = self->priv->visibility_combo;
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = self->priv->media_type;
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), (_tmp6_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) != 0);
-#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = self->priv->existing_albums_combo;
-#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 7050 "FacebookPublishing.c"
+#line 5052 "FacebookPublishing.c"
 	}
 }
 
@@ -7091,38 +5077,38 @@ static void publishing_facebook_publishing_options_pane_on_create_new_toggled (P
 	GtkRadioButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 843 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 844 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->create_new_radio;
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 844 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 844 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 844 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp2_) {
-#line 7069 "FacebookPublishing.c"
+#line 5071 "FacebookPublishing.c"
 		GtkComboBoxText* _tmp3_ = NULL;
 		GtkEntry* _tmp4_ = NULL;
 		GtkEntry* _tmp5_ = NULL;
 		GtkComboBoxText* _tmp6_ = NULL;
-#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = self->priv->existing_albums_combo;
-#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = self->priv->new_album_entry;
-#line 1102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 1103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = self->priv->new_album_entry;
-#line 1103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget));
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = self->priv->visibility_combo;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 7090 "FacebookPublishing.c"
+#line 5092 "FacebookPublishing.c"
 	}
 }
 
@@ -7131,26 +5117,26 @@ static void publishing_facebook_publishing_options_pane_on_size_changed (Publish
 	PublishingFacebookFacebookPublisher* _tmp0_ = NULL;
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 1111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publisher;
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->resolution_combo;
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_facebook_publisher_set_persistent_default_size (_tmp0_, _tmp2_);
-#line 7109 "FacebookPublishing.c"
+#line 5111 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_on_logout_button_clicked (PublishingFacebookPublishingOptionsPane* self) {
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 7118 "FacebookPublishing.c"
+#line 5120 "FacebookPublishing.c"
 }
 
 
@@ -7171,29 +5157,29 @@ static void publishing_facebook_publishing_options_pane_on_publish_button_clicke
 	PublishingFacebookResolution _tmp21_ = 0;
 	GtkCheckButton* _tmp22_ = NULL;
 	gboolean _tmp23_ = FALSE;
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->privacy_descriptions;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->priv->privacy_descriptions_length1;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->visibility_combo;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _tmp0_[_tmp2_];
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = _tmp3_->privacy_setting;
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = g_strdup (_tmp4_);
-#line 1121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	privacy_setting = _tmp5_;
-#line 1125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 869 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_facebook_publishing_options_pane_publishing_photos (self);
-#line 1125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 869 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp6_) {
-#line 7161 "FacebookPublishing.c"
+#line 5163 "FacebookPublishing.c"
 		PublishingFacebookResolution* _tmp7_ = NULL;
 		gint _tmp7__length1 = 0;
 		GtkComboBoxText* _tmp8_ = NULL;
@@ -7202,131 +5188,131 @@ static void publishing_facebook_publishing_options_pane_on_publish_button_clicke
 		GtkRadioButton* _tmp11_ = NULL;
 		gboolean _tmp12_ = FALSE;
 		gboolean _tmp13_ = FALSE;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = self->priv->possible_resolutions;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7__length1 = self->priv->possible_resolutions_length1;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = self->priv->resolution_combo;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = _tmp7_[_tmp9_];
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		resolution_setting = _tmp10_;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 871 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = self->priv->use_existing_radio;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 871 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 871 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 871 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (_tmp13_) {
-#line 7190 "FacebookPublishing.c"
+#line 5192 "FacebookPublishing.c"
 			GtkComboBoxText* _tmp14_ = NULL;
 			gchar* _tmp15_ = NULL;
-#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp14_ = self->priv->existing_albums_combo;
-#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp15_ = gtk_combo_box_text_get_active_text (_tmp14_);
-#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (album_name);
-#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			album_name = _tmp15_;
-#line 7201 "FacebookPublishing.c"
+#line 5203 "FacebookPublishing.c"
 		} else {
 			GtkEntry* _tmp16_ = NULL;
 			const gchar* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp16_ = self->priv->new_album_entry;
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp17_ = gtk_entry_get_text (_tmp16_);
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp18_ = g_strdup (_tmp17_);
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (album_name);
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			album_name = _tmp18_;
-#line 7216 "FacebookPublishing.c"
+#line 5218 "FacebookPublishing.c"
 		}
 	} else {
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		resolution_setting = PUBLISHING_FACEBOOK_RESOLUTION_STANDARD;
-#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (album_name);
-#line 1134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		album_name = NULL;
-#line 7225 "FacebookPublishing.c"
+#line 5227 "FacebookPublishing.c"
 	}
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp19_ = album_name;
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp20_ = privacy_setting;
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = resolution_setting;
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = self->priv->strip_metadata_check;
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "publish", _tmp19_, _tmp20_, _tmp21_, _tmp23_);
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (privacy_setting);
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (album_name);
-#line 7243 "FacebookPublishing.c"
+#line 5245 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add7 (PublishingFacebookPublishingOptionsPanePrivacyDescription*** array, int* length, int* size, PublishingFacebookPublishingOptionsPanePrivacyDescription* value) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookPublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 7254 "FacebookPublishing.c"
+#line 5256 "FacebookPublishing.c"
 	}
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7260 "FacebookPublishing.c"
+#line 5262 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add8 (PublishingFacebookPublishingOptionsPanePrivacyDescription*** array, int* length, int* size, PublishingFacebookPublishingOptionsPanePrivacyDescription* value) {
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookPublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 7271 "FacebookPublishing.c"
+#line 5273 "FacebookPublishing.c"
 	}
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7277 "FacebookPublishing.c"
+#line 5279 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add9 (PublishingFacebookPublishingOptionsPanePrivacyDescription*** array, int* length, int* size, PublishingFacebookPublishingOptionsPanePrivacyDescription* value) {
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookPublishingOptionsPanePrivacyDescription*, *array, (*size) + 1);
-#line 7288 "FacebookPublishing.c"
+#line 5290 "FacebookPublishing.c"
 	}
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7294 "FacebookPublishing.c"
+#line 5296 "FacebookPublishing.c"
 }
 
 
@@ -7350,91 +5336,91 @@ static PublishingFacebookPublishingOptionsPanePrivacyDescription** publishing_fa
 	PublishingFacebookPublishingOptionsPanePrivacyDescription* _tmp9_ = NULL;
 	PublishingFacebookPublishingOptionsPanePrivacyDescription** _tmp10_ = NULL;
 	gint _tmp10__length1 = 0;
-#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 884 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self), NULL);
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = g_new0 (PublishingFacebookPublishingOptionsPanePrivacyDescription*, 0 + 1);
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_result_ = _tmp0_;
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_result__length1 = 0;
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__result__size_ = _result__length1;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _result_;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = _result__length1;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _ ("Just me");
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = publishing_facebook_publishing_options_pane_privacy_description_new (_tmp2_, "{ 'value' : 'SELF' }");
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add7 (&_result_, &_result__length1, &__result__size_, _tmp3_);
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = _result_;
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4__length1 = _result__length1;
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _ ("Friends");
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_facebook_publishing_options_pane_privacy_description_new (_tmp5_, "{ 'value' : 'ALL_FRIENDS' }");
-#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 888 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add8 (&_result_, &_result__length1, &__result__size_, _tmp6_);
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _result_;
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7__length1 = _result__length1;
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = _ ("Everyone");
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = publishing_facebook_publishing_options_pane_privacy_description_new (_tmp8_, "{ 'value' : 'EVERYONE' }");
-#line 1145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add9 (&_result_, &_result__length1, &__result__size_, _tmp9_);
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _result_;
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10__length1 = _result__length1;
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (result_length1) {
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*result_length1 = _tmp10__length1;
-#line 7366 "FacebookPublishing.c"
+#line 5368 "FacebookPublishing.c"
 	}
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp10_;
-#line 1147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 7372 "FacebookPublishing.c"
+#line 5374 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add10 (PublishingFacebookResolution** array, int* length, int* size, PublishingFacebookResolution value) {
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookResolution, *array, *size);
-#line 7383 "FacebookPublishing.c"
+#line 5385 "FacebookPublishing.c"
 	}
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 7387 "FacebookPublishing.c"
+#line 5389 "FacebookPublishing.c"
 }
 
 
 static void _vala_array_add11 (PublishingFacebookResolution** array, int* length, int* size, PublishingFacebookResolution value) {
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*array = g_renew (PublishingFacebookResolution, *array, *size);
-#line 7398 "FacebookPublishing.c"
+#line 5400 "FacebookPublishing.c"
 	}
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 7402 "FacebookPublishing.c"
+#line 5404 "FacebookPublishing.c"
 }
 
 
@@ -7450,120 +5436,120 @@ static PublishingFacebookResolution* publishing_facebook_publishing_options_pane
 	gint _tmp2__length1 = 0;
 	PublishingFacebookResolution* _tmp3_ = NULL;
 	gint _tmp3__length1 = 0;
-#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 894 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self), NULL);
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = g_new0 (PublishingFacebookResolution, 0);
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_result_ = _tmp0_;
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_result__length1 = 0;
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__result__size_ = _result__length1;
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _result_;
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = _result__length1;
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add10 (&_result_, &_result__length1, &__result__size_, PUBLISHING_FACEBOOK_RESOLUTION_STANDARD);
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _result_;
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2__length1 = _result__length1;
-#line 1154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_array_add11 (&_result_, &_result__length1, &__result__size_, PUBLISHING_FACEBOOK_RESOLUTION_HIGH);
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _result_;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3__length1 = _result__length1;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (result_length1) {
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*result_length1 = _tmp3__length1;
-#line 7448 "FacebookPublishing.c"
+#line 5450 "FacebookPublishing.c"
 	}
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp3_;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 7454 "FacebookPublishing.c"
+#line 5456 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_publishing_options_pane_installed (PublishingFacebookPublishingOptionsPane* self) {
 	gboolean _tmp0_ = FALSE;
 	GtkButton* _tmp24_ = NULL;
-#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = publishing_facebook_publishing_options_pane_publishing_photos (self);
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_) {
-#line 7467 "FacebookPublishing.c"
+#line 5469 "FacebookPublishing.c"
 		PublishingFacebookAlbum** _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
-#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = self->priv->albums;
-#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1__length1 = self->priv->albums_length1;
-#line 1161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 905 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (_tmp1__length1 == 0) {
-#line 7476 "FacebookPublishing.c"
+#line 5478 "FacebookPublishing.c"
 			GtkRadioButton* _tmp2_ = NULL;
 			GtkEntry* _tmp3_ = NULL;
 			GtkComboBoxText* _tmp4_ = NULL;
 			GtkRadioButton* _tmp5_ = NULL;
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp2_ = self->priv->create_new_radio;
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
-#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp3_ = self->priv->new_album_entry;
-#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			gtk_entry_set_text (_tmp3_, PUBLISHING_FACEBOOK_DEFAULT_ALBUM_NAME);
-#line 1164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp4_ = self->priv->existing_albums_combo;
-#line 1164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp5_ = self->priv->use_existing_radio;
-#line 1165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 7497 "FacebookPublishing.c"
+#line 5499 "FacebookPublishing.c"
 		} else {
 			gint default_album_seq_num = 0;
 			gint ticker = 0;
 			PublishingFacebookAlbum** _tmp6_ = NULL;
 			gint _tmp6__length1 = 0;
 			gint _tmp15_ = 0;
-#line 1167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			default_album_seq_num = -1;
-#line 1168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			ticker = 0;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp6_ = self->priv->albums;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp6__length1 = self->priv->albums_length1;
-#line 7512 "FacebookPublishing.c"
+#line 5514 "FacebookPublishing.c"
 			{
 				PublishingFacebookAlbum** album_collection = NULL;
 				gint album_collection_length1 = 0;
 				gint _album_collection_size_ = 0;
 				gint album_it = 0;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				album_collection = _tmp6_;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				album_collection_length1 = _tmp6__length1;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				for (album_it = 0; album_it < _tmp6__length1; album_it = album_it + 1) {
-#line 7524 "FacebookPublishing.c"
+#line 5526 "FacebookPublishing.c"
 					PublishingFacebookAlbum* _tmp7_ = NULL;
 					PublishingFacebookAlbum* album = NULL;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					_tmp7_ = _publishing_facebook_album_ref0 (album_collection[album_it]);
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 					album = _tmp7_;
-#line 7531 "FacebookPublishing.c"
+#line 5533 "FacebookPublishing.c"
 					{
 						GtkComboBoxText* _tmp8_ = NULL;
 						PublishingFacebookAlbum* _tmp9_ = NULL;
@@ -7571,101 +5557,101 @@ void publishing_facebook_publishing_options_pane_installed (PublishingFacebookPu
 						PublishingFacebookAlbum* _tmp11_ = NULL;
 						const gchar* _tmp12_ = NULL;
 						gint _tmp14_ = 0;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp8_ = self->priv->existing_albums_combo;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp9_ = album;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp10_ = _tmp9_->name;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						gtk_combo_box_text_append_text (_tmp8_, _tmp10_);
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp11_ = album;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp12_ = _tmp11_->name;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						if (g_strcmp0 (_tmp12_, PUBLISHING_FACEBOOK_DEFAULT_ALBUM_NAME) == 0) {
-#line 7553 "FacebookPublishing.c"
+#line 5555 "FacebookPublishing.c"
 							gint _tmp13_ = 0;
-#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 							_tmp13_ = ticker;
-#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 							default_album_seq_num = _tmp13_;
-#line 7559 "FacebookPublishing.c"
+#line 5561 "FacebookPublishing.c"
 						}
-#line 1173 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_tmp14_ = ticker;
-#line 1173 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 917 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						ticker = _tmp14_ + 1;
-#line 1169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 913 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 						_publishing_facebook_album_unref0 (album);
-#line 7567 "FacebookPublishing.c"
+#line 5569 "FacebookPublishing.c"
 					}
 				}
 			}
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp15_ = default_album_seq_num;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			if (_tmp15_ != -1) {
-#line 7575 "FacebookPublishing.c"
+#line 5577 "FacebookPublishing.c"
 				GtkComboBoxText* _tmp16_ = NULL;
 				gint _tmp17_ = 0;
 				GtkRadioButton* _tmp18_ = NULL;
 				GtkEntry* _tmp19_ = NULL;
-#line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp16_ = self->priv->existing_albums_combo;
-#line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp17_ = default_album_seq_num;
-#line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, gtk_combo_box_get_type (), GtkComboBox), _tmp17_);
-#line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp18_ = self->priv->use_existing_radio;
-#line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
-#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp19_ = self->priv->new_album_entry;
-#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 7594 "FacebookPublishing.c"
+#line 5596 "FacebookPublishing.c"
 			} else {
 				GtkRadioButton* _tmp20_ = NULL;
 				GtkComboBoxText* _tmp21_ = NULL;
 				GtkComboBoxText* _tmp22_ = NULL;
 				GtkEntry* _tmp23_ = NULL;
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp20_ = self->priv->create_new_radio;
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
-#line 1182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp21_ = self->priv->existing_albums_combo;
-#line 1182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, gtk_combo_box_get_type (), GtkComboBox), 0);
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 927 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp22_ = self->priv->existing_albums_combo;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 927 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp23_ = self->priv->new_album_entry;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 928 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				gtk_entry_set_text (_tmp23_, PUBLISHING_FACEBOOK_DEFAULT_ALBUM_NAME);
-#line 7616 "FacebookPublishing.c"
+#line 5618 "FacebookPublishing.c"
 			}
 		}
 	}
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp24_ = self->priv->publish_button;
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	gtk_widget_grab_focus (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, gtk_widget_get_type (), GtkWidget));
-#line 7624 "FacebookPublishing.c"
+#line 5626 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_notify_logout (PublishingFacebookPublishingOptionsPane* self) {
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 937 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 7633 "FacebookPublishing.c"
+#line 5635 "FacebookPublishing.c"
 }
 
 
@@ -7675,23 +5661,23 @@ static void publishing_facebook_publishing_options_pane_notify_publish (Publishi
 	PublishingFacebookResolution _tmp2_ = 0;
 	GtkCheckButton* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (privacy_setting != NULL);
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = target_album;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = privacy_setting;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = target_resolution;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->strip_metadata_check;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "publish", _tmp0_, _tmp1_, _tmp2_, _tmp4_);
-#line 7659 "FacebookPublishing.c"
+#line 5661 "FacebookPublishing.c"
 }
 
 
@@ -7700,58 +5686,58 @@ static GtkWidget* publishing_facebook_publishing_options_pane_real_get_widget (S
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 1200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFacebookPublishingOptionsPane);
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp1_;
-#line 1201 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 945 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 7678 "FacebookPublishing.c"
+#line 5680 "FacebookPublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_facebook_publishing_options_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingFacebookPublishingOptionsPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 1204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFacebookPublishingOptionsPane);
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 7691 "FacebookPublishing.c"
+#line 5693 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_notify_logout_publishing_facebook_publishing_options_pane_logout (PublishingFacebookPublishingOptionsPane* _sender, gpointer self) {
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_notify_logout ((PublishingFacebookPublishingOptionsPane*) self);
-#line 7698 "FacebookPublishing.c"
+#line 5700 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_publishing_options_pane_notify_publish_publishing_facebook_publishing_options_pane_publish (PublishingFacebookPublishingOptionsPane* _sender, const gchar* target_album, const gchar* privacy_setting, PublishingFacebookResolution target_resolution, gboolean strip_metadata, gpointer self) {
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_notify_publish ((PublishingFacebookPublishingOptionsPane*) self, target_album, privacy_setting, target_resolution);
-#line 7705 "FacebookPublishing.c"
+#line 5707 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
 	PublishingFacebookPublishingOptionsPane * self;
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 952 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFacebookPublishingOptionsPane);
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (self, "logout", (GCallback) _publishing_facebook_publishing_options_pane_notify_logout_publishing_facebook_publishing_options_pane_logout, self, 0);
-#line 1210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect_object (self, "publish", (GCallback) _publishing_facebook_publishing_options_pane_notify_publish_publishing_facebook_publishing_options_pane_publish, self, 0);
-#line 1212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 956 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_installed (self);
-#line 7719 "FacebookPublishing.c"
+#line 5721 "FacebookPublishing.c"
 }
 
 
@@ -7759,17 +5745,17 @@ static void publishing_facebook_publishing_options_pane_real_on_pane_uninstalled
 	PublishingFacebookPublishingOptionsPane * self;
 	guint _tmp0_ = 0U;
 	guint _tmp1_ = 0U;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFacebookPublishingOptionsPane);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 960 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp0_, NULL, FALSE);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 960 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp0_, 0, NULL, (GCallback) _publishing_facebook_publishing_options_pane_notify_logout_publishing_facebook_publishing_options_pane_logout, self);
-#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 1217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_publishing_options_pane_notify_publish_publishing_facebook_publishing_options_pane_publish, self);
-#line 7737 "FacebookPublishing.c"
+#line 5739 "FacebookPublishing.c"
 }
 
 
@@ -7780,27 +5766,27 @@ static void g_cclosure_user_marshal_VOID__STRING_STRING_ENUM_BOOLEAN (GClosure *
 	register gpointer data1;
 	register gpointer data2;
 	cc = (GCClosure *) closure;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (n_param_values == 5);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_CCLOSURE_SWAP_DATA (closure)) {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data1 = closure->data;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 7756 "FacebookPublishing.c"
+#line 5758 "FacebookPublishing.c"
 	} else {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data1 = param_values->data[0].v_pointer;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data2 = closure->data;
-#line 7762 "FacebookPublishing.c"
+#line 5764 "FacebookPublishing.c"
 	}
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	callback = (GMarshalFunc_VOID__STRING_STRING_ENUM_BOOLEAN) (marshal_data ? marshal_data : cc->callback);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	callback (data1, g_value_get_string (param_values + 1), g_value_get_string (param_values + 2), g_value_get_enum (param_values + 3), g_value_get_boolean (param_values + 4), data2);
-#line 7768 "FacebookPublishing.c"
+#line 5770 "FacebookPublishing.c"
 }
 
 
@@ -7810,248 +5796,248 @@ static PublishingFacebookPublishingOptionsPanePrivacyDescription* publishing_fac
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (description != NULL, NULL);
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (privacy_setting != NULL, NULL);
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookPublishingOptionsPanePrivacyDescription*) g_type_create_instance (object_type);
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = description;
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->description);
-#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->description = _tmp1_;
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = privacy_setting;
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->privacy_setting);
-#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->privacy_setting = _tmp3_;
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 7802 "FacebookPublishing.c"
+#line 5804 "FacebookPublishing.c"
 }
 
 
 static PublishingFacebookPublishingOptionsPanePrivacyDescription* publishing_facebook_publishing_options_pane_privacy_description_new (const gchar* description, const gchar* privacy_setting) {
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_publishing_options_pane_privacy_description_construct (PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION, description, privacy_setting);
-#line 7809 "FacebookPublishing.c"
+#line 5811 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_value_privacy_description_init (GValue* value) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 7816 "FacebookPublishing.c"
+#line 5818 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_value_privacy_description_free_value (GValue* value) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_options_pane_privacy_description_unref (value->data[0].v_pointer);
-#line 7825 "FacebookPublishing.c"
+#line 5827 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_publishing_options_pane_value_privacy_description_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_publishing_options_pane_privacy_description_ref (src_value->data[0].v_pointer);
-#line 7835 "FacebookPublishing.c"
+#line 5837 "FacebookPublishing.c"
 	} else {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 7839 "FacebookPublishing.c"
+#line 5841 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_publishing_options_pane_value_privacy_description_peek_pointer (const GValue* value) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 7847 "FacebookPublishing.c"
+#line 5849 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_publishing_options_pane_value_privacy_description_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 7854 "FacebookPublishing.c"
+#line 5856 "FacebookPublishing.c"
 		PublishingFacebookPublishingOptionsPanePrivacyDescription* object;
 		object = collect_values[0].v_pointer;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7861 "FacebookPublishing.c"
+#line 5863 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7865 "FacebookPublishing.c"
+#line 5867 "FacebookPublishing.c"
 		}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_publishing_options_pane_privacy_description_ref (object);
-#line 7869 "FacebookPublishing.c"
+#line 5871 "FacebookPublishing.c"
 	} else {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7873 "FacebookPublishing.c"
+#line 5875 "FacebookPublishing.c"
 	}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 7877 "FacebookPublishing.c"
+#line 5879 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_publishing_options_pane_value_privacy_description_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 7888 "FacebookPublishing.c"
+#line 5890 "FacebookPublishing.c"
 	}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 7894 "FacebookPublishing.c"
+#line 5896 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 7898 "FacebookPublishing.c"
+#line 5900 "FacebookPublishing.c"
 	} else {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_publishing_options_pane_privacy_description_ref (value->data[0].v_pointer);
-#line 7902 "FacebookPublishing.c"
+#line 5904 "FacebookPublishing.c"
 	}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 7906 "FacebookPublishing.c"
+#line 5908 "FacebookPublishing.c"
 }
 
 
 static GParamSpec* publishing_facebook_publishing_options_pane_param_spec_privacy_description (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookPublishingOptionsPaneParamSpecPrivacyDescription* spec;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION), NULL);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 7920 "FacebookPublishing.c"
+#line 5922 "FacebookPublishing.c"
 }
 
 
 static gpointer publishing_facebook_publishing_options_pane_value_get_privacy_description (const GValue* value) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION), NULL);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 7929 "FacebookPublishing.c"
+#line 5931 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_value_set_privacy_description (GValue* value, gpointer v_object) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription* old;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_options_pane_privacy_description_ref (value->data[0].v_pointer);
-#line 7949 "FacebookPublishing.c"
+#line 5951 "FacebookPublishing.c"
 	} else {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7953 "FacebookPublishing.c"
+#line 5955 "FacebookPublishing.c"
 	}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_options_pane_privacy_description_unref (old);
-#line 7959 "FacebookPublishing.c"
+#line 5961 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_publishing_options_pane_value_take_privacy_description (GValue* value, gpointer v_object) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription* old;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 7978 "FacebookPublishing.c"
+#line 5980 "FacebookPublishing.c"
 	} else {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 7982 "FacebookPublishing.c"
+#line 5984 "FacebookPublishing.c"
 	}
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_publishing_options_pane_privacy_description_unref (old);
-#line 7988 "FacebookPublishing.c"
+#line 5990 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_publishing_options_pane_privacy_description_class_init (PublishingFacebookPublishingOptionsPanePrivacyDescriptionClass * klass) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_privacy_description_parent_class = g_type_class_peek_parent (klass);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookPublishingOptionsPanePrivacyDescriptionClass *) klass)->finalize = publishing_facebook_publishing_options_pane_privacy_description_finalize;
-#line 7998 "FacebookPublishing.c"
+#line 6000 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_privacy_description_instance_init (PublishingFacebookPublishingOptionsPanePrivacyDescription * self) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 8005 "FacebookPublishing.c"
+#line 6007 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_privacy_description_finalize (PublishingFacebookPublishingOptionsPanePrivacyDescription* obj) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription * self;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_TYPE_PRIVACY_DESCRIPTION, PublishingFacebookPublishingOptionsPanePrivacyDescription);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->description);
-#line 994 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->privacy_setting);
-#line 8019 "FacebookPublishing.c"
+#line 6021 "FacebookPublishing.c"
 }
 
 
@@ -8072,134 +6058,134 @@ static GType publishing_facebook_publishing_options_pane_privacy_description_get
 static gpointer publishing_facebook_publishing_options_pane_privacy_description_ref (gpointer instance) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription* self;
 	self = instance;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 8044 "FacebookPublishing.c"
+#line 6046 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_privacy_description_unref (gpointer instance) {
 	PublishingFacebookPublishingOptionsPanePrivacyDescription* self;
 	self = instance;
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_PRIVACY_DESCRIPTION_GET_CLASS (self)->finalize (self);
-#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8057 "FacebookPublishing.c"
+#line 6059 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_publishing_options_pane_class_init (PublishingFacebookPublishingOptionsPaneClass * klass) {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_parent_class = g_type_class_peek_parent (klass);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFacebookPublishingOptionsPanePrivate));
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_facebook_publishing_options_pane_finalize;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("logout", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("publish", PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__STRING_STRING_ENUM_BOOLEAN, G_TYPE_NONE, 4, G_TYPE_STRING, G_TYPE_STRING, PUBLISHING_FACEBOOK_TYPE_RESOLUTION, G_TYPE_BOOLEAN);
-#line 8073 "FacebookPublishing.c"
+#line 6075 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_facebook_publishing_options_pane_real_get_widget;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_facebook_publishing_options_pane_real_get_preferred_geometry;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_facebook_publishing_options_pane_real_on_pane_installed;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_facebook_publishing_options_pane_real_on_pane_uninstalled;
-#line 8088 "FacebookPublishing.c"
+#line 6090 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_instance_init (PublishingFacebookPublishingOptionsPane * self) {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv = PUBLISHING_FACEBOOK_PUBLISHING_OPTIONS_PANE_GET_PRIVATE (self);
-#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->pane_widget = NULL;
-#line 964 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->use_existing_radio = NULL;
-#line 965 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 706 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->create_new_radio = NULL;
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->existing_albums_combo = NULL;
-#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->visibility_combo = NULL;
-#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->new_album_entry = NULL;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->strip_metadata_check = NULL;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publish_button = NULL;
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->logout_button = NULL;
-#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->how_to_label = NULL;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums = NULL;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums_length1 = 0;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->_albums_size_ = self->priv->albums_length1;
-#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publisher = NULL;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->resolution_combo = NULL;
-#line 8125 "FacebookPublishing.c"
+#line 6127 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_publishing_options_pane_finalize (GObject* obj) {
 	PublishingFacebookPublishingOptionsPane * self;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFacebookPublishingOptionsPane);
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 964 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->use_existing_radio);
-#line 965 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 706 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->create_new_radio);
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->existing_albums_combo);
-#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_combo);
-#line 968 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->new_album_entry);
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 710 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->strip_metadata_check);
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publish_button);
-#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->how_to_label);
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->albums = (_vala_array_free (self->priv->albums, self->priv->albums_length1, (GDestroyNotify) publishing_facebook_album_unref), NULL);
-#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->privacy_descriptions = (_vala_array_free (self->priv->privacy_descriptions, self->priv->privacy_descriptions_length1, (GDestroyNotify) publishing_facebook_publishing_options_pane_privacy_description_unref), NULL);
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->possible_resolutions = (g_free (self->priv->possible_resolutions), NULL);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->resolution_combo);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_OBJECT_CLASS (publishing_facebook_publishing_options_pane_parent_class)->finalize (obj);
-#line 8167 "FacebookPublishing.c"
+#line 6169 "FacebookPublishing.c"
 }
 
 
@@ -8219,52 +6205,52 @@ GType publishing_facebook_publishing_options_pane_get_type (void) {
 
 gchar* publishing_facebook_endpoint_to_uri (PublishingFacebookEndpoint self) {
 	gchar* result = NULL;
-#line 1227 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	switch (self) {
-#line 1227 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_ENDPOINT_DEFAULT:
-#line 8191 "FacebookPublishing.c"
+#line 6193 "FacebookPublishing.c"
 		{
 			gchar* _tmp0_ = NULL;
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp0_ = g_strdup ("https://graph.facebook.com/");
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = _tmp0_;
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 8200 "FacebookPublishing.c"
+#line 6202 "FacebookPublishing.c"
 		}
-#line 1227 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_ENDPOINT_VIDEO:
-#line 8204 "FacebookPublishing.c"
+#line 6206 "FacebookPublishing.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp1_ = g_strdup ("https://graph-video.facebook.com/");
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = _tmp1_;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 8213 "FacebookPublishing.c"
+#line 6215 "FacebookPublishing.c"
 		}
-#line 1227 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_ENDPOINT_TEST_CONNECTION:
-#line 8217 "FacebookPublishing.c"
+#line 6219 "FacebookPublishing.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 1235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp2_ = g_strdup ("https://www.facebook.com/");
-#line 1235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			result = _tmp2_;
-#line 1235 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return result;
-#line 8226 "FacebookPublishing.c"
+#line 6228 "FacebookPublishing.c"
 		}
 		default:
 		{
-#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 982 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_assert_not_reached ();
-#line 8232 "FacebookPublishing.c"
+#line 6234 "FacebookPublishing.c"
 		}
 	}
 }
@@ -8283,48 +6269,48 @@ GType publishing_facebook_endpoint_get_type (void) {
 
 
 static gchar* publishing_facebook_graph_message_real_get_uri (PublishingFacebookGraphMessage* self) {
-#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_facebook_graph_message_get_uri'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 8255 "FacebookPublishing.c"
+#line 6257 "FacebookPublishing.c"
 }
 
 
 gchar* publishing_facebook_graph_message_get_uri (PublishingFacebookGraphMessage* self) {
-#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (self), NULL);
-#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 992 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return PUBLISHING_FACEBOOK_GRAPH_MESSAGE_GET_CLASS (self)->get_uri (self);
-#line 8264 "FacebookPublishing.c"
+#line 6266 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_graph_message_real_get_response_body (PublishingFacebookGraphMessage* self) {
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_critical ("Type `%s' does not implement abstract method `publishing_facebook_graph_message_get_response_body'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 8273 "FacebookPublishing.c"
+#line 6275 "FacebookPublishing.c"
 }
 
 
 gchar* publishing_facebook_graph_message_get_response_body (PublishingFacebookGraphMessage* self) {
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (self), NULL);
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return PUBLISHING_FACEBOOK_GRAPH_MESSAGE_GET_CLASS (self)->get_response_body (self);
-#line 8282 "FacebookPublishing.c"
+#line 6284 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookGraphMessage* publishing_facebook_graph_message_construct (GType object_type) {
 	PublishingFacebookGraphMessage* self = NULL;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphMessage*) g_type_create_instance (object_type);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 8292 "FacebookPublishing.c"
+#line 6294 "FacebookPublishing.c"
 }
 
 
@@ -8335,243 +6321,243 @@ static void g_cclosure_user_marshal_VOID__INT_INT (GClosure * closure, GValue * 
 	register gpointer data1;
 	register gpointer data2;
 	cc = (GCClosure *) closure;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (n_param_values == 3);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_CCLOSURE_SWAP_DATA (closure)) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data1 = closure->data;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 8311 "FacebookPublishing.c"
+#line 6313 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data1 = param_values->data[0].v_pointer;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		data2 = closure->data;
-#line 8317 "FacebookPublishing.c"
+#line 6319 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	callback = (GMarshalFunc_VOID__INT_INT) (marshal_data ? marshal_data : cc->callback);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	callback (data1, g_value_get_int (param_values + 1), g_value_get_int (param_values + 2), data2);
-#line 8323 "FacebookPublishing.c"
+#line 6325 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_graph_message_init (GValue* value) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 8330 "FacebookPublishing.c"
+#line 6332 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_graph_message_free_value (GValue* value) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_message_unref (value->data[0].v_pointer);
-#line 8339 "FacebookPublishing.c"
+#line 6341 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_graph_message_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_graph_message_ref (src_value->data[0].v_pointer);
-#line 8349 "FacebookPublishing.c"
+#line 6351 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 8353 "FacebookPublishing.c"
+#line 6355 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_value_graph_message_peek_pointer (const GValue* value) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 8361 "FacebookPublishing.c"
+#line 6363 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_graph_message_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 8368 "FacebookPublishing.c"
+#line 6370 "FacebookPublishing.c"
 		PublishingFacebookGraphMessage* object;
 		object = collect_values[0].v_pointer;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8375 "FacebookPublishing.c"
+#line 6377 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8379 "FacebookPublishing.c"
+#line 6381 "FacebookPublishing.c"
 		}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_graph_message_ref (object);
-#line 8383 "FacebookPublishing.c"
+#line 6385 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8387 "FacebookPublishing.c"
+#line 6389 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 8391 "FacebookPublishing.c"
+#line 6393 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_graph_message_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookGraphMessage** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 8402 "FacebookPublishing.c"
+#line 6404 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 8408 "FacebookPublishing.c"
+#line 6410 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 8412 "FacebookPublishing.c"
+#line 6414 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_graph_message_ref (value->data[0].v_pointer);
-#line 8416 "FacebookPublishing.c"
+#line 6418 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 8420 "FacebookPublishing.c"
+#line 6422 "FacebookPublishing.c"
 }
 
 
 GParamSpec* publishing_facebook_param_spec_graph_message (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookParamSpecGraphMessage* spec;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE), NULL);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 8434 "FacebookPublishing.c"
+#line 6436 "FacebookPublishing.c"
 }
 
 
 gpointer publishing_facebook_value_get_graph_message (const GValue* value) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE), NULL);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 8443 "FacebookPublishing.c"
+#line 6445 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_value_set_graph_message (GValue* value, gpointer v_object) {
 	PublishingFacebookGraphMessage* old;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_message_ref (value->data[0].v_pointer);
-#line 8463 "FacebookPublishing.c"
+#line 6465 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8467 "FacebookPublishing.c"
+#line 6469 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_message_unref (old);
-#line 8473 "FacebookPublishing.c"
+#line 6475 "FacebookPublishing.c"
 	}
 }
 
 
 void publishing_facebook_value_take_graph_message (GValue* value, gpointer v_object) {
 	PublishingFacebookGraphMessage* old;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 8492 "FacebookPublishing.c"
+#line 6494 "FacebookPublishing.c"
 	} else {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8496 "FacebookPublishing.c"
+#line 6498 "FacebookPublishing.c"
 	}
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_message_unref (old);
-#line 8502 "FacebookPublishing.c"
+#line 6504 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_graph_message_class_init (PublishingFacebookGraphMessageClass * klass) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_message_parent_class = g_type_class_peek_parent (klass);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->finalize = publishing_facebook_graph_message_finalize;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->get_uri = publishing_facebook_graph_message_real_get_uri;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->get_response_body = publishing_facebook_graph_message_real_get_response_body;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1, G_TYPE_POINTER);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("data_transmitted", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__INT_INT, G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
-#line 8522 "FacebookPublishing.c"
+#line 6524 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_message_instance_init (PublishingFacebookGraphMessage * self) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 8529 "FacebookPublishing.c"
+#line 6531 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_message_finalize (PublishingFacebookGraphMessage* obj) {
 	PublishingFacebookGraphMessage * self;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 8539 "FacebookPublishing.c"
+#line 6541 "FacebookPublishing.c"
 }
 
 
@@ -8592,32 +6578,32 @@ GType publishing_facebook_graph_message_get_type (void) {
 gpointer publishing_facebook_graph_message_ref (gpointer instance) {
 	PublishingFacebookGraphMessage* self;
 	self = instance;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 8564 "FacebookPublishing.c"
+#line 6566 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_graph_message_unref (gpointer instance) {
 	PublishingFacebookGraphMessage* self;
 	self = instance;
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_GRAPH_MESSAGE_GET_CLASS (self)->finalize (self);
-#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8577 "FacebookPublishing.c"
+#line 6579 "FacebookPublishing.c"
 	}
 }
 
 
 static void _publishing_facebook_graph_session_on_request_unqueued_soup_session_request_unqueued (SoupSession* _sender, SoupMessage* msg, gpointer self) {
-#line 1428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_on_request_unqueued ((PublishingFacebookGraphSession*) self, msg);
-#line 8585 "FacebookPublishing.c"
+#line 6587 "FacebookPublishing.c"
 }
 
 
@@ -8627,51 +6613,51 @@ PublishingFacebookGraphSession* publishing_facebook_graph_session_construct (GTy
 	SoupSession* _tmp1_ = NULL;
 	SoupSession* _tmp2_ = NULL;
 	SoupSession* _tmp3_ = NULL;
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSession*) g_type_create_instance (object_type);
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = soup_session_new ();
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->soup_session);
-#line 1419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->soup_session = _tmp0_;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->soup_session;
-#line 1420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1164 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp1_, "request-unqueued", (GCallback) _publishing_facebook_graph_session_on_request_unqueued_soup_session_request_unqueued, self);
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = self->priv->soup_session;
-#line 1421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_object_set (_tmp2_, "timeout", (guint) 15, NULL);
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->priv->access_token);
-#line 1422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->access_token = NULL;
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (self->priv->current_message);
-#line 1423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_message = NULL;
-#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->soup_session;
-#line 1424 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_object_set (_tmp3_, "ssl-use-system-ca-file", TRUE, NULL);
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 8625 "FacebookPublishing.c"
+#line 6627 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookGraphSession* publishing_facebook_graph_session_new (void) {
-#line 1418 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_graph_session_construct (PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION);
-#line 8632 "FacebookPublishing.c"
+#line 6634 "FacebookPublishing.c"
 }
 
 
 static gpointer _publishing_facebook_graph_message_ref0 (gpointer self) {
-#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? publishing_facebook_graph_message_ref (self) : NULL;
-#line 8639 "FacebookPublishing.c"
+#line 6641 "FacebookPublishing.c"
 }
 
 
@@ -8679,48 +6665,48 @@ static void publishing_facebook_graph_session_manage_message (PublishingFacebook
 	PublishingFacebookGraphMessage* _tmp0_ = NULL;
 	PublishingFacebookGraphMessage* _tmp1_ = NULL;
 	PublishingFacebookGraphMessage* _tmp2_ = NULL;
-#line 1431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (msg));
-#line 1432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->current_message;
-#line 1432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1176 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp0_ == NULL, "current_message == null");
-#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = msg;
-#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _publishing_facebook_graph_message_ref0 (_tmp1_);
-#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (self->priv->current_message);
-#line 1434 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_message = _tmp2_;
-#line 8663 "FacebookPublishing.c"
+#line 6665 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_unmanage_message (PublishingFacebookGraphSession* self, PublishingFacebookGraphMessage* msg) {
 	PublishingFacebookGraphMessage* _tmp0_ = NULL;
-#line 1437 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1437 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (msg));
-#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->current_message;
-#line 1438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp0_ != NULL, "current_message != null");
-#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (self->priv->current_message);
-#line 1440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_message = NULL;
-#line 8681 "FacebookPublishing.c"
+#line 6683 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data (SoupMessage* _sender, SoupBuffer* chunk, gpointer self) {
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data ((PublishingFacebookGraphSessionGraphMessageImpl*) self, chunk);
-#line 8688 "FacebookPublishing.c"
+#line 6690 "FacebookPublishing.c"
 }
 
 
@@ -8747,149 +6733,149 @@ static void publishing_facebook_graph_session_on_request_unqueued (PublishingFac
 	guint _tmp27_ = 0U;
 	GError* _tmp68_ = NULL;
 	GError* _tmp80_ = NULL;
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (SOUP_IS_MESSAGE (msg));
-#line 1444 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->current_message;
-#line 1444 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp0_ != NULL, "current_message != null");
-#line 1445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->current_message;
-#line 1445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _publishing_facebook_graph_message_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl));
-#line 1445 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	real_message = _tmp2_;
-#line 1446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = real_message;
-#line 1446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = _tmp3_->soup_message;
-#line 1446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = msg;
-#line 1446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1190 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp4_ == _tmp5_, "real_message.soup_message == msg");
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = msg;
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_object_get (_tmp8_, "status-code", &_tmp9_, NULL);
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp10_ == ((guint) SOUP_STATUS_IO_ERROR)) {
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = TRUE;
-#line 8747 "FacebookPublishing.c"
+#line 6749 "FacebookPublishing.c"
 	} else {
 		SoupMessage* _tmp11_ = NULL;
 		guint _tmp12_ = 0U;
 		guint _tmp13_ = 0U;
-#line 1451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = msg;
-#line 1451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_object_get (_tmp11_, "status-code", &_tmp12_, NULL);
-#line 1451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 1451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1195 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = _tmp13_ == ((guint) SOUP_STATUS_MALFORMED);
-#line 8760 "FacebookPublishing.c"
+#line 6762 "FacebookPublishing.c"
 	}
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp7_) {
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = TRUE;
-#line 8766 "FacebookPublishing.c"
+#line 6768 "FacebookPublishing.c"
 	} else {
 		SoupMessage* _tmp14_ = NULL;
 		guint _tmp15_ = 0U;
 		guint _tmp16_ = 0U;
-#line 1452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = msg;
-#line 1452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_object_get (_tmp14_, "status-code", &_tmp15_, NULL);
-#line 1452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = _tmp15_;
-#line 1452 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = _tmp16_ == ((guint) SOUP_STATUS_TRY_AGAIN);
-#line 8779 "FacebookPublishing.c"
+#line 6781 "FacebookPublishing.c"
 	}
-#line 1450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp6_) {
-#line 8783 "FacebookPublishing.c"
+#line 6785 "FacebookPublishing.c"
 		PublishingFacebookGraphSessionGraphMessageImpl* _tmp17_ = NULL;
 		SoupSession* _tmp18_ = NULL;
 		SoupMessage* _tmp19_ = NULL;
 		SoupMessage* _tmp20_ = NULL;
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = real_message;
-#line 1453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_->bytes_so_far = 0;
-#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp18_ = self->priv->soup_session;
-#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp19_ = msg;
-#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp20_ = _g_object_ref0 (_tmp19_);
-#line 1454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1198 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_session_queue_message (_tmp18_, _tmp20_, NULL, NULL);
-#line 1455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_publishing_facebook_graph_message_unref0 (real_message);
-#line 1455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 8804 "FacebookPublishing.c"
+#line 6806 "FacebookPublishing.c"
 	}
-#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = real_message;
-#line 1458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_unmanage_message (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = msg;
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = real_message;
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("wrote-body-data", soup_message_get_type (), &_tmp24_, NULL, FALSE);
-#line 1459 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp22_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp24_, 0, NULL, (GCallback) _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data, _tmp23_);
-#line 1461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_error_ = NULL;
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp25_ = msg;
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_object_get (_tmp25_, "status-code", &_tmp26_, NULL);
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp27_ = _tmp26_;
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	switch (_tmp27_) {
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_OK:
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_CREATED:
-#line 8832 "FacebookPublishing.c"
+#line 6834 "FacebookPublishing.c"
 		{
-#line 1467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			break;
-#line 8836 "FacebookPublishing.c"
+#line 6838 "FacebookPublishing.c"
 		}
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case PUBLISHING_FACEBOOK_EXPIRED_SESSION_STATUS_CODE:
-#line 8840 "FacebookPublishing.c"
+#line 6842 "FacebookPublishing.c"
 		{
 			GError* _tmp28_ = NULL;
-#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp28_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_EXPIRED_SESSION, "OAuth Access Token has Expired. Logout user.");
-#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_error_free0 (_error_);
-#line 1470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_error_ = _tmp28_;
-#line 1472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			break;
-#line 8851 "FacebookPublishing.c"
+#line 6853 "FacebookPublishing.c"
 		}
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_CANT_RESOLVE:
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_CANT_RESOLVE_PROXY:
-#line 8857 "FacebookPublishing.c"
+#line 6859 "FacebookPublishing.c"
 		{
 			PublishingFacebookGraphSessionGraphMessageImpl* _tmp29_ = NULL;
 			gchar* _tmp30_ = NULL;
@@ -8898,35 +6884,35 @@ static void publishing_facebook_graph_session_on_request_unqueued (PublishingFac
 			guint _tmp33_ = 0U;
 			guint _tmp34_ = 0U;
 			GError* _tmp35_ = NULL;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp29_ = real_message;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp30_ = publishing_facebook_graph_message_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp31_ = _tmp30_;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp32_ = msg;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_object_get (_tmp32_, "status-code", &_tmp33_, NULL);
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp34_ = _tmp33_;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp35_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Unable to resolve %s (error code %u)", _tmp31_, _tmp34_);
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_error_free0 (_error_);
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_error_ = _tmp35_;
-#line 1476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1220 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (_tmp31_);
-#line 1478 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1222 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			break;
-#line 8888 "FacebookPublishing.c"
+#line 6890 "FacebookPublishing.c"
 		}
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_CANT_CONNECT:
-#line 1462 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		case SOUP_STATUS_CANT_CONNECT_PROXY:
-#line 8894 "FacebookPublishing.c"
+#line 6896 "FacebookPublishing.c"
 		{
 			PublishingFacebookGraphSessionGraphMessageImpl* _tmp36_ = NULL;
 			gchar* _tmp37_ = NULL;
@@ -8935,44 +6921,44 @@ static void publishing_facebook_graph_session_on_request_unqueued (PublishingFac
 			guint _tmp40_ = 0U;
 			guint _tmp41_ = 0U;
 			GError* _tmp42_ = NULL;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp36_ = real_message;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp37_ = publishing_facebook_graph_message_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp38_ = _tmp37_;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp39_ = msg;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_object_get (_tmp39_, "status-code", &_tmp40_, NULL);
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp41_ = _tmp40_;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp42_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Unable to connect to %s (error code %u)", _tmp38_, _tmp41_);
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_error_free0 (_error_);
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_error_ = _tmp42_;
-#line 1482 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (_tmp38_);
-#line 1484 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1228 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			break;
-#line 8925 "FacebookPublishing.c"
+#line 6927 "FacebookPublishing.c"
 		}
 		default:
 		{
 			SoupMessage* _tmp43_ = NULL;
 			guint _tmp44_ = 0U;
 			guint _tmp45_ = 0U;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp43_ = msg;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_object_get (_tmp43_, "status-code", &_tmp44_, NULL);
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp45_ = _tmp44_;
-#line 1489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			if (_tmp45_ >= ((guint) 100)) {
-#line 8940 "FacebookPublishing.c"
+#line 6942 "FacebookPublishing.c"
 				PublishingFacebookGraphSessionGraphMessageImpl* _tmp46_ = NULL;
 				gchar* _tmp47_ = NULL;
 				gchar* _tmp48_ = NULL;
@@ -8984,37 +6970,37 @@ static void publishing_facebook_graph_session_on_request_unqueued (PublishingFac
 				gchar* _tmp54_ = NULL;
 				gchar* _tmp55_ = NULL;
 				GError* _tmp56_ = NULL;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp46_ = real_message;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp47_ = publishing_facebook_graph_message_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp48_ = _tmp47_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp49_ = msg;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				g_object_get (_tmp49_, "status-code", &_tmp50_, NULL);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp51_ = _tmp50_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp52_ = msg;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				g_object_get (_tmp52_, "reason-phrase", &_tmp53_, NULL);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp54_ = _tmp53_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp55_ = _tmp54_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp56_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Service %s returned HTTP status code %u %s", _tmp48_, _tmp51_, _tmp55_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_error_free0 (_error_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_error_ = _tmp56_;
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_free0 (_tmp55_);
-#line 1490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_free0 (_tmp48_);
-#line 8982 "FacebookPublishing.c"
+#line 6984 "FacebookPublishing.c"
 			} else {
 				SoupMessage* _tmp57_ = NULL;
 				gchar* _tmp58_ = NULL;
@@ -9027,210 +7013,172 @@ static void publishing_facebook_graph_session_on_request_unqueued (PublishingFac
 				guint _tmp65_ = 0U;
 				guint _tmp66_ = 0U;
 				GError* _tmp67_ = NULL;
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp57_ = msg;
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				g_object_get (_tmp57_, "reason-phrase", &_tmp58_, NULL);
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp59_ = _tmp58_;
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp60_ = _tmp59_;
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-				g_debug ("FacebookPublishing.vala:1494: %s", _tmp60_);
-#line 1494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+				g_debug ("FacebookPublishing.vala:1238: %s", _tmp60_);
+#line 1238 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_free0 (_tmp60_);
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp61_ = real_message;
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp62_ = publishing_facebook_graph_message_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp61_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp63_ = _tmp62_;
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp64_ = msg;
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				g_object_get (_tmp64_, "status-code", &_tmp65_, NULL);
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp66_ = _tmp65_;
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_tmp67_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_NO_ANSWER, "Failure communicating with %s (error code %u)", _tmp63_, _tmp66_);
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_error_free0 (_error_);
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_error_ = _tmp67_;
-#line 1495 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 				_g_free0 (_tmp63_);
-#line 9027 "FacebookPublishing.c"
+#line 7029 "FacebookPublishing.c"
 			}
-#line 1499 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1243 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			break;
-#line 9031 "FacebookPublishing.c"
+#line 7033 "FacebookPublishing.c"
 		}
 	}
-#line 1503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp68_ = _error_;
-#line 1503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp68_ == NULL) {
-#line 9038 "FacebookPublishing.c"
+#line 7040 "FacebookPublishing.c"
 		gboolean _tmp69_ = FALSE;
 		SoupMessage* _tmp70_ = NULL;
 		SoupMessageBody* _tmp71_ = NULL;
 		guint8* _tmp72_ = NULL;
 		gint _tmp72__length1 = 0;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp70_ = msg;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp71_ = _tmp70_->response_body;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp72_ = _tmp71_->data;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp72__length1 = (gint) _tmp71_->length;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (_tmp72_ == NULL) {
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp69_ = TRUE;
-#line 9056 "FacebookPublishing.c"
+#line 7058 "FacebookPublishing.c"
 		} else {
 			SoupMessage* _tmp73_ = NULL;
 			SoupMessageBody* _tmp74_ = NULL;
 			guint8* _tmp75_ = NULL;
 			gint _tmp75__length1 = 0;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp73_ = msg;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp74_ = _tmp73_->response_body;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp75_ = _tmp74_->data;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp75__length1 = (gint) _tmp74_->length;
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp69_ = _tmp75__length1 == 0;
-#line 9072 "FacebookPublishing.c"
+#line 7074 "FacebookPublishing.c"
 		}
-#line 1504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (_tmp69_) {
-#line 9076 "FacebookPublishing.c"
+#line 7078 "FacebookPublishing.c"
 			PublishingFacebookGraphSessionGraphMessageImpl* _tmp76_ = NULL;
 			gchar* _tmp77_ = NULL;
 			gchar* _tmp78_ = NULL;
 			GError* _tmp79_ = NULL;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp76_ = real_message;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp77_ = publishing_facebook_graph_message_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage));
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp78_ = _tmp77_;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_tmp79_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "No response data from %s", _tmp78_);
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_error_free0 (_error_);
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_error_ = _tmp79_;
-#line 1505 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (_tmp78_);
-#line 9095 "FacebookPublishing.c"
+#line 7097 "FacebookPublishing.c"
 		}
 	}
-#line 1508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp80_ = _error_;
-#line 1508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp80_ == NULL) {
-#line 9102 "FacebookPublishing.c"
+#line 7104 "FacebookPublishing.c"
 		PublishingFacebookGraphSessionGraphMessageImpl* _tmp81_ = NULL;
-#line 1509 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp81_ = real_message;
-#line 1509 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp81_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage), "completed");
-#line 9108 "FacebookPublishing.c"
+#line 7110 "FacebookPublishing.c"
 	} else {
 		PublishingFacebookGraphSessionGraphMessageImpl* _tmp82_ = NULL;
 		GError* _tmp83_ = NULL;
-#line 1511 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp82_ = real_message;
-#line 1511 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp83_ = _error_;
-#line 1511 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage), "failed", _tmp83_);
-#line 9118 "FacebookPublishing.c"
+#line 7120 "FacebookPublishing.c"
 	}
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_error_free0 (_error_);
-#line 1443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (real_message);
-#line 9124 "FacebookPublishing.c"
+#line 7126 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_graph_session_authenticate (PublishingFacebookGraphSession* self, const gchar* access_token) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (access_token != NULL);
-#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = access_token;
-#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->priv->access_token);
-#line 1515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->access_token = _tmp1_;
-#line 1516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1260 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "authenticated");
-#line 9145 "FacebookPublishing.c"
+#line 7147 "FacebookPublishing.c"
 }
 
 
 gboolean publishing_facebook_graph_session_is_authenticated (PublishingFacebookGraphSession* self) {
 	gboolean result = FALSE;
 	const gchar* _tmp0_ = NULL;
-#line 1519 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), FALSE);
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->access_token;
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp0_ != NULL;
-#line 1520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9160 "FacebookPublishing.c"
-}
-
-
-gchar* publishing_facebook_graph_session_get_access_token (PublishingFacebookGraphSession* self) {
-	gchar* result = NULL;
-	gboolean _tmp0_ = FALSE;
-	const gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-#line 1523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), NULL);
-#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_graph_session_is_authenticated (self);
-#line 1524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_vala_assert (_tmp0_, "is_authenticated()");
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp1_ = self->priv->access_token;
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp2_ = g_strdup (_tmp1_);
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = _tmp2_;
-#line 1525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 9183 "FacebookPublishing.c"
-}
-
-
-PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_endpoint_test (PublishingFacebookGraphSession* self) {
-	PublishingFacebookGraphMessage* result = NULL;
-	PublishingFacebookGraphSessionGraphEndpointProbeMessage* _tmp0_ = NULL;
-#line 1528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), NULL);
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	_tmp0_ = publishing_facebook_graph_session_graph_endpoint_probe_message_new (self);
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage);
-#line 1529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	return result;
-#line 9198 "FacebookPublishing.c"
+#line 7162 "FacebookPublishing.c"
 }
 
 
@@ -9239,21 +7187,21 @@ PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_query (Pub
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	PublishingFacebookGraphSessionGraphQueryMessage* _tmp2_ = NULL;
-#line 1532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), NULL);
-#line 1532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (resource_path != NULL, NULL);
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = resource_path;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->access_token;
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = publishing_facebook_graph_session_graph_query_message_new (self, _tmp0_, _tmp1_);
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage);
-#line 1533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9221 "FacebookPublishing.c"
+#line 7185 "FacebookPublishing.c"
 }
 
 
@@ -9265,29 +7213,29 @@ PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_upload (Pu
 	gboolean _tmp3_ = FALSE;
 	const gchar* _tmp4_ = NULL;
 	PublishingFacebookGraphSessionGraphUploadMessage* _tmp5_ = NULL;
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), NULL);
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (resource_path != NULL, NULL);
-#line 1536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->access_token;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = resource_path;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = publishable;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = suppress_titling;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = resource_privacy;
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = publishing_facebook_graph_session_graph_upload_message_new (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_, _tmp4_);
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage);
-#line 1538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9255 "FacebookPublishing.c"
+#line 7219 "FacebookPublishing.c"
 }
 
 
@@ -9297,25 +7245,25 @@ PublishingFacebookGraphMessage* publishing_facebook_graph_session_new_create_alb
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	PublishingFacebookGraphSessionGraphCreateAlbumMessage* _tmp3_ = NULL;
-#line 1542 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self), NULL);
-#line 1542 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (album_name != NULL, NULL);
-#line 1542 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (privacy != NULL, NULL);
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->access_token;
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = album_name;
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = privacy;
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = publishing_facebook_graph_session_graph_create_album_message_new (self, _tmp0_, _tmp1_, _tmp2_);
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage);
-#line 1543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9283 "FacebookPublishing.c"
+#line 7247 "FacebookPublishing.c"
 }
 
 
@@ -9333,81 +7281,81 @@ void publishing_facebook_graph_session_send_message (PublishingFacebookGraphSess
 	gchar* _tmp9_ = NULL;
 	PublishingFacebookGraphSessionGraphMessageImpl* _tmp10_ = NULL;
 	gboolean _tmp11_ = FALSE;
-#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 1547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 1547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _publishing_facebook_graph_message_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl));
-#line 1547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	real_message = _tmp1_;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = real_message;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _tmp2_->soup_message;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = soup_message_get_uri (_tmp3_);
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = soup_uri_to_string (_tmp5_, FALSE);
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = g_strconcat ("making HTTP request to URI: ", _tmp7_, NULL);
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
-	g_debug ("FacebookPublishing.vala:1549: %s", _tmp9_);
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	g_debug ("FacebookPublishing.vala:1290: %s", _tmp9_);
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 1549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 1551 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = real_message;
-#line 1551 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = publishing_facebook_graph_session_graph_message_impl_prepare_for_transmission (_tmp10_);
-#line 1551 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp11_) {
-#line 9339 "FacebookPublishing.c"
+#line 7303 "FacebookPublishing.c"
 		PublishingFacebookGraphMessage* _tmp12_ = NULL;
 		SoupSession* _tmp13_ = NULL;
 		PublishingFacebookGraphSessionGraphMessageImpl* _tmp14_ = NULL;
 		SoupMessage* _tmp15_ = NULL;
 		SoupMessage* _tmp16_ = NULL;
-#line 1552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = message;
-#line 1552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_manage_message (self, _tmp12_);
-#line 1553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = self->priv->soup_session;
-#line 1553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = real_message;
-#line 1553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = _tmp14_->soup_message;
-#line 1553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = _g_object_ref0 (_tmp15_);
-#line 1553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_session_queue_message (_tmp13_, _tmp16_, NULL, NULL);
-#line 9359 "FacebookPublishing.c"
+#line 7323 "FacebookPublishing.c"
 	}
-#line 1546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (real_message);
-#line 9363 "FacebookPublishing.c"
+#line 7327 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_graph_session_stop_transactions (PublishingFacebookGraphSession* self) {
 	SoupSession* _tmp0_ = NULL;
-#line 1557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1298 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (self));
-#line 1558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->soup_session;
-#line 1558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_session_abort (_tmp0_);
-#line 9375 "FacebookPublishing.c"
+#line 7339 "FacebookPublishing.c"
 }
 
 
@@ -9421,39 +7369,39 @@ static PublishingFacebookGraphSessionGraphMessageImpl* publishing_facebook_graph
 	PublishingFacebookEndpoint _tmp4_ = 0;
 	gchar* _tmp5_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (host_session), NULL);
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (relative_uri != NULL, NULL);
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (access_token != NULL, NULL);
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSessionGraphMessageImpl*) publishing_facebook_graph_message_construct (object_type);
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = method;
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1007 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->method = _tmp0_;
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = access_token;
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->access_token);
-#line 1264 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->access_token = _tmp2_;
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = host_session;
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->host_session = _tmp3_;
-#line 1266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1010 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->bytes_so_far = 0;
-#line 1268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = endpoint;
-#line 1268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = publishing_facebook_endpoint_to_uri (_tmp4_);
-#line 1268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	endpoint_uri = _tmp5_;
-#line 9421 "FacebookPublishing.c"
+#line 7385 "FacebookPublishing.c"
 	{
 		GRegex* starting_slashes = NULL;
 		GRegex* _tmp6_ = NULL;
@@ -9465,129 +7413,129 @@ static PublishingFacebookGraphSessionGraphMessageImpl* publishing_facebook_graph
 		gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = g_regex_new ("^/+", 0, 0, &_inner_error_);
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		starting_slashes = _tmp6_;
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 9441 "FacebookPublishing.c"
-				goto __catch5_g_regex_error;
+#line 7405 "FacebookPublishing.c"
+				goto __catch4_g_regex_error;
 			}
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (endpoint_uri);
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return NULL;
-#line 9452 "FacebookPublishing.c"
+#line 7416 "FacebookPublishing.c"
 		}
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = starting_slashes;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = relative_uri;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = g_regex_replace (_tmp8_, _tmp9_, (gssize) -1, 0, "", 0, &_inner_error_);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = _tmp10_;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_regex_unref0 (starting_slashes);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 9468 "FacebookPublishing.c"
-				goto __catch5_g_regex_error;
+#line 7432 "FacebookPublishing.c"
+				goto __catch4_g_regex_error;
 			}
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_regex_unref0 (starting_slashes);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			_g_free0 (endpoint_uri);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return NULL;
-#line 9481 "FacebookPublishing.c"
+#line 7445 "FacebookPublishing.c"
 		}
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = endpoint_uri;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = _tmp7_;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = NULL;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = g_strconcat (_tmp11_, _tmp13_, NULL);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (self->uri);
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->uri = _tmp14_;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1015 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp13_);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp7_);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_regex_unref0 (starting_slashes);
-#line 9503 "FacebookPublishing.c"
+#line 7467 "FacebookPublishing.c"
 	}
-	goto __finally5;
-	__catch5_g_regex_error:
+	goto __finally4;
+	__catch4_g_regex_error:
 	{
 		GError* err = NULL;
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		err = _inner_error_;
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 1273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1017 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_assert_not_reached ();
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (err);
-#line 9517 "FacebookPublishing.c"
+#line 7481 "FacebookPublishing.c"
 	}
-	__finally5:
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	__finally4:
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (endpoint_uri);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 1269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return NULL;
-#line 9530 "FacebookPublishing.c"
+#line 7494 "FacebookPublishing.c"
 	}
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (endpoint_uri);
-#line 1261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 9536 "FacebookPublishing.c"
+#line 7500 "FacebookPublishing.c"
 }
 
 
 static gboolean publishing_facebook_graph_session_graph_message_impl_real_prepare_for_transmission (PublishingFacebookGraphSessionGraphMessageImpl* self) {
 	gboolean result = FALSE;
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = TRUE;
-#line 1278 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1022 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9546 "FacebookPublishing.c"
+#line 7510 "FacebookPublishing.c"
 }
 
 
 gboolean publishing_facebook_graph_session_graph_message_impl_prepare_for_transmission (PublishingFacebookGraphSessionGraphMessageImpl* self) {
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_MESSAGE_IMPL (self), FALSE);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_MESSAGE_IMPL_GET_CLASS (self)->prepare_for_transmission (self);
-#line 9555 "FacebookPublishing.c"
+#line 7519 "FacebookPublishing.c"
 }
 
 
@@ -9596,17 +7544,17 @@ static gchar* publishing_facebook_graph_session_graph_message_impl_real_get_uri 
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 1281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl);
-#line 1282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->uri;
-#line 1282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp1_;
-#line 1282 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9574 "FacebookPublishing.c"
+#line 7538 "FacebookPublishing.c"
 }
 
 
@@ -9618,23 +7566,23 @@ static gchar* publishing_facebook_graph_session_graph_message_impl_real_get_resp
 	guint8* _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
 	gchar* _tmp3_ = NULL;
-#line 1285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl);
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->soup_message;
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = _tmp0_->response_body;
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_->data;
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2__length1 = (gint) _tmp1_->length;
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = g_strdup ((const gchar*) _tmp2_);
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = _tmp3_;
-#line 1286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1030 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 9602 "FacebookPublishing.c"
+#line 7566 "FacebookPublishing.c"
 }
 
 
@@ -9646,44 +7594,44 @@ static void publishing_facebook_graph_session_graph_message_impl_on_wrote_body_d
 	SoupMessage* _tmp4_ = NULL;
 	SoupMessageBody* _tmp5_ = NULL;
 	gint64 _tmp6_ = 0LL;
-#line 1289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_GRAPH_SESSION_IS_GRAPH_MESSAGE_IMPL (self));
-#line 1289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (chunk != NULL);
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->bytes_so_far;
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = chunk;
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp1_->length;
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->bytes_so_far = _tmp0_ + ((gint) _tmp2_);
-#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->bytes_so_far;
-#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = self->soup_message;
-#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_->request_body;
-#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _tmp5_->length;
-#line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage), "data-transmitted", _tmp3_, (gint) _tmp6_);
-#line 9636 "FacebookPublishing.c"
+#line 7600 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_message_impl_class_init (PublishingFacebookGraphSessionGraphMessageImplClass * klass) {
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_message_impl_parent_class = g_type_class_peek_parent (klass);
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->finalize = publishing_facebook_graph_session_graph_message_impl_finalize;
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphSessionGraphMessageImplClass *) klass)->prepare_for_transmission = publishing_facebook_graph_session_graph_message_impl_real_prepare_for_transmission;
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->get_uri = publishing_facebook_graph_session_graph_message_impl_real_get_uri;
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->get_response_body = publishing_facebook_graph_session_graph_message_impl_real_get_response_body;
-#line 9651 "FacebookPublishing.c"
+#line 7615 "FacebookPublishing.c"
 }
 
 
@@ -9693,17 +7641,17 @@ static void publishing_facebook_graph_session_graph_message_impl_instance_init (
 
 static void publishing_facebook_graph_session_graph_message_impl_finalize (PublishingFacebookGraphMessage* obj) {
 	PublishingFacebookGraphSessionGraphMessageImpl * self;
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl);
-#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->uri);
-#line 1256 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->access_token);
-#line 1257 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->soup_message);
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	PUBLISHING_FACEBOOK_GRAPH_MESSAGE_CLASS (publishing_facebook_graph_session_graph_message_impl_parent_class)->finalize (obj);
-#line 9671 "FacebookPublishing.c"
+#line 7635 "FacebookPublishing.c"
 }
 
 
@@ -9720,9 +7668,9 @@ static GType publishing_facebook_graph_session_graph_message_impl_get_type (void
 
 
 static void _vala_SoupURI_free (SoupURI* self) {
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_boxed_free (soup_uri_get_type (), self);
-#line 9690 "FacebookPublishing.c"
+#line 7654 "FacebookPublishing.c"
 }
 
 
@@ -9745,79 +7693,79 @@ static PublishingFacebookGraphSessionGraphQueryMessage* publishing_facebook_grap
 	gchar* _tmp13_ = NULL;
 	SoupMessage* _tmp14_ = NULL;
 	SoupMessage* _tmp15_ = NULL;
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (host_session), NULL);
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (relative_uri != NULL, NULL);
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (access_token != NULL, NULL);
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = host_session;
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = relative_uri;
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = access_token;
-#line 1299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1043 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSessionGraphQueryMessage*) publishing_facebook_graph_session_graph_message_impl_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET, _tmp1_, _tmp2_, PUBLISHING_FACEBOOK_ENDPOINT_DEFAULT);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->uri;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = g_strconcat (_tmp3_, "?access_token=", NULL);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = access_token;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = g_strconcat (_tmp5_, _tmp6_, NULL);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = _tmp7_;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = soup_uri_new (_tmp8_);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp8_);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp5_);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	destination_uri = _tmp10_;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->method;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = publishing_rest_support_http_method_to_string (_tmp11_);
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = _tmp12_;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = soup_message_new_from_uri (_tmp13_, destination_uri);
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message);
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message = _tmp14_;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp13_);
-#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp15_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1047 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp15_, "wrote-body-data", (GCallback) _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl));
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupURI_free0 (destination_uri);
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 9771 "FacebookPublishing.c"
+#line 7735 "FacebookPublishing.c"
 }
 
 
 static PublishingFacebookGraphSessionGraphQueryMessage* publishing_facebook_graph_session_graph_query_message_new (PublishingFacebookGraphSession* host_session, const gchar* relative_uri, const gchar* access_token) {
-#line 1297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_graph_session_graph_query_message_construct (PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_QUERY_MESSAGE, host_session, relative_uri, access_token);
-#line 9778 "FacebookPublishing.c"
+#line 7742 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_query_message_class_init (PublishingFacebookGraphSessionGraphQueryMessageClass * klass) {
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_query_message_parent_class = g_type_class_peek_parent (klass);
-#line 9785 "FacebookPublishing.c"
+#line 7749 "FacebookPublishing.c"
 }
 
 
@@ -9848,55 +7796,55 @@ static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_faceb
 	SoupURI* _tmp6_ = NULL;
 	SoupMessage* _tmp7_ = NULL;
 	SoupMessage* _tmp8_ = NULL;
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (host_session), NULL);
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = host_session;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1053 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSessionGraphEndpointProbeMessage*) publishing_facebook_graph_session_graph_message_impl_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET, "/", "", PUBLISHING_FACEBOOK_ENDPOINT_TEST_CONNECTION);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->method;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = publishing_rest_support_http_method_to_string (_tmp1_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->uri;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = soup_uri_new (_tmp4_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _tmp5_;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = soup_message_new_from_uri (_tmp3_, _tmp6_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message = _tmp7_;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupURI_free0 (_tmp6_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp3_);
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1057 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp8_, "wrote-body-data", (GCallback) _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl));
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 9850 "FacebookPublishing.c"
+#line 7814 "FacebookPublishing.c"
 }
 
 
 static PublishingFacebookGraphSessionGraphEndpointProbeMessage* publishing_facebook_graph_session_graph_endpoint_probe_message_new (PublishingFacebookGraphSession* host_session) {
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1052 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_graph_session_graph_endpoint_probe_message_construct (PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_ENDPOINT_PROBE_MESSAGE, host_session);
-#line 9857 "FacebookPublishing.c"
+#line 7821 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_endpoint_probe_message_class_init (PublishingFacebookGraphSessionGraphEndpointProbeMessageClass * klass) {
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_endpoint_probe_message_parent_class = g_type_class_peek_parent (klass);
-#line 9864 "FacebookPublishing.c"
+#line 7828 "FacebookPublishing.c"
 }
 
 
@@ -9927,21 +7875,21 @@ static gchar* g_date_time_to_string (GDateTime* self) {
 	result = _tmp0_;
 #line 2835 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 9895 "FacebookPublishing.c"
+#line 7859 "FacebookPublishing.c"
 }
 
 
 static void _vala_SoupMultipart_free (SoupMultipart* self) {
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_boxed_free (soup_multipart_get_type (), self);
-#line 9902 "FacebookPublishing.c"
+#line 7866 "FacebookPublishing.c"
 }
 
 
 static void _vala_SoupBuffer_free (SoupBuffer* self) {
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_boxed_free (soup_buffer_get_type (), self);
-#line 9909 "FacebookPublishing.c"
+#line 7873 "FacebookPublishing.c"
 }
 
 
@@ -10014,64 +7962,64 @@ static PublishingFacebookGraphSessionGraphUploadMessage* publishing_facebook_gra
 	SoupMessage* _tmp79_ = NULL;
 	SoupMessageBody* _tmp80_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (host_session), NULL);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (access_token != NULL, NULL);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (relative_uri != NULL, NULL);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 1325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = publishable;
-#line 1325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = spit_publishing_publishable_get_media_type (_tmp1_);
-#line 1325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1069 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp2_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = PUBLISHING_FACEBOOK_ENDPOINT_VIDEO;
-#line 9998 "FacebookPublishing.c"
+#line 7962 "FacebookPublishing.c"
 	} else {
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = PUBLISHING_FACEBOOK_ENDPOINT_DEFAULT;
-#line 10002 "FacebookPublishing.c"
+#line 7966 "FacebookPublishing.c"
 	}
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = host_session;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = relative_uri;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = access_token;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1068 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSessionGraphUploadMessage*) publishing_facebook_graph_session_graph_message_impl_construct (object_type, _tmp3_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST, _tmp4_, _tmp5_, _tmp0_);
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = publishable;
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = spit_publishing_publishable_get_media_type (_tmp7_);
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp8_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = TRUE;
-#line 10020 "FacebookPublishing.c"
+#line 7984 "FacebookPublishing.c"
 	} else {
 		const gchar* _tmp9_ = NULL;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = resource_privacy;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = _tmp9_ != NULL;
-#line 10027 "FacebookPublishing.c"
+#line 7991 "FacebookPublishing.c"
 	}
-#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1075 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp6_, "publishable.get_media_type() != Spit.Publishing.Publisher.MediaType.VIDEO ||                 resource_privacy != null");
-#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = publishable;
-#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = _g_object_ref0 (_tmp10_);
-#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publishable);
-#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishable = _tmp11_;
-#line 10039 "FacebookPublishing.c"
+#line 8003 "FacebookPublishing.c"
 	{
 		GMappedFile* _tmp12_ = NULL;
 		SpitPublishingPublishable* _tmp13_ = NULL;
@@ -10082,330 +8030,330 @@ static PublishingFacebookGraphSessionGraphUploadMessage* publishing_facebook_gra
 		GMappedFile* _tmp18_ = NULL;
 		GMappedFile* _tmp19_ = NULL;
 		GMappedFile* _tmp20_ = NULL;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = publishable;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = spit_publishing_publishable_get_serialized_file (_tmp13_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = _tmp14_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp16_ = g_file_get_path (_tmp15_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = _tmp16_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp18_ = g_mapped_file_new (_tmp17_, FALSE, &_inner_error_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp19_ = _tmp18_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp17_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (_tmp15_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = _tmp19_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			if (_inner_error_->domain == G_FILE_ERROR) {
-#line 10074 "FacebookPublishing.c"
-				goto __catch6_g_file_error;
+#line 8038 "FacebookPublishing.c"
+				goto __catch5_g_file_error;
 			}
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return NULL;
-#line 10083 "FacebookPublishing.c"
+#line 8047 "FacebookPublishing.c"
 		}
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp20_ = _tmp12_;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = NULL;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_mapped_file_unref0 (self->priv->mapped_file);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->priv->mapped_file = _tmp20_;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_mapped_file_unref0 (_tmp12_);
-#line 10095 "FacebookPublishing.c"
+#line 8059 "FacebookPublishing.c"
 	}
-	goto __finally6;
-	__catch6_g_file_error:
+	goto __finally5;
+	__catch5_g_file_error:
 	{
 		GError* e = NULL;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		e = _inner_error_;
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_inner_error_ = NULL;
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (e);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1085 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return self;
-#line 10109 "FacebookPublishing.c"
+#line 8073 "FacebookPublishing.c"
 	}
-	__finally6:
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+	__finally5:
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return NULL;
-#line 10120 "FacebookPublishing.c"
+#line 8084 "FacebookPublishing.c"
 	}
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp21_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->method;
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = publishing_rest_support_http_method_to_string (_tmp21_);
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = _tmp22_;
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp24_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->uri;
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp25_ = soup_uri_new (_tmp24_);
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp26_ = _tmp25_;
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp27_ = soup_message_new_from_uri (_tmp23_, _tmp26_);
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message);
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message = _tmp27_;
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupURI_free0 (_tmp26_);
-#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp23_);
-#line 1345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp28_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp28_, "wrote-body-data", (GCallback) _publishing_facebook_graph_session_graph_message_impl_on_wrote_body_data_soup_message_wrote_body_data, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl));
-#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp29_ = self->priv->mapped_file;
-#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp30_ = g_mapped_file_get_contents (_tmp29_);
-#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	payload = (guint8*) _tmp30_;
-#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	payload_length1 = -1;
-#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_payload_size_ = payload_length1;
-#line 1348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp31_ = self->priv->mapped_file;
-#line 1348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp32_ = g_mapped_file_get_length (_tmp31_);
-#line 1348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	payload_length1 = (gint) _tmp32_;
-#line 1348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp33_ = payload_length1;
-#line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp34_ = payload;
-#line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp34__length1 = payload_length1;
-#line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp35_ = soup_buffer_new (SOUP_MEMORY_TEMPORARY, _tmp34_, _tmp34__length1);
-#line 1350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	image_data = _tmp35_;
-#line 1352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp36_ = soup_multipart_new ("multipart/form-data");
-#line 1352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	mp_envelope = _tmp36_;
-#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp37_ = mp_envelope;
-#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp38_ = access_token;
-#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_append_form_string (_tmp37_, "access_token", _tmp38_);
-#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp39_ = publishable;
-#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp40_ = spit_publishing_publishable_get_media_type (_tmp39_);
-#line 1356 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp40_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 10190 "FacebookPublishing.c"
+#line 8154 "FacebookPublishing.c"
 		SoupMultipart* _tmp41_ = NULL;
 		const gchar* _tmp42_ = NULL;
-#line 1357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp41_ = mp_envelope;
-#line 1357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp42_ = resource_privacy;
-#line 1357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_multipart_append_form_string (_tmp41_, "privacy", _tmp42_);
-#line 10199 "FacebookPublishing.c"
+#line 8163 "FacebookPublishing.c"
 	}
-#line 1360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp43_ = publishable;
-#line 1360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp44_ = spit_publishing_publishable_get_param_string (_tmp43_, "title");
-#line 1360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishable_title = _tmp44_;
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp46_ = suppress_titling;
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp46_) {
-#line 10211 "FacebookPublishing.c"
+#line 8175 "FacebookPublishing.c"
 		const gchar* _tmp47_ = NULL;
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp47_ = publishable_title;
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp45_ = _tmp47_ != NULL;
-#line 10217 "FacebookPublishing.c"
+#line 8181 "FacebookPublishing.c"
 	} else {
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp45_ = FALSE;
-#line 10221 "FacebookPublishing.c"
+#line 8185 "FacebookPublishing.c"
 	}
-#line 1361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp45_) {
-#line 10225 "FacebookPublishing.c"
+#line 8189 "FacebookPublishing.c"
 		SoupMultipart* _tmp48_ = NULL;
 		const gchar* _tmp49_ = NULL;
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp48_ = mp_envelope;
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp49_ = publishable_title;
-#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_multipart_append_form_string (_tmp48_, "name", _tmp49_);
-#line 10234 "FacebookPublishing.c"
+#line 8198 "FacebookPublishing.c"
 	}
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp50_ = publishable;
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp51_ = spit_publishing_publishable_get_param_string (_tmp50_, "comment");
-#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishable_comment = _tmp51_;
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp53_ = suppress_titling;
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp53_) {
-#line 10246 "FacebookPublishing.c"
+#line 8210 "FacebookPublishing.c"
 		const gchar* _tmp54_ = NULL;
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp54_ = publishable_comment;
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp52_ = _tmp54_ != NULL;
-#line 10252 "FacebookPublishing.c"
+#line 8216 "FacebookPublishing.c"
 	} else {
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp52_ = FALSE;
-#line 10256 "FacebookPublishing.c"
+#line 8220 "FacebookPublishing.c"
 	}
-#line 1366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp52_) {
-#line 10260 "FacebookPublishing.c"
+#line 8224 "FacebookPublishing.c"
 		SoupMultipart* _tmp55_ = NULL;
 		const gchar* _tmp56_ = NULL;
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp55_ = mp_envelope;
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp56_ = publishable_comment;
-#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_multipart_append_form_string (_tmp55_, "message", _tmp56_);
-#line 10269 "FacebookPublishing.c"
+#line 8233 "FacebookPublishing.c"
 	}
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp57_ = suppress_titling;
-#line 1370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!_tmp57_) {
-#line 10275 "FacebookPublishing.c"
+#line 8239 "FacebookPublishing.c"
 		SoupMultipart* _tmp58_ = NULL;
 		SpitPublishingPublishable* _tmp59_ = NULL;
 		GDateTime* _tmp60_ = NULL;
 		GDateTime* _tmp61_ = NULL;
 		gchar* _tmp62_ = NULL;
 		gchar* _tmp63_ = NULL;
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp58_ = mp_envelope;
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp59_ = publishable;
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp60_ = spit_publishing_publishable_get_exposure_date_time (_tmp59_);
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp61_ = _tmp60_;
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp62_ = g_date_time_to_string (_tmp61_);
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp63_ = _tmp62_;
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		soup_multipart_append_form_string (_tmp58_, "backdated_time", _tmp63_);
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp63_);
-#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_date_time_unref0 (_tmp61_);
-#line 10300 "FacebookPublishing.c"
+#line 8264 "FacebookPublishing.c"
 	}
-#line 1374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp65_ = publishable;
-#line 1374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp66_ = spit_publishing_publishable_get_media_type (_tmp65_);
-#line 1374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp66_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 1375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp64_ = "video";
-#line 10310 "FacebookPublishing.c"
+#line 8274 "FacebookPublishing.c"
 	} else {
-#line 1375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp64_ = "image/jpeg";
-#line 10314 "FacebookPublishing.c"
+#line 8278 "FacebookPublishing.c"
 	}
-#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp67_ = g_strdup (_tmp64_);
-#line 1373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	source_file_mime_type = _tmp67_;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp68_ = mp_envelope;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp69_ = publishable;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp70_ = spit_publishing_publishable_get_serialized_file (_tmp69_);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp71_ = _tmp70_;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp72_ = g_file_get_basename (_tmp71_);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp73_ = _tmp72_;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp74_ = source_file_mime_type;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp75_ = image_data;
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_append_form_file (_tmp68_, "source", _tmp73_, _tmp74_, _tmp75_);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp73_);
-#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (_tmp71_);
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp76_ = mp_envelope;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp77_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp78_ = _tmp77_->request_headers;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp79_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp80_ = _tmp79_->request_body;
-#line 1379 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_to_message (_tmp76_, _tmp78_, _tmp80_);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (source_file_mime_type);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (publishable_comment);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (publishable_title);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupMultipart_free0 (mp_envelope);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupBuffer_free0 (image_data);
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 10366 "FacebookPublishing.c"
+#line 8330 "FacebookPublishing.c"
 }
 
 
 static PublishingFacebookGraphSessionGraphUploadMessage* publishing_facebook_graph_session_graph_upload_message_new (PublishingFacebookGraphSession* host_session, const gchar* access_token, const gchar* relative_uri, SpitPublishingPublishable* publishable, gboolean suppress_titling, const gchar* resource_privacy) {
-#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_graph_session_graph_upload_message_construct (PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_UPLOAD_MESSAGE, host_session, access_token, relative_uri, publishable, suppress_titling, resource_privacy);
-#line 10373 "FacebookPublishing.c"
+#line 8337 "FacebookPublishing.c"
 }
 
 
@@ -10413,13 +8361,13 @@ static gboolean publishing_facebook_graph_session_graph_upload_message_real_prep
 	PublishingFacebookGraphSessionGraphUploadMessage * self;
 	gboolean result = FALSE;
 	GMappedFile* _tmp0_ = NULL;
-#line 1382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_UPLOAD_MESSAGE, PublishingFacebookGraphSessionGraphUploadMessage);
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->mapped_file;
-#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 10387 "FacebookPublishing.c"
+#line 8351 "FacebookPublishing.c"
 		SpitPublishingPublishable* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
@@ -10429,82 +8377,82 @@ static gboolean publishing_facebook_graph_session_graph_upload_message_real_prep
 		gchar* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
 		GError* _tmp9_ = NULL;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp1_ = self->priv->publishable;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = spit_publishing_publishable_get_serialized_file (_tmp1_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp3_ = _tmp2_;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = g_file_get_path (_tmp3_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp5_ = _tmp4_;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp6_ = g_strdup_printf ("File %s is unavailable.", _tmp5_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = _tmp6_;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp7_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = _tmp8_;
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, PublishingFacebookGraphMessage), "failed", _tmp9_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_error_free0 (_tmp9_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp7_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp5_);
-#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (_tmp3_);
-#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result = FALSE;
-#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return result;
-#line 10429 "FacebookPublishing.c"
+#line 8393 "FacebookPublishing.c"
 	} else {
-#line 1388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result = TRUE;
-#line 1388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return result;
-#line 10435 "FacebookPublishing.c"
+#line 8399 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_graph_session_graph_upload_message_class_init (PublishingFacebookGraphSessionGraphUploadMessageClass * klass) {
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_upload_message_parent_class = g_type_class_peek_parent (klass);
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphMessageClass *) klass)->finalize = publishing_facebook_graph_session_graph_upload_message_finalize;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFacebookGraphSessionGraphUploadMessagePrivate));
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphSessionGraphMessageImplClass *) klass)->prepare_for_transmission = publishing_facebook_graph_session_graph_upload_message_real_prepare_for_transmission;
-#line 10449 "FacebookPublishing.c"
+#line 8413 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_upload_message_instance_init (PublishingFacebookGraphSessionGraphUploadMessage * self) {
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv = PUBLISHING_FACEBOOK_GRAPH_SESSION_GRAPH_UPLOAD_MESSAGE_GET_PRIVATE (self);
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->mapped_file = NULL;
-#line 10458 "FacebookPublishing.c"
+#line 8422 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_upload_message_finalize (PublishingFacebookGraphMessage* obj) {
 	PublishingFacebookGraphSessionGraphUploadMessage * self;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_UPLOAD_MESSAGE, PublishingFacebookGraphSessionGraphUploadMessage);
-#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1062 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_mapped_file_unref0 (self->priv->mapped_file);
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1063 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->publishable);
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	PUBLISHING_FACEBOOK_GRAPH_MESSAGE_CLASS (publishing_facebook_graph_session_graph_upload_message_parent_class)->finalize (obj);
-#line 10472 "FacebookPublishing.c"
+#line 8436 "FacebookPublishing.c"
 }
 
 
@@ -10542,105 +8490,105 @@ static PublishingFacebookGraphSessionGraphCreateAlbumMessage* publishing_faceboo
 	SoupMessageHeaders* _tmp17_ = NULL;
 	SoupMessage* _tmp18_ = NULL;
 	SoupMessageBody* _tmp19_ = NULL;
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (host_session), NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (access_token != NULL, NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (album_name != NULL, NULL);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (album_privacy != NULL, NULL);
-#line 1396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = host_session;
-#line 1396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = access_token;
-#line 1396 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookGraphSessionGraphCreateAlbumMessage*) publishing_facebook_graph_session_graph_message_impl_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_POST, "/me/albums", _tmp1_, PUBLISHING_FACEBOOK_ENDPOINT_DEFAULT);
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = album_privacy;
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp3_ != NULL) {
-#line 10528 "FacebookPublishing.c"
+#line 8492 "FacebookPublishing.c"
 		const gchar* _tmp4_ = NULL;
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp4_ = album_privacy;
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = g_strcmp0 (_tmp4_, "") != 0;
-#line 10534 "FacebookPublishing.c"
+#line 8498 "FacebookPublishing.c"
 	} else {
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp2_ = FALSE;
-#line 10538 "FacebookPublishing.c"
+#line 8502 "FacebookPublishing.c"
 	}
-#line 1398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_vala_assert (_tmp2_, "album_privacy != null && album_privacy != \"\"");
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->method;
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = publishing_rest_support_http_method_to_string (_tmp5_);
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->uri;
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = soup_uri_new (_tmp8_);
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = _tmp9_;
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp11_ = soup_message_new_from_uri (_tmp7_, _tmp10_);
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message);
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message = _tmp11_;
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupURI_free0 (_tmp10_);
-#line 1400 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp12_ = soup_multipart_new ("multipart/form-data");
-#line 1402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	mp_envelope = _tmp12_;
-#line 1404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp13_ = access_token;
-#line 1404 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_append_form_string (mp_envelope, "access_token", _tmp13_);
-#line 1405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp14_ = album_name;
-#line 1405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_append_form_string (mp_envelope, "name", _tmp14_);
-#line 1406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp15_ = album_privacy;
-#line 1406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_append_form_string (mp_envelope, "privacy", _tmp15_);
-#line 1408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp16_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp17_ = _tmp16_->request_headers;
-#line 1408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp18_ = G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_MESSAGE_IMPL, PublishingFacebookGraphSessionGraphMessageImpl)->soup_message;
-#line 1408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp19_ = _tmp18_->request_body;
-#line 1408 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	soup_multipart_to_message (mp_envelope, _tmp17_, _tmp19_);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	__vala_SoupMultipart_free0 (mp_envelope);
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 10594 "FacebookPublishing.c"
+#line 8558 "FacebookPublishing.c"
 }
 
 
 static PublishingFacebookGraphSessionGraphCreateAlbumMessage* publishing_facebook_graph_session_graph_create_album_message_new (PublishingFacebookGraphSession* host_session, const gchar* access_token, const gchar* album_name, const gchar* album_privacy) {
-#line 1394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_graph_session_graph_create_album_message_construct (PUBLISHING_FACEBOOK_GRAPH_SESSION_TYPE_GRAPH_CREATE_ALBUM_MESSAGE, host_session, access_token, album_name, album_privacy);
-#line 10601 "FacebookPublishing.c"
+#line 8565 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_graph_create_album_message_class_init (PublishingFacebookGraphSessionGraphCreateAlbumMessageClass * klass) {
-#line 1393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_graph_create_album_message_parent_class = g_type_class_peek_parent (klass);
-#line 10608 "FacebookPublishing.c"
+#line 8572 "FacebookPublishing.c"
 }
 
 
@@ -10661,204 +8609,204 @@ static GType publishing_facebook_graph_session_graph_create_album_message_get_ty
 
 
 static void publishing_facebook_value_graph_session_init (GValue* value) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 10631 "FacebookPublishing.c"
+#line 8595 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_graph_session_free_value (GValue* value) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_unref (value->data[0].v_pointer);
-#line 10640 "FacebookPublishing.c"
+#line 8604 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_graph_session_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_graph_session_ref (src_value->data[0].v_pointer);
-#line 10650 "FacebookPublishing.c"
+#line 8614 "FacebookPublishing.c"
 	} else {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 10654 "FacebookPublishing.c"
+#line 8618 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_value_graph_session_peek_pointer (const GValue* value) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 10662 "FacebookPublishing.c"
+#line 8626 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_graph_session_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 10669 "FacebookPublishing.c"
+#line 8633 "FacebookPublishing.c"
 		PublishingFacebookGraphSession* object;
 		object = collect_values[0].v_pointer;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10676 "FacebookPublishing.c"
+#line 8640 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 10680 "FacebookPublishing.c"
+#line 8644 "FacebookPublishing.c"
 		}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_graph_session_ref (object);
-#line 10684 "FacebookPublishing.c"
+#line 8648 "FacebookPublishing.c"
 	} else {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 10688 "FacebookPublishing.c"
+#line 8652 "FacebookPublishing.c"
 	}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 10692 "FacebookPublishing.c"
+#line 8656 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_graph_session_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookGraphSession** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 10703 "FacebookPublishing.c"
+#line 8667 "FacebookPublishing.c"
 	}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 10709 "FacebookPublishing.c"
+#line 8673 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 10713 "FacebookPublishing.c"
+#line 8677 "FacebookPublishing.c"
 	} else {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_graph_session_ref (value->data[0].v_pointer);
-#line 10717 "FacebookPublishing.c"
+#line 8681 "FacebookPublishing.c"
 	}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 10721 "FacebookPublishing.c"
+#line 8685 "FacebookPublishing.c"
 }
 
 
 GParamSpec* publishing_facebook_param_spec_graph_session (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookParamSpecGraphSession* spec;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION), NULL);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 10735 "FacebookPublishing.c"
+#line 8699 "FacebookPublishing.c"
 }
 
 
 gpointer publishing_facebook_value_get_graph_session (const GValue* value) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION), NULL);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 10744 "FacebookPublishing.c"
+#line 8708 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_value_set_graph_session (GValue* value, gpointer v_object) {
 	PublishingFacebookGraphSession* old;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_ref (value->data[0].v_pointer);
-#line 10764 "FacebookPublishing.c"
+#line 8728 "FacebookPublishing.c"
 	} else {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 10768 "FacebookPublishing.c"
+#line 8732 "FacebookPublishing.c"
 	}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_unref (old);
-#line 10774 "FacebookPublishing.c"
+#line 8738 "FacebookPublishing.c"
 	}
 }
 
 
 void publishing_facebook_value_take_graph_session (GValue* value, gpointer v_object) {
 	PublishingFacebookGraphSession* old;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 10793 "FacebookPublishing.c"
+#line 8757 "FacebookPublishing.c"
 	} else {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 10797 "FacebookPublishing.c"
+#line 8761 "FacebookPublishing.c"
 	}
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_graph_session_unref (old);
-#line 10803 "FacebookPublishing.c"
+#line 8767 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_graph_session_class_init (PublishingFacebookGraphSessionClass * klass) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_parent_class = g_type_class_peek_parent (klass);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookGraphSessionClass *) klass)->finalize = publishing_facebook_graph_session_finalize;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFacebookGraphSessionPrivate));
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("authenticated", PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 10817 "FacebookPublishing.c"
+#line 8781 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_graph_session_instance_init (PublishingFacebookGraphSession * self) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv = PUBLISHING_FACEBOOK_GRAPH_SESSION_GET_PRIVATE (self);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 10826 "FacebookPublishing.c"
+#line 8790 "FacebookPublishing.c"
 }
 
 
@@ -10866,23 +8814,23 @@ static void publishing_facebook_graph_session_finalize (PublishingFacebookGraphS
 	PublishingFacebookGraphSession * self;
 	SoupSession* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_GRAPH_SESSION, PublishingFacebookGraphSession);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->soup_session;
-#line 1428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("request-unqueued", soup_session_get_type (), &_tmp1_, NULL, FALSE);
-#line 1428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_graph_session_on_request_unqueued_soup_session_request_unqueued, self);
-#line 1414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1158 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (self->priv->soup_session);
-#line 1415 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1159 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (self->priv->access_token);
-#line 1416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (self->priv->current_message);
-#line 10850 "FacebookPublishing.c"
+#line 8814 "FacebookPublishing.c"
 }
 
 
@@ -10903,24 +8851,24 @@ GType publishing_facebook_graph_session_get_type (void) {
 gpointer publishing_facebook_graph_session_ref (gpointer instance) {
 	PublishingFacebookGraphSession* self;
 	self = instance;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 10875 "FacebookPublishing.c"
+#line 8839 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_graph_session_unref (gpointer instance) {
 	PublishingFacebookGraphSession* self;
 	self = instance;
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_GRAPH_SESSION_GET_CLASS (self)->finalize (self);
-#line 1252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 10888 "FacebookPublishing.c"
+#line 8852 "FacebookPublishing.c"
 	}
 }
 
@@ -10928,35 +8876,35 @@ void publishing_facebook_graph_session_unref (gpointer instance) {
 static SpitPublishingPublishable** _vala_array_dup3 (SpitPublishingPublishable** self, int length) {
 	SpitPublishingPublishable** result;
 	int i;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	result = g_new0 (SpitPublishingPublishable*, length + 1);
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 10900 "FacebookPublishing.c"
+#line 8864 "FacebookPublishing.c"
 		SpitPublishingPublishable* _tmp0_ = NULL;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		result[i] = _tmp0_;
-#line 10906 "FacebookPublishing.c"
+#line 8870 "FacebookPublishing.c"
 	}
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return result;
-#line 10910 "FacebookPublishing.c"
+#line 8874 "FacebookPublishing.c"
 }
 
 
 static gpointer _publishing_facebook_graph_session_ref0 (gpointer self) {
-#line 1576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? publishing_facebook_graph_session_ref (self) : NULL;
-#line 10917 "FacebookPublishing.c"
+#line 8881 "FacebookPublishing.c"
 }
 
 
 static gpointer _publishing_facebook_publishing_parameters_ref0 (gpointer self) {
-#line 1577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self ? publishing_facebook_publishing_parameters_ref (self) : NULL;
-#line 10924 "FacebookPublishing.c"
+#line 8888 "FacebookPublishing.c"
 }
 
 
@@ -10970,77 +8918,77 @@ PublishingFacebookUploader* publishing_facebook_uploader_construct (GType object
 	PublishingFacebookGraphSession* _tmp3_ = NULL;
 	PublishingFacebookPublishingParameters* _tmp4_ = NULL;
 	PublishingFacebookPublishingParameters* _tmp5_ = NULL;
-#line 1572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_SESSION (session), NULL);
-#line 1572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FACEBOOK_IS_PUBLISHING_PARAMETERS (publishing_params), NULL);
-#line 1572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = (PublishingFacebookUploader*) g_type_create_instance (object_type);
-#line 1574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_file = 0;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = publishables;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = publishables_length1;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup3 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishables = _tmp1_;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishables_length1 = _tmp1__length1;
-#line 1575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->_publishables_size_ = self->priv->publishables_length1;
-#line 1576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = session;
-#line 1576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _publishing_facebook_graph_session_ref0 (_tmp2_);
-#line 1576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_session_unref0 (self->priv->session);
-#line 1576 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->session = _tmp3_;
-#line 1577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = publishing_params;
-#line 1577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = _publishing_facebook_publishing_parameters_ref0 (_tmp4_);
-#line 1577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_publishing_parameters_unref0 (self->priv->publishing_params);
-#line 1577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishing_params = _tmp5_;
-#line 1572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return self;
-#line 10980 "FacebookPublishing.c"
+#line 8944 "FacebookPublishing.c"
 }
 
 
 PublishingFacebookUploader* publishing_facebook_uploader_new (PublishingFacebookGraphSession* session, PublishingFacebookPublishingParameters* publishing_params, SpitPublishingPublishable** publishables, int publishables_length1) {
-#line 1572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return publishing_facebook_uploader_construct (PUBLISHING_FACEBOOK_TYPE_UPLOADER, session, publishing_params, publishables, publishables_length1);
-#line 10987 "FacebookPublishing.c"
+#line 8951 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_uploader_on_chunk_transmitted_publishing_facebook_graph_message_data_transmitted (PublishingFacebookGraphMessage* _sender, gint bytes_sent_so_far, gint total_bytes, gpointer self) {
-#line 1599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_on_chunk_transmitted ((PublishingFacebookUploader*) self, bytes_sent_so_far, total_bytes);
-#line 10994 "FacebookPublishing.c"
+#line 8958 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_uploader_on_message_completed_publishing_facebook_graph_message_completed (PublishingFacebookGraphMessage* _sender, gpointer self) {
-#line 1600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_on_message_completed ((PublishingFacebookUploader*) self, _sender);
-#line 11001 "FacebookPublishing.c"
+#line 8965 "FacebookPublishing.c"
 }
 
 
 static void _publishing_facebook_uploader_on_message_failed_publishing_facebook_graph_message_failed (PublishingFacebookGraphMessage* _sender, GError* err, gpointer self) {
-#line 1601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_on_message_failed ((PublishingFacebookUploader*) self, _sender, err);
-#line 11008 "FacebookPublishing.c"
+#line 8972 "FacebookPublishing.c"
 }
 
 
@@ -11078,167 +9026,167 @@ static void publishing_facebook_uploader_send_current_file (PublishingFacebookUp
 	PublishingFacebookGraphMessage* _tmp32_ = NULL;
 	PublishingFacebookGraphSession* _tmp33_ = NULL;
 	PublishingFacebookGraphMessage* _tmp34_ = NULL;
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publishables;
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->priv->publishables_length1;
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->current_file;
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = _tmp0_[_tmp1_];
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 1581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishable = _tmp3_;
-#line 1582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = publishable;
-#line 1582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = spit_publishing_publishable_get_serialized_file (_tmp4_);
-#line 1582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1323 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	file = _tmp5_;
-#line 1585 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = file;
-#line 1585 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp6_ == NULL) {
-#line 11070 "FacebookPublishing.c"
+#line 9034 "FacebookPublishing.c"
 		gint _tmp7_ = 0;
-#line 1586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp7_ = self->priv->current_file;
-#line 1586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		self->priv->current_file = _tmp7_ + 1;
-#line 1587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (file);
-#line 1587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_object_unref0 (publishable);
-#line 1587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return;
-#line 11082 "FacebookPublishing.c"
+#line 9046 "FacebookPublishing.c"
 	}
-#line 1591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp9_ = publishable;
-#line 1591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp10_ = spit_publishing_publishable_get_media_type (_tmp9_);
-#line 1591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp10_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
-#line 11090 "FacebookPublishing.c"
+#line 9054 "FacebookPublishing.c"
 		PublishingFacebookPublishingParameters* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
 		gchar* _tmp14_ = NULL;
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp11_ = self->priv->publishing_params;
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp12_ = publishing_facebook_publishing_parameters_get_target_album_id (_tmp11_);
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp14_ = g_strdup_printf ("/%s/photos", _tmp13_);
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp8_);
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _tmp14_;
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp13_);
-#line 11109 "FacebookPublishing.c"
+#line 9073 "FacebookPublishing.c"
 	} else {
 		gchar* _tmp15_ = NULL;
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp15_ = g_strdup ("/me/videos");
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_g_free0 (_tmp8_);
-#line 1592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1333 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = _tmp15_;
-#line 11118 "FacebookPublishing.c"
+#line 9082 "FacebookPublishing.c"
 	}
-#line 1590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp16_ = g_strdup (_tmp8_);
-#line 1590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1331 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	resource_uri = _tmp16_;
-#line 1594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp18_ = publishable;
-#line 1594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp19_ = spit_publishing_publishable_get_media_type (_tmp18_);
-#line 1594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp19_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 11130 "FacebookPublishing.c"
+#line 9094 "FacebookPublishing.c"
 		PublishingFacebookPublishingParameters* _tmp20_ = NULL;
 		const gchar* _tmp21_ = NULL;
-#line 1595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1336 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp20_ = self->priv->publishing_params;
-#line 1595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1336 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp21_ = _tmp20_->privacy_object;
-#line 1595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1336 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = _tmp21_;
-#line 11139 "FacebookPublishing.c"
+#line 9103 "FacebookPublishing.c"
 	} else {
-#line 1595 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1336 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp17_ = NULL;
-#line 11143 "FacebookPublishing.c"
+#line 9107 "FacebookPublishing.c"
 	}
-#line 1593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp22_ = g_strdup (_tmp17_);
-#line 1593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	resource_privacy = _tmp22_;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp23_ = self->priv->session;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp24_ = resource_uri;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp25_ = publishable;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp26_ = self->priv->publishing_params;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp27_ = _tmp26_->strip_metadata;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp28_ = resource_privacy;
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp29_ = publishing_facebook_graph_session_new_upload (_tmp23_, _tmp24_, _tmp25_, _tmp27_, _tmp28_);
-#line 1596 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	upload_message = _tmp29_;
-#line 1599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp30_ = upload_message;
-#line 1599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp30_, "data-transmitted", (GCallback) _publishing_facebook_uploader_on_chunk_transmitted_publishing_facebook_graph_message_data_transmitted, self);
-#line 1600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp31_ = upload_message;
-#line 1600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp31_, "completed", (GCallback) _publishing_facebook_uploader_on_message_completed_publishing_facebook_graph_message_completed, self);
-#line 1601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp32_ = upload_message;
-#line 1601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_connect (_tmp32_, "failed", (GCallback) _publishing_facebook_uploader_on_message_failed_publishing_facebook_graph_message_failed, self);
-#line 1603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp33_ = self->priv->session;
-#line 1603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp34_ = upload_message;
-#line 1603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_graph_session_send_message (_tmp33_, _tmp34_);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_message_unref0 (upload_message);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (resource_privacy);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (resource_uri);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_free0 (_tmp8_);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (file);
-#line 1580 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_g_object_unref0 (publishable);
-#line 11195 "FacebookPublishing.c"
+#line 9159 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_uploader_send_files (PublishingFacebookUploader* self) {
-#line 1606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_file = 0;
-#line 1608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_send_current_file (self);
-#line 11206 "FacebookPublishing.c"
+#line 9170 "FacebookPublishing.c"
 }
 
 
@@ -11256,52 +9204,52 @@ static void publishing_facebook_uploader_on_chunk_transmitted (PublishingFaceboo
 	gdouble _tmp6_ = 0.0;
 	SpitPublishingProgressCallback _tmp7_ = NULL;
 	void* _tmp7__target = NULL;
-#line 1611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = self->priv->publishables;
-#line 1612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__length1 = self->priv->publishables_length1;
-#line 1612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	file_span = 1.0 / _tmp0__length1;
-#line 1613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = bytes_written_so_far;
-#line 1613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = total_bytes;
-#line 1613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	this_file_fraction_complete = ((gdouble) _tmp1_) / _tmp2_;
-#line 1614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp3_ = self->priv->current_file;
-#line 1614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = file_span;
-#line 1614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp5_ = this_file_fraction_complete;
-#line 1614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = file_span;
-#line 1614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	fraction_complete = (_tmp3_ * _tmp4_) + (_tmp5_ * _tmp6_);
-#line 1617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = self->priv->status_updated;
-#line 1617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7__target = self->priv->status_updated_target;
-#line 1617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp7_ != NULL) {
-#line 11254 "FacebookPublishing.c"
+#line 9218 "FacebookPublishing.c"
 		SpitPublishingProgressCallback _tmp8_ = NULL;
 		void* _tmp8__target = NULL;
 		gint _tmp9_ = 0;
 		gdouble _tmp10_ = 0.0;
-#line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ = self->priv->status_updated;
-#line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8__target = self->priv->status_updated_target;
-#line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = self->priv->current_file;
-#line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp10_ = fraction_complete;
-#line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp8_ (_tmp9_ + 1, _tmp10_, _tmp8__target);
-#line 11269 "FacebookPublishing.c"
+#line 9233 "FacebookPublishing.c"
 	}
 }
 
@@ -11317,50 +9265,50 @@ static void publishing_facebook_uploader_on_message_completed (PublishingFaceboo
 	gint _tmp7_ = 0;
 	SpitPublishingPublishable** _tmp8_ = NULL;
 	gint _tmp8__length1 = 0;
-#line 1621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 1622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 1622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("data-transmitted", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 1622 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_chunk_transmitted_publishing_facebook_graph_message_data_transmitted, self);
-#line 1623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 1623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 1623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_message_completed_publishing_facebook_graph_message_completed, self);
-#line 1624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = message;
-#line 1624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp5_, NULL, FALSE);
-#line 1624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1365 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_message_failed_publishing_facebook_graph_message_failed, self);
-#line 1626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = self->priv->current_file;
-#line 1626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->current_file = _tmp6_ + 1;
-#line 1627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp7_ = self->priv->current_file;
-#line 1627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8_ = self->priv->publishables;
-#line 1627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp8__length1 = self->priv->publishables_length1;
-#line 1627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp7_ < _tmp8__length1) {
-#line 1628 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1369 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_send_current_file (self);
-#line 11321 "FacebookPublishing.c"
+#line 9285 "FacebookPublishing.c"
 	} else {
 		gint _tmp9_ = 0;
-#line 1630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		_tmp9_ = self->priv->current_file;
-#line 1630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_signal_emit_by_name (self, "upload-complete", _tmp9_);
-#line 11328 "FacebookPublishing.c"
+#line 9292 "FacebookPublishing.c"
 	}
 }
 
@@ -11373,33 +9321,33 @@ static void publishing_facebook_uploader_on_message_failed (PublishingFacebookUp
 	PublishingFacebookGraphMessage* _tmp4_ = NULL;
 	guint _tmp5_ = 0U;
 	GError* _tmp6_ = NULL;
-#line 1634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_GRAPH_MESSAGE (message));
-#line 1635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = message;
-#line 1635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("data-transmitted", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp1_, NULL, FALSE);
-#line 1635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_chunk_transmitted_publishing_facebook_graph_message_data_transmitted, self);
-#line 1636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp2_ = message;
-#line 1636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp3_, NULL, FALSE);
-#line 1636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1377 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_message_completed_publishing_facebook_graph_message_completed, self);
-#line 1637 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp4_ = message;
-#line 1637 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_parse_name ("failed", PUBLISHING_FACEBOOK_TYPE_GRAPH_MESSAGE, &_tmp5_, NULL, FALSE);
-#line 1637 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_facebook_uploader_on_message_failed_publishing_facebook_graph_message_failed, self);
-#line 1639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp6_ = _error_;
-#line 1639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_emit_by_name (self, "upload-error", _tmp6_);
-#line 11367 "FacebookPublishing.c"
+#line 9331 "FacebookPublishing.c"
 }
 
 
@@ -11408,248 +9356,248 @@ void publishing_facebook_uploader_upload (PublishingFacebookUploader* self, Spit
 	void* _tmp0__target = NULL;
 	SpitPublishingPublishable** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 1642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (PUBLISHING_FACEBOOK_IS_UPLOADER (self));
-#line 1643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0_ = status_updated;
-#line 1643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp0__target = status_updated_target;
-#line 1643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->status_updated = _tmp0_;
-#line 1643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1384 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->status_updated_target = _tmp0__target;
-#line 1645 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1_ = self->priv->publishables;
-#line 1645 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_tmp1__length1 = self->priv->publishables_length1;
-#line 1645 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (_tmp1__length1 > 0) {
-#line 1646 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_send_files (self);
-#line 11394 "FacebookPublishing.c"
+#line 9358 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_uploader_init (GValue* value) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 11402 "FacebookPublishing.c"
+#line 9366 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_value_uploader_free_value (GValue* value) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_unref (value->data[0].v_pointer);
-#line 11411 "FacebookPublishing.c"
+#line 9375 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_value_uploader_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_facebook_uploader_ref (src_value->data[0].v_pointer);
-#line 11421 "FacebookPublishing.c"
+#line 9385 "FacebookPublishing.c"
 	} else {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 11425 "FacebookPublishing.c"
+#line 9389 "FacebookPublishing.c"
 	}
 }
 
 
 static gpointer publishing_facebook_value_uploader_peek_pointer (const GValue* value) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 11433 "FacebookPublishing.c"
+#line 9397 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_uploader_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 11440 "FacebookPublishing.c"
+#line 9404 "FacebookPublishing.c"
 		PublishingFacebookUploader* object;
 		object = collect_values[0].v_pointer;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11447 "FacebookPublishing.c"
+#line 9411 "FacebookPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 11451 "FacebookPublishing.c"
+#line 9415 "FacebookPublishing.c"
 		}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = publishing_facebook_uploader_ref (object);
-#line 11455 "FacebookPublishing.c"
+#line 9419 "FacebookPublishing.c"
 	} else {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 11459 "FacebookPublishing.c"
+#line 9423 "FacebookPublishing.c"
 	}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 11463 "FacebookPublishing.c"
+#line 9427 "FacebookPublishing.c"
 }
 
 
 static gchar* publishing_facebook_value_uploader_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFacebookUploader** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!object_p) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 11474 "FacebookPublishing.c"
+#line 9438 "FacebookPublishing.c"
 	}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = NULL;
-#line 11480 "FacebookPublishing.c"
+#line 9444 "FacebookPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 11484 "FacebookPublishing.c"
+#line 9448 "FacebookPublishing.c"
 	} else {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		*object_p = publishing_facebook_uploader_ref (value->data[0].v_pointer);
-#line 11488 "FacebookPublishing.c"
+#line 9452 "FacebookPublishing.c"
 	}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return NULL;
-#line 11492 "FacebookPublishing.c"
+#line 9456 "FacebookPublishing.c"
 }
 
 
 GParamSpec* publishing_facebook_param_spec_uploader (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFacebookParamSpecUploader* spec;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FACEBOOK_TYPE_UPLOADER), NULL);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 11506 "FacebookPublishing.c"
+#line 9470 "FacebookPublishing.c"
 }
 
 
 gpointer publishing_facebook_value_get_uploader (const GValue* value) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_UPLOADER), NULL);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return value->data[0].v_pointer;
-#line 11515 "FacebookPublishing.c"
+#line 9479 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_value_set_uploader (GValue* value, gpointer v_object) {
 	PublishingFacebookUploader* old;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_UPLOADER));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_UPLOADER));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_ref (value->data[0].v_pointer);
-#line 11535 "FacebookPublishing.c"
+#line 9499 "FacebookPublishing.c"
 	} else {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 11539 "FacebookPublishing.c"
+#line 9503 "FacebookPublishing.c"
 	}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_unref (old);
-#line 11545 "FacebookPublishing.c"
+#line 9509 "FacebookPublishing.c"
 	}
 }
 
 
 void publishing_facebook_value_take_uploader (GValue* value, gpointer v_object) {
 	PublishingFacebookUploader* old;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FACEBOOK_TYPE_UPLOADER));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (v_object) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FACEBOOK_TYPE_UPLOADER));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 11564 "FacebookPublishing.c"
+#line 9528 "FacebookPublishing.c"
 	} else {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 11568 "FacebookPublishing.c"
+#line 9532 "FacebookPublishing.c"
 	}
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (old) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		publishing_facebook_uploader_unref (old);
-#line 11574 "FacebookPublishing.c"
+#line 9538 "FacebookPublishing.c"
 	}
 }
 
 
 static void publishing_facebook_uploader_class_init (PublishingFacebookUploaderClass * klass) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	publishing_facebook_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	((PublishingFacebookUploaderClass *) klass)->finalize = publishing_facebook_uploader_finalize;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFacebookUploaderPrivate));
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("upload_complete", PUBLISHING_FACEBOOK_TYPE_UPLOADER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__INT, G_TYPE_NONE, 1, G_TYPE_INT);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_new ("upload_error", PUBLISHING_FACEBOOK_TYPE_UPLOADER, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1, G_TYPE_POINTER);
-#line 11590 "FacebookPublishing.c"
+#line 9554 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_uploader_instance_init (PublishingFacebookUploader * self) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv = PUBLISHING_FACEBOOK_UPLOADER_GET_PRIVATE (self);
-#line 1567 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->status_updated = NULL;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->ref_count = 1;
-#line 11601 "FacebookPublishing.c"
+#line 9565 "FacebookPublishing.c"
 }
 
 
 static void publishing_facebook_uploader_finalize (PublishingFacebookUploader* obj) {
 	PublishingFacebookUploader * self;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FACEBOOK_TYPE_UPLOADER, PublishingFacebookUploader);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 1565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_graph_session_unref0 (self->priv->session);
-#line 1566 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	_publishing_facebook_publishing_parameters_unref0 (self->priv->publishing_params);
-#line 11617 "FacebookPublishing.c"
+#line 9581 "FacebookPublishing.c"
 }
 
 
@@ -11670,24 +9618,24 @@ GType publishing_facebook_uploader_get_type (void) {
 gpointer publishing_facebook_uploader_ref (gpointer instance) {
 	PublishingFacebookUploader* self;
 	self = instance;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	return instance;
-#line 11642 "FacebookPublishing.c"
+#line 9606 "FacebookPublishing.c"
 }
 
 
 void publishing_facebook_uploader_unref (gpointer instance) {
 	PublishingFacebookUploader* self;
 	self = instance;
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		PUBLISHING_FACEBOOK_UPLOADER_GET_CLASS (self)->finalize (self);
-#line 1562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
+#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FacebookPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 11655 "FacebookPublishing.c"
+#line 9619 "FacebookPublishing.c"
 	}
 }
 
@@ -11707,18 +9655,6 @@ static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNoti
 static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify destroy_func) {
 	_vala_array_destroy (array, array_length, destroy_func);
 	g_free (array);
-}
-
-
-static gint _vala_array_length (gpointer array) {
-	int length;
-	length = 0;
-	if (array) {
-		while (((gpointer*) array)[length]) {
-			length++;
-		}
-	}
-	return length;
 }
 
 

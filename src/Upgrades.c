@@ -1123,14 +1123,14 @@ static guint64 mimics_removal_task_real_get_step_count (UpgradeTask* base) {
 #line 73 "/home/jens/Source/shotwell/src/Upgrades.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1126 "Upgrades.c"
-			goto __catch591_g_error;
+			goto __catch593_g_error;
 		}
 #line 73 "/home/jens/Source/shotwell/src/Upgrades.vala"
 		self->priv->num_mimics = _tmp0_;
 #line 1131 "Upgrades.c"
 	}
-	goto __finally591;
-	__catch591_g_error:
+	goto __finally593;
+	__catch593_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp3_ = NULL;
@@ -1149,7 +1149,7 @@ static guint64 mimics_removal_task_real_get_step_count (UpgradeTask* base) {
 		_g_error_free0 (e);
 #line 1151 "Upgrades.c"
 	}
-	__finally591:
+	__finally593:
 #line 72 "/home/jens/Source/shotwell/src/Upgrades.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 72 "/home/jens/Source/shotwell/src/Upgrades.vala"
@@ -1195,7 +1195,7 @@ static void mimics_removal_task_real_execute (UpgradeTask* base, ProgressMonitor
 #line 82 "/home/jens/Source/shotwell/src/Upgrades.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1198 "Upgrades.c"
-			goto __catch592_g_error;
+			goto __catch594_g_error;
 		}
 #line 83 "/home/jens/Source/shotwell/src/Upgrades.vala"
 		_tmp3_ = self->priv->mimic_dir;
@@ -1204,11 +1204,11 @@ static void mimics_removal_task_real_execute (UpgradeTask* base, ProgressMonitor
 #line 83 "/home/jens/Source/shotwell/src/Upgrades.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1207 "Upgrades.c"
-			goto __catch592_g_error;
+			goto __catch594_g_error;
 		}
 	}
-	goto __finally592;
-	__catch592_g_error:
+	goto __finally594;
+	__catch594_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp4_ = NULL;
@@ -1227,7 +1227,7 @@ static void mimics_removal_task_real_execute (UpgradeTask* base, ProgressMonitor
 		_g_error_free0 (e);
 #line 1229 "Upgrades.c"
 	}
-	__finally592:
+	__finally594:
 #line 81 "/home/jens/Source/shotwell/src/Upgrades.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 81 "/home/jens/Source/shotwell/src/Upgrades.vala"

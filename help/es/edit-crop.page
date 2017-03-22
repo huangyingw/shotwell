@@ -42,7 +42,7 @@
   <p>También puede limitar el recuadro a uno de los tamaños más comunes. Elija un tamaño de la lista desplegable que se adapte a sus necesidades. Si pulsa el botón voltear situado junto a esta, la orientación de la restricción cambiará (de horizontal a vertical).</p>
  </item>
  <item>
-  <p>When you're happy with your crop outline, apply it by pressing the <gui>Crop</gui> button. Shotwell will display the cropped photo.</p>
+  <p>Cuando esté satisfecho con su recorte, aplíquelo pulsando el botón <gui>Recortar</gui>. Shotwell mostrará la foto recortada.</p>
  </item>
  <item>
   <p>Si cambia de opinión, pulse el botón <gui>Recortar</gui> de nuevo y ajuste el recorte.</p>

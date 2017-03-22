@@ -130,7 +130,6 @@ GFile* app_dirs_get_temp_dir (void);
 GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname);
 void app_dirs_ensure_writable (GFile* dir);
 GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname);
-GFile* app_dirs_get_resources_dir (void);
 GFile* app_dirs_get_lib_dir (void);
 #define RESOURCES_LIB _LIB
 GFile* app_dirs_get_system_plugins_dir (void);
@@ -182,7 +181,7 @@ void app_dirs_init (const gchar* arg0) {
 	app_dirs_exec_dir = _tmp7_;
 #line 16 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (exec_file);
-#line 186 "AppDirs.c"
+#line 185 "AppDirs.c"
 }
 
 
@@ -202,14 +201,14 @@ GFile* app_dirs_get_home_dir (void) {
 	result = _tmp1_;
 #line 27 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 206 "AppDirs.c"
+#line 205 "AppDirs.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 33 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 213 "AppDirs.c"
+#line 212 "AppDirs.c"
 }
 
 
@@ -221,7 +220,7 @@ GFile* app_dirs_get_cache_dir (void) {
 	_tmp1_ = app_dirs_data_dir;
 #line 31 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp1_ == NULL) {
-#line 225 "AppDirs.c"
+#line 224 "AppDirs.c"
 		const gchar* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
@@ -240,7 +239,7 @@ GFile* app_dirs_get_cache_dir (void) {
 		_tmp0_ = _tmp5_;
 #line 32 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp4_);
-#line 244 "AppDirs.c"
+#line 243 "AppDirs.c"
 	} else {
 		GFile* _tmp6_ = NULL;
 		GFile* _tmp7_ = NULL;
@@ -252,13 +251,13 @@ GFile* app_dirs_get_cache_dir (void) {
 		_g_object_unref0 (_tmp0_);
 #line 33 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp0_ = _tmp7_;
-#line 256 "AppDirs.c"
+#line 255 "AppDirs.c"
 	}
 #line 31 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp0_;
 #line 31 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 262 "AppDirs.c"
+#line 261 "AppDirs.c"
 }
 
 
@@ -351,7 +350,7 @@ void app_dirs_try_migrate_data (void) {
 	_tmp11_ = g_file_query_exists (_tmp10_, NULL);
 #line 42 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp11_) {
-#line 355 "AppDirs.c"
+#line 354 "AppDirs.c"
 		GFile* _tmp12_ = NULL;
 		GFile* _tmp13_ = NULL;
 		GFile* _tmp14_ = NULL;
@@ -368,15 +367,15 @@ void app_dirs_try_migrate_data (void) {
 		_tmp9_ = !_tmp15_;
 #line 42 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp14_);
-#line 372 "AppDirs.c"
+#line 371 "AppDirs.c"
 	} else {
 #line 42 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp9_ = FALSE;
-#line 376 "AppDirs.c"
+#line 375 "AppDirs.c"
 	}
 #line 42 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp9_) {
-#line 380 "AppDirs.c"
+#line 379 "AppDirs.c"
 		{
 			GFile* _tmp16_ = NULL;
 			GFile* _tmp17_ = NULL;
@@ -393,12 +392,12 @@ void app_dirs_try_migrate_data (void) {
 			_g_object_unref0 (_tmp18_);
 #line 44 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 397 "AppDirs.c"
-				goto __catch442_g_error;
+#line 396 "AppDirs.c"
+				goto __catch443_g_error;
 			}
 		}
-		goto __finally442;
-		__catch442_g_error:
+		goto __finally443;
+		__catch443_g_error:
 		{
 			GError* err = NULL;
 #line 43 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -407,9 +406,9 @@ void app_dirs_try_migrate_data (void) {
 			_inner_error_ = NULL;
 #line 43 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_error_free0 (err);
-#line 411 "AppDirs.c"
+#line 410 "AppDirs.c"
 		}
-		__finally442:
+		__finally443:
 #line 43 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 43 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -422,7 +421,7 @@ void app_dirs_try_migrate_data (void) {
 			g_clear_error (&_inner_error_);
 #line 43 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return;
-#line 426 "AppDirs.c"
+#line 425 "AppDirs.c"
 		}
 	}
 	{
@@ -436,12 +435,12 @@ void app_dirs_try_migrate_data (void) {
 		g_file_move (_tmp19_, _tmp20_, G_FILE_COPY_NONE, NULL, NULL, NULL, &_inner_error_);
 #line 49 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 440 "AppDirs.c"
-			goto __catch443_g_error;
+#line 439 "AppDirs.c"
+			goto __catch444_g_error;
 		}
 	}
-	goto __finally443;
-	__catch443_g_error:
+	goto __finally444;
+	__catch444_g_error:
 	{
 		GError* err = NULL;
 #line 48 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -450,9 +449,9 @@ void app_dirs_try_migrate_data (void) {
 		_inner_error_ = NULL;
 #line 48 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_error_free0 (err);
-#line 454 "AppDirs.c"
+#line 453 "AppDirs.c"
 	}
-	__finally443:
+	__finally444:
 #line 48 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 48 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -465,7 +464,7 @@ void app_dirs_try_migrate_data (void) {
 		g_clear_error (&_inner_error_);
 #line 48 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return;
-#line 469 "AppDirs.c"
+#line 468 "AppDirs.c"
 	}
 #line 53 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp21_ = app_dirs_get_data_dir ();
@@ -491,7 +490,7 @@ void app_dirs_try_migrate_data (void) {
 	if (_tmp27_) {
 #line 55 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp25_ = TRUE;
-#line 495 "AppDirs.c"
+#line 494 "AppDirs.c"
 	} else {
 		GFile* _tmp28_ = NULL;
 		gboolean _tmp29_ = FALSE;
@@ -501,7 +500,7 @@ void app_dirs_try_migrate_data (void) {
 		_tmp29_ = g_file_query_exists (_tmp28_, NULL);
 #line 55 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp25_ = !_tmp29_;
-#line 505 "AppDirs.c"
+#line 504 "AppDirs.c"
 	}
 #line 55 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp25_) {
@@ -513,7 +512,7 @@ void app_dirs_try_migrate_data (void) {
 		_g_object_unref0 (user_plugin_dir);
 #line 56 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return;
-#line 517 "AppDirs.c"
+#line 516 "AppDirs.c"
 	}
 #line 58 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp30_ = app_dirs_get_cache_dir ();
@@ -529,7 +528,7 @@ void app_dirs_try_migrate_data (void) {
 	_tmp33_ = g_file_query_exists (_tmp32_, NULL);
 #line 60 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp33_) {
-#line 533 "AppDirs.c"
+#line 532 "AppDirs.c"
 		{
 			GFile* _tmp34_ = NULL;
 #line 62 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -538,12 +537,12 @@ void app_dirs_try_migrate_data (void) {
 			g_file_make_directory_with_parents (_tmp34_, NULL, &_inner_error_);
 #line 62 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 542 "AppDirs.c"
-				goto __catch444_g_error;
+#line 541 "AppDirs.c"
+				goto __catch445_g_error;
 			}
 		}
-		goto __finally444;
-		__catch444_g_error:
+		goto __finally445;
+		__catch445_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp35_ = NULL;
@@ -582,9 +581,9 @@ void app_dirs_try_migrate_data (void) {
 			_g_free0 (_tmp38_);
 #line 61 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_error_free0 (err);
-#line 586 "AppDirs.c"
+#line 585 "AppDirs.c"
 		}
-		__finally444:
+		__finally445:
 #line 61 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 61 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -601,7 +600,7 @@ void app_dirs_try_migrate_data (void) {
 			g_clear_error (&_inner_error_);
 #line 61 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return;
-#line 605 "AppDirs.c"
+#line 604 "AppDirs.c"
 		}
 	}
 #line 68 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -648,7 +647,7 @@ void app_dirs_try_migrate_data (void) {
 	_g_object_unref0 (_tmp55_);
 #line 70 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp57_) {
-#line 652 "AppDirs.c"
+#line 651 "AppDirs.c"
 		{
 			GFile* _tmp58_ = NULL;
 			GFile* _tmp59_ = NULL;
@@ -665,12 +664,12 @@ void app_dirs_try_migrate_data (void) {
 			_g_object_unref0 (_tmp60_);
 #line 72 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 669 "AppDirs.c"
-				goto __catch445_g_error;
+#line 668 "AppDirs.c"
+				goto __catch446_g_error;
 			}
 		}
-		goto __finally445;
-		__catch445_g_error:
+		goto __finally446;
+		__catch446_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp61_ = NULL;
@@ -717,9 +716,9 @@ void app_dirs_try_migrate_data (void) {
 			_g_object_unref0 (_tmp64_);
 #line 71 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_error_free0 (err);
-#line 721 "AppDirs.c"
+#line 720 "AppDirs.c"
 		}
-		__finally445:
+		__finally446:
 #line 71 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 71 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -736,7 +735,7 @@ void app_dirs_try_migrate_data (void) {
 			g_clear_error (&_inner_error_);
 #line 71 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return;
-#line 740 "AppDirs.c"
+#line 739 "AppDirs.c"
 		}
 	}
 #line 78 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -779,7 +778,7 @@ void app_dirs_try_migrate_data (void) {
 	_g_object_unref0 (old_dir);
 #line 36 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (user_plugin_dir);
-#line 783 "AppDirs.c"
+#line 782 "AppDirs.c"
 }
 
 
@@ -819,7 +818,7 @@ void app_dirs_set_data_dir (const gchar* user_data_dir) {
 	_tmp6_ = g_path_is_absolute (_tmp5_);
 #line 90 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp6_) {
-#line 823 "AppDirs.c"
+#line 822 "AppDirs.c"
 		GFile* _tmp7_ = NULL;
 		GFile* _tmp8_ = NULL;
 		const gchar* _tmp9_ = NULL;
@@ -838,7 +837,7 @@ void app_dirs_set_data_dir (const gchar* user_data_dir) {
 		app_dirs_data_dir = _tmp10_;
 #line 91 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp8_);
-#line 842 "AppDirs.c"
+#line 841 "AppDirs.c"
 	} else {
 		const gchar* _tmp11_ = NULL;
 		GFile* _tmp12_ = NULL;
@@ -850,7 +849,7 @@ void app_dirs_set_data_dir (const gchar* user_data_dir) {
 		_g_object_unref0 (app_dirs_data_dir);
 #line 93 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		app_dirs_data_dir = _tmp12_;
-#line 854 "AppDirs.c"
+#line 853 "AppDirs.c"
 	}
 #line 95 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp13_ = app_dirs_data_dir;
@@ -864,7 +863,7 @@ void app_dirs_set_data_dir (const gchar* user_data_dir) {
 	_g_free0 (_tmp15_);
 #line 85 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_free0 (path);
-#line 868 "AppDirs.c"
+#line 867 "AppDirs.c"
 }
 
 
@@ -876,7 +875,7 @@ void app_dirs_verify_data_dir (void) {
 	_tmp0_ = app_dirs_get_data_dir ();
 #line 99 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	data_dir = _tmp0_;
-#line 880 "AppDirs.c"
+#line 879 "AppDirs.c"
 	{
 		GFile* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
@@ -886,7 +885,7 @@ void app_dirs_verify_data_dir (void) {
 		_tmp2_ = g_file_query_exists (_tmp1_, NULL);
 #line 101 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (!_tmp2_) {
-#line 890 "AppDirs.c"
+#line 889 "AppDirs.c"
 			GFile* _tmp3_ = NULL;
 #line 102 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp3_ = data_dir;
@@ -894,13 +893,13 @@ void app_dirs_verify_data_dir (void) {
 			g_file_make_directory_with_parents (_tmp3_, NULL, &_inner_error_);
 #line 102 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 898 "AppDirs.c"
-				goto __catch446_g_error;
+#line 897 "AppDirs.c"
+				goto __catch447_g_error;
 			}
 		}
 	}
-	goto __finally446;
-	__catch446_g_error:
+	goto __finally447;
+	__catch447_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -939,9 +938,9 @@ void app_dirs_verify_data_dir (void) {
 		_g_free0 (_tmp7_);
 #line 100 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_error_free0 (err);
-#line 943 "AppDirs.c"
+#line 942 "AppDirs.c"
 	}
-	__finally446:
+	__finally447:
 #line 100 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 100 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -952,11 +951,11 @@ void app_dirs_verify_data_dir (void) {
 		g_clear_error (&_inner_error_);
 #line 100 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return;
-#line 956 "AppDirs.c"
+#line 955 "AppDirs.c"
 	}
 #line 98 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (data_dir);
-#line 960 "AppDirs.c"
+#line 959 "AppDirs.c"
 }
 
 
@@ -968,7 +967,7 @@ void app_dirs_verify_cache_dir (void) {
 	_tmp0_ = app_dirs_get_cache_dir ();
 #line 110 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	cache_dir = _tmp0_;
-#line 972 "AppDirs.c"
+#line 971 "AppDirs.c"
 	{
 		GFile* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
@@ -978,7 +977,7 @@ void app_dirs_verify_cache_dir (void) {
 		_tmp2_ = g_file_query_exists (_tmp1_, NULL);
 #line 112 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (!_tmp2_) {
-#line 982 "AppDirs.c"
+#line 981 "AppDirs.c"
 			GFile* _tmp3_ = NULL;
 #line 113 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp3_ = cache_dir;
@@ -986,13 +985,13 @@ void app_dirs_verify_cache_dir (void) {
 			g_file_make_directory_with_parents (_tmp3_, NULL, &_inner_error_);
 #line 113 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 990 "AppDirs.c"
-				goto __catch447_g_error;
+#line 989 "AppDirs.c"
+				goto __catch448_g_error;
 			}
 		}
 	}
-	goto __finally447;
-	__catch447_g_error:
+	goto __finally448;
+	__catch448_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -1031,9 +1030,9 @@ void app_dirs_verify_cache_dir (void) {
 		_g_free0 (_tmp7_);
 #line 111 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_error_free0 (err);
-#line 1035 "AppDirs.c"
+#line 1034 "AppDirs.c"
 	}
-	__finally447:
+	__finally448:
 #line 111 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 111 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1044,11 +1043,11 @@ void app_dirs_verify_cache_dir (void) {
 		g_clear_error (&_inner_error_);
 #line 111 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return;
-#line 1048 "AppDirs.c"
+#line 1047 "AppDirs.c"
 	}
 #line 109 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (cache_dir);
-#line 1052 "AppDirs.c"
+#line 1051 "AppDirs.c"
 }
 
 
@@ -1065,7 +1064,7 @@ GFile* app_dirs_get_libexec_dir (void) {
 	_tmp0_ = app_dirs_libexec_dir;
 #line 125 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp0_ == NULL) {
-#line 1069 "AppDirs.c"
+#line 1068 "AppDirs.c"
 		GFile* _tmp1_ = NULL;
 		GFile* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
@@ -1079,7 +1078,7 @@ GFile* app_dirs_get_libexec_dir (void) {
 		_g_object_unref0 (_tmp2_);
 #line 126 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (_tmp3_) {
-#line 1083 "AppDirs.c"
+#line 1082 "AppDirs.c"
 			GFile* _tmp4_ = NULL;
 #line 128 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp4_ = app_dirs_get_exec_dir ();
@@ -1087,7 +1086,7 @@ GFile* app_dirs_get_libexec_dir (void) {
 			_g_object_unref0 (app_dirs_libexec_dir);
 #line 128 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			app_dirs_libexec_dir = _tmp4_;
-#line 1091 "AppDirs.c"
+#line 1090 "AppDirs.c"
 		} else {
 			GFile* _tmp5_ = NULL;
 #line 130 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1096,7 +1095,7 @@ GFile* app_dirs_get_libexec_dir (void) {
 			_g_object_unref0 (app_dirs_libexec_dir);
 #line 130 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			app_dirs_libexec_dir = _tmp5_;
-#line 1100 "AppDirs.c"
+#line 1099 "AppDirs.c"
 		}
 	}
 #line 134 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1107,7 +1106,7 @@ GFile* app_dirs_get_libexec_dir (void) {
 	result = _tmp7_;
 #line 134 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1111 "AppDirs.c"
+#line 1110 "AppDirs.c"
 }
 
 
@@ -1123,7 +1122,7 @@ GFile* app_dirs_get_install_dir (void) {
 	result = _tmp1_;
 #line 139 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1127 "AppDirs.c"
+#line 1126 "AppDirs.c"
 }
 
 
@@ -1135,7 +1134,7 @@ GFile* app_dirs_get_data_dir (void) {
 	_tmp1_ = app_dirs_data_dir;
 #line 143 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp1_ == NULL) {
-#line 1139 "AppDirs.c"
+#line 1138 "AppDirs.c"
 		const gchar* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
@@ -1154,7 +1153,7 @@ GFile* app_dirs_get_data_dir (void) {
 		_tmp0_ = _tmp5_;
 #line 143 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp4_);
-#line 1158 "AppDirs.c"
+#line 1157 "AppDirs.c"
 	} else {
 		GFile* _tmp6_ = NULL;
 		GFile* _tmp7_ = NULL;
@@ -1166,13 +1165,13 @@ GFile* app_dirs_get_data_dir (void) {
 		_g_object_unref0 (_tmp0_);
 #line 143 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp0_ = _tmp7_;
-#line 1170 "AppDirs.c"
+#line 1169 "AppDirs.c"
 	}
 #line 143 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp0_;
 #line 143 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1176 "AppDirs.c"
+#line 1175 "AppDirs.c"
 }
 
 
@@ -1212,7 +1211,7 @@ GFile* app_dirs_get_import_dir (void) {
 	_tmp5_ = is_string_empty (_tmp4_);
 #line 150 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp5_) {
-#line 1216 "AppDirs.c"
+#line 1215 "AppDirs.c"
 		const gchar* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
@@ -1233,7 +1232,7 @@ GFile* app_dirs_get_import_dir (void) {
 		_tmp9_ = g_path_is_absolute (_tmp8_);
 #line 155 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (!_tmp9_) {
-#line 1237 "AppDirs.c"
+#line 1236 "AppDirs.c"
 			GFile* _tmp10_ = NULL;
 			GFile* _tmp11_ = NULL;
 			const gchar* _tmp12_ = NULL;
@@ -1257,7 +1256,7 @@ GFile* app_dirs_get_import_dir (void) {
 			_g_free0 (path);
 #line 156 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return result;
-#line 1261 "AppDirs.c"
+#line 1260 "AppDirs.c"
 		}
 #line 159 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp15_ = path;
@@ -1269,7 +1268,7 @@ GFile* app_dirs_get_import_dir (void) {
 		_g_free0 (path);
 #line 159 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return result;
-#line 1273 "AppDirs.c"
+#line 1272 "AppDirs.c"
 	}
 #line 163 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp17_ = g_get_user_special_dir (G_USER_DIRECTORY_PICTURES);
@@ -1285,7 +1284,7 @@ GFile* app_dirs_get_import_dir (void) {
 	_tmp20_ = is_string_empty (_tmp19_);
 #line 164 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp20_) {
-#line 1289 "AppDirs.c"
+#line 1288 "AppDirs.c"
 		const gchar* _tmp21_ = NULL;
 		GFile* _tmp22_ = NULL;
 #line 165 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1298,7 +1297,7 @@ GFile* app_dirs_get_import_dir (void) {
 		_g_free0 (path);
 #line 165 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return result;
-#line 1302 "AppDirs.c"
+#line 1301 "AppDirs.c"
 	}
 #line 168 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp23_ = app_dirs_get_home_dir ();
@@ -1318,7 +1317,7 @@ GFile* app_dirs_get_import_dir (void) {
 	_g_free0 (path);
 #line 168 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1322 "AppDirs.c"
+#line 1321 "AppDirs.c"
 }
 
 
@@ -1367,7 +1366,7 @@ GFile* app_dirs_get_baked_import_dir (time_t tm) {
 	_tmp5_ = is_string_empty (_tmp4_);
 #line 174 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp5_) {
-#line 1371 "AppDirs.c"
+#line 1370 "AppDirs.c"
 		ConfigFacade* _tmp6_ = NULL;
 		ConfigFacade* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
@@ -1383,7 +1382,7 @@ GFile* app_dirs_get_baked_import_dir (time_t tm) {
 		pattern = _tmp8_;
 #line 175 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp7_);
-#line 1387 "AppDirs.c"
+#line 1386 "AppDirs.c"
 	}
 #line 176 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp9_ = pattern;
@@ -1391,7 +1390,7 @@ GFile* app_dirs_get_baked_import_dir (time_t tm) {
 	_tmp10_ = is_string_empty (_tmp9_);
 #line 176 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp10_) {
-#line 1395 "AppDirs.c"
+#line 1394 "AppDirs.c"
 		gchar* _tmp11_ = NULL;
 #line 177 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp11_ = g_strdup ("%Y" G_DIR_SEPARATOR_S "%m" G_DIR_SEPARATOR_S "%d");
@@ -1399,7 +1398,7 @@ GFile* app_dirs_get_baked_import_dir (time_t tm) {
 		_g_free0 (pattern);
 #line 177 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		pattern = _tmp11_;
-#line 1403 "AppDirs.c"
+#line 1402 "AppDirs.c"
 	}
 #line 179 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp12_ = tm;
@@ -1451,7 +1450,7 @@ GFile* app_dirs_get_baked_import_dir (time_t tm) {
 	_g_free0 (pattern);
 #line 180 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1455 "AppDirs.c"
+#line 1454 "AppDirs.c"
 }
 
 
@@ -1479,7 +1478,7 @@ gboolean app_dirs_is_in_import_dir (GFile* file) {
 	if (_tmp4_) {
 #line 187 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp1_ = TRUE;
-#line 1483 "AppDirs.c"
+#line 1482 "AppDirs.c"
 	} else {
 		GFile* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
@@ -1492,7 +1491,7 @@ gboolean app_dirs_is_in_import_dir (GFile* file) {
 		_tmp7_ = g_file_equal (_tmp5_, _tmp6_);
 #line 187 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp1_ = _tmp7_;
-#line 1496 "AppDirs.c"
+#line 1495 "AppDirs.c"
 	}
 #line 187 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp1_;
@@ -1500,7 +1499,7 @@ gboolean app_dirs_is_in_import_dir (GFile* file) {
 	_g_object_unref0 (import_dir);
 #line 187 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1504 "AppDirs.c"
+#line 1503 "AppDirs.c"
 }
 
 
@@ -1520,7 +1519,7 @@ void app_dirs_set_import_dir (const gchar* path) {
 	configuration_facade_set_import_dir (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp2_);
 #line 191 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1524 "AppDirs.c"
+#line 1523 "AppDirs.c"
 }
 
 
@@ -1536,7 +1535,7 @@ GFile* app_dirs_get_exec_dir (void) {
 	result = _tmp1_;
 #line 195 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1540 "AppDirs.c"
+#line 1539 "AppDirs.c"
 }
 
 
@@ -1550,7 +1549,7 @@ GFile* app_dirs_get_temp_dir (void) {
 	_tmp0_ = app_dirs_tmp_dir;
 #line 199 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp0_ == NULL) {
-#line 1554 "AppDirs.c"
+#line 1553 "AppDirs.c"
 		const gchar* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
@@ -1572,7 +1571,7 @@ GFile* app_dirs_get_temp_dir (void) {
 		app_dirs_tmp_dir = _tmp5_;
 #line 200 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_free0 (_tmp4_);
-#line 1576 "AppDirs.c"
+#line 1575 "AppDirs.c"
 		{
 			GFile* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
@@ -1582,7 +1581,7 @@ GFile* app_dirs_get_temp_dir (void) {
 			_tmp7_ = g_file_query_exists (_tmp6_, NULL);
 #line 203 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (!_tmp7_) {
-#line 1586 "AppDirs.c"
+#line 1585 "AppDirs.c"
 				GFile* _tmp8_ = NULL;
 #line 204 "/home/jens/Source/shotwell/src/AppDirs.vala"
 				_tmp8_ = app_dirs_tmp_dir;
@@ -1590,13 +1589,13 @@ GFile* app_dirs_get_temp_dir (void) {
 				g_file_make_directory_with_parents (_tmp8_, NULL, &_inner_error_);
 #line 204 "/home/jens/Source/shotwell/src/AppDirs.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1594 "AppDirs.c"
-					goto __catch448_g_error;
+#line 1593 "AppDirs.c"
+					goto __catch449_g_error;
 				}
 			}
 		}
-		goto __finally448;
-		__catch448_g_error:
+		goto __finally449;
+		__catch449_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp9_ = NULL;
@@ -1635,9 +1634,9 @@ GFile* app_dirs_get_temp_dir (void) {
 			_g_free0 (_tmp12_);
 #line 202 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_error_free0 (err);
-#line 1639 "AppDirs.c"
+#line 1638 "AppDirs.c"
 		}
-		__finally448:
+		__finally449:
 #line 202 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 202 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1646,7 +1645,7 @@ GFile* app_dirs_get_temp_dir (void) {
 			g_clear_error (&_inner_error_);
 #line 202 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return NULL;
-#line 1650 "AppDirs.c"
+#line 1649 "AppDirs.c"
 		}
 	}
 #line 211 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1657,7 +1656,7 @@ GFile* app_dirs_get_temp_dir (void) {
 	result = _tmp18_;
 #line 211 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1661 "AppDirs.c"
+#line 1660 "AppDirs.c"
 }
 
 
@@ -1691,7 +1690,7 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 	_tmp5_ = subname;
 #line 216 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp5_ != NULL) {
-#line 1695 "AppDirs.c"
+#line 1694 "AppDirs.c"
 		GFile* _tmp6_ = NULL;
 		const gchar* _tmp7_ = NULL;
 		GFile* _tmp8_ = NULL;
@@ -1705,7 +1704,7 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 		_g_object_unref0 (subdir);
 #line 217 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		subdir = _tmp8_;
-#line 1709 "AppDirs.c"
+#line 1708 "AppDirs.c"
 	}
 	{
 		GFile* _tmp9_ = NULL;
@@ -1716,7 +1715,7 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 		_tmp10_ = g_file_query_exists (_tmp9_, NULL);
 #line 220 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (!_tmp10_) {
-#line 1720 "AppDirs.c"
+#line 1719 "AppDirs.c"
 			GFile* _tmp11_ = NULL;
 #line 221 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp11_ = subdir;
@@ -1724,13 +1723,13 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 			g_file_make_directory_with_parents (_tmp11_, NULL, &_inner_error_);
 #line 221 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1728 "AppDirs.c"
-				goto __catch449_g_error;
+#line 1727 "AppDirs.c"
+				goto __catch450_g_error;
 			}
 		}
 	}
-	goto __finally449;
-	__catch449_g_error:
+	goto __finally450;
+	__catch450_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp12_ = NULL;
@@ -1769,9 +1768,9 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 		_g_free0 (_tmp15_);
 #line 219 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_error_free0 (err);
-#line 1773 "AppDirs.c"
+#line 1772 "AppDirs.c"
 	}
-	__finally449:
+	__finally450:
 #line 219 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 219 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1782,13 +1781,13 @@ GFile* app_dirs_get_data_subdir (const gchar* name, const gchar* subname) {
 		g_clear_error (&_inner_error_);
 #line 219 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return NULL;
-#line 1786 "AppDirs.c"
+#line 1785 "AppDirs.c"
 	}
 #line 227 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = subdir;
 #line 227 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 1792 "AppDirs.c"
+#line 1791 "AppDirs.c"
 }
 
 
@@ -1804,7 +1803,7 @@ void app_dirs_ensure_writable (GFile* dir) {
 	_tmp1_ = g_file_query_exists (_tmp0_, NULL);
 #line 231 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp1_) {
-#line 1808 "AppDirs.c"
+#line 1807 "AppDirs.c"
 		{
 			GFileInfo* info = NULL;
 			GFile* _tmp2_ = NULL;
@@ -1824,8 +1823,8 @@ void app_dirs_ensure_writable (GFile* dir) {
 			info = _tmp3_;
 #line 233 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1828 "AppDirs.c"
-				goto __catch450_g_error;
+#line 1827 "AppDirs.c"
+				goto __catch451_g_error;
 			}
 #line 234 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp4_ = info;
@@ -1845,12 +1844,12 @@ void app_dirs_ensure_writable (GFile* dir) {
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 235 "/home/jens/Source/shotwell/src/AppDirs.vala"
 				_g_object_unref0 (info);
-#line 1849 "AppDirs.c"
-				goto __catch450_g_error;
+#line 1848 "AppDirs.c"
+				goto __catch451_g_error;
 			}
 #line 235 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (!_tmp6_) {
-#line 1854 "AppDirs.c"
+#line 1853 "AppDirs.c"
 				const gchar* _tmp10_ = NULL;
 				GFile* _tmp11_ = NULL;
 				gchar* _tmp12_ = NULL;
@@ -1875,14 +1874,14 @@ void app_dirs_ensure_writable (GFile* dir) {
 				_g_free0 (_tmp15_);
 #line 236 "/home/jens/Source/shotwell/src/AppDirs.vala"
 				_g_free0 (_tmp13_);
-#line 1879 "AppDirs.c"
+#line 1878 "AppDirs.c"
 			}
 #line 232 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_object_unref0 (info);
-#line 1883 "AppDirs.c"
+#line 1882 "AppDirs.c"
 		}
-		goto __finally450;
-		__catch450_g_error:
+		goto __finally451;
+		__catch451_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp16_ = NULL;
@@ -1921,9 +1920,9 @@ void app_dirs_ensure_writable (GFile* dir) {
 			_g_free0 (_tmp19_);
 #line 232 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_g_error_free0 (err);
-#line 1925 "AppDirs.c"
+#line 1924 "AppDirs.c"
 		}
-		__finally450:
+		__finally451:
 #line 232 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 232 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -1932,7 +1931,7 @@ void app_dirs_ensure_writable (GFile* dir) {
 			g_clear_error (&_inner_error_);
 #line 232 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return;
-#line 1936 "AppDirs.c"
+#line 1935 "AppDirs.c"
 		}
 	}
 }
@@ -1974,7 +1973,7 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 	_tmp6_ = subname;
 #line 247 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp6_ != NULL) {
-#line 1978 "AppDirs.c"
+#line 1977 "AppDirs.c"
 		GFile* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
 		GFile* _tmp9_ = NULL;
@@ -1988,7 +1987,7 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 		_g_object_unref0 (subdir);
 #line 248 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		subdir = _tmp9_;
-#line 1992 "AppDirs.c"
+#line 1991 "AppDirs.c"
 	}
 	{
 		GFile* _tmp10_ = NULL;
@@ -1999,7 +1998,7 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 		_tmp11_ = g_file_query_exists (_tmp10_, NULL);
 #line 251 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (!_tmp11_) {
-#line 2003 "AppDirs.c"
+#line 2002 "AppDirs.c"
 			GFile* _tmp12_ = NULL;
 #line 252 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp12_ = subdir;
@@ -2007,13 +2006,13 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 			g_file_make_directory_with_parents (_tmp12_, NULL, &_inner_error_);
 #line 252 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2011 "AppDirs.c"
-				goto __catch451_g_error;
+#line 2010 "AppDirs.c"
+				goto __catch452_g_error;
 			}
 		}
 	}
-	goto __finally451;
-	__catch451_g_error:
+	goto __finally452;
+	__catch452_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp13_ = NULL;
@@ -2052,9 +2051,9 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 		_g_free0 (_tmp16_);
 #line 250 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_error_free0 (err);
-#line 2056 "AppDirs.c"
+#line 2055 "AppDirs.c"
 	}
-	__finally451:
+	__finally452:
 #line 250 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 250 "/home/jens/Source/shotwell/src/AppDirs.vala"
@@ -2065,7 +2064,7 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 		g_clear_error (&_inner_error_);
 #line 250 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return NULL;
-#line 2069 "AppDirs.c"
+#line 2068 "AppDirs.c"
 	}
 #line 257 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp21_ = subdir;
@@ -2075,61 +2074,7 @@ GFile* app_dirs_get_cache_subdir (const gchar* name, const gchar* subname) {
 	result = subdir;
 #line 258 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2079 "AppDirs.c"
-}
-
-
-GFile* app_dirs_get_resources_dir (void) {
-	GFile* result = NULL;
-	GFile* install_dir = NULL;
-	GFile* _tmp0_ = NULL;
-	GFile* _tmp1_ = NULL;
-	GFile* _tmp2_ = NULL;
-#line 262 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	_tmp0_ = app_dirs_get_install_dir ();
-#line 262 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	install_dir = _tmp0_;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	_tmp2_ = install_dir;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	if (_tmp2_ != NULL) {
-#line 2097 "AppDirs.c"
-		GFile* _tmp3_ = NULL;
-		GFile* _tmp4_ = NULL;
-		GFile* _tmp5_ = NULL;
-		GFile* _tmp6_ = NULL;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp3_ = install_dir;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp4_ = g_file_get_child (_tmp3_, "share");
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp5_ = _tmp4_;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp6_ = g_file_get_child (_tmp5_, "shotwell");
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_g_object_unref0 (_tmp1_);
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp1_ = _tmp6_;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_g_object_unref0 (_tmp5_);
-#line 2116 "AppDirs.c"
-	} else {
-		GFile* _tmp7_ = NULL;
-#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp7_ = app_dirs_get_exec_dir ();
-#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_g_object_unref0 (_tmp1_);
-#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
-		_tmp1_ = _tmp7_;
-#line 2125 "AppDirs.c"
-	}
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	result = _tmp1_;
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	_g_object_unref0 (install_dir);
-#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
-	return result;
-#line 2133 "AppDirs.c"
+#line 2078 "AppDirs.c"
 }
 
 
@@ -2139,51 +2084,51 @@ GFile* app_dirs_get_lib_dir (void) {
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
-#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 262 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = app_dirs_get_install_dir ();
-#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 262 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	install_dir = _tmp0_;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp2_ = install_dir;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp2_ != NULL) {
-#line 2151 "AppDirs.c"
+#line 2096 "AppDirs.c"
 		GFile* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp3_ = install_dir;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp4_ = g_file_get_child (_tmp3_, RESOURCES_LIB);
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp5_ = _tmp4_;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp6_ = g_file_get_child (_tmp5_, "shotwell");
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp1_);
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp1_ = _tmp6_;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp5_);
-#line 2170 "AppDirs.c"
+#line 2115 "AppDirs.c"
 	} else {
 		GFile* _tmp7_ = NULL;
-#line 272 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp7_ = app_dirs_get_exec_dir ();
-#line 272 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp1_);
-#line 272 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 265 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp1_ = _tmp7_;
-#line 2179 "AppDirs.c"
+#line 2124 "AppDirs.c"
 	}
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp1_;
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (install_dir);
-#line 271 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 264 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2187 "AppDirs.c"
+#line 2132 "AppDirs.c"
 }
 
 
@@ -2193,21 +2138,21 @@ GFile* app_dirs_get_system_plugins_dir (void) {
 	GFile* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GFile* _tmp3_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = app_dirs_get_lib_dir ();
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp1_ = _tmp0_;
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "plugins");
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp3_ = _tmp2_;
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp3_;
-#line 276 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 269 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2211 "AppDirs.c"
+#line 2156 "AppDirs.c"
 }
 
 
@@ -2217,54 +2162,54 @@ GFile* app_dirs_get_user_plugins_dir (void) {
 	GFile* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GFile* _tmp3_ = NULL;
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = app_dirs_get_data_dir ();
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp1_ = _tmp0_;
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "plugins");
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp3_ = _tmp2_;
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = _tmp3_;
-#line 280 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 273 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2235 "AppDirs.c"
+#line 2180 "AppDirs.c"
 }
 
 
 GFile* app_dirs_get_log_file (void) {
 	GFile* result = NULL;
 	const gchar* _tmp0_ = NULL;
-#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 277 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = g_getenv ("SHOTWELL_LOG_FILE");
-#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 277 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (_tmp0_ != NULL) {
-#line 2246 "AppDirs.c"
+#line 2191 "AppDirs.c"
 		const gchar* _tmp1_ = NULL;
-#line 285 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 278 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp1_ = g_getenv ("SHOTWELL_LOG_FILE");
-#line 285 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 278 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (g_strcmp0 (_tmp1_, ":console:") == 0) {
-#line 286 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 279 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			result = NULL;
-#line 286 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 279 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return result;
-#line 2256 "AppDirs.c"
+#line 2201 "AppDirs.c"
 		} else {
 			const gchar* _tmp2_ = NULL;
 			GFile* _tmp3_ = NULL;
-#line 288 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 281 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp2_ = g_getenv ("SHOTWELL_LOG_FILE");
-#line 288 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 281 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			_tmp3_ = g_file_new_for_path (_tmp2_);
-#line 288 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 281 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			result = _tmp3_;
-#line 288 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 281 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return result;
-#line 2268 "AppDirs.c"
+#line 2213 "AppDirs.c"
 		}
 	} else {
 		const gchar* _tmp4_ = NULL;
@@ -2274,38 +2219,38 @@ GFile* app_dirs_get_log_file (void) {
 		GFile* _tmp8_ = NULL;
 		GFile* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp4_ = g_get_user_cache_dir ();
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp5_ = g_file_new_for_path (_tmp4_);
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp6_ = _tmp5_;
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp7_ = g_file_get_child (_tmp6_, "shotwell");
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp8_ = _tmp7_;
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp9_ = g_file_get_child (_tmp8_, "shotwell.log");
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp10_ = _tmp9_;
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp8_);
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp6_);
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		result = _tmp10_;
-#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 284 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return result;
-#line 2300 "AppDirs.c"
+#line 2245 "AppDirs.c"
 	}
 }
 
 
 GFile* app_dirs_get_thumbnailer_bin (void) {
 	GFile* result = NULL;
-#line 297 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 290 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	static const char filename[] = "shotwell-video-thumbnailer";
-#line 2309 "AppDirs.c"
+#line 2254 "AppDirs.c"
 	GFile* f = NULL;
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
@@ -2315,69 +2260,69 @@ GFile* app_dirs_get_thumbnailer_bin (void) {
 	GFile* _tmp5_ = NULL;
 	GFile* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = app_dirs_get_libexec_dir ();
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp1_ = _tmp0_;
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "thumbnailer");
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp3_ = _tmp2_;
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp4_ = g_file_get_child (_tmp3_, filename);
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp5_ = _tmp4_;
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp3_);
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 298 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 291 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	f = _tmp5_;
-#line 299 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 292 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp6_ = f;
-#line 299 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 292 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp7_ = g_file_query_exists (_tmp6_, NULL);
-#line 299 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 292 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp7_) {
-#line 2343 "AppDirs.c"
+#line 2288 "AppDirs.c"
 		GFile* _tmp8_ = NULL;
 		GFile* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFile* _tmp11_ = NULL;
 		GFile* _tmp12_ = NULL;
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp8_ = app_dirs_get_libexec_dir ();
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp9_ = _tmp8_;
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp10_ = g_file_get_child (_tmp9_, "shotwell");
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp11_ = _tmp10_;
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp12_ = g_file_get_child (_tmp11_, filename);
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (f);
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		f = _tmp12_;
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp11_);
-#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 294 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp9_);
-#line 2367 "AppDirs.c"
+#line 2312 "AppDirs.c"
 	}
-#line 303 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = f;
-#line 303 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 296 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2373 "AppDirs.c"
+#line 2318 "AppDirs.c"
 }
 
 
 GFile* app_dirs_get_settings_migrator_bin (void) {
 	GFile* result = NULL;
-#line 307 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 300 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	static const char filename[] = "shotwell-settings-migrator";
-#line 2381 "AppDirs.c"
+#line 2326 "AppDirs.c"
 	GFile* f = NULL;
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
@@ -2387,61 +2332,61 @@ GFile* app_dirs_get_settings_migrator_bin (void) {
 	GFile* _tmp5_ = NULL;
 	GFile* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp0_ = app_dirs_get_libexec_dir ();
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp1_ = _tmp0_;
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp2_ = g_file_get_child (_tmp1_, "settings-migrator");
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp3_ = _tmp2_;
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp4_ = g_file_get_child (_tmp3_, filename);
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp5_ = _tmp4_;
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp3_);
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_g_object_unref0 (_tmp1_);
-#line 308 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 301 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	f = _tmp5_;
-#line 309 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 302 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp6_ = f;
-#line 309 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 302 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	_tmp7_ = g_file_query_exists (_tmp6_, NULL);
-#line 309 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 302 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!_tmp7_) {
-#line 2415 "AppDirs.c"
+#line 2360 "AppDirs.c"
 		GFile* _tmp8_ = NULL;
 		GFile* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFile* _tmp11_ = NULL;
 		GFile* _tmp12_ = NULL;
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp8_ = app_dirs_get_libexec_dir ();
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp9_ = _tmp8_;
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp10_ = g_file_get_child (_tmp9_, "shotwell");
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp11_ = _tmp10_;
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_tmp12_ = g_file_get_child (_tmp11_, filename);
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (f);
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		f = _tmp12_;
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp11_);
-#line 311 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 304 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		_g_object_unref0 (_tmp9_);
-#line 2439 "AppDirs.c"
+#line 2384 "AppDirs.c"
 	}
-#line 313 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 306 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	result = f;
-#line 313 "/home/jens/Source/shotwell/src/AppDirs.vala"
+#line 306 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return result;
-#line 2445 "AppDirs.c"
+#line 2390 "AppDirs.c"
 }
 
 
@@ -2451,21 +2396,21 @@ AppDirs* app_dirs_construct (GType object_type) {
 	self = (AppDirs*) g_type_create_instance (object_type);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return self;
-#line 2455 "AppDirs.c"
+#line 2400 "AppDirs.c"
 }
 
 
 AppDirs* app_dirs_new (void) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return app_dirs_construct (TYPE_APP_DIRS);
-#line 2462 "AppDirs.c"
+#line 2407 "AppDirs.c"
 }
 
 
 static void value_app_dirs_init (GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	value->data[0].v_pointer = NULL;
-#line 2469 "AppDirs.c"
+#line 2414 "AppDirs.c"
 }
 
 
@@ -2474,7 +2419,7 @@ static void value_app_dirs_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		app_dirs_unref (value->data[0].v_pointer);
-#line 2478 "AppDirs.c"
+#line 2423 "AppDirs.c"
 	}
 }
 
@@ -2484,11 +2429,11 @@ static void value_app_dirs_copy_value (const GValue* src_value, GValue* dest_val
 	if (src_value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		dest_value->data[0].v_pointer = app_dirs_ref (src_value->data[0].v_pointer);
-#line 2488 "AppDirs.c"
+#line 2433 "AppDirs.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2492 "AppDirs.c"
+#line 2437 "AppDirs.c"
 	}
 }
 
@@ -2496,37 +2441,37 @@ static void value_app_dirs_copy_value (const GValue* src_value, GValue* dest_val
 static gpointer value_app_dirs_peek_pointer (const GValue* value) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return value->data[0].v_pointer;
-#line 2500 "AppDirs.c"
+#line 2445 "AppDirs.c"
 }
 
 
 static gchar* value_app_dirs_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (collect_values[0].v_pointer) {
-#line 2507 "AppDirs.c"
+#line 2452 "AppDirs.c"
 		AppDirs* object;
 		object = collect_values[0].v_pointer;
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2514 "AppDirs.c"
+#line 2459 "AppDirs.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2518 "AppDirs.c"
+#line 2463 "AppDirs.c"
 		}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		value->data[0].v_pointer = app_dirs_ref (object);
-#line 2522 "AppDirs.c"
+#line 2467 "AppDirs.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		value->data[0].v_pointer = NULL;
-#line 2526 "AppDirs.c"
+#line 2471 "AppDirs.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return NULL;
-#line 2530 "AppDirs.c"
+#line 2475 "AppDirs.c"
 }
 
 
@@ -2537,25 +2482,25 @@ static gchar* value_app_dirs_lcopy_value (const GValue* value, guint n_collect_v
 	if (!object_p) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2541 "AppDirs.c"
+#line 2486 "AppDirs.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (!value->data[0].v_pointer) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		*object_p = NULL;
-#line 2547 "AppDirs.c"
+#line 2492 "AppDirs.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2551 "AppDirs.c"
+#line 2496 "AppDirs.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		*object_p = app_dirs_ref (value->data[0].v_pointer);
-#line 2555 "AppDirs.c"
+#line 2500 "AppDirs.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return NULL;
-#line 2559 "AppDirs.c"
+#line 2504 "AppDirs.c"
 }
 
 
@@ -2569,7 +2514,7 @@ GParamSpec* param_spec_app_dirs (const gchar* name, const gchar* nick, const gch
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return G_PARAM_SPEC (spec);
-#line 2573 "AppDirs.c"
+#line 2518 "AppDirs.c"
 }
 
 
@@ -2578,7 +2523,7 @@ gpointer value_get_app_dirs (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_APP_DIRS), NULL);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return value->data[0].v_pointer;
-#line 2582 "AppDirs.c"
+#line 2527 "AppDirs.c"
 }
 
 
@@ -2598,17 +2543,17 @@ void value_set_app_dirs (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		app_dirs_ref (value->data[0].v_pointer);
-#line 2602 "AppDirs.c"
+#line 2547 "AppDirs.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		value->data[0].v_pointer = NULL;
-#line 2606 "AppDirs.c"
+#line 2551 "AppDirs.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		app_dirs_unref (old);
-#line 2612 "AppDirs.c"
+#line 2557 "AppDirs.c"
 	}
 }
 
@@ -2627,17 +2572,17 @@ void value_take_app_dirs (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		value->data[0].v_pointer = v_object;
-#line 2631 "AppDirs.c"
+#line 2576 "AppDirs.c"
 	} else {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		value->data[0].v_pointer = NULL;
-#line 2635 "AppDirs.c"
+#line 2580 "AppDirs.c"
 	}
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	if (old) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		app_dirs_unref (old);
-#line 2641 "AppDirs.c"
+#line 2586 "AppDirs.c"
 	}
 }
 
@@ -2647,14 +2592,14 @@ static void app_dirs_class_init (AppDirsClass * klass) {
 	app_dirs_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	((AppDirsClass *) klass)->finalize = app_dirs_finalize;
-#line 2651 "AppDirs.c"
+#line 2596 "AppDirs.c"
 }
 
 
 static void app_dirs_instance_init (AppDirs * self) {
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	self->ref_count = 1;
-#line 2658 "AppDirs.c"
+#line 2603 "AppDirs.c"
 }
 
 
@@ -2664,7 +2609,7 @@ static void app_dirs_finalize (AppDirs* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_APP_DIRS, AppDirs);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	g_signal_handlers_destroy (self);
-#line 2668 "AppDirs.c"
+#line 2613 "AppDirs.c"
 }
 
 
@@ -2689,7 +2634,7 @@ gpointer app_dirs_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 	return instance;
-#line 2693 "AppDirs.c"
+#line 2638 "AppDirs.c"
 }
 
 
@@ -2702,7 +2647,7 @@ void app_dirs_unref (gpointer instance) {
 		APP_DIRS_GET_CLASS (self)->finalize (self);
 #line 7 "/home/jens/Source/shotwell/src/AppDirs.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2706 "AppDirs.c"
+#line 2651 "AppDirs.c"
 	}
 }
 

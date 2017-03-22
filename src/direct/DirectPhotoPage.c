@@ -502,6 +502,7 @@ struct _DirectPhotoPagePrivate {
 	DirectViewCollection* view_controller;
 	GFile* current_save_dir;
 	gboolean drop_if_dirty;
+	GtkMenu* context_menu;
 };
 
 typedef enum  {
@@ -740,6 +741,8 @@ ImportResult direct_photo_demand_load (DirectPhoto* self);
 GFile* direct_photo_page_get_current_file (DirectPhotoPage* self);
 GFile* media_source_get_file (MediaSource* self);
 static gboolean direct_photo_page_real_on_context_buttonpress (Page* base, GdkEventButton* event);
+gboolean page_popup_context_menu (Page* self, GtkMenu* context_menu, GdkEventButton* event);
+static GtkMenu* direct_photo_page_get_context_menu (DirectPhotoPage* self);
 static void direct_photo_page_update_zoom_menu_item_sensitivity (DirectPhotoPage* self);
 GType zoom_state_get_type (void) G_GNUC_CONST;
 ZoomState* zoom_state_dup (const ZoomState* self);
@@ -795,6 +798,7 @@ static gboolean direct_photo_page_real_confirm_replace_photo (EditingHostPage* b
 void scaling_for_constraint (ScaleConstraint constraint, gint scale, gboolean scale_up, Scaling* result);
 void photo_export (Photo* self, GFile* dest_file, Scaling* scaling, JpegQuality quality, PhotoFileFormat export_format, gboolean direct_copy_unmodified, gboolean export_metadata, GError** error);
 gchar* direct_photo_source_collection_fetch (DirectPhotoSourceCollection* self, GFile* file, DirectPhoto** photo, gboolean reimport);
+gboolean data_source_equals (DataSource* self, DataSource* source);
 GType direct_view_get_type (void) G_GNUC_CONST;
 DirectView* direct_view_new (DirectPhoto* source);
 DirectView* direct_view_construct (GType object_type, DirectPhoto* source);
@@ -862,182 +866,182 @@ static const GActionEntry DIRECT_PHOTO_PAGE_entries[23] = {{"Save", _direct_phot
 static void _direct_photo_page_on_photos_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 32 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_photos_altered ((DirectPhotoPage*) self, items);
-#line 866 "DirectPhotoPage.c"
+#line 870 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_save_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_save ((DirectPhotoPage*) self);
-#line 873 "DirectPhotoPage.c"
+#line 877 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_save_as_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_save_as ((DirectPhotoPage*) self);
-#line 880 "DirectPhotoPage.c"
+#line 884 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_send_to_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_send_to ((DirectPhotoPage*) self);
-#line 887 "DirectPhotoPage.c"
+#line 891 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_print_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_print ((DirectPhotoPage*) self);
-#line 894 "DirectPhotoPage.c"
+#line 898 "DirectPhotoPage.c"
 }
 
 
 static void _single_photo_page_on_previous_photo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	single_photo_page_on_previous_photo ((SinglePhotoPage*) self);
-#line 901 "DirectPhotoPage.c"
+#line 905 "DirectPhotoPage.c"
 }
 
 
 static void _single_photo_page_on_next_photo_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	single_photo_page_on_next_photo ((SinglePhotoPage*) self);
-#line 908 "DirectPhotoPage.c"
+#line 912 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_rotate_clockwise_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_rotate_clockwise ((EditingHostPage*) self);
-#line 915 "DirectPhotoPage.c"
+#line 919 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_rotate_counterclockwise_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_rotate_counterclockwise ((EditingHostPage*) self);
-#line 922 "DirectPhotoPage.c"
+#line 926 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_flip_horizontally_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_flip_horizontally ((EditingHostPage*) self);
-#line 929 "DirectPhotoPage.c"
+#line 933 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_flip_vertically_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_flip_vertically ((EditingHostPage*) self);
-#line 936 "DirectPhotoPage.c"
+#line 940 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_enhance_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_enhance ((EditingHostPage*) self);
-#line 943 "DirectPhotoPage.c"
+#line 947 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_toggle_crop_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_toggle_crop ((EditingHostPage*) self);
-#line 950 "DirectPhotoPage.c"
+#line 954 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_toggle_straighten_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_toggle_straighten ((EditingHostPage*) self);
-#line 957 "DirectPhotoPage.c"
+#line 961 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_toggle_redeye_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_toggle_redeye ((EditingHostPage*) self);
-#line 964 "DirectPhotoPage.c"
+#line 968 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_toggle_adjust_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_toggle_adjust ((EditingHostPage*) self);
-#line 971 "DirectPhotoPage.c"
+#line 975 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_revert_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_revert ((EditingHostPage*) self);
-#line 978 "DirectPhotoPage.c"
+#line 982 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_adjust_date_time_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_adjust_date_time ((EditingHostPage*) self);
-#line 985 "DirectPhotoPage.c"
+#line 989 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_set_background_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_set_background ((EditingHostPage*) self);
-#line 992 "DirectPhotoPage.c"
+#line 996 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_increase_size_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_increase_size ((EditingHostPage*) self);
-#line 999 "DirectPhotoPage.c"
+#line 1003 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_on_decrease_size_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_on_decrease_size ((EditingHostPage*) self);
-#line 1006 "DirectPhotoPage.c"
+#line 1010 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_snap_zoom_to_min_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_snap_zoom_to_min ((EditingHostPage*) self);
-#line 1013 "DirectPhotoPage.c"
+#line 1017 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_snap_zoom_to_isomorphic_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_snap_zoom_to_isomorphic ((EditingHostPage*) self);
-#line 1020 "DirectPhotoPage.c"
+#line 1024 "DirectPhotoPage.c"
 }
 
 
 static void _editing_host_page_snap_zoom_to_max_gsimple_action_activate_callback (GSimpleAction* action, GVariant* parameter, gpointer self) {
 #line 42 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_snap_zoom_to_max ((EditingHostPage*) self);
-#line 1027 "DirectPhotoPage.c"
+#line 1031 "DirectPhotoPage.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 22 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1034 "DirectPhotoPage.c"
+#line 1038 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_selection_group_altered_view_collection_selection_group_altered (ViewCollection* _sender, gpointer self) {
 #line 28 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_selection_group_altered ((DirectPhotoPage*) self);
-#line 1041 "DirectPhotoPage.c"
+#line 1045 "DirectPhotoPage.c"
 }
 
 
@@ -1077,7 +1081,7 @@ DirectPhotoPage* direct_photo_page_construct (GType object_type, GFile* file) {
 	_tmp5_ = direct_photo_page_check_editable_file (_tmp4_);
 #line 16 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (!_tmp5_) {
-#line 1081 "DirectPhotoPage.c"
+#line 1085 "DirectPhotoPage.c"
 		Application* _tmp6_ = NULL;
 		Application* _tmp7_ = NULL;
 #line 17 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
@@ -1090,7 +1094,7 @@ DirectPhotoPage* direct_photo_page_construct (GType object_type, GFile* file) {
 		_application_unref0 (_tmp7_);
 #line 19 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return self;
-#line 1094 "DirectPhotoPage.c"
+#line 1098 "DirectPhotoPage.c"
 	}
 #line 22 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp8_ = file;
@@ -1128,14 +1132,14 @@ DirectPhotoPage* direct_photo_page_construct (GType object_type, GFile* file) {
 	_data_collection_unref0 (_tmp15_);
 #line 13 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return self;
-#line 1132 "DirectPhotoPage.c"
+#line 1136 "DirectPhotoPage.c"
 }
 
 
 DirectPhotoPage* direct_photo_page_new (GFile* file) {
 #line 13 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return direct_photo_page_construct (TYPE_DIRECT_PHOTO_PAGE, file);
-#line 1139 "DirectPhotoPage.c"
+#line 1143 "DirectPhotoPage.c"
 }
 
 
@@ -1160,7 +1164,7 @@ static void direct_photo_page_real_init_collect_ui_filenames (Page* base, GeeLis
 	_tmp2_ = ui_filenames;
 #line 39 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection), "direct.ui");
-#line 1164 "DirectPhotoPage.c"
+#line 1168 "DirectPhotoPage.c"
 }
 
 
@@ -1180,7 +1184,7 @@ static void direct_photo_page_real_add_actions (Page* base, GActionMap* map) {
 	_tmp1_ = map;
 #line 71 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_action_map_add_action_entries (_tmp1_, DIRECT_PHOTO_PAGE_entries, G_N_ELEMENTS (DIRECT_PHOTO_PAGE_entries), self);
-#line 1184 "DirectPhotoPage.c"
+#line 1188 "DirectPhotoPage.c"
 }
 
 
@@ -1195,7 +1199,7 @@ static void direct_photo_page_real_remove_actions (Page* base, GActionMap* map) 
 	_tmp0_ = map;
 #line 75 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	PAGE_CLASS (direct_photo_page_parent_class)->remove_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), TYPE_PAGE, Page), _tmp0_);
-#line 1199 "DirectPhotoPage.c"
+#line 1203 "DirectPhotoPage.c"
 	{
 		GActionEntry* entry_collection = NULL;
 		gint entry_collection_length1 = 0;
@@ -1207,11 +1211,11 @@ static void direct_photo_page_real_remove_actions (Page* base, GActionMap* map) 
 		entry_collection_length1 = G_N_ELEMENTS (DIRECT_PHOTO_PAGE_entries);
 #line 76 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		for (entry_it = 0; entry_it < G_N_ELEMENTS (DIRECT_PHOTO_PAGE_entries); entry_it = entry_it + 1) {
-#line 1211 "DirectPhotoPage.c"
+#line 1215 "DirectPhotoPage.c"
 			GActionEntry entry = {0};
 #line 76 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			entry = entry_collection[entry_it];
-#line 1215 "DirectPhotoPage.c"
+#line 1219 "DirectPhotoPage.c"
 			{
 				GActionMap* _tmp1_ = NULL;
 				GActionEntry _tmp2_ = {0};
@@ -1224,7 +1228,7 @@ static void direct_photo_page_real_remove_actions (Page* base, GActionMap* map) 
 				_tmp3_ = _tmp2_.name;
 #line 77 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				g_action_map_remove_action (_tmp1_, _tmp3_);
-#line 1228 "DirectPhotoPage.c"
+#line 1232 "DirectPhotoPage.c"
 			}
 		}
 	}
@@ -1234,7 +1238,7 @@ static void direct_photo_page_real_remove_actions (Page* base, GActionMap* map) 
 static gpointer _injection_group_ref0 (gpointer self) {
 #line 87 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return self ? injection_group_ref (self) : NULL;
-#line 1238 "DirectPhotoPage.c"
+#line 1242 "DirectPhotoPage.c"
 }
 
 
@@ -1245,13 +1249,13 @@ static void _vala_array_add61 (InjectionGroup*** array, int* length, int* size, 
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 87 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		*array = g_renew (InjectionGroup*, *array, (*size) + 1);
-#line 1249 "DirectPhotoPage.c"
+#line 1253 "DirectPhotoPage.c"
 	}
 #line 87 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	(*array)[(*length)++] = value;
 #line 87 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	(*array)[*length] = NULL;
-#line 1255 "DirectPhotoPage.c"
+#line 1259 "DirectPhotoPage.c"
 }
 
 
@@ -1262,13 +1266,13 @@ static void _vala_array_add62 (InjectionGroup*** array, int* length, int* size, 
 		*size = (*size) ? (2 * (*size)) : 4;
 #line 92 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		*array = g_renew (InjectionGroup*, *array, (*size) + 1);
-#line 1266 "DirectPhotoPage.c"
+#line 1270 "DirectPhotoPage.c"
 	}
 #line 92 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	(*array)[(*length)++] = value;
 #line 92 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	(*array)[*length] = NULL;
-#line 1272 "DirectPhotoPage.c"
+#line 1276 "DirectPhotoPage.c"
 }
 
 
@@ -1344,7 +1348,7 @@ static InjectionGroup** direct_photo_page_real_init_collect_injection_groups (Pa
 	if (result_length1) {
 #line 94 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		*result_length1 = _tmp10__length1;
-#line 1348 "DirectPhotoPage.c"
+#line 1352 "DirectPhotoPage.c"
 	}
 #line 94 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = _tmp10_;
@@ -1354,7 +1358,7 @@ static InjectionGroup** direct_photo_page_real_init_collect_injection_groups (Pa
 	_injection_group_unref0 (print_group);
 #line 94 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 1358 "DirectPhotoPage.c"
+#line 1362 "DirectPhotoPage.c"
 }
 
 
@@ -1381,7 +1385,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 	_g_free0 (_tmp2_);
 #line 98 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp4_) {
-#line 1385 "DirectPhotoPage.c"
+#line 1389 "DirectPhotoPage.c"
 		const gchar* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
@@ -1406,7 +1410,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 		_g_free0 (_tmp10_);
 #line 99 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp8_);
-#line 1410 "DirectPhotoPage.c"
+#line 1414 "DirectPhotoPage.c"
 	} else {
 		GFile* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
@@ -1427,7 +1431,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 		_g_free0 (_tmp13_);
 #line 100 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (_tmp15_) {
-#line 1431 "DirectPhotoPage.c"
+#line 1435 "DirectPhotoPage.c"
 			const gchar* _tmp16_ = NULL;
 			GFile* _tmp17_ = NULL;
 			gchar* _tmp18_ = NULL;
@@ -1452,7 +1456,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 			_g_free0 (_tmp21_);
 #line 101 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_g_free0 (_tmp19_);
-#line 1456 "DirectPhotoPage.c"
+#line 1460 "DirectPhotoPage.c"
 		} else {
 			GFile* _tmp22_ = NULL;
 			gboolean _tmp23_ = FALSE;
@@ -1462,7 +1466,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 			_tmp23_ = photo_file_format_is_file_supported (_tmp22_);
 #line 102 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			if (!_tmp23_) {
-#line 1466 "DirectPhotoPage.c"
+#line 1470 "DirectPhotoPage.c"
 				const gchar* _tmp24_ = NULL;
 				GFile* _tmp25_ = NULL;
 				gchar* _tmp26_ = NULL;
@@ -1487,13 +1491,13 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 				_g_free0 (_tmp29_);
 #line 103 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (_tmp27_);
-#line 1491 "DirectPhotoPage.c"
+#line 1495 "DirectPhotoPage.c"
 			} else {
 #line 106 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				result = TRUE;
 #line 106 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				return result;
-#line 1497 "DirectPhotoPage.c"
+#line 1501 "DirectPhotoPage.c"
 			}
 		}
 	}
@@ -1501,7 +1505,7 @@ static gboolean direct_photo_page_check_editable_file (GFile* file) {
 	result = FALSE;
 #line 108 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 1505 "DirectPhotoPage.c"
+#line 1509 "DirectPhotoPage.c"
 }
 
 
@@ -1518,7 +1522,7 @@ static void direct_photo_page_real_realize (GtkWidget* base) {
 	if (GTK_WIDGET_CLASS (direct_photo_page_parent_class)->realize != NULL) {
 #line 113 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		GTK_WIDGET_CLASS (direct_photo_page_parent_class)->realize (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), gtk_widget_get_type (), GtkWidget));
-#line 1522 "DirectPhotoPage.c"
+#line 1526 "DirectPhotoPage.c"
 	}
 #line 115 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = direct_photo_global;
@@ -1532,7 +1536,7 @@ static void direct_photo_page_real_realize (GtkWidget* base) {
 	_tmp3_ = photo;
 #line 117 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp3_ != NULL) {
-#line 1536 "DirectPhotoPage.c"
+#line 1540 "DirectPhotoPage.c"
 		DirectViewCollection* _tmp4_ = NULL;
 		DirectPhoto* _tmp5_ = NULL;
 #line 118 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
@@ -1541,7 +1545,7 @@ static void direct_photo_page_real_realize (GtkWidget* base) {
 		_tmp5_ = photo;
 #line 118 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		editing_host_page_display_mirror_of (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, TYPE_VIEW_COLLECTION, ViewCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, TYPE_PHOTO, Photo));
-#line 1545 "DirectPhotoPage.c"
+#line 1549 "DirectPhotoPage.c"
 	} else {
 		const gchar* _tmp6_ = NULL;
 		GFile* _tmp7_ = NULL;
@@ -1567,7 +1571,7 @@ static void direct_photo_page_real_realize (GtkWidget* base) {
 		_g_free0 (_tmp11_);
 #line 120 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp9_);
-#line 1571 "DirectPhotoPage.c"
+#line 1575 "DirectPhotoPage.c"
 	}
 #line 123 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (self->priv->initial_file);
@@ -1575,14 +1579,14 @@ static void direct_photo_page_real_realize (GtkWidget* base) {
 	self->priv->initial_file = NULL;
 #line 111 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (photo);
-#line 1579 "DirectPhotoPage.c"
+#line 1583 "DirectPhotoPage.c"
 }
 
 
 static void _direct_photo_page_on_dphoto_can_rotate_changed_direct_photo_can_rotate_changed (DirectPhoto* _sender, gboolean b, gpointer self) {
 #line 131 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_on_dphoto_can_rotate_changed ((DirectPhotoPage*) self, b);
-#line 1586 "DirectPhotoPage.c"
+#line 1590 "DirectPhotoPage.c"
 }
 
 
@@ -1610,7 +1614,7 @@ static void direct_photo_page_real_photo_changing (EditingHostPage* base, Photo*
 	_g_object_unref0 (_tmp1_);
 #line 127 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp2_) {
-#line 1614 "DirectPhotoPage.c"
+#line 1618 "DirectPhotoPage.c"
 		DirectPhoto* tmp = NULL;
 		Photo* _tmp3_ = NULL;
 		DirectPhoto* _tmp4_ = NULL;
@@ -1623,7 +1627,7 @@ static void direct_photo_page_real_photo_changing (EditingHostPage* base, Photo*
 		if (_tmp4_ == NULL) {
 #line 128 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_g_object_unref0 (_tmp3_);
-#line 1627 "DirectPhotoPage.c"
+#line 1631 "DirectPhotoPage.c"
 		}
 #line 128 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		tmp = _tmp4_;
@@ -1631,7 +1635,7 @@ static void direct_photo_page_real_photo_changing (EditingHostPage* base, Photo*
 		_tmp5_ = tmp;
 #line 130 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (_tmp5_ != NULL) {
-#line 1635 "DirectPhotoPage.c"
+#line 1639 "DirectPhotoPage.c"
 			DirectPhoto* _tmp6_ = NULL;
 			guint _tmp7_ = 0U;
 #line 131 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
@@ -1640,11 +1644,11 @@ static void direct_photo_page_real_photo_changing (EditingHostPage* base, Photo*
 			g_signal_parse_name ("can-rotate-changed", TYPE_DIRECT_PHOTO, &_tmp7_, NULL, FALSE);
 #line 131 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			g_signal_handlers_disconnect_matched (_tmp6_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp7_, 0, NULL, (GCallback) _direct_photo_page_on_dphoto_can_rotate_changed_direct_photo_can_rotate_changed, self);
-#line 1644 "DirectPhotoPage.c"
+#line 1648 "DirectPhotoPage.c"
 		}
 #line 127 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (tmp);
-#line 1648 "DirectPhotoPage.c"
+#line 1652 "DirectPhotoPage.c"
 	}
 #line 135 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp8_ = new_photo;
@@ -1660,17 +1664,17 @@ static void direct_photo_page_real_photo_changing (EditingHostPage* base, Photo*
 	_tmp11_ = tmp;
 #line 139 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp11_ != NULL) {
-#line 1664 "DirectPhotoPage.c"
+#line 1668 "DirectPhotoPage.c"
 		DirectPhoto* _tmp12_ = NULL;
 #line 140 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp12_ = tmp;
 #line 140 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		g_signal_connect_object (_tmp12_, "can-rotate-changed", (GCallback) _direct_photo_page_on_dphoto_can_rotate_changed_direct_photo_can_rotate_changed, self, 0);
-#line 1670 "DirectPhotoPage.c"
+#line 1674 "DirectPhotoPage.c"
 	}
 #line 126 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (tmp);
-#line 1674 "DirectPhotoPage.c"
+#line 1678 "DirectPhotoPage.c"
 }
 
 
@@ -1696,22 +1700,92 @@ GFile* direct_photo_page_get_current_file (DirectPhotoPage* self) {
 	result = _tmp3_;
 #line 145 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 1700 "DirectPhotoPage.c"
+#line 1704 "DirectPhotoPage.c"
 }
 
 
 static gboolean direct_photo_page_real_on_context_buttonpress (Page* base, GdkEventButton* event) {
 	DirectPhotoPage * self;
 	gboolean result = FALSE;
+	GtkMenu* _tmp0_ = NULL;
+	GtkMenu* _tmp1_ = NULL;
+	GdkEventButton* _tmp2_ = NULL;
 #line 148 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
 #line 148 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 152 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 149 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp0_ = direct_photo_page_get_context_menu (self);
+#line 149 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp1_ = _tmp0_;
+#line 149 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp2_ = event;
+#line 149 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	page_popup_context_menu (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), _tmp1_, _tmp2_);
+#line 149 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_g_object_unref0 (_tmp1_);
+#line 151 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = TRUE;
-#line 152 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 151 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 1715 "DirectPhotoPage.c"
+#line 1732 "DirectPhotoPage.c"
+}
+
+
+static GtkMenu* direct_photo_page_get_context_menu (DirectPhotoPage* self) {
+	GtkMenu* result = NULL;
+	GtkMenu* _tmp0_ = NULL;
+	GtkMenu* _tmp7_ = NULL;
+	GtkMenu* _tmp8_ = NULL;
+#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	g_return_val_if_fail (IS_DIRECT_PHOTO_PAGE (self), NULL);
+#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp0_ = self->priv->context_menu;
+#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	if (_tmp0_ == NULL) {
+#line 1747 "DirectPhotoPage.c"
+		GMenuModel* model = NULL;
+		GtkBuilder* _tmp1_ = NULL;
+		GObject* _tmp2_ = NULL;
+		GMenuModel* _tmp3_ = NULL;
+		GMenuModel* _tmp4_ = NULL;
+		GtkMenu* _tmp5_ = NULL;
+		GtkMenu* _tmp6_ = NULL;
+#line 158 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page)->builder;
+#line 158 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp2_ = gtk_builder_get_object (_tmp1_, "DirectContextMenu");
+#line 158 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp3_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp2_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp2_) : NULL);
+#line 158 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		model = _tmp3_;
+#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp4_ = model;
+#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp5_ = (GtkMenu*) gtk_menu_new_from_model (_tmp4_);
+#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		g_object_ref_sink (_tmp5_);
+#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_g_object_unref0 (self->priv->context_menu);
+#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		self->priv->context_menu = _tmp5_;
+#line 161 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp6_ = self->priv->context_menu;
+#line 161 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		gtk_menu_attach_to_widget (_tmp6_, G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), NULL);
+#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_g_object_unref0 (model);
+#line 1779 "DirectPhotoPage.c"
+	}
+#line 164 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp7_ = self->priv->context_menu;
+#line 164 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp8_ = _g_object_ref0 (_tmp7_);
+#line 164 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	result = _tmp8_;
+#line 164 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	return result;
+#line 1789 "DirectPhotoPage.c"
 }
 
 
@@ -1722,73 +1796,73 @@ static void direct_photo_page_update_zoom_menu_item_sensitivity (DirectPhotoPage
 	gboolean _tmp4_ = FALSE;
 	ZoomState _tmp5_ = {0};
 	gboolean _tmp6_ = FALSE;
-#line 155 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 167 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	single_photo_page_get_zoom_state (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), &_tmp1_);
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = zoom_state_is_max (&_tmp1_);
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (!_tmp2_) {
-#line 1734 "DirectPhotoPage.c"
+#line 1808 "DirectPhotoPage.c"
 		gboolean _tmp3_ = FALSE;
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp3_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = !_tmp3_;
-#line 1740 "DirectPhotoPage.c"
+#line 1814 "DirectPhotoPage.c"
 	} else {
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = FALSE;
-#line 1744 "DirectPhotoPage.c"
+#line 1818 "DirectPhotoPage.c"
 	}
-#line 156 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 168 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "IncreaseSize", _tmp0_);
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	single_photo_page_get_zoom_state (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_SINGLE_PHOTO_PAGE, SinglePhotoPage), &_tmp5_);
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp6_ = zoom_state_is_default (&_tmp5_);
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (!_tmp6_) {
-#line 1754 "DirectPhotoPage.c"
+#line 1828 "DirectPhotoPage.c"
 		gboolean _tmp7_ = FALSE;
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp7_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = !_tmp7_;
-#line 1760 "DirectPhotoPage.c"
+#line 1834 "DirectPhotoPage.c"
 	} else {
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = FALSE;
-#line 1764 "DirectPhotoPage.c"
+#line 1838 "DirectPhotoPage.c"
 	}
-#line 157 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "DecreaseSize", _tmp4_);
-#line 1768 "DirectPhotoPage.c"
+#line 1842 "DirectPhotoPage.c"
 }
 
 
 static void direct_photo_page_real_on_increase_size (EditingHostPage* base) {
 	DirectPhotoPage * self;
-#line 160 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 172 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 161 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 173 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	EDITING_HOST_PAGE_CLASS (direct_photo_page_parent_class)->on_increase_size (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 163 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 175 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_update_zoom_menu_item_sensitivity (self);
-#line 1780 "DirectPhotoPage.c"
+#line 1854 "DirectPhotoPage.c"
 }
 
 
 static void direct_photo_page_real_on_decrease_size (EditingHostPage* base) {
 	DirectPhotoPage * self;
-#line 166 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 178 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 167 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 179 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	EDITING_HOST_PAGE_CLASS (direct_photo_page_parent_class)->on_decrease_size (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 169 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 181 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_update_zoom_menu_item_sensitivity (self);
-#line 1792 "DirectPhotoPage.c"
+#line 1866 "DirectPhotoPage.c"
 }
 
 
@@ -1802,24 +1876,24 @@ static void direct_photo_page_on_photos_altered (DirectPhotoPage* self, GeeMap* 
 	gboolean _tmp19_ = FALSE;
 	gboolean _tmp20_ = FALSE;
 	gboolean _tmp25_ = FALSE;
-#line 172 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 184 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 172 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 184 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (GEE_IS_MAP (map));
-#line 173 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	contains = FALSE;
-#line 174 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 186 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 174 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 186 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp0_) {
-#line 1816 "DirectPhotoPage.c"
+#line 1890 "DirectPhotoPage.c"
 		Photo* photo = NULL;
 		Photo* _tmp1_ = NULL;
-#line 175 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp1_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 175 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 187 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		photo = _tmp1_;
-#line 1823 "DirectPhotoPage.c"
+#line 1897 "DirectPhotoPage.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeMap* _tmp2_ = NULL;
@@ -1828,25 +1902,25 @@ static void direct_photo_page_on_photos_altered (DirectPhotoPage* self, GeeMap* 
 			GeeSet* _tmp5_ = NULL;
 			GeeIterator* _tmp6_ = NULL;
 			GeeIterator* _tmp7_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp2_ = map;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp3_ = gee_map_get_keys (_tmp2_);
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp4_ = _tmp3_;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp5_ = _tmp4_;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp6_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp7_ = _tmp6_;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_g_object_unref0 (_tmp5_);
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_object_it = _tmp7_;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			while (TRUE) {
-#line 1850 "DirectPhotoPage.c"
+#line 1924 "DirectPhotoPage.c"
 				GeeIterator* _tmp8_ = NULL;
 				gboolean _tmp9_ = FALSE;
 				DataObject* object = NULL;
@@ -1854,129 +1928,129 @@ static void direct_photo_page_on_photos_altered (DirectPhotoPage* self, GeeMap* 
 				gpointer _tmp11_ = NULL;
 				DataObject* _tmp12_ = NULL;
 				Photo* _tmp13_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp8_ = _object_it;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp9_ = gee_iterator_next (_tmp8_);
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				if (!_tmp9_) {
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 					break;
-#line 1866 "DirectPhotoPage.c"
+#line 1940 "DirectPhotoPage.c"
 				}
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp10_ = _object_it;
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp11_ = gee_iterator_get (_tmp10_);
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				object = (DataObject*) _tmp11_;
-#line 177 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp12_ = object;
-#line 177 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp13_ = photo;
-#line 177 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				if (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_PHOTO, Photo) == _tmp13_) {
-#line 178 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 190 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 					contains = TRUE;
-#line 180 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 					_g_object_unref0 (object);
-#line 180 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 192 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 					break;
-#line 1886 "DirectPhotoPage.c"
+#line 1960 "DirectPhotoPage.c"
 				}
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_object_unref0 (object);
-#line 1890 "DirectPhotoPage.c"
+#line 1964 "DirectPhotoPage.c"
 			}
-#line 176 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 188 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_g_object_unref0 (_object_it);
-#line 1894 "DirectPhotoPage.c"
+#line 1968 "DirectPhotoPage.c"
 		}
-#line 174 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 186 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (photo);
-#line 1898 "DirectPhotoPage.c"
+#line 1972 "DirectPhotoPage.c"
 	}
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp15_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp15_) {
-#line 1904 "DirectPhotoPage.c"
+#line 1978 "DirectPhotoPage.c"
 		gboolean _tmp16_ = FALSE;
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp16_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp14_ = !_tmp16_;
-#line 1910 "DirectPhotoPage.c"
+#line 1984 "DirectPhotoPage.c"
 	} else {
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp14_ = FALSE;
-#line 1914 "DirectPhotoPage.c"
+#line 1988 "DirectPhotoPage.c"
 	}
-#line 185 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 197 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	sensitive = _tmp14_;
-#line 186 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 198 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp17_ = sensitive;
-#line 186 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 198 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp17_) {
-#line 1922 "DirectPhotoPage.c"
+#line 1996 "DirectPhotoPage.c"
 		gboolean _tmp18_ = FALSE;
-#line 187 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 199 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp18_ = contains;
-#line 187 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 199 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		sensitive = _tmp18_;
-#line 1928 "DirectPhotoPage.c"
+#line 2002 "DirectPhotoPage.c"
 	}
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp20_ = sensitive;
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp20_) {
-#line 1934 "DirectPhotoPage.c"
+#line 2008 "DirectPhotoPage.c"
 		Photo* _tmp21_ = NULL;
 		Photo* _tmp22_ = NULL;
 		PhotoFileFormat _tmp23_ = 0;
 		gboolean _tmp24_ = FALSE;
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp21_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp22_ = _tmp21_;
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp23_ = photo_get_file_format (_tmp22_);
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp24_ = photo_file_format_can_write (_tmp23_);
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp19_ = _tmp24_;
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp22_);
-#line 1951 "DirectPhotoPage.c"
+#line 2025 "DirectPhotoPage.c"
 	} else {
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp19_ = FALSE;
-#line 1955 "DirectPhotoPage.c"
+#line 2029 "DirectPhotoPage.c"
 	}
-#line 189 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 201 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Save", _tmp19_);
-#line 190 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 202 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp25_ = sensitive;
-#line 190 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 202 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Revert", _tmp25_);
-#line 1963 "DirectPhotoPage.c"
+#line 2037 "DirectPhotoPage.c"
 }
 
 
 static void direct_photo_page_on_selection_group_altered (DirectPhotoPage* self) {
 	CommandManager* _tmp0_ = NULL;
 	CommandManager* _tmp1_ = NULL;
-#line 193 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 205 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 200 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 212 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = page_get_command_manager (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 200 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 212 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = _tmp0_;
-#line 200 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 212 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	command_manager_reset (_tmp1_);
-#line 200 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 212 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_command_manager_unref0 (_tmp1_);
-#line 1980 "DirectPhotoPage.c"
+#line 2054 "DirectPhotoPage.c"
 }
 
 
@@ -1989,51 +2063,51 @@ static gboolean direct_photo_page_real_on_double_click (EditingHostPage* base, G
 	FullscreenWindow* _tmp2_ = NULL;
 	GdkEventButton* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 203 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 203 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 215 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 204 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 216 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = page_get_container (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 204 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 216 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_TYPE (_tmp0_, TYPE_FULLSCREEN_WINDOW) ? ((FullscreenWindow*) _tmp0_) : NULL;
-#line 204 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 216 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp1_ == NULL) {
-#line 204 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 216 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp0_);
-#line 2005 "DirectPhotoPage.c"
+#line 2079 "DirectPhotoPage.c"
 	}
-#line 204 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 216 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	fs = _tmp1_;
-#line 205 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 217 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = fs;
-#line 205 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 217 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp2_ != NULL) {
-#line 2013 "DirectPhotoPage.c"
+#line 2087 "DirectPhotoPage.c"
 		FullscreenWindow* _tmp3_ = NULL;
-#line 206 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 218 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp3_ = fs;
-#line 206 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 218 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		fullscreen_window_close (_tmp3_);
-#line 208 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 220 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		result = TRUE;
-#line 208 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 220 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (fs);
-#line 208 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 220 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return result;
-#line 2025 "DirectPhotoPage.c"
+#line 2099 "DirectPhotoPage.c"
 	}
-#line 211 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp4_ = event;
-#line 211 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = EDITING_HOST_PAGE_CLASS (direct_photo_page_parent_class)->on_double_click (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp4_);
-#line 211 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = _tmp5_;
-#line 211 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (fs);
-#line 211 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 223 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 2037 "DirectPhotoPage.c"
+#line 2111 "DirectPhotoPage.c"
 }
 
 
@@ -2069,135 +2143,135 @@ static void direct_photo_page_real_update_ui (EditingHostPage* base, gboolean mi
 	gboolean _tmp26_ = FALSE;
 	gboolean _tmp27_ = FALSE;
 	gboolean _tmp29_ = FALSE;
-#line 214 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 226 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 215 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 227 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = missing;
-#line 215 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 227 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	sensitivity = !_tmp0_;
-#line 217 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 229 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = sensitivity;
-#line 217 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 229 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Save", _tmp1_);
-#line 218 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 230 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = sensitivity;
-#line 218 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 230 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "SaveAs", _tmp2_);
-#line 219 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 231 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = sensitivity;
-#line 219 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 231 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "SendTo", _tmp3_);
-#line 220 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 232 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp4_ = sensitivity;
-#line 220 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 232 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Publish", _tmp4_);
-#line 221 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 233 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = sensitivity;
-#line 221 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 233 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Print", _tmp5_);
-#line 222 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 234 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp6_ = sensitivity;
-#line 222 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 234 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonJumpToFile", _tmp6_);
-#line 224 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 236 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp7_ = sensitivity;
-#line 224 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 236 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonUndo", _tmp7_);
-#line 225 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 237 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp8_ = sensitivity;
-#line 225 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 237 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "CommonRedo", _tmp8_);
-#line 227 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 239 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp9_ = sensitivity;
-#line 227 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 239 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "IncreaseSize", _tmp9_);
-#line 228 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 240 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp10_ = sensitivity;
-#line 228 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 240 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "DecreaseSize", _tmp10_);
-#line 229 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 241 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp11_ = sensitivity;
-#line 229 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 241 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "ZoomFit", _tmp11_);
-#line 230 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 242 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp12_ = sensitivity;
-#line 230 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 242 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Zoom100", _tmp12_);
-#line 231 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 243 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp13_ = sensitivity;
-#line 231 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 243 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Zoom200", _tmp13_);
-#line 233 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 245 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp14_ = sensitivity;
-#line 233 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 245 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateClockwise", _tmp14_);
-#line 234 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp15_ = sensitivity;
-#line 234 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateCounterclockwise", _tmp15_);
-#line 235 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 247 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp16_ = sensitivity;
-#line 235 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 247 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "FlipHorizontally", _tmp16_);
-#line 236 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 248 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp17_ = sensitivity;
-#line 236 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 248 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "FlipVertically", _tmp17_);
-#line 237 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 249 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp18_ = sensitivity;
-#line 237 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 249 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Enhance", _tmp18_);
-#line 238 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 250 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp19_ = sensitivity;
-#line 238 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 250 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Crop", _tmp19_);
-#line 239 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 251 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp20_ = sensitivity;
-#line 239 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 251 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Straighten", _tmp20_);
-#line 240 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp21_ = sensitivity;
-#line 240 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RedEye", _tmp21_);
-#line 241 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22_ = sensitivity;
-#line 241 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Adjust", _tmp22_);
-#line 242 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 254 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp23_ = sensitivity;
-#line 242 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 254 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Revert", _tmp23_);
-#line 243 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp24_ = sensitivity;
-#line 243 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "AdjustDateTime", _tmp24_);
-#line 244 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp25_ = sensitivity;
-#line 244 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Fullscreen", _tmp25_);
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp27_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp27_) {
-#line 2183 "DirectPhotoPage.c"
+#line 2257 "DirectPhotoPage.c"
 		gboolean _tmp28_ = FALSE;
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp28_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp26_ = !_tmp28_;
-#line 2189 "DirectPhotoPage.c"
+#line 2263 "DirectPhotoPage.c"
 	} else {
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp26_ = FALSE;
-#line 2193 "DirectPhotoPage.c"
+#line 2267 "DirectPhotoPage.c"
 	}
-#line 246 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "SetBackground", _tmp26_);
-#line 248 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp29_ = missing;
-#line 248 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 260 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	EDITING_HOST_PAGE_CLASS (direct_photo_page_parent_class)->update_ui (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp29_);
-#line 2201 "DirectPhotoPage.c"
+#line 2275 "DirectPhotoPage.c"
 }
 
 
@@ -2232,157 +2306,157 @@ static void direct_photo_page_real_update_actions (Page* base, gint selected_cou
 	gboolean _tmp42_ = FALSE;
 	gint _tmp46_ = 0;
 	gint _tmp47_ = 0;
-#line 251 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 263 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = _tmp0_;
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_COLLECTION, DataCollection));
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = _tmp2_ > 1;
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 252 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	multiple = _tmp3_;
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp5_) {
-#line 2254 "DirectPhotoPage.c"
+#line 2328 "DirectPhotoPage.c"
 		gboolean _tmp6_ = FALSE;
 		Photo* _tmp7_ = NULL;
 		Photo* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 		gboolean _tmp10_ = FALSE;
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp7_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp8_ = _tmp7_;
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp9_ = photo_has_transformations (_tmp8_);
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp10_ = _tmp9_;
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp8_);
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (_tmp10_) {
-#line 2272 "DirectPhotoPage.c"
+#line 2346 "DirectPhotoPage.c"
 			gboolean _tmp11_ = FALSE;
-#line 254 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 266 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp11_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 254 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 266 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp6_ = !_tmp11_;
-#line 2278 "DirectPhotoPage.c"
+#line 2352 "DirectPhotoPage.c"
 		} else {
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp6_ = FALSE;
-#line 2282 "DirectPhotoPage.c"
+#line 2356 "DirectPhotoPage.c"
 		}
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = _tmp6_;
-#line 2286 "DirectPhotoPage.c"
+#line 2360 "DirectPhotoPage.c"
 	} else {
-#line 254 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 266 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = FALSE;
-#line 2290 "DirectPhotoPage.c"
+#line 2364 "DirectPhotoPage.c"
 	}
-#line 253 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	revert_possible = _tmp4_;
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp13_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp13_) {
-#line 2298 "DirectPhotoPage.c"
+#line 2372 "DirectPhotoPage.c"
 		Photo* _tmp14_ = NULL;
 		Photo* _tmp15_ = NULL;
 		gboolean _tmp16_ = FALSE;
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp14_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp15_ = _tmp14_;
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp16_ = editing_host_page_is_rotate_available (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp15_);
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp12_ = _tmp16_;
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp15_);
-#line 2312 "DirectPhotoPage.c"
+#line 2386 "DirectPhotoPage.c"
 	} else {
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp12_ = FALSE;
-#line 2316 "DirectPhotoPage.c"
+#line 2390 "DirectPhotoPage.c"
 	}
-#line 255 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	rotate_possible = _tmp12_;
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp18_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp18_) {
-#line 2324 "DirectPhotoPage.c"
+#line 2398 "DirectPhotoPage.c"
 		Photo* _tmp19_ = NULL;
 		Photo* _tmp20_ = NULL;
 		gboolean _tmp21_ = FALSE;
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp19_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp20_ = _tmp19_;
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp21_ = editing_host_page_is_enhance_available (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp20_);
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp17_ = _tmp21_;
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp20_);
-#line 2338 "DirectPhotoPage.c"
+#line 2412 "DirectPhotoPage.c"
 	} else {
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp17_ = FALSE;
-#line 2342 "DirectPhotoPage.c"
+#line 2416 "DirectPhotoPage.c"
 	}
-#line 256 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 268 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	enhance_possible = _tmp17_;
-#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22_ = multiple;
-#line 258 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "PrevPhoto", _tmp22_);
-#line 259 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp23_ = multiple;
-#line 259 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "NextPhoto", _tmp23_);
-#line 260 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 272 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp24_ = rotate_possible;
-#line 260 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 272 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateClockwise", _tmp24_);
-#line 261 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 273 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp25_ = rotate_possible;
-#line 261 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 273 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateCounterclockwise", _tmp25_);
-#line 262 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 274 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp26_ = rotate_possible;
-#line 262 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 274 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "FlipHorizontally", _tmp26_);
-#line 263 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 275 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp27_ = rotate_possible;
-#line 263 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 275 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "FlipVertically", _tmp27_);
-#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 276 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp28_ = revert_possible;
-#line 264 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 276 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Revert", _tmp28_);
-#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp29_ = enhance_possible;
-#line 265 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Enhance", _tmp29_);
-#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 279 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp30_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 267 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 279 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "SetBackground", _tmp30_);
-#line 269 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 281 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp31_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 269 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 281 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp31_) {
-#line 2386 "DirectPhotoPage.c"
+#line 2460 "DirectPhotoPage.c"
 		Photo* _tmp32_ = NULL;
 		Photo* _tmp33_ = NULL;
 		Scaling _tmp34_ = {0};
@@ -2391,69 +2465,69 @@ static void direct_photo_page_real_update_actions (Page* base, gint selected_cou
 		Photo* _tmp37_ = NULL;
 		Scaling _tmp38_ = {0};
 		gboolean _tmp39_ = FALSE;
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp32_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp33_ = _tmp32_;
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		scaling_for_original (&_tmp34_);
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp35_ = editing_tools_crop_tool_is_available (_tmp33_, &_tmp34_);
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "Crop", _tmp35_);
-#line 270 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 282 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp33_);
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp36_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp37_ = _tmp36_;
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		scaling_for_original (&_tmp38_);
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp39_ = editing_tools_redeye_tool_is_available (_tmp37_, &_tmp38_);
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RedEye", _tmp39_);
-#line 271 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp37_);
-#line 2419 "DirectPhotoPage.c"
+#line 2493 "DirectPhotoPage.c"
 	}
-#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp40_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp41_ = _tmp40_;
-#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp42_ = _tmp41_ != NULL;
-#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp41_);
-#line 277 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp42_) {
-#line 2431 "DirectPhotoPage.c"
+#line 2505 "DirectPhotoPage.c"
 		Photo* _tmp43_ = NULL;
 		Photo* _tmp44_ = NULL;
 		PhotoFileFormat _tmp45_ = 0;
-#line 278 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp43_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 278 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp44_ = _tmp43_;
-#line 278 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp45_ = photo_get_file_format (_tmp44_);
-#line 278 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "AdjustDateTime", _tmp45_ != PHOTO_FILE_FORMAT_RAW);
-#line 278 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp44_);
-#line 2445 "DirectPhotoPage.c"
+#line 2519 "DirectPhotoPage.c"
 	} else {
-#line 280 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 292 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		page_set_action_sensitive (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "AdjustDateTime", FALSE);
-#line 2449 "DirectPhotoPage.c"
+#line 2523 "DirectPhotoPage.c"
 	}
-#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 295 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp46_ = selected_count;
-#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 295 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp47_ = count;
-#line 283 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 295 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	PAGE_CLASS (direct_photo_page_parent_class)->update_actions (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), TYPE_PAGE, Page), _tmp46_, _tmp47_);
-#line 2457 "DirectPhotoPage.c"
+#line 2531 "DirectPhotoPage.c"
 }
 
 
@@ -2485,216 +2559,216 @@ static gboolean direct_photo_page_check_ok_to_close_photo (DirectPhotoPage* self
 	GtkResponseType _tmp23_ = 0;
 	GtkResponseType _tmp24_ = 0;
 	GtkResponseType _tmp25_ = 0;
-#line 286 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 298 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (IS_DIRECT_PHOTO_PAGE (self), FALSE);
-#line 286 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 298 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail ((photo == NULL) || IS_PHOTO (photo), FALSE);
-#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 301 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = photo;
-#line 289 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 301 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp0_ == NULL) {
-#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 302 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		result = TRUE;
-#line 290 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 302 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return result;
-#line 2501 "DirectPhotoPage.c"
+#line 2575 "DirectPhotoPage.c"
 	}
-#line 292 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = photo;
-#line 292 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = photo_has_alterations (_tmp1_);
-#line 292 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (!_tmp2_) {
-#line 293 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 305 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		result = TRUE;
-#line 293 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 305 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return result;
-#line 2513 "DirectPhotoPage.c"
+#line 2587 "DirectPhotoPage.c"
 	}
-#line 295 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 307 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = self->priv->drop_if_dirty;
-#line 295 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 307 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp3_) {
-#line 2519 "DirectPhotoPage.c"
+#line 2593 "DirectPhotoPage.c"
 		Photo* _tmp4_ = NULL;
-#line 298 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 310 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = photo;
-#line 298 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 310 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		photo_remove_all_transformations (_tmp4_);
-#line 300 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 312 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		result = TRUE;
-#line 300 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 312 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return result;
-#line 2529 "DirectPhotoPage.c"
+#line 2603 "DirectPhotoPage.c"
 	}
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp6_ = _tmp5_;
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp7_ = photo_get_file_format (_tmp6_);
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp8_ = photo_file_format_can_write (_tmp7_);
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp9_ = _tmp8_;
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp6_);
-#line 303 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 315 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	is_writeable = _tmp9_;
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp11_ = is_writeable;
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp11_) {
-#line 2549 "DirectPhotoPage.c"
+#line 2623 "DirectPhotoPage.c"
 		const gchar* _tmp12_ = NULL;
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp12_ = _ ("_Save");
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp10_ = _tmp12_;
-#line 2555 "DirectPhotoPage.c"
+#line 2629 "DirectPhotoPage.c"
 	} else {
 		const gchar* _tmp13_ = NULL;
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp13_ = _ ("_Save a Copy");
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp10_ = _tmp13_;
-#line 2562 "DirectPhotoPage.c"
+#line 2636 "DirectPhotoPage.c"
 	}
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp14_ = g_strdup (_tmp10_);
-#line 304 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 316 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	save_option = _tmp14_;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp15_ = _ ("Lose changes to %s?");
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp16_ = photo;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp17_ = media_source_get_basename (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp18_ = _tmp17_;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp19_ = g_strdup_printf (_tmp15_, _tmp18_);
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp20_ = _tmp19_;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp21_ = save_option;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22_ = _ ("Close _without Saving");
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp23_ = app_window_negate_affirm_cancel_question (_tmp20_, _tmp21_, _tmp22_, NULL, NULL);
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp24_ = _tmp23_;
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (_tmp20_);
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (_tmp18_);
-#line 306 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	response = _tmp24_;
-#line 310 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 322 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp25_ = response;
-#line 310 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 322 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp25_ == GTK_RESPONSE_YES) {
-#line 2598 "DirectPhotoPage.c"
+#line 2672 "DirectPhotoPage.c"
 		Photo* _tmp26_ = NULL;
-#line 311 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 323 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp26_ = photo;
-#line 311 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 323 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		photo_remove_all_transformations (_tmp26_);
-#line 2604 "DirectPhotoPage.c"
+#line 2678 "DirectPhotoPage.c"
 	} else {
 		GtkResponseType _tmp27_ = 0;
-#line 312 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 324 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp27_ = response;
-#line 312 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 324 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (_tmp27_ == GTK_RESPONSE_NO) {
-#line 2611 "DirectPhotoPage.c"
+#line 2685 "DirectPhotoPage.c"
 			gboolean _tmp28_ = FALSE;
-#line 313 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 325 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp28_ = is_writeable;
-#line 313 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 325 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			if (_tmp28_) {
-#line 2617 "DirectPhotoPage.c"
+#line 2691 "DirectPhotoPage.c"
 				Photo* _tmp29_ = NULL;
 				GFile* _tmp30_ = NULL;
 				GFile* _tmp31_ = NULL;
 				Photo* _tmp32_ = NULL;
 				Photo* _tmp33_ = NULL;
 				PhotoFileFormat _tmp34_ = 0;
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp29_ = photo;
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp30_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp31_ = _tmp30_;
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp32_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp33_ = _tmp32_;
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp34_ = photo_get_file_format (_tmp33_);
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				direct_photo_page_save (self, _tmp31_, 0, SCALE_CONSTRAINT_ORIGINAL, JPEG_QUALITY_HIGH, _tmp34_, FALSE, TRUE);
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_object_unref0 (_tmp33_);
-#line 314 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_object_unref0 (_tmp31_);
-#line 2642 "DirectPhotoPage.c"
+#line 2716 "DirectPhotoPage.c"
 			} else {
-#line 317 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 329 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				direct_photo_page_on_save_as (self);
-#line 2646 "DirectPhotoPage.c"
+#line 2720 "DirectPhotoPage.c"
 			}
 		} else {
 			gboolean _tmp35_ = FALSE;
 			gboolean _tmp36_ = FALSE;
 			GtkResponseType _tmp37_ = 0;
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp37_ = response;
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			if (_tmp37_ == GTK_RESPONSE_CANCEL) {
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp36_ = TRUE;
-#line 2658 "DirectPhotoPage.c"
+#line 2732 "DirectPhotoPage.c"
 			} else {
 				GtkResponseType _tmp38_ = 0;
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp38_ = response;
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp36_ = _tmp38_ == GTK_RESPONSE_DELETE_EVENT;
-#line 2665 "DirectPhotoPage.c"
+#line 2739 "DirectPhotoPage.c"
 			}
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			if (_tmp36_) {
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp35_ = TRUE;
-#line 2671 "DirectPhotoPage.c"
+#line 2745 "DirectPhotoPage.c"
 			} else {
 				GtkResponseType _tmp39_ = 0;
-#line 319 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp39_ = response;
-#line 319 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp35_ = _tmp39_ == GTK_RESPONSE_CLOSE;
-#line 2678 "DirectPhotoPage.c"
+#line 2752 "DirectPhotoPage.c"
 			}
-#line 318 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			if (_tmp35_) {
-#line 320 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 332 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				result = FALSE;
-#line 320 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 332 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (save_option);
-#line 320 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 332 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				return result;
-#line 2688 "DirectPhotoPage.c"
+#line 2762 "DirectPhotoPage.c"
 			}
 		}
 	}
-#line 323 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 335 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = TRUE;
-#line 323 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 335 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (save_option);
-#line 323 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 335 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 2698 "DirectPhotoPage.c"
+#line 2772 "DirectPhotoPage.c"
 }
 
 
@@ -2704,23 +2778,23 @@ gboolean direct_photo_page_check_quit (DirectPhotoPage* self) {
 	Photo* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 326 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (IS_DIRECT_PHOTO_PAGE (self), FALSE);
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = _tmp0_;
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = direct_photo_page_check_ok_to_close_photo (self, _tmp1_);
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = _tmp2_;
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp1_);
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = _tmp3_;
-#line 327 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 2724 "DirectPhotoPage.c"
+#line 2798 "DirectPhotoPage.c"
 }
 
 
@@ -2729,36 +2803,36 @@ static gboolean direct_photo_page_real_confirm_replace_photo (EditingHostPage* b
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	Photo* _tmp1_ = NULL;
-#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 342 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 342 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail ((old_photo == NULL) || IS_PHOTO (old_photo), FALSE);
-#line 330 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 342 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (IS_PHOTO (new_photo), FALSE);
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = old_photo;
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp1_ != NULL) {
-#line 2743 "DirectPhotoPage.c"
+#line 2817 "DirectPhotoPage.c"
 		Photo* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp2_ = old_photo;
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp3_ = direct_photo_page_check_ok_to_close_photo (self, _tmp2_);
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = _tmp3_;
-#line 2752 "DirectPhotoPage.c"
+#line 2826 "DirectPhotoPage.c"
 	} else {
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = TRUE;
-#line 2756 "DirectPhotoPage.c"
+#line 2830 "DirectPhotoPage.c"
 	}
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = _tmp0_;
-#line 331 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 343 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 2762 "DirectPhotoPage.c"
+#line 2836 "DirectPhotoPage.c"
 }
 
 
@@ -2773,29 +2847,29 @@ static void direct_photo_page_save (DirectPhotoPage* self, GFile* dest, gint sca
 	DirectPhoto* _tmp21_ = NULL;
 	gchar* _tmp22_ = NULL;
 	gchar* _tmp23_ = NULL;
-	DirectView* tmp_view = NULL;
-	DirectPhoto* _tmp24_ = NULL;
-	DirectView* _tmp25_ = NULL;
-	DirectViewCollection* _tmp26_ = NULL;
-	DirectView* _tmp27_ = NULL;
-	DirectPhotoSourceCollection* _tmp28_ = NULL;
-	DirectPhoto* _tmp29_ = NULL;
-	DirectViewCollection* _tmp30_ = NULL;
-	DirectPhoto* _tmp31_ = NULL;
+	Photo* _tmp24_ = NULL;
+	Photo* _tmp25_ = NULL;
+	DirectPhoto* _tmp26_ = NULL;
+	gboolean _tmp27_ = FALSE;
+	gboolean _tmp28_ = FALSE;
+	DirectPhotoSourceCollection* _tmp33_ = NULL;
+	DirectPhoto* _tmp34_ = NULL;
+	DirectViewCollection* _tmp35_ = NULL;
+	DirectPhoto* _tmp36_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 334 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 346 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 334 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 346 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (G_IS_FILE (dest));
-#line 336 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 348 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = constraint;
-#line 336 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 348 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = scale;
-#line 336 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 348 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	scaling_for_constraint (_tmp0_, _tmp1_, FALSE, &_tmp2_);
-#line 336 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 348 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	scaling = _tmp2_;
-#line 2799 "DirectPhotoPage.c"
+#line 2873 "DirectPhotoPage.c"
 	{
 		Photo* _tmp3_ = NULL;
 		Photo* _tmp4_ = NULL;
@@ -2805,34 +2879,34 @@ static void direct_photo_page_save (DirectPhotoPage* self, GFile* dest, gint sca
 		PhotoFileFormat _tmp8_ = 0;
 		gboolean _tmp9_ = FALSE;
 		gboolean _tmp10_ = FALSE;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp3_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = _tmp3_;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp5_ = dest;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp6_ = scaling;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp7_ = quality;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp8_ = format;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp9_ = copy_unmodified;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp10_ = save_metadata;
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		photo_export (_tmp4_, _tmp5_, &_tmp6_, _tmp7_, _tmp8_, _tmp9_, _tmp10_, &_inner_error_);
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp4_);
-#line 339 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2831 "DirectPhotoPage.c"
-			goto __catch47_g_error;
+#line 2905 "DirectPhotoPage.c"
+			goto __catch48_g_error;
 		}
 	}
-	goto __finally47;
-	__catch47_g_error:
+	goto __finally48;
+	__catch48_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp11_ = NULL;
@@ -2843,92 +2917,114 @@ static void direct_photo_page_save (DirectPhotoPage* self, GFile* dest, gint sca
 		const gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
 		gchar* _tmp18_ = NULL;
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		err = _inner_error_;
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_inner_error_ = NULL;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp11_ = _ ("Error while saving to %s: %s");
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp12_ = dest;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp13_ = g_file_get_path (_tmp12_);
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp14_ = _tmp13_;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp15_ = err;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp16_ = _tmp15_->message;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp17_ = g_strdup_printf (_tmp11_, _tmp14_, _tmp16_);
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp18_ = _tmp17_;
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		app_window_error_message (_tmp18_, NULL);
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp18_);
-#line 341 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 353 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp14_);
-#line 344 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 356 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_error_free0 (err);
-#line 344 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 356 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return;
-#line 2877 "DirectPhotoPage.c"
+#line 2951 "DirectPhotoPage.c"
 	}
-	__finally47:
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	__finally48:
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		g_clear_error (&_inner_error_);
-#line 338 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 350 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return;
-#line 2888 "DirectPhotoPage.c"
+#line 2962 "DirectPhotoPage.c"
 	}
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp19_ = direct_photo_global;
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp20_ = dest;
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22_ = direct_photo_source_collection_fetch (_tmp19_, _tmp20_, &_tmp21_, TRUE);
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (photo);
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	photo = _tmp21_;
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp23_ = _tmp22_;
-#line 349 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (_tmp23_);
-#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp24_ = photo;
-#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp25_ = direct_view_new (_tmp24_);
-#line 351 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	tmp_view = _tmp25_;
-#line 352 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp26_ = self->priv->view_controller;
-#line 352 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp27_ = tmp_view;
-#line 352 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	data_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, TYPE_DATA_OBJECT, DataObject));
-#line 354 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp28_ = direct_photo_global;
-#line 354 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp29_ = photo;
-#line 354 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	direct_photo_source_collection_reimport_photo (_tmp28_, _tmp29_);
-#line 355 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp30_ = self->priv->view_controller;
-#line 355 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp31_ = photo;
-#line 355 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	editing_host_page_display_mirror_of (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, TYPE_VIEW_COLLECTION, ViewCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_PHOTO, Photo));
-#line 334 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_g_object_unref0 (tmp_view);
-#line 334 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp24_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp25_ = _tmp24_;
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp26_ = photo;
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp27_ = data_source_equals (G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, TYPE_DATA_SOURCE, DataSource), G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, TYPE_DATA_SOURCE, DataSource));
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp28_ = !_tmp27_;
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_g_object_unref0 (_tmp25_);
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	if (_tmp28_) {
+#line 2992 "DirectPhotoPage.c"
+		DirectView* tmp_view = NULL;
+		DirectPhoto* _tmp29_ = NULL;
+		DirectView* _tmp30_ = NULL;
+		DirectViewCollection* _tmp31_ = NULL;
+		DirectView* _tmp32_ = NULL;
+#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp29_ = photo;
+#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp30_ = direct_view_new (_tmp29_);
+#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		tmp_view = _tmp30_;
+#line 365 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp31_ = self->priv->view_controller;
+#line 365 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_tmp32_ = tmp_view;
+#line 365 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		data_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, TYPE_DATA_COLLECTION, DataCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, TYPE_DATA_OBJECT, DataObject));
+#line 363 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+		_g_object_unref0 (tmp_view);
+#line 3012 "DirectPhotoPage.c"
+	}
+#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp33_ = direct_photo_global;
+#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp34_ = photo;
+#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	direct_photo_source_collection_reimport_photo (_tmp33_, _tmp34_);
+#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp35_ = self->priv->view_controller;
+#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_tmp36_ = photo;
+#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	editing_host_page_display_mirror_of (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), G_TYPE_CHECK_INSTANCE_CAST (_tmp35_, TYPE_VIEW_COLLECTION, ViewCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp36_, TYPE_PHOTO, Photo));
+#line 346 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (photo);
-#line 2932 "DirectPhotoPage.c"
+#line 3028 "DirectPhotoPage.c"
 }
 
 
@@ -2946,84 +3042,84 @@ static void direct_photo_page_on_save (DirectPhotoPage* self) {
 	Photo* _tmp15_ = NULL;
 	Photo* _tmp16_ = NULL;
 	PhotoFileFormat _tmp17_ = 0;
-#line 358 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 372 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = _tmp2_;
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp4_ = photo_has_alterations (_tmp3_);
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = !_tmp4_;
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp3_);
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp5_) {
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp1_ = TRUE;
-#line 2966 "DirectPhotoPage.c"
+#line 3062 "DirectPhotoPage.c"
 	} else {
 		Photo* _tmp6_ = NULL;
 		Photo* _tmp7_ = NULL;
 		PhotoFileFormat _tmp8_ = 0;
 		gboolean _tmp9_ = FALSE;
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp6_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp7_ = _tmp6_;
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp8_ = photo_get_file_format (_tmp7_);
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp9_ = photo_file_format_can_write (_tmp8_);
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp1_ = !_tmp9_;
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp7_);
-#line 2984 "DirectPhotoPage.c"
+#line 3080 "DirectPhotoPage.c"
 	}
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp1_) {
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = TRUE;
-#line 2990 "DirectPhotoPage.c"
+#line 3086 "DirectPhotoPage.c"
 	} else {
 		gboolean _tmp10_ = FALSE;
-#line 360 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp10_ = editing_host_page_get_photo_missing (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 360 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp0_ = _tmp10_;
-#line 2997 "DirectPhotoPage.c"
+#line 3093 "DirectPhotoPage.c"
 	}
-#line 359 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp0_) {
-#line 361 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 375 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return;
-#line 3003 "DirectPhotoPage.c"
+#line 3099 "DirectPhotoPage.c"
 	}
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp11_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp12_ = _tmp11_;
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp13_ = media_source_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_MEDIA_SOURCE, MediaSource));
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp14_ = _tmp13_;
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp15_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp16_ = _tmp15_;
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp17_ = photo_get_file_format (_tmp16_);
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_photo_page_save (self, _tmp14_, 0, SCALE_CONSTRAINT_ORIGINAL, JPEG_QUALITY_HIGH, _tmp17_, FALSE, TRUE);
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp16_);
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp14_);
-#line 364 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp12_);
-#line 3027 "DirectPhotoPage.c"
+#line 3123 "DirectPhotoPage.c"
 }
 
 
@@ -3088,114 +3184,114 @@ static void direct_photo_page_on_save_as (DirectPhotoPage* self) {
 	gint _tmp54_ = 0;
 	gint _tmp55_ = 0;
 	GtkFileChooserDialog* _tmp74_ = NULL;
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = _ ("Save As");
-#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = export_dialog_new (_tmp0_);
-#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_object_ref_sink (_tmp1_);
-#line 369 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	export_dialog = _tmp1_;
-#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	export_format_parameters_last (&_tmp2_);
-#line 373 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	export_params = _tmp2_;
-#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 388 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = export_dialog;
-#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 388 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp6_ = export_dialog_execute (_tmp3_, &_tmp4_, &_tmp5_, &export_params);
-#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 388 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	scale = _tmp4_;
-#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 388 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	constraint = _tmp5_;
-#line 374 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 388 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (!_tmp6_) {
-#line 375 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 389 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (export_dialog);
-#line 375 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 389 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		return;
-#line 3120 "DirectPhotoPage.c"
+#line 3216 "DirectPhotoPage.c"
 	}
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp7_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp8_ = _tmp7_;
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp9_ = export_params;
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp10_ = photo_get_export_basename_for_parameters (_tmp8_, &_tmp9_);
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp11_ = _tmp10_;
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp8_);
-#line 377 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 391 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	filename = _tmp11_;
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp12_ = editing_host_page_get_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp13_ = _tmp12_;
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp14_ = export_params;
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp15_ = photo_get_export_format_for_parameters (_tmp13_, &_tmp14_);
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp16_ = _tmp15_;
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp13_);
-#line 378 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 392 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	effective_export_format = _tmp16_;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp17_ = effective_export_format;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp18_ = photo_file_format_get_properties (_tmp17_);
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp19_ = _tmp18_;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp21_ = photo_file_format_properties_get_known_extensions (_tmp19_, &_tmp20_);
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22_ = _tmp21_;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp22__length1 = _tmp20_;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_photo_file_format_properties_unref0 (_tmp19_);
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	output_format_extensions = _tmp22_;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	output_format_extensions_length1 = _tmp22__length1;
-#line 381 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_output_format_extensions_size_ = output_format_extensions_length1;
-#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 397 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp23_ = gtk_file_filter_new ();
-#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 397 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_object_ref_sink (_tmp23_);
-#line 383 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 397 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	output_format_filter = _tmp23_;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp24_ = output_format_extensions;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp24__length1 = output_format_extensions_length1;
-#line 3180 "DirectPhotoPage.c"
+#line 3276 "DirectPhotoPage.c"
 	{
 		gchar** extension_collection = NULL;
 		gint extension_collection_length1 = 0;
 		gint _extension_collection_size_ = 0;
 		gint extension_it = 0;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		extension_collection = _tmp24_;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		extension_collection_length1 = _tmp24__length1;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		for (extension_it = 0; extension_it < _tmp24__length1; extension_it = extension_it + 1) {
-#line 3192 "DirectPhotoPage.c"
+#line 3288 "DirectPhotoPage.c"
 			gchar* _tmp25_ = NULL;
 			gchar* extension = NULL;
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			_tmp25_ = g_strdup (extension_collection[extension_it]);
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 			extension = _tmp25_;
-#line 3199 "DirectPhotoPage.c"
+#line 3295 "DirectPhotoPage.c"
 			{
 				gchar* uppercase_extension = NULL;
 				const gchar* _tmp26_ = NULL;
@@ -3208,109 +3304,109 @@ static void direct_photo_page_on_save_as (DirectPhotoPage* self) {
 				const gchar* _tmp33_ = NULL;
 				gchar* _tmp34_ = NULL;
 				gchar* _tmp35_ = NULL;
-#line 385 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 399 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp26_ = extension;
-#line 385 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 399 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp27_ = g_utf8_strup (_tmp26_, (gssize) -1);
-#line 385 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 399 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				uppercase_extension = _tmp27_;
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp28_ = output_format_filter;
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp29_ = extension;
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp30_ = g_strconcat ("*.", _tmp29_, NULL);
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp31_ = _tmp30_;
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				gtk_file_filter_add_pattern (_tmp28_, _tmp31_);
-#line 386 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (_tmp31_);
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp32_ = output_format_filter;
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp33_ = uppercase_extension;
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp34_ = g_strconcat ("*.", _tmp33_, NULL);
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_tmp35_ = _tmp34_;
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				gtk_file_filter_add_pattern (_tmp32_, _tmp35_);
-#line 387 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (_tmp35_);
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (uppercase_extension);
-#line 384 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				_g_free0 (extension);
-#line 3246 "DirectPhotoPage.c"
+#line 3342 "DirectPhotoPage.c"
 			}
 		}
 	}
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp36_ = _ ("Save As");
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp37_ = app_window_get_instance ();
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp38_ = _tmp37_;
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp39_ = (GtkFileChooserDialog*) gtk_file_chooser_dialog_new (_tmp36_, G_TYPE_CHECK_INSTANCE_CAST (_tmp38_, gtk_window_get_type (), GtkWindow), GTK_FILE_CHOOSER_ACTION_SAVE, RESOURCES_CANCEL_LABEL, GTK_RESPONSE_CANCEL, RESOURCES_OK_LABEL, GTK_RESPONSE_OK, NULL);
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_object_ref_sink (_tmp39_);
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp40_ = _tmp39_;
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (_tmp38_);
-#line 390 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	save_as_dialog = _tmp40_;
-#line 393 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 407 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp41_ = save_as_dialog;
-#line 393 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 407 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_set_select_multiple (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), FALSE);
-#line 394 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 408 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp42_ = save_as_dialog;
-#line 394 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 408 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp43_ = filename;
-#line 394 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 408 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_set_current_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), _tmp43_);
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp44_ = save_as_dialog;
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp45_ = self->priv->current_save_dir;
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp46_ = g_file_get_path (_tmp45_);
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp47_ = _tmp46_;
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_set_current_folder (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), _tmp47_);
-#line 395 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 409 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (_tmp47_);
-#line 396 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp48_ = save_as_dialog;
-#line 396 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp49_ = output_format_filter;
-#line 396 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp50_ = _g_object_ref0 (_tmp49_);
-#line 396 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_add_filter (G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), _tmp50_);
-#line 397 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 411 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp51_ = save_as_dialog;
-#line 397 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 411 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_set_do_overwrite_confirmation (G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), TRUE);
-#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 412 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp52_ = save_as_dialog;
-#line 398 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 412 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_file_chooser_set_local_only (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), FALSE);
-#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 414 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp53_ = save_as_dialog;
-#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 414 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp54_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_dialog_get_type (), GtkDialog));
-#line 400 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 414 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	response = _tmp54_;
-#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 415 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp55_ = response;
-#line 401 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 415 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp55_ == ((gint) GTK_RESPONSE_OK)) {
-#line 3314 "DirectPhotoPage.c"
+#line 3410 "DirectPhotoPage.c"
 		GtkFileChooserDialog* _tmp56_ = NULL;
 		gchar* _tmp57_ = NULL;
 		gchar* _tmp58_ = NULL;
@@ -3329,106 +3425,106 @@ static void direct_photo_page_on_save_as (DirectPhotoPage* self) {
 		gchar* _tmp71_ = NULL;
 		gchar* _tmp72_ = NULL;
 		GFile* _tmp73_ = NULL;
-#line 404 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		self->priv->drop_if_dirty = TRUE;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp56_ = save_as_dialog;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp57_ = gtk_file_chooser_get_uri (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser));
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp58_ = _tmp57_;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp59_ = g_file_new_for_uri (_tmp58_);
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp60_ = _tmp59_;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp61_ = scale;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp62_ = constraint;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp63_ = export_params;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp64_ = _tmp63_.quality;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp65_ = effective_export_format;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp66_ = export_params;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp67_ = _tmp66_.mode;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp68_ = export_params;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp69_ = _tmp68_.export_metadata;
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		direct_photo_page_save (self, _tmp60_, _tmp61_, _tmp62_, _tmp64_, _tmp65_, _tmp67_ == EXPORT_FORMAT_MODE_UNMODIFIED, _tmp69_);
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp60_);
-#line 405 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 419 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp58_);
-#line 408 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 422 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		self->priv->drop_if_dirty = FALSE;
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp70_ = save_as_dialog;
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp71_ = gtk_file_chooser_get_current_folder (G_TYPE_CHECK_INSTANCE_CAST (_tmp70_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser));
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp72_ = _tmp71_;
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp73_ = g_file_new_for_path (_tmp72_);
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (self->priv->current_save_dir);
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		self->priv->current_save_dir = _tmp73_;
-#line 410 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_free0 (_tmp72_);
-#line 3385 "DirectPhotoPage.c"
+#line 3481 "DirectPhotoPage.c"
 	}
-#line 413 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 427 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp74_ = save_as_dialog;
-#line 413 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 427 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, gtk_widget_get_type (), GtkWidget));
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (save_as_dialog);
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (output_format_filter);
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	output_format_extensions = (_vala_array_free (output_format_extensions, output_format_extensions_length1, (GDestroyNotify) g_free), NULL);
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_free0 (filename);
-#line 368 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 382 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (export_dialog);
-#line 3401 "DirectPhotoPage.c"
+#line 3497 "DirectPhotoPage.c"
 }
 
 
 static void direct_photo_page_on_send_to (DirectPhotoPage* self) {
 	gboolean _tmp0_ = FALSE;
-#line 416 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 430 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 417 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 431 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = editing_host_page_has_photo (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage));
-#line 417 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 431 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp0_) {
-#line 3413 "DirectPhotoPage.c"
+#line 3509 "DirectPhotoPage.c"
 		ViewCollection* _tmp1_ = NULL;
 		ViewCollection* _tmp2_ = NULL;
 		GeeList* _tmp3_ = NULL;
 		GeeCollection* _tmp4_ = NULL;
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp1_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp2_ = _tmp1_;
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp3_ = view_collection_get_selected_sources (_tmp2_);
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		desktop_integration_send_to (_tmp4_);
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp4_);
-#line 418 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 432 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_data_collection_unref0 (_tmp2_);
-#line 3432 "DirectPhotoPage.c"
+#line 3528 "DirectPhotoPage.c"
 	}
 }
 
@@ -3442,93 +3538,93 @@ static gboolean direct_photo_page_real_on_app_key_pressed (Page* base, GdkEventK
 	const gchar* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	GQuark _tmp5_ = 0U;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	static GQuark _tmp4_label0 = 0;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	static GQuark _tmp4_label1 = 0;
-#line 3450 "DirectPhotoPage.c"
+#line 3546 "DirectPhotoPage.c"
 	gboolean _tmp6_ = FALSE;
 	gboolean _tmp7_ = FALSE;
-#line 421 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 435 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 421 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 435 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (event != NULL, FALSE);
-#line 422 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 436 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	handled = TRUE;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = event;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = _tmp0_->keyval;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = gdk_keyval_name (_tmp1_);
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = _tmp2_;
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp5_ = (NULL == _tmp3_) ? 0 : g_quark_from_string (_tmp3_);
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp5_ == ((0 != _tmp4_label0) ? _tmp4_label0 : (_tmp4_label0 = g_quark_from_static_string ("bracketright")))) {
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		switch (0) {
-#line 3473 "DirectPhotoPage.c"
+#line 3569 "DirectPhotoPage.c"
 			default:
 			{
-#line 426 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 440 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				page_activate_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateClockwise");
-#line 427 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 441 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				break;
-#line 3480 "DirectPhotoPage.c"
+#line 3576 "DirectPhotoPage.c"
 			}
 		}
 	} else if (_tmp5_ == ((0 != _tmp4_label1) ? _tmp4_label1 : (_tmp4_label1 = g_quark_from_static_string ("bracketleft")))) {
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		switch (0) {
-#line 3486 "DirectPhotoPage.c"
+#line 3582 "DirectPhotoPage.c"
 			default:
 			{
-#line 430 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 444 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				page_activate_action (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page), "RotateClockwise");
-#line 431 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 445 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				break;
-#line 3493 "DirectPhotoPage.c"
+#line 3589 "DirectPhotoPage.c"
 			}
 		}
 	} else {
-#line 424 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		switch (0) {
-#line 3499 "DirectPhotoPage.c"
+#line 3595 "DirectPhotoPage.c"
 			default:
 			{
-#line 434 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				handled = FALSE;
-#line 435 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 449 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 				break;
-#line 3506 "DirectPhotoPage.c"
+#line 3602 "DirectPhotoPage.c"
 			}
 		}
 	}
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp7_ = handled;
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp7_) {
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp6_ = TRUE;
-#line 3516 "DirectPhotoPage.c"
+#line 3612 "DirectPhotoPage.c"
 	} else {
 		GdkEventKey* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp8_ = event;
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp9_ = PAGE_CLASS (direct_photo_page_parent_class)->on_app_key_pressed (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), TYPE_PAGE, Page), _tmp8_);
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp6_ = _tmp9_;
-#line 3526 "DirectPhotoPage.c"
+#line 3622 "DirectPhotoPage.c"
 	}
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = _tmp6_;
-#line 438 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 3532 "DirectPhotoPage.c"
+#line 3628 "DirectPhotoPage.c"
 }
 
 
@@ -3537,75 +3633,75 @@ static void direct_photo_page_on_print (DirectPhotoPage* self) {
 	ViewCollection* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
 	gboolean _tmp3_ = FALSE;
-#line 441 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 455 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = _tmp0_;
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp2_ = view_collection_get_selected_count (_tmp1_);
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp3_ = _tmp2_ > 0;
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data_collection_unref0 (_tmp1_);
-#line 442 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 456 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (_tmp3_) {
-#line 3555 "DirectPhotoPage.c"
+#line 3651 "DirectPhotoPage.c"
 		PrintManager* _tmp4_ = NULL;
 		PrintManager* _tmp5_ = NULL;
 		ViewCollection* _tmp6_ = NULL;
 		ViewCollection* _tmp7_ = NULL;
 		GeeList* _tmp8_ = NULL;
 		GeeCollection* _tmp9_ = NULL;
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp4_ = print_manager_get_instance ();
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp5_ = _tmp4_;
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp6_ = page_get_view (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PAGE, Page));
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp7_ = _tmp6_;
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp8_ = view_collection_get_selected_sources_of_type (_tmp7_, TYPE_PHOTO);
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_tmp9_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		print_manager_spool_photo (_tmp5_, _tmp9_);
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (_tmp9_);
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_data_collection_unref0 (_tmp7_);
-#line 443 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 457 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_print_manager_unref0 (_tmp5_);
-#line 3582 "DirectPhotoPage.c"
+#line 3678 "DirectPhotoPage.c"
 	}
 }
 
 
 static Block6Data* block6_data_ref (Block6Data* _data6_) {
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_atomic_int_inc (&_data6_->_ref_count_);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return _data6_;
-#line 3592 "DirectPhotoPage.c"
+#line 3688 "DirectPhotoPage.c"
 }
 
 
 static void block6_data_unref (void * _userdata_) {
 	Block6Data* _data6_;
 	_data6_ = (Block6Data*) _userdata_;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	if (g_atomic_int_dec_and_test (&_data6_->_ref_count_)) {
-#line 3601 "DirectPhotoPage.c"
+#line 3697 "DirectPhotoPage.c"
 		DirectPhotoPage* self;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		self = _data6_->self;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (self);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		g_slice_free (Block6Data, _data6_);
-#line 3609 "DirectPhotoPage.c"
+#line 3705 "DirectPhotoPage.c"
 	}
 }
 
@@ -3614,51 +3710,51 @@ static gboolean __lambda15_ (Block6Data* _data6_) {
 	DirectPhotoPage* self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = _data6_->self;
-#line 453 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 467 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = _data6_->should_allow_rotation;
-#line 453 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 467 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_enable_rotate (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp0_);
-#line 455 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 469 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = FALSE;
-#line 455 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 469 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 3628 "DirectPhotoPage.c"
+#line 3724 "DirectPhotoPage.c"
 }
 
 
 static gboolean ___lambda15__gsource_func (gpointer self) {
 	gboolean result;
 	result = __lambda15_ (self);
-#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 3637 "DirectPhotoPage.c"
+#line 3733 "DirectPhotoPage.c"
 }
 
 
 static void direct_photo_page_on_dphoto_can_rotate_changed (DirectPhotoPage* self, gboolean should_allow_rotation) {
 	Block6Data* _data6_;
 	gboolean _tmp0_ = FALSE;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data6_ = g_slice_new0 (Block6Data);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data6_->_ref_count_ = 1;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data6_->self = g_object_ref (self);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = should_allow_rotation;
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data6_->should_allow_rotation = _tmp0_;
-#line 452 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, ___lambda15__gsource_func, block6_data_ref (_data6_), block6_data_unref);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	block6_data_unref (_data6_);
-#line 448 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_data6_ = NULL;
-#line 3662 "DirectPhotoPage.c"
+#line 3758 "DirectPhotoPage.c"
 }
 
 
@@ -3667,19 +3763,19 @@ static DataView* direct_photo_page_real_create_photo_view (EditingHostPage* base
 	DataView* result = NULL;
 	DataSource* _tmp0_ = NULL;
 	DirectView* _tmp1_ = NULL;
-#line 459 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 473 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_PHOTO_PAGE, DirectPhotoPage);
-#line 459 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 473 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (IS_DATA_SOURCE (source), NULL);
-#line 460 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 474 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = source;
-#line 460 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 474 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp1_ = direct_view_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_DIRECT_PHOTO, DirectPhoto));
-#line 460 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 474 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_DATA_VIEW, DataView);
-#line 460 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 474 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
-#line 3683 "DirectPhotoPage.c"
+#line 3779 "DirectPhotoPage.c"
 }
 
 
@@ -3720,7 +3816,7 @@ static void direct_photo_page_class_init (DirectPhotoPageClass * klass) {
 	((EditingHostPageClass *) klass)->create_photo_view = direct_photo_page_real_create_photo_view;
 #line 7 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	G_OBJECT_CLASS (klass)->finalize = direct_photo_page_finalize;
-#line 3724 "DirectPhotoPage.c"
+#line 3820 "DirectPhotoPage.c"
 }
 
 
@@ -3731,7 +3827,7 @@ static void direct_photo_page_instance_init (DirectPhotoPage * self) {
 	self->priv->view_controller = NULL;
 #line 11 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self->priv->drop_if_dirty = FALSE;
-#line 3735 "DirectPhotoPage.c"
+#line 3831 "DirectPhotoPage.c"
 }
 
 
@@ -3753,9 +3849,11 @@ static void direct_photo_page_finalize (GObject* obj) {
 	_data_collection_unref0 (self->priv->view_controller);
 #line 10 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_g_object_unref0 (self->priv->current_save_dir);
+#line 154 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+	_g_object_unref0 (self->priv->context_menu);
 #line 7 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	G_OBJECT_CLASS (direct_photo_page_parent_class)->finalize (obj);
-#line 3759 "DirectPhotoPage.c"
+#line 3857 "DirectPhotoPage.c"
 }
 
 
@@ -3774,46 +3872,46 @@ GType direct_photo_page_get_type (void) {
 DirectFullscreenPhotoPage* direct_fullscreen_photo_page_construct (GType object_type, GFile* file) {
 	DirectFullscreenPhotoPage * self = NULL;
 	GFile* _tmp0_ = NULL;
-#line 465 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 479 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 480 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = file;
-#line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 480 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = (DirectFullscreenPhotoPage*) direct_photo_page_construct (object_type, _tmp0_);
-#line 465 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 479 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return self;
-#line 3786 "DirectPhotoPage.c"
+#line 3884 "DirectPhotoPage.c"
 }
 
 
 DirectFullscreenPhotoPage* direct_fullscreen_photo_page_new (GFile* file) {
-#line 465 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 479 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return direct_fullscreen_photo_page_construct (TYPE_DIRECT_FULLSCREEN_PHOTO_PAGE, file);
-#line 3793 "DirectPhotoPage.c"
+#line 3891 "DirectPhotoPage.c"
 }
 
 
 static void direct_fullscreen_photo_page_real_init_collect_ui_filenames (Page* base, GeeList* ui_filenames) {
 	DirectFullscreenPhotoPage * self;
 	GeeList* _tmp0_ = NULL;
-#line 469 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 483 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_DIRECT_FULLSCREEN_PHOTO_PAGE, DirectFullscreenPhotoPage);
-#line 469 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 483 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (GEE_IS_LIST (ui_filenames));
-#line 472 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 486 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = ui_filenames;
-#line 472 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 486 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_COLLECTION, GeeCollection), "direct_context.ui");
-#line 3808 "DirectPhotoPage.c"
+#line 3906 "DirectPhotoPage.c"
 }
 
 
 static void direct_fullscreen_photo_page_class_init (DirectFullscreenPhotoPageClass * klass) {
-#line 464 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 478 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	direct_fullscreen_photo_page_parent_class = g_type_class_peek_parent (klass);
-#line 464 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
+#line 478 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	((PageClass *) klass)->init_collect_ui_filenames = direct_fullscreen_photo_page_real_init_collect_ui_filenames;
-#line 3817 "DirectPhotoPage.c"
+#line 3915 "DirectPhotoPage.c"
 }
 
 

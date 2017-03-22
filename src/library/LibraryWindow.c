@@ -6597,7 +6597,7 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 #line 957 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 6599 "LibraryWindow.c"
-			goto __catch41_g_error;
+			goto __catch42_g_error;
 		}
 #line 957 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp12_ = _tmp9_;
@@ -6611,8 +6611,8 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 		_g_object_unref0 (_tmp9_);
 #line 6612 "LibraryWindow.c"
 	}
-	goto __finally41;
-	__catch41_g_error:
+	goto __finally42;
+	__catch42_g_error:
 	{
 		GError* err = NULL;
 #line 956 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -6623,7 +6623,7 @@ static void library_window_on_camera_added (LibraryWindow* self, DiscoveredCamer
 		_g_error_free0 (err);
 #line 6624 "LibraryWindow.c"
 	}
-	__finally41:
+	__finally42:
 #line 956 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 956 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
@@ -8747,7 +8747,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 8749 "LibraryWindow.c"
-				goto __catch43_g_regex_error;
+				goto __catch44_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8772,7 +8772,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 8774 "LibraryWindow.c"
-				goto __catch43_g_regex_error;
+				goto __catch44_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -8798,8 +8798,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 8799 "LibraryWindow.c"
 	}
-	goto __finally43;
-	__catch43_g_regex_error:
+	goto __finally44;
+	__catch44_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8812,7 +8812,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 8813 "LibraryWindow.c"
 	}
-	__finally43:
+	__finally44:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -8886,7 +8886,7 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 #line 1414 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8888 "LibraryWindow.c"
-			goto __catch42_g_error;
+			goto __catch43_g_error;
 		}
 #line 1414 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 		_tmp9_ = _tmp6_;
@@ -8900,8 +8900,8 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 		_g_object_unref0 (_tmp6_);
 #line 8901 "LibraryWindow.c"
 	}
-	goto __finally42;
-	__catch42_g_error:
+	goto __finally43;
+	__catch43_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -8926,7 +8926,7 @@ void library_window_mounted_camera_shell_notification (LibraryWindow* self, cons
 		return;
 #line 8927 "LibraryWindow.c"
 	}
-	__finally42:
+	__finally43:
 #line 1413 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1413 "/home/jens/Source/shotwell/src/library/LibraryWindow.vala"

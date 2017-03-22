@@ -1320,7 +1320,7 @@ void tombstone_source_collection_resurrect_many (TombstoneSourceCollection* self
 #line 94 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 1323 "Tombstone.c"
-				goto __catch545_database_error;
+				goto __catch547_database_error;
 			}
 #line 94 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			_g_object_unref0 (marker);
@@ -1333,8 +1333,8 @@ void tombstone_source_collection_resurrect_many (TombstoneSourceCollection* self
 #line 1334 "Tombstone.c"
 		}
 	}
-	goto __finally545;
-	__catch545_database_error:
+	goto __finally547;
+	__catch547_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -1350,7 +1350,7 @@ void tombstone_source_collection_resurrect_many (TombstoneSourceCollection* self
 		_g_error_free0 (err);
 #line 1352 "Tombstone.c"
 	}
-	__finally545:
+	__finally547:
 #line 93 "/home/jens/Source/shotwell/src/Tombstone.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 93 "/home/jens/Source/shotwell/src/Tombstone.vala"
@@ -1636,7 +1636,7 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 #line 127 "/home/jens/Source/shotwell/src/Tombstone.vala"
 					if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 1639 "Tombstone.c"
-						goto __catch546_g_error;
+						goto __catch548_g_error;
 					}
 #line 127 "/home/jens/Source/shotwell/src/Tombstone.vala"
 					_data_->_tmp22_ = NULL;
@@ -1652,8 +1652,8 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 					_g_object_unref0 (_data_->_tmp18_);
 #line 1654 "Tombstone.c"
 				}
-				goto __finally546;
-				__catch546_g_error:
+				goto __finally548;
+				__catch548_g_error:
 				{
 #line 126 "/home/jens/Source/shotwell/src/Tombstone.vala"
 					_data_->err = _data_->_inner_error_;
@@ -1716,7 +1716,7 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 					_g_error_free0 (_data_->err);
 #line 1717 "Tombstone.c"
 				}
-				__finally546:
+				__finally548:
 #line 126 "/home/jens/Source/shotwell/src/Tombstone.vala"
 				if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 126 "/home/jens/Source/shotwell/src/Tombstone.vala"
@@ -1818,7 +1818,7 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 #line 154 "/home/jens/Source/shotwell/src/Tombstone.vala"
 				if (_data_->_inner_error_->domain == DATABASE_ERROR) {
 #line 1820 "Tombstone.c"
-					goto __catch547_database_error;
+					goto __catch549_database_error;
 				}
 #line 154 "/home/jens/Source/shotwell/src/Tombstone.vala"
 				_g_object_unref0 (_data_->marker);
@@ -1831,8 +1831,8 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 #line 1831 "Tombstone.c"
 			}
 		}
-		goto __finally547;
-		__catch547_database_error:
+		goto __finally549;
+		__catch549_database_error:
 		{
 #line 153 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			_data_->err2 = _data_->_inner_error_;
@@ -1848,7 +1848,7 @@ static gboolean tombstone_source_collection_async_scan_co (TombstoneSourceCollec
 			_g_error_free0 (_data_->err2);
 #line 1849 "Tombstone.c"
 		}
-		__finally547:
+		__finally549:
 #line 153 "/home/jens/Source/shotwell/src/Tombstone.vala"
 		if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 153 "/home/jens/Source/shotwell/src/Tombstone.vala"
@@ -2374,7 +2374,7 @@ void tombstone_init (void) {
 #line 211 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 2376 "Tombstone.c"
-				goto __catch548_database_error;
+				goto __catch550_database_error;
 			}
 #line 211 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			rows = (_vala_array_free (rows, rows_length1, (GDestroyNotify) tombstone_row_unref), NULL);
@@ -2406,8 +2406,8 @@ void tombstone_init (void) {
 		_tmp1_ = (_vala_array_free (_tmp1_, _tmp1__length1, (GDestroyNotify) tombstone_row_unref), NULL);
 #line 2407 "Tombstone.c"
 	}
-	goto __finally548;
-	__catch548_database_error:
+	goto __finally550;
+	__catch550_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp8_ = NULL;
@@ -2423,7 +2423,7 @@ void tombstone_init (void) {
 		_g_error_free0 (err);
 #line 2424 "Tombstone.c"
 	}
-	__finally548:
+	__finally550:
 #line 210 "/home/jens/Source/shotwell/src/Tombstone.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 210 "/home/jens/Source/shotwell/src/Tombstone.vala"
@@ -3210,7 +3210,7 @@ void tombstone_move (Tombstone* self, GFile* file) {
 #line 297 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3212 "Tombstone.c"
-				goto __catch549_database_error;
+				goto __catch551_database_error;
 			}
 #line 297 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3221,8 +3221,8 @@ void tombstone_move (Tombstone* self, GFile* file) {
 #line 3221 "Tombstone.c"
 		}
 	}
-	goto __finally549;
-	__catch549_database_error:
+	goto __finally551;
+	__catch551_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -3238,7 +3238,7 @@ void tombstone_move (Tombstone* self, GFile* file) {
 		_g_error_free0 (err);
 #line 3239 "Tombstone.c"
 	}
-	__finally549:
+	__finally551:
 #line 296 "/home/jens/Source/shotwell/src/Tombstone.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 296 "/home/jens/Source/shotwell/src/Tombstone.vala"
@@ -3457,7 +3457,7 @@ static void tombstone_real_destroy (DataSource* base) {
 #line 328 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 3459 "Tombstone.c"
-				goto __catch550_database_error;
+				goto __catch552_database_error;
 			}
 #line 328 "/home/jens/Source/shotwell/src/Tombstone.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3468,8 +3468,8 @@ static void tombstone_real_destroy (DataSource* base) {
 #line 3468 "Tombstone.c"
 		}
 	}
-	goto __finally550;
-	__catch550_database_error:
+	goto __finally552;
+	__catch552_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -3485,7 +3485,7 @@ static void tombstone_real_destroy (DataSource* base) {
 		_g_error_free0 (err);
 #line 3486 "Tombstone.c"
 	}
-	__finally550:
+	__finally552:
 #line 327 "/home/jens/Source/shotwell/src/Tombstone.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 327 "/home/jens/Source/shotwell/src/Tombstone.vala"

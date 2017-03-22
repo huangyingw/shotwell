@@ -95,8 +95,14 @@ pkglibexec_PROGRAMS = thumbnailer/shotwell-video-thumbnailer$(EXEEXT)
 @IS_GITVERSION_TRUE@am__append_1 = -D_GIT_VERSION='"@GITVER@"'
 @IS_GITVERSION_TRUE@am__append_2 = --define=_GITVERSION
 bin_PROGRAMS = shotwell$(EXEEXT)
-@HAVE_EXTRA_PLUGINS_TRUE@am__append_3 = plugins/shotwell-publishing-extras/shotwell-publishing-extras.la
-@HAVE_EXTRA_PLUGINS_TRUE@am__append_4 = \
+@AUTHENTICATOR_SHOTWELL_TRUE@am__append_3 = \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+
+@HAVE_EXTRA_PLUGINS_TRUE@am__append_4 = plugins/shotwell-publishing-extras/shotwell-publishing-extras.la
+@HAVE_EXTRA_PLUGINS_TRUE@am__append_5 = \
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/gallery3.png \
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/rajce.png \
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/tumblr.png \
@@ -109,12 +115,10 @@ bin_PROGRAMS = shotwell$(EXEEXT)
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/yandex_publish_model.ui \
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/org.gnome.Shotwell.Publishing.Extras.gresource.xml
 
-@HAVE_EXTRA_PLUGINS_TRUE@am__append_5 = plugins/shotwell-publishing-extras/resource.c
+@HAVE_EXTRA_PLUGINS_TRUE@am__append_6 = plugins/shotwell-publishing-extras/resource.c
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/appdata-xml.m4 \
-	$(top_srcdir)/m4/ax_check_enable_debug.m4 \
-	$(top_srcdir)/m4/ax_generate_changelog.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_generate_changelog.m4 \
 	$(top_srcdir)/m4/ax_is_release.m4 \
 	$(top_srcdir)/m4/ax_require_defined.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/gsettings.m4 \
@@ -171,19 +175,43 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(plugindir)" \
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES) \
 	$(plugin_LTLIBRARIES)
 am__DEPENDENCIES_1 =
+plugins_authenticator_libshotwell_authenticator_la_DEPENDENCIES =  \
+	$(am__DEPENDENCIES_1) \
+	$(top_builddir)/plugins/common/libshotwell-plugin-common.la
+am__plugins_authenticator_libshotwell_authenticator_la_SOURCES_DIST =  \
+	plugins/shotwell-plugin-common.vapi \
+	plugins/shotwell-plugin-dev-1.0.vapi \
+	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala \
+	plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala \
+	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala \
+	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+am__dirstamp = $(am__leading_dot)dirstamp
+@AUTHENTICATOR_SHOTWELL_TRUE@am__objects_1 = plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo \
+@AUTHENTICATOR_SHOTWELL_TRUE@	plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo
+am_plugins_authenticator_libshotwell_authenticator_la_OBJECTS =  \
+	$(am__objects_1)
+nodist_plugins_authenticator_libshotwell_authenticator_la_OBJECTS = plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo
+plugins_authenticator_libshotwell_authenticator_la_OBJECTS = $(am_plugins_authenticator_libshotwell_authenticator_la_OBJECTS) \
+	$(nodist_plugins_authenticator_libshotwell_authenticator_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+plugins_authenticator_libshotwell_authenticator_la_LINK = $(LIBTOOL) \
+	$(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) \
+	$(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 plugins_common_libshotwell_plugin_common_la_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1)
-am__dirstamp = $(am__leading_dot)dirstamp
 am_plugins_common_libshotwell_plugin_common_la_OBJECTS = plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo \
 	plugins/common/plugins_common_libshotwell_plugin_common_la-Resources.lo \
 	plugins/common/plugins_common_libshotwell_plugin_common_la-WebAuthenticationPane.lo \
 	plugins/common/plugins_common_libshotwell_plugin_common_la-BuilderPane.lo
 plugins_common_libshotwell_plugin_common_la_OBJECTS =  \
 	$(am_plugins_common_libshotwell_plugin_common_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 plugins_common_libshotwell_plugin_common_la_LINK = $(LIBTOOL) \
 	$(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) \
@@ -245,7 +273,8 @@ plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_LINK =  \
 @HAVE_EXTRA_PLUGINS_TRUE@	-rpath $(plugindir)
 plugins_shotwell_publishing_shotwell_publishing_la_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1) \
-	$(top_builddir)/plugins/common/libshotwell-plugin-common.la
+	$(top_builddir)/plugins/common/libshotwell-plugin-common.la \
+	$(top_builddir)/plugins/authenticator/libshotwell-authenticator.la
 am_plugins_shotwell_publishing_shotwell_publishing_la_OBJECTS = plugins/shotwell-publishing/plugins_shotwell_publishing_shotwell_publishing_la-shotwell-publishing.lo \
 	plugins/shotwell-publishing/plugins_shotwell_publishing_shotwell_publishing_la-FacebookPublishing.lo \
 	plugins/shotwell-publishing/plugins_shotwell_publishing_shotwell_publishing_la-PicasaPublishing.lo \
@@ -544,7 +573,10 @@ AM_V_VALAC = $(am__v_VALAC_@AM_V@)
 am__v_VALAC_ = $(am__v_VALAC_@AM_DEFAULT_V@)
 am__v_VALAC_0 = @echo "  VALAC   " $@;
 am__v_VALAC_1 = 
-SOURCES = $(plugins_common_libshotwell_plugin_common_la_SOURCES) \
+SOURCES =  \
+	$(plugins_authenticator_libshotwell_authenticator_la_SOURCES) \
+	$(nodist_plugins_authenticator_libshotwell_authenticator_la_SOURCES) \
+	$(plugins_common_libshotwell_plugin_common_la_SOURCES) \
 	$(plugins_shotwell_data_imports_shotwell_data_imports_la_SOURCES) \
 	$(nodist_plugins_shotwell_data_imports_shotwell_data_imports_la_SOURCES) \
 	$(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_SOURCES) \
@@ -556,7 +588,8 @@ SOURCES = $(plugins_common_libshotwell_plugin_common_la_SOURCES) \
 	$(src_plugins_libplugin_la_SOURCES) $(shotwell_SOURCES) \
 	$(nodist_shotwell_SOURCES) \
 	$(thumbnailer_shotwell_video_thumbnailer_SOURCES)
-DIST_SOURCES = $(plugins_common_libshotwell_plugin_common_la_SOURCES) \
+DIST_SOURCES = $(am__plugins_authenticator_libshotwell_authenticator_la_SOURCES_DIST) \
+	$(plugins_common_libshotwell_plugin_common_la_SOURCES) \
 	$(plugins_shotwell_data_imports_shotwell_data_imports_la_SOURCES) \
 	$(am__plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_SOURCES_DIST) \
 	$(plugins_shotwell_publishing_shotwell_publishing_la_SOURCES) \
@@ -577,13 +610,15 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 am__dist_noinst_DATA_DIST = org.gnome.Shotwell.gresource.xml \
+	plugins/authenticator/shotwell/flickr_pin_entry_pane.ui \
+	plugins/authenticator/shotwell/org.gnome.Shotwell.Authenticator.gresource.xml \
+	plugins/authenticator/shotwell-authenticator.h \
 	plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/flickr.png \
 	plugins/shotwell-publishing/picasa.png \
 	plugins/shotwell-publishing/piwigo.png \
 	plugins/shotwell-publishing/youtube.png \
 	plugins/shotwell-publishing/facebook_publishing_options_pane.ui \
-	plugins/shotwell-publishing/flickr_pin_entry_pane.ui \
 	plugins/shotwell-publishing/flickr_publishing_options_pane.ui \
 	plugins/shotwell-publishing/picasa_publishing_options_pane.ui \
 	plugins/shotwell-publishing/piwigo_authentication_pane.ui \
@@ -642,6 +677,7 @@ CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	$(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp \
 	$(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp \
 	$(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp \
 	$(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp \
@@ -650,7 +686,7 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(srcdir)/shotwell_vala.stamp \
 	$(srcdir)/src_plugins_libplugin_la_vala.stamp \
 	$(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp \
-	$(top_srcdir)/build-aux/compile \
+	$(top_srcdir)/authenticator.am $(top_srcdir)/build-aux/compile \
 	$(top_srcdir)/build-aux/config.guess \
 	$(top_srcdir)/build-aux/config.rpath \
 	$(top_srcdir)/build-aux/config.sub \
@@ -665,6 +701,10 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	build-aux/compile build-aux/config.guess \
 	build-aux/config.rpath build-aux/config.sub build-aux/depcomp \
 	build-aux/install-sh build-aux/ltmain.sh build-aux/missing \
+	plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c \
+	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c \
+	plugins/authenticator/shotwell/GoogleAuthenticator.c \
+	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c \
 	plugins/common/BuilderPane.c plugins/common/RESTSupport.c \
 	plugins/common/Resources.c \
 	plugins/common/WebAuthenticationPane.c \
@@ -855,6 +895,9 @@ AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 API_VERSION = @API_VERSION@
 APPSTREAM_UTIL = @APPSTREAM_UTIL@
 AR = @AR@
+AUTHENTICATOR_CFLAGS = @AUTHENTICATOR_CFLAGS@
+AUTHENTICATOR_LIBS = @AUTHENTICATOR_LIBS@
+AUTHENTICATOR_PACKAGES = @AUTHENTICATOR_PACKAGES@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -942,6 +985,7 @@ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PLUGIN_CFLAGS = @PLUGIN_CFLAGS@
 PLUGIN_LIBS = @PLUGIN_LIBS@
 POSUB = @POSUB@
+PUBLISHER_VALAFLAGS = @PUBLISHER_VALAFLAGS@
 PUBLISHING_CFLAGS = @PUBLISHING_CFLAGS@
 PUBLISHING_LIBS = @PUBLISHING_LIBS@
 RANLIB = @RANLIB@
@@ -1053,9 +1097,8 @@ GITIGNOREFILES = \
 #
 # Generate utility library for plugins
 #
-lib_LTLIBRARIES = \
-	plugins/common/libshotwell-plugin-common.la
-
+lib_LTLIBRARIES = plugins/common/libshotwell-plugin-common.la \
+	plugins/authenticator/libshotwell-authenticator.la
 plugins_common_libshotwell_plugin_common_la_SOURCES = \
 	plugins/common/RESTSupport.vala \
 	plugins/common/Resources.vala \
@@ -1118,19 +1161,21 @@ SHOTWELL_PLUGIN_LDFLAGS = \
 plugindir = $(pkglibdir)/plugins/builtin
 plugin_LTLIBRARIES =  \
 	plugins/shotwell-publishing/shotwell-publishing.la \
-	$(am__append_3) \
+	$(am__append_4) \
 	plugins/shotwell-transitions/shotwell-transitions.la \
 	plugins/shotwell-data-imports/shotwell-data-imports.la
 dist_plugin_DATA = 
 dist_pkglibexec_SCRIPTS = $(top_srcdir)/settings-migrator/shotwell-settings-migrator
 dist_noinst_DATA = $(NULL) org.gnome.Shotwell.gresource.xml \
+	plugins/authenticator/shotwell/flickr_pin_entry_pane.ui \
+	plugins/authenticator/shotwell/org.gnome.Shotwell.Authenticator.gresource.xml \
+	plugins/authenticator/shotwell-authenticator.h \
 	plugins/shotwell-publishing/facebook.png \
 	plugins/shotwell-publishing/flickr.png \
 	plugins/shotwell-publishing/picasa.png \
 	plugins/shotwell-publishing/piwigo.png \
 	plugins/shotwell-publishing/youtube.png \
 	plugins/shotwell-publishing/facebook_publishing_options_pane.ui \
-	plugins/shotwell-publishing/flickr_pin_entry_pane.ui \
 	plugins/shotwell-publishing/flickr_publishing_options_pane.ui \
 	plugins/shotwell-publishing/picasa_publishing_options_pane.ui \
 	plugins/shotwell-publishing/piwigo_authentication_pane.ui \
@@ -1138,7 +1183,7 @@ dist_noinst_DATA = $(NULL) org.gnome.Shotwell.gresource.xml \
 	plugins/shotwell-publishing/piwigo_ssl_failure_pane.ui \
 	plugins/shotwell-publishing/youtube_publishing_options_pane.ui \
 	plugins/shotwell-publishing/org.gnome.Shotwell.Publishing.gresource.xml \
-	$(am__append_4) \
+	$(am__append_5) \
 	plugins/shotwell-transitions/slideshow-plugin.png \
 	plugins/shotwell-transitions/org.gnome.Shotwell.Transitions.gresource.xml \
 	plugins/shotwell-data-imports/f-spot-24.png \
@@ -1147,8 +1192,8 @@ dist_noinst_DATA = $(NULL) org.gnome.Shotwell.gresource.xml \
 	plugins/shotwell-plugin-common.h vapi/gphoto.h \
 	vapi/libexif.vapi vapi/libgphoto2.vapi vapi/libraw.vapi \
 	vapi/unity.deps vapi/unity.vapi vapi/misc.vapi
-MOSTLYCLEANFILES = $(NULL) resource.c \
-	plugins/shotwell-publishing/resource.c $(am__append_5) \
+MOSTLYCLEANFILES = $(NULL) resource.c plugins/authenticator/resource.c \
+	plugins/shotwell-publishing/resource.c $(am__append_6) \
 	plugins/shotwell-transitions/resource.c \
 	plugins/shotwell-data-imports/resource.c
 
@@ -1397,6 +1442,36 @@ thumbnailer_shotwell_video_thumbnailer_VALAFLAGS = $(COMMON_VALAFLAGS) \
 
 thumbnailer_shotwell_video_thumbnailer_CFLAGS = $(THUMBNAILER_CFLAGS)
 thumbnailer_shotwell_video_thumbnailer_LDADD = $(THUMBNAILER_LIBS)
+plugins_authenticator_libshotwell_authenticator_la_SOURCES =  \
+	plugins/shotwell-plugin-common.vapi \
+	plugins/shotwell-plugin-dev-1.0.vapi $(am__append_3)
+plugins_authenticator_libshotwell_authenticator_la_VALAFLAGS = \
+	$(COMMON_VALAFLAGS) \
+	--library shotwell-authenticator \
+	--vapi=plugins/authenticator/shotwell-authenticator.vapi \
+	--header=plugins/authenticator/shotwell-authenticator.h \
+	$(AUTHENTICATOR_PACKAGES) \
+	--vapidir $(abs_top_srcdir)/plugins
+
+plugins_authenticator_libshotwell_authenticator_la_LIBADD = \
+	$(AUTHENTICATOR_LIBS) \
+	$(top_builddir)/plugins/common/libshotwell-plugin-common.la
+
+plugins_authenticator_libshotwell_authenticator_la_CFLAGS = \
+	$(COMMON_CFLAGS) \
+	$(AUTHENTICATOR_CFLAGS) \
+	-I $(top_srcdir)/plugins \
+	-DPLUGIN_RESOURCE_PATH='"/org/gnome/Shotwell/Authenticator"'
+
+nodist_plugins_authenticator_libshotwell_authenticator_la_SOURCES = \
+	plugins/authenticator/resource.c
+
+AUTHENTICATOR_RESOURCE_DEPS = $(shell $(GLIB_COMPILE_RESOURCES) \
+		--sourcedir=$(AUTHENTICATOR_RESOURCE_SOURCEDIR) \
+		--generate-dependencies $(AUTHENTICATOR_SHOTWELL_RESOURCE_FILE))
+
+@AUTHENTICATOR_SHOTWELL_TRUE@AUTHENTICATOR_RESOURCE_FILE := $(abs_top_srcdir)/plugins/authenticator/shotwell/org.gnome.Shotwell.Authenticator.gresource.xml
+@AUTHENTICATOR_SHOTWELL_TRUE@AUTHENTICATOR_RESOURCE_SOURCEDIR := $(abs_top_srcdir)/plugins/authenticator/shotwell
 plugins_shotwell_publishing_shotwell_publishing_la_SOURCES = \
 	plugins/shotwell-publishing/shotwell-publishing.vala \
 	plugins/shotwell-publishing/FacebookPublishing.vala \
@@ -1404,7 +1479,9 @@ plugins_shotwell_publishing_shotwell_publishing_la_SOURCES = \
 	plugins/shotwell-publishing/FlickrPublishing.vala \
 	plugins/shotwell-publishing/YouTubePublishing.vala \
 	plugins/shotwell-publishing/PiwigoPublishing.vala \
-	plugins/shotwell-plugin-common.vapi
+	plugins/shotwell-plugin-common.vapi \
+	plugins/authenticator/shotwell-authenticator.vapi \
+	vapi/libgdata.vapi
 
 nodist_plugins_shotwell_publishing_shotwell_publishing_la_SOURCES = \
 	plugins/shotwell-publishing/resource.c
@@ -1416,6 +1493,7 @@ PUBLISHING_RESOURCE_DEPS = $(shell $(GLIB_COMPILE_RESOURCES) \
 
 plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS = \
 	$(COMMON_VALAFLAGS) \
+	@PUBLISHER_VALAFLAGS@ \
 	--pkg gtk+-3.0 \
 	--pkg libsoup-2.4 \
 	--pkg gexiv2 \
@@ -1434,14 +1512,16 @@ plugins_shotwell_publishing_shotwell_publishing_la_CFLAGS = \
 	$(COMMON_CFLAGS) \
 	-DGCR_API_SUBJECT_TO_CHANGE \
 	$(PUBLISHING_CFLAGS) \
-	-I $(top_srcdir)/plugins
+	-I $(top_srcdir)/plugins \
+	-I $(top_srcdir)/plugins/authenticator
 
 plugins_shotwell_publishing_shotwell_publishing_la_LDFLAGS = \
 	$(SHOTWELL_PLUGIN_LDFLAGS)
 
 plugins_shotwell_publishing_shotwell_publishing_la_LIBADD = \
 	$(PUBLISHING_LIBS) \
-	$(top_builddir)/plugins/common/libshotwell-plugin-common.la
+	$(top_builddir)/plugins/common/libshotwell-plugin-common.la \
+	$(top_builddir)/plugins/authenticator/libshotwell-authenticator.la
 
 @HAVE_EXTRA_PLUGINS_TRUE@plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_SOURCES = \
 @HAVE_EXTRA_PLUGINS_TRUE@	plugins/shotwell-publishing-extras/GalleryConnector.vala \
@@ -1456,6 +1536,7 @@ plugins_shotwell_publishing_shotwell_publishing_la_LIBADD = \
 
 @HAVE_EXTRA_PLUGINS_TRUE@plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS = \
 @HAVE_EXTRA_PLUGINS_TRUE@	$(COMMON_VALAFLAGS) \
+@HAVE_EXTRA_PLUGINS_TRUE@	@PUBLISHER_VALAFLAGS@ \
 @HAVE_EXTRA_PLUGINS_TRUE@	--pkg gtk+-3.0 \
 @HAVE_EXTRA_PLUGINS_TRUE@	--pkg libsoup-2.4 \
 @HAVE_EXTRA_PLUGINS_TRUE@	--pkg gexiv2 \
@@ -1568,6 +1649,8 @@ plugins_shotwell_data_imports_shotwell_data_imports_la_LIBADD = \
 	$(top_builddir)/plugins/common/libshotwell-plugin-common.la
 
 
+# Authenticators
+
 # Plugins
 dist_noinst_SCRIPTS = \
 	autogen.sh
@@ -1579,7 +1662,7 @@ all: config.h
 .SUFFIXES: .c .lo .o .obj
 am--refresh: Makefile
 	@:
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/common.am $(top_srcdir)/shotwell.am $(top_srcdir)/thumbnailer.am $(top_srcdir)/publish.am $(top_srcdir)/publish-extra.am $(top_srcdir)/transition.am $(top_srcdir)/import.am $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(top_srcdir)/common.am $(top_srcdir)/shotwell.am $(top_srcdir)/thumbnailer.am $(top_srcdir)/authenticator.am $(top_srcdir)/publish.am $(top_srcdir)/publish-extra.am $(top_srcdir)/transition.am $(top_srcdir)/import.am $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -1601,7 +1684,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe);; \
 	esac;
-$(top_srcdir)/common.am $(top_srcdir)/shotwell.am $(top_srcdir)/thumbnailer.am $(top_srcdir)/publish.am $(top_srcdir)/publish-extra.am $(top_srcdir)/transition.am $(top_srcdir)/import.am $(am__empty):
+$(top_srcdir)/common.am $(top_srcdir)/shotwell.am $(top_srcdir)/thumbnailer.am $(top_srcdir)/authenticator.am $(top_srcdir)/publish.am $(top_srcdir)/publish-extra.am $(top_srcdir)/transition.am $(top_srcdir)/import.am $(am__empty):
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
@@ -1707,6 +1790,36 @@ clean-pluginLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
+plugins/authenticator/shotwell/$(am__dirstamp):
+	@$(MKDIR_P) plugins/authenticator/shotwell
+	@: > plugins/authenticator/shotwell/$(am__dirstamp)
+plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) plugins/authenticator/shotwell/$(DEPDIR)
+	@: > plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo:  \
+	plugins/authenticator/shotwell/$(am__dirstamp) \
+	plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo:  \
+	plugins/authenticator/shotwell/$(am__dirstamp) \
+	plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo:  \
+	plugins/authenticator/shotwell/$(am__dirstamp) \
+	plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo:  \
+	plugins/authenticator/shotwell/$(am__dirstamp) \
+	plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/$(am__dirstamp):
+	@$(MKDIR_P) plugins/authenticator
+	@: > plugins/authenticator/$(am__dirstamp)
+plugins/authenticator/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) plugins/authenticator/$(DEPDIR)
+	@: > plugins/authenticator/$(DEPDIR)/$(am__dirstamp)
+plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo:  \
+	plugins/authenticator/$(am__dirstamp) \
+	plugins/authenticator/$(DEPDIR)/$(am__dirstamp)
+
+plugins/authenticator/libshotwell-authenticator.la: $(plugins_authenticator_libshotwell_authenticator_la_OBJECTS) $(plugins_authenticator_libshotwell_authenticator_la_DEPENDENCIES) $(EXTRA_plugins_authenticator_libshotwell_authenticator_la_DEPENDENCIES) plugins/authenticator/$(am__dirstamp)
+	$(AM_V_CCLD)$(plugins_authenticator_libshotwell_authenticator_la_LINK) -rpath $(libdir) $(plugins_authenticator_libshotwell_authenticator_la_OBJECTS) $(plugins_authenticator_libshotwell_authenticator_la_LIBADD) $(LIBS)
 plugins/common/$(am__dirstamp):
 	@$(MKDIR_P) plugins/common
 	@: > plugins/common/$(am__dirstamp)
@@ -2628,6 +2741,10 @@ uninstall-dist_pkglibexecSCRIPTS:
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f plugins/authenticator/*.$(OBJEXT)
+	-rm -f plugins/authenticator/*.lo
+	-rm -f plugins/authenticator/shotwell/*.$(OBJEXT)
+	-rm -f plugins/authenticator/shotwell/*.lo
 	-rm -f plugins/common/*.$(OBJEXT)
 	-rm -f plugins/common/*.lo
 	-rm -f plugins/shotwell-data-imports/*.$(OBJEXT)
@@ -2667,6 +2784,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shotwell-resource.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/authenticator/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-resource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-BuilderPane.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-RESTSupport.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-Resources.Plo@am__quote@
@@ -2931,6 +3053,41 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
+
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo: plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -MT plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo -MD -MP -MF plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.Tpo -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo `test -f 'plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.Tpo plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c' object='plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-ShotwellAuthenticatorFactory.lo `test -f 'plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c
+
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo: plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -MT plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo -MD -MP -MF plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.Tpo -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo `test -f 'plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.Tpo plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c' object='plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FacebookPublishingAuthenticator.lo `test -f 'plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c
+
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo: plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -MT plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo -MD -MP -MF plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.Tpo -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo `test -f 'plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.Tpo plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c' object='plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-FlickrPublishingAuthenticator.lo `test -f 'plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c
+
+plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo: plugins/authenticator/shotwell/GoogleAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -MT plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo -MD -MP -MF plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.Tpo -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo `test -f 'plugins/authenticator/shotwell/GoogleAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/GoogleAuthenticator.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.Tpo plugins/authenticator/shotwell/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/authenticator/shotwell/GoogleAuthenticator.c' object='plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -c -o plugins/authenticator/shotwell/plugins_authenticator_libshotwell_authenticator_la-GoogleAuthenticator.lo `test -f 'plugins/authenticator/shotwell/GoogleAuthenticator.c' || echo '$(srcdir)/'`plugins/authenticator/shotwell/GoogleAuthenticator.c
+
+plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo: plugins/authenticator/resource.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -MT plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo -MD -MP -MF plugins/authenticator/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-resource.Tpo -c -o plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo `test -f 'plugins/authenticator/resource.c' || echo '$(srcdir)/'`plugins/authenticator/resource.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) plugins/authenticator/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-resource.Tpo plugins/authenticator/$(DEPDIR)/plugins_authenticator_libshotwell_authenticator_la-resource.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='plugins/authenticator/resource.c' object='plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_authenticator_libshotwell_authenticator_la_CFLAGS) $(CFLAGS) -c -o plugins/authenticator/plugins_authenticator_libshotwell_authenticator_la-resource.lo `test -f 'plugins/authenticator/resource.c' || echo '$(srcdir)/'`plugins/authenticator/resource.c
 
 plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo: plugins/common/RESTSupport.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(plugins_common_libshotwell_plugin_common_la_CFLAGS) $(CFLAGS) -MT plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo -MD -MP -MF plugins/common/$(DEPDIR)/plugins_common_libshotwell_plugin_common_la-RESTSupport.Tpo -c -o plugins/common/plugins_common_libshotwell_plugin_common_la-RESTSupport.lo `test -f 'plugins/common/RESTSupport.c' || echo '$(srcdir)/'`plugins/common/RESTSupport.c
@@ -6937,6 +7094,157 @@ $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp: thumbnailer/shotwel
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
 	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(thumbnailer_shotwell_video_thumbnailer_VALAFLAGS) $(VALAFLAGS) -C thumbnailer/shotwell-video-thumbnailer.vala
 	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
+	fi
+$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/shotwell-publishing-extras/GalleryConnector.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/RajcePublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/shotwell-publishing-extras.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/TumblrPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-publishing-extras/YandexPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp: plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotDatabase.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotImporter.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotMetaTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotPhotosTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotPhotoTagsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotPhotoVersionsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotRollsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotTableBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/FSpotTagsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/shotwell-data-imports.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/SqliteSupport.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/shotwell-data-imports/VersionNumber.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp: plugins/shotwell-data-imports/FSpotDatabaseBehavior.vala plugins/shotwell-data-imports/FSpotDatabaseTable.vala plugins/shotwell-data-imports/FSpotDatabase.vala plugins/shotwell-data-imports/FSpotImporter.vala plugins/shotwell-data-imports/FSpotMetaTable.vala plugins/shotwell-data-imports/FSpotPhotosTable.vala plugins/shotwell-data-imports/FSpotPhotoTagsTable.vala plugins/shotwell-data-imports/FSpotPhotoVersionsTable.vala plugins/shotwell-data-imports/FSpotRollsTable.vala plugins/shotwell-data-imports/FSpotTableBehavior.vala plugins/shotwell-data-imports/FSpotTagsTable.vala plugins/shotwell-data-imports/shotwell-data-imports.vala plugins/shotwell-data-imports/SqliteSupport.vala plugins/shotwell-data-imports/VersionNumber.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_data_imports_shotwell_data_imports_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-data-imports/FSpotDatabaseBehavior.vala plugins/shotwell-data-imports/FSpotDatabaseTable.vala plugins/shotwell-data-imports/FSpotDatabase.vala plugins/shotwell-data-imports/FSpotImporter.vala plugins/shotwell-data-imports/FSpotMetaTable.vala plugins/shotwell-data-imports/FSpotPhotosTable.vala plugins/shotwell-data-imports/FSpotPhotoTagsTable.vala plugins/shotwell-data-imports/FSpotPhotoVersionsTable.vala plugins/shotwell-data-imports/FSpotRollsTable.vala plugins/shotwell-data-imports/FSpotTableBehavior.vala plugins/shotwell-data-imports/FSpotTagsTable.vala plugins/shotwell-data-imports/shotwell-data-imports.vala plugins/shotwell-data-imports/SqliteSupport.vala plugins/shotwell-data-imports/VersionNumber.vala plugins/shotwell-plugin-common.vapi
+	$(AM_V_at)mv -f $@-t $@
+$(srcdir)/plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c: $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c: $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c: $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; \
+	fi
+$(srcdir)/plugins/authenticator/shotwell/GoogleAuthenticator.c: $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp
+	@if test -f $@; then :; else rm -f $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; fi
+	@if test -f $@; then :; else \
+	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp; \
+	fi
+$(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp: plugins/shotwell-plugin-common.vapi plugins/shotwell-plugin-dev-1.0.vapi plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala plugins/authenticator/shotwell/GoogleAuthenticator.vala
+	$(AM_V_at)rm -f $@ && echo stamp > $@-t
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_authenticator_libshotwell_authenticator_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-plugin-common.vapi plugins/shotwell-plugin-dev-1.0.vapi plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala plugins/authenticator/shotwell/GoogleAuthenticator.vala
+	$(AM_V_at)mv -f $@-t $@
 $(srcdir)/plugins/common/RESTSupport.c: $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
 	@if test -f $@; then :; else rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp; fi
 	@if test -f $@; then :; else \
@@ -7050,136 +7358,9 @@ $(srcdir)/plugins/shotwell-publishing/PiwigoPublishing.c: $(srcdir)/plugins_shot
 	@if test -f $@; then :; else \
 	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp; \
 	fi
-$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
+$(srcdir)/plugins_shotwell_publishing_shotwell_publishing_la_vala.stamp: plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi plugins/authenticator/shotwell-authenticator.vapi vapi/libgdata.vapi
 	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/shotwell-publishing-extras/GalleryConnector.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/RajcePublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/shotwell-publishing-extras.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/TumblrPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-publishing-extras/YandexPublishing.c: $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp: plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing-extras/GalleryConnector.vala plugins/shotwell-publishing-extras/RajcePublishing.vala plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala plugins/shotwell-publishing-extras/TumblrPublishing.vala plugins/shotwell-publishing-extras/YandexPublishing.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotDatabaseTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotDatabase.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotImporter.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotMetaTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotPhotosTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotPhotoTagsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotPhotoVersionsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotRollsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotTableBehavior.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/FSpotTagsTable.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/shotwell-data-imports.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/SqliteSupport.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins/shotwell-data-imports/VersionNumber.c: $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp; \
-	fi
-$(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp: plugins/shotwell-data-imports/FSpotDatabaseBehavior.vala plugins/shotwell-data-imports/FSpotDatabaseTable.vala plugins/shotwell-data-imports/FSpotDatabase.vala plugins/shotwell-data-imports/FSpotImporter.vala plugins/shotwell-data-imports/FSpotMetaTable.vala plugins/shotwell-data-imports/FSpotPhotosTable.vala plugins/shotwell-data-imports/FSpotPhotoTagsTable.vala plugins/shotwell-data-imports/FSpotPhotoVersionsTable.vala plugins/shotwell-data-imports/FSpotRollsTable.vala plugins/shotwell-data-imports/FSpotTableBehavior.vala plugins/shotwell-data-imports/FSpotTagsTable.vala plugins/shotwell-data-imports/shotwell-data-imports.vala plugins/shotwell-data-imports/SqliteSupport.vala plugins/shotwell-data-imports/VersionNumber.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_data_imports_shotwell_data_imports_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-data-imports/FSpotDatabaseBehavior.vala plugins/shotwell-data-imports/FSpotDatabaseTable.vala plugins/shotwell-data-imports/FSpotDatabase.vala plugins/shotwell-data-imports/FSpotImporter.vala plugins/shotwell-data-imports/FSpotMetaTable.vala plugins/shotwell-data-imports/FSpotPhotosTable.vala plugins/shotwell-data-imports/FSpotPhotoTagsTable.vala plugins/shotwell-data-imports/FSpotPhotoVersionsTable.vala plugins/shotwell-data-imports/FSpotRollsTable.vala plugins/shotwell-data-imports/FSpotTableBehavior.vala plugins/shotwell-data-imports/FSpotTagsTable.vala plugins/shotwell-data-imports/shotwell-data-imports.vala plugins/shotwell-data-imports/SqliteSupport.vala plugins/shotwell-data-imports/VersionNumber.vala plugins/shotwell-plugin-common.vapi
-	$(AM_V_at)mv -f $@-t $@
-$(srcdir)/src/plugins/SpitInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/TransitionsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/PublishingInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src/plugins/DataImportsInterfaces.c: $(srcdir)/src_plugins_libplugin_la_vala.stamp
-	@if test -f $@; then :; else rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp; fi
-	@if test -f $@; then :; else \
-	  $(MAKE) $(AM_MAKEFLAGS) $(srcdir)/src_plugins_libplugin_la_vala.stamp; \
-	fi
-$(srcdir)/src_plugins_libplugin_la_vala.stamp: src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
-	$(AM_V_at)rm -f $@ && echo stamp > $@-t
-	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(src_plugins_libplugin_la_VALAFLAGS) $(VALAFLAGS) -C src/plugins/SpitInterfaces.vala src/plugins/TransitionsInterfaces.vala src/plugins/PublishingInterfaces.vala src/plugins/DataImportsInterfaces.vala
+	$(AM_V_VALAC)$(am__cd) $(srcdir) && $(VALAC) $(plugins_shotwell_publishing_shotwell_publishing_la_VALAFLAGS) $(VALAFLAGS) -C plugins/shotwell-publishing/shotwell-publishing.vala plugins/shotwell-publishing/FacebookPublishing.vala plugins/shotwell-publishing/PicasaPublishing.vala plugins/shotwell-publishing/FlickrPublishing.vala plugins/shotwell-publishing/YouTubePublishing.vala plugins/shotwell-publishing/PiwigoPublishing.vala plugins/shotwell-plugin-common.vapi plugins/authenticator/shotwell-authenticator.vapi vapi/libgdata.vapi
 	$(AM_V_at)mv -f $@-t $@
 
 mostlyclean-libtool:
@@ -7187,6 +7368,8 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf plugins/authenticator/.libs plugins/authenticator/_libs
+	-rm -rf plugins/authenticator/shotwell/.libs plugins/authenticator/shotwell/_libs
 	-rm -rf plugins/common/.libs plugins/common/_libs
 	-rm -rf plugins/shotwell-data-imports/.libs plugins/shotwell-data-imports/_libs
 	-rm -rf plugins/shotwell-publishing/.libs plugins/shotwell-publishing/_libs
@@ -7553,6 +7736,10 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f plugins/authenticator/$(DEPDIR)/$(am__dirstamp)
+	-rm -f plugins/authenticator/$(am__dirstamp)
+	-rm -f plugins/authenticator/shotwell/$(DEPDIR)/$(am__dirstamp)
+	-rm -f plugins/authenticator/shotwell/$(am__dirstamp)
 	-rm -f plugins/common/$(DEPDIR)/$(am__dirstamp)
 	-rm -f plugins/common/$(am__dirstamp)
 	-rm -f plugins/shotwell-data-imports/$(DEPDIR)/$(am__dirstamp)
@@ -7613,6 +7800,10 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-rm -f $(srcdir)/plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c
+	-rm -f $(srcdir)/plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c
+	-rm -f $(srcdir)/plugins/authenticator/shotwell/GoogleAuthenticator.c
+	-rm -f $(srcdir)/plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c
 	-rm -f $(srcdir)/plugins/common/BuilderPane.c
 	-rm -f $(srcdir)/plugins/common/RESTSupport.c
 	-rm -f $(srcdir)/plugins/common/Resources.c
@@ -7653,6 +7844,7 @@ maintainer-clean-generic:
 	-rm -f $(srcdir)/plugins/shotwell-transitions/SquaresEffect.c
 	-rm -f $(srcdir)/plugins/shotwell-transitions/StripesEffect.c
 	-rm -f $(srcdir)/plugins/shotwell-transitions/shotwell-transitions.c
+	-rm -f $(srcdir)/plugins_authenticator_libshotwell_authenticator_la_vala.stamp
 	-rm -f $(srcdir)/plugins_common_libshotwell_plugin_common_la_vala.stamp
 	-rm -f $(srcdir)/plugins_shotwell_data_imports_shotwell_data_imports_la_vala.stamp
 	-rm -f $(srcdir)/plugins_shotwell_publishing_extras_shotwell_publishing_extras_la_vala.stamp
@@ -7857,6 +8049,10 @@ maintainer-clean-generic:
 	-rm -f $(srcdir)/src_plugins_libplugin_la_vala.stamp
 	-rm -f $(srcdir)/thumbnailer/shotwell-video-thumbnailer.c
 	-rm -f $(srcdir)/thumbnailer_shotwell_video_thumbnailer_vala.stamp
+	-rm -f plugins/authenticator/shotwell/FacebookPublishingAuthenticator.c
+	-rm -f plugins/authenticator/shotwell/FlickrPublishingAuthenticator.c
+	-rm -f plugins/authenticator/shotwell/GoogleAuthenticator.c
+	-rm -f plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.c
 	-rm -f plugins/common/BuilderPane.c
 	-rm -f plugins/common/RESTSupport.c
 	-rm -f plugins/common/Resources.c
@@ -8102,7 +8298,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) plugins/authenticator/$(DEPDIR) plugins/authenticator/shotwell/$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -8151,7 +8347,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) plugins/authenticator/$(DEPDIR) plugins/authenticator/shotwell/$(DEPDIR) plugins/common/$(DEPDIR) plugins/shotwell-data-imports/$(DEPDIR) plugins/shotwell-publishing-extras/$(DEPDIR) plugins/shotwell-publishing/$(DEPDIR) plugins/shotwell-transitions/$(DEPDIR) src/$(DEPDIR) src/.unitize/$(DEPDIR) src/camera/$(DEPDIR) src/config/$(DEPDIR) src/core/$(DEPDIR) src/data_imports/$(DEPDIR) src/db/$(DEPDIR) src/direct/$(DEPDIR) src/editing_tools/$(DEPDIR) src/events/$(DEPDIR) src/folders/$(DEPDIR) src/library/$(DEPDIR) src/photos/$(DEPDIR) src/plugins/$(DEPDIR) src/publishing/$(DEPDIR) src/searches/$(DEPDIR) src/sidebar/$(DEPDIR) src/slideshow/$(DEPDIR) src/tags/$(DEPDIR) src/threads/$(DEPDIR) src/unit/$(DEPDIR) src/util/$(DEPDIR) thumbnailer/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -8232,6 +8428,15 @@ resource.c: org.gnome.Shotwell.gresource.xml $(shotwell_resource_deps)
 	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) --target=$@ \
 		--sourcedir=$(abs_top_srcdir) \
 		--generate $<
+
+plugins/authenticator/shotwell-authenticator.vapi plugins/authenticator/shotwell-authenticator.h: \
+	plugins_authenticator_libshotwell_authenticator_la_vala.stamp
+
+plugins/authenticator/resource.c: $(AUTHENTICATOR_RESOURCE_DEPS) $(AUTHENTICATOR_RESOURCE_FILE)
+	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) \
+		--target=$@ \
+		--sourcedir=$(AUTHENTICATOR_RESOURCE_SOURCEDIR) \
+		--generate $(AUTHENTICATOR_RESOURCE_FILE)
 
 plugins/shotwell-publishing/resource.c: $(PUBLISHING_RESOURCE_DEPS) $(PUBLISHING_RESOURCE_FILE)
 	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) \

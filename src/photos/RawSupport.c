@@ -211,6 +211,8 @@ typedef struct _GRawProcessedImage GRawProcessedImage;
 typedef struct _GRawProcessedImageClass GRawProcessedImageClass;
 #define _graw_processed_image_unref0(var) ((var == NULL) ? NULL : (var = (graw_processed_image_unref (var), NULL)))
 
+#define PHOTO_FILE_READER_TYPE_ROLE (photo_file_reader_role_get_type ())
+
 #define TYPE_RAW_DEVELOPER (raw_developer_get_type ())
 
 #define TYPE_BACKING_PHOTO_ROW (backing_photo_row_get_type ())
@@ -408,6 +410,11 @@ struct _RawReader {
 struct _RawReaderClass {
 	PhotoFileReaderClass parent_class;
 };
+
+typedef enum  {
+	PHOTO_FILE_READER_ROLE_DEFAULT,
+	PHOTO_FILE_READER_ROLE_THUMBNAIL
+} PhotoFileReaderRole;
 
 typedef enum  {
 	RAW_DEVELOPER_SHOTWELL = 0,
@@ -618,6 +625,10 @@ GType graw_processed_image_get_type (void) G_GNUC_CONST;
 GRawProcessedImage* graw_processor_make_mem_image (GRawProcessor* self, GError** error);
 GdkPixbuf* graw_processed_image_get_pixbuf_copy (GRawProcessedImage* self);
 static GdkPixbuf* raw_reader_real_scaled_read (PhotoFileReader* base, Dimensions* full, Dimensions* scaled, GError** error);
+GType photo_file_reader_role_get_type (void) G_GNUC_CONST;
+PhotoFileReaderRole photo_file_reader_get_role (PhotoFileReader* self);
+void graw_processor_unpack_thumb (GRawProcessor* self, GError** error);
+GRawProcessedImage* graw_processor_make_thumb_image (GRawProcessor* self, GError** error);
 GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType interp);
 GType raw_developer_get_type (void) G_GNUC_CONST;
 RawDeveloper* raw_developer_as_array (int* result_length1);
@@ -654,14 +665,14 @@ void raw_file_format_driver_init (void) {
 	raw_file_format_driver_instance = _tmp0_;
 #line 12 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	raw_file_format_properties_init ();
-#line 658 "RawSupport.c"
+#line 669 "RawSupport.c"
 }
 
 
 static gpointer _photo_file_format_driver_ref0 (gpointer self) {
 #line 16 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self ? photo_file_format_driver_ref (self) : NULL;
-#line 665 "RawSupport.c"
+#line 676 "RawSupport.c"
 }
 
 
@@ -677,7 +688,7 @@ RawFileFormatDriver* raw_file_format_driver_get_instance (void) {
 	result = _tmp1_;
 #line 16 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 681 "RawSupport.c"
+#line 692 "RawSupport.c"
 }
 
 
@@ -693,7 +704,7 @@ static PhotoFileFormatProperties* raw_file_format_driver_real_get_properties (Ph
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, TYPE_PHOTO_FILE_FORMAT_PROPERTIES, PhotoFileFormatProperties);
 #line 20 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 697 "RawSupport.c"
+#line 708 "RawSupport.c"
 }
 
 
@@ -714,7 +725,7 @@ static PhotoFileReader* raw_file_format_driver_real_create_reader (PhotoFileForm
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PHOTO_FILE_READER, PhotoFileReader);
 #line 24 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 718 "RawSupport.c"
+#line 729 "RawSupport.c"
 }
 
 
@@ -730,7 +741,7 @@ static PhotoMetadata* raw_file_format_driver_real_create_metadata (PhotoFileForm
 	result = _tmp0_;
 #line 28 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 734 "RawSupport.c"
+#line 745 "RawSupport.c"
 }
 
 
@@ -743,7 +754,7 @@ static gboolean raw_file_format_driver_real_can_write_image (PhotoFileFormatDriv
 	result = FALSE;
 #line 32 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 747 "RawSupport.c"
+#line 758 "RawSupport.c"
 }
 
 
@@ -756,7 +767,7 @@ static gboolean raw_file_format_driver_real_can_write_metadata (PhotoFileFormatD
 	result = FALSE;
 #line 36 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 760 "RawSupport.c"
+#line 771 "RawSupport.c"
 }
 
 
@@ -771,7 +782,7 @@ static PhotoFileWriter* raw_file_format_driver_real_create_writer (PhotoFileForm
 	result = NULL;
 #line 40 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 775 "RawSupport.c"
+#line 786 "RawSupport.c"
 }
 
 
@@ -786,7 +797,7 @@ static PhotoFileMetadataWriter* raw_file_format_driver_real_create_metadata_writ
 	result = NULL;
 #line 44 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 790 "RawSupport.c"
+#line 801 "RawSupport.c"
 }
 
 
@@ -810,7 +821,7 @@ static PhotoFileSniffer* raw_file_format_driver_real_create_sniffer (PhotoFileFo
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, TYPE_PHOTO_FILE_SNIFFER, PhotoFileSniffer);
 #line 48 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 814 "RawSupport.c"
+#line 825 "RawSupport.c"
 }
 
 
@@ -820,14 +831,14 @@ RawFileFormatDriver* raw_file_format_driver_construct (GType object_type) {
 	self = (RawFileFormatDriver*) photo_file_format_driver_construct (object_type);
 #line 7 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self;
-#line 824 "RawSupport.c"
+#line 835 "RawSupport.c"
 }
 
 
 RawFileFormatDriver* raw_file_format_driver_new (void) {
 #line 7 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return raw_file_format_driver_construct (TYPE_RAW_FILE_FORMAT_DRIVER);
-#line 831 "RawSupport.c"
+#line 842 "RawSupport.c"
 }
 
 
@@ -852,7 +863,7 @@ static void raw_file_format_driver_class_init (RawFileFormatDriverClass * klass)
 	((PhotoFileFormatDriverClass *) klass)->create_metadata_writer = raw_file_format_driver_real_create_metadata_writer;
 #line 7 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	((PhotoFileFormatDriverClass *) klass)->create_sniffer = raw_file_format_driver_real_create_sniffer;
-#line 856 "RawSupport.c"
+#line 867 "RawSupport.c"
 }
 
 
@@ -866,7 +877,7 @@ static void raw_file_format_driver_finalize (PhotoFileFormatDriver* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_RAW_FILE_FORMAT_DRIVER, RawFileFormatDriver);
 #line 7 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	PHOTO_FILE_FORMAT_DRIVER_CLASS (raw_file_format_driver_parent_class)->finalize (obj);
-#line 870 "RawSupport.c"
+#line 881 "RawSupport.c"
 }
 
 
@@ -890,14 +901,14 @@ void raw_file_format_properties_init (void) {
 	_photo_file_format_properties_unref0 (raw_file_format_properties_instance);
 #line 122 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	raw_file_format_properties_instance = _tmp0_;
-#line 894 "RawSupport.c"
+#line 905 "RawSupport.c"
 }
 
 
 static gpointer _photo_file_format_properties_ref0 (gpointer self) {
 #line 126 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self ? photo_file_format_properties_ref (self) : NULL;
-#line 901 "RawSupport.c"
+#line 912 "RawSupport.c"
 }
 
 
@@ -913,7 +924,7 @@ RawFileFormatProperties* raw_file_format_properties_get_instance (void) {
 	result = _tmp1_;
 #line 126 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 917 "RawSupport.c"
+#line 928 "RawSupport.c"
 }
 
 
@@ -926,7 +937,7 @@ static PhotoFileFormat raw_file_format_properties_real_get_file_format (PhotoFil
 	result = PHOTO_FILE_FORMAT_RAW;
 #line 130 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 930 "RawSupport.c"
+#line 941 "RawSupport.c"
 }
 
 
@@ -945,7 +956,7 @@ static gchar* raw_file_format_properties_real_get_user_visible_name (PhotoFileFo
 	result = _tmp1_;
 #line 134 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 949 "RawSupport.c"
+#line 960 "RawSupport.c"
 }
 
 
@@ -958,7 +969,7 @@ static PhotoFileFormatFlags raw_file_format_properties_real_get_flags (PhotoFile
 	result = PHOTO_FILE_FORMAT_FLAGS_NONE;
 #line 138 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 962 "RawSupport.c"
+#line 973 "RawSupport.c"
 }
 
 
@@ -974,7 +985,7 @@ static gchar* raw_file_format_properties_real_get_default_extension (PhotoFileFo
 	result = _tmp0_;
 #line 145 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 978 "RawSupport.c"
+#line 989 "RawSupport.c"
 }
 
 
@@ -985,17 +996,17 @@ static gchar** _vala_array_dup12 (gchar** self, int length) {
 	result = g_new0 (gchar*, length + 1);
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	for (i = 0; i < length; i++) {
-#line 989 "RawSupport.c"
+#line 1000 "RawSupport.c"
 		gchar* _tmp0_ = NULL;
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp0_ = g_strdup (self[i]);
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		result[i] = _tmp0_;
-#line 995 "RawSupport.c"
+#line 1006 "RawSupport.c"
 	}
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 999 "RawSupport.c"
+#line 1010 "RawSupport.c"
 }
 
 
@@ -1026,13 +1037,13 @@ static gchar** raw_file_format_properties_real_get_known_extensions (PhotoFileFo
 	if (result_length1) {
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		*result_length1 = _tmp2__length1;
-#line 1030 "RawSupport.c"
+#line 1041 "RawSupport.c"
 	}
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = _tmp2_;
 #line 149 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 1036 "RawSupport.c"
+#line 1047 "RawSupport.c"
 }
 
 
@@ -1057,7 +1068,7 @@ static gchar* raw_file_format_properties_real_get_default_mime_type (PhotoFileFo
 	result = _tmp2_;
 #line 153 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 1061 "RawSupport.c"
+#line 1072 "RawSupport.c"
 }
 
 
@@ -1068,17 +1079,17 @@ static gchar** _vala_array_dup13 (gchar** self, int length) {
 	result = g_new0 (gchar*, length + 1);
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	for (i = 0; i < length; i++) {
-#line 1072 "RawSupport.c"
+#line 1083 "RawSupport.c"
 		gchar* _tmp0_ = NULL;
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp0_ = g_strdup (self[i]);
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		result[i] = _tmp0_;
-#line 1078 "RawSupport.c"
+#line 1089 "RawSupport.c"
 	}
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 1082 "RawSupport.c"
+#line 1093 "RawSupport.c"
 }
 
 
@@ -1109,13 +1120,13 @@ static gchar** raw_file_format_properties_real_get_mime_types (PhotoFileFormatPr
 	if (result_length1) {
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		*result_length1 = _tmp2__length1;
-#line 1113 "RawSupport.c"
+#line 1124 "RawSupport.c"
 	}
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = _tmp2_;
 #line 157 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 1119 "RawSupport.c"
+#line 1130 "RawSupport.c"
 }
 
 
@@ -1125,14 +1136,14 @@ RawFileFormatProperties* raw_file_format_properties_construct (GType object_type
 	self = (RawFileFormatProperties*) photo_file_format_properties_construct (object_type);
 #line 52 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self;
-#line 1129 "RawSupport.c"
+#line 1140 "RawSupport.c"
 }
 
 
 RawFileFormatProperties* raw_file_format_properties_new (void) {
 #line 52 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return raw_file_format_properties_construct (TYPE_RAW_FILE_FORMAT_PROPERTIES);
-#line 1136 "RawSupport.c"
+#line 1147 "RawSupport.c"
 }
 
 
@@ -1604,7 +1615,7 @@ static void raw_file_format_properties_class_init (RawFileFormatPropertiesClass 
 	raw_file_format_properties_KNOWN_MIME_TYPES = _tmp88_;
 #line 59 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	raw_file_format_properties_KNOWN_MIME_TYPES_length1 = 51;
-#line 1608 "RawSupport.c"
+#line 1619 "RawSupport.c"
 }
 
 
@@ -1618,7 +1629,7 @@ static void raw_file_format_properties_finalize (PhotoFileFormatProperties* obj)
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_RAW_FILE_FORMAT_PROPERTIES, RawFileFormatProperties);
 #line 52 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	PHOTO_FILE_FORMAT_PROPERTIES_CLASS (raw_file_format_properties_parent_class)->finalize (obj);
-#line 1622 "RawSupport.c"
+#line 1633 "RawSupport.c"
 }
 
 
@@ -1648,21 +1659,21 @@ RawSniffer* raw_sniffer_construct (GType object_type, GFile* file, PhotoFileSnif
 	self = (RawSniffer*) photo_file_sniffer_construct (object_type, _tmp0_, _tmp1_);
 #line 162 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self;
-#line 1652 "RawSupport.c"
+#line 1663 "RawSupport.c"
 }
 
 
 RawSniffer* raw_sniffer_new (GFile* file, PhotoFileSnifferOptions options) {
 #line 162 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return raw_sniffer_construct (TYPE_RAW_SNIFFER, file, options);
-#line 1659 "RawSupport.c"
+#line 1670 "RawSupport.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
 #line 183 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 1666 "RawSupport.c"
+#line 1677 "RawSupport.c"
 }
 
 
@@ -1720,7 +1731,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 	_tmp4_ = _tmp3_;
 #line 173 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	(*_tmp4_).user_flip = (gint) GRAW_FLIP_NONE;
-#line 1724 "RawSupport.c"
+#line 1735 "RawSupport.c"
 	{
 		GRawProcessor* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
@@ -1744,7 +1755,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 176 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 1748 "RawSupport.c"
+#line 1759 "RawSupport.c"
 				goto __catch32_graw_exception;
 			}
 #line 176 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -1757,7 +1768,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			g_clear_error (&_inner_error_);
 #line 176 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return NULL;
-#line 1761 "RawSupport.c"
+#line 1772 "RawSupport.c"
 		}
 #line 177 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp9_ = processor;
@@ -1767,7 +1778,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 177 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 1771 "RawSupport.c"
+#line 1782 "RawSupport.c"
 				goto __catch32_graw_exception;
 			}
 #line 177 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -1780,7 +1791,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			g_clear_error (&_inner_error_);
 #line 177 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return NULL;
-#line 1784 "RawSupport.c"
+#line 1795 "RawSupport.c"
 		}
 #line 178 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp10_ = processor;
@@ -1790,7 +1801,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 178 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 1794 "RawSupport.c"
+#line 1805 "RawSupport.c"
 				goto __catch32_graw_exception;
 			}
 #line 178 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -1803,7 +1814,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			g_clear_error (&_inner_error_);
 #line 178 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return NULL;
-#line 1807 "RawSupport.c"
+#line 1818 "RawSupport.c"
 		}
 	}
 	goto __finally32;
@@ -1833,11 +1844,11 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			if (is_corrupted) {
 #line 181 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				*is_corrupted = _vala_is_corrupted;
-#line 1837 "RawSupport.c"
+#line 1848 "RawSupport.c"
 			}
 #line 181 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 1841 "RawSupport.c"
+#line 1852 "RawSupport.c"
 		}
 #line 183 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp12_ = exception;
@@ -1847,7 +1858,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_inner_error_ = _tmp13_;
 #line 183 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_error_free0 (exception);
-#line 1851 "RawSupport.c"
+#line 1862 "RawSupport.c"
 		goto __finally32;
 	}
 	__finally32:
@@ -1861,7 +1872,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_detected_photo_information_unref0 (detected);
 #line 175 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 1865 "RawSupport.c"
+#line 1876 "RawSupport.c"
 	}
 #line 186 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp14_ = detected;
@@ -1905,7 +1916,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 	_g_free0 (_tmp26_);
 #line 191 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	reader = _tmp28_;
-#line 1909 "RawSupport.c"
+#line 1920 "RawSupport.c"
 	{
 		PhotoMetadata* _tmp29_ = NULL;
 		RawReader* _tmp30_ = NULL;
@@ -1920,7 +1931,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_tmp29_ = _tmp31_;
 #line 193 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1924 "RawSupport.c"
+#line 1935 "RawSupport.c"
 			goto __catch33_g_error;
 		}
 #line 193 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -1935,7 +1946,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_tmp32_->metadata = _tmp33_;
 #line 192 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_media_metadata_unref0 (_tmp29_);
-#line 1939 "RawSupport.c"
+#line 1950 "RawSupport.c"
 	}
 	goto __finally33;
 	__catch33_g_error:
@@ -1947,7 +1958,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_inner_error_ = NULL;
 #line 192 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_error_free0 (err);
-#line 1951 "RawSupport.c"
+#line 1962 "RawSupport.c"
 	}
 	__finally33:
 #line 192 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -1962,7 +1973,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_detected_photo_information_unref0 (detected);
 #line 192 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 1966 "RawSupport.c"
+#line 1977 "RawSupport.c"
 	}
 #line 198 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp34_ = detected;
@@ -1970,7 +1981,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 	_tmp35_ = _tmp34_->metadata;
 #line 198 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp35_ != NULL) {
-#line 1974 "RawSupport.c"
+#line 1985 "RawSupport.c"
 		guint8* flattened_sans_thumbnail = NULL;
 		DetectedPhotoInformation* _tmp36_ = NULL;
 		PhotoMetadata* _tmp37_ = NULL;
@@ -2009,7 +2020,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_tmp41__length1 = flattened_sans_thumbnail_length1;
 #line 200 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (_tmp41_ != NULL) {
-#line 2013 "RawSupport.c"
+#line 2024 "RawSupport.c"
 			guint8* _tmp42_ = NULL;
 			gint _tmp42__length1 = 0;
 #line 200 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -2018,15 +2029,15 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			_tmp42__length1 = flattened_sans_thumbnail_length1;
 #line 200 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp40_ = _tmp42__length1 > 0;
-#line 2022 "RawSupport.c"
+#line 2033 "RawSupport.c"
 		} else {
 #line 200 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp40_ = FALSE;
-#line 2026 "RawSupport.c"
+#line 2037 "RawSupport.c"
 		}
 #line 200 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (_tmp40_) {
-#line 2030 "RawSupport.c"
+#line 2041 "RawSupport.c"
 			DetectedPhotoInformation* _tmp43_ = NULL;
 			guint8* _tmp44_ = NULL;
 			gint _tmp44__length1 = 0;
@@ -2049,7 +2060,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			_g_free0 (_tmp43_->exif_md5);
 #line 201 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp43_->exif_md5 = _tmp46_;
-#line 2053 "RawSupport.c"
+#line 2064 "RawSupport.c"
 		}
 #line 203 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp47_ = detected;
@@ -2069,7 +2080,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_tmp52__length1 = flattened_thumbnail_length1;
 #line 204 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (_tmp52_ != NULL) {
-#line 2073 "RawSupport.c"
+#line 2084 "RawSupport.c"
 			guint8* _tmp53_ = NULL;
 			gint _tmp53__length1 = 0;
 #line 204 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -2078,15 +2089,15 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			_tmp53__length1 = flattened_thumbnail_length1;
 #line 204 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp51_ = _tmp53__length1 > 0;
-#line 2082 "RawSupport.c"
+#line 2093 "RawSupport.c"
 		} else {
 #line 204 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp51_ = FALSE;
-#line 2086 "RawSupport.c"
+#line 2097 "RawSupport.c"
 		}
 #line 204 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (_tmp51_) {
-#line 2090 "RawSupport.c"
+#line 2101 "RawSupport.c"
 			DetectedPhotoInformation* _tmp54_ = NULL;
 			guint8* _tmp55_ = NULL;
 			gint _tmp55__length1 = 0;
@@ -2109,19 +2120,19 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			_g_free0 (_tmp54_->thumbnail_md5);
 #line 205 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp54_->thumbnail_md5 = _tmp57_;
-#line 2113 "RawSupport.c"
+#line 2124 "RawSupport.c"
 		}
 #line 198 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		flattened_thumbnail = (g_free (flattened_thumbnail), NULL);
 #line 198 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		flattened_sans_thumbnail = (g_free (flattened_sans_thumbnail), NULL);
-#line 2119 "RawSupport.c"
+#line 2130 "RawSupport.c"
 	}
 #line 208 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp58_ = G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_SNIFFER, PhotoFileSniffer)->calc_md5;
 #line 208 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp58_) {
-#line 2125 "RawSupport.c"
+#line 2136 "RawSupport.c"
 		gchar* _tmp59_ = NULL;
 		GFile* _tmp60_ = NULL;
 		gchar* _tmp61_ = NULL;
@@ -2145,7 +2156,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 			_detected_photo_information_unref0 (detected);
 #line 209 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return NULL;
-#line 2149 "RawSupport.c"
+#line 2160 "RawSupport.c"
 		}
 #line 209 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp62_ = detected;
@@ -2159,7 +2170,7 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 		_tmp62_->md5 = _tmp63_;
 #line 208 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (_tmp59_);
-#line 2163 "RawSupport.c"
+#line 2174 "RawSupport.c"
 	}
 #line 211 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp64_ = detected;
@@ -2183,11 +2194,11 @@ static DetectedPhotoInformation* raw_sniffer_real_sniff (PhotoFileSniffer* base,
 	if (is_corrupted) {
 #line 214 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		*is_corrupted = _vala_is_corrupted;
-#line 2187 "RawSupport.c"
+#line 2198 "RawSupport.c"
 	}
 #line 214 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2191 "RawSupport.c"
+#line 2202 "RawSupport.c"
 }
 
 
@@ -2196,7 +2207,7 @@ static void raw_sniffer_class_init (RawSnifferClass * klass) {
 	raw_sniffer_parent_class = g_type_class_peek_parent (klass);
 #line 161 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	((PhotoFileSnifferClass *) klass)->sniff = raw_sniffer_real_sniff;
-#line 2200 "RawSupport.c"
+#line 2211 "RawSupport.c"
 }
 
 
@@ -2227,14 +2238,14 @@ RawReader* raw_reader_construct (GType object_type, const gchar* filepath) {
 	self = (RawReader*) photo_file_reader_construct (object_type, _tmp0_, PHOTO_FILE_FORMAT_RAW);
 #line 219 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return self;
-#line 2231 "RawSupport.c"
+#line 2242 "RawSupport.c"
 }
 
 
 RawReader* raw_reader_new (const gchar* filepath) {
 #line 219 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return raw_reader_construct (TYPE_RAW_READER, filepath);
-#line 2238 "RawSupport.c"
+#line 2249 "RawSupport.c"
 }
 
 
@@ -2268,13 +2279,13 @@ static PhotoMetadata* raw_reader_real_read_metadata (PhotoFileReader* base, GErr
 		_media_metadata_unref0 (metadata);
 #line 225 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2272 "RawSupport.c"
+#line 2283 "RawSupport.c"
 	}
 #line 227 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = metadata;
 #line 227 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2278 "RawSupport.c"
+#line 2289 "RawSupport.c"
 }
 
 
@@ -2336,7 +2347,7 @@ static GdkPixbuf* raw_reader_real_unscaled_read (PhotoFileReader* base, GError**
 		_graw_processor_unref0 (processor);
 #line 235 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2340 "RawSupport.c"
+#line 2351 "RawSupport.c"
 	}
 #line 236 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp8_ = processor;
@@ -2350,7 +2361,7 @@ static GdkPixbuf* raw_reader_real_unscaled_read (PhotoFileReader* base, GError**
 		_graw_processor_unref0 (processor);
 #line 236 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2354 "RawSupport.c"
+#line 2365 "RawSupport.c"
 	}
 #line 237 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp9_ = processor;
@@ -2364,7 +2375,7 @@ static GdkPixbuf* raw_reader_real_unscaled_read (PhotoFileReader* base, GError**
 		_graw_processor_unref0 (processor);
 #line 237 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2368 "RawSupport.c"
+#line 2379 "RawSupport.c"
 	}
 #line 239 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp11_ = processor;
@@ -2380,7 +2391,7 @@ static GdkPixbuf* raw_reader_real_unscaled_read (PhotoFileReader* base, GError**
 		_graw_processor_unref0 (processor);
 #line 239 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2384 "RawSupport.c"
+#line 2395 "RawSupport.c"
 	}
 #line 239 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp13_ = _tmp10_;
@@ -2402,7 +2413,7 @@ static GdkPixbuf* raw_reader_real_unscaled_read (PhotoFileReader* base, GError**
 	_graw_processor_unref0 (processor);
 #line 239 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2406 "RawSupport.c"
+#line 2417 "RawSupport.c"
 }
 
 
@@ -2432,17 +2443,17 @@ static GdkPixbuf* raw_reader_real_scaled_read (PhotoFileReader* base, Dimensions
 	GRawProcessor* _tmp17_ = NULL;
 	gchar* _tmp18_ = NULL;
 	gchar* _tmp19_ = NULL;
-	GRawProcessor* _tmp20_ = NULL;
-	GRawProcessor* _tmp21_ = NULL;
+	GRawProcessor* _tmp30_ = NULL;
+	GRawProcessor* _tmp31_ = NULL;
 	GRawProcessedImage* image = NULL;
-	GRawProcessor* _tmp22_ = NULL;
-	GRawProcessedImage* _tmp23_ = NULL;
-	GRawProcessedImage* _tmp24_ = NULL;
-	GdkPixbuf* _tmp25_ = NULL;
-	GdkPixbuf* _tmp26_ = NULL;
-	Dimensions _tmp27_ = {0};
-	GdkPixbuf* _tmp28_ = NULL;
-	GdkPixbuf* _tmp29_ = NULL;
+	GRawProcessor* _tmp32_ = NULL;
+	GRawProcessedImage* _tmp33_ = NULL;
+	GRawProcessedImage* _tmp34_ = NULL;
+	GdkPixbuf* _tmp35_ = NULL;
+	GdkPixbuf* _tmp36_ = NULL;
+	Dimensions _tmp37_ = {0};
+	GdkPixbuf* _tmp38_ = NULL;
+	GdkPixbuf* _tmp39_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 242 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_RAW_READER, RawReader);
@@ -2450,86 +2461,72 @@ static GdkPixbuf* raw_reader_real_scaled_read (PhotoFileReader* base, Dimensions
 	g_return_val_if_fail (full != NULL, NULL);
 #line 242 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	g_return_val_if_fail (scaled != NULL, NULL);
-#line 243 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_ = *scaled;
-#line 243 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp1_ = _tmp0_.width;
-#line 243 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp2_ = *full;
-#line 243 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp3_ = _tmp2_.width;
-#line 243 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	width_proportion = ((gdouble) _tmp1_) / ((gdouble) _tmp3_);
-#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp4_ = *scaled;
-#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp5_ = _tmp4_.height;
-#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp6_ = *full;
-#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp7_ = _tmp6_.height;
-#line 244 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	height_proportion = ((gdouble) _tmp5_) / ((gdouble) _tmp7_);
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp9_ = width_proportion;
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp9_ < 0.5) {
-#line 2478 "RawSupport.c"
+#line 2489 "RawSupport.c"
 		gdouble _tmp10_ = 0.0;
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp10_ = height_proportion;
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp8_ = _tmp10_ < 0.5;
-#line 2484 "RawSupport.c"
+#line 2495 "RawSupport.c"
 	} else {
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp8_ = FALSE;
-#line 2488 "RawSupport.c"
+#line 2499 "RawSupport.c"
 	}
-#line 245 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	half_size = _tmp8_;
-#line 247 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp11_ = graw_processor_new (LIBRAW_OPTIONS_NONE);
-#line 247 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	processor = _tmp11_;
-#line 248 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp12_ = processor;
-#line 248 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp13_ = half_size;
-#line 248 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	graw_processor_configure_for_rgb_display (_tmp12_, _tmp13_);
-#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 250 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp14_ = processor;
-#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 250 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp15_ = graw_processor_get_output_params (_tmp14_);
-#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 250 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp16_ = _tmp15_;
-#line 249 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 250 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	(*_tmp16_).user_flip = (gint) GRAW_FLIP_NONE;
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp17_ = processor;
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp18_ = photo_file_adapter_get_filepath (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp19_ = _tmp18_;
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	graw_processor_open_file (_tmp17_, _tmp19_, &_inner_error_);
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (_tmp19_);
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-		g_propagate_error (error, _inner_error_);
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-		_graw_processor_unref0 (processor);
-#line 251 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-		return NULL;
-#line 2528 "RawSupport.c"
-	}
-#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp20_ = processor;
-#line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	graw_processor_unpack (_tmp20_, &_inner_error_);
 #line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -2538,12 +2535,83 @@ static GdkPixbuf* raw_reader_real_scaled_read (PhotoFileReader* base, Dimensions
 		_graw_processor_unref0 (processor);
 #line 252 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2542 "RawSupport.c"
+#line 2539 "RawSupport.c"
 	}
+	{
+		PhotoFileReaderRole _tmp20_ = 0;
+#line 254 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		_tmp20_ = photo_file_reader_get_role (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_READER, PhotoFileReader));
+#line 254 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		if (_tmp20_ == PHOTO_FILE_READER_ROLE_THUMBNAIL) {
+#line 2547 "RawSupport.c"
+			GRawProcessor* _tmp21_ = NULL;
+			GRawProcessedImage* image = NULL;
+			GRawProcessor* _tmp22_ = NULL;
+			GRawProcessedImage* _tmp23_ = NULL;
+			GRawProcessedImage* _tmp24_ = NULL;
+			GdkPixbuf* _tmp25_ = NULL;
+			GdkPixbuf* _tmp26_ = NULL;
+			Dimensions _tmp27_ = {0};
+			GdkPixbuf* _tmp28_ = NULL;
+			GdkPixbuf* _tmp29_ = NULL;
+#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp21_ = processor;
+#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			graw_processor_unpack_thumb (_tmp21_, &_inner_error_);
+#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 2564 "RawSupport.c"
+				goto __catch34_g_error;
+			}
+#line 256 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp22_ = processor;
+#line 256 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp23_ = graw_processor_make_thumb_image (_tmp22_, &_inner_error_);
+#line 256 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			image = _tmp23_;
+#line 256 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 2575 "RawSupport.c"
+				goto __catch34_g_error;
+			}
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp24_ = image;
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp25_ = graw_processed_image_get_pixbuf_copy (_tmp24_);
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp26_ = _tmp25_;
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp27_ = *scaled;
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp28_ = resize_pixbuf (_tmp26_, &_tmp27_, GDK_INTERP_BILINEAR);
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_tmp29_ = _tmp28_;
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_g_object_unref0 (_tmp26_);
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			result = _tmp29_;
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_graw_processed_image_unref0 (image);
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			_graw_processor_unref0 (processor);
+#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+			return result;
+#line 2600 "RawSupport.c"
+		}
+	}
+	goto __finally34;
+	__catch34_g_error:
+	{
+		GError* _error_ = NULL;
 #line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp21_ = processor;
+		_error_ = _inner_error_;
 #line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	graw_processor_process (_tmp21_, &_inner_error_);
+		_inner_error_ = NULL;
+#line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		_g_error_free0 (_error_);
+#line 2613 "RawSupport.c"
+	}
+	__finally34:
 #line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
@@ -2552,47 +2620,75 @@ static GdkPixbuf* raw_reader_real_scaled_read (PhotoFileReader* base, Dimensions
 		_graw_processor_unref0 (processor);
 #line 253 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2556 "RawSupport.c"
+#line 2624 "RawSupport.c"
 	}
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp22_ = processor;
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp23_ = graw_processor_make_mem_image (_tmp22_, &_inner_error_);
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	image = _tmp23_;
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp30_ = processor;
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	graw_processor_unpack (_tmp30_, &_inner_error_);
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_graw_processor_unref0 (processor);
-#line 255 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 265 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 2572 "RawSupport.c"
+#line 2638 "RawSupport.c"
 	}
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp24_ = image;
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp25_ = graw_processed_image_get_pixbuf_copy (_tmp24_);
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp26_ = _tmp25_;
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp27_ = *scaled;
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp28_ = resize_pixbuf (_tmp26_, &_tmp27_, GDK_INTERP_BILINEAR);
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_tmp29_ = _tmp28_;
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	_g_object_unref0 (_tmp26_);
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
-	result = _tmp29_;
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp31_ = processor;
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	graw_processor_process (_tmp31_, &_inner_error_);
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		g_propagate_error (error, _inner_error_);
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		_graw_processor_unref0 (processor);
+#line 266 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		return NULL;
+#line 2652 "RawSupport.c"
+	}
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp32_ = processor;
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp33_ = graw_processor_make_mem_image (_tmp32_, &_inner_error_);
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	image = _tmp33_;
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		g_propagate_error (error, _inner_error_);
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		_graw_processor_unref0 (processor);
+#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+		return NULL;
+#line 2668 "RawSupport.c"
+	}
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp34_ = image;
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp35_ = graw_processed_image_get_pixbuf_copy (_tmp34_);
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp36_ = _tmp35_;
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp37_ = *scaled;
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp38_ = resize_pixbuf (_tmp36_, &_tmp37_, GDK_INTERP_BILINEAR);
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_tmp39_ = _tmp38_;
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	_g_object_unref0 (_tmp36_);
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+	result = _tmp39_;
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_graw_processed_image_unref0 (image);
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_graw_processor_unref0 (processor);
-#line 257 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2596 "RawSupport.c"
+#line 2692 "RawSupport.c"
 }
 
 
@@ -2605,7 +2701,7 @@ static void raw_reader_class_init (RawReaderClass * klass) {
 	((PhotoFileReaderClass *) klass)->unscaled_read = raw_reader_real_unscaled_read;
 #line 218 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	((PhotoFileReaderClass *) klass)->scaled_read = raw_reader_real_scaled_read;
-#line 2609 "RawSupport.c"
+#line 2705 "RawSupport.c"
 }
 
 
@@ -2630,80 +2726,80 @@ RawDeveloper* raw_developer_as_array (int* result_length1) {
 	RawDeveloper* _tmp0_ = NULL;
 	RawDeveloper* _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_ = g_new0 (RawDeveloper, 3);
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_[0] = RAW_DEVELOPER_SHOTWELL;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_[1] = RAW_DEVELOPER_CAMERA;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_[2] = RAW_DEVELOPER_EMBEDDED;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp1__length1 = 3;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (result_length1) {
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		*result_length1 = _tmp1__length1;
-#line 2650 "RawSupport.c"
+#line 2746 "RawSupport.c"
 	}
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = _tmp1_;
-#line 268 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 281 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2656 "RawSupport.c"
+#line 2752 "RawSupport.c"
 }
 
 
 gchar* raw_developer_to_string (RawDeveloper self) {
 	gchar* result = NULL;
-#line 272 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	switch (self) {
-#line 272 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_SHOTWELL:
-#line 2666 "RawSupport.c"
+#line 2762 "RawSupport.c"
 		{
 			gchar* _tmp0_ = NULL;
-#line 274 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp0_ = g_strdup ("SHOTWELL");
-#line 274 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			result = _tmp0_;
-#line 274 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 287 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 2675 "RawSupport.c"
+#line 2771 "RawSupport.c"
 		}
-#line 272 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_CAMERA:
-#line 2679 "RawSupport.c"
+#line 2775 "RawSupport.c"
 		{
 			gchar* _tmp1_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 289 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp1_ = g_strdup ("CAMERA");
-#line 276 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 289 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			result = _tmp1_;
-#line 276 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 289 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 2688 "RawSupport.c"
+#line 2784 "RawSupport.c"
 		}
-#line 272 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_EMBEDDED:
-#line 2692 "RawSupport.c"
+#line 2788 "RawSupport.c"
 		{
 			gchar* _tmp2_ = NULL;
-#line 278 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp2_ = g_strdup ("EMBEDDED");
-#line 278 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			result = _tmp2_;
-#line 278 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 2701 "RawSupport.c"
+#line 2797 "RawSupport.c"
 		}
 		default:
 		{
-#line 280 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 293 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			g_assert_not_reached ();
-#line 2707 "RawSupport.c"
+#line 2803 "RawSupport.c"
 		}
 	}
 }
@@ -2714,69 +2810,69 @@ RawDeveloper raw_developer_from_string (const gchar* value) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	GQuark _tmp3_ = 0U;
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	static GQuark _tmp2_label0 = 0;
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	static GQuark _tmp2_label1 = 0;
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	static GQuark _tmp2_label2 = 0;
-#line 284 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	g_return_val_if_fail (value != NULL, 0);
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_ = value;
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp1_ = _tmp0_;
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp3_ = (NULL == _tmp1_) ? 0 : g_quark_from_string (_tmp1_);
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp3_ == ((0 != _tmp2_label0) ? _tmp2_label0 : (_tmp2_label0 = g_quark_from_static_string ("SHOTWELL")))) {
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		switch (0) {
-#line 2736 "RawSupport.c"
+#line 2832 "RawSupport.c"
 			default:
 			{
-#line 287 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				result = RAW_DEVELOPER_SHOTWELL;
-#line 287 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				return result;
-#line 2743 "RawSupport.c"
+#line 2839 "RawSupport.c"
 			}
 		}
 	} else if (_tmp3_ == ((0 != _tmp2_label1) ? _tmp2_label1 : (_tmp2_label1 = g_quark_from_static_string ("CAMERA")))) {
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		switch (0) {
-#line 2749 "RawSupport.c"
+#line 2845 "RawSupport.c"
 			default:
 			{
-#line 289 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 302 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				result = RAW_DEVELOPER_CAMERA;
-#line 289 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 302 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				return result;
-#line 2756 "RawSupport.c"
+#line 2852 "RawSupport.c"
 			}
 		}
 	} else if (_tmp3_ == ((0 != _tmp2_label2) ? _tmp2_label2 : (_tmp2_label2 = g_quark_from_static_string ("EMBEDDED")))) {
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		switch (0) {
-#line 2762 "RawSupport.c"
+#line 2858 "RawSupport.c"
 			default:
 			{
-#line 291 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 304 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				result = RAW_DEVELOPER_EMBEDDED;
-#line 291 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 304 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				return result;
-#line 2769 "RawSupport.c"
+#line 2865 "RawSupport.c"
 			}
 		}
 	} else {
-#line 285 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		switch (0) {
-#line 2775 "RawSupport.c"
+#line 2871 "RawSupport.c"
 			default:
 			{
-#line 293 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 306 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 				g_assert_not_reached ();
-#line 2780 "RawSupport.c"
+#line 2876 "RawSupport.c"
 			}
 		}
 	}
@@ -2785,47 +2881,47 @@ RawDeveloper raw_developer_from_string (const gchar* value) {
 
 gchar* raw_developer_get_label (RawDeveloper self) {
 	gchar* result = NULL;
-#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	switch (self) {
-#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_SHOTWELL:
-#line 2793 "RawSupport.c"
+#line 2889 "RawSupport.c"
 		{
 			const gchar* _tmp0_ = NULL;
 			gchar* _tmp1_ = NULL;
-#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp0_ = _ ("Shotwell");
-#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp1_ = g_strdup (_tmp0_);
-#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			result = _tmp1_;
-#line 300 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 2805 "RawSupport.c"
+#line 2901 "RawSupport.c"
 		}
-#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_CAMERA:
-#line 298 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 311 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		case RAW_DEVELOPER_EMBEDDED:
-#line 2811 "RawSupport.c"
+#line 2907 "RawSupport.c"
 		{
 			const gchar* _tmp2_ = NULL;
 			gchar* _tmp3_ = NULL;
-#line 303 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp2_ = _ ("Camera");
-#line 303 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp3_ = g_strdup (_tmp2_);
-#line 303 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			result = _tmp3_;
-#line 303 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			return result;
-#line 2823 "RawSupport.c"
+#line 2919 "RawSupport.c"
 		}
 		default:
 		{
-#line 305 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 318 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			g_assert_not_reached ();
-#line 2829 "RawSupport.c"
+#line 2925 "RawSupport.c"
 		}
 	}
 }
@@ -2836,68 +2932,68 @@ gboolean raw_developer_is_equivalent (RawDeveloper self, RawDeveloper d) {
 	RawDeveloper _tmp0_ = 0;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
-#line 312 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 325 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_ = d;
-#line 312 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 325 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (self == _tmp0_) {
-#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 326 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		result = TRUE;
-#line 313 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 326 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return result;
-#line 2848 "RawSupport.c"
+#line 2944 "RawSupport.c"
 	}
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (self == RAW_DEVELOPER_CAMERA) {
-#line 2852 "RawSupport.c"
+#line 2948 "RawSupport.c"
 		RawDeveloper _tmp3_ = 0;
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp3_ = d;
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp2_ = _tmp3_ == RAW_DEVELOPER_EMBEDDED;
-#line 2858 "RawSupport.c"
+#line 2954 "RawSupport.c"
 	} else {
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp2_ = FALSE;
-#line 2862 "RawSupport.c"
+#line 2958 "RawSupport.c"
 	}
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp2_) {
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp1_ = TRUE;
-#line 2868 "RawSupport.c"
+#line 2964 "RawSupport.c"
 	} else {
 		gboolean _tmp4_ = FALSE;
-#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (self == RAW_DEVELOPER_EMBEDDED) {
-#line 2873 "RawSupport.c"
+#line 2969 "RawSupport.c"
 			RawDeveloper _tmp5_ = 0;
-#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp5_ = d;
-#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp4_ = _tmp5_ == RAW_DEVELOPER_CAMERA;
-#line 2879 "RawSupport.c"
+#line 2975 "RawSupport.c"
 		} else {
-#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp4_ = FALSE;
-#line 2883 "RawSupport.c"
+#line 2979 "RawSupport.c"
 		}
-#line 316 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp1_ = _tmp4_;
-#line 2887 "RawSupport.c"
+#line 2983 "RawSupport.c"
 	}
-#line 315 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 328 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp1_) {
-#line 317 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 330 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		result = TRUE;
-#line 317 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 330 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return result;
-#line 2895 "RawSupport.c"
+#line 2991 "RawSupport.c"
 	}
-#line 319 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 332 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = FALSE;
-#line 319 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 332 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 2901 "RawSupport.c"
+#line 2997 "RawSupport.c"
 }
 
 
@@ -2932,41 +3028,41 @@ BackingPhotoRow* raw_developer_create_backing_row_for_development (RawDeveloper 
 	GFile* _tmp37_ = NULL;
 	gchar* _tmp38_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 324 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	g_return_val_if_fail (raw_filepath != NULL, NULL);
-#line 326 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp0_ = backing_photo_row_new ();
-#line 326 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	ns = _tmp0_;
-#line 327 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp1_ = raw_filepath;
-#line 327 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp2_ = g_file_new_for_path (_tmp1_);
-#line 327 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 340 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	master = _tmp2_;
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp3_ = master;
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp4_ = g_file_get_basename (_tmp3_);
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp5_ = _tmp4_;
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	disassemble_filename (_tmp5_, &_tmp6_, &_tmp7_);
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (name);
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	name = _tmp6_;
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (ext);
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	ext = _tmp7_;
-#line 329 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 342 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (_tmp5_);
-#line 335 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp8_ = camera_development_filename;
-#line 335 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (_tmp8_ == NULL) {
-#line 2970 "RawSupport.c"
+#line 3066 "RawSupport.c"
 		gchar* _tmp9_ = NULL;
 		const gchar* _tmp16_ = NULL;
 		gchar* _tmp17_ = NULL;
@@ -2977,176 +3073,176 @@ BackingPhotoRow* raw_developer_create_backing_row_for_development (RawDeveloper 
 		gchar* _tmp22_ = NULL;
 		gchar* _tmp23_ = NULL;
 		gchar* _tmp24_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		if (self != RAW_DEVELOPER_CAMERA) {
-#line 2983 "RawSupport.c"
+#line 3079 "RawSupport.c"
 			gchar* _tmp10_ = NULL;
 			gchar* _tmp11_ = NULL;
 			gchar* _tmp12_ = NULL;
 			gchar* _tmp13_ = NULL;
 			gchar* _tmp14_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp10_ = raw_developer_to_string (self);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp11_ = _tmp10_;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp12_ = g_utf8_strdown (_tmp11_, (gssize) -1);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp13_ = _tmp12_;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp14_ = g_strconcat ("_", _tmp13_, NULL);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_g_free0 (_tmp9_);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp9_ = _tmp14_;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_g_free0 (_tmp13_);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_g_free0 (_tmp11_);
-#line 3007 "RawSupport.c"
+#line 3103 "RawSupport.c"
 		} else {
 			gchar* _tmp15_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp15_ = g_strdup ("");
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_g_free0 (_tmp9_);
-#line 337 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 350 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 			_tmp9_ = _tmp15_;
-#line 3016 "RawSupport.c"
+#line 3112 "RawSupport.c"
 		}
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp16_ = name;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp17_ = g_strconcat (_tmp16_, "_", NULL);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp18_ = _tmp17_;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp19_ = ext;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp20_ = g_strconcat (_tmp18_, _tmp19_, NULL);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp21_ = _tmp20_;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp22_ = g_strconcat (_tmp21_, _tmp9_, NULL);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp23_ = _tmp22_;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp24_ = g_strconcat (_tmp23_, ".jpg", NULL);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (basename);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		basename = _tmp24_;
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (_tmp23_);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (_tmp21_);
-#line 336 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 349 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (_tmp18_);
-#line 335 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (_tmp9_);
-#line 3048 "RawSupport.c"
+#line 3144 "RawSupport.c"
 	} else {
 		const gchar* _tmp25_ = NULL;
 		gchar* _tmp26_ = NULL;
-#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 352 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp25_ = camera_development_filename;
-#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 352 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_tmp26_ = g_strdup (_tmp25_);
-#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 352 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (basename);
-#line 339 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 352 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		basename = _tmp26_;
-#line 3060 "RawSupport.c"
+#line 3156 "RawSupport.c"
 	}
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp27_ = master;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp28_ = g_file_get_parent (_tmp27_);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp29_ = _tmp28_;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp30_ = basename;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp32_ = generate_unique_file (_tmp29_, _tmp30_, &_tmp31_, &_inner_error_);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	c = _tmp31_;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp33_ = _tmp32_;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_object_unref0 (_tmp29_);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	new_back = _tmp33_;
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (basename);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (ext);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (name);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_object_unref0 (master);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_backing_photo_row_unref0 (ns);
-#line 343 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 356 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 3096 "RawSupport.c"
+#line 3192 "RawSupport.c"
 	}
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp34_ = new_back;
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	claim_file (_tmp34_, &_inner_error_);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		g_propagate_error (error, _inner_error_);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_object_unref0 (new_back);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (basename);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (ext);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_free0 (name);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_g_object_unref0 (master);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		_backing_photo_row_unref0 (ns);
-#line 344 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 357 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 		return NULL;
-#line 3120 "RawSupport.c"
+#line 3216 "RawSupport.c"
 	}
-#line 345 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 358 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp35_ = ns;
-#line 345 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 358 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp35_->file_format = PHOTO_FILE_FORMAT_JFIF;
-#line 346 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp36_ = ns;
-#line 346 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp37_ = new_back;
-#line 346 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp38_ = g_file_get_path (_tmp37_);
-#line 346 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (_tmp36_->filepath);
-#line 346 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 359 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_tmp36_->filepath = _tmp38_;
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	result = ns;
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_object_unref0 (new_back);
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (basename);
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (ext);
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_free0 (name);
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	_g_object_unref0 (master);
-#line 348 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
+#line 361 "/home/jens/Source/shotwell/src/photos/RawSupport.vala"
 	return result;
-#line 3150 "RawSupport.c"
+#line 3246 "RawSupport.c"
 }
 
 

@@ -1155,7 +1155,7 @@ static void event_directory_item_real_exposed (CheckerboardItem* base) {
 #line 107 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1158 "EventDirectoryItem.c"
-			goto __catch51_g_error;
+			goto __catch52_g_error;
 		}
 #line 107 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 		checkerboard_item_set_image (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_ITEM, CheckerboardItem), _tmp1_);
@@ -1163,8 +1163,8 @@ static void event_directory_item_real_exposed (CheckerboardItem* base) {
 		_g_object_unref0 (_tmp1_);
 #line 1165 "EventDirectoryItem.c"
 	}
-	goto __finally51;
-	__catch51_g_error:
+	goto __finally52;
+	__catch52_g_error:
 	{
 		GError* err = NULL;
 		Event* _tmp8_ = NULL;
@@ -1194,7 +1194,7 @@ static void event_directory_item_real_exposed (CheckerboardItem* base) {
 		_g_error_free0 (err);
 #line 1196 "EventDirectoryItem.c"
 	}
-	__finally51:
+	__finally52:
 #line 106 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 106 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
@@ -1321,7 +1321,7 @@ static void event_directory_item_real_thumbnail_altered (ThumbnailView* base) {
 #line 140 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1324 "EventDirectoryItem.c"
-				goto __catch52_g_error;
+				goto __catch53_g_error;
 			}
 #line 140 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 			checkerboard_item_set_image (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_CHECKERBOARD_ITEM, CheckerboardItem), _tmp5_);
@@ -1329,8 +1329,8 @@ static void event_directory_item_real_thumbnail_altered (ThumbnailView* base) {
 			_g_object_unref0 (_tmp5_);
 #line 1331 "EventDirectoryItem.c"
 		}
-		goto __finally52;
-		__catch52_g_error:
+		goto __finally53;
+		__catch53_g_error:
 		{
 			GError* err = NULL;
 			Event* _tmp9_ = NULL;
@@ -1360,7 +1360,7 @@ static void event_directory_item_real_thumbnail_altered (ThumbnailView* base) {
 			_g_error_free0 (err);
 #line 1362 "EventDirectoryItem.c"
 		}
-		__finally52:
+		__finally53:
 #line 139 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 139 "/home/jens/Source/shotwell/src/events/EventDirectoryItem.vala"

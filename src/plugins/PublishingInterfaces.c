@@ -16,6 +16,7 @@
 #include <float.h>
 #include <math.h>
 #include <gtk/gtk.h>
+#include <gee.h>
 
 
 #define SPIT_PUBLISHING_TYPE_PUBLISHER (spit_publishing_publisher_get_type ())
@@ -82,6 +83,22 @@ typedef struct _SpitPublishingPublishable SpitPublishingPublishable;
 typedef struct _SpitPublishingPublishableIface SpitPublishingPublishableIface;
 
 #define SPIT_PUBLISHING_PUBLISHER_TYPE_MEDIA_TYPE (spit_publishing_publisher_media_type_get_type ())
+
+#define SPIT_PUBLISHING_TYPE_AUTHENTICATOR (spit_publishing_authenticator_get_type ())
+#define SPIT_PUBLISHING_AUTHENTICATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR, SpitPublishingAuthenticator))
+#define SPIT_PUBLISHING_IS_AUTHENTICATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR))
+#define SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR, SpitPublishingAuthenticatorIface))
+
+typedef struct _SpitPublishingAuthenticator SpitPublishingAuthenticator;
+typedef struct _SpitPublishingAuthenticatorIface SpitPublishingAuthenticatorIface;
+
+#define SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY (spit_publishing_authenticator_factory_get_type ())
+#define SPIT_PUBLISHING_AUTHENTICATOR_FACTORY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactory))
+#define SPIT_PUBLISHING_IS_AUTHENTICATOR_FACTORY(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY))
+#define SPIT_PUBLISHING_AUTHENTICATOR_FACTORY_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactoryIface))
+
+typedef struct _SpitPublishingAuthenticatorFactory SpitPublishingAuthenticatorFactory;
+typedef struct _SpitPublishingAuthenticatorFactoryIface SpitPublishingAuthenticatorFactoryIface;
 
 /**
  * Defines different kinds of errors that can occur during publishing.
@@ -261,6 +278,21 @@ struct _SpitPublishingPublisherIface {
 	void (*reserved7) (SpitPublishingPublisher* self);
 };
 
+struct _SpitPublishingAuthenticatorIface {
+	GTypeInterface parent_iface;
+	void (*authenticate) (SpitPublishingAuthenticator* self);
+	gboolean (*can_logout) (SpitPublishingAuthenticator* self);
+	void (*logout) (SpitPublishingAuthenticator* self);
+	void (*refresh) (SpitPublishingAuthenticator* self);
+	GHashTable* (*get_authentication_parameter) (SpitPublishingAuthenticator* self);
+};
+
+struct _SpitPublishingAuthenticatorFactoryIface {
+	GTypeInterface parent_iface;
+	GeeList* (*get_available_authenticators) (SpitPublishingAuthenticatorFactory* self);
+	SpitPublishingAuthenticator* (*create) (SpitPublishingAuthenticatorFactory* self, const gchar* provider, SpitPublishingPluginHost* host);
+};
+
 
 
 #define SPIT_PUBLISHING_CURRENT_INTERFACE 0
@@ -395,6 +427,15 @@ void spit_publishing_service_reserved6 (SpitPublishingService* self);
 static void spit_publishing_service_real_reserved6 (SpitPublishingService* self);
 void spit_publishing_service_reserved7 (SpitPublishingService* self);
 static void spit_publishing_service_real_reserved7 (SpitPublishingService* self);
+GType spit_publishing_authenticator_get_type (void) G_GNUC_CONST;
+void spit_publishing_authenticator_authenticate (SpitPublishingAuthenticator* self);
+gboolean spit_publishing_authenticator_can_logout (SpitPublishingAuthenticator* self);
+void spit_publishing_authenticator_logout (SpitPublishingAuthenticator* self);
+void spit_publishing_authenticator_refresh (SpitPublishingAuthenticator* self);
+GHashTable* spit_publishing_authenticator_get_authentication_parameter (SpitPublishingAuthenticator* self);
+GType spit_publishing_authenticator_factory_get_type (void) G_GNUC_CONST;
+GeeList* spit_publishing_authenticator_factory_get_available_authenticators (SpitPublishingAuthenticatorFactory* self);
+SpitPublishingAuthenticator* spit_publishing_authenticator_factory_create (SpitPublishingAuthenticatorFactory* self, const gchar* provider, SpitPublishingPluginHost* host);
 
 
 GQuark spit_publishing_publishing_error_quark (void) {
@@ -428,7 +469,7 @@ SpitPublishingService* spit_publishing_publisher_get_service (SpitPublishingPubl
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self), NULL);
 #line 121 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->get_service (self);
-#line 432 "PublishingInterfaces.c"
+#line 473 "PublishingInterfaces.c"
 }
 
 
@@ -443,7 +484,7 @@ void spit_publishing_publisher_start (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 129 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->start (self);
-#line 447 "PublishingInterfaces.c"
+#line 488 "PublishingInterfaces.c"
 }
 
 
@@ -455,7 +496,7 @@ gboolean spit_publishing_publisher_is_running (SpitPublishingPublisher* self) {
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self), FALSE);
 #line 134 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->is_running (self);
-#line 459 "PublishingInterfaces.c"
+#line 500 "PublishingInterfaces.c"
 }
 
 
@@ -468,7 +509,7 @@ void spit_publishing_publisher_stop (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 140 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->stop (self);
-#line 472 "PublishingInterfaces.c"
+#line 513 "PublishingInterfaces.c"
 }
 
 
@@ -481,7 +522,7 @@ void spit_publishing_publisher_reserved0 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 145 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved0 (self);
-#line 485 "PublishingInterfaces.c"
+#line 526 "PublishingInterfaces.c"
 }
 
 
@@ -494,7 +535,7 @@ void spit_publishing_publisher_reserved1 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 146 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved1 (self);
-#line 498 "PublishingInterfaces.c"
+#line 539 "PublishingInterfaces.c"
 }
 
 
@@ -507,7 +548,7 @@ void spit_publishing_publisher_reserved2 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 147 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved2 (self);
-#line 511 "PublishingInterfaces.c"
+#line 552 "PublishingInterfaces.c"
 }
 
 
@@ -520,7 +561,7 @@ void spit_publishing_publisher_reserved3 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 148 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved3 (self);
-#line 524 "PublishingInterfaces.c"
+#line 565 "PublishingInterfaces.c"
 }
 
 
@@ -533,7 +574,7 @@ void spit_publishing_publisher_reserved4 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 149 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved4 (self);
-#line 537 "PublishingInterfaces.c"
+#line 578 "PublishingInterfaces.c"
 }
 
 
@@ -546,7 +587,7 @@ void spit_publishing_publisher_reserved5 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 150 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved5 (self);
-#line 550 "PublishingInterfaces.c"
+#line 591 "PublishingInterfaces.c"
 }
 
 
@@ -559,7 +600,7 @@ void spit_publishing_publisher_reserved6 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 151 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved6 (self);
-#line 563 "PublishingInterfaces.c"
+#line 604 "PublishingInterfaces.c"
 }
 
 
@@ -572,7 +613,7 @@ void spit_publishing_publisher_reserved7 (SpitPublishingPublisher* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHER (self));
 #line 152 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHER_GET_INTERFACE (self)->reserved7 (self);
-#line 576 "PublishingInterfaces.c"
+#line 617 "PublishingInterfaces.c"
 }
 
 
@@ -599,7 +640,7 @@ static void spit_publishing_publisher_base_init (SpitPublishingPublisherIface * 
 		iface->reserved6 = spit_publishing_publisher_real_reserved6;
 #line 105 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 		iface->reserved7 = spit_publishing_publisher_real_reserved7;
-#line 603 "PublishingInterfaces.c"
+#line 644 "PublishingInterfaces.c"
 	}
 }
 
@@ -651,7 +692,7 @@ GtkWidget* spit_publishing_dialog_pane_get_widget (SpitPublishingDialogPane* sel
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self), NULL);
 #line 197 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->get_widget (self);
-#line 655 "PublishingInterfaces.c"
+#line 696 "PublishingInterfaces.c"
 }
 
 
@@ -664,7 +705,7 @@ SpitPublishingDialogPaneGeometryOptions spit_publishing_dialog_pane_get_preferre
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self), 0);
 #line 203 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->get_preferred_geometry (self);
-#line 668 "PublishingInterfaces.c"
+#line 709 "PublishingInterfaces.c"
 }
 
 
@@ -677,7 +718,7 @@ void spit_publishing_dialog_pane_on_pane_installed (SpitPublishingDialogPane* se
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 209 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->on_pane_installed (self);
-#line 681 "PublishingInterfaces.c"
+#line 722 "PublishingInterfaces.c"
 }
 
 
@@ -690,7 +731,7 @@ void spit_publishing_dialog_pane_on_pane_uninstalled (SpitPublishingDialogPane* 
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 215 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->on_pane_uninstalled (self);
-#line 694 "PublishingInterfaces.c"
+#line 735 "PublishingInterfaces.c"
 }
 
 
@@ -703,7 +744,7 @@ void spit_publishing_dialog_pane_reserved0 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 220 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved0 (self);
-#line 707 "PublishingInterfaces.c"
+#line 748 "PublishingInterfaces.c"
 }
 
 
@@ -716,7 +757,7 @@ void spit_publishing_dialog_pane_reserved1 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 221 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved1 (self);
-#line 720 "PublishingInterfaces.c"
+#line 761 "PublishingInterfaces.c"
 }
 
 
@@ -729,7 +770,7 @@ void spit_publishing_dialog_pane_reserved2 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 222 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved2 (self);
-#line 733 "PublishingInterfaces.c"
+#line 774 "PublishingInterfaces.c"
 }
 
 
@@ -742,7 +783,7 @@ void spit_publishing_dialog_pane_reserved3 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 223 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved3 (self);
-#line 746 "PublishingInterfaces.c"
+#line 787 "PublishingInterfaces.c"
 }
 
 
@@ -755,7 +796,7 @@ void spit_publishing_dialog_pane_reserved4 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 224 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved4 (self);
-#line 759 "PublishingInterfaces.c"
+#line 800 "PublishingInterfaces.c"
 }
 
 
@@ -768,7 +809,7 @@ void spit_publishing_dialog_pane_reserved5 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 225 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved5 (self);
-#line 772 "PublishingInterfaces.c"
+#line 813 "PublishingInterfaces.c"
 }
 
 
@@ -781,7 +822,7 @@ void spit_publishing_dialog_pane_reserved6 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 226 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved6 (self);
-#line 785 "PublishingInterfaces.c"
+#line 826 "PublishingInterfaces.c"
 }
 
 
@@ -794,7 +835,7 @@ void spit_publishing_dialog_pane_reserved7 (SpitPublishingDialogPane* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (self));
 #line 227 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_DIALOG_PANE_GET_INTERFACE (self)->reserved7 (self);
-#line 798 "PublishingInterfaces.c"
+#line 839 "PublishingInterfaces.c"
 }
 
 
@@ -821,7 +862,7 @@ static void spit_publishing_dialog_pane_base_init (SpitPublishingDialogPaneIface
 		iface->reserved6 = spit_publishing_dialog_pane_real_reserved6;
 #line 160 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 		iface->reserved7 = spit_publishing_dialog_pane_real_reserved7;
-#line 825 "PublishingInterfaces.c"
+#line 866 "PublishingInterfaces.c"
 	}
 }
 
@@ -871,7 +912,7 @@ void spit_publishing_plugin_host_post_error (SpitPublishingPluginHost* self, GEr
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 277 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->post_error (self, err);
-#line 875 "PublishingInterfaces.c"
+#line 916 "PublishingInterfaces.c"
 }
 
 
@@ -886,7 +927,7 @@ void spit_publishing_plugin_host_stop_publishing (SpitPublishingPluginHost* self
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 285 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->stop_publishing (self);
-#line 890 "PublishingInterfaces.c"
+#line 931 "PublishingInterfaces.c"
 }
 
 
@@ -898,7 +939,7 @@ SpitPublishingPublisher* spit_publishing_plugin_host_get_publisher (SpitPublishi
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self), NULL);
 #line 290 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->get_publisher (self);
-#line 902 "PublishingInterfaces.c"
+#line 943 "PublishingInterfaces.c"
 }
 
 
@@ -925,7 +966,7 @@ void spit_publishing_plugin_host_install_dialog_pane (SpitPublishingPluginHost* 
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 310 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_dialog_pane (self, pane, mode);
-#line 929 "PublishingInterfaces.c"
+#line 970 "PublishingInterfaces.c"
 }
 
 
@@ -960,7 +1001,7 @@ void spit_publishing_plugin_host_install_static_message_pane (SpitPublishingPlug
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 339 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_static_message_pane (self, message, mode);
-#line 964 "PublishingInterfaces.c"
+#line 1005 "PublishingInterfaces.c"
 }
 
 
@@ -987,7 +1028,7 @@ void spit_publishing_plugin_host_install_pango_message_pane (SpitPublishingPlugi
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 360 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_pango_message_pane (self, markup, mode);
-#line 991 "PublishingInterfaces.c"
+#line 1032 "PublishingInterfaces.c"
 }
 
 
@@ -1008,7 +1049,7 @@ void spit_publishing_plugin_host_install_success_pane (SpitPublishingPluginHost*
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 375 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_success_pane (self);
-#line 1012 "PublishingInterfaces.c"
+#line 1053 "PublishingInterfaces.c"
 }
 
 
@@ -1031,7 +1072,7 @@ void spit_publishing_plugin_host_install_account_fetch_wait_pane (SpitPublishing
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 391 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_account_fetch_wait_pane (self);
-#line 1035 "PublishingInterfaces.c"
+#line 1076 "PublishingInterfaces.c"
 }
 
 
@@ -1051,7 +1092,7 @@ void spit_publishing_plugin_host_install_login_wait_pane (SpitPublishingPluginHo
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 405 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_login_wait_pane (self);
-#line 1055 "PublishingInterfaces.c"
+#line 1096 "PublishingInterfaces.c"
 }
 
 
@@ -1080,7 +1121,7 @@ void spit_publishing_plugin_host_install_welcome_pane (SpitPublishingPluginHost*
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 427 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->install_welcome_pane (self, welcome_message, on_login_clicked, on_login_clicked_target);
-#line 1084 "PublishingInterfaces.c"
+#line 1125 "PublishingInterfaces.c"
 }
 
 
@@ -1103,7 +1144,7 @@ void spit_publishing_plugin_host_set_service_locked (SpitPublishingPluginHost* s
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 444 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->set_service_locked (self, is_locked);
-#line 1107 "PublishingInterfaces.c"
+#line 1148 "PublishingInterfaces.c"
 }
 
 
@@ -1122,7 +1163,7 @@ void spit_publishing_plugin_host_set_dialog_default_widget (SpitPublishingPlugin
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 456 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->set_dialog_default_widget (self, widget);
-#line 1126 "PublishingInterfaces.c"
+#line 1167 "PublishingInterfaces.c"
 }
 
 
@@ -1135,7 +1176,7 @@ SpitPublishingPublishable** spit_publishing_plugin_host_get_publishables (SpitPu
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self), NULL);
 #line 462 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->get_publishables (self, result_length1);
-#line 1139 "PublishingInterfaces.c"
+#line 1180 "PublishingInterfaces.c"
 }
 
 
@@ -1174,7 +1215,7 @@ SpitPublishingProgressCallback spit_publishing_plugin_host_serialize_publishable
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self), NULL);
 #line 494 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->serialize_publishables (self, content_major_axis, strip_metadata, result_target, result_target_destroy_notify);
-#line 1178 "PublishingInterfaces.c"
+#line 1219 "PublishingInterfaces.c"
 }
 
 
@@ -1188,7 +1229,7 @@ SpitPublishingPublisherMediaType spit_publishing_plugin_host_get_publishable_med
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self), 0);
 #line 502 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->get_publishable_media_type (self);
-#line 1192 "PublishingInterfaces.c"
+#line 1233 "PublishingInterfaces.c"
 }
 
 
@@ -1201,7 +1242,7 @@ void spit_publishing_plugin_host_reserved0 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 507 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved0 (self);
-#line 1205 "PublishingInterfaces.c"
+#line 1246 "PublishingInterfaces.c"
 }
 
 
@@ -1214,7 +1255,7 @@ void spit_publishing_plugin_host_reserved1 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 508 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved1 (self);
-#line 1218 "PublishingInterfaces.c"
+#line 1259 "PublishingInterfaces.c"
 }
 
 
@@ -1227,7 +1268,7 @@ void spit_publishing_plugin_host_reserved2 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 509 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved2 (self);
-#line 1231 "PublishingInterfaces.c"
+#line 1272 "PublishingInterfaces.c"
 }
 
 
@@ -1240,7 +1281,7 @@ void spit_publishing_plugin_host_reserved3 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 510 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved3 (self);
-#line 1244 "PublishingInterfaces.c"
+#line 1285 "PublishingInterfaces.c"
 }
 
 
@@ -1253,7 +1294,7 @@ void spit_publishing_plugin_host_reserved4 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 511 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved4 (self);
-#line 1257 "PublishingInterfaces.c"
+#line 1298 "PublishingInterfaces.c"
 }
 
 
@@ -1266,7 +1307,7 @@ void spit_publishing_plugin_host_reserved5 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 512 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved5 (self);
-#line 1270 "PublishingInterfaces.c"
+#line 1311 "PublishingInterfaces.c"
 }
 
 
@@ -1279,7 +1320,7 @@ void spit_publishing_plugin_host_reserved6 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 513 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved6 (self);
-#line 1283 "PublishingInterfaces.c"
+#line 1324 "PublishingInterfaces.c"
 }
 
 
@@ -1292,7 +1333,7 @@ void spit_publishing_plugin_host_reserved7 (SpitPublishingPluginHost* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (self));
 #line 514 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PLUGIN_HOST_GET_INTERFACE (self)->reserved7 (self);
-#line 1296 "PublishingInterfaces.c"
+#line 1337 "PublishingInterfaces.c"
 }
 
 
@@ -1319,7 +1360,7 @@ static void spit_publishing_plugin_host_base_init (SpitPublishingPluginHostIface
 		iface->reserved6 = spit_publishing_plugin_host_real_reserved6;
 #line 260 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 		iface->reserved7 = spit_publishing_plugin_host_real_reserved7;
-#line 1323 "PublishingInterfaces.c"
+#line 1364 "PublishingInterfaces.c"
 	}
 }
 
@@ -1362,7 +1403,7 @@ GFile* spit_publishing_publishable_get_serialized_file (SpitPublishingPublishabl
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), NULL);
 #line 535 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_serialized_file (self);
-#line 1366 "PublishingInterfaces.c"
+#line 1407 "PublishingInterfaces.c"
 }
 
 
@@ -1378,7 +1419,7 @@ gchar* spit_publishing_publishable_get_publishing_name (SpitPublishingPublishabl
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), NULL);
 #line 544 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_publishing_name (self);
-#line 1382 "PublishingInterfaces.c"
+#line 1423 "PublishingInterfaces.c"
 }
 
 
@@ -1391,7 +1432,7 @@ gchar* spit_publishing_publishable_get_param_string (SpitPublishingPublishable* 
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), NULL);
 #line 550 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_param_string (self, name);
-#line 1395 "PublishingInterfaces.c"
+#line 1436 "PublishingInterfaces.c"
 }
 
 
@@ -1404,7 +1445,7 @@ gchar** spit_publishing_publishable_get_publishing_keywords (SpitPublishingPubli
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), NULL);
 #line 556 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_publishing_keywords (self, result_length1);
-#line 1408 "PublishingInterfaces.c"
+#line 1449 "PublishingInterfaces.c"
 }
 
 
@@ -1416,7 +1457,7 @@ SpitPublishingPublisherMediaType spit_publishing_publishable_get_media_type (Spi
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), 0);
 #line 561 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_media_type (self);
-#line 1420 "PublishingInterfaces.c"
+#line 1461 "PublishingInterfaces.c"
 }
 
 
@@ -1428,7 +1469,7 @@ GDateTime* spit_publishing_publishable_get_exposure_date_time (SpitPublishingPub
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self), NULL);
 #line 566 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->get_exposure_date_time (self);
-#line 1432 "PublishingInterfaces.c"
+#line 1473 "PublishingInterfaces.c"
 }
 
 
@@ -1441,7 +1482,7 @@ void spit_publishing_publishable_reserved0 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 571 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved0 (self);
-#line 1445 "PublishingInterfaces.c"
+#line 1486 "PublishingInterfaces.c"
 }
 
 
@@ -1454,7 +1495,7 @@ void spit_publishing_publishable_reserved1 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 572 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved1 (self);
-#line 1458 "PublishingInterfaces.c"
+#line 1499 "PublishingInterfaces.c"
 }
 
 
@@ -1467,7 +1508,7 @@ void spit_publishing_publishable_reserved2 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 573 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved2 (self);
-#line 1471 "PublishingInterfaces.c"
+#line 1512 "PublishingInterfaces.c"
 }
 
 
@@ -1480,7 +1521,7 @@ void spit_publishing_publishable_reserved3 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 574 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved3 (self);
-#line 1484 "PublishingInterfaces.c"
+#line 1525 "PublishingInterfaces.c"
 }
 
 
@@ -1493,7 +1534,7 @@ void spit_publishing_publishable_reserved4 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 575 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved4 (self);
-#line 1497 "PublishingInterfaces.c"
+#line 1538 "PublishingInterfaces.c"
 }
 
 
@@ -1506,7 +1547,7 @@ void spit_publishing_publishable_reserved5 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 576 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved5 (self);
-#line 1510 "PublishingInterfaces.c"
+#line 1551 "PublishingInterfaces.c"
 }
 
 
@@ -1519,7 +1560,7 @@ void spit_publishing_publishable_reserved6 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 577 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved6 (self);
-#line 1523 "PublishingInterfaces.c"
+#line 1564 "PublishingInterfaces.c"
 }
 
 
@@ -1532,7 +1573,7 @@ void spit_publishing_publishable_reserved7 (SpitPublishingPublishable* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (self));
 #line 578 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_PUBLISHABLE_GET_INTERFACE (self)->reserved7 (self);
-#line 1536 "PublishingInterfaces.c"
+#line 1577 "PublishingInterfaces.c"
 }
 
 
@@ -1559,7 +1600,7 @@ static void spit_publishing_publishable_base_init (SpitPublishingPublishableIfac
 		iface->reserved6 = spit_publishing_publishable_real_reserved6;
 #line 521 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 		iface->reserved7 = spit_publishing_publishable_real_reserved7;
-#line 1563 "PublishingInterfaces.c"
+#line 1604 "PublishingInterfaces.c"
 	}
 }
 
@@ -1590,7 +1631,7 @@ SpitPublishingPublisher* spit_publishing_service_create_publisher (SpitPublishin
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (self), NULL);
 #line 591 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->create_publisher (self, host);
-#line 1594 "PublishingInterfaces.c"
+#line 1635 "PublishingInterfaces.c"
 }
 
 
@@ -1602,7 +1643,7 @@ SpitPublishingPublisherMediaType spit_publishing_service_get_supported_media (Sp
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (self), 0);
 #line 596 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	return SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->get_supported_media (self);
-#line 1606 "PublishingInterfaces.c"
+#line 1647 "PublishingInterfaces.c"
 }
 
 
@@ -1615,7 +1656,7 @@ void spit_publishing_service_reserved0 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 601 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved0 (self);
-#line 1619 "PublishingInterfaces.c"
+#line 1660 "PublishingInterfaces.c"
 }
 
 
@@ -1628,7 +1669,7 @@ void spit_publishing_service_reserved1 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 602 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved1 (self);
-#line 1632 "PublishingInterfaces.c"
+#line 1673 "PublishingInterfaces.c"
 }
 
 
@@ -1641,7 +1682,7 @@ void spit_publishing_service_reserved2 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 603 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved2 (self);
-#line 1645 "PublishingInterfaces.c"
+#line 1686 "PublishingInterfaces.c"
 }
 
 
@@ -1654,7 +1695,7 @@ void spit_publishing_service_reserved3 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 604 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved3 (self);
-#line 1658 "PublishingInterfaces.c"
+#line 1699 "PublishingInterfaces.c"
 }
 
 
@@ -1667,7 +1708,7 @@ void spit_publishing_service_reserved4 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 605 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved4 (self);
-#line 1671 "PublishingInterfaces.c"
+#line 1712 "PublishingInterfaces.c"
 }
 
 
@@ -1680,7 +1721,7 @@ void spit_publishing_service_reserved5 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 606 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved5 (self);
-#line 1684 "PublishingInterfaces.c"
+#line 1725 "PublishingInterfaces.c"
 }
 
 
@@ -1693,7 +1734,7 @@ void spit_publishing_service_reserved6 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 607 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved6 (self);
-#line 1697 "PublishingInterfaces.c"
+#line 1738 "PublishingInterfaces.c"
 }
 
 
@@ -1706,7 +1747,7 @@ void spit_publishing_service_reserved7 (SpitPublishingService* self) {
 	g_return_if_fail (SPIT_PUBLISHING_IS_SERVICE (self));
 #line 608 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 	SPIT_PUBLISHING_SERVICE_GET_INTERFACE (self)->reserved7 (self);
-#line 1710 "PublishingInterfaces.c"
+#line 1751 "PublishingInterfaces.c"
 }
 
 
@@ -1733,7 +1774,7 @@ static void spit_publishing_service_base_init (SpitPublishingServiceIface * ifac
 		iface->reserved6 = spit_publishing_service_real_reserved6;
 #line 586 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
 		iface->reserved7 = spit_publishing_service_real_reserved7;
-#line 1737 "PublishingInterfaces.c"
+#line 1778 "PublishingInterfaces.c"
 	}
 }
 
@@ -1754,6 +1795,123 @@ GType spit_publishing_service_get_type (void) {
 		g_once_init_leave (&spit_publishing_service_type_id__volatile, spit_publishing_service_type_id);
 	}
 	return spit_publishing_service_type_id__volatile;
+}
+
+
+void spit_publishing_authenticator_authenticate (SpitPublishingAuthenticator* self) {
+#line 615 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR (self));
+#line 615 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE (self)->authenticate (self);
+#line 1807 "PublishingInterfaces.c"
+}
+
+
+gboolean spit_publishing_authenticator_can_logout (SpitPublishingAuthenticator* self) {
+#line 616 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_val_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR (self), FALSE);
+#line 616 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	return SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE (self)->can_logout (self);
+#line 1816 "PublishingInterfaces.c"
+}
+
+
+void spit_publishing_authenticator_logout (SpitPublishingAuthenticator* self) {
+#line 617 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR (self));
+#line 617 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE (self)->logout (self);
+#line 1825 "PublishingInterfaces.c"
+}
+
+
+void spit_publishing_authenticator_refresh (SpitPublishingAuthenticator* self) {
+#line 618 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR (self));
+#line 618 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE (self)->refresh (self);
+#line 1834 "PublishingInterfaces.c"
+}
+
+
+GHashTable* spit_publishing_authenticator_get_authentication_parameter (SpitPublishingAuthenticator* self) {
+#line 620 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_val_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR (self), NULL);
+#line 620 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	return SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE (self)->get_authentication_parameter (self);
+#line 1843 "PublishingInterfaces.c"
+}
+
+
+static void spit_publishing_authenticator_base_init (SpitPublishingAuthenticatorIface * iface) {
+#line 611 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	static gboolean initialized = FALSE;
+#line 611 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	if (!initialized) {
+#line 611 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+		initialized = TRUE;
+#line 611 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+		g_signal_new ("authenticated", SPIT_PUBLISHING_TYPE_AUTHENTICATOR, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+#line 611 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+		g_signal_new ("authentication_failed", SPIT_PUBLISHING_TYPE_AUTHENTICATOR, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+#line 1858 "PublishingInterfaces.c"
+	}
+}
+
+
+GType spit_publishing_authenticator_get_type (void) {
+	static volatile gsize spit_publishing_authenticator_type_id__volatile = 0;
+	if (g_once_init_enter (&spit_publishing_authenticator_type_id__volatile)) {
+		static const GTypeInfo g_define_type_info = { sizeof (SpitPublishingAuthenticatorIface), (GBaseInitFunc) spit_publishing_authenticator_base_init, (GBaseFinalizeFunc) NULL, (GClassInitFunc) NULL, (GClassFinalizeFunc) NULL, NULL, 0, 0, (GInstanceInitFunc) NULL, NULL };
+		GType spit_publishing_authenticator_type_id;
+		spit_publishing_authenticator_type_id = g_type_register_static (G_TYPE_INTERFACE, "SpitPublishingAuthenticator", &g_define_type_info, 0);
+		g_type_interface_add_prerequisite (spit_publishing_authenticator_type_id, G_TYPE_OBJECT);
+		g_once_init_leave (&spit_publishing_authenticator_type_id__volatile, spit_publishing_authenticator_type_id);
+	}
+	return spit_publishing_authenticator_type_id__volatile;
+}
+
+
+GeeList* spit_publishing_authenticator_factory_get_available_authenticators (SpitPublishingAuthenticatorFactory* self) {
+#line 628 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_val_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR_FACTORY (self), NULL);
+#line 628 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	return SPIT_PUBLISHING_AUTHENTICATOR_FACTORY_GET_INTERFACE (self)->get_available_authenticators (self);
+#line 1881 "PublishingInterfaces.c"
+}
+
+
+SpitPublishingAuthenticator* spit_publishing_authenticator_factory_create (SpitPublishingAuthenticatorFactory* self, const gchar* provider, SpitPublishingPluginHost* host) {
+#line 629 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	g_return_val_if_fail (SPIT_PUBLISHING_IS_AUTHENTICATOR_FACTORY (self), NULL);
+#line 629 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	return SPIT_PUBLISHING_AUTHENTICATOR_FACTORY_GET_INTERFACE (self)->create (self, provider, host);
+#line 1890 "PublishingInterfaces.c"
+}
+
+
+static void spit_publishing_authenticator_factory_base_init (SpitPublishingAuthenticatorFactoryIface * iface) {
+#line 623 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	static gboolean initialized = FALSE;
+#line 623 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+	if (!initialized) {
+#line 623 "/home/jens/Source/shotwell/src/plugins/PublishingInterfaces.vala"
+		initialized = TRUE;
+#line 1901 "PublishingInterfaces.c"
+	}
+}
+
+
+GType spit_publishing_authenticator_factory_get_type (void) {
+	static volatile gsize spit_publishing_authenticator_factory_type_id__volatile = 0;
+	if (g_once_init_enter (&spit_publishing_authenticator_factory_type_id__volatile)) {
+		static const GTypeInfo g_define_type_info = { sizeof (SpitPublishingAuthenticatorFactoryIface), (GBaseInitFunc) spit_publishing_authenticator_factory_base_init, (GBaseFinalizeFunc) NULL, (GClassInitFunc) NULL, (GClassFinalizeFunc) NULL, NULL, 0, 0, (GInstanceInitFunc) NULL, NULL };
+		GType spit_publishing_authenticator_factory_type_id;
+		spit_publishing_authenticator_factory_type_id = g_type_register_static (G_TYPE_INTERFACE, "SpitPublishingAuthenticatorFactory", &g_define_type_info, 0);
+		g_type_interface_add_prerequisite (spit_publishing_authenticator_factory_type_id, G_TYPE_OBJECT);
+		g_once_init_leave (&spit_publishing_authenticator_factory_type_id__volatile, spit_publishing_authenticator_factory_type_id);
+	}
+	return spit_publishing_authenticator_factory_type_id__volatile;
 }
 
 

@@ -728,6 +728,7 @@ enum  {
 SidebarHeader* sidebar_header_new (const gchar* name, gboolean emphasized);
 SidebarHeader* sidebar_header_construct (GType object_type, const gchar* name, gboolean emphasized);
 static void tags_header_setup_context_menu (TagsHeader* self);
+gchar* resources_get_ui (const gchar* filename);
 void app_window_error_message (const gchar* message, GtkWindow* parent);
 gpointer application_ref (gpointer instance);
 void application_unref (gpointer instance);
@@ -826,14 +827,14 @@ static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify 
 static void _tags_branch_on_tags_added_removed_data_collection_contents_altered (DataCollection* _sender, GeeIterable* added, GeeIterable* removed, gpointer self) {
 #line 26 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	tags_branch_on_tags_added_removed ((TagsBranch*) self, added, removed);
-#line 830 "Branch.c"
+#line 831 "Branch.c"
 }
 
 
 static void _tags_branch_on_tags_altered_data_collection_items_altered (DataCollection* _sender, GeeMap* items, gpointer self) {
 #line 27 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	tags_branch_on_tags_altered ((TagsBranch*) self, items);
-#line 837 "Branch.c"
+#line 838 "Branch.c"
 }
 
 
@@ -842,7 +843,7 @@ static gint _tags_branch_comparator_gcompare_func (gconstpointer a, gconstpointe
 	result = tags_branch_comparator ((SidebarEntry*) a, (SidebarEntry*) b);
 #line 11 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 846 "Branch.c"
+#line 847 "Branch.c"
 }
 
 
@@ -883,14 +884,14 @@ TagsBranch* tags_branch_construct (GType object_type) {
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_DATA_COLLECTION, DataCollection), "items-altered", (GCallback) _tags_branch_on_tags_altered_data_collection_items_altered, self, 0);
 #line 10 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return self;
-#line 887 "Branch.c"
+#line 888 "Branch.c"
 }
 
 
 TagsBranch* tags_branch_new (void) {
 #line 10 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return tags_branch_construct (TAGS_TYPE_BRANCH);
-#line 894 "Branch.c"
+#line 895 "Branch.c"
 }
 
 
@@ -913,7 +914,7 @@ TagsSidebarEntry* tags_branch_get_entry_for_tag (TagsBranch* self, Tag* tag) {
 	result = (TagsSidebarEntry*) _tmp2_;
 #line 31 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 917 "Branch.c"
+#line 918 "Branch.c"
 }
 
 
@@ -925,7 +926,7 @@ gboolean tags_branch_is_user_renameable (TagsBranch* self) {
 	result = TRUE;
 #line 35 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 929 "Branch.c"
+#line 930 "Branch.c"
 }
 
 
@@ -955,7 +956,7 @@ static gint tags_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 		result = 0;
 #line 40 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		return result;
-#line 959 "Branch.c"
+#line 960 "Branch.c"
 	}
 #line 42 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp2_ = a;
@@ -981,7 +982,7 @@ static gint tags_branch_comparator (SidebarEntry* a, SidebarEntry* b) {
 	result = _tmp9_;
 #line 42 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 985 "Branch.c"
+#line 986 "Branch.c"
 }
 
 
@@ -990,14 +991,14 @@ static gint _tag_compare_names_gcompare_data_func (gconstpointer a, gconstpointe
 	result = tag_compare_names ((Tag*) a, (Tag*) b);
 #line 57 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 994 "Branch.c"
+#line 995 "Branch.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 59 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1001 "Branch.c"
+#line 1002 "Branch.c"
 }
 
 
@@ -1017,14 +1018,14 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 	_tmp0_ = added_raw;
 #line 53 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp0_ != NULL) {
-#line 1021 "Branch.c"
+#line 1022 "Branch.c"
 		GeeSortedSet* added = NULL;
 		GeeTreeSet* _tmp1_ = NULL;
 #line 57 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp1_ = gee_tree_set_new (TYPE_TAG, (GBoxedCopyFunc) g_object_ref, g_object_unref, _tag_compare_names_gcompare_data_func, NULL, NULL);
 #line 57 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		added = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_SORTED_SET, GeeSortedSet);
-#line 1028 "Branch.c"
+#line 1029 "Branch.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp2_ = NULL;
@@ -1037,7 +1038,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 			_object_it = _tmp3_;
 #line 58 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			while (TRUE) {
-#line 1041 "Branch.c"
+#line 1042 "Branch.c"
 				GeeIterator* _tmp4_ = NULL;
 				gboolean _tmp5_ = FALSE;
 				DataObject* object = NULL;
@@ -1056,7 +1057,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				if (!_tmp5_) {
 #line 58 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					break;
-#line 1060 "Branch.c"
+#line 1061 "Branch.c"
 				}
 #line 58 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp6_ = _object_it;
@@ -1080,11 +1081,11 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				_g_object_unref0 (tag);
 #line 58 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_g_object_unref0 (object);
-#line 1084 "Branch.c"
+#line 1085 "Branch.c"
 			}
 #line 58 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (_object_it);
-#line 1088 "Branch.c"
+#line 1089 "Branch.c"
 		}
 		{
 			GeeIterator* _tag_it = NULL;
@@ -1098,7 +1099,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 			_tag_it = _tmp13_;
 #line 63 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			while (TRUE) {
-#line 1102 "Branch.c"
+#line 1103 "Branch.c"
 				GeeIterator* _tmp14_ = NULL;
 				gboolean _tmp15_ = FALSE;
 				Tag* tag = NULL;
@@ -1126,7 +1127,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				if (!_tmp15_) {
 #line 63 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					break;
-#line 1130 "Branch.c"
+#line 1131 "Branch.c"
 				}
 #line 63 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp16_ = _tag_it;
@@ -1142,7 +1143,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				parent_tag = _tmp19_;
 #line 67 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				while (TRUE) {
-#line 1146 "Branch.c"
+#line 1147 "Branch.c"
 					Tag* _tmp20_ = NULL;
 					GeeHashMap* _tmp21_ = NULL;
 					Tag* _tmp22_ = NULL;
@@ -1155,7 +1156,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 					if (!(_tmp20_ != NULL)) {
 #line 67 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 						break;
-#line 1159 "Branch.c"
+#line 1160 "Branch.c"
 					}
 #line 68 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_tmp21_ = self->priv->entry_map;
@@ -1165,7 +1166,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 					_tmp23_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp22_);
 #line 68 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					if (!_tmp23_) {
-#line 1169 "Branch.c"
+#line 1170 "Branch.c"
 						TagsSidebarEntry* parent_entry = NULL;
 						Tag* _tmp24_ = NULL;
 						TagsSidebarEntry* _tmp25_ = NULL;
@@ -1188,7 +1189,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 						gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp27_, _tmp28_);
 #line 68 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 						_g_object_unref0 (parent_entry);
-#line 1192 "Branch.c"
+#line 1193 "Branch.c"
 					}
 #line 73 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_tmp29_ = parent_tag;
@@ -1198,7 +1199,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 					_g_object_unref0 (parent_tag);
 #line 73 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					parent_tag = _tmp30_;
-#line 1202 "Branch.c"
+#line 1203 "Branch.c"
 				}
 #line 77 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp31_ = tag;
@@ -1226,7 +1227,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				_tmp38_ = parent_tag;
 #line 81 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				if (_tmp38_ != NULL) {
-#line 1230 "Branch.c"
+#line 1231 "Branch.c"
 					TagsSidebarEntry* parent_entry = NULL;
 					GeeHashMap* _tmp39_ = NULL;
 					Tag* _tmp40_ = NULL;
@@ -1249,7 +1250,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 					sidebar_branch_graft (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, SIDEBAR_TYPE_ENTRY, SidebarEntry), G_TYPE_CHECK_INSTANCE_CAST (_tmp43_, SIDEBAR_TYPE_ENTRY, SidebarEntry), NULL);
 #line 81 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_g_object_unref0 (parent_entry);
-#line 1253 "Branch.c"
+#line 1254 "Branch.c"
 				} else {
 					SidebarEntry* _tmp44_ = NULL;
 					SidebarEntry* _tmp45_ = NULL;
@@ -1264,7 +1265,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 					sidebar_branch_graft (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp45_, G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, SIDEBAR_TYPE_ENTRY, SidebarEntry), NULL);
 #line 85 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_g_object_unref0 (_tmp45_);
-#line 1268 "Branch.c"
+#line 1269 "Branch.c"
 				}
 #line 90 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp47_ = tag;
@@ -1280,21 +1281,21 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				_g_object_unref0 (parent_tag);
 #line 63 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_g_object_unref0 (tag);
-#line 1284 "Branch.c"
+#line 1285 "Branch.c"
 			}
 #line 63 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (_tag_it);
-#line 1288 "Branch.c"
+#line 1289 "Branch.c"
 		}
 #line 53 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (added);
-#line 1292 "Branch.c"
+#line 1293 "Branch.c"
 	}
 #line 94 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp49_ = removed;
 #line 94 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp49_ != NULL) {
-#line 1298 "Branch.c"
+#line 1299 "Branch.c"
 		{
 			GeeIterator* _object_it = NULL;
 			GeeIterable* _tmp50_ = NULL;
@@ -1307,7 +1308,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 			_object_it = _tmp51_;
 #line 95 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			while (TRUE) {
-#line 1311 "Branch.c"
+#line 1312 "Branch.c"
 				GeeIterator* _tmp52_ = NULL;
 				gboolean _tmp53_ = FALSE;
 				DataObject* object = NULL;
@@ -1335,7 +1336,7 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				if (!_tmp53_) {
 #line 95 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					break;
-#line 1339 "Branch.c"
+#line 1340 "Branch.c"
 				}
 #line 95 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp54_ = _object_it;
@@ -1383,16 +1384,16 @@ static void tags_branch_on_tags_added_removed (TagsBranch* self, GeeIterable* ad
 				_g_object_unref0 (tag);
 #line 95 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_g_object_unref0 (object);
-#line 1387 "Branch.c"
+#line 1388 "Branch.c"
 			}
 #line 95 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (_object_it);
-#line 1391 "Branch.c"
+#line 1392 "Branch.c"
 		}
 	}
 #line 46 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_object_unref0 (restore_point);
-#line 1396 "Branch.c"
+#line 1397 "Branch.c"
 }
 
 
@@ -1401,7 +1402,7 @@ static void tags_branch_on_tags_altered (TagsBranch* self, GeeMap* altered) {
 	g_return_if_fail (TAGS_IS_BRANCH (self));
 #line 109 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_if_fail (GEE_IS_MAP (altered));
-#line 1405 "Branch.c"
+#line 1406 "Branch.c"
 	{
 		GeeIterator* _object_it = NULL;
 		GeeMap* _tmp0_ = NULL;
@@ -1428,7 +1429,7 @@ static void tags_branch_on_tags_altered (TagsBranch* self, GeeMap* altered) {
 		_object_it = _tmp5_;
 #line 110 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		while (TRUE) {
-#line 1432 "Branch.c"
+#line 1433 "Branch.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			DataObject* object = NULL;
@@ -1465,7 +1466,7 @@ static void tags_branch_on_tags_altered (TagsBranch* self, GeeMap* altered) {
 			if (!_tmp7_) {
 #line 110 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				break;
-#line 1469 "Branch.c"
+#line 1470 "Branch.c"
 			}
 #line 110 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp8_ = _object_it;
@@ -1493,7 +1494,7 @@ static void tags_branch_on_tags_altered (TagsBranch* self, GeeMap* altered) {
 				_g_object_unref0 (object);
 #line 112 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				continue;
-#line 1497 "Branch.c"
+#line 1498 "Branch.c"
 			}
 #line 114 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp16_ = object;
@@ -1547,11 +1548,11 @@ static void tags_branch_on_tags_altered (TagsBranch* self, GeeMap* altered) {
 			_g_object_unref0 (tag);
 #line 110 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (object);
-#line 1551 "Branch.c"
+#line 1552 "Branch.c"
 		}
 #line 110 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_object_it);
-#line 1555 "Branch.c"
+#line 1556 "Branch.c"
 	}
 }
 
@@ -1563,7 +1564,7 @@ static void tags_branch_class_init (TagsBranchClass * klass) {
 	g_type_class_add_private (klass, sizeof (TagsBranchPrivate));
 #line 7 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = tags_branch_finalize;
-#line 1567 "Branch.c"
+#line 1568 "Branch.c"
 }
 
 
@@ -1575,7 +1576,7 @@ static void tags_branch_instance_init (TagsBranch * self) {
 	_tmp0_ = gee_hash_map_new (TYPE_TAG, (GBoxedCopyFunc) g_object_ref, g_object_unref, TAGS_TYPE_SIDEBAR_ENTRY, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 #line 8 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self->priv->entry_map = _tmp0_;
-#line 1579 "Branch.c"
+#line 1580 "Branch.c"
 }
 
 
@@ -1603,7 +1604,7 @@ static void tags_branch_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->entry_map);
 #line 7 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (tags_branch_parent_class)->finalize (obj);
-#line 1607 "Branch.c"
+#line 1608 "Branch.c"
 }
 
 
@@ -1630,14 +1631,14 @@ TagsHeader* tags_header_construct (GType object_type) {
 	tags_header_setup_context_menu (self);
 #line 130 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return self;
-#line 1634 "Branch.c"
+#line 1635 "Branch.c"
 }
 
 
 TagsHeader* tags_header_new (void) {
 #line 130 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return tags_header_construct (TAGS_TYPE_HEADER);
-#line 1641 "Branch.c"
+#line 1642 "Branch.c"
 }
 
 
@@ -1652,85 +1653,93 @@ static void tags_header_setup_context_menu (TagsHeader* self) {
 	_g_object_unref0 (self->priv->builder);
 #line 136 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self->priv->builder = _tmp0_;
-#line 1656 "Branch.c"
+#line 1657 "Branch.c"
 	{
 		GtkBuilder* _tmp1_ = NULL;
+		gchar* _tmp2_ = NULL;
+		gchar* _tmp3_ = NULL;
 		GMenuModel* model = NULL;
-		GtkBuilder* _tmp2_ = NULL;
-		GObject* _tmp3_ = NULL;
-		GMenuModel* _tmp4_ = NULL;
-		GMenuModel* _tmp5_ = NULL;
-		GtkMenu* _tmp6_ = NULL;
+		GtkBuilder* _tmp4_ = NULL;
+		GObject* _tmp5_ = NULL;
+		GMenuModel* _tmp6_ = NULL;
+		GMenuModel* _tmp7_ = NULL;
+		GtkMenu* _tmp8_ = NULL;
 #line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp1_ = self->priv->builder;
 #line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		gtk_builder_add_from_resource (_tmp1_, "/org/gnome/Shotwell/tag_sidebar_context.ui", &_inner_error_);
+		_tmp2_ = resources_get_ui ("tag_sidebar_context.ui");
+#line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp3_ = _tmp2_;
+#line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		gtk_builder_add_from_resource (_tmp1_, _tmp3_, &_inner_error_);
+#line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_g_free0 (_tmp3_);
 #line 138 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1671 "Branch.c"
-			goto __catch53_g_error;
+#line 1680 "Branch.c"
+			goto __catch54_g_error;
 		}
+#line 139 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp4_ = self->priv->builder;
+#line 139 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp5_ = gtk_builder_get_object (_tmp4_, "popup-menu");
+#line 139 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp5_) : NULL);
+#line 139 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		model = _tmp6_;
 #line 140 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp2_ = self->priv->builder;
+		_tmp7_ = model;
 #line 140 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp3_ = gtk_builder_get_object (_tmp2_, "popup-menu");
+		_tmp8_ = (GtkMenu*) gtk_menu_new_from_model (_tmp7_);
 #line 140 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, g_menu_model_get_type ()) ? ((GMenuModel*) _tmp3_) : NULL);
+		g_object_ref_sink (_tmp8_);
 #line 140 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		model = _tmp4_;
-#line 141 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp5_ = model;
-#line 141 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp6_ = (GtkMenu*) gtk_menu_new_from_model (_tmp5_);
-#line 141 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		g_object_ref_sink (_tmp6_);
-#line 141 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (self->priv->context_menu);
-#line 141 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		self->priv->context_menu = _tmp6_;
+#line 140 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		self->priv->context_menu = _tmp8_;
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (model);
-#line 1694 "Branch.c"
+#line 1703 "Branch.c"
 	}
-	goto __finally53;
-	__catch53_g_error:
+	goto __finally54;
+	__catch54_g_error:
 	{
 		GError* _error_ = NULL;
-		GError* _tmp7_ = NULL;
-		const gchar* _tmp8_ = NULL;
-		gchar* _tmp9_ = NULL;
-		gchar* _tmp10_ = NULL;
-		Application* _tmp11_ = NULL;
-		Application* _tmp12_ = NULL;
+		GError* _tmp9_ = NULL;
+		const gchar* _tmp10_ = NULL;
+		gchar* _tmp11_ = NULL;
+		gchar* _tmp12_ = NULL;
+		Application* _tmp13_ = NULL;
+		Application* _tmp14_ = NULL;
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_error_ = _inner_error_;
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_inner_error_ = NULL;
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp7_ = _error_;
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp8_ = _tmp7_->message;
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp9_ = g_strdup_printf ("Error loading UI resource: %s", _tmp8_);
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp10_ = _tmp9_;
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		app_window_error_message (_tmp10_, NULL);
-#line 143 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_g_free0 (_tmp10_);
-#line 145 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_tmp11_ = application_get_instance ();
-#line 145 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp9_ = _error_;
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp10_ = _tmp9_->message;
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp11_ = g_strdup_printf ("Error loading UI resource: %s", _tmp10_);
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp12_ = _tmp11_;
-#line 145 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		application_panic (_tmp12_);
-#line 145 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_application_unref0 (_tmp12_);
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		app_window_error_message (_tmp12_, NULL);
+#line 142 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_g_free0 (_tmp12_);
+#line 144 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp13_ = application_get_instance ();
+#line 144 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_tmp14_ = _tmp13_;
+#line 144 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		application_panic (_tmp14_);
+#line 144 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_application_unref0 (_tmp14_);
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_error_free0 (_error_);
-#line 1732 "Branch.c"
+#line 1741 "Branch.c"
 	}
-	__finally53:
+	__finally54:
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
@@ -1739,7 +1748,7 @@ static void tags_header_setup_context_menu (TagsHeader* self) {
 		g_clear_error (&_inner_error_);
 #line 137 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		return;
-#line 1743 "Branch.c"
+#line 1752 "Branch.c"
 	}
 }
 
@@ -1765,85 +1774,85 @@ static gboolean tags_header_real_internal_drop_received (SidebarInternalDropTarg
 	GeeList* _tmp10_ = NULL;
 	AddTagsCommand* _tmp11_ = NULL;
 	AddTagsCommand* _tmp12_ = NULL;
-#line 149 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_HEADER, TagsHeader);
-#line 149 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 148 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (GEE_IS_LIST (media), FALSE);
-#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = add_tags_dialog_new ();
-#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 149 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	dialog = _tmp0_;
-#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = dialog;
-#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp3_ = add_tags_dialog_execute (_tmp1_, &_tmp2_);
-#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	names = _tmp3_;
-#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	names_length1 = _tmp2_;
-#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 150 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_names_size_ = names_length1;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp5_ = names;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp5__length1 = names_length1;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp5_ == NULL) {
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp4_ = TRUE;
-#line 1795 "Branch.c"
+#line 1804 "Branch.c"
 	} else {
 		gchar** _tmp6_ = NULL;
 		gint _tmp6__length1 = 0;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp6_ = names;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp6__length1 = names_length1;
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp4_ = _tmp6__length1 == 0;
-#line 1805 "Branch.c"
+#line 1814 "Branch.c"
 	}
-#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 151 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp4_) {
-#line 153 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		result = FALSE;
-#line 153 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		names = (_vala_array_free (names, names_length1, (GDestroyNotify) g_free), NULL);
-#line 153 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_text_entry_dialog_mediator_unref0 (dialog);
-#line 153 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 152 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		return result;
-#line 1817 "Branch.c"
+#line 1826 "Branch.c"
 	}
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp7_ = app_window_get_command_manager ();
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp8_ = _tmp7_;
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp9_ = names;
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp9__length1 = names_length1;
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp10_ = media;
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp11_ = add_tags_command_new (_tmp9_, _tmp9__length1, G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp12_ = _tmp11_;
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	command_manager_execute (_tmp8_, G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, TYPE_COMMAND, Command));
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_object_unref0 (_tmp12_);
-#line 155 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 154 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_command_manager_unref0 (_tmp8_);
-#line 157 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 156 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = TRUE;
-#line 157 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 156 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	names = (_vala_array_free (names, names_length1, (GDestroyNotify) g_free), NULL);
-#line 157 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 156 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_text_entry_dialog_mediator_unref0 (dialog);
-#line 157 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 156 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 1847 "Branch.c"
+#line 1856 "Branch.c"
 }
 
 
@@ -1855,25 +1864,25 @@ static gboolean tags_header_real_internal_drop_received_arbitrary (SidebarIntern
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 159 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_HEADER, TagsHeader);
-#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 159 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (data != NULL, FALSE);
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = data;
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = gtk_selection_data_get_data_type (_tmp0_);
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp2_ = gdk_atom_name (_tmp1_);
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp3_ = _tmp2_;
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp4_ = g_strcmp0 (_tmp3_, LIBRARY_WINDOW_TAG_PATH_MIME_TYPE) == 0;
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_free0 (_tmp3_);
-#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 160 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp4_) {
-#line 1877 "Branch.c"
+#line 1886 "Branch.c"
 		gchar* old_tag_path = NULL;
 		GtkSelectionData* _tmp5_ = NULL;
 		guchar* _tmp6_ = NULL;
@@ -1894,91 +1903,91 @@ static gboolean tags_header_real_internal_drop_received_arbitrary (SidebarIntern
 		Tag* _tmp21_ = NULL;
 		ReparentTagCommand* _tmp22_ = NULL;
 		ReparentTagCommand* _tmp23_ = NULL;
-#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp5_ = data;
-#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp6_ = gtk_selection_data_get_data (_tmp5_);
-#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp7_ = g_strdup ((const gchar*) _tmp6_);
-#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 161 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		old_tag_path = _tmp7_;
-#line 163 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp8_ = tag_global;
-#line 163 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp9_ = old_tag_path;
-#line 163 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp10_ = tag_source_collection_exists (_tmp8_, _tmp9_, FALSE);
-#line 163 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 162 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_vala_assert (_tmp10_, "Tag.global.exists(old_tag_path)");
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp11_ = old_tag_path;
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp12_ = hierarchical_tag_utilities_enumerate_path_components (_tmp11_);
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp13_ = _tmp12_;
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp14_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp15_ = _tmp14_;
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp16_ = _tmp15_ < 2;
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_tmp13_);
-#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 165 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (_tmp16_) {
-#line 167 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			result = TRUE;
-#line 167 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (old_tag_path);
-#line 167 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 166 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			return result;
-#line 1936 "Branch.c"
+#line 1945 "Branch.c"
 		}
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp17_ = app_window_get_command_manager ();
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp18_ = _tmp17_;
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp19_ = old_tag_path;
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp20_ = tag_for_path (_tmp19_);
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp21_ = _tmp20_;
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp22_ = reparent_tag_command_new (_tmp21_, "/");
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp23_ = _tmp22_;
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		command_manager_execute (_tmp18_, G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_COMMAND, Command));
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_tmp23_);
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_tmp21_);
-#line 169 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 168 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_command_manager_unref0 (_tmp18_);
-#line 172 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		result = TRUE;
-#line 172 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_free0 (old_tag_path);
-#line 172 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 171 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		return result;
-#line 1966 "Branch.c"
+#line 1975 "Branch.c"
 	}
-#line 175 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 174 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = FALSE;
-#line 175 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 174 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 1972 "Branch.c"
+#line 1981 "Branch.c"
 }
 
 
 static void tags_header_real_prepare_selection_data (SidebarInternalDragSourceEntry* base, GtkSelectionData* data) {
 	TagsHeader * self;
-#line 178 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 177 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_HEADER, TagsHeader);
-#line 178 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 177 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_if_fail (data != NULL);
-#line 1982 "Branch.c"
+#line 1991 "Branch.c"
 }
 
 
@@ -1987,17 +1996,17 @@ static GtkMenu* tags_header_real_get_sidebar_context_menu (SidebarContextable* b
 	GtkMenu* result = NULL;
 	GtkMenu* _tmp0_ = NULL;
 	GtkMenu* _tmp1_ = NULL;
-#line 182 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 181 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_HEADER, TagsHeader);
-#line 183 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 182 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->context_menu;
-#line 183 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 182 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 183 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 182 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = _tmp1_;
-#line 183 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 182 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2001 "Branch.c"
+#line 2010 "Branch.c"
 }
 
 
@@ -2008,7 +2017,7 @@ static void tags_header_class_init (TagsHeaderClass * klass) {
 	g_type_class_add_private (klass, sizeof (TagsHeaderPrivate));
 #line 125 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = tags_header_finalize;
-#line 2012 "Branch.c"
+#line 2021 "Branch.c"
 }
 
 
@@ -2019,7 +2028,7 @@ static void tags_header_sidebar_internal_drop_target_entry_interface_init (Sideb
 	iface->internal_drop_received = (gboolean (*)(SidebarInternalDropTargetEntry*, GeeList*)) tags_header_real_internal_drop_received;
 #line 125 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	iface->internal_drop_received_arbitrary = (gboolean (*)(SidebarInternalDropTargetEntry*, GtkSelectionData*)) tags_header_real_internal_drop_received_arbitrary;
-#line 2023 "Branch.c"
+#line 2032 "Branch.c"
 }
 
 
@@ -2028,7 +2037,7 @@ static void tags_header_sidebar_internal_drag_source_entry_interface_init (Sideb
 	tags_header_sidebar_internal_drag_source_entry_parent_iface = g_type_interface_peek_parent (iface);
 #line 125 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	iface->prepare_selection_data = (void (*)(SidebarInternalDragSourceEntry*, GtkSelectionData*)) tags_header_real_prepare_selection_data;
-#line 2032 "Branch.c"
+#line 2041 "Branch.c"
 }
 
 
@@ -2037,7 +2046,7 @@ static void tags_header_sidebar_contextable_interface_init (SidebarContextableIf
 	tags_header_sidebar_contextable_parent_iface = g_type_interface_peek_parent (iface);
 #line 125 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	iface->get_sidebar_context_menu = (GtkMenu* (*)(SidebarContextable*, GdkEventButton*)) tags_header_real_get_sidebar_context_menu;
-#line 2041 "Branch.c"
+#line 2050 "Branch.c"
 }
 
 
@@ -2046,7 +2055,7 @@ static void tags_header_instance_init (TagsHeader * self) {
 	self->priv = TAGS_HEADER_GET_PRIVATE (self);
 #line 128 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self->priv->context_menu = NULL;
-#line 2050 "Branch.c"
+#line 2059 "Branch.c"
 }
 
 
@@ -2060,7 +2069,7 @@ static void tags_header_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->context_menu);
 #line 125 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (tags_header_parent_class)->finalize (obj);
-#line 2064 "Branch.c"
+#line 2073 "Branch.c"
 }
 
 
@@ -2086,28 +2095,28 @@ TagsSidebarEntry* tags_sidebar_entry_construct (GType object_type, Tag* tag) {
 	TagsSidebarEntry * self = NULL;
 	Tag* _tmp0_ = NULL;
 	Tag* _tmp1_ = NULL;
-#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 193 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (IS_TAG (tag), NULL);
-#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 193 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = (TagsSidebarEntry*) sidebar_simple_page_entry_construct (object_type);
-#line 195 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp0_ = tag;
-#line 195 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 195 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_g_object_unref0 (self->priv->tag);
-#line 195 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	self->priv->tag = _tmp1_;
 #line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp0_ = tag;
+#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp1_ = _g_object_ref0 (_tmp0_);
+#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_g_object_unref0 (self->priv->tag);
+#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	self->priv->tag = _tmp1_;
+#line 193 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return self;
-#line 2104 "Branch.c"
+#line 2113 "Branch.c"
 }
 
 
 TagsSidebarEntry* tags_sidebar_entry_new (Tag* tag) {
-#line 194 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 193 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return tags_sidebar_entry_construct (TAGS_TYPE_SIDEBAR_ENTRY, tag);
-#line 2111 "Branch.c"
+#line 2120 "Branch.c"
 }
 
 
@@ -2123,17 +2132,17 @@ Tag* tags_sidebar_entry_for_tag (TagsSidebarEntry* self) {
 	Tag* result = NULL;
 	Tag* _tmp0_ = NULL;
 	Tag* _tmp1_ = NULL;
-#line 204 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 203 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (TAGS_IS_SIDEBAR_ENTRY (self), NULL);
-#line 205 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 204 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->tag;
-#line 205 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 204 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 205 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 204 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = _tmp1_;
-#line 205 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 204 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2137 "Branch.c"
+#line 2146 "Branch.c"
 }
 
 
@@ -2142,17 +2151,17 @@ static gchar* tags_sidebar_entry_real_get_sidebar_name (SidebarSimplePageEntry* 
 	gchar* result = NULL;
 	Tag* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 208 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 207 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 209 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 208 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->tag;
-#line 209 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 208 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = tag_get_user_visible_name (_tmp0_);
-#line 209 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 208 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = _tmp1_;
-#line 209 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 208 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2156 "Branch.c"
+#line 2165 "Branch.c"
 }
 
 
@@ -2161,17 +2170,17 @@ static gchar* tags_sidebar_entry_real_get_sidebar_icon (SidebarSimplePageEntry* 
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
-#line 212 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 211 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 213 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 212 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->single_tag_icon;
-#line 213 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 212 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 213 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 212 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = _tmp1_;
-#line 213 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 212 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2175 "Branch.c"
+#line 2184 "Branch.c"
 }
 
 
@@ -2180,32 +2189,32 @@ static Page* tags_sidebar_entry_real_create_page (SidebarSimplePageEntry* base) 
 	Page* result = NULL;
 	Tag* _tmp0_ = NULL;
 	TagPage* _tmp1_ = NULL;
-#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 215 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 217 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->tag;
-#line 217 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = tag_page_new (_tmp0_);
-#line 217 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_object_ref_sink (_tmp1_);
-#line 217 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, TYPE_PAGE, Page);
-#line 217 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 216 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2196 "Branch.c"
+#line 2205 "Branch.c"
 }
 
 
 static gboolean tags_sidebar_entry_real_is_user_renameable (SidebarRenameableEntry* base) {
 	TagsSidebarEntry * self;
 	gboolean result = FALSE;
-#line 220 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 219 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 221 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 220 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = TRUE;
-#line 221 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 220 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2209 "Branch.c"
+#line 2218 "Branch.c"
 }
 
 
@@ -2218,7 +2227,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 	g_return_val_if_fail (old != NULL, NULL);
 #line 1380 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (replacement != NULL, NULL);
-#line 2222 "Branch.c"
+#line 2231 "Branch.c"
 	{
 		GRegex* regex = NULL;
 		const gchar* _tmp0_ = NULL;
@@ -2249,8 +2258,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 2253 "Branch.c"
-				goto __catch54_g_regex_error;
+#line 2262 "Branch.c"
+				goto __catch55_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2258,7 +2267,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 2262 "Branch.c"
+#line 2271 "Branch.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp6_ = regex;
@@ -2274,8 +2283,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
-#line 2278 "Branch.c"
-				goto __catch54_g_regex_error;
+#line 2287 "Branch.c"
+				goto __catch55_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -2285,7 +2294,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 			g_clear_error (&_inner_error_);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			return NULL;
-#line 2289 "Branch.c"
+#line 2298 "Branch.c"
 		}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp9_ = _tmp5_;
@@ -2299,10 +2308,10 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_regex_unref0 (regex);
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 2303 "Branch.c"
+#line 2312 "Branch.c"
 	}
-	goto __finally54;
-	__catch54_g_regex_error:
+	goto __finally55;
+	__catch55_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2313,9 +2322,9 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_assert_not_reached ();
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_g_error_free0 (e);
-#line 2317 "Branch.c"
+#line 2326 "Branch.c"
 	}
-	__finally54:
+	__finally55:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -2324,7 +2333,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		g_clear_error (&_inner_error_);
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return NULL;
-#line 2328 "Branch.c"
+#line 2337 "Branch.c"
 	}
 }
 
@@ -2349,85 +2358,85 @@ static void tags_sidebar_entry_real_rename (SidebarRenameableEntry* base, const 
 	const gchar* _tmp14_ = NULL;
 	RenameTagCommand* _tmp15_ = NULL;
 	RenameTagCommand* _tmp16_ = NULL;
-#line 224 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 223 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 224 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 223 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_if_fail (new_name != NULL);
-#line 225 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp0_ = new_name;
-#line 225 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp1_ = tag_prep_tag_name (_tmp0_);
-#line 225 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	prepped = _tmp1_;
-#line 226 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp2_ = prepped;
-#line 226 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	if (_tmp2_ == NULL) {
-#line 227 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_g_free0 (prepped);
-#line 227 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		return;
-#line 2371 "Branch.c"
-	}
-#line 229 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp3_ = prepped;
-#line 229 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp4_ = string_replace (_tmp3_, "/", "");
-#line 229 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_g_free0 (prepped);
-#line 229 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	prepped = _tmp4_;
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp5_ = prepped;
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp6_ = self->priv->tag;
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp7_ = tag_get_user_visible_name (_tmp6_);
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp8_ = _tmp7_;
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp9_ = g_strcmp0 (_tmp5_, _tmp8_) == 0;
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_g_free0 (_tmp8_);
-#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	if (_tmp9_) {
-#line 232 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_g_free0 (prepped);
-#line 232 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		return;
-#line 2399 "Branch.c"
-	}
-#line 234 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp10_ = prepped;
-#line 234 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	if (g_strcmp0 (_tmp10_, "") == 0) {
-#line 235 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		_g_free0 (prepped);
-#line 235 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-		return;
-#line 2409 "Branch.c"
-	}
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp11_ = app_window_get_command_manager ();
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp12_ = _tmp11_;
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp13_ = self->priv->tag;
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp14_ = prepped;
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp15_ = rename_tag_command_new (_tmp13_, _tmp14_);
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_tmp16_ = _tmp15_;
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	command_manager_execute (_tmp12_, G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_COMMAND, Command));
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_g_object_unref0 (_tmp16_);
-#line 237 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	_command_manager_unref0 (_tmp12_);
 #line 224 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp0_ = new_name;
+#line 224 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp1_ = tag_prep_tag_name (_tmp0_);
+#line 224 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	prepped = _tmp1_;
+#line 225 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp2_ = prepped;
+#line 225 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	if (_tmp2_ == NULL) {
+#line 226 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_g_free0 (prepped);
+#line 226 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		return;
+#line 2380 "Branch.c"
+	}
+#line 228 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp3_ = prepped;
+#line 228 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp4_ = string_replace (_tmp3_, "/", "");
+#line 228 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_free0 (prepped);
-#line 2431 "Branch.c"
+#line 228 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	prepped = _tmp4_;
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp5_ = prepped;
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp6_ = self->priv->tag;
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp7_ = tag_get_user_visible_name (_tmp6_);
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp8_ = _tmp7_;
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp9_ = g_strcmp0 (_tmp5_, _tmp8_) == 0;
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_g_free0 (_tmp8_);
+#line 230 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	if (_tmp9_) {
+#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_g_free0 (prepped);
+#line 231 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		return;
+#line 2408 "Branch.c"
+	}
+#line 233 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp10_ = prepped;
+#line 233 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	if (g_strcmp0 (_tmp10_, "") == 0) {
+#line 234 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		_g_free0 (prepped);
+#line 234 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+		return;
+#line 2418 "Branch.c"
+	}
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp11_ = app_window_get_command_manager ();
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp12_ = _tmp11_;
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp13_ = self->priv->tag;
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp14_ = prepped;
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp15_ = rename_tag_command_new (_tmp13_, _tmp14_);
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_tmp16_ = _tmp15_;
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	command_manager_execute (_tmp12_, G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, TYPE_COMMAND, Command));
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_g_object_unref0 (_tmp16_);
+#line 236 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_command_manager_unref0 (_tmp12_);
+#line 223 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	_g_free0 (prepped);
+#line 2440 "Branch.c"
 }
 
 
@@ -2435,37 +2444,37 @@ static void tags_sidebar_entry_real_destroy_source (SidebarDestroyableEntry* bas
 	TagsSidebarEntry * self;
 	Tag* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 240 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 239 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 240 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = self->priv->tag;
-#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 240 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = dialogs_confirm_delete_tag (_tmp0_);
-#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 240 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp1_) {
-#line 2447 "Branch.c"
+#line 2456 "Branch.c"
 		CommandManager* _tmp2_ = NULL;
 		CommandManager* _tmp3_ = NULL;
 		Tag* _tmp4_ = NULL;
 		DeleteTagCommand* _tmp5_ = NULL;
 		DeleteTagCommand* _tmp6_ = NULL;
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp2_ = app_window_get_command_manager ();
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp3_ = _tmp2_;
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp4_ = self->priv->tag;
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp5_ = delete_tag_command_new (_tmp4_);
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp6_ = _tmp5_;
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		command_manager_execute (_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, TYPE_COMMAND, Command));
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_tmp6_);
-#line 242 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 241 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_command_manager_unref0 (_tmp3_);
-#line 2469 "Branch.c"
+#line 2478 "Branch.c"
 	}
 }
 
@@ -2482,39 +2491,39 @@ static gboolean tags_sidebar_entry_real_internal_drop_received (SidebarInternalD
 	gint _tmp6_ = 0;
 	TagUntagPhotosCommand* _tmp7_ = NULL;
 	TagUntagPhotosCommand* _tmp8_ = NULL;
-#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 244 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 244 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (GEE_IS_LIST (media), FALSE);
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = app_window_get_command_manager ();
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = _tmp0_;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp2_ = self->priv->tag;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp3_ = media;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp4_ = media;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp5_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp6_ = _tmp5_;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp7_ = tag_untag_photos_command_new (_tmp2_, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection), _tmp6_, TRUE);
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp8_ = _tmp7_;
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	command_manager_execute (_tmp1_, G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, TYPE_COMMAND, Command));
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_object_unref0 (_tmp8_);
-#line 246 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 245 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_command_manager_unref0 (_tmp1_);
-#line 249 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 248 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = TRUE;
-#line 249 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 248 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2518 "Branch.c"
+#line 2527 "Branch.c"
 }
 
 
@@ -2526,25 +2535,25 @@ static gboolean tags_sidebar_entry_real_internal_drop_received_arbitrary (Sideba
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 251 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 251 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_val_if_fail (data != NULL, FALSE);
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = data;
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = gtk_selection_data_get_data_type (_tmp0_);
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp2_ = gdk_atom_name (_tmp1_);
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp3_ = _tmp2_;
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp4_ = g_strcmp0 (_tmp3_, LIBRARY_WINDOW_TAG_PATH_MIME_TYPE) == 0;
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_free0 (_tmp3_);
-#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 252 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	if (_tmp4_) {
-#line 2548 "Branch.c"
+#line 2557 "Branch.c"
 		gchar* old_tag_path = NULL;
 		GtkSelectionData* _tmp5_ = NULL;
 		guchar* _tmp6_ = NULL;
@@ -2573,35 +2582,35 @@ static gboolean tags_sidebar_entry_real_internal_drop_received_arbitrary (Sideba
 		gchar* _tmp49_ = NULL;
 		ReparentTagCommand* _tmp50_ = NULL;
 		ReparentTagCommand* _tmp51_ = NULL;
-#line 254 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp5_ = data;
-#line 254 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp6_ = gtk_selection_data_get_data (_tmp5_);
-#line 254 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp7_ = g_strdup ((const gchar*) _tmp6_);
-#line 254 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 253 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		old_tag_path = _tmp7_;
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp8_ = old_tag_path;
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp9_ = self->priv->tag;
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp10_ = tag_get_path (_tmp9_);
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp11_ = _tmp10_;
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp12_ = g_strcmp0 (_tmp8_, _tmp11_) == 0;
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_free0 (_tmp11_);
-#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 256 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (_tmp12_) {
-#line 258 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			result = TRUE;
-#line 258 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (old_tag_path);
-#line 258 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 257 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			return result;
-#line 2605 "Branch.c"
+#line 2614 "Branch.c"
 		}
 		{
 			GeeList* _parent_path_list = NULL;
@@ -2615,33 +2624,33 @@ static gboolean tags_sidebar_entry_real_internal_drop_received_arbitrary (Sideba
 			gint _tmp19_ = 0;
 			gint _tmp20_ = 0;
 			gint _parent_path_index = 0;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp13_ = self->priv->tag;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp14_ = tag_get_path (_tmp13_);
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp15_ = _tmp14_;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp16_ = hierarchical_tag_utilities_enumerate_parent_paths (_tmp15_);
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp17_ = _tmp16_;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (_tmp15_);
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_parent_path_list = _tmp17_;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp18_ = _parent_path_list;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp19_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp20_ = _tmp19_;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_parent_path_size = _tmp20_;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_parent_path_index = -1;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			while (TRUE) {
-#line 2645 "Branch.c"
+#line 2654 "Branch.c"
 				gint _tmp21_ = 0;
 				gint _tmp22_ = 0;
 				gint _tmp23_ = 0;
@@ -2651,177 +2660,177 @@ static gboolean tags_sidebar_entry_real_internal_drop_received_arbitrary (Sideba
 				gpointer _tmp26_ = NULL;
 				const gchar* _tmp27_ = NULL;
 				const gchar* _tmp28_ = NULL;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp21_ = _parent_path_index;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_parent_path_index = _tmp21_ + 1;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp22_ = _parent_path_index;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp23_ = _parent_path_size;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				if (!(_tmp22_ < _tmp23_)) {
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					break;
-#line 2667 "Branch.c"
+#line 2676 "Branch.c"
 				}
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp24_ = _parent_path_list;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp25_ = _parent_path_index;
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp26_ = gee_list_get (_tmp24_, _tmp25_);
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				parent_path = (gchar*) _tmp26_;
-#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp27_ = parent_path;
-#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_tmp28_ = old_tag_path;
-#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				if (g_strcmp0 (_tmp27_, _tmp28_) == 0) {
-#line 263 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					result = TRUE;
-#line 263 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_g_free0 (parent_path);
-#line 263 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_g_object_unref0 (_parent_path_list);
-#line 263 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					_g_free0 (old_tag_path);
-#line 263 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 262 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 					return result;
-#line 2693 "Branch.c"
+#line 2702 "Branch.c"
 				}
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 				_g_free0 (parent_path);
-#line 2697 "Branch.c"
+#line 2706 "Branch.c"
 			}
-#line 261 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 260 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (_parent_path_list);
-#line 2701 "Branch.c"
+#line 2710 "Branch.c"
 		}
-#line 266 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 265 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp29_ = tag_global;
-#line 266 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 265 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp30_ = old_tag_path;
-#line 266 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 265 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp31_ = tag_source_collection_exists (_tmp29_, _tmp30_, FALSE);
-#line 266 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 265 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_vala_assert (_tmp31_, "Tag.global.exists(old_tag_path)");
-#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 268 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp32_ = old_tag_path;
-#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 268 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp33_ = tag_for_path (_tmp32_);
-#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 268 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		old_tag = _tmp33_;
-#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp34_ = old_tag;
-#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp35_ = tag_get_hierarchical_parent (_tmp34_);
-#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 269 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		old_tag_parent = _tmp35_;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp37_ = old_tag_parent;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (_tmp37_ != NULL) {
-#line 2727 "Branch.c"
+#line 2736 "Branch.c"
 			Tag* _tmp38_ = NULL;
 			gchar* _tmp39_ = NULL;
 			gchar* _tmp40_ = NULL;
 			Tag* _tmp41_ = NULL;
 			gchar* _tmp42_ = NULL;
 			gchar* _tmp43_ = NULL;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp38_ = old_tag_parent;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp39_ = tag_get_path (_tmp38_);
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp40_ = _tmp39_;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp41_ = self->priv->tag;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp42_ = tag_get_path (_tmp41_);
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp43_ = _tmp42_;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp36_ = g_strcmp0 (_tmp40_, _tmp43_) == 0;
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (_tmp43_);
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (_tmp40_);
-#line 2752 "Branch.c"
+#line 2761 "Branch.c"
 		} else {
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_tmp36_ = FALSE;
-#line 2756 "Branch.c"
+#line 2765 "Branch.c"
 		}
-#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 270 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		if (_tmp36_) {
-#line 272 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			result = TRUE;
-#line 272 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (old_tag_parent);
-#line 272 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_object_unref0 (old_tag);
-#line 272 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			_g_free0 (old_tag_path);
-#line 272 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 271 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 			return result;
-#line 2770 "Branch.c"
+#line 2779 "Branch.c"
 		}
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp44_ = app_window_get_command_manager ();
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp45_ = _tmp44_;
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp46_ = old_tag;
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp47_ = self->priv->tag;
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp48_ = tag_get_path (_tmp47_);
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp49_ = _tmp48_;
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp50_ = reparent_tag_command_new (_tmp46_, _tmp49_);
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_tmp51_ = _tmp50_;
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		command_manager_execute (_tmp45_, G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, TYPE_COMMAND, Command));
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (_tmp51_);
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_free0 (_tmp49_);
-#line 274 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 273 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_command_manager_unref0 (_tmp45_);
-#line 277 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 276 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		result = TRUE;
-#line 277 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 276 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (old_tag_parent);
-#line 277 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 276 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_object_unref0 (old_tag);
-#line 277 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 276 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		_g_free0 (old_tag_path);
-#line 277 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 276 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 		return result;
-#line 2806 "Branch.c"
+#line 2815 "Branch.c"
 	}
-#line 280 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 279 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = FALSE;
-#line 280 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 279 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2812 "Branch.c"
+#line 2821 "Branch.c"
 }
 
 
 static gboolean tags_sidebar_entry_real_expand_on_select (SidebarExpandableEntry* base) {
 	TagsSidebarEntry * self;
 	gboolean result = FALSE;
-#line 283 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 282 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 284 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 283 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	result = FALSE;
-#line 284 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 283 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	return result;
-#line 2825 "Branch.c"
+#line 2834 "Branch.c"
 }
 
 
@@ -2865,13 +2874,13 @@ static guint8* string_get_data (const gchar* self, int* result_length1) {
 	if (result_length1) {
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		*result_length1 = _tmp4__length1;
-#line 2869 "Branch.c"
+#line 2878 "Branch.c"
 	}
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	result = _tmp4_;
 #line 1401 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2875 "Branch.c"
+#line 2884 "Branch.c"
 }
 
 
@@ -2886,123 +2895,123 @@ static void tags_sidebar_entry_real_prepare_selection_data (SidebarInternalDragS
 	gint _tmp5__length1 = 0;
 	guint8* _tmp6_ = NULL;
 	gint _tmp6__length1 = 0;
-#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 286 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 286 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_return_if_fail (data != NULL);
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = data;
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp1_ = gdk_atom_intern_static_string (LIBRARY_WINDOW_TAG_PATH_MIME_TYPE);
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp2_ = self->priv->tag;
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp3_ = tag_get_path (_tmp2_);
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp4_ = _tmp3_;
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp5_ = string_get_data (_tmp4_, &_tmp5__length1);
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp6_ = _tmp5_;
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp6__length1 = _tmp5__length1;
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	gtk_selection_data_set (_tmp0_, _tmp1_, 0, _tmp6_, _tmp6__length1);
-#line 288 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 287 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_free0 (_tmp4_);
-#line 2914 "Branch.c"
+#line 2923 "Branch.c"
 }
 
 
 static void tags_sidebar_entry_class_init (TagsSidebarEntryClass * klass) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	tags_sidebar_entry_parent_class = g_type_class_peek_parent (klass);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	g_type_class_add_private (klass, sizeof (TagsSidebarEntryPrivate));
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_name = tags_sidebar_entry_real_get_sidebar_name;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->get_sidebar_icon = tags_sidebar_entry_real_get_sidebar_icon;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	((SidebarSimplePageEntryClass *) klass)->create_page = tags_sidebar_entry_real_create_page;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = tags_sidebar_entry_finalize;
-#line 2931 "Branch.c"
+#line 2940 "Branch.c"
 }
 
 
 static void tags_sidebar_entry_sidebar_renameable_entry_interface_init (SidebarRenameableEntryIface * iface) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	tags_sidebar_entry_sidebar_renameable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	iface->is_user_renameable = (gboolean (*)(SidebarRenameableEntry*)) tags_sidebar_entry_real_is_user_renameable;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	iface->rename = (void (*)(SidebarRenameableEntry*, const gchar*)) tags_sidebar_entry_real_rename;
-#line 2942 "Branch.c"
-}
-
-
-static void tags_sidebar_entry_sidebar_destroyable_entry_interface_init (SidebarDestroyableEntryIface * iface) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	tags_sidebar_entry_sidebar_destroyable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	iface->destroy_source = (void (*)(SidebarDestroyableEntry*)) tags_sidebar_entry_real_destroy_source;
 #line 2951 "Branch.c"
 }
 
 
-static void tags_sidebar_entry_sidebar_internal_drop_target_entry_interface_init (SidebarInternalDropTargetEntryIface * iface) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	tags_sidebar_entry_sidebar_internal_drop_target_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	iface->internal_drop_received = (gboolean (*)(SidebarInternalDropTargetEntry*, GeeList*)) tags_sidebar_entry_real_internal_drop_received;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	iface->internal_drop_received_arbitrary = (gboolean (*)(SidebarInternalDropTargetEntry*, GtkSelectionData*)) tags_sidebar_entry_real_internal_drop_received_arbitrary;
-#line 2962 "Branch.c"
+static void tags_sidebar_entry_sidebar_destroyable_entry_interface_init (SidebarDestroyableEntryIface * iface) {
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	tags_sidebar_entry_sidebar_destroyable_entry_parent_iface = g_type_interface_peek_parent (iface);
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	iface->destroy_source = (void (*)(SidebarDestroyableEntry*)) tags_sidebar_entry_real_destroy_source;
+#line 2960 "Branch.c"
 }
 
 
-static void tags_sidebar_entry_sidebar_expandable_entry_interface_init (SidebarExpandableEntryIface * iface) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	tags_sidebar_entry_sidebar_expandable_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	iface->expand_on_select = (gboolean (*)(SidebarExpandableEntry*)) tags_sidebar_entry_real_expand_on_select;
+static void tags_sidebar_entry_sidebar_internal_drop_target_entry_interface_init (SidebarInternalDropTargetEntryIface * iface) {
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	tags_sidebar_entry_sidebar_internal_drop_target_entry_parent_iface = g_type_interface_peek_parent (iface);
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	iface->internal_drop_received = (gboolean (*)(SidebarInternalDropTargetEntry*, GeeList*)) tags_sidebar_entry_real_internal_drop_received;
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	iface->internal_drop_received_arbitrary = (gboolean (*)(SidebarInternalDropTargetEntry*, GtkSelectionData*)) tags_sidebar_entry_real_internal_drop_received_arbitrary;
 #line 2971 "Branch.c"
 }
 
 
-static void tags_sidebar_entry_sidebar_internal_drag_source_entry_interface_init (SidebarInternalDragSourceEntryIface * iface) {
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	tags_sidebar_entry_sidebar_internal_drag_source_entry_parent_iface = g_type_interface_peek_parent (iface);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
-	iface->prepare_selection_data = (void (*)(SidebarInternalDragSourceEntry*, GtkSelectionData*)) tags_sidebar_entry_real_prepare_selection_data;
+static void tags_sidebar_entry_sidebar_expandable_entry_interface_init (SidebarExpandableEntryIface * iface) {
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	tags_sidebar_entry_sidebar_expandable_entry_parent_iface = g_type_interface_peek_parent (iface);
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	iface->expand_on_select = (gboolean (*)(SidebarExpandableEntry*)) tags_sidebar_entry_real_expand_on_select;
 #line 2980 "Branch.c"
+}
+
+
+static void tags_sidebar_entry_sidebar_internal_drag_source_entry_interface_init (SidebarInternalDragSourceEntryIface * iface) {
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	tags_sidebar_entry_sidebar_internal_drag_source_entry_parent_iface = g_type_interface_peek_parent (iface);
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+	iface->prepare_selection_data = (void (*)(SidebarInternalDragSourceEntry*, GtkSelectionData*)) tags_sidebar_entry_real_prepare_selection_data;
+#line 2989 "Branch.c"
 }
 
 
 static void tags_sidebar_entry_instance_init (TagsSidebarEntry * self) {
 	gchar* _tmp0_ = NULL;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self->priv = TAGS_SIDEBAR_ENTRY_GET_PRIVATE (self);
-#line 190 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 189 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_tmp0_ = g_strdup (RESOURCES_ICON_ONE_TAG);
-#line 190 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 189 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self->priv->single_tag_icon = _tmp0_;
-#line 2992 "Branch.c"
+#line 3001 "Branch.c"
 }
 
 
 static void tags_sidebar_entry_finalize (GObject* obj) {
 	TagsSidebarEntry * self;
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TAGS_TYPE_SIDEBAR_ENTRY, TagsSidebarEntry);
-#line 190 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 189 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_free0 (self->priv->single_tag_icon);
-#line 192 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 191 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	_g_object_unref0 (self->priv->tag);
-#line 187 "/home/jens/Source/shotwell/src/tags/Branch.vala"
+#line 186 "/home/jens/Source/shotwell/src/tags/Branch.vala"
 	G_OBJECT_CLASS (tags_sidebar_entry_parent_class)->finalize (obj);
-#line 3006 "Branch.c"
+#line 3015 "Branch.c"
 }
 
 

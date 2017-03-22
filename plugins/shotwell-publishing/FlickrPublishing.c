@@ -16,12 +16,13 @@
 #include <gio/gio.h>
 #include "shotwell-plugin-common.h"
 #include <glib/gi18n-lib.h>
+#include "shotwell-authenticator.h"
 #include <float.h>
 #include <math.h>
-#include <libsoup/soup.h>
-#include <gtk/gtk.h>
 #include <libxml/tree.h>
+#include <gtk/gtk.h>
 #include <gee.h>
+#include <libsoup/soup.h>
 #include <gexiv2/gexiv2.h>
 #include <gobject/gvaluecollector.h>
 
@@ -98,16 +99,8 @@ typedef struct _PublishingFlickrPublishingOptionsPaneClass PublishingFlickrPubli
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _publishing_rest_support_session_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_session_unref (var), NULL)))
 #define _publishing_flickr_publishing_parameters_unref0(var) ((var == NULL) ? NULL : (var = (publishing_flickr_publishing_parameters_unref (var), NULL)))
-
-#define PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE (publishing_flickr_pin_entry_pane_get_type ())
-#define PUBLISHING_FLICKR_PIN_ENTRY_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane))
-#define PUBLISHING_FLICKR_PIN_ENTRY_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPaneClass))
-#define PUBLISHING_FLICKR_IS_PIN_ENTRY_PANE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE))
-#define PUBLISHING_FLICKR_IS_PIN_ENTRY_PANE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE))
-#define PUBLISHING_FLICKR_PIN_ENTRY_PANE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPaneClass))
-
-typedef struct _PublishingFlickrPinEntryPane PublishingFlickrPinEntryPane;
-typedef struct _PublishingFlickrPinEntryPaneClass PublishingFlickrPinEntryPaneClass;
+#define _g_variant_unref0(var) ((var == NULL) ? NULL : (var = (g_variant_unref (var), NULL)))
+#define _g_hash_table_unref0(var) ((var == NULL) ? NULL : (var = (g_hash_table_unref (var), NULL)))
 
 #define PUBLISHING_FLICKR_TYPE_TRANSACTION (publishing_flickr_transaction_get_type ())
 #define PUBLISHING_FLICKR_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FLICKR_TYPE_TRANSACTION, PublishingFlickrTransaction))
@@ -119,29 +112,6 @@ typedef struct _PublishingFlickrPinEntryPaneClass PublishingFlickrPinEntryPaneCl
 typedef struct _PublishingFlickrTransaction PublishingFlickrTransaction;
 typedef struct _PublishingFlickrTransactionClass PublishingFlickrTransactionClass;
 
-#define PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION (publishing_flickr_authentication_request_transaction_get_type ())
-#define PUBLISHING_FLICKR_AUTHENTICATION_REQUEST_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION, PublishingFlickrAuthenticationRequestTransaction))
-#define PUBLISHING_FLICKR_AUTHENTICATION_REQUEST_TRANSACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION, PublishingFlickrAuthenticationRequestTransactionClass))
-#define PUBLISHING_FLICKR_IS_AUTHENTICATION_REQUEST_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION))
-#define PUBLISHING_FLICKR_IS_AUTHENTICATION_REQUEST_TRANSACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION))
-#define PUBLISHING_FLICKR_AUTHENTICATION_REQUEST_TRANSACTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION, PublishingFlickrAuthenticationRequestTransactionClass))
-
-typedef struct _PublishingFlickrAuthenticationRequestTransaction PublishingFlickrAuthenticationRequestTransaction;
-typedef struct _PublishingFlickrAuthenticationRequestTransactionClass PublishingFlickrAuthenticationRequestTransactionClass;
-#define _publishing_rest_support_transaction_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_transaction_unref (var), NULL)))
-#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
-#define _g_hash_table_unref0(var) ((var == NULL) ? NULL : (var = (g_hash_table_unref (var), NULL)))
-
-#define PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION (publishing_flickr_access_token_fetch_transaction_get_type ())
-#define PUBLISHING_FLICKR_ACCESS_TOKEN_FETCH_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION, PublishingFlickrAccessTokenFetchTransaction))
-#define PUBLISHING_FLICKR_ACCESS_TOKEN_FETCH_TRANSACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION, PublishingFlickrAccessTokenFetchTransactionClass))
-#define PUBLISHING_FLICKR_IS_ACCESS_TOKEN_FETCH_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION))
-#define PUBLISHING_FLICKR_IS_ACCESS_TOKEN_FETCH_TRANSACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION))
-#define PUBLISHING_FLICKR_ACCESS_TOKEN_FETCH_TRANSACTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION, PublishingFlickrAccessTokenFetchTransactionClass))
-
-typedef struct _PublishingFlickrAccessTokenFetchTransaction PublishingFlickrAccessTokenFetchTransaction;
-typedef struct _PublishingFlickrAccessTokenFetchTransactionClass PublishingFlickrAccessTokenFetchTransactionClass;
-
 #define PUBLISHING_FLICKR_TYPE_ACCOUNT_INFO_FETCH_TRANSACTION (publishing_flickr_account_info_fetch_transaction_get_type ())
 #define PUBLISHING_FLICKR_ACCOUNT_INFO_FETCH_TRANSACTION(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_FLICKR_TYPE_ACCOUNT_INFO_FETCH_TRANSACTION, PublishingFlickrAccountInfoFetchTransaction))
 #define PUBLISHING_FLICKR_ACCOUNT_INFO_FETCH_TRANSACTION_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_FLICKR_TYPE_ACCOUNT_INFO_FETCH_TRANSACTION, PublishingFlickrAccountInfoFetchTransactionClass))
@@ -151,6 +121,8 @@ typedef struct _PublishingFlickrAccessTokenFetchTransactionClass PublishingFlick
 
 typedef struct _PublishingFlickrAccountInfoFetchTransaction PublishingFlickrAccountInfoFetchTransaction;
 typedef struct _PublishingFlickrAccountInfoFetchTransactionClass PublishingFlickrAccountInfoFetchTransactionClass;
+#define _publishing_rest_support_transaction_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_transaction_unref (var), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 #define _publishing_rest_support_xml_document_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_xml_document_unref (var), NULL)))
 #define _g_date_time_unref0(var) ((var == NULL) ? NULL : (var = (g_date_time_unref (var), NULL)))
 
@@ -164,11 +136,7 @@ typedef struct _PublishingFlickrAccountInfoFetchTransactionClass PublishingFlick
 typedef struct _PublishingFlickrUploader PublishingFlickrUploader;
 typedef struct _PublishingFlickrUploaderClass PublishingFlickrUploaderClass;
 #define _publishing_rest_support_batch_uploader_unref0(var) ((var == NULL) ? NULL : (var = (publishing_rest_support_batch_uploader_unref (var), NULL)))
-typedef struct _PublishingFlickrPinEntryPanePrivate PublishingFlickrPinEntryPanePrivate;
-#define _g_slist_free0(var) ((var == NULL) ? NULL : (var = (g_slist_free (var), NULL)))
 typedef struct _PublishingFlickrTransactionPrivate PublishingFlickrTransactionPrivate;
-typedef struct _PublishingFlickrAuthenticationRequestTransactionPrivate PublishingFlickrAuthenticationRequestTransactionPrivate;
-typedef struct _PublishingFlickrAccessTokenFetchTransactionPrivate PublishingFlickrAccessTokenFetchTransactionPrivate;
 typedef struct _PublishingFlickrAccountInfoFetchTransactionPrivate PublishingFlickrAccountInfoFetchTransactionPrivate;
 
 #define PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION (publishing_flickr_upload_transaction_get_type ())
@@ -204,6 +172,7 @@ typedef struct _PublishingFlickrPublishingOptionsPaneVisibilityEntryClass Publis
 
 typedef struct _PublishingFlickrPublishingOptionsPaneSizeEntry PublishingFlickrPublishingOptionsPaneSizeEntry;
 typedef struct _PublishingFlickrPublishingOptionsPaneSizeEntryClass PublishingFlickrPublishingOptionsPaneSizeEntryClass;
+#define _g_slist_free0(var) ((var == NULL) ? NULL : (var = (g_slist_free (var), NULL)))
 typedef struct _PublishingFlickrPublishingOptionsPaneVisibilityEntryPrivate PublishingFlickrPublishingOptionsPaneVisibilityEntryPrivate;
 typedef struct _PublishingFlickrPublishingOptionsPaneSizeEntryPrivate PublishingFlickrPublishingOptionsPaneSizeEntryPrivate;
 #define _publishing_flickr_publishing_options_pane_visibility_entry_unref0(var) ((var == NULL) ? NULL : (var = (publishing_flickr_publishing_options_pane_visibility_entry_unref (var), NULL)))
@@ -287,25 +256,8 @@ struct _PublishingFlickrFlickrPublisherPrivate {
 	gboolean was_started;
 	PublishingFlickrSession* session;
 	PublishingFlickrPublishingOptionsPane* publishing_options_pane;
+	SpitPublishingAuthenticator* authenticator;
 	PublishingFlickrPublishingParameters* parameters;
-};
-
-struct _PublishingFlickrPinEntryPane {
-	GObject parent_instance;
-	PublishingFlickrPinEntryPanePrivate * priv;
-};
-
-struct _PublishingFlickrPinEntryPaneClass {
-	GObjectClass parent_class;
-};
-
-struct _PublishingFlickrPinEntryPanePrivate {
-	GtkBox* pane_widget;
-	GtkButton* continue_button;
-	GtkEntry* pin_entry;
-	GtkLabel* pin_entry_caption;
-	GtkLabel* explanatory_text;
-	GtkBuilder* builder;
 };
 
 struct _PublishingFlickrTransaction {
@@ -315,24 +267,6 @@ struct _PublishingFlickrTransaction {
 
 struct _PublishingFlickrTransactionClass {
 	PublishingRESTSupportTransactionClass parent_class;
-};
-
-struct _PublishingFlickrAuthenticationRequestTransaction {
-	PublishingFlickrTransaction parent_instance;
-	PublishingFlickrAuthenticationRequestTransactionPrivate * priv;
-};
-
-struct _PublishingFlickrAuthenticationRequestTransactionClass {
-	PublishingFlickrTransactionClass parent_class;
-};
-
-struct _PublishingFlickrAccessTokenFetchTransaction {
-	PublishingFlickrTransaction parent_instance;
-	PublishingFlickrAccessTokenFetchTransactionPrivate * priv;
-};
-
-struct _PublishingFlickrAccessTokenFetchTransactionClass {
-	PublishingFlickrTransactionClass parent_class;
 };
 
 struct _PublishingFlickrAccountInfoFetchTransaction {
@@ -371,11 +305,11 @@ struct _PublishingFlickrSessionClass {
 };
 
 struct _PublishingFlickrSessionPrivate {
-	gchar* request_phase_token;
-	gchar* request_phase_token_secret;
 	gchar* access_phase_token;
 	gchar* access_phase_token_secret;
 	gchar* username;
+	gchar* consumer_key;
+	gchar* consumer_secret;
 };
 
 struct _PublishingFlickrPublishingOptionsPane {
@@ -470,11 +404,7 @@ static gpointer publishing_flickr_visibility_specification_parent_class = NULL;
 static gpointer publishing_flickr_publishing_parameters_parent_class = NULL;
 static gpointer publishing_flickr_flickr_publisher_parent_class = NULL;
 static SpitPublishingPublisherIface* publishing_flickr_flickr_publisher_spit_publishing_publisher_parent_iface = NULL;
-static gpointer publishing_flickr_pin_entry_pane_parent_class = NULL;
-static SpitPublishingDialogPaneIface* publishing_flickr_pin_entry_pane_spit_publishing_dialog_pane_parent_iface = NULL;
 static gpointer publishing_flickr_transaction_parent_class = NULL;
-static gpointer publishing_flickr_authentication_request_transaction_parent_class = NULL;
-static gpointer publishing_flickr_access_token_fetch_transaction_parent_class = NULL;
 static gpointer publishing_flickr_account_info_fetch_transaction_parent_class = NULL;
 static gpointer publishing_flickr_upload_transaction_parent_class = NULL;
 static gpointer publishing_flickr_session_parent_class = NULL;
@@ -504,17 +434,7 @@ GType publishing_flickr_flickr_publisher_get_type (void) G_GNUC_CONST;
 static SpitPublishingPublisherMediaType flickr_service_real_get_supported_media (SpitPublishingService* base);
 static void flickr_service_finalize (GObject* obj);
 #define PUBLISHING_FLICKR_SERVICE_NAME "Flickr"
-#define PUBLISHING_FLICKR_SERVICE_WELCOME_MESSAGE _ ("You are not currently logged into Flickr.\n" \
-"\n" \
-"Click Log in to log into Flickr in your Web browser. You will have to " \
-"authorize Shotwell Connect to link to your Flickr account.")
-#define PUBLISHING_FLICKR_RESTART_ERROR_MESSAGE _ ("You have already logged in and out of Flickr during this Shotwell sess" \
-"ion.\n" \
-"To continue publishing to Flickr, quit and restart Shotwell, then try " \
-"publishing again.")
 #define PUBLISHING_FLICKR_ENDPOINT_URL "https://api.flickr.com/services/rest"
-#define PUBLISHING_FLICKR_API_KEY "60dd96d4a2ad04888b09c9e18d82c26f"
-#define PUBLISHING_FLICKR_API_SECRET "d0960565e03547c1"
 #define PUBLISHING_FLICKR_ORIGINAL_SIZE -1
 #define PUBLISHING_FLICKR_EXPIRED_SESSION_ERROR_CODE "98"
 #define PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA "!*'();:@&=+$,/?%#[] \\"
@@ -552,43 +472,15 @@ enum  {
 	PUBLISHING_FLICKR_FLICKR_PUBLISHER_DUMMY_PROPERTY
 };
 static void publishing_flickr_flickr_publisher_on_session_authenticated (PublishingFlickrFlickrPublisher* self);
-static void _publishing_flickr_flickr_publisher_on_session_authenticated_publishing_rest_support_session_authenticated (PublishingRESTSupportSession* _sender, gpointer self);
+static void _publishing_flickr_flickr_publisher_on_session_authenticated_spit_publishing_authenticator_authenticated (SpitPublishingAuthenticator* _sender, gpointer self);
 PublishingFlickrSession* publishing_flickr_session_new (void);
 PublishingFlickrSession* publishing_flickr_session_construct (GType object_type);
-static void publishing_flickr_flickr_publisher_invalidate_persistent_session (PublishingFlickrFlickrPublisher* self);
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_token (PublishingFlickrFlickrPublisher* self, const gchar* token);
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_token_secret (PublishingFlickrFlickrPublisher* self, const gchar* secret);
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_username (PublishingFlickrFlickrPublisher* self, const gchar* username);
-static gboolean publishing_flickr_flickr_publisher_is_persistent_session_valid (PublishingFlickrFlickrPublisher* self);
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_username (PublishingFlickrFlickrPublisher* self);
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_token (PublishingFlickrFlickrPublisher* self);
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_token_secret (PublishingFlickrFlickrPublisher* self);
+SpitPublishingAuthenticator* publishing_flickr_flickr_publisher_get_authenticator (PublishingFlickrFlickrPublisher* self);
 static gboolean publishing_flickr_flickr_publisher_get_persistent_strip_metadata (PublishingFlickrFlickrPublisher* self);
 static void publishing_flickr_flickr_publisher_set_persistent_strip_metadata (PublishingFlickrFlickrPublisher* self, gboolean strip_metadata);
-static void publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked (PublishingFlickrFlickrPublisher* self);
-static void publishing_flickr_flickr_publisher_do_run_authentication_request_transaction (PublishingFlickrFlickrPublisher* self);
-static void publishing_flickr_flickr_publisher_on_auth_request_txn_completed (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn);
-static void _publishing_flickr_flickr_publisher_on_auth_request_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self);
-static void publishing_flickr_flickr_publisher_on_auth_request_txn_error (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn, GError* err);
-static void _publishing_flickr_flickr_publisher_on_auth_request_txn_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self);
-static void publishing_flickr_flickr_publisher_do_parse_token_info_from_auth_request (PublishingFlickrFlickrPublisher* self, const gchar* response);
-static void publishing_flickr_flickr_publisher_on_authentication_token_available (PublishingFlickrFlickrPublisher* self, const gchar* token, const gchar* token_secret);
-void publishing_flickr_session_set_request_phase_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret);
-static void publishing_flickr_flickr_publisher_do_launch_system_browser (PublishingFlickrFlickrPublisher* self, const gchar* token);
-static void publishing_flickr_flickr_publisher_on_system_browser_launched (PublishingFlickrFlickrPublisher* self);
-static void publishing_flickr_flickr_publisher_do_show_pin_entry_pane (PublishingFlickrFlickrPublisher* self);
-GType publishing_flickr_pin_entry_pane_get_type (void) G_GNUC_CONST;
-static void publishing_flickr_flickr_publisher_on_pin_entry_proceed (PublishingFlickrFlickrPublisher* self, PublishingFlickrPinEntryPane* sender, const gchar* pin);
-static void _publishing_flickr_flickr_publisher_on_pin_entry_proceed_publishing_flickr_pin_entry_pane_proceed (PublishingFlickrPinEntryPane* _sender, PublishingFlickrPinEntryPane* sender, const gchar* authorization_pin, gpointer self);
-static void publishing_flickr_flickr_publisher_do_verify_pin (PublishingFlickrFlickrPublisher* self, const gchar* pin);
-static void publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn);
-static void _publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self);
-static void publishing_flickr_flickr_publisher_on_access_token_fetch_error (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn, GError* err);
-static void _publishing_flickr_flickr_publisher_on_access_token_fetch_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self);
-static void publishing_flickr_flickr_publisher_do_extract_access_phase_credentials_from_reponse (PublishingFlickrFlickrPublisher* self, const gchar* response);
+void publishing_flickr_session_set_api_credentials (PublishingFlickrSession* self, const gchar* consumer_key, const gchar* consumer_secret);
+void publishing_flickr_session_set_access_phase_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret, const gchar* username);
 gchar* publishing_flickr_session_get_username (PublishingFlickrSession* self);
-gchar* publishing_flickr_session_get_access_phase_token (PublishingFlickrSession* self);
-gchar* publishing_flickr_session_get_access_phase_token_secret (PublishingFlickrSession* self);
 static void publishing_flickr_flickr_publisher_do_fetch_account_info (PublishingFlickrFlickrPublisher* self);
 static void publishing_flickr_flickr_publisher_on_account_fetch_txn_completed (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn);
 static void _publishing_flickr_flickr_publisher_on_account_fetch_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self);
@@ -609,23 +501,11 @@ static void _publishing_flickr_flickr_publisher_on_upload_complete_publishing_re
 static void publishing_flickr_flickr_publisher_on_upload_error (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportBatchUploader* uploader, GError* err);
 static void _publishing_flickr_flickr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self);
 static void publishing_flickr_flickr_publisher_do_show_success_pane (PublishingFlickrFlickrPublisher* self);
-static void publishing_flickr_flickr_publisher_do_show_login_welcome_pane (PublishingFlickrFlickrPublisher* self);
-static void _publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked_spit_publishing_login_callback (gpointer self);
 GType publishing_flickr_transaction_get_type (void) G_GNUC_CONST;
-GType publishing_flickr_authentication_request_transaction_get_type (void) G_GNUC_CONST;
-PublishingFlickrAuthenticationRequestTransaction* publishing_flickr_authentication_request_transaction_new (PublishingFlickrSession* session);
-PublishingFlickrAuthenticationRequestTransaction* publishing_flickr_authentication_request_transaction_construct (GType object_type, PublishingFlickrSession* session);
-PublishingFlickrPinEntryPane* publishing_flickr_pin_entry_pane_new (GtkBuilder* builder);
-PublishingFlickrPinEntryPane* publishing_flickr_pin_entry_pane_construct (GType object_type, GtkBuilder* builder);
-GType publishing_flickr_access_token_fetch_transaction_get_type (void) G_GNUC_CONST;
-PublishingFlickrAccessTokenFetchTransaction* publishing_flickr_access_token_fetch_transaction_new (PublishingFlickrSession* session, const gchar* user_verifier);
-PublishingFlickrAccessTokenFetchTransaction* publishing_flickr_access_token_fetch_transaction_construct (GType object_type, PublishingFlickrSession* session, const gchar* user_verifier);
-void publishing_flickr_session_set_access_phase_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret, const gchar* username);
 GType publishing_flickr_account_info_fetch_transaction_get_type (void) G_GNUC_CONST;
 PublishingFlickrAccountInfoFetchTransaction* publishing_flickr_account_info_fetch_transaction_new (PublishingFlickrSession* session);
 PublishingFlickrAccountInfoFetchTransaction* publishing_flickr_account_info_fetch_transaction_construct (GType object_type, PublishingFlickrSession* session);
 PublishingRESTSupportXmlDocument* publishing_flickr_transaction_parse_flickr_response (const gchar* xml, GError** error);
-void publishing_flickr_session_deauthenticate (PublishingFlickrSession* self);
 static void publishing_flickr_flickr_publisher_attempt_start (PublishingFlickrFlickrPublisher* self);
 PublishingFlickrPublishingOptionsPane* publishing_flickr_publishing_options_pane_new (PublishingFlickrFlickrPublisher* publisher, PublishingFlickrPublishingParameters* parameters, SpitPublishingPublisherMediaType media_type, GtkBuilder* builder, gboolean strip_metadata);
 PublishingFlickrPublishingOptionsPane* publishing_flickr_publishing_options_pane_construct (GType object_type, PublishingFlickrFlickrPublisher* publisher, PublishingFlickrPublishingParameters* parameters, SpitPublishingPublisherMediaType media_type, GtkBuilder* builder, gboolean strip_metadata);
@@ -641,24 +521,9 @@ gint publishing_flickr_flickr_publisher_get_persistent_default_size (PublishingF
 void publishing_flickr_flickr_publisher_set_persistent_default_size (PublishingFlickrFlickrPublisher* self, gint size);
 static SpitPublishingService* publishing_flickr_flickr_publisher_real_get_service (SpitPublishingPublisher* base);
 static gboolean publishing_flickr_flickr_publisher_real_is_running (SpitPublishingPublisher* base);
-void publishing_flickr_session_authenticate_from_persistent_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret, const gchar* username);
 static void publishing_flickr_flickr_publisher_real_start (SpitPublishingPublisher* base);
 static void publishing_flickr_flickr_publisher_real_stop (SpitPublishingPublisher* base);
 static void publishing_flickr_flickr_publisher_finalize (GObject* obj);
-#define PUBLISHING_FLICKR_PIN_ENTRY_PANE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPanePrivate))
-enum  {
-	PUBLISHING_FLICKR_PIN_ENTRY_PANE_DUMMY_PROPERTY
-};
-static void publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed (PublishingFlickrPinEntryPane* self);
-static void publishing_flickr_pin_entry_pane_on_continue_clicked (PublishingFlickrPinEntryPane* self);
-static GtkWidget* publishing_flickr_pin_entry_pane_real_get_widget (SpitPublishingDialogPane* base);
-static SpitPublishingDialogPaneGeometryOptions publishing_flickr_pin_entry_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base);
-static void publishing_flickr_pin_entry_pane_real_on_pane_installed (SpitPublishingDialogPane* base);
-static void _publishing_flickr_pin_entry_pane_on_continue_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self);
-static void _publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self);
-static void publishing_flickr_pin_entry_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base);
-static void g_cclosure_user_marshal_VOID__OBJECT_STRING (GClosure * closure, GValue * return_value, guint n_param_values, const GValue * param_values, gpointer invocation_hint, gpointer marshal_data);
-static void publishing_flickr_pin_entry_pane_finalize (GObject* obj);
 enum  {
 	PUBLISHING_FLICKR_TRANSACTION_DUMMY_PROPERTY
 };
@@ -666,6 +531,7 @@ PublishingFlickrTransaction* publishing_flickr_transaction_new (PublishingFlickr
 PublishingFlickrTransaction* publishing_flickr_transaction_construct (GType object_type, PublishingFlickrSession* session, PublishingRESTSupportHttpMethod method);
 gchar* publishing_flickr_session_get_oauth_nonce (PublishingFlickrSession* self);
 gchar* publishing_flickr_session_get_oauth_timestamp (PublishingFlickrSession* self);
+gchar* publishing_flickr_session_get_consumer_key (PublishingFlickrSession* self);
 PublishingFlickrTransaction* publishing_flickr_transaction_new_with_uri (PublishingFlickrSession* session, const gchar* uri, PublishingRESTSupportHttpMethod method);
 PublishingFlickrTransaction* publishing_flickr_transaction_construct_with_uri (GType object_type, PublishingFlickrSession* session, const gchar* uri, PublishingRESTSupportHttpMethod method);
 static void publishing_flickr_transaction_real_execute (PublishingRESTSupportTransaction* base, GError** error);
@@ -673,15 +539,9 @@ void publishing_flickr_session_sign_transaction (PublishingFlickrSession* self, 
 gchar* publishing_flickr_transaction_validate_xml (PublishingRESTSupportXmlDocument* doc);
 static gchar* _publishing_flickr_transaction_validate_xml_publishing_rest_support_xml_document_check_for_error_response (PublishingRESTSupportXmlDocument* doc, gpointer self);
 enum  {
-	PUBLISHING_FLICKR_AUTHENTICATION_REQUEST_TRANSACTION_DUMMY_PROPERTY
-};
-enum  {
-	PUBLISHING_FLICKR_ACCESS_TOKEN_FETCH_TRANSACTION_DUMMY_PROPERTY
-};
-gchar* publishing_flickr_session_get_request_phase_token (PublishingFlickrSession* self);
-enum  {
 	PUBLISHING_FLICKR_ACCOUNT_INFO_FETCH_TRANSACTION_DUMMY_PROPERTY
 };
+gchar* publishing_flickr_session_get_access_phase_token (PublishingFlickrSession* self);
 GType publishing_flickr_upload_transaction_get_type (void) G_GNUC_CONST;
 #define PUBLISHING_FLICKR_UPLOAD_TRANSACTION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION, PublishingFlickrUploadTransactionPrivate))
 enum  {
@@ -691,7 +551,7 @@ PublishingFlickrUploadTransaction* publishing_flickr_upload_transaction_new (Pub
 PublishingFlickrUploadTransaction* publishing_flickr_upload_transaction_construct (GType object_type, PublishingFlickrSession* session, PublishingFlickrPublishingParameters* parameters, SpitPublishingPublishable* publishable);
 void publishing_flickr_upload_transaction_add_authorization_header_field (PublishingFlickrUploadTransaction* self, const gchar* key, const gchar* value);
 static void _g_free0_ (gpointer var);
-static void _vala_array_add18 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value);
+static void _vala_array_add19 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value);
 PublishingRESTSupportArgument** publishing_flickr_upload_transaction_get_authorization_header_fields (PublishingFlickrUploadTransaction* self, int* result_length1);
 static PublishingRESTSupportArgument** _vala_array_dup8 (PublishingRESTSupportArgument** self, int length);
 gchar* publishing_flickr_upload_transaction_get_authorization_header_string (PublishingFlickrUploadTransaction* self);
@@ -702,7 +562,7 @@ enum  {
 	PUBLISHING_FLICKR_SESSION_DUMMY_PROPERTY
 };
 static gboolean publishing_flickr_session_real_is_authenticated (PublishingRESTSupportSession* base);
-static void _vala_array_add19 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value);
+static void _vala_array_add20 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value);
 static void publishing_flickr_session_finalize (PublishingRESTSupportSession* obj);
 static gpointer publishing_flickr_publishing_options_pane_visibility_entry_ref (gpointer instance);
 static void publishing_flickr_publishing_options_pane_visibility_entry_unref (gpointer instance);
@@ -736,18 +596,18 @@ static void publishing_flickr_publishing_options_pane_on_publish_clicked (Publis
 static void _publishing_flickr_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self);
 static PublishingFlickrPublishingOptionsPaneVisibilityEntry* publishing_flickr_publishing_options_pane_visibility_entry_new (const gchar* creator_title, PublishingFlickrVisibilitySpecification* creator_specification);
 static PublishingFlickrPublishingOptionsPaneVisibilityEntry* publishing_flickr_publishing_options_pane_visibility_entry_construct (GType object_type, const gchar* creator_title, PublishingFlickrVisibilitySpecification* creator_specification);
-static void _vala_array_add20 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
 static void _vala_array_add21 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
 static void _vala_array_add22 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
 static void _vala_array_add23 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
 static void _vala_array_add24 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
+static void _vala_array_add25 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value);
 static PublishingFlickrPublishingOptionsPaneSizeEntry* publishing_flickr_publishing_options_pane_size_entry_new (const gchar* creator_title, gint creator_size);
 static PublishingFlickrPublishingOptionsPaneSizeEntry* publishing_flickr_publishing_options_pane_size_entry_construct (GType object_type, const gchar* creator_title, gint creator_size);
-static void _vala_array_add25 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
 static void _vala_array_add26 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
 static void _vala_array_add27 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
 static void _vala_array_add28 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
 static void _vala_array_add29 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
+static void _vala_array_add30 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value);
 void publishing_flickr_publishing_options_pane_notify_publish (PublishingFlickrPublishingOptionsPane* self);
 void publishing_flickr_publishing_options_pane_notify_logout (PublishingFlickrPublishingOptionsPane* self);
 static GtkWidget* publishing_flickr_publishing_options_pane_real_get_widget (SpitPublishingDialogPane* base);
@@ -770,7 +630,7 @@ enum  {
 	PUBLISHING_FLICKR_UPLOADER_DUMMY_PROPERTY
 };
 static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrUploader* self, SpitPublishingPublishable* publishable);
-static void _vala_array_add30 (gchar*** array, int* length, int* size, gchar* value);
+static void _vala_array_add31 (gchar*** array, int* length, int* size, gchar* value);
 static PublishingRESTSupportTransaction* publishing_flickr_uploader_real_create_transaction (PublishingRESTSupportBatchUploader* base, SpitPublishingPublishable* publishable);
 static void publishing_flickr_uploader_finalize (PublishingRESTSupportBatchUploader* obj);
 static void _vala_array_destroy (gpointer array, gint array_length, GDestroyNotify destroy_func);
@@ -792,7 +652,7 @@ FlickrService* flickr_service_construct (GType object_type, GFile* resource_dire
 	_tmp0__length1 = flickr_service_icon_pixbuf_set_length1;
 #line 13 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 790 "FlickrPublishing.c"
+#line 656 "FlickrPublishing.c"
 		gint _tmp1_ = 0;
 		GdkPixbuf** _tmp2_ = NULL;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
@@ -805,18 +665,18 @@ FlickrService* flickr_service_construct (GType object_type, GFile* resource_dire
 		flickr_service_icon_pixbuf_set_length1 = _tmp1_;
 #line 14 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_flickr_service_icon_pixbuf_set_size_ = flickr_service_icon_pixbuf_set_length1;
-#line 803 "FlickrPublishing.c"
+#line 669 "FlickrPublishing.c"
 	}
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 807 "FlickrPublishing.c"
+#line 673 "FlickrPublishing.c"
 }
 
 
 FlickrService* flickr_service_new (GFile* resource_directory) {
 #line 12 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return flickr_service_construct (TYPE_FLICKR_SERVICE, resource_directory);
-#line 814 "FlickrPublishing.c"
+#line 680 "FlickrPublishing.c"
 }
 
 
@@ -838,7 +698,7 @@ static gint flickr_service_real_get_pluggable_interface (SpitPluggable* base, gi
 	result = _tmp2_;
 #line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 836 "FlickrPublishing.c"
+#line 702 "FlickrPublishing.c"
 }
 
 
@@ -851,7 +711,7 @@ static const gchar* flickr_service_real_get_id (SpitPluggable* base) {
 	result = "org.yorba.shotwell.publishing.flickr";
 #line 24 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 849 "FlickrPublishing.c"
+#line 715 "FlickrPublishing.c"
 }
 
 
@@ -864,14 +724,14 @@ static const gchar* flickr_service_real_get_pluggable_name (SpitPluggable* base)
 	result = "Flickr";
 #line 28 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 862 "FlickrPublishing.c"
+#line 728 "FlickrPublishing.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 869 "FlickrPublishing.c"
+#line 735 "FlickrPublishing.c"
 }
 
 
@@ -882,17 +742,17 @@ static GdkPixbuf** _vala_array_dup7 (GdkPixbuf** self, int length) {
 	result = g_new0 (GdkPixbuf*, length + 1);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 880 "FlickrPublishing.c"
+#line 746 "FlickrPublishing.c"
 		GdkPixbuf* _tmp0_ = NULL;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = _g_object_ref0 (self[i]);
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		result[i] = _tmp0_;
-#line 886 "FlickrPublishing.c"
+#line 752 "FlickrPublishing.c"
 	}
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 890 "FlickrPublishing.c"
+#line 756 "FlickrPublishing.c"
 }
 
 
@@ -974,7 +834,7 @@ static void flickr_service_real_get_info (SpitPluggable* base, SpitPluggableInfo
 	(*info).icons = _tmp9_;
 #line 40 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*info).icons_length1 = _tmp9__length1;
-#line 972 "FlickrPublishing.c"
+#line 838 "FlickrPublishing.c"
 }
 
 
@@ -982,7 +842,7 @@ static void flickr_service_real_activation (SpitPluggable* base, gboolean enable
 	FlickrService * self;
 #line 43 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_FLICKR_SERVICE, FlickrService);
-#line 980 "FlickrPublishing.c"
+#line 846 "FlickrPublishing.c"
 }
 
 
@@ -1003,7 +863,7 @@ static SpitPublishingPublisher* flickr_service_real_create_publisher (SpitPublis
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher);
 #line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 1001 "FlickrPublishing.c"
+#line 867 "FlickrPublishing.c"
 }
 
 
@@ -1016,7 +876,7 @@ static SpitPublishingPublisherMediaType flickr_service_real_get_supported_media 
 	result = SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO;
 #line 51 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 1014 "FlickrPublishing.c"
+#line 880 "FlickrPublishing.c"
 }
 
 
@@ -1025,7 +885,7 @@ static void flickr_service_class_init (FlickrServiceClass * klass) {
 	flickr_service_parent_class = g_type_class_peek_parent (klass);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = flickr_service_finalize;
-#line 1023 "FlickrPublishing.c"
+#line 889 "FlickrPublishing.c"
 }
 
 
@@ -1042,7 +902,7 @@ static void flickr_service_spit_pluggable_interface_init (SpitPluggableIface * i
 	iface->get_info = (void (*)(SpitPluggable*, SpitPluggableInfo*)) flickr_service_real_get_info;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->activation = (void (*)(SpitPluggable*, gboolean)) flickr_service_real_activation;
-#line 1040 "FlickrPublishing.c"
+#line 906 "FlickrPublishing.c"
 }
 
 
@@ -1053,7 +913,7 @@ static void flickr_service_spit_publishing_service_interface_init (SpitPublishin
 	iface->create_publisher = (SpitPublishingPublisher* (*)(SpitPublishingService*, SpitPublishingPluginHost*)) flickr_service_real_create_publisher;
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->get_supported_media = (SpitPublishingPublisherMediaType (*)(SpitPublishingService*)) flickr_service_real_get_supported_media;
-#line 1051 "FlickrPublishing.c"
+#line 917 "FlickrPublishing.c"
 }
 
 
@@ -1067,7 +927,7 @@ static void flickr_service_finalize (GObject* obj) {
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_FLICKR_SERVICE, FlickrService);
 #line 7 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (flickr_service_parent_class)->finalize (obj);
-#line 1065 "FlickrPublishing.c"
+#line 931 "FlickrPublishing.c"
 }
 
 
@@ -1104,236 +964,236 @@ PublishingFlickrVisibilitySpecification* publishing_flickr_visibility_specificat
 	gint _tmp0_ = 0;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
-#line 80 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrVisibilitySpecification*) g_type_create_instance (object_type);
-#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = friends_level;
-#line 81 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->friends_level = _tmp0_;
-#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = family_level;
-#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->family_level = _tmp1_;
-#line 83 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = everyone_level;
-#line 83 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->everyone_level = _tmp2_;
-#line 80 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 1118 "FlickrPublishing.c"
+#line 984 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrVisibilitySpecification* publishing_flickr_visibility_specification_new (gint friends_level, gint family_level, gint everyone_level) {
-#line 80 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 74 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_visibility_specification_construct (PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION, friends_level, family_level, everyone_level);
-#line 1125 "FlickrPublishing.c"
+#line 991 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_value_visibility_specification_init (GValue* value) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 1132 "FlickrPublishing.c"
+#line 998 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_value_visibility_specification_free_value (GValue* value) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_visibility_specification_unref (value->data[0].v_pointer);
-#line 1141 "FlickrPublishing.c"
+#line 1007 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_value_visibility_specification_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_flickr_visibility_specification_ref (src_value->data[0].v_pointer);
-#line 1151 "FlickrPublishing.c"
+#line 1017 "FlickrPublishing.c"
 	} else {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1155 "FlickrPublishing.c"
+#line 1021 "FlickrPublishing.c"
 	}
 }
 
 
 static gpointer publishing_flickr_value_visibility_specification_peek_pointer (const GValue* value) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1163 "FlickrPublishing.c"
+#line 1029 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_value_visibility_specification_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 1170 "FlickrPublishing.c"
+#line 1036 "FlickrPublishing.c"
 		PublishingFlickrVisibilitySpecification* object;
 		object = collect_values[0].v_pointer;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1177 "FlickrPublishing.c"
+#line 1043 "FlickrPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1181 "FlickrPublishing.c"
+#line 1047 "FlickrPublishing.c"
 		}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = publishing_flickr_visibility_specification_ref (object);
-#line 1185 "FlickrPublishing.c"
+#line 1051 "FlickrPublishing.c"
 	} else {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1189 "FlickrPublishing.c"
+#line 1055 "FlickrPublishing.c"
 	}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 1193 "FlickrPublishing.c"
+#line 1059 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_value_visibility_specification_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFlickrVisibilitySpecification** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!object_p) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1204 "FlickrPublishing.c"
+#line 1070 "FlickrPublishing.c"
 	}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = NULL;
-#line 1210 "FlickrPublishing.c"
+#line 1076 "FlickrPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1214 "FlickrPublishing.c"
+#line 1080 "FlickrPublishing.c"
 	} else {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = publishing_flickr_visibility_specification_ref (value->data[0].v_pointer);
-#line 1218 "FlickrPublishing.c"
+#line 1084 "FlickrPublishing.c"
 	}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 1222 "FlickrPublishing.c"
+#line 1088 "FlickrPublishing.c"
 }
 
 
 GParamSpec* publishing_flickr_param_spec_visibility_specification (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFlickrParamSpecVisibilitySpecification* spec;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION), NULL);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 1236 "FlickrPublishing.c"
+#line 1102 "FlickrPublishing.c"
 }
 
 
 gpointer publishing_flickr_value_get_visibility_specification (const GValue* value) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION), NULL);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1245 "FlickrPublishing.c"
+#line 1111 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_value_set_visibility_specification (GValue* value, gpointer v_object) {
 	PublishingFlickrVisibilitySpecification* old;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_visibility_specification_ref (value->data[0].v_pointer);
-#line 1265 "FlickrPublishing.c"
+#line 1131 "FlickrPublishing.c"
 	} else {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1269 "FlickrPublishing.c"
+#line 1135 "FlickrPublishing.c"
 	}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_visibility_specification_unref (old);
-#line 1275 "FlickrPublishing.c"
+#line 1141 "FlickrPublishing.c"
 	}
 }
 
 
 void publishing_flickr_value_take_visibility_specification (GValue* value, gpointer v_object) {
 	PublishingFlickrVisibilitySpecification* old;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1294 "FlickrPublishing.c"
+#line 1160 "FlickrPublishing.c"
 	} else {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1298 "FlickrPublishing.c"
+#line 1164 "FlickrPublishing.c"
 	}
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_visibility_specification_unref (old);
-#line 1304 "FlickrPublishing.c"
+#line 1170 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_visibility_specification_class_init (PublishingFlickrVisibilitySpecificationClass * klass) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_visibility_specification_parent_class = g_type_class_peek_parent (klass);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingFlickrVisibilitySpecificationClass *) klass)->finalize = publishing_flickr_visibility_specification_finalize;
-#line 1314 "FlickrPublishing.c"
+#line 1180 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_visibility_specification_instance_init (PublishingFlickrVisibilitySpecification * self) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->ref_count = 1;
-#line 1321 "FlickrPublishing.c"
+#line 1187 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_visibility_specification_finalize (PublishingFlickrVisibilitySpecification* obj) {
 	PublishingFlickrVisibilitySpecification * self;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_VISIBILITY_SPECIFICATION, PublishingFlickrVisibilitySpecification);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1331 "FlickrPublishing.c"
+#line 1197 "FlickrPublishing.c"
 }
 
 
@@ -1354,252 +1214,252 @@ GType publishing_flickr_visibility_specification_get_type (void) {
 gpointer publishing_flickr_visibility_specification_ref (gpointer instance) {
 	PublishingFlickrVisibilitySpecification* self;
 	self = instance;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return instance;
-#line 1356 "FlickrPublishing.c"
+#line 1222 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_visibility_specification_unref (gpointer instance) {
 	PublishingFlickrVisibilitySpecification* self;
 	self = instance;
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		PUBLISHING_FLICKR_VISIBILITY_SPECIFICATION_GET_CLASS (self)->finalize (self);
-#line 75 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 69 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1369 "FlickrPublishing.c"
+#line 1235 "FlickrPublishing.c"
 	}
 }
 
 
 PublishingFlickrPublishingParameters* publishing_flickr_publishing_parameters_construct (GType object_type) {
 	PublishingFlickrPublishingParameters* self = NULL;
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrPublishingParameters*) g_type_create_instance (object_type);
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 1380 "FlickrPublishing.c"
+#line 1246 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrPublishingParameters* publishing_flickr_publishing_parameters_new (void) {
-#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 89 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_publishing_parameters_construct (PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS);
-#line 1387 "FlickrPublishing.c"
+#line 1253 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_value_publishing_parameters_init (GValue* value) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 1394 "FlickrPublishing.c"
+#line 1260 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_value_publishing_parameters_free_value (GValue* value) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_parameters_unref (value->data[0].v_pointer);
-#line 1403 "FlickrPublishing.c"
+#line 1269 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_value_publishing_parameters_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_flickr_publishing_parameters_ref (src_value->data[0].v_pointer);
-#line 1413 "FlickrPublishing.c"
+#line 1279 "FlickrPublishing.c"
 	} else {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1417 "FlickrPublishing.c"
+#line 1283 "FlickrPublishing.c"
 	}
 }
 
 
 static gpointer publishing_flickr_value_publishing_parameters_peek_pointer (const GValue* value) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1425 "FlickrPublishing.c"
+#line 1291 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_value_publishing_parameters_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 1432 "FlickrPublishing.c"
+#line 1298 "FlickrPublishing.c"
 		PublishingFlickrPublishingParameters* object;
 		object = collect_values[0].v_pointer;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1439 "FlickrPublishing.c"
+#line 1305 "FlickrPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1443 "FlickrPublishing.c"
+#line 1309 "FlickrPublishing.c"
 		}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = publishing_flickr_publishing_parameters_ref (object);
-#line 1447 "FlickrPublishing.c"
+#line 1313 "FlickrPublishing.c"
 	} else {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1451 "FlickrPublishing.c"
+#line 1317 "FlickrPublishing.c"
 	}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 1455 "FlickrPublishing.c"
+#line 1321 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_value_publishing_parameters_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFlickrPublishingParameters** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!object_p) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1466 "FlickrPublishing.c"
+#line 1332 "FlickrPublishing.c"
 	}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = NULL;
-#line 1472 "FlickrPublishing.c"
+#line 1338 "FlickrPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1476 "FlickrPublishing.c"
+#line 1342 "FlickrPublishing.c"
 	} else {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = publishing_flickr_publishing_parameters_ref (value->data[0].v_pointer);
-#line 1480 "FlickrPublishing.c"
+#line 1346 "FlickrPublishing.c"
 	}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 1484 "FlickrPublishing.c"
+#line 1350 "FlickrPublishing.c"
 }
 
 
 GParamSpec* publishing_flickr_param_spec_publishing_parameters (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFlickrParamSpecPublishingParameters* spec;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 1498 "FlickrPublishing.c"
+#line 1364 "FlickrPublishing.c"
 }
 
 
 gpointer publishing_flickr_value_get_publishing_parameters (const GValue* value) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS), NULL);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 1507 "FlickrPublishing.c"
+#line 1373 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_value_set_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingParameters* old;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_parameters_ref (value->data[0].v_pointer);
-#line 1527 "FlickrPublishing.c"
+#line 1393 "FlickrPublishing.c"
 	} else {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1531 "FlickrPublishing.c"
+#line 1397 "FlickrPublishing.c"
 	}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_parameters_unref (old);
-#line 1537 "FlickrPublishing.c"
+#line 1403 "FlickrPublishing.c"
 	}
 }
 
 
 void publishing_flickr_value_take_publishing_parameters (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingParameters* old;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1556 "FlickrPublishing.c"
+#line 1422 "FlickrPublishing.c"
 	} else {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 1560 "FlickrPublishing.c"
+#line 1426 "FlickrPublishing.c"
 	}
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_parameters_unref (old);
-#line 1566 "FlickrPublishing.c"
+#line 1432 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_parameters_class_init (PublishingFlickrPublishingParametersClass * klass) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_parameters_parent_class = g_type_class_peek_parent (klass);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingFlickrPublishingParametersClass *) klass)->finalize = publishing_flickr_publishing_parameters_finalize;
-#line 1576 "FlickrPublishing.c"
+#line 1442 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_parameters_instance_init (PublishingFlickrPublishingParameters * self) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->ref_count = 1;
-#line 1583 "FlickrPublishing.c"
+#line 1449 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_parameters_finalize (PublishingFlickrPublishingParameters* obj) {
 	PublishingFlickrPublishingParameters * self;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_PUBLISHING_PARAMETERS, PublishingFlickrPublishingParameters);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 92 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 86 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->username);
-#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 87 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (self->visibility_specification);
-#line 1597 "FlickrPublishing.c"
+#line 1463 "FlickrPublishing.c"
 }
 
 
@@ -1620,32 +1480,32 @@ GType publishing_flickr_publishing_parameters_get_type (void) {
 gpointer publishing_flickr_publishing_parameters_ref (gpointer instance) {
 	PublishingFlickrPublishingParameters* self;
 	self = instance;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return instance;
-#line 1622 "FlickrPublishing.c"
+#line 1488 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_publishing_parameters_unref (gpointer instance) {
 	PublishingFlickrPublishingParameters* self;
 	self = instance;
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		PUBLISHING_FLICKR_PUBLISHING_PARAMETERS_GET_CLASS (self)->finalize (self);
-#line 88 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 82 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1635 "FlickrPublishing.c"
+#line 1501 "FlickrPublishing.c"
 	}
 }
 
 
-static void _publishing_flickr_flickr_publisher_on_session_authenticated_publishing_rest_support_session_authenticated (PublishingRESTSupportSession* _sender, gpointer self) {
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+static void _publishing_flickr_flickr_publisher_on_session_authenticated_spit_publishing_authenticator_authenticated (SpitPublishingAuthenticator* _sender, gpointer self) {
+#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_session_authenticated ((PublishingFlickrFlickrPublisher*) self);
-#line 1643 "FlickrPublishing.c"
+#line 1509 "FlickrPublishing.c"
 }
 
 
@@ -1657,238 +1517,93 @@ PublishingFlickrFlickrPublisher* publishing_flickr_flickr_publisher_construct (G
 	SpitPublishingPluginHost* _tmp3_ = NULL;
 	PublishingFlickrSession* _tmp4_ = NULL;
 	PublishingFlickrPublishingParameters* _tmp5_ = NULL;
-	PublishingFlickrSession* _tmp6_ = NULL;
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	PublishingAuthenticatorFactory* _tmp6_ = NULL;
+	PublishingAuthenticatorFactory* _tmp7_ = NULL;
+	SpitPublishingPluginHost* _tmp8_ = NULL;
+	SpitPublishingAuthenticator* _tmp9_ = NULL;
+	SpitPublishingAuthenticator* _tmp10_ = NULL;
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_SERVICE (service), NULL);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PLUGIN_HOST (host), NULL);
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrFlickrPublisher*) g_object_new (object_type, NULL);
-#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:112: FlickrPublisher instantiated.");
-#line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:107: FlickrPublisher instantiated.");
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = service;
-#line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->service);
-#line 113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->service = _tmp1_;
-#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = host;
-#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->host);
-#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->host = _tmp3_;
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = publishing_flickr_session_new ();
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->session = _tmp4_;
-#line 116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = publishing_flickr_publishing_parameters_new ();
-#line 116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->parameters = _tmp5_;
-#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = self->priv->session;
-#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), "authenticated", (GCallback) _publishing_flickr_flickr_publisher_on_session_authenticated_publishing_rest_support_session_authenticated, self, 0);
 #line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp4_ = publishing_flickr_session_new ();
+#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_publishing_rest_support_session_unref0 (self->priv->session);
+#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->session = _tmp4_;
+#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp5_ = publishing_flickr_publishing_parameters_new ();
+#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
+#line 111 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->parameters = _tmp5_;
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp6_ = publishing_authenticator_factory_get_instance ();
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp7_ = _tmp6_;
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp8_ = host;
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp9_ = spit_publishing_authenticator_factory_create (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactory), "flickr", _tmp8_);
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_object_unref0 (self->priv->authenticator);
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->authenticator = _tmp9_;
+#line 112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_object_unref0 (_tmp7_);
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp10_ = self->priv->authenticator;
+#line 114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_connect_object (_tmp10_, "authenticated", (GCallback) _publishing_flickr_flickr_publisher_on_session_authenticated_spit_publishing_authenticator_authenticated, self, 0);
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 1698 "FlickrPublishing.c"
+#line 1582 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrFlickrPublisher* publishing_flickr_flickr_publisher_new (SpitPublishingService* service, SpitPublishingPluginHost* host) {
-#line 110 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_flickr_publisher_construct (PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, service, host);
-#line 1705 "FlickrPublishing.c"
+#line 1589 "FlickrPublishing.c"
 }
 
 
-static void publishing_flickr_flickr_publisher_invalidate_persistent_session (PublishingFlickrFlickrPublisher* self) {
-#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_token (self, "");
-#line 127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_token_secret (self, "");
-#line 128 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_username (self, "");
-#line 1718 "FlickrPublishing.c"
-}
-
-
-static gboolean publishing_flickr_flickr_publisher_is_persistent_session_valid (PublishingFlickrFlickrPublisher* self) {
-	gboolean result = FALSE;
-	gboolean _tmp0_ = FALSE;
-	gboolean _tmp1_ = FALSE;
-	gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-	gboolean _tmp4_ = FALSE;
-#line 131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), FALSE);
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_username (self);
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = _tmp2_;
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = _tmp3_ != NULL;
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp3_);
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp4_) {
-#line 1741 "FlickrPublishing.c"
-		gchar* _tmp5_ = NULL;
-		gchar* _tmp6_ = NULL;
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp5_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_token (self);
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp6_ = _tmp5_;
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp1_ = _tmp6_ != NULL;
-#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp6_);
-#line 1752 "FlickrPublishing.c"
-	} else {
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp1_ = FALSE;
-#line 1756 "FlickrPublishing.c"
-	}
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp1_) {
-#line 1760 "FlickrPublishing.c"
-		gchar* _tmp7_ = NULL;
-		gchar* _tmp8_ = NULL;
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp7_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_token_secret (self);
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp8_ = _tmp7_;
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp0_ = _tmp8_ != NULL;
-#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp8_);
-#line 1771 "FlickrPublishing.c"
-	} else {
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp0_ = FALSE;
-#line 1775 "FlickrPublishing.c"
-	}
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = _tmp0_;
-#line 132 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 1781 "FlickrPublishing.c"
-}
-
-
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_username (PublishingFlickrFlickrPublisher* self) {
-	gchar* result = NULL;
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+SpitPublishingAuthenticator* publishing_flickr_flickr_publisher_get_authenticator (PublishingFlickrFlickrPublisher* self) {
+	SpitPublishingAuthenticator* result = NULL;
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
+	SpitPublishingAuthenticator* _tmp1_ = NULL;
+#line 121 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), NULL);
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = spit_host_interface_get_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_username", NULL);
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp1_ = _g_object_ref0 (_tmp0_);
+#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 1799 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_username (PublishingFlickrFlickrPublisher* self, const gchar* username) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (username != NULL);
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = username;
-#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_username", _tmp1_);
-#line 1816 "FlickrPublishing.c"
-}
-
-
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_token (PublishingFlickrFlickrPublisher* self) {
-	gchar* result = NULL;
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 145 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), NULL);
-#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = spit_host_interface_get_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_token", NULL);
-#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = _tmp1_;
-#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 1834 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_token (PublishingFlickrFlickrPublisher* self, const gchar* token) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token != NULL);
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = token;
-#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_token", _tmp1_);
-#line 1851 "FlickrPublishing.c"
-}
-
-
-static gchar* publishing_flickr_flickr_publisher_get_persistent_access_phase_token_secret (PublishingFlickrFlickrPublisher* self) {
-	gchar* result = NULL;
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), NULL);
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = spit_host_interface_get_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_token_secret", NULL);
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = _tmp1_;
-#line 154 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 1869 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_set_persistent_access_phase_token_secret (PublishingFlickrFlickrPublisher* self, const gchar* secret) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (secret != NULL);
-#line 158 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 158 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = secret;
-#line 158 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_host_interface_set_config_string (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "access_phase_token_secret", _tmp1_);
-#line 1886 "FlickrPublishing.c"
+#line 1607 "FlickrPublishing.c"
 }
 
 
@@ -1896,468 +1611,228 @@ static gboolean publishing_flickr_flickr_publisher_get_persistent_strip_metadata
 	gboolean result = FALSE;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 125 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), FALSE);
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_bool (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "strip_metadata", FALSE);
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 1904 "FlickrPublishing.c"
+#line 1625 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_set_persistent_strip_metadata (PublishingFlickrFlickrPublisher* self, gboolean strip_metadata) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = strip_metadata;
-#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_host_interface_set_config_bool (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "strip_metadata", _tmp1_);
-#line 1919 "FlickrPublishing.c"
+#line 1640 "FlickrPublishing.c"
 }
 
 
-static void publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked (PublishingFlickrFlickrPublisher* self) {
-	gboolean _tmp0_ = FALSE;
-#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->running;
-#line 170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp0_) {
-#line 171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 1933 "FlickrPublishing.c"
-	}
-#line 173 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:173: EVENT: user clicked 'Login' button in the w" \
-"elcome pane");
-#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_run_authentication_request_transaction (self);
-#line 1939 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_auth_request_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_auth_request_txn_completed ((PublishingFlickrFlickrPublisher*) self, _sender);
-#line 1946 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_auth_request_txn_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_auth_request_txn_error ((PublishingFlickrFlickrPublisher*) self, _sender, err);
-#line 1953 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_auth_request_txn_completed (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn) {
-	PublishingRESTSupportTransaction* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingRESTSupportTransaction* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-	PublishingRESTSupportTransaction* _tmp5_ = NULL;
-	gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-	PublishingRESTSupportTransaction* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
-	gchar* _tmp10_ = NULL;
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = txn;
-#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 179 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = txn;
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_error_publishing_rest_support_transaction_network_error, self);
-#line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 182 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp4_) {
-#line 183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 1991 "FlickrPublishing.c"
-	}
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = txn;
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = publishing_rest_support_transaction_get_response (_tmp5_);
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp7_ = _tmp6_;
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:185: EVENT: OAuth authentication request transac" \
-"tion completed; response = '%s'", _tmp7_);
-#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp7_);
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = txn;
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = publishing_rest_support_transaction_get_response (_tmp8_);
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp10_ = _tmp9_;
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_parse_token_info_from_auth_request (self, _tmp10_);
-#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp10_);
-#line 2013 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_auth_request_txn_error (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn, GError* err) {
-	PublishingRESTSupportTransaction* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingRESTSupportTransaction* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-	SpitPublishingPluginHost* _tmp5_ = NULL;
-	GError* _tmp6_ = NULL;
-#line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 191 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = txn;
-#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = txn;
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_error_publishing_rest_support_transaction_network_error, self);
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp4_) {
-#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2047 "FlickrPublishing.c"
-	}
-#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:199: EVENT: OAuth authentication request transac" \
-"tion caused a network error");
-#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = self->priv->host;
-#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = err;
-#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 2057 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_authentication_token_available (PublishingFlickrFlickrPublisher* self, const gchar* token, const gchar* token_secret) {
-	const gchar* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	PublishingFlickrSession* _tmp2_ = NULL;
-	const gchar* _tmp3_ = NULL;
-	const gchar* _tmp4_ = NULL;
-	const gchar* _tmp5_ = NULL;
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token != NULL);
-#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token_secret != NULL);
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = token;
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = token_secret;
-#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:204: EVENT: OAuth authentication token (%s) and " \
-"token secret (%s) available", _tmp0_, _tmp1_);
-#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = self->priv->session;
-#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = token;
-#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = token_secret;
-#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_session_set_request_phase_credentials (_tmp2_, _tmp3_, _tmp4_);
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = token;
-#line 209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_launch_system_browser (self, _tmp5_);
-#line 2092 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_system_browser_launched (PublishingFlickrFlickrPublisher* self) {
-	gboolean _tmp0_ = FALSE;
-#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 213 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp0_) {
-#line 214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2106 "FlickrPublishing.c"
-	}
-#line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:216: EVENT: system browser launched.");
-#line 218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_show_pin_entry_pane (self);
-#line 2112 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_pin_entry_proceed_publishing_flickr_pin_entry_pane_proceed (PublishingFlickrPinEntryPane* _sender, PublishingFlickrPinEntryPane* sender, const gchar* authorization_pin, gpointer self) {
-#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_pin_entry_proceed ((PublishingFlickrFlickrPublisher*) self, sender, authorization_pin);
-#line 2119 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_pin_entry_proceed (PublishingFlickrFlickrPublisher* self, PublishingFlickrPinEntryPane* sender, const gchar* pin) {
-	PublishingFlickrPinEntryPane* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	gboolean _tmp2_ = FALSE;
-	const gchar* _tmp3_ = NULL;
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_PIN_ENTRY_PANE (sender));
-#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (pin != NULL);
-#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = sender;
-#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("proceed", PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, &_tmp1_, NULL, FALSE);
-#line 222 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_pin_entry_proceed_publishing_flickr_pin_entry_pane_proceed, self);
-#line 224 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 224 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp2_) {
-#line 225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2146 "FlickrPublishing.c"
-	}
-#line 227 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:227: EVENT: user clicked 'Continue' in PIN entry" \
-" pane.");
-#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = pin;
-#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_verify_pin (self, _tmp3_);
-#line 2154 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed ((PublishingFlickrFlickrPublisher*) self, _sender);
-#line 2161 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_access_token_fetch_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_access_token_fetch_error ((PublishingFlickrFlickrPublisher*) self, _sender, err);
-#line 2168 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn) {
-	PublishingRESTSupportTransaction* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingRESTSupportTransaction* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-	PublishingRESTSupportTransaction* _tmp5_ = NULL;
-	gchar* _tmp6_ = NULL;
-	gchar* _tmp7_ = NULL;
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = txn;
-#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = txn;
-#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_error_publishing_rest_support_transaction_network_error, self);
-#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp4_) {
-#line 237 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2203 "FlickrPublishing.c"
-	}
-#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:239: EVENT: fetching OAuth access token over the" \
-" network succeeded");
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = txn;
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = publishing_rest_support_transaction_get_response (_tmp5_);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp7_ = _tmp6_;
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_do_extract_access_phase_credentials_from_reponse (self, _tmp7_);
-#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp7_);
-#line 2217 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_on_access_token_fetch_error (PublishingFlickrFlickrPublisher* self, PublishingRESTSupportTransaction* txn, GError* err) {
-	PublishingRESTSupportTransaction* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	PublishingRESTSupportTransaction* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-	gboolean _tmp4_ = FALSE;
-	SpitPublishingPluginHost* _tmp5_ = NULL;
-	GError* _tmp6_ = NULL;
-#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = txn;
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = txn;
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_error_publishing_rest_support_transaction_network_error, self);
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (!_tmp4_) {
-#line 250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2251 "FlickrPublishing.c"
-	}
-#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:252: EVENT: fetching OAuth access token over the" \
-" network caused an error.");
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = self->priv->host;
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = err;
-#line 254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 2261 "FlickrPublishing.c"
+static gpointer _g_variant_ref0 (gpointer self) {
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	return self ? g_variant_ref (self) : NULL;
+#line 1647 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_on_session_authenticated (PublishingFlickrFlickrPublisher* self) {
 	gboolean _tmp0_ = FALSE;
-	PublishingFlickrPublishingParameters* _tmp1_ = NULL;
-	PublishingFlickrSession* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-	PublishingFlickrSession* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-	gchar* _tmp6_ = NULL;
-	PublishingFlickrSession* _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	gchar* _tmp9_ = NULL;
-	PublishingFlickrSession* _tmp10_ = NULL;
-	gchar* _tmp11_ = NULL;
-	gchar* _tmp12_ = NULL;
-#line 257 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	GHashTable* params = NULL;
+	SpitPublishingAuthenticator* _tmp1_ = NULL;
+	GHashTable* _tmp2_ = NULL;
+	GVariant* consumer_key = NULL;
+	GVariant* consumer_secret = NULL;
+	GVariant* auth_token = NULL;
+	GVariant* auth_token_secret = NULL;
+	GVariant* username = NULL;
+	GHashTable* _tmp3_ = NULL;
+	gconstpointer _tmp4_ = NULL;
+	GVariant* _tmp5_ = NULL;
+	GHashTable* _tmp6_ = NULL;
+	gconstpointer _tmp7_ = NULL;
+	GVariant* _tmp8_ = NULL;
+	PublishingFlickrSession* _tmp9_ = NULL;
+	GVariant* _tmp10_ = NULL;
+	const gchar* _tmp11_ = NULL;
+	GVariant* _tmp12_ = NULL;
+	const gchar* _tmp13_ = NULL;
+	GHashTable* _tmp14_ = NULL;
+	gconstpointer _tmp15_ = NULL;
+	GVariant* _tmp16_ = NULL;
+	GHashTable* _tmp17_ = NULL;
+	gconstpointer _tmp18_ = NULL;
+	GVariant* _tmp19_ = NULL;
+	GHashTable* _tmp20_ = NULL;
+	gconstpointer _tmp21_ = NULL;
+	GVariant* _tmp22_ = NULL;
+	PublishingFlickrSession* _tmp23_ = NULL;
+	GVariant* _tmp24_ = NULL;
+	const gchar* _tmp25_ = NULL;
+	GVariant* _tmp26_ = NULL;
+	const gchar* _tmp27_ = NULL;
+	GVariant* _tmp28_ = NULL;
+	const gchar* _tmp29_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp30_ = NULL;
+	PublishingFlickrSession* _tmp31_ = NULL;
+	gchar* _tmp32_ = NULL;
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 134 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp0_) {
-#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 135 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2287 "FlickrPublishing.c"
+#line 1699 "FlickrPublishing.c"
 	}
-#line 261 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:261: EVENT: a fully authenticated session has be" \
+#line 137 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:137: EVENT: a fully authenticated session has be" \
 "come available");
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->parameters;
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = self->priv->session;
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = publishing_flickr_session_get_username (_tmp2_);
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp1_->username);
-#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_->username = _tmp3_;
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = self->priv->session;
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = publishing_flickr_session_get_access_phase_token (_tmp4_);
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = _tmp5_;
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_token (self, _tmp6_);
-#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp6_);
-#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp7_ = self->priv->session;
-#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = publishing_flickr_session_get_access_phase_token_secret (_tmp7_);
-#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = _tmp8_;
-#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_token_secret (self, _tmp9_);
-#line 266 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp9_);
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp10_ = self->priv->session;
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp11_ = publishing_flickr_session_get_username (_tmp10_);
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp12_ = _tmp11_;
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_set_persistent_access_phase_username (self, _tmp12_);
-#line 267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp12_);
-#line 269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp1_ = self->priv->authenticator;
+#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp2_ = spit_publishing_authenticator_get_authentication_parameter (_tmp1_);
+#line 139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	params = _tmp2_;
+#line 140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	consumer_key = NULL;
+#line 141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	consumer_secret = NULL;
+#line 142 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	auth_token = NULL;
+#line 143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	auth_token_secret = NULL;
+#line 144 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	username = NULL;
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp3_ = params;
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_lookup_extended (_tmp3_, "ConsumerKey", NULL, &_tmp4_);
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (consumer_key);
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp5_ = _g_variant_ref0 (_tmp4_);
+#line 146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	consumer_key = _tmp5_;
+#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp6_ = params;
+#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_lookup_extended (_tmp6_, "ConsumerSecret", NULL, &_tmp7_);
+#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (consumer_secret);
+#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp8_ = _g_variant_ref0 (_tmp7_);
+#line 147 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	consumer_secret = _tmp8_;
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp9_ = self->priv->session;
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp10_ = consumer_key;
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp11_ = g_variant_get_string (_tmp10_, NULL);
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp12_ = consumer_secret;
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp13_ = g_variant_get_string (_tmp12_, NULL);
+#line 148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_flickr_session_set_api_credentials (_tmp9_, _tmp11_, _tmp13_);
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp14_ = params;
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_lookup_extended (_tmp14_, "AuthToken", NULL, &_tmp15_);
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (auth_token);
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp16_ = _g_variant_ref0 (_tmp15_);
+#line 150 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	auth_token = _tmp16_;
+#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp17_ = params;
+#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_lookup_extended (_tmp17_, "AuthTokenSecret", NULL, &_tmp18_);
+#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (auth_token_secret);
+#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp19_ = _g_variant_ref0 (_tmp18_);
+#line 151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	auth_token_secret = _tmp19_;
+#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp20_ = params;
+#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_lookup_extended (_tmp20_, "Username", NULL, &_tmp21_);
+#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (username);
+#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp22_ = _g_variant_ref0 (_tmp21_);
+#line 152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	username = _tmp22_;
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp23_ = self->priv->session;
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp24_ = auth_token;
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp25_ = g_variant_get_string (_tmp24_, NULL);
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp26_ = auth_token_secret;
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp27_ = g_variant_get_string (_tmp26_, NULL);
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp28_ = username;
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp29_ = g_variant_get_string (_tmp28_, NULL);
+#line 153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_flickr_session_set_access_phase_credentials (_tmp23_, _tmp25_, _tmp27_, _tmp29_);
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp30_ = self->priv->parameters;
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp31_ = self->priv->session;
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp32_ = publishing_flickr_session_get_username (_tmp31_);
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp30_->username);
+#line 156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp30_->username = _tmp32_;
+#line 158 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_fetch_account_info (self);
-#line 2333 "FlickrPublishing.c"
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (username);
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (auth_token_secret);
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (auth_token);
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (consumer_secret);
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_variant_unref0 (consumer_key);
+#line 133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_hash_table_unref0 (params);
+#line 1821 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_account_fetch_txn_completed_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self) {
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_account_fetch_txn_completed ((PublishingFlickrFlickrPublisher*) self, _sender);
-#line 2340 "FlickrPublishing.c"
+#line 1828 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_account_fetch_txn_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self) {
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_account_fetch_txn_error ((PublishingFlickrFlickrPublisher*) self, _sender, err);
-#line 2347 "FlickrPublishing.c"
+#line 1835 "FlickrPublishing.c"
 }
 
 
@@ -2370,44 +1845,44 @@ static void publishing_flickr_flickr_publisher_on_account_fetch_txn_completed (P
 	PublishingRESTSupportTransaction* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 161 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = txn;
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = txn;
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 274 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_error_publishing_rest_support_transaction_network_error, self);
-#line 276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 165 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp4_) {
-#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2382 "FlickrPublishing.c"
+#line 1870 "FlickrPublishing.c"
 	}
-#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:279: EVENT: account fetch transaction response r" \
+#line 168 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:168: EVENT: account fetch transaction response r" \
 "eceived over the network");
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = txn;
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = publishing_rest_support_transaction_get_response (_tmp5_);
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_parse_account_info_from_xml (self, _tmp7_);
-#line 280 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 169 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 2396 "FlickrPublishing.c"
+#line 1884 "FlickrPublishing.c"
 }
 
 
@@ -2419,75 +1894,75 @@ static void publishing_flickr_flickr_publisher_on_account_fetch_txn_error (Publi
 	gboolean _tmp4_ = FALSE;
 	SpitPublishingPluginHost* _tmp5_ = NULL;
 	GError* _tmp6_ = NULL;
-#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 283 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 172 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = txn;
-#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("completed", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp1_, NULL, FALSE);
-#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_completed_publishing_rest_support_transaction_completed, self);
-#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = txn;
-#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("network-error", PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, &_tmp3_, NULL, FALSE);
-#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_error_publishing_rest_support_transaction_network_error, self);
-#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp4_) {
-#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 178 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2430 "FlickrPublishing.c"
+#line 1918 "FlickrPublishing.c"
 	}
-#line 291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:291: EVENT: account fetch transaction caused a n" \
+#line 180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:180: EVENT: account fetch transaction caused a n" \
 "etwork error");
-#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = self->priv->host;
-#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = err;
-#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 2440 "FlickrPublishing.c"
+#line 1928 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_on_account_info_available (PublishingFlickrFlickrPublisher* self) {
 	gboolean _tmp0_ = FALSE;
-#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp0_) {
-#line 297 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2454 "FlickrPublishing.c"
+#line 1942 "FlickrPublishing.c"
 	}
-#line 299 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:299: EVENT: account information has become avail" \
+#line 188 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:188: EVENT: account information has become avail" \
 "able");
-#line 300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_show_publishing_options_pane (self);
-#line 2460 "FlickrPublishing.c"
+#line 1948 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_publishing_options_pane_publish_publishing_flickr_publishing_options_pane_publish (PublishingFlickrPublishingOptionsPane* _sender, gboolean strip_metadata, gpointer self) {
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_publishing_options_pane_publish ((PublishingFlickrFlickrPublisher*) self, strip_metadata);
-#line 2467 "FlickrPublishing.c"
+#line 1955 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_publishing_options_pane_logout_publishing_flickr_publishing_options_pane_logout (PublishingFlickrPublishingOptionsPane* _sender, gpointer self) {
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_publishing_options_pane_logout ((PublishingFlickrFlickrPublisher*) self);
-#line 2474 "FlickrPublishing.c"
+#line 1962 "FlickrPublishing.c"
 }
 
 
@@ -2498,36 +1973,36 @@ static void publishing_flickr_flickr_publisher_on_publishing_options_pane_publis
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
 	gboolean _tmp5_ = FALSE;
-#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 192 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->publishing_options_pane;
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_publish_publishing_flickr_publishing_options_pane_publish, self);
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->publishing_options_pane;
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp3_, NULL, FALSE);
-#line 305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_logout_publishing_flickr_publishing_options_pane_logout, self);
-#line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp4_) {
-#line 308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2505 "FlickrPublishing.c"
+#line 1993 "FlickrPublishing.c"
 	}
-#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:310: EVENT: user clicked the 'Publish' button in" \
+#line 199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:199: EVENT: user clicked the 'Publish' button in" \
 " the publishing options pane");
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = strip_metadata;
-#line 311 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 200 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_publish (self, _tmp5_);
-#line 2513 "FlickrPublishing.c"
+#line 2001 "FlickrPublishing.c"
 }
 
 
@@ -2537,34 +2012,34 @@ static void publishing_flickr_flickr_publisher_on_publishing_options_pane_logout
 	PublishingFlickrPublishingOptionsPane* _tmp2_ = NULL;
 	guint _tmp3_ = 0U;
 	gboolean _tmp4_ = FALSE;
-#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->publishing_options_pane;
-#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 315 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 204 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_publish_publishing_flickr_publishing_options_pane_publish, self);
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->publishing_options_pane;
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp3_, NULL, FALSE);
-#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_logout_publishing_flickr_publishing_options_pane_logout, self);
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 318 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp4_) {
-#line 319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2543 "FlickrPublishing.c"
+#line 2031 "FlickrPublishing.c"
 	}
-#line 321 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:321: EVENT: user clicked the 'Logout' button in " \
+#line 210 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:210: EVENT: user clicked the 'Logout' button in " \
 "the publishing options pane");
-#line 323 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 212 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_logout (self);
-#line 2549 "FlickrPublishing.c"
+#line 2037 "FlickrPublishing.c"
 }
 
 
@@ -2577,52 +2052,52 @@ static void publishing_flickr_flickr_publisher_on_upload_status_updated (Publish
 	void* _tmp3__target = NULL;
 	gint _tmp4_ = 0;
 	gdouble _tmp5_ = 0.0;
-#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 215 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp0_) {
-#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 217 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2570 "FlickrPublishing.c"
+#line 2058 "FlickrPublishing.c"
 	}
-#line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = completed_fraction;
-#line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:330: EVENT: uploader reports upload %.2f percent" \
+#line 219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:219: EVENT: uploader reports upload %.2f percent" \
 " complete.", 100.0 * _tmp1_);
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->progress_reporter;
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2__target = self->priv->progress_reporter_target;
-#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_vala_assert (_tmp2_ != NULL, "progress_reporter != null");
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = self->priv->progress_reporter;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3__target = self->priv->progress_reporter_target;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = file_number;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = completed_fraction;
-#line 334 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 223 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ (_tmp4_, _tmp5_, _tmp3__target);
-#line 2592 "FlickrPublishing.c"
+#line 2080 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete (PublishingRESTSupportBatchUploader* _sender, gint num_photos_published, gpointer self) {
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_upload_complete ((PublishingFlickrFlickrPublisher*) self, _sender, num_photos_published);
-#line 2599 "FlickrPublishing.c"
+#line 2087 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error (PublishingRESTSupportBatchUploader* _sender, GError* err, gpointer self) {
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_upload_error ((PublishingFlickrFlickrPublisher*) self, _sender, err);
-#line 2606 "FlickrPublishing.c"
+#line 2094 "FlickrPublishing.c"
 }
 
 
@@ -2633,38 +2108,38 @@ static void publishing_flickr_flickr_publisher_on_upload_complete (PublishingFli
 	guint _tmp3_ = 0U;
 	PublishingRESTSupportBatchUploader* _tmp4_ = NULL;
 	guint _tmp5_ = 0U;
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 337 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 226 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (uploader));
-#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 228 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp0_) {
-#line 340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2627 "FlickrPublishing.c"
+#line 2115 "FlickrPublishing.c"
 	}
-#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = num_published;
-#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:342: EVENT: uploader reports upload complete; %d" \
+#line 231 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:231: EVENT: uploader reports upload complete; %d" \
 " items published.", _tmp1_);
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = uploader;
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp3_, NULL, FALSE);
-#line 344 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp2_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self);
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = uploader;
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp5_, NULL, FALSE);
-#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 234 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp4_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp5_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
-#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_do_show_success_pane (self);
-#line 2647 "FlickrPublishing.c"
+#line 2135 "FlickrPublishing.c"
 }
 
 
@@ -2678,753 +2153,44 @@ static void publishing_flickr_flickr_publisher_on_upload_error (PublishingFlickr
 	guint _tmp6_ = 0U;
 	SpitPublishingPluginHost* _tmp7_ = NULL;
 	GError* _tmp8_ = NULL;
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 350 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 239 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_BATCH_UPLOADER (uploader));
-#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp0_) {
-#line 353 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 242 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 2671 "FlickrPublishing.c"
+#line 2159 "FlickrPublishing.c"
 	}
-#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = err;
-#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _tmp1_->message;
-#line 355 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:355: EVENT: uploader reports upload error = '%s'" \
+#line 244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:244: EVENT: uploader reports upload error = '%s'" \
 ".", _tmp2_);
-#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = uploader;
-#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("upload-complete", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp4_, NULL, FALSE);
-#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 246 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp3_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp4_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self);
-#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = uploader;
-#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("upload-error", PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, &_tmp6_, NULL, FALSE);
-#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 247 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (_tmp5_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp6_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self);
-#line 360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = self->priv->host;
-#line 360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = err;
-#line 360 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 2697 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked_spit_publishing_login_callback (gpointer self) {
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked ((PublishingFlickrFlickrPublisher*) self);
-#line 2704 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_show_login_welcome_pane (PublishingFlickrFlickrPublisher* self) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	SpitPublishingPluginHost* _tmp1_ = NULL;
-#line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:364: ACTION: installing login welcome pane");
-#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 366 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->host;
-#line 367 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_install_welcome_pane (_tmp1_, PUBLISHING_FLICKR_SERVICE_WELCOME_MESSAGE, _publishing_flickr_flickr_publisher_on_welcome_pane_login_clicked_spit_publishing_login_callback, self);
-#line 2723 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_run_authentication_request_transaction (PublishingFlickrFlickrPublisher* self) {
-	SpitPublishingPluginHost* _tmp0_ = NULL;
-	SpitPublishingPluginHost* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	PublishingFlickrAuthenticationRequestTransaction* txn = NULL;
-	PublishingFlickrSession* _tmp3_ = NULL;
-	PublishingFlickrAuthenticationRequestTransaction* _tmp4_ = NULL;
-	GError * _inner_error_ = NULL;
-#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 371 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:371: ACTION: running authentication request tran" \
-"saction");
-#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->host;
-#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->host;
-#line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = _ ("Preparing for login…");
-#line 374 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_install_static_message_pane (_tmp1_, _tmp2_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = self->priv->session;
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = publishing_flickr_authentication_request_transaction_new (_tmp3_);
-#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	txn = _tmp4_;
-#line 377 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_completed_publishing_rest_support_transaction_completed, self, 0);
-#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_flickr_flickr_publisher_on_auth_request_txn_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 2759 "FlickrPublishing.c"
-	{
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 2767 "FlickrPublishing.c"
-				goto __catch16_spit_publishing_publishing_error;
-			}
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_publishing_rest_support_transaction_unref0 (txn);
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_clear_error (&_inner_error_);
-#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			return;
-#line 2778 "FlickrPublishing.c"
-		}
-	}
-	goto __finally16;
-	__catch16_spit_publishing_publishing_error:
-	{
-		GError* err = NULL;
-		SpitPublishingPluginHost* _tmp5_ = NULL;
-		GError* _tmp6_ = NULL;
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		err = _inner_error_;
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_inner_error_ = NULL;
-#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp5_ = self->priv->host;
-#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp6_ = err;
-#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp5_, _tmp6_);
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (err);
-#line 2799 "FlickrPublishing.c"
-	}
-	__finally16:
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_publishing_rest_support_transaction_unref0 (txn);
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_clear_error (&_inner_error_);
-#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 2812 "FlickrPublishing.c"
-	}
-#line 370 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_rest_support_transaction_unref0 (txn);
-#line 2816 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_parse_token_info_from_auth_request (PublishingFlickrFlickrPublisher* self, const gchar* response) {
-	const gchar* _tmp0_ = NULL;
-	gchar* oauth_token = NULL;
-	gchar* oauth_token_secret = NULL;
-	GHashTable* data = NULL;
-	const gchar* _tmp1_ = NULL;
-	GHashTable* _tmp2_ = NULL;
-	GHashTable* _tmp3_ = NULL;
-	gconstpointer _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-	GHashTable* _tmp6_ = NULL;
-	gconstpointer _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	gboolean _tmp9_ = FALSE;
-	const gchar* _tmp10_ = NULL;
-	const gchar* _tmp16_ = NULL;
-	const gchar* _tmp17_ = NULL;
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (response != NULL);
-#line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = response;
-#line 388 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:388: ACTION: parsing authorization request respo" \
-"nse '%s' into token and secret", _tmp0_);
-#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	oauth_token = NULL;
-#line 391 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	oauth_token_secret = NULL;
-#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = response;
-#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = soup_form_decode (_tmp1_);
-#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	data = _tmp2_;
-#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = data;
-#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_lookup_extended (_tmp3_, "oauth_token", NULL, &_tmp4_);
-#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (oauth_token);
-#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = g_strdup (_tmp4_);
-#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	oauth_token = _tmp5_;
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = data;
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_lookup_extended (_tmp6_, "oauth_token_secret", NULL, &_tmp7_);
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (oauth_token_secret);
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = g_strdup (_tmp7_);
-#line 395 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	oauth_token_secret = _tmp8_;
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp10_ = oauth_token;
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp10_ == NULL) {
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp9_ = TRUE;
-#line 2881 "FlickrPublishing.c"
-	} else {
-		const gchar* _tmp11_ = NULL;
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp11_ = oauth_token_secret;
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp9_ = _tmp11_ == NULL;
-#line 2888 "FlickrPublishing.c"
-	}
-#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp9_) {
-#line 2892 "FlickrPublishing.c"
-		SpitPublishingPluginHost* _tmp12_ = NULL;
-		const gchar* _tmp13_ = NULL;
-		GError* _tmp14_ = NULL;
-		GError* _tmp15_ = NULL;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp12_ = self->priv->host;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp13_ = response;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp14_ = g_error_new (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "'%s' isn't a valid response to an OAuth authentication request", _tmp13_);
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp15_ = _tmp14_;
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp12_, _tmp15_);
-#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (_tmp15_);
-#line 2909 "FlickrPublishing.c"
-	}
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp16_ = oauth_token;
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp17_ = oauth_token_secret;
-#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_authentication_token_available (self, _tmp16_, _tmp17_);
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_hash_table_unref0 (data);
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (oauth_token_secret);
-#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (oauth_token);
-#line 2923 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_launch_system_browser (PublishingFlickrFlickrPublisher* self, const gchar* token) {
-	gchar* login_uri = NULL;
-	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-	gchar* _tmp4_ = NULL;
-	const gchar* _tmp5_ = NULL;
-	GError * _inner_error_ = NULL;
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token != NULL);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = token;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = g_strconcat ("https://www.flickr.com/services/oauth/authorize?oauth_token=", _tmp0_, NULL);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = _tmp1_;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = g_strconcat (_tmp2_, "&perms=write", NULL);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = _tmp3_;
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp2_);
-#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	login_uri = _tmp4_;
-#line 409 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = login_uri;
-#line 409 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:409: ACTION: launching system browser with uri =" \
-" '%s'", _tmp5_);
-#line 2958 "FlickrPublishing.c"
-	{
-		const gchar* _tmp6_ = NULL;
-		gchar* _tmp7_ = NULL;
-		gchar* _tmp8_ = NULL;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp6_ = login_uri;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp7_ = g_strconcat ("xdg-open ", _tmp6_, NULL);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp8_ = _tmp7_;
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_spawn_command_line_async (_tmp8_, &_inner_error_);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp8_);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			if (_inner_error_->domain == G_SPAWN_ERROR) {
-#line 2977 "FlickrPublishing.c"
-				goto __catch17_g_spawn_error;
-			}
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_g_free0 (login_uri);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_clear_error (&_inner_error_);
-#line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			return;
-#line 2988 "FlickrPublishing.c"
-		}
-	}
-	goto __finally17;
-	__catch17_g_spawn_error:
-	{
-		GError* e = NULL;
-		SpitPublishingPluginHost* _tmp9_ = NULL;
-		GError* _tmp10_ = NULL;
-		GError* _tmp11_ = NULL;
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		e = _inner_error_;
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_inner_error_ = NULL;
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp9_ = self->priv->host;
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp10_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, "couldn't launch system web browser to complete Flickr login");
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp11_ = _tmp10_;
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp9_, _tmp11_);
-#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (_tmp11_);
-#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (e);
-#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (login_uri);
-#line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 3018 "FlickrPublishing.c"
-	}
-	__finally17:
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (login_uri);
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_clear_error (&_inner_error_);
-#line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 3031 "FlickrPublishing.c"
-	}
-#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_on_system_browser_launched (self);
-#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (login_uri);
-#line 3037 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_show_pin_entry_pane (PublishingFlickrFlickrPublisher* self) {
-	GtkBuilder* builder = NULL;
-	GtkBuilder* _tmp0_ = NULL;
-	PublishingFlickrPinEntryPane* pin_entry_pane = NULL;
-	GtkBuilder* _tmp8_ = NULL;
-	PublishingFlickrPinEntryPane* _tmp9_ = NULL;
-	PublishingFlickrPinEntryPane* _tmp10_ = NULL;
-	SpitPublishingPluginHost* _tmp11_ = NULL;
-	PublishingFlickrPinEntryPane* _tmp12_ = NULL;
-	GError * _inner_error_ = NULL;
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:423: ACTION: showing PIN entry pane");
-#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = gtk_builder_new ();
-#line 425 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	builder = _tmp0_;
-#line 3059 "FlickrPublishing.c"
-	{
-		GtkBuilder* _tmp1_ = NULL;
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp1_ = builder;
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		gtk_builder_add_from_resource (_tmp1_, PLUGIN_RESOURCE_PATH "/" "flickr_pin_entry_pane.ui", &_inner_error_);
-#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3068 "FlickrPublishing.c"
-			goto __catch18_g_error;
-		}
-	}
-	goto __finally18;
-	__catch18_g_error:
-	{
-		GError* e = NULL;
-		GError* _tmp2_ = NULL;
-		const gchar* _tmp3_ = NULL;
-		SpitPublishingPluginHost* _tmp4_ = NULL;
-		const gchar* _tmp5_ = NULL;
-		GError* _tmp6_ = NULL;
-		GError* _tmp7_ = NULL;
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		e = _inner_error_;
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_inner_error_ = NULL;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp2_ = e;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp3_ = _tmp2_->message;
-#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_warning ("FlickrPublishing.vala:431: Could not parse UI file! Error: %s.", _tmp3_);
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp4_ = self->priv->host;
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp5_ = _ ("A file required for publishing is unavailable. Publishing to Flickr ca" \
-"n’t continue.");
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp6_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp5_);
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp7_ = _tmp6_;
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp4_, _tmp7_);
-#line 432 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (_tmp7_);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (e);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_object_unref0 (builder);
-#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 3110 "FlickrPublishing.c"
-	}
-	__finally18:
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_object_unref0 (builder);
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_clear_error (&_inner_error_);
-#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 3123 "FlickrPublishing.c"
-	}
-#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = builder;
-#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = publishing_flickr_pin_entry_pane_new (_tmp8_);
-#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	pin_entry_pane = _tmp9_;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp10_ = pin_entry_pane;
-#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (_tmp10_, "proceed", (GCallback) _publishing_flickr_flickr_publisher_on_pin_entry_proceed_publishing_flickr_pin_entry_pane_proceed, self, 0);
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp11_ = self->priv->host;
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp12_ = pin_entry_pane;
-#line 440 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_install_dialog_pane (_tmp11_, G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (pin_entry_pane);
-#line 422 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (builder);
-#line 3145 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_verify_pin (PublishingFlickrFlickrPublisher* self, const gchar* pin) {
-	const gchar* _tmp0_ = NULL;
-	SpitPublishingPluginHost* _tmp1_ = NULL;
-	SpitPublishingPluginHost* _tmp2_ = NULL;
-	const gchar* _tmp3_ = NULL;
-	PublishingFlickrAccessTokenFetchTransaction* txn = NULL;
-	PublishingFlickrSession* _tmp4_ = NULL;
-	const gchar* _tmp5_ = NULL;
-	PublishingFlickrAccessTokenFetchTransaction* _tmp6_ = NULL;
-	GError * _inner_error_ = NULL;
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (pin != NULL);
-#line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = pin;
-#line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:444: ACTION: validating authorization PIN %s", _tmp0_);
-#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->host;
-#line 446 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_set_service_locked (_tmp1_, TRUE);
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = self->priv->host;
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = _ ("Verifying authorization…");
-#line 447 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	spit_publishing_plugin_host_install_static_message_pane (_tmp2_, _tmp3_, SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = self->priv->session;
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = pin;
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = publishing_flickr_access_token_fetch_transaction_new (_tmp4_, _tmp5_);
-#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	txn = _tmp6_;
-#line 450 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_txn_completed_publishing_rest_support_transaction_completed, self, 0);
-#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_flickr_flickr_publisher_on_access_token_fetch_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 3189 "FlickrPublishing.c"
-	{
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3197 "FlickrPublishing.c"
-				goto __catch19_spit_publishing_publishing_error;
-			}
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_publishing_rest_support_transaction_unref0 (txn);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_clear_error (&_inner_error_);
-#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			return;
-#line 3208 "FlickrPublishing.c"
-		}
-	}
-	goto __finally19;
-	__catch19_spit_publishing_publishing_error:
-	{
-		GError* err = NULL;
-		SpitPublishingPluginHost* _tmp7_ = NULL;
-		GError* _tmp8_ = NULL;
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		err = _inner_error_;
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_inner_error_ = NULL;
-#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp7_ = self->priv->host;
-#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp8_ = err;
-#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp7_, _tmp8_);
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (err);
-#line 3229 "FlickrPublishing.c"
-	}
-	__finally19:
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_publishing_rest_support_transaction_unref0 (txn);
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_clear_error (&_inner_error_);
-#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		return;
-#line 3242 "FlickrPublishing.c"
-	}
-#line 443 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_rest_support_transaction_unref0 (txn);
-#line 3246 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_flickr_publisher_do_extract_access_phase_credentials_from_reponse (PublishingFlickrFlickrPublisher* self, const gchar* response) {
-	const gchar* _tmp0_ = NULL;
-	gchar* token = NULL;
-	gchar* token_secret = NULL;
-	gchar* username = NULL;
-	GHashTable* data = NULL;
-	const gchar* _tmp1_ = NULL;
-	GHashTable* _tmp2_ = NULL;
-	GHashTable* _tmp3_ = NULL;
-	gconstpointer _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-	GHashTable* _tmp6_ = NULL;
-	gconstpointer _tmp7_ = NULL;
-	gchar* _tmp8_ = NULL;
-	GHashTable* _tmp9_ = NULL;
-	gconstpointer _tmp10_ = NULL;
-	gchar* _tmp11_ = NULL;
-	const gchar* _tmp12_ = NULL;
-	const gchar* _tmp13_ = NULL;
-	const gchar* _tmp14_ = NULL;
-	gboolean _tmp15_ = FALSE;
-	gboolean _tmp16_ = FALSE;
-	const gchar* _tmp17_ = NULL;
-	PublishingFlickrSession* _tmp23_ = NULL;
-	const gchar* _tmp24_ = NULL;
-	const gchar* _tmp25_ = NULL;
-	const gchar* _tmp26_ = NULL;
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (response != NULL);
-#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = response;
-#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:461: ACTION: extracting access phase credentials" \
-" from '%s'", _tmp0_);
-#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	token = NULL;
-#line 464 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	token_secret = NULL;
-#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	username = NULL;
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = response;
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = soup_form_decode (_tmp1_);
-#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	data = _tmp2_;
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = data;
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_lookup_extended (_tmp3_, "oauth_token", NULL, &_tmp4_);
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (token);
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = g_strdup (_tmp4_);
-#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	token = _tmp5_;
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = data;
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_lookup_extended (_tmp6_, "oauth_token_secret", NULL, &_tmp7_);
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (token_secret);
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = g_strdup (_tmp7_);
-#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	token_secret = _tmp8_;
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = data;
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_lookup_extended (_tmp9_, "username", NULL, &_tmp10_);
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (username);
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp11_ = g_strdup (_tmp10_);
-#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	username = _tmp11_;
-#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp12_ = token;
-#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp13_ = token_secret;
-#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp14_ = username;
-#line 472 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:472: access phase credentials: { token = '%s'; t" \
-"oken_secret = '%s'; username = '%s' }", _tmp12_, _tmp13_, _tmp14_);
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp17_ = token;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp17_ == NULL) {
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp16_ = TRUE;
-#line 3341 "FlickrPublishing.c"
-	} else {
-		const gchar* _tmp18_ = NULL;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp18_ = token_secret;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp16_ = _tmp18_ == NULL;
-#line 3348 "FlickrPublishing.c"
-	}
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp16_) {
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp15_ = TRUE;
-#line 3354 "FlickrPublishing.c"
-	} else {
-		const gchar* _tmp19_ = NULL;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp19_ = username;
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp15_ = _tmp19_ == NULL;
-#line 3361 "FlickrPublishing.c"
-	}
-#line 475 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp15_) {
-#line 3365 "FlickrPublishing.c"
-		SpitPublishingPluginHost* _tmp20_ = NULL;
-		GError* _tmp21_ = NULL;
-		GError* _tmp22_ = NULL;
-#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp20_ = self->priv->host;
-#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp21_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "expected " "access phase credentials to contain token, token secret, and username " \
-"but at " "least one of these is absent");
-#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp22_ = _tmp21_;
-#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		spit_publishing_plugin_host_post_error (_tmp20_, _tmp22_);
-#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_error_free0 (_tmp22_);
-#line 3379 "FlickrPublishing.c"
-	}
-#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp23_ = self->priv->session;
-#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp24_ = token;
-#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp25_ = token_secret;
-#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp26_ = username;
-#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_session_set_access_phase_credentials (_tmp23_, _tmp24_, _tmp25_, _tmp26_);
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_hash_table_unref0 (data);
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (username);
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (token_secret);
-#line 460 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (token);
-#line 3399 "FlickrPublishing.c"
+#line 2185 "FlickrPublishing.c"
 }
 
 
@@ -3435,87 +2201,87 @@ static void publishing_flickr_flickr_publisher_do_fetch_account_info (Publishing
 	PublishingFlickrSession* _tmp2_ = NULL;
 	PublishingFlickrAccountInfoFetchTransaction* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 484 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:484: ACTION: running network transaction to fetc" \
+#line 253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:253: ACTION: running network transaction to fetc" \
 "h account information");
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, TRUE);
-#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 256 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_install_account_fetch_wait_pane (_tmp1_);
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->session;
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_flickr_account_info_fetch_transaction_new (_tmp2_);
-#line 489 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 258 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	txn = _tmp3_;
-#line 490 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "completed", (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_completed_publishing_rest_support_transaction_completed, self, 0);
-#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 260 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "network-error", (GCallback) _publishing_flickr_flickr_publisher_on_account_fetch_txn_error_publishing_rest_support_transaction_network_error, self, 0);
-#line 3432 "FlickrPublishing.c"
+#line 2218 "FlickrPublishing.c"
 	{
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_rest_support_transaction_execute (G_TYPE_CHECK_INSTANCE_CAST (txn, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3440 "FlickrPublishing.c"
-				goto __catch20_spit_publishing_publishing_error;
+#line 2226 "FlickrPublishing.c"
+				goto __catch13_spit_publishing_publishing_error;
 			}
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (txn);
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3451 "FlickrPublishing.c"
+#line 2237 "FlickrPublishing.c"
 		}
 	}
-	goto __finally20;
-	__catch20_spit_publishing_publishing_error:
+	goto __finally13;
+	__catch13_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		SpitPublishingPluginHost* _tmp4_ = NULL;
 		GError* _tmp5_ = NULL;
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		err = _inner_error_;
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = self->priv->host;
-#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = err;
-#line 496 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp4_, _tmp5_);
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (err);
-#line 3472 "FlickrPublishing.c"
+#line 2258 "FlickrPublishing.c"
 	}
-	__finally20:
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally13:
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_publishing_rest_support_transaction_unref0 (txn);
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 493 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 262 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 3485 "FlickrPublishing.c"
+#line 2271 "FlickrPublishing.c"
 	}
-#line 483 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 252 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (txn);
-#line 3489 "FlickrPublishing.c"
+#line 2275 "FlickrPublishing.c"
 }
 
 
@@ -3533,23 +2299,23 @@ static gint64 int64_parse (const gchar* str) {
 	result = _tmp1_;
 #line 680 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 3507 "FlickrPublishing.c"
+#line 2293 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_do_parse_account_info_from_xml (PublishingFlickrFlickrPublisher* self, const gchar* xml) {
 	const gchar* _tmp0_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 269 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (xml != NULL);
-#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = xml;
-#line 501 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:501: ACTION: parsing account information from xm" \
+#line 270 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:270: ACTION: parsing account information from xm" \
 "l = '%s'", _tmp0_);
-#line 3522 "FlickrPublishing.c"
+#line 2308 "FlickrPublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* response_doc = NULL;
 		const gchar* _tmp1_ = NULL;
@@ -3582,293 +2348,302 @@ static void publishing_flickr_flickr_publisher_do_parse_account_info_from_xml (P
 		gint64 _tmp23_ = 0LL;
 		PublishingFlickrPublishingParameters* _tmp24_ = NULL;
 		PublishingFlickrUserKind _tmp25_ = 0;
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp1_ = xml;
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp2_ = publishing_flickr_transaction_parse_flickr_response (_tmp1_, &_inner_error_);
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		response_doc = _tmp2_;
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3565 "FlickrPublishing.c"
-				goto __catch21_spit_publishing_publishing_error;
+#line 2351 "FlickrPublishing.c"
+				goto __catch14_spit_publishing_publishing_error;
 			}
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 503 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3574 "FlickrPublishing.c"
+#line 2360 "FlickrPublishing.c"
 		}
-#line 504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp3_ = response_doc;
-#line 504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = publishing_rest_support_xml_document_get_root_node (_tmp3_);
-#line 504 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		root_node = _tmp4_;
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = response_doc;
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = root_node;
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = publishing_rest_support_xml_document_get_named_child (_tmp5_, _tmp6_, "user", &_inner_error_);
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		user_node = _tmp7_;
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3596 "FlickrPublishing.c"
-				goto __catch21_spit_publishing_publishing_error;
+#line 2382 "FlickrPublishing.c"
+				goto __catch14_spit_publishing_publishing_error;
 			}
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 506 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3607 "FlickrPublishing.c"
+#line 2393 "FlickrPublishing.c"
 		}
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = response_doc;
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9_ = user_node;
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp10_ = publishing_rest_support_xml_document_get_property_value (_tmp8_, _tmp9_, "ispro", &_inner_error_);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		is_pro_str = _tmp10_;
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3623 "FlickrPublishing.c"
-				goto __catch21_spit_publishing_publishing_error;
+#line 2409 "FlickrPublishing.c"
+				goto __catch14_spit_publishing_publishing_error;
 			}
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 508 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3634 "FlickrPublishing.c"
+#line 2420 "FlickrPublishing.c"
 		}
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp11_ = response_doc;
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp12_ = user_node;
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp13_ = publishing_rest_support_xml_document_get_named_child (_tmp11_, _tmp12_, "bandwidth", &_inner_error_);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		bandwidth_node = _tmp13_;
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (is_pro_str);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3652 "FlickrPublishing.c"
-				goto __catch21_spit_publishing_publishing_error;
+#line 2438 "FlickrPublishing.c"
+				goto __catch14_spit_publishing_publishing_error;
 			}
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (is_pro_str);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3665 "FlickrPublishing.c"
+#line 2451 "FlickrPublishing.c"
 		}
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp14_ = response_doc;
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp15_ = bandwidth_node;
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp16_ = publishing_rest_support_xml_document_get_property_value (_tmp14_, _tmp15_, "remainingkb", &_inner_error_);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		remaining_kb_str = _tmp16_;
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (is_pro_str);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3683 "FlickrPublishing.c"
-				goto __catch21_spit_publishing_publishing_error;
+#line 2469 "FlickrPublishing.c"
+				goto __catch14_spit_publishing_publishing_error;
 			}
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (is_pro_str);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 281 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3696 "FlickrPublishing.c"
+#line 2482 "FlickrPublishing.c"
 		}
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp17_ = is_pro_str;
-#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 284 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (g_strcmp0 (_tmp17_, "0") == 0) {
-#line 516 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 285 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			user_kind = PUBLISHING_FLICKR_USER_KIND_FREE;
-#line 3704 "FlickrPublishing.c"
+#line 2490 "FlickrPublishing.c"
 		} else {
 			const gchar* _tmp18_ = NULL;
-#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp18_ = is_pro_str;
-#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 286 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (g_strcmp0 (_tmp18_, "1") == 0) {
-#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				user_kind = PUBLISHING_FLICKR_USER_KIND_PRO;
-#line 3713 "FlickrPublishing.c"
+#line 2499 "FlickrPublishing.c"
 			} else {
 				GError* _tmp19_ = NULL;
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp19_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_MALFORMED_RESPONSE, "Unable to determine if user has free or pro account");
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_inner_error_ = _tmp19_;
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (remaining_kb_str);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (is_pro_str);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 3728 "FlickrPublishing.c"
-					goto __catch21_spit_publishing_publishing_error;
+#line 2514 "FlickrPublishing.c"
+					goto __catch14_spit_publishing_publishing_error;
 				}
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (remaining_kb_str);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (is_pro_str);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				g_clear_error (&_inner_error_);
-#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 289 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				return;
-#line 3743 "FlickrPublishing.c"
+#line 2529 "FlickrPublishing.c"
 			}
 		}
-#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp20_ = remaining_kb_str;
-#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp21_ = int64_parse (_tmp20_);
-#line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		quota_bytes_left = _tmp21_ * 1024;
-#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp22_ = self->priv->parameters;
-#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp23_ = quota_bytes_left;
-#line 525 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp22_->quota_free_bytes = _tmp23_;
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp24_ = self->priv->parameters;
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp25_ = user_kind;
-#line 526 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp24_->user_kind = _tmp25_;
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (remaining_kb_str);
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (is_pro_str);
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (response_doc);
-#line 3770 "FlickrPublishing.c"
+#line 2556 "FlickrPublishing.c"
 	}
-	goto __finally21;
-	__catch21_spit_publishing_publishing_error:
+	goto __finally14;
+	__catch14_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp26_ = NULL;
 		SpitPublishingPluginHost* _tmp27_ = NULL;
 		GError* _tmp28_ = NULL;
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		err = _inner_error_;
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp26_ = err;
-#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (g_error_matches (_tmp26_, SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_EXPIRED_SESSION)) {
-#line 533 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			publishing_flickr_flickr_publisher_do_logout (self);
-#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_error_free0 (err);
-#line 534 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 3793 "FlickrPublishing.c"
+#line 2579 "FlickrPublishing.c"
 		}
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp27_ = self->priv->host;
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp28_ = err;
-#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp27_, _tmp28_);
-#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (err);
-#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 3805 "FlickrPublishing.c"
+#line 2591 "FlickrPublishing.c"
 	}
-	__finally21:
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally14:
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 502 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 3816 "FlickrPublishing.c"
+#line 2602 "FlickrPublishing.c"
 	}
-#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_account_info_available (self);
-#line 3820 "FlickrPublishing.c"
+#line 2606 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_do_logout (PublishingFlickrFlickrPublisher* self) {
-	PublishingFlickrSession* _tmp0_ = NULL;
-#line 544 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
+	gboolean _tmp1_ = FALSE;
+#line 313 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:545: ACTION: logging user out, deauthenticating " \
+#line 314 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:314: ACTION: logging user out, deauthenticating " \
 "session, and erasing stored credentials");
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->session;
-#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_session_deauthenticate (_tmp0_);
-#line 548 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_flickr_publisher_invalidate_persistent_session (self);
-#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp1_ = spit_publishing_authenticator_can_logout (_tmp0_);
+#line 316 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp1_) {
+#line 2623 "FlickrPublishing.c"
+		SpitPublishingAuthenticator* _tmp2_ = NULL;
+#line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp2_ = self->priv->authenticator;
+#line 317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		spit_publishing_authenticator_logout (_tmp2_);
+#line 2629 "FlickrPublishing.c"
+	}
+#line 320 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->running = FALSE;
-#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 322 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_attempt_start (self);
-#line 3840 "FlickrPublishing.c"
+#line 2635 "FlickrPublishing.c"
 }
 
 
@@ -3887,33 +2662,33 @@ static void publishing_flickr_flickr_publisher_do_show_publishing_options_pane (
 	SpitPublishingPluginHost* _tmp17_ = NULL;
 	PublishingFlickrPublishingOptionsPane* _tmp18_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 556 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:556: ACTION: displaying publishing options pane");
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:326: ACTION: displaying publishing options pane");
+#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 328 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = gtk_builder_new ();
-#line 560 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	builder = _tmp1_;
-#line 3871 "FlickrPublishing.c"
+#line 2666 "FlickrPublishing.c"
 	{
 		GtkBuilder* _tmp2_ = NULL;
-#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp2_ = builder;
-#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gtk_builder_add_from_resource (_tmp2_, PLUGIN_RESOURCE_PATH "/" "flickr_publishing_options_pane.ui", &_inner_error_);
-#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 335 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 3880 "FlickrPublishing.c"
-			goto __catch22_g_error;
+#line 2675 "FlickrPublishing.c"
+			goto __catch15_g_error;
 		}
 	}
-	goto __finally22;
-	__catch22_g_error:
+	goto __finally15;
+	__catch15_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp3_ = NULL;
@@ -3922,83 +2697,83 @@ static void publishing_flickr_flickr_publisher_do_show_publishing_options_pane (
 		const gchar* _tmp6_ = NULL;
 		GError* _tmp7_ = NULL;
 		GError* _tmp8_ = NULL;
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		e = _inner_error_;
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp3_ = e;
-#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = _tmp3_->message;
-#line 568 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_warning ("FlickrPublishing.vala:568: Could not parse UI file! Error: %s.", _tmp4_);
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_warning ("FlickrPublishing.vala:338: Could not parse UI file! Error: %s.", _tmp4_);
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = self->priv->host;
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = _ ("A file required for publishing is unavailable. Publishing to Flickr ca" \
 "n’t continue.");
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_LOCAL_FILE_ERROR, _tmp6_);
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = _tmp7_;
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		spit_publishing_plugin_host_post_error (_tmp5_, _tmp8_);
-#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 339 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (_tmp8_);
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (e);
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (builder);
-#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 342 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 3922 "FlickrPublishing.c"
+#line 2717 "FlickrPublishing.c"
 	}
-	__finally22:
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally15:
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (builder);
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 562 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 3935 "FlickrPublishing.c"
+#line 2730 "FlickrPublishing.c"
 	}
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = self->priv->parameters;
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = self->priv->host;
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = spit_publishing_plugin_host_get_publishable_media_type (_tmp10_);
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = builder;
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = publishing_flickr_flickr_publisher_get_persistent_strip_metadata (self);
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = publishing_flickr_publishing_options_pane_new (self, _tmp9_, _tmp11_, _tmp12_, _tmp13_);
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->publishing_options_pane);
-#line 575 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 345 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->publishing_options_pane = _tmp14_;
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = self->priv->publishing_options_pane;
-#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 347 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (_tmp15_, "publish", (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_publish_publishing_flickr_publishing_options_pane_publish, self, 0);
-#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = self->priv->publishing_options_pane;
-#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 348 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (_tmp16_, "logout", (GCallback) _publishing_flickr_flickr_publisher_on_publishing_options_pane_logout_publishing_flickr_publishing_options_pane_logout, self, 0);
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp17_ = self->priv->host;
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp18_ = self->priv->publishing_options_pane;
-#line 579 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 349 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_install_dialog_pane (_tmp17_, G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, SPIT_PUBLISHING_TYPE_DIALOG_PANE, SpitPublishingDialogPane), SPIT_PUBLISHING_PLUGIN_HOST_BUTTON_MODE_CANCEL);
-#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 325 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (builder);
-#line 3969 "FlickrPublishing.c"
+#line 2764 "FlickrPublishing.c"
 }
 
 
@@ -4012,51 +2787,51 @@ gint publishing_flickr_flickr_publisher_flickr_date_time_compare_func (SpitPubli
 	GDateTime* _tmp5_ = NULL;
 	gint _tmp6_ = 0;
 	gint _tmp7_ = 0;
-#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (a), 0);
-#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 352 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (b), 0);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = a;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = spit_publishing_publishable_get_exposure_date_time (_tmp0_);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = b;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = spit_publishing_publishable_get_exposure_date_time (_tmp3_);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = g_date_time_compare (_tmp2_, _tmp5_);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_date_time_unref0 (_tmp5_);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_date_time_unref0 (_tmp2_);
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp7_;
-#line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 354 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4011 "FlickrPublishing.c"
+#line 2806 "FlickrPublishing.c"
 }
 
 
 static gint _publishing_flickr_flickr_publisher_flickr_date_time_compare_func_gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
 	result = publishing_flickr_flickr_publisher_flickr_date_time_compare_func ((SpitPublishingPublishable*) a, (SpitPublishingPublishable*) b);
-#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4020 "FlickrPublishing.c"
+#line 2815 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_flickr_publisher_on_upload_status_updated_spit_publishing_progress_callback (gint file_number, gdouble fraction_complete, gpointer self) {
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_on_upload_status_updated ((PublishingFlickrFlickrPublisher*) self, file_number, fraction_complete);
-#line 4027 "FlickrPublishing.c"
+#line 2822 "FlickrPublishing.c"
 }
 
 
@@ -4096,168 +2871,168 @@ static void publishing_flickr_flickr_publisher_do_publish (PublishingFlickrFlick
 	PublishingFlickrUploader* _tmp28_ = NULL;
 	PublishingFlickrUploader* _tmp29_ = NULL;
 	PublishingFlickrUploader* _tmp30_ = NULL;
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = strip_metadata;
-#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 358 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_set_persistent_strip_metadata (self, _tmp0_);
-#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:589: ACTION: uploading media items to remote ser" \
+#line 359 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:359: ACTION: uploading media items to remote ser" \
 "ver.");
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 361 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp1_, TRUE);
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->host;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = self->priv->parameters;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _tmp3_->photo_major_axis_size;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = strip_metadata;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = spit_publishing_plugin_host_serialize_publishables (_tmp2_, _tmp4_, _tmp5_, &_tmp6_, &_tmp7_);
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter = _tmp8_;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target = _tmp6_;
-#line 592 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 362 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = _tmp7_;
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 598 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 368 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp9_) {
-#line 599 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 369 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 4109 "FlickrPublishing.c"
+#line 2904 "FlickrPublishing.c"
 	}
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = self->priv->host;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = spit_publishing_plugin_host_get_publishables (_tmp10_, &_tmp11_);
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishables = _tmp12_;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishables_length1 = _tmp11_;
-#line 602 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 372 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishables_size_ = publishables_length1;
-#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = gee_array_list_new (SPIT_PUBLISHING_TYPE_PUBLISHABLE, (GBoxedCopyFunc) g_object_ref, g_object_unref, NULL, NULL, NULL);
-#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 373 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	sorted_list = _tmp13_;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = publishables;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14__length1 = publishables_length1;
-#line 4129 "FlickrPublishing.c"
+#line 2924 "FlickrPublishing.c"
 	{
 		SpitPublishingPublishable** p_collection = NULL;
 		gint p_collection_length1 = 0;
 		gint _p_collection_size_ = 0;
 		gint p_it = 0;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		p_collection = _tmp14_;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		p_collection_length1 = _tmp14__length1;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		for (p_it = 0; p_it < _tmp14__length1; p_it = p_it + 1) {
-#line 4141 "FlickrPublishing.c"
+#line 2936 "FlickrPublishing.c"
 			SpitPublishingPublishable* _tmp15_ = NULL;
 			SpitPublishingPublishable* p = NULL;
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp15_ = _g_object_ref0 (p_collection[p_it]);
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			p = _tmp15_;
-#line 4148 "FlickrPublishing.c"
+#line 2943 "FlickrPublishing.c"
 			{
 				GeeArrayList* _tmp16_ = NULL;
 				SpitPublishingPublishable* _tmp17_ = NULL;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp16_ = sorted_list;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp17_ = p;
-#line 606 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 376 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp17_);
-#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 375 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_object_unref0 (p);
-#line 4160 "FlickrPublishing.c"
+#line 2955 "FlickrPublishing.c"
 			}
 		}
 	}
-#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp18_ = sorted_list;
-#line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 378 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	gee_list_sort (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_LIST, GeeList), _publishing_flickr_flickr_publisher_flickr_date_time_compare_func_gcompare_data_func, NULL, NULL);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp19_ = self->priv->session;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp20_ = sorted_list;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp22_ = gee_collection_to_array (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, GEE_TYPE_COLLECTION, GeeCollection), &_tmp21_);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23_ = _tmp22_;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23__length1 = _tmp21_;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp24_ = self->priv->parameters;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp25_ = strip_metadata;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp26_ = publishing_flickr_uploader_new (_tmp19_, _tmp23_, _tmp21_, _tmp24_, _tmp25_);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp27_ = _tmp26_;
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23_ = (_vala_array_free (_tmp23_, _tmp23__length1, (GDestroyNotify) g_object_unref), NULL);
-#line 610 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 380 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	uploader = _tmp27_;
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp28_ = uploader;
-#line 611 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 381 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), "upload-complete", (GCallback) _publishing_flickr_flickr_publisher_on_upload_complete_publishing_rest_support_batch_uploader_upload_complete, self, 0);
-#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp29_ = uploader;
-#line 612 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 382 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), "upload-error", (GCallback) _publishing_flickr_flickr_publisher_on_upload_error_publishing_rest_support_batch_uploader_upload_error, self, 0);
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp30_ = uploader;
-#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 383 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_batch_uploader_upload (G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader), _publishing_flickr_flickr_publisher_on_upload_status_updated_spit_publishing_progress_callback, self);
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_batch_uploader_unref0 (uploader);
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (sorted_list);
-#line 587 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 357 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishables = (_vala_array_free (publishables, publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 4208 "FlickrPublishing.c"
+#line 3003 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_do_show_success_pane (PublishingFlickrFlickrPublisher* self) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	SpitPublishingPluginHost* _tmp1_ = NULL;
-#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 386 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:617: ACTION: showing success pane.");
-#line 619 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 387 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:387: ACTION: showing success pane.");
+#line 389 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 619 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 389 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_set_service_locked (_tmp0_, FALSE);
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->host;
-#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 390 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_publishing_plugin_host_install_success_pane (_tmp1_);
-#line 4227 "FlickrPublishing.c"
+#line 3022 "FlickrPublishing.c"
 }
 
 
@@ -4265,32 +3040,32 @@ gint publishing_flickr_flickr_publisher_get_persistent_visibility (PublishingFli
 	gint result = 0;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 393 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), 0);
-#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "visibility", 0);
-#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 394 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4245 "FlickrPublishing.c"
+#line 3040 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_flickr_publisher_set_persistent_visibility (PublishingFlickrFlickrPublisher* self, gint vis) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 627 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 397 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = vis;
-#line 628 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 398 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_host_interface_set_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "visibility", _tmp1_);
-#line 4260 "FlickrPublishing.c"
+#line 3055 "FlickrPublishing.c"
 }
 
 
@@ -4298,32 +3073,32 @@ gint publishing_flickr_flickr_publisher_get_persistent_default_size (PublishingF
 	gint result = 0;
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 401 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self), 0);
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = spit_host_interface_get_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "default_size", 1);
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 632 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 402 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4278 "FlickrPublishing.c"
+#line 3073 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_flickr_publisher_set_persistent_default_size (PublishingFlickrFlickrPublisher* self, gint size) {
 	SpitPublishingPluginHost* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
-#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 405 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->host;
-#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = size;
-#line 636 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 406 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spit_host_interface_set_config_int (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_TYPE_HOST_INTERFACE, SpitHostInterface), "default_size", _tmp1_);
-#line 4293 "FlickrPublishing.c"
+#line 3088 "FlickrPublishing.c"
 }
 
 
@@ -4332,17 +3107,17 @@ static SpitPublishingService* publishing_flickr_flickr_publisher_real_get_servic
 	SpitPublishingService* result = NULL;
 	SpitPublishingService* _tmp0_ = NULL;
 	SpitPublishingService* _tmp1_ = NULL;
-#line 639 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 409 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, PublishingFlickrFlickrPublisher);
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->service;
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 410 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4312 "FlickrPublishing.c"
+#line 3107 "FlickrPublishing.c"
 }
 
 
@@ -4350,72 +3125,31 @@ static gboolean publishing_flickr_flickr_publisher_real_is_running (SpitPublishi
 	PublishingFlickrFlickrPublisher * self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 413 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, PublishingFlickrFlickrPublisher);
-#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->running;
-#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp0_;
-#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 414 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 4328 "FlickrPublishing.c"
+#line 3123 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_attempt_start (PublishingFlickrFlickrPublisher* self) {
-	gboolean _tmp0_ = FALSE;
-#line 649 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
+#line 419 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (self));
-#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 420 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->running = TRUE;
-#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 421 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->was_started = TRUE;
-#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = publishing_flickr_flickr_publisher_is_persistent_session_valid (self);
-#line 653 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp0_) {
-#line 4344 "FlickrPublishing.c"
-		PublishingFlickrSession* _tmp1_ = NULL;
-		gchar* _tmp2_ = NULL;
-		gchar* _tmp3_ = NULL;
-		gchar* _tmp4_ = NULL;
-		gchar* _tmp5_ = NULL;
-		gchar* _tmp6_ = NULL;
-		gchar* _tmp7_ = NULL;
-#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_debug ("FlickrPublishing.vala:654: attempt start: a persistent session is avai" \
-"lable; using it");
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp1_ = self->priv->session;
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp2_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_token (self);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp3_ = _tmp2_;
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp4_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_token_secret (self);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp5_ = _tmp4_;
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp6_ = publishing_flickr_flickr_publisher_get_persistent_access_phase_username (self);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp7_ = _tmp6_;
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_flickr_session_authenticate_from_persistent_credentials (_tmp1_, _tmp3_, _tmp5_, _tmp7_);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp7_);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp5_);
-#line 656 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp3_);
-#line 4376 "FlickrPublishing.c"
-	} else {
-#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_debug ("FlickrPublishing.vala:659: attempt start: no persistent session availa" \
-"ble; showing login welcome pane");
-#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_flickr_flickr_publisher_do_show_login_welcome_pane (self);
-#line 4382 "FlickrPublishing.c"
-	}
+#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 423 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	spit_publishing_authenticator_authenticate (_tmp0_);
+#line 3139 "FlickrPublishing.c"
 }
 
 
@@ -4423,136 +3157,140 @@ static void publishing_flickr_flickr_publisher_real_start (SpitPublishingPublish
 	PublishingFlickrFlickrPublisher * self;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
-#line 665 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 426 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, PublishingFlickrFlickrPublisher);
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = spit_publishing_publisher_is_running (G_TYPE_CHECK_INSTANCE_CAST (self, SPIT_PUBLISHING_TYPE_PUBLISHER, SpitPublishingPublisher));
-#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 427 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp0_) {
-#line 667 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 428 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 4399 "FlickrPublishing.c"
+#line 3155 "FlickrPublishing.c"
 	}
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 430 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->was_started;
-#line 669 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 430 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp1_) {
-#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_error ("FlickrPublishing.vala:670: FlickrPublisher: start( ): can't start; thi" \
+#line 431 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_error ("FlickrPublishing.vala:431: FlickrPublisher: start( ): can't start; thi" \
 "s publisher is not restartable.");
-#line 4407 "FlickrPublishing.c"
+#line 3163 "FlickrPublishing.c"
 	}
-#line 672 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:672: FlickrPublisher: starting interaction.");
-#line 674 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 433 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:433: FlickrPublisher: starting interaction.");
+#line 435 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_attempt_start (self);
-#line 4413 "FlickrPublishing.c"
+#line 3169 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_real_stop (SpitPublishingPublisher* base) {
 	PublishingFlickrFlickrPublisher * self;
 	PublishingFlickrSession* _tmp0_ = NULL;
-#line 677 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 438 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, PublishingFlickrFlickrPublisher);
-#line 678 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:678: FlickrPublisher: stop( ) invoked.");
-#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 439 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:439: FlickrPublisher: stop( ) invoked.");
+#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->session;
-#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 441 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp0_ != NULL) {
-#line 4428 "FlickrPublishing.c"
+#line 3184 "FlickrPublishing.c"
 		PublishingFlickrSession* _tmp1_ = NULL;
-#line 681 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 442 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp1_ = self->priv->session;
-#line 681 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 442 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_rest_support_session_stop_transactions (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 4434 "FlickrPublishing.c"
+#line 3190 "FlickrPublishing.c"
 	}
-#line 683 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 444 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->running = FALSE;
-#line 4438 "FlickrPublishing.c"
+#line 3194 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_class_init (PublishingFlickrFlickrPublisherClass * klass) {
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_parent_class = g_type_class_peek_parent (klass);
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFlickrFlickrPublisherPrivate));
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_flickr_flickr_publisher_finalize;
-#line 4449 "FlickrPublishing.c"
+#line 3205 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_spit_publishing_publisher_interface_init (SpitPublishingPublisherIface * iface) {
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_spit_publishing_publisher_parent_iface = g_type_interface_peek_parent (iface);
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->get_service = (SpitPublishingService* (*)(SpitPublishingPublisher*)) publishing_flickr_flickr_publisher_real_get_service;
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->is_running = (gboolean (*)(SpitPublishingPublisher*)) publishing_flickr_flickr_publisher_real_is_running;
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->start = (void (*)(SpitPublishingPublisher*)) publishing_flickr_flickr_publisher_real_start;
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->stop = (void (*)(SpitPublishingPublisher*)) publishing_flickr_flickr_publisher_real_stop;
-#line 4464 "FlickrPublishing.c"
+#line 3220 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_instance_init (PublishingFlickrFlickrPublisher * self) {
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv = PUBLISHING_FLICKR_FLICKR_PUBLISHER_GET_PRIVATE (self);
-#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 97 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->running = FALSE;
-#line 104 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 98 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->was_started = FALSE;
-#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->session = NULL;
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->publishing_options_pane = NULL;
-#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->authenticator = NULL;
+#line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->parameters = NULL;
-#line 4483 "FlickrPublishing.c"
+#line 3241 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_flickr_publisher_finalize (GObject* obj) {
 	PublishingFlickrFlickrPublisher * self;
-	PublishingFlickrSession* _tmp0_ = NULL;
+	SpitPublishingAuthenticator* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
-#line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_FLICKR_PUBLISHER, PublishingFlickrFlickrPublisher);
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->session;
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("authenticated", PUBLISHING_REST_SUPPORT_TYPE_SESSION, &_tmp1_, NULL, FALSE);
-#line 122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_session_authenticated_publishing_rest_support_session_authenticated, self);
-#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = self->priv->authenticator;
+#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_parse_name ("authenticated", SPIT_PUBLISHING_TYPE_AUTHENTICATOR, &_tmp1_, NULL, FALSE);
+#line 118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_flickr_publisher_on_session_authenticated_spit_publishing_authenticator_authenticated, self);
+#line 94 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->service);
-#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 95 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->host);
-#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(self->priv->progress_reporter_target_destroy_notify == NULL) ? NULL : (self->priv->progress_reporter_target_destroy_notify (self->priv->progress_reporter_target), NULL);
-#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter = NULL;
-#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target = NULL;
-#line 102 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 96 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->progress_reporter_target_destroy_notify = NULL;
-#line 105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 106 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->publishing_options_pane);
-#line 108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
 #line 99 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_publishing_rest_support_session_unref0 (self->priv->session);
+#line 100 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_object_unref0 (self->priv->publishing_options_pane);
+#line 101 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_object_unref0 (self->priv->authenticator);
+#line 103 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
+#line 93 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (publishing_flickr_flickr_publisher_parent_class)->finalize (obj);
-#line 4519 "FlickrPublishing.c"
+#line 3279 "FlickrPublishing.c"
 }
 
 
@@ -4570,366 +3308,6 @@ GType publishing_flickr_flickr_publisher_get_type (void) {
 }
 
 
-PublishingFlickrPinEntryPane* publishing_flickr_pin_entry_pane_construct (GType object_type, GtkBuilder* builder) {
-	PublishingFlickrPinEntryPane * self = NULL;
-	GtkBuilder* _tmp0_ = NULL;
-	GtkBuilder* _tmp1_ = NULL;
-	GtkBuilder* _tmp2_ = NULL;
-	GtkBuilder* _tmp3_ = NULL;
-	GSList* _tmp4_ = NULL;
-	GSList* _tmp5_ = NULL;
-	guint _tmp6_ = 0U;
-	GtkBuilder* _tmp7_ = NULL;
-	GObject* _tmp8_ = NULL;
-	GtkLabel* _tmp9_ = NULL;
-	GtkBuilder* _tmp10_ = NULL;
-	GObject* _tmp11_ = NULL;
-	GtkLabel* _tmp12_ = NULL;
-	GtkBuilder* _tmp13_ = NULL;
-	GObject* _tmp14_ = NULL;
-	GtkEntry* _tmp15_ = NULL;
-	GtkBuilder* _tmp16_ = NULL;
-	GObject* _tmp17_ = NULL;
-	GtkButton* _tmp18_ = NULL;
-	GtkBuilder* _tmp19_ = NULL;
-	GObject* _tmp20_ = NULL;
-	GtkBox* _tmp21_ = NULL;
-	GtkBox* _tmp22_ = NULL;
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = (PublishingFlickrPinEntryPane*) g_object_new (object_type, NULL);
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = builder;
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->builder);
-#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->builder = _tmp1_;
-#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = builder;
-#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_assert (_tmp2_ != NULL, "builder != null");
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = builder;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = gtk_builder_get_objects (_tmp3_);
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = _tmp4_;
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp6_ = g_slist_length (_tmp5_);
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_assert (_tmp6_ > ((guint) 0), "builder.get_objects().length() > 0");
-#line 700 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_slist_free0 (_tmp5_);
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp7_ = builder;
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp8_ = gtk_builder_get_object (_tmp7_, "explanatory_text");
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp9_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp8_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp8_) : NULL);
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->explanatory_text);
-#line 702 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->explanatory_text = _tmp9_;
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp10_ = builder;
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp11_ = gtk_builder_get_object (_tmp10_, "pin_entry_caption");
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp11_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp11_) : NULL);
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pin_entry_caption);
-#line 703 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pin_entry_caption = _tmp12_;
-#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp13_ = builder;
-#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp14_ = gtk_builder_get_object (_tmp13_, "pin_entry");
-#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp15_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp14_, gtk_entry_get_type ()) ? ((GtkEntry*) _tmp14_) : NULL);
-#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pin_entry);
-#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pin_entry = _tmp15_;
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp16_ = builder;
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp17_ = gtk_builder_get_object (_tmp16_, "continue_button");
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp17_, gtk_button_get_type ()) ? ((GtkButton*) _tmp17_) : NULL);
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->continue_button);
-#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->continue_button = _tmp18_;
-#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp19_ = builder;
-#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp20_ = gtk_builder_get_object (_tmp19_, "pane_widget");
-#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp20_, gtk_box_get_type ()) ? ((GtkBox*) _tmp20_) : NULL);
-#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 707 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pane_widget = _tmp21_;
-#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp22_ = self->priv->pane_widget;
-#line 709 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, gtk_widget_get_type (), GtkWidget));
-#line 711 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed (self);
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return self;
-#line 4648 "FlickrPublishing.c"
-}
-
-
-PublishingFlickrPinEntryPane* publishing_flickr_pin_entry_pane_new (GtkBuilder* builder) {
-#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return publishing_flickr_pin_entry_pane_construct (PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, builder);
-#line 4655 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_on_continue_clicked (PublishingFlickrPinEntryPane* self) {
-	GtkEntry* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-#line 714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_PIN_ENTRY_PANE (self));
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->pin_entry;
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = gtk_entry_get_text (_tmp0_);
-#line 715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_emit_by_name (self, "proceed", self, _tmp1_);
-#line 4670 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed (PublishingFlickrPinEntryPane* self) {
-	GtkButton* _tmp0_ = NULL;
-	GtkEntry* _tmp1_ = NULL;
-	guint _tmp2_ = 0U;
-	guint _tmp3_ = 0U;
-#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_PIN_ENTRY_PANE (self));
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->continue_button;
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->pin_entry;
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = gtk_entry_get_text_length (_tmp1_);
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = _tmp2_;
-#line 719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), _tmp3_ > ((guint) 0));
-#line 4691 "FlickrPublishing.c"
-}
-
-
-static GtkWidget* publishing_flickr_pin_entry_pane_real_get_widget (SpitPublishingDialogPane* base) {
-	PublishingFlickrPinEntryPane * self;
-	GtkWidget* result = NULL;
-	GtkBox* _tmp0_ = NULL;
-	GtkWidget* _tmp1_ = NULL;
-#line 722 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane);
-#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->pane_widget;
-#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = _tmp1_;
-#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 4710 "FlickrPublishing.c"
-}
-
-
-static SpitPublishingDialogPaneGeometryOptions publishing_flickr_pin_entry_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
-	PublishingFlickrPinEntryPane * self;
-	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane);
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 4723 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_pin_entry_pane_on_continue_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_pin_entry_pane_on_continue_clicked ((PublishingFlickrPinEntryPane*) self);
-#line 4730 "FlickrPublishing.c"
-}
-
-
-static void _publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed_gtk_editable_changed (GtkEditable* _sender, gpointer self) {
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed ((PublishingFlickrPinEntryPane*) self);
-#line 4737 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
-	PublishingFlickrPinEntryPane * self;
-	GtkButton* _tmp0_ = NULL;
-	GtkEntry* _tmp1_ = NULL;
-#line 730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane);
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->continue_button;
-#line 731 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (_tmp0_, "clicked", (GCallback) _publishing_flickr_pin_entry_pane_on_continue_clicked_gtk_button_clicked, self, 0);
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->pin_entry;
-#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GTK_TYPE_EDITABLE, GtkEditable), "changed", (GCallback) _publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed_gtk_editable_changed, self, 0);
-#line 4755 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_real_on_pane_uninstalled (SpitPublishingDialogPane* base) {
-	PublishingFlickrPinEntryPane * self;
-	GtkButton* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
-	GtkEntry* _tmp2_ = NULL;
-	guint _tmp3_ = 0U;
-#line 735 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane);
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->continue_button;
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("clicked", gtk_button_get_type (), &_tmp1_, NULL, FALSE);
-#line 736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_pin_entry_pane_on_continue_clicked_gtk_button_clicked, self);
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = self->priv->pin_entry;
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_parse_name ("changed", GTK_TYPE_EDITABLE, &_tmp3_, NULL, FALSE);
-#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_handlers_disconnect_matched (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GTK_TYPE_EDITABLE, GtkEditable), G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp3_, 0, NULL, (GCallback) _publishing_flickr_pin_entry_pane_on_pin_entry_contents_changed_gtk_editable_changed, self);
-#line 4779 "FlickrPublishing.c"
-}
-
-
-static void g_cclosure_user_marshal_VOID__OBJECT_STRING (GClosure * closure, GValue * return_value, guint n_param_values, const GValue * param_values, gpointer invocation_hint, gpointer marshal_data) {
-	typedef void (*GMarshalFunc_VOID__OBJECT_STRING) (gpointer data1, gpointer arg_1, const char* arg_2, gpointer data2);
-	register GMarshalFunc_VOID__OBJECT_STRING callback;
-	register GCClosure * cc;
-	register gpointer data1;
-	register gpointer data2;
-	cc = (GCClosure *) closure;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (n_param_values == 3);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (G_CCLOSURE_SWAP_DATA (closure)) {
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		data1 = closure->data;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		data2 = param_values->data[0].v_pointer;
-#line 4798 "FlickrPublishing.c"
-	} else {
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		data1 = param_values->data[0].v_pointer;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		data2 = closure->data;
-#line 4804 "FlickrPublishing.c"
-	}
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	callback = (GMarshalFunc_VOID__OBJECT_STRING) (marshal_data ? marshal_data : cc->callback);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	callback (data1, g_value_get_object (param_values + 1), g_value_get_string (param_values + 2), data2);
-#line 4810 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_class_init (PublishingFlickrPinEntryPaneClass * klass) {
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_pin_entry_pane_parent_class = g_type_class_peek_parent (klass);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_type_class_add_private (klass, sizeof (PublishingFlickrPinEntryPanePrivate));
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	G_OBJECT_CLASS (klass)->finalize = publishing_flickr_pin_entry_pane_finalize;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_new ("proceed", PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__OBJECT_STRING, G_TYPE_NONE, 2, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, G_TYPE_STRING);
-#line 4823 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_pin_entry_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_flickr_pin_entry_pane_real_get_widget;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_flickr_pin_entry_pane_real_get_preferred_geometry;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_flickr_pin_entry_pane_real_on_pane_installed;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_flickr_pin_entry_pane_real_on_pane_uninstalled;
-#line 4838 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_instance_init (PublishingFlickrPinEntryPane * self) {
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv = PUBLISHING_FLICKR_PIN_ENTRY_PANE_GET_PRIVATE (self);
-#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pane_widget = NULL;
-#line 689 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->continue_button = NULL;
-#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pin_entry = NULL;
-#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->pin_entry_caption = NULL;
-#line 692 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->explanatory_text = NULL;
-#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->builder = NULL;
-#line 4857 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_pin_entry_pane_finalize (GObject* obj) {
-	PublishingFlickrPinEntryPane * self;
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_PIN_ENTRY_PANE, PublishingFlickrPinEntryPane);
-#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pane_widget);
-#line 689 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->continue_button);
-#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pin_entry);
-#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->pin_entry_caption);
-#line 692 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->explanatory_text);
-#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_object_unref0 (self->priv->builder);
-#line 687 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	G_OBJECT_CLASS (publishing_flickr_pin_entry_pane_parent_class)->finalize (obj);
-#line 4879 "FlickrPublishing.c"
-}
-
-
-GType publishing_flickr_pin_entry_pane_get_type (void) {
-	static volatile gsize publishing_flickr_pin_entry_pane_type_id__volatile = 0;
-	if (g_once_init_enter (&publishing_flickr_pin_entry_pane_type_id__volatile)) {
-		static const GTypeInfo g_define_type_info = { sizeof (PublishingFlickrPinEntryPaneClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_flickr_pin_entry_pane_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingFlickrPinEntryPane), 0, (GInstanceInitFunc) publishing_flickr_pin_entry_pane_instance_init, NULL };
-		static const GInterfaceInfo spit_publishing_dialog_pane_info = { (GInterfaceInitFunc) publishing_flickr_pin_entry_pane_spit_publishing_dialog_pane_interface_init, (GInterfaceFinalizeFunc) NULL, NULL};
-		GType publishing_flickr_pin_entry_pane_type_id;
-		publishing_flickr_pin_entry_pane_type_id = g_type_register_static (G_TYPE_OBJECT, "PublishingFlickrPinEntryPane", &g_define_type_info, 0);
-		g_type_add_interface_static (publishing_flickr_pin_entry_pane_type_id, SPIT_PUBLISHING_TYPE_DIALOG_PANE, &spit_publishing_dialog_pane_info);
-		g_once_init_leave (&publishing_flickr_pin_entry_pane_type_id__volatile, publishing_flickr_pin_entry_pane_type_id);
-	}
-	return publishing_flickr_pin_entry_pane_type_id__volatile;
-}
-
-
 PublishingFlickrTransaction* publishing_flickr_transaction_construct (GType object_type, PublishingFlickrSession* session, PublishingRESTSupportHttpMethod method) {
 	PublishingFlickrTransaction* self = NULL;
 	PublishingFlickrSession* _tmp0_ = NULL;
@@ -4940,52 +3318,63 @@ PublishingFlickrTransaction* publishing_flickr_transaction_construct (GType obje
 	PublishingFlickrSession* _tmp5_ = NULL;
 	gchar* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	PublishingFlickrSession* _tmp8_ = NULL;
+	gchar* _tmp9_ = NULL;
+	gchar* _tmp10_ = NULL;
+#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 744 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = session;
-#line 744 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = method;
-#line 744 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 451 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrTransaction*) publishing_rest_support_transaction_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_);
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = session;
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_flickr_session_get_oauth_nonce (_tmp2_);
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_nonce", _tmp4_);
-#line 746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 453 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp4_);
-#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 454 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_signature_method", "HMAC-SHA1");
-#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 455 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_version", "1.0");
-#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 456 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_callback", "oob");
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = session;
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = publishing_flickr_session_get_oauth_timestamp (_tmp5_);
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_timestamp", _tmp7_);
-#line 750 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 457 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 751 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_consumer_key", PUBLISHING_FLICKR_API_KEY);
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp8_ = session;
+#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp9_ = publishing_flickr_session_get_consumer_key (_tmp8_);
+#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp10_ = _tmp9_;
+#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_consumer_key", _tmp10_);
+#line 458 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp10_);
+#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 4945 "FlickrPublishing.c"
+#line 3356 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrTransaction* publishing_flickr_transaction_new (PublishingFlickrSession* session, PublishingRESTSupportHttpMethod method) {
-#line 742 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 449 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_transaction_construct (PUBLISHING_FLICKR_TYPE_TRANSACTION, session, method);
-#line 4952 "FlickrPublishing.c"
+#line 3363 "FlickrPublishing.c"
 }
 
 
@@ -5000,56 +3389,67 @@ PublishingFlickrTransaction* publishing_flickr_transaction_construct_with_uri (G
 	PublishingFlickrSession* _tmp6_ = NULL;
 	gchar* _tmp7_ = NULL;
 	gchar* _tmp8_ = NULL;
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	PublishingFlickrSession* _tmp9_ = NULL;
+	gchar* _tmp10_ = NULL;
+	gchar* _tmp11_ = NULL;
+#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (uri != NULL, NULL);
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = session;
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = uri;
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = method;
-#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 463 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrTransaction*) publishing_rest_support_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp2_);
-#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = session;
-#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = publishing_flickr_session_get_oauth_nonce (_tmp3_);
-#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_nonce", _tmp5_);
-#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 465 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp5_);
-#line 759 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 466 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_signature_method", "HMAC-SHA1");
-#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 467 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_version", "1.0");
-#line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 468 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_callback", "oob");
-#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = session;
-#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = publishing_flickr_session_get_oauth_timestamp (_tmp6_);
-#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = _tmp7_;
-#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_timestamp", _tmp8_);
-#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 469 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp8_);
-#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_consumer_key", PUBLISHING_FLICKR_API_KEY);
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp9_ = session;
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp10_ = publishing_flickr_session_get_consumer_key (_tmp9_);
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp11_ = _tmp10_;
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_consumer_key", _tmp11_);
+#line 470 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp11_);
+#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 5009 "FlickrPublishing.c"
+#line 3431 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrTransaction* publishing_flickr_transaction_new_with_uri (PublishingFlickrSession* session, const gchar* uri, PublishingRESTSupportHttpMethod method) {
-#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 461 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_transaction_construct_with_uri (PUBLISHING_FLICKR_TYPE_TRANSACTION, session, uri, method);
-#line 5016 "FlickrPublishing.c"
+#line 3438 "FlickrPublishing.c"
 }
 
 
@@ -5058,35 +3458,35 @@ static void publishing_flickr_transaction_real_execute (PublishingRESTSupportTra
 	PublishingRESTSupportSession* _tmp0_ = NULL;
 	PublishingFlickrSession* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 473 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_TRANSACTION, PublishingFlickrTransaction);
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = publishing_rest_support_transaction_get_parent_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_FLICKR_TYPE_SESSION, PublishingFlickrSession);
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_session_sign_transaction (_tmp1_, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 767 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 474 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp1_);
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_flickr_transaction_parent_class)->execute (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 5045 "FlickrPublishing.c"
+#line 3467 "FlickrPublishing.c"
 		} else {
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 769 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 476 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 5053 "FlickrPublishing.c"
+#line 3475 "FlickrPublishing.c"
 		}
 	}
 }
@@ -5112,152 +3512,152 @@ gchar* publishing_flickr_transaction_validate_xml (PublishingRESTSupportXmlDocum
 	gchar* _tmp18_ = NULL;
 	gchar* _tmp19_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 479 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_REST_SUPPORT_IS_XML_DOCUMENT (doc), NULL);
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = doc;
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = publishing_rest_support_xml_document_get_root_node (_tmp0_);
-#line 773 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 480 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	root = _tmp1_;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = root;
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = (gchar*) xmlGetProp (_tmp2_, (xmlChar*) "stat");
-#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 481 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	status = _tmp3_;
-#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 484 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = status;
-#line 777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 484 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp4_ == NULL) {
-#line 5097 "FlickrPublishing.c"
+#line 3519 "FlickrPublishing.c"
 		gchar* _tmp5_ = NULL;
-#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = g_strdup ("No status property in root node");
-#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		result = _tmp5_;
-#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (status);
-#line 778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 485 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return result;
-#line 5107 "FlickrPublishing.c"
+#line 3529 "FlickrPublishing.c"
 	}
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = status;
-#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (g_strcmp0 (_tmp6_, "ok") == 0) {
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		result = NULL;
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (status);
-#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 488 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return result;
-#line 5119 "FlickrPublishing.c"
+#line 3541 "FlickrPublishing.c"
 	}
 	{
 		xmlNode* _tmp7_ = NULL;
 		PublishingRESTSupportXmlDocument* _tmp8_ = NULL;
 		xmlNode* _tmp9_ = NULL;
 		xmlNode* _tmp10_ = NULL;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = doc;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9_ = root;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp10_ = publishing_rest_support_xml_document_get_named_child (_tmp8_, _tmp9_, "err", &_inner_error_);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = _tmp10_;
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 5138 "FlickrPublishing.c"
-				goto __catch23_spit_publishing_publishing_error;
+#line 3560 "FlickrPublishing.c"
+				goto __catch16_spit_publishing_publishing_error;
 			}
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (status);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return NULL;
-#line 5149 "FlickrPublishing.c"
+#line 3571 "FlickrPublishing.c"
 		}
-#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 492 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		errcode = _tmp7_;
-#line 5153 "FlickrPublishing.c"
+#line 3575 "FlickrPublishing.c"
 	}
-	goto __finally23;
-	__catch23_spit_publishing_publishing_error:
+	goto __finally16;
+	__catch16_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp11_ = NULL;
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		err = _inner_error_;
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp11_ = g_strdup ("No error code specified");
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		result = _tmp11_;
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (err);
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (status);
-#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 494 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return result;
-#line 5174 "FlickrPublishing.c"
+#line 3596 "FlickrPublishing.c"
 	}
-	__finally23:
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally16:
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (status);
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 491 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return NULL;
-#line 5187 "FlickrPublishing.c"
+#line 3609 "FlickrPublishing.c"
 	}
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = errcode;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = (gchar*) xmlGetProp (_tmp12_, (xmlChar*) "msg");
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = _tmp13_;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = errcode;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = (gchar*) xmlGetProp (_tmp15_, (xmlChar*) "code");
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp17_ = _tmp16_;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp18_ = g_strdup_printf ("%s (error code %s)", _tmp14_, _tmp17_);
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp19_ = _tmp18_;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp17_);
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp14_);
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp19_;
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (status);
-#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 500 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 5215 "FlickrPublishing.c"
+#line 3637 "FlickrPublishing.c"
 }
 
 
 static gchar* _publishing_flickr_transaction_validate_xml_publishing_rest_support_xml_document_check_for_error_response (PublishingRESTSupportXmlDocument* doc, gpointer self) {
 	gchar* result;
 	result = publishing_flickr_transaction_validate_xml (doc);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 5224 "FlickrPublishing.c"
+#line 3646 "FlickrPublishing.c"
 }
 
 
@@ -5277,14 +3677,14 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 5244 "FlickrPublishing.c"
+#line 3666 "FlickrPublishing.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 5251 "FlickrPublishing.c"
+#line 3673 "FlickrPublishing.c"
 }
 
 
@@ -5292,53 +3692,53 @@ PublishingRESTSupportXmlDocument* publishing_flickr_transaction_parse_flickr_res
 	PublishingRESTSupportXmlDocument* result = NULL;
 	PublishingRESTSupportXmlDocument* _result_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 803 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 510 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (xml != NULL, NULL);
-#line 805 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 512 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result_ = NULL;
-#line 5263 "FlickrPublishing.c"
+#line 3685 "FlickrPublishing.c"
 	{
 		PublishingRESTSupportXmlDocument* _tmp0_ = NULL;
 		const gchar* _tmp1_ = NULL;
 		PublishingRESTSupportXmlDocument* _tmp2_ = NULL;
 		PublishingRESTSupportXmlDocument* _tmp3_ = NULL;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp1_ = xml;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp2_ = publishing_rest_support_xml_document_parse_string (_tmp1_, _publishing_flickr_transaction_validate_xml_publishing_rest_support_xml_document_check_for_error_response, NULL, &_inner_error_);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = _tmp2_;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 5279 "FlickrPublishing.c"
-				goto __catch24_spit_publishing_publishing_error;
+#line 3701 "FlickrPublishing.c"
+				goto __catch17_spit_publishing_publishing_error;
 			}
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (_result_);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return NULL;
-#line 5290 "FlickrPublishing.c"
+#line 3712 "FlickrPublishing.c"
 		}
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp3_ = _tmp0_;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = NULL;
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (_result_);
-#line 808 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 515 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_result_ = _tmp3_;
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_publishing_rest_support_xml_document_unref0 (_tmp0_);
-#line 5302 "FlickrPublishing.c"
+#line 3724 "FlickrPublishing.c"
 	}
-	goto __finally24;
-	__catch24_spit_publishing_publishing_error:
+	goto __finally17;
+	__catch17_spit_publishing_publishing_error:
 	{
 		GError* e = NULL;
 		GError* _tmp4_ = NULL;
@@ -5347,98 +3747,98 @@ PublishingRESTSupportXmlDocument* publishing_flickr_transaction_parse_flickr_res
 		gchar* _tmp7_ = NULL;
 		gboolean _tmp8_ = FALSE;
 		gboolean _tmp9_ = FALSE;
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		e = _inner_error_;
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = e;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = _tmp4_->message;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = g_strdup_printf ("(error code %s)", PUBLISHING_FLICKR_EXPIRED_SESSION_ERROR_CODE);
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = _tmp6_;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = string_contains (_tmp5_, _tmp7_);
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9_ = _tmp8_;
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp7_);
-#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 517 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_tmp9_) {
-#line 5334 "FlickrPublishing.c"
+#line 3756 "FlickrPublishing.c"
 			GError* _tmp10_ = NULL;
 			const gchar* _tmp11_ = NULL;
 			GError* _tmp12_ = NULL;
-#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp10_ = e;
-#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp11_ = _tmp10_->message;
-#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp12_ = g_error_new_literal (SPIT_PUBLISHING_PUBLISHING_ERROR, SPIT_PUBLISHING_PUBLISHING_ERROR_EXPIRED_SESSION, _tmp11_);
-#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_inner_error_ = _tmp12_;
-#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 518 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_error_free0 (e);
-#line 5348 "FlickrPublishing.c"
-			goto __finally24;
+#line 3770 "FlickrPublishing.c"
+			goto __finally17;
 		} else {
 			GError* _tmp13_ = NULL;
 			GError* _tmp14_ = NULL;
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp13_ = e;
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp14_ = _g_error_copy0 (_tmp13_);
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_inner_error_ = _tmp14_;
-#line 813 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 520 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_error_free0 (e);
-#line 5361 "FlickrPublishing.c"
-			goto __finally24;
+#line 3783 "FlickrPublishing.c"
+			goto __finally17;
 		}
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (e);
-#line 5366 "FlickrPublishing.c"
+#line 3788 "FlickrPublishing.c"
 	}
-	__finally24:
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally17:
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (_result_);
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return NULL;
-#line 5379 "FlickrPublishing.c"
+#line 3801 "FlickrPublishing.c"
 		} else {
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (_result_);
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 514 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return NULL;
-#line 5389 "FlickrPublishing.c"
+#line 3811 "FlickrPublishing.c"
 		}
 	}
-#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _result_;
-#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 5396 "FlickrPublishing.c"
+#line 3818 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_transaction_class_init (PublishingFlickrTransactionClass * klass) {
-#line 741 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 741 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 448 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_flickr_transaction_real_execute;
-#line 5405 "FlickrPublishing.c"
+#line 3827 "FlickrPublishing.c"
 }
 
 
@@ -5458,157 +3858,47 @@ GType publishing_flickr_transaction_get_type (void) {
 }
 
 
-PublishingFlickrAuthenticationRequestTransaction* publishing_flickr_authentication_request_transaction_construct (GType object_type, PublishingFlickrSession* session) {
-	PublishingFlickrAuthenticationRequestTransaction* self = NULL;
-	PublishingFlickrSession* _tmp0_ = NULL;
-#line 822 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 823 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = session;
-#line 823 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = (PublishingFlickrAuthenticationRequestTransaction*) publishing_flickr_transaction_construct_with_uri (object_type, _tmp0_, "https://www.flickr.com/services/oauth/request_token", PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 822 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return self;
-#line 5436 "FlickrPublishing.c"
-}
-
-
-PublishingFlickrAuthenticationRequestTransaction* publishing_flickr_authentication_request_transaction_new (PublishingFlickrSession* session) {
-#line 822 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return publishing_flickr_authentication_request_transaction_construct (PUBLISHING_FLICKR_TYPE_AUTHENTICATION_REQUEST_TRANSACTION, session);
-#line 5443 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_authentication_request_transaction_class_init (PublishingFlickrAuthenticationRequestTransactionClass * klass) {
-#line 821 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_authentication_request_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 5450 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_authentication_request_transaction_instance_init (PublishingFlickrAuthenticationRequestTransaction * self) {
-}
-
-
-GType publishing_flickr_authentication_request_transaction_get_type (void) {
-	static volatile gsize publishing_flickr_authentication_request_transaction_type_id__volatile = 0;
-	if (g_once_init_enter (&publishing_flickr_authentication_request_transaction_type_id__volatile)) {
-		static const GTypeInfo g_define_type_info = { sizeof (PublishingFlickrAuthenticationRequestTransactionClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_flickr_authentication_request_transaction_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingFlickrAuthenticationRequestTransaction), 0, (GInstanceInitFunc) publishing_flickr_authentication_request_transaction_instance_init, NULL };
-		GType publishing_flickr_authentication_request_transaction_type_id;
-		publishing_flickr_authentication_request_transaction_type_id = g_type_register_static (PUBLISHING_FLICKR_TYPE_TRANSACTION, "PublishingFlickrAuthenticationRequestTransaction", &g_define_type_info, 0);
-		g_once_init_leave (&publishing_flickr_authentication_request_transaction_type_id__volatile, publishing_flickr_authentication_request_transaction_type_id);
-	}
-	return publishing_flickr_authentication_request_transaction_type_id__volatile;
-}
-
-
-PublishingFlickrAccessTokenFetchTransaction* publishing_flickr_access_token_fetch_transaction_construct (GType object_type, PublishingFlickrSession* session, const gchar* user_verifier) {
-	PublishingFlickrAccessTokenFetchTransaction* self = NULL;
-	PublishingFlickrSession* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	PublishingFlickrSession* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-	gchar* _tmp4_ = NULL;
-#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (user_verifier != NULL, NULL);
-#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = session;
-#line 830 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self = (PublishingFlickrAccessTokenFetchTransaction*) publishing_flickr_transaction_construct_with_uri (object_type, _tmp0_, "https://www.flickr.com/services/oauth/access_token", PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = user_verifier;
-#line 832 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_verifier", _tmp1_);
-#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = session;
-#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = publishing_flickr_session_get_request_phase_token (_tmp2_);
-#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = _tmp3_;
-#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_token", _tmp4_);
-#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp4_);
-#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return self;
-#line 5501 "FlickrPublishing.c"
-}
-
-
-PublishingFlickrAccessTokenFetchTransaction* publishing_flickr_access_token_fetch_transaction_new (PublishingFlickrSession* session, const gchar* user_verifier) {
-#line 829 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return publishing_flickr_access_token_fetch_transaction_construct (PUBLISHING_FLICKR_TYPE_ACCESS_TOKEN_FETCH_TRANSACTION, session, user_verifier);
-#line 5508 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_access_token_fetch_transaction_class_init (PublishingFlickrAccessTokenFetchTransactionClass * klass) {
-#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_access_token_fetch_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 5515 "FlickrPublishing.c"
-}
-
-
-static void publishing_flickr_access_token_fetch_transaction_instance_init (PublishingFlickrAccessTokenFetchTransaction * self) {
-}
-
-
-GType publishing_flickr_access_token_fetch_transaction_get_type (void) {
-	static volatile gsize publishing_flickr_access_token_fetch_transaction_type_id__volatile = 0;
-	if (g_once_init_enter (&publishing_flickr_access_token_fetch_transaction_type_id__volatile)) {
-		static const GTypeInfo g_define_type_info = { sizeof (PublishingFlickrAccessTokenFetchTransactionClass), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) publishing_flickr_access_token_fetch_transaction_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (PublishingFlickrAccessTokenFetchTransaction), 0, (GInstanceInitFunc) publishing_flickr_access_token_fetch_transaction_instance_init, NULL };
-		GType publishing_flickr_access_token_fetch_transaction_type_id;
-		publishing_flickr_access_token_fetch_transaction_type_id = g_type_register_static (PUBLISHING_FLICKR_TYPE_TRANSACTION, "PublishingFlickrAccessTokenFetchTransaction", &g_define_type_info, 0);
-		g_once_init_leave (&publishing_flickr_access_token_fetch_transaction_type_id__volatile, publishing_flickr_access_token_fetch_transaction_type_id);
-	}
-	return publishing_flickr_access_token_fetch_transaction_type_id__volatile;
-}
-
-
 PublishingFlickrAccountInfoFetchTransaction* publishing_flickr_account_info_fetch_transaction_construct (GType object_type, PublishingFlickrSession* session) {
 	PublishingFlickrAccountInfoFetchTransaction* self = NULL;
 	PublishingFlickrSession* _tmp0_ = NULL;
 	PublishingFlickrSession* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = session;
-#line 839 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrAccountInfoFetchTransaction*) publishing_flickr_transaction_construct (object_type, _tmp0_, PUBLISHING_REST_SUPPORT_HTTP_METHOD_GET);
-#line 840 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 531 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "method", "flickr.people.getUploadStatus");
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = session;
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = publishing_flickr_session_get_access_phase_token (_tmp1_);
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "oauth_token", _tmp3_);
-#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 532 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp3_);
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 5561 "FlickrPublishing.c"
+#line 3873 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrAccountInfoFetchTransaction* publishing_flickr_account_info_fetch_transaction_new (PublishingFlickrSession* session) {
-#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_account_info_fetch_transaction_construct (PUBLISHING_FLICKR_TYPE_ACCOUNT_INFO_FETCH_TRANSACTION, session);
-#line 5568 "FlickrPublishing.c"
+#line 3880 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_account_info_fetch_transaction_class_init (PublishingFlickrAccountInfoFetchTransactionClass * klass) {
-#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 528 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_account_info_fetch_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 5575 "FlickrPublishing.c"
+#line 3887 "FlickrPublishing.c"
 }
 
 
@@ -5629,23 +3919,23 @@ GType publishing_flickr_account_info_fetch_transaction_get_type (void) {
 
 
 static gpointer _publishing_flickr_publishing_parameters_ref0 (gpointer self) {
-#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_flickr_publishing_parameters_ref (self) : NULL;
-#line 5598 "FlickrPublishing.c"
+#line 3910 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_session_ref0 (gpointer self) {
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_rest_support_session_ref (self) : NULL;
-#line 5605 "FlickrPublishing.c"
+#line 3917 "FlickrPublishing.c"
 }
 
 
 static void _g_free0_ (gpointer var) {
-#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	var = (g_free (var), NULL);
-#line 5612 "FlickrPublishing.c"
+#line 3924 "FlickrPublishing.c"
 }
 
 
@@ -5667,261 +3957,272 @@ PublishingFlickrUploadTransaction* publishing_flickr_upload_transaction_construc
 	PublishingFlickrSession* _tmp13_ = NULL;
 	gchar* _tmp14_ = NULL;
 	gchar* _tmp15_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp16_ = NULL;
-	PublishingFlickrVisibilitySpecification* _tmp17_ = NULL;
-	gint _tmp18_ = 0;
-	gchar* _tmp19_ = NULL;
-	gchar* _tmp20_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp21_ = NULL;
-	PublishingFlickrVisibilitySpecification* _tmp22_ = NULL;
-	gint _tmp23_ = 0;
-	gchar* _tmp24_ = NULL;
-	gchar* _tmp25_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp26_ = NULL;
-	PublishingFlickrVisibilitySpecification* _tmp27_ = NULL;
-	gint _tmp28_ = 0;
-	gchar* _tmp29_ = NULL;
-	gchar* _tmp30_ = NULL;
+	PublishingFlickrSession* _tmp16_ = NULL;
+	gchar* _tmp17_ = NULL;
+	gchar* _tmp18_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp19_ = NULL;
+	PublishingFlickrVisibilitySpecification* _tmp20_ = NULL;
+	gint _tmp21_ = 0;
+	gchar* _tmp22_ = NULL;
+	gchar* _tmp23_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp24_ = NULL;
+	PublishingFlickrVisibilitySpecification* _tmp25_ = NULL;
+	gint _tmp26_ = 0;
+	gchar* _tmp27_ = NULL;
+	gchar* _tmp28_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp29_ = NULL;
+	PublishingFlickrVisibilitySpecification* _tmp30_ = NULL;
+	gint _tmp31_ = 0;
+	gchar* _tmp32_ = NULL;
+	gchar* _tmp33_ = NULL;
 	GHashTable* disposition_table = NULL;
-	GHashFunc _tmp31_ = NULL;
-	GEqualFunc _tmp32_ = NULL;
-	GHashTable* _tmp33_ = NULL;
+	GHashFunc _tmp34_ = NULL;
+	GEqualFunc _tmp35_ = NULL;
+	GHashTable* _tmp36_ = NULL;
 	gchar* filename = NULL;
-	SpitPublishingPublishable* _tmp34_ = NULL;
-	gchar* _tmp35_ = NULL;
-	gboolean _tmp36_ = FALSE;
-	const gchar* _tmp37_ = NULL;
-	GHashTable* _tmp41_ = NULL;
-	gchar* _tmp42_ = NULL;
-	SpitPublishingPublishable* _tmp43_ = NULL;
-	gchar* _tmp44_ = NULL;
+	SpitPublishingPublishable* _tmp37_ = NULL;
+	gchar* _tmp38_ = NULL;
+	gboolean _tmp39_ = FALSE;
+	const gchar* _tmp40_ = NULL;
+	GHashTable* _tmp44_ = NULL;
 	gchar* _tmp45_ = NULL;
-	gchar* _tmp46_ = NULL;
-	GHashTable* _tmp47_ = NULL;
+	SpitPublishingPublishable* _tmp46_ = NULL;
+	gchar* _tmp47_ = NULL;
 	gchar* _tmp48_ = NULL;
 	gchar* _tmp49_ = NULL;
 	GHashTable* _tmp50_ = NULL;
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	gchar* _tmp51_ = NULL;
+	gchar* _tmp52_ = NULL;
+	GHashTable* _tmp53_ = NULL;
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_PARAMETERS (parameters), NULL);
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = session;
-#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = publishable;
-#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 543 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrUploadTransaction*) publishing_rest_support_upload_transaction_construct_with_endpoint_url (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, "https://api.flickr.com/services/upload");
-#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = parameters;
-#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = _publishing_flickr_publishing_parameters_ref0 (_tmp2_);
-#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 545 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->parameters = _tmp3_;
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = session;
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _publishing_rest_support_session_ref0 (_tmp4_);
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 546 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->session = _tmp5_;
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = g_new0 (PublishingRESTSupportArgument*, 0 + 1);
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->auth_header_fields = (_vala_array_free (self->priv->auth_header_fields, self->priv->auth_header_fields_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->auth_header_fields = _tmp6_;
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->auth_header_fields_length1 = 0;
-#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 547 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->_auth_header_fields_size_ = self->priv->auth_header_fields_length1;
-#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = session;
-#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = publishing_flickr_session_get_oauth_nonce (_tmp7_);
-#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_nonce", _tmp9_);
-#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 549 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 859 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 550 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_signature_method", "HMAC-SHA1");
-#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 551 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_version", "1.0");
-#line 861 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 552 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_callback", "oob");
-#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = session;
-#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = publishing_flickr_session_get_oauth_timestamp (_tmp10_);
-#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = _tmp11_;
-#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_timestamp", _tmp12_);
-#line 862 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 553 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp12_);
-#line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_consumer_key", PUBLISHING_FLICKR_API_KEY);
-#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = session;
-#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp14_ = publishing_flickr_session_get_access_phase_token (_tmp13_);
-#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp14_ = publishing_flickr_session_get_consumer_key (_tmp13_);
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = _tmp14_;
-#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_token", _tmp15_);
-#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_consumer_key", _tmp15_);
+#line 554 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp15_);
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp16_ = parameters;
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp17_ = _tmp16_->visibility_specification;
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp18_ = _tmp17_->everyone_level;
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp19_ = g_strdup_printf ("%d", _tmp18_);
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp20_ = _tmp19_;
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_public", _tmp20_);
-#line 866 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp20_);
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp21_ = parameters;
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp22_ = _tmp21_->visibility_specification;
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp23_ = _tmp22_->friends_level;
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp24_ = g_strdup_printf ("%d", _tmp23_);
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp25_ = _tmp24_;
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_friend", _tmp25_);
-#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp25_);
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp26_ = parameters;
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp27_ = _tmp26_->visibility_specification;
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp28_ = _tmp27_->family_level;
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp29_ = g_strdup_printf ("%d", _tmp28_);
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp30_ = _tmp29_;
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_family", _tmp30_);
-#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp30_);
-#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp31_ = g_str_hash;
-#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp32_ = g_str_equal;
-#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp33_ = g_hash_table_new_full (_tmp31_, _tmp32_, _g_free0_, _g_free0_);
-#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	disposition_table = _tmp33_;
-#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp34_ = publishable;
-#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp35_ = spit_publishing_publishable_get_publishing_name (_tmp34_);
-#line 872 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	filename = _tmp35_;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp37_ = filename;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp37_ == NULL) {
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp36_ = TRUE;
-#line 5806 "FlickrPublishing.c"
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp16_ = session;
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp17_ = publishing_flickr_session_get_access_phase_token (_tmp16_);
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp18_ = _tmp17_;
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_flickr_upload_transaction_add_authorization_header_field (self, "oauth_token", _tmp18_);
+#line 555 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp18_);
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp19_ = parameters;
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp20_ = _tmp19_->visibility_specification;
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp21_ = _tmp20_->everyone_level;
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp22_ = g_strdup_printf ("%d", _tmp21_);
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp23_ = _tmp22_;
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_public", _tmp23_);
+#line 557 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp23_);
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp24_ = parameters;
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp25_ = _tmp24_->visibility_specification;
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp26_ = _tmp25_->friends_level;
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp27_ = g_strdup_printf ("%d", _tmp26_);
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp28_ = _tmp27_;
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_friend", _tmp28_);
+#line 558 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp28_);
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp29_ = parameters;
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp30_ = _tmp29_->visibility_specification;
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp31_ = _tmp30_->family_level;
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp32_ = g_strdup_printf ("%d", _tmp31_);
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp33_ = _tmp32_;
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "is_family", _tmp33_);
+#line 559 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp33_);
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp34_ = g_str_hash;
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp35_ = g_str_equal;
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp36_ = g_hash_table_new_full (_tmp34_, _tmp35_, _g_free0_, _g_free0_);
+#line 561 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	disposition_table = _tmp36_;
+#line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp37_ = publishable;
+#line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp38_ = spit_publishing_publishable_get_publishing_name (_tmp37_);
+#line 563 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	filename = _tmp38_;
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp40_ = filename;
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp40_ == NULL) {
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp39_ = TRUE;
+#line 4129 "FlickrPublishing.c"
 	} else {
-		const gchar* _tmp38_ = NULL;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp38_ = filename;
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp36_ = g_strcmp0 (_tmp38_, "") == 0;
-#line 5813 "FlickrPublishing.c"
+		const gchar* _tmp41_ = NULL;
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp41_ = filename;
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp39_ = g_strcmp0 (_tmp41_, "") == 0;
+#line 4136 "FlickrPublishing.c"
 	}
-#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp36_) {
-#line 5817 "FlickrPublishing.c"
-		SpitPublishingPublishable* _tmp39_ = NULL;
-		gchar* _tmp40_ = NULL;
-#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp39_ = publishable;
-#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp40_ = spit_publishing_publishable_get_param_string (_tmp39_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
-#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 564 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp39_) {
+#line 4140 "FlickrPublishing.c"
+		SpitPublishingPublishable* _tmp42_ = NULL;
+		gchar* _tmp43_ = NULL;
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp42_ = publishable;
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp43_ = spit_publishing_publishable_get_param_string (_tmp42_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (filename);
-#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		filename = _tmp40_;
-#line 5828 "FlickrPublishing.c"
+#line 565 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		filename = _tmp43_;
+#line 4151 "FlickrPublishing.c"
 	}
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp41_ = disposition_table;
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp42_ = g_strdup ("filename");
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp43_ = publishable;
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp44_ = spit_publishing_publishable_get_param_string (_tmp43_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp45_ = _tmp44_;
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp46_ = soup_uri_encode (_tmp45_, NULL);
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_insert (_tmp41_, _tmp42_, _tmp46_);
-#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp45_);
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp47_ = disposition_table;
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp48_ = g_strdup ("name");
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp49_ = g_strdup ("photo");
-#line 881 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_hash_table_insert (_tmp47_, _tmp48_, _tmp49_);
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp44_ = disposition_table;
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp45_ = g_strdup ("filename");
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp46_ = publishable;
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp47_ = spit_publishing_publishable_get_param_string (_tmp46_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp48_ = _tmp47_;
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp49_ = soup_uri_encode (_tmp48_, NULL);
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_insert (_tmp44_, _tmp45_, _tmp49_);
+#line 569 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp48_);
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp50_ = disposition_table;
-#line 883 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	publishing_rest_support_upload_transaction_set_binary_disposition_table (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), _tmp50_);
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp51_ = g_strdup ("name");
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp52_ = g_strdup ("photo");
+#line 572 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_hash_table_insert (_tmp50_, _tmp51_, _tmp52_);
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp53_ = disposition_table;
+#line 574 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	publishing_rest_support_upload_transaction_set_binary_disposition_table (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), _tmp53_);
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (filename);
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_hash_table_unref0 (disposition_table);
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 5864 "FlickrPublishing.c"
+#line 4187 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrUploadTransaction* publishing_flickr_upload_transaction_new (PublishingFlickrSession* session, PublishingFlickrPublishingParameters* parameters, SpitPublishingPublishable* publishable) {
-#line 850 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 541 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_upload_transaction_construct (PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION, session, parameters, publishable);
-#line 5871 "FlickrPublishing.c"
+#line 4194 "FlickrPublishing.c"
 }
 
 
-static void _vala_array_add18 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+static void _vala_array_add19 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingRESTSupportArgument*, *array, (*size) + 1);
-#line 5882 "FlickrPublishing.c"
+#line 4205 "FlickrPublishing.c"
 	}
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 5888 "FlickrPublishing.c"
+#line 4211 "FlickrPublishing.c"
 }
 
 
@@ -5931,53 +4232,53 @@ void publishing_flickr_upload_transaction_add_authorization_header_field (Publis
 	const gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	PublishingRESTSupportArgument* _tmp3_ = NULL;
-#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_UPLOAD_TRANSACTION (self));
-#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (key != NULL);
-#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 577 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (value != NULL);
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->auth_header_fields;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0__length1 = self->priv->auth_header_fields_length1;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = key;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = value;
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_rest_support_argument_new (_tmp1_, _tmp2_);
-#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add18 (&self->priv->auth_header_fields, &self->priv->auth_header_fields_length1, &self->priv->_auth_header_fields_size_, _tmp3_);
-#line 5916 "FlickrPublishing.c"
+#line 578 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add19 (&self->priv->auth_header_fields, &self->priv->auth_header_fields_length1, &self->priv->_auth_header_fields_size_, _tmp3_);
+#line 4239 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_argument_ref0 (gpointer self) {
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_rest_support_argument_ref (self) : NULL;
-#line 5923 "FlickrPublishing.c"
+#line 4246 "FlickrPublishing.c"
 }
 
 
 static PublishingRESTSupportArgument** _vala_array_dup8 (PublishingRESTSupportArgument** self, int length) {
 	PublishingRESTSupportArgument** result;
 	int i;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = g_new0 (PublishingRESTSupportArgument*, length + 1);
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	for (i = 0; i < length; i++) {
-#line 5934 "FlickrPublishing.c"
+#line 4257 "FlickrPublishing.c"
 		PublishingRESTSupportArgument* _tmp0_ = NULL;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = _publishing_rest_support_argument_ref0 (self[i]);
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		result[i] = _tmp0_;
-#line 5940 "FlickrPublishing.c"
+#line 4263 "FlickrPublishing.c"
 	}
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 5944 "FlickrPublishing.c"
+#line 4267 "FlickrPublishing.c"
 }
 
 
@@ -5989,31 +4290,31 @@ PublishingRESTSupportArgument** publishing_flickr_upload_transaction_get_authori
 	gint _tmp1__length1 = 0;
 	PublishingRESTSupportArgument** _tmp2_ = NULL;
 	gint _tmp2__length1 = 0;
-#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 581 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->auth_header_fields;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0__length1 = self->priv->auth_header_fields_length1;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = (_tmp0_ != NULL) ? _vala_array_dup8 (_tmp0_, _tmp0__length1) : ((gpointer) _tmp0_);
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2__length1 = _tmp1__length1;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (result_length1) {
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*result_length1 = _tmp2__length1;
-#line 5974 "FlickrPublishing.c"
+#line 4297 "FlickrPublishing.c"
 	}
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp2_;
-#line 891 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 582 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 5980 "FlickrPublishing.c"
+#line 4303 "FlickrPublishing.c"
 }
 
 
@@ -6021,25 +4322,25 @@ gchar* publishing_flickr_upload_transaction_get_authorization_header_string (Pub
 	gchar* result = NULL;
 	gchar* _result_ = NULL;
 	gchar* _tmp0_ = NULL;
-#line 894 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 585 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_UPLOAD_TRANSACTION (self), NULL);
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = g_strdup ("OAuth ");
-#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 586 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result_ = _tmp0_;
-#line 5994 "FlickrPublishing.c"
+#line 4317 "FlickrPublishing.c"
 	{
 		gint i = 0;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		i = 0;
-#line 5999 "FlickrPublishing.c"
+#line 4322 "FlickrPublishing.c"
 		{
 			gboolean _tmp1_ = FALSE;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp1_ = TRUE;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			while (TRUE) {
-#line 6006 "FlickrPublishing.c"
+#line 4329 "FlickrPublishing.c"
 				gint _tmp3_ = 0;
 				PublishingRESTSupportArgument** _tmp4_ = NULL;
 				gint _tmp4__length1 = 0;
@@ -6066,115 +4367,115 @@ gchar* publishing_flickr_upload_transaction_get_authorization_header_string (Pub
 				gint _tmp23_ = 0;
 				PublishingRESTSupportArgument** _tmp24_ = NULL;
 				gint _tmp24__length1 = 0;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (!_tmp1_) {
-#line 6035 "FlickrPublishing.c"
+#line 4358 "FlickrPublishing.c"
 					gint _tmp2_ = 0;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp2_ = i;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					i = _tmp2_ + 1;
-#line 6041 "FlickrPublishing.c"
+#line 4364 "FlickrPublishing.c"
 				}
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp1_ = FALSE;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp3_ = i;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp4_ = self->priv->auth_header_fields;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp4__length1 = self->priv->auth_header_fields_length1;
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (!(_tmp3_ < _tmp4__length1)) {
-#line 897 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 588 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					break;
-#line 6055 "FlickrPublishing.c"
+#line 4378 "FlickrPublishing.c"
 				}
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp5_ = _result_;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp6_ = self->priv->auth_header_fields;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp6__length1 = self->priv->auth_header_fields_length1;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp7_ = i;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp8_ = _tmp6_[_tmp7_];
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp9_ = _tmp8_->key;
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp10_ = g_strconcat (_tmp5_, _tmp9_, NULL);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_result_);
-#line 898 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 589 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_result_ = _tmp10_;
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp11_ = _result_;
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp12_ = g_strconcat (_tmp11_, "=", NULL);
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_result_);
-#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 590 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_result_ = _tmp12_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp13_ = _result_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp14_ = self->priv->auth_header_fields;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp14__length1 = self->priv->auth_header_fields_length1;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp15_ = i;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp16_ = _tmp14_[_tmp15_];
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp17_ = _tmp16_->value;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp18_ = g_strconcat ("\"", _tmp17_, NULL);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp19_ = _tmp18_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp20_ = g_strconcat (_tmp19_, "\"", NULL);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp21_ = _tmp20_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp22_ = g_strconcat (_tmp13_, _tmp21_, NULL);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_result_);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_result_ = _tmp22_;
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_tmp21_);
-#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 591 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_tmp19_);
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp23_ = i;
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp24_ = self->priv->auth_header_fields;
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp24__length1 = self->priv->auth_header_fields_length1;
-#line 902 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 593 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (_tmp23_ < (_tmp24__length1 - 1)) {
-#line 6121 "FlickrPublishing.c"
+#line 4444 "FlickrPublishing.c"
 					const gchar* _tmp25_ = NULL;
 					gchar* _tmp26_ = NULL;
-#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp25_ = _result_;
-#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp26_ = g_strconcat (_tmp25_, ", ", NULL);
-#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_g_free0 (_result_);
-#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 594 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_result_ = _tmp26_;
-#line 6132 "FlickrPublishing.c"
+#line 4455 "FlickrPublishing.c"
 				}
 			}
 		}
 	}
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _result_;
-#line 906 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 597 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 6141 "FlickrPublishing.c"
+#line 4464 "FlickrPublishing.c"
 }
 
 
@@ -6184,85 +4485,85 @@ static void publishing_flickr_upload_transaction_real_execute (PublishingRESTSup
 	gchar* authorization_header = NULL;
 	gchar* _tmp1_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION, PublishingFlickrUploadTransaction);
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->session;
-#line 910 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 601 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_session_sign_transaction (_tmp0_, G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction));
-#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = publishing_flickr_upload_transaction_get_authorization_header_string (self);
-#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 603 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	authorization_header = _tmp1_;
-#line 914 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:914: executing upload transaction: authorization" \
+#line 605 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:605: executing upload transaction: authorization" \
 " header string = '%s'", authorization_header);
-#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 607 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_rest_support_transaction_add_header (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "Authorization", authorization_header);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_flickr_upload_transaction_parent_class)->execute (G_TYPE_CHECK_INSTANCE_CAST (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), &_inner_error_);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_propagate_error (error, _inner_error_);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (authorization_header);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 6177 "FlickrPublishing.c"
+#line 4500 "FlickrPublishing.c"
 		} else {
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (authorization_header);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 918 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 6187 "FlickrPublishing.c"
+#line 4510 "FlickrPublishing.c"
 		}
 	}
-#line 909 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 600 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (authorization_header);
-#line 6192 "FlickrPublishing.c"
+#line 4515 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_upload_transaction_class_init (PublishingFlickrUploadTransactionClass * klass) {
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_upload_transaction_parent_class = g_type_class_peek_parent (klass);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_flickr_upload_transaction_finalize;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFlickrUploadTransactionPrivate));
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportTransactionClass *) klass)->execute = publishing_flickr_upload_transaction_real_execute;
-#line 6205 "FlickrPublishing.c"
+#line 4528 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_upload_transaction_instance_init (PublishingFlickrUploadTransaction * self) {
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv = PUBLISHING_FLICKR_UPLOAD_TRANSACTION_GET_PRIVATE (self);
-#line 6212 "FlickrPublishing.c"
+#line 4535 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_upload_transaction_finalize (PublishingRESTSupportTransaction* obj) {
 	PublishingFlickrUploadTransaction * self;
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION, PublishingFlickrUploadTransaction);
-#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 537 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 847 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 538 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_session_unref0 (self->priv->session);
-#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 539 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->auth_header_fields = (_vala_array_free (self->priv->auth_header_fields, self->priv->auth_header_fields_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 536 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_flickr_upload_transaction_parent_class)->finalize (obj);
-#line 6228 "FlickrPublishing.c"
+#line 4551 "FlickrPublishing.c"
 }
 
 
@@ -6280,18 +4581,18 @@ GType publishing_flickr_upload_transaction_get_type (void) {
 
 PublishingFlickrSession* publishing_flickr_session_construct (GType object_type) {
 	PublishingFlickrSession* self = NULL;
-#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 621 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrSession*) publishing_rest_support_session_construct (object_type, PUBLISHING_FLICKR_ENDPOINT_URL);
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 6250 "FlickrPublishing.c"
+#line 4573 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrSession* publishing_flickr_session_new (void) {
-#line 929 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 620 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_session_construct (PUBLISHING_FLICKR_TYPE_SESSION);
-#line 6257 "FlickrPublishing.c"
+#line 4580 "FlickrPublishing.c"
 }
 
 
@@ -6301,131 +4602,98 @@ static gboolean publishing_flickr_session_real_is_authenticated (PublishingRESTS
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	const gchar* _tmp2_ = NULL;
-#line 933 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 624 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_SESSION, PublishingFlickrSession);
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->access_phase_token;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp2_ != NULL) {
-#line 6273 "FlickrPublishing.c"
+#line 4596 "FlickrPublishing.c"
 		const gchar* _tmp3_ = NULL;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp3_ = self->priv->access_phase_token_secret;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 6279 "FlickrPublishing.c"
+#line 4602 "FlickrPublishing.c"
 	} else {
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp1_ = FALSE;
-#line 6283 "FlickrPublishing.c"
+#line 4606 "FlickrPublishing.c"
 	}
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp1_) {
-#line 6287 "FlickrPublishing.c"
+#line 4610 "FlickrPublishing.c"
 		const gchar* _tmp4_ = NULL;
-#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = self->priv->username;
-#line 935 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 626 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = _tmp4_ != NULL;
-#line 6293 "FlickrPublishing.c"
+#line 4616 "FlickrPublishing.c"
 	} else {
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp0_ = FALSE;
-#line 6297 "FlickrPublishing.c"
+#line 4620 "FlickrPublishing.c"
 	}
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp0_;
-#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 6303 "FlickrPublishing.c"
+#line 4626 "FlickrPublishing.c"
 }
 
 
-void publishing_flickr_session_authenticate_from_persistent_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret, const gchar* username) {
+void publishing_flickr_session_set_api_credentials (PublishingFlickrSession* self, const gchar* consumer_key, const gchar* consumer_secret) {
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-	const gchar* _tmp4_ = NULL;
-	gchar* _tmp5_ = NULL;
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_SESSION (self));
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token != NULL);
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (secret != NULL);
-#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (username != NULL);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = token;
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_return_if_fail (consumer_key != NULL);
+#line 629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_return_if_fail (consumer_secret != NULL);
+#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = consumer_key;
+#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->access_phase_token);
-#line 940 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->access_phase_token = _tmp1_;
-#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = secret;
-#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (self->priv->consumer_key);
+#line 630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->consumer_key = _tmp1_;
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp2_ = consumer_secret;
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->access_phase_token_secret);
-#line 941 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->access_phase_token_secret = _tmp3_;
-#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp4_ = username;
-#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp5_ = g_strdup (_tmp4_);
-#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->username);
-#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->username = _tmp5_;
-#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), "authenticated");
-#line 6348 "FlickrPublishing.c"
-}
-
-
-void publishing_flickr_session_deauthenticate (PublishingFlickrSession* self) {
-#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_SESSION (self));
-#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->access_phase_token);
-#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->access_phase_token = NULL;
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->access_phase_token_secret);
-#line 949 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->access_phase_token_secret = NULL;
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->username);
-#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->username = NULL;
-#line 6367 "FlickrPublishing.c"
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (self->priv->consumer_secret);
+#line 631 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->consumer_secret = _tmp3_;
+#line 4657 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_rest_support_transaction_ref0 (gpointer self) {
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_rest_support_transaction_ref (self) : NULL;
-#line 6374 "FlickrPublishing.c"
+#line 4664 "FlickrPublishing.c"
 }
 
 
-static void _vala_array_add19 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+static void _vala_array_add20 (PublishingRESTSupportArgument*** array, int* length, int* size, PublishingRESTSupportArgument* value) {
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingRESTSupportArgument*, *array, (*size) + 1);
-#line 6385 "FlickrPublishing.c"
+#line 4675 "FlickrPublishing.c"
 	}
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 6391 "FlickrPublishing.c"
+#line 4681 "FlickrPublishing.c"
 }
 
 
@@ -6459,11 +4727,10 @@ void publishing_flickr_session_sign_transaction (PublishingFlickrSession* self, 
 	gchar* signing_key = NULL;
 	const gchar* _tmp46_ = NULL;
 	gchar* signature_base_string = NULL;
-	const gchar* _tmp53_ = NULL;
-	gchar* _tmp54_ = NULL;
+	const gchar* _tmp54_ = NULL;
 	gchar* _tmp55_ = NULL;
-	PublishingRESTSupportTransaction* _tmp56_ = NULL;
-	gchar* _tmp57_ = NULL;
+	gchar* _tmp56_ = NULL;
+	PublishingRESTSupportTransaction* _tmp57_ = NULL;
 	gchar* _tmp58_ = NULL;
 	gchar* _tmp59_ = NULL;
 	gchar* _tmp60_ = NULL;
@@ -6471,66 +4738,67 @@ void publishing_flickr_session_sign_transaction (PublishingFlickrSession* self, 
 	gchar* _tmp62_ = NULL;
 	gchar* _tmp63_ = NULL;
 	gchar* _tmp64_ = NULL;
-	const gchar* _tmp65_ = NULL;
-	gchar* _tmp66_ = NULL;
+	gchar* _tmp65_ = NULL;
+	const gchar* _tmp66_ = NULL;
 	gchar* _tmp67_ = NULL;
 	gchar* _tmp68_ = NULL;
 	gchar* _tmp69_ = NULL;
-	const gchar* _tmp70_ = NULL;
+	gchar* _tmp70_ = NULL;
 	const gchar* _tmp71_ = NULL;
-	gchar* signature = NULL;
 	const gchar* _tmp72_ = NULL;
+	gchar* signature = NULL;
 	const gchar* _tmp73_ = NULL;
-	gchar* _tmp74_ = NULL;
-	const gchar* _tmp75_ = NULL;
-	gchar* _tmp76_ = NULL;
-	const gchar* _tmp77_ = NULL;
-	PublishingFlickrUploadTransaction* _tmp78_ = NULL;
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	const gchar* _tmp74_ = NULL;
+	gchar* _tmp75_ = NULL;
+	const gchar* _tmp76_ = NULL;
+	gchar* _tmp77_ = NULL;
+	const gchar* _tmp78_ = NULL;
+	PublishingFlickrUploadTransaction* _tmp79_ = NULL;
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_SESSION (self));
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_REST_SUPPORT_IS_TRANSACTION (txn));
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = txn;
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = publishing_rest_support_transaction_get_method (_tmp0_);
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = publishing_rest_support_http_method_to_string (_tmp1_);
-#line 954 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 635 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	http_method = _tmp2_;
-#line 956 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:956: signing transaction with parameters:");
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 637 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:637: signing transaction with parameters:");
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = http_method;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = g_strconcat ("HTTP method = ", _tmp3_, NULL);
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:957: %s", _tmp5_);
-#line 957 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:638: %s", _tmp5_);
+#line 638 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp5_);
-#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = txn;
-#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = publishing_rest_support_transaction_get_arguments (_tmp6_, &_tmp7_);
-#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	base_string_arguments = _tmp8_;
-#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	base_string_arguments_length1 = _tmp7_;
-#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 640 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_base_string_arguments_size_ = base_string_arguments_length1;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = txn;
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = _publishing_rest_support_transaction_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp9_, PUBLISHING_FLICKR_TYPE_UPLOAD_TRANSACTION) ? ((PublishingFlickrUploadTransaction*) _tmp9_) : NULL);
-#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 642 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	upload_txn = _tmp10_;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = upload_txn;
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp11_ != NULL) {
-#line 6496 "FlickrPublishing.c"
+#line 4786 "FlickrPublishing.c"
 		PublishingRESTSupportArgument** auth_header_args = NULL;
 		PublishingFlickrUploadTransaction* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
@@ -6539,97 +4807,97 @@ void publishing_flickr_session_sign_transaction (PublishingFlickrSession* self, 
 		gint _auth_header_args_size_ = 0;
 		PublishingRESTSupportArgument** _tmp15_ = NULL;
 		gint _tmp15__length1 = 0;
-#line 963 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_debug ("FlickrPublishing.vala:963: %s", "this transaction is an UploadTransaction; including Authorization head" \
+#line 644 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_debug ("FlickrPublishing.vala:644: %s", "this transaction is an UploadTransaction; including Authorization head" \
 "er " "fields in signature base string");
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp12_ = upload_txn;
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp14_ = publishing_flickr_upload_transaction_get_authorization_header_fields (_tmp12_, &_tmp13_);
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		auth_header_args = _tmp14_;
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		auth_header_args_length1 = _tmp13_;
-#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 647 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_auth_header_args_size_ = auth_header_args_length1;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp15_ = auth_header_args;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp15__length1 = auth_header_args_length1;
-#line 6521 "FlickrPublishing.c"
+#line 4811 "FlickrPublishing.c"
 		{
 			PublishingRESTSupportArgument** arg_collection = NULL;
 			gint arg_collection_length1 = 0;
 			gint _arg_collection_size_ = 0;
 			gint arg_it = 0;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			arg_collection = _tmp15_;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			arg_collection_length1 = _tmp15__length1;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			for (arg_it = 0; arg_it < _tmp15__length1; arg_it = arg_it + 1) {
-#line 6533 "FlickrPublishing.c"
+#line 4823 "FlickrPublishing.c"
 				PublishingRESTSupportArgument* _tmp16_ = NULL;
 				PublishingRESTSupportArgument* arg = NULL;
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp16_ = _publishing_rest_support_argument_ref0 (arg_collection[arg_it]);
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				arg = _tmp16_;
-#line 6540 "FlickrPublishing.c"
+#line 4830 "FlickrPublishing.c"
 				{
 					PublishingRESTSupportArgument** _tmp17_ = NULL;
 					gint _tmp17__length1 = 0;
 					PublishingRESTSupportArgument* _tmp18_ = NULL;
 					PublishingRESTSupportArgument* _tmp19_ = NULL;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp17_ = base_string_arguments;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp17__length1 = base_string_arguments_length1;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp18_ = arg;
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp19_ = _publishing_rest_support_argument_ref0 (_tmp18_);
-#line 970 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-					_vala_array_add19 (&base_string_arguments, &base_string_arguments_length1, &_base_string_arguments_size_, _tmp19_);
-#line 969 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 651 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+					_vala_array_add20 (&base_string_arguments, &base_string_arguments_length1, &_base_string_arguments_size_, _tmp19_);
+#line 650 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_publishing_rest_support_argument_unref0 (arg);
-#line 6558 "FlickrPublishing.c"
+#line 4848 "FlickrPublishing.c"
 				}
 			}
 		}
-#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 643 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		auth_header_args = (_vala_array_free (auth_header_args, auth_header_args_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 6564 "FlickrPublishing.c"
+#line 4854 "FlickrPublishing.c"
 	}
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp20_ = base_string_arguments;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp20__length1 = base_string_arguments_length1;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp22_ = publishing_rest_support_argument_sort (_tmp20_, _tmp20__length1, &_tmp21_);
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	sorted_args = _tmp22_;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	sorted_args_length1 = _tmp21_;
-#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 654 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_sorted_args_size_ = sorted_args_length1;
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23_ = g_strdup ("");
-#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 657 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	arguments_string = _tmp23_;
-#line 6582 "FlickrPublishing.c"
+#line 4872 "FlickrPublishing.c"
 	{
 		gint i = 0;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		i = 0;
-#line 6587 "FlickrPublishing.c"
+#line 4877 "FlickrPublishing.c"
 		{
 			gboolean _tmp24_ = FALSE;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp24_ = TRUE;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			while (TRUE) {
-#line 6594 "FlickrPublishing.c"
+#line 4884 "FlickrPublishing.c"
 				gint _tmp26_ = 0;
 				PublishingRESTSupportArgument** _tmp27_ = NULL;
 				gint _tmp27__length1 = 0;
@@ -6652,299 +4920,260 @@ void publishing_flickr_session_sign_transaction (PublishingFlickrSession* self, 
 				gint _tmp42_ = 0;
 				PublishingRESTSupportArgument** _tmp43_ = NULL;
 				gint _tmp43__length1 = 0;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (!_tmp24_) {
-#line 6619 "FlickrPublishing.c"
+#line 4909 "FlickrPublishing.c"
 					gint _tmp25_ = 0;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp25_ = i;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					i = _tmp25_ + 1;
-#line 6625 "FlickrPublishing.c"
+#line 4915 "FlickrPublishing.c"
 				}
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp24_ = FALSE;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp26_ = i;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp27_ = sorted_args;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp27__length1 = sorted_args_length1;
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (!(_tmp26_ < _tmp27__length1)) {
-#line 977 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 658 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					break;
-#line 6639 "FlickrPublishing.c"
+#line 4929 "FlickrPublishing.c"
 				}
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp28_ = arguments_string;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp29_ = sorted_args;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp29__length1 = sorted_args_length1;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp30_ = i;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp31_ = _tmp29_[_tmp30_];
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp32_ = _tmp31_->key;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp33_ = g_strconcat (_tmp32_, "=", NULL);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp34_ = _tmp33_;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp35_ = sorted_args;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp35__length1 = sorted_args_length1;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp36_ = i;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp37_ = _tmp35_[_tmp36_];
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp38_ = _tmp37_->value;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp39_ = g_strconcat (_tmp34_, _tmp38_, NULL);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp40_ = _tmp39_;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp41_ = g_strconcat (_tmp28_, _tmp40_, NULL);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (arguments_string);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				arguments_string = _tmp41_;
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_tmp40_);
-#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 659 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_g_free0 (_tmp34_);
-#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp42_ = i;
-#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp43_ = sorted_args;
-#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp43__length1 = sorted_args_length1;
-#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 660 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				if (_tmp42_ < (_tmp43__length1 - 1)) {
-#line 6689 "FlickrPublishing.c"
+#line 4979 "FlickrPublishing.c"
 					const gchar* _tmp44_ = NULL;
 					gchar* _tmp45_ = NULL;
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp44_ = arguments_string;
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp45_ = g_strconcat (_tmp44_, "&", NULL);
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_g_free0 (arguments_string);
-#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 661 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					arguments_string = _tmp45_;
-#line 6700 "FlickrPublishing.c"
+#line 4990 "FlickrPublishing.c"
 				}
 			}
 		}
 	}
-#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 664 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	signing_key = NULL;
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 665 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp46_ = self->priv->access_phase_token_secret;
-#line 984 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 665 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp46_ != NULL) {
-#line 6711 "FlickrPublishing.c"
+#line 5001 "FlickrPublishing.c"
 		const gchar* _tmp47_ = NULL;
 		gchar* _tmp48_ = NULL;
-#line 985 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_debug ("FlickrPublishing.vala:985: access phase token secret available; using " \
+		gchar* _tmp49_ = NULL;
+		const gchar* _tmp50_ = NULL;
+		gchar* _tmp51_ = NULL;
+#line 666 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_debug ("FlickrPublishing.vala:666: access phase token secret available; using " \
 "it as signing key");
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp47_ = self->priv->access_phase_token_secret;
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp48_ = g_strconcat (PUBLISHING_FLICKR_API_SECRET "&", _tmp47_, NULL);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp47_ = self->priv->consumer_secret;
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp48_ = g_strconcat (_tmp47_, "&", NULL);
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp49_ = _tmp48_;
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp50_ = self->priv->access_phase_token_secret;
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp51_ = g_strconcat (_tmp49_, _tmp50_, NULL);
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (signing_key);
-#line 987 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		signing_key = _tmp48_;
-#line 6724 "FlickrPublishing.c"
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		signing_key = _tmp51_;
+#line 668 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (_tmp49_);
+#line 5025 "FlickrPublishing.c"
 	} else {
-		const gchar* _tmp49_ = NULL;
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp49_ = self->priv->request_phase_token_secret;
-#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (_tmp49_ != NULL) {
-#line 6731 "FlickrPublishing.c"
-			const gchar* _tmp50_ = NULL;
-			gchar* _tmp51_ = NULL;
-#line 989 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_debug ("FlickrPublishing.vala:989: request phase token secret available; using" \
-" it as signing key");
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_tmp50_ = self->priv->request_phase_token_secret;
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_tmp51_ = g_strconcat (PUBLISHING_FLICKR_API_SECRET "&", _tmp50_, NULL);
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_g_free0 (signing_key);
-#line 991 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			signing_key = _tmp51_;
-#line 6744 "FlickrPublishing.c"
-		} else {
-			gchar* _tmp52_ = NULL;
-#line 993 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_debug ("FlickrPublishing.vala:993: %s", "neither access phase nor request phase token secrets available; using " \
+		const gchar* _tmp52_ = NULL;
+		gchar* _tmp53_ = NULL;
+#line 670 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_debug ("FlickrPublishing.vala:670: %s", "neither access phase nor request phase token secrets available; using " \
 "API " "key as signing key");
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_tmp52_ = g_strdup (PUBLISHING_FLICKR_API_SECRET "&");
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_g_free0 (signing_key);
-#line 996 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			signing_key = _tmp52_;
-#line 6755 "FlickrPublishing.c"
-		}
+#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp52_ = self->priv->consumer_secret;
+#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp53_ = g_strconcat (_tmp52_, "&", NULL);
+#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (signing_key);
+#line 673 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		signing_key = _tmp53_;
+#line 5039 "FlickrPublishing.c"
 	}
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp53_ = http_method;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp54_ = g_strconcat (_tmp53_, "&", NULL);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp55_ = _tmp54_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp56_ = txn;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp57_ = publishing_rest_support_transaction_get_endpoint_url (_tmp56_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp58_ = _tmp57_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp59_ = soup_uri_encode (_tmp58_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp60_ = _tmp59_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp61_ = g_strconcat (_tmp55_, _tmp60_, NULL);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp62_ = _tmp61_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp63_ = g_strconcat (_tmp62_, "&", NULL);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp64_ = _tmp63_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp65_ = arguments_string;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp66_ = soup_uri_encode (_tmp65_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp67_ = _tmp66_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp68_ = g_strconcat (_tmp64_, _tmp67_, NULL);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp69_ = _tmp68_;
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp67_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp64_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp62_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp60_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp58_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (_tmp55_);
-#line 999 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	signature_base_string = _tmp69_;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp70_ = signature_base_string;
-#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:1003: signature base string = '%s'", _tmp70_);
-#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp71_ = signing_key;
-#line 1005 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:1005: signing key = '%s'", _tmp71_);
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp54_ = http_method;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp55_ = g_strconcat (_tmp54_, "&", NULL);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp56_ = _tmp55_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp57_ = txn;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp58_ = publishing_rest_support_transaction_get_endpoint_url (_tmp57_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp59_ = _tmp58_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp60_ = soup_uri_encode (_tmp59_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp61_ = _tmp60_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp62_ = g_strconcat (_tmp56_, _tmp61_, NULL);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp63_ = _tmp62_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp64_ = g_strconcat (_tmp63_, "&", NULL);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp65_ = _tmp64_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp66_ = arguments_string;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp67_ = soup_uri_encode (_tmp66_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp68_ = _tmp67_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp69_ = g_strconcat (_tmp65_, _tmp68_, NULL);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp70_ = _tmp69_;
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp68_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp65_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp63_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp61_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp59_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (_tmp56_);
+#line 676 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	signature_base_string = _tmp70_;
+#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp71_ = signature_base_string;
+#line 680 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:680: signature base string = '%s'", _tmp71_);
+#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp72_ = signing_key;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp73_ = signature_base_string;
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp74_ = publishing_rest_support_hmac_sha1 (_tmp72_, _tmp73_);
-#line 1008 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	signature = _tmp74_;
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp75_ = signature;
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp76_ = soup_uri_encode (_tmp75_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 682 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:682: signing key = '%s'", _tmp72_);
+#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp73_ = signing_key;
+#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp74_ = signature_base_string;
+#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp75_ = publishing_rest_support_hmac_sha1 (_tmp73_, _tmp74_);
+#line 685 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	signature = _tmp75_;
+#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp76_ = signature;
+#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp77_ = soup_uri_encode (_tmp76_, PUBLISHING_FLICKR_ENCODE_RFC_3986_EXTRA);
+#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (signature);
-#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	signature = _tmp76_;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp77_ = signature;
-#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_debug ("FlickrPublishing.vala:1011: signature = '%s'", _tmp77_);
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp78_ = upload_txn;
-#line 1013 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp78_ != NULL) {
-#line 6838 "FlickrPublishing.c"
-		PublishingFlickrUploadTransaction* _tmp79_ = NULL;
-		const gchar* _tmp80_ = NULL;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp79_ = upload_txn;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp80_ = signature;
-#line 1014 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_flickr_upload_transaction_add_authorization_header_field (_tmp79_, "oauth_signature", _tmp80_);
-#line 6847 "FlickrPublishing.c"
+#line 686 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	signature = _tmp77_;
+#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp78_ = signature;
+#line 688 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_debug ("FlickrPublishing.vala:688: signature = '%s'", _tmp78_);
+#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp79_ = upload_txn;
+#line 690 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp79_ != NULL) {
+#line 5121 "FlickrPublishing.c"
+		PublishingFlickrUploadTransaction* _tmp80_ = NULL;
+		const gchar* _tmp81_ = NULL;
+#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp80_ = upload_txn;
+#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp81_ = signature;
+#line 691 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		publishing_flickr_upload_transaction_add_authorization_header_field (_tmp80_, "oauth_signature", _tmp81_);
+#line 5130 "FlickrPublishing.c"
 	} else {
-		PublishingRESTSupportTransaction* _tmp81_ = NULL;
-		const gchar* _tmp82_ = NULL;
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp81_ = txn;
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp82_ = signature;
-#line 1016 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		publishing_rest_support_transaction_add_argument (_tmp81_, "oauth_signature", _tmp82_);
-#line 6857 "FlickrPublishing.c"
+		PublishingRESTSupportTransaction* _tmp82_ = NULL;
+		const gchar* _tmp83_ = NULL;
+#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp82_ = txn;
+#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp83_ = signature;
+#line 693 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		publishing_rest_support_transaction_add_argument (_tmp82_, "oauth_signature", _tmp83_);
+#line 5140 "FlickrPublishing.c"
 	}
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (signature);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (signature_base_string);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (signing_key);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (arguments_string);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	sorted_args = (_vala_array_free (sorted_args, sorted_args_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_transaction_unref0 (upload_txn);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	base_string_arguments = (_vala_array_free (base_string_arguments, base_string_arguments_length1, (GDestroyNotify) publishing_rest_support_argument_unref), NULL);
-#line 953 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 634 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (http_method);
-#line 6875 "FlickrPublishing.c"
-}
-
-
-void publishing_flickr_session_set_request_phase_credentials (PublishingFlickrSession* self, const gchar* token, const gchar* secret) {
-	const gchar* _tmp0_ = NULL;
-	gchar* _tmp1_ = NULL;
-	const gchar* _tmp2_ = NULL;
-	gchar* _tmp3_ = NULL;
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (PUBLISHING_FLICKR_IS_SESSION (self));
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (token != NULL);
-#line 1019 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_if_fail (secret != NULL);
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = token;
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = g_strdup (_tmp0_);
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->request_phase_token);
-#line 1020 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->request_phase_token = _tmp1_;
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = secret;
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp3_ = g_strdup (_tmp2_);
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->request_phase_token_secret);
-#line 1021 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->request_phase_token_secret = _tmp3_;
-#line 6906 "FlickrPublishing.c"
+#line 5158 "FlickrPublishing.c"
 }
 
 
@@ -6955,41 +5184,41 @@ void publishing_flickr_session_set_access_phase_credentials (PublishingFlickrSes
 	gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_SESSION (self));
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (token != NULL);
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (secret != NULL);
-#line 1024 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 696 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (username != NULL);
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = token;
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token);
-#line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->access_phase_token = _tmp1_;
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = secret;
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 1026 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->access_phase_token_secret = _tmp3_;
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = username;
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = g_strdup (_tmp4_);
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->username);
-#line 1027 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 699 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->username = _tmp5_;
-#line 1029 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 701 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_emit_by_name (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), "authenticated");
-#line 6951 "FlickrPublishing.c"
+#line 5203 "FlickrPublishing.c"
 }
 
 
@@ -7008,47 +5237,47 @@ gchar* publishing_flickr_session_get_oauth_nonce (PublishingFlickrSession* self)
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
-#line 1032 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 704 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1033 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 705 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_get_current_time (&currtime);
-#line 1034 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 706 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_get_current_time (&currtime);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = currtime;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _tmp0_.tv_sec;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = g_strdup_printf ("%li", _tmp1_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = _tmp2_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = currtime;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_.tv_usec;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = g_strdup_printf ("%li", _tmp5_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _tmp6_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = g_strconcat (_tmp3_, _tmp7_, NULL);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = g_compute_checksum_for_string (G_CHECKSUM_MD5, _tmp9_, (gsize) -1);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = _tmp10_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp9_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp7_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp3_);
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp11_;
-#line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 708 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 7010 "FlickrPublishing.c"
+#line 5262 "FlickrPublishing.c"
 }
 
 
@@ -7071,7 +5300,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 	_tmp3_ = end;
 #line 1296 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp3_ == NULL) {
-#line 7033 "FlickrPublishing.c"
+#line 5285 "FlickrPublishing.c"
 		glong _tmp4_ = 0L;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp4_ = maxlen;
@@ -7079,7 +5308,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = _tmp4_;
 #line 1297 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 7041 "FlickrPublishing.c"
+#line 5293 "FlickrPublishing.c"
 	} else {
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
@@ -7091,7 +5320,7 @@ static glong string_strnlen (gchar* str, glong maxlen) {
 		result = (glong) (_tmp5_ - _tmp6_);
 #line 1299 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		return result;
-#line 7053 "FlickrPublishing.c"
+#line 5305 "FlickrPublishing.c"
 	}
 }
 
@@ -7115,21 +5344,21 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	_tmp1_ = offset;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp1_ >= ((glong) 0)) {
-#line 7077 "FlickrPublishing.c"
+#line 5329 "FlickrPublishing.c"
 		glong _tmp2_ = 0L;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp2_ = len;
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = _tmp2_ >= ((glong) 0);
-#line 7083 "FlickrPublishing.c"
+#line 5335 "FlickrPublishing.c"
 	} else {
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp0_ = FALSE;
-#line 7087 "FlickrPublishing.c"
+#line 5339 "FlickrPublishing.c"
 	}
 #line 1308 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp0_) {
-#line 7091 "FlickrPublishing.c"
+#line 5343 "FlickrPublishing.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 		glong _tmp5_ = 0L;
@@ -7141,7 +5370,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp5_ = string_strnlen ((gchar*) self, _tmp3_ + _tmp4_);
 #line 1310 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = _tmp5_;
-#line 7103 "FlickrPublishing.c"
+#line 5355 "FlickrPublishing.c"
 	} else {
 		gint _tmp6_ = 0;
 		gint _tmp7_ = 0;
@@ -7151,13 +5380,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp7_ = _tmp6_;
 #line 1312 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		string_length = (glong) _tmp7_;
-#line 7113 "FlickrPublishing.c"
+#line 5365 "FlickrPublishing.c"
 	}
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp8_ = offset;
 #line 1315 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp8_ < ((glong) 0)) {
-#line 7119 "FlickrPublishing.c"
+#line 5371 "FlickrPublishing.c"
 		glong _tmp9_ = 0L;
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
@@ -7171,7 +5400,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp11_ = offset;
 #line 1317 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp11_ >= ((glong) 0), NULL);
-#line 7133 "FlickrPublishing.c"
+#line 5385 "FlickrPublishing.c"
 	} else {
 		glong _tmp12_ = 0L;
 		glong _tmp13_ = 0L;
@@ -7181,13 +5410,13 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp13_ = string_length;
 #line 1319 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		g_return_val_if_fail (_tmp12_ <= _tmp13_, NULL);
-#line 7143 "FlickrPublishing.c"
+#line 5395 "FlickrPublishing.c"
 	}
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp14_ = len;
 #line 1321 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp14_ < ((glong) 0)) {
-#line 7149 "FlickrPublishing.c"
+#line 5401 "FlickrPublishing.c"
 		glong _tmp15_ = 0L;
 		glong _tmp16_ = 0L;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -7196,7 +5425,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 		_tmp16_ = offset;
 #line 1322 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		len = _tmp15_ - _tmp16_;
-#line 7158 "FlickrPublishing.c"
+#line 5410 "FlickrPublishing.c"
 	}
 #line 1324 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp17_ = offset;
@@ -7216,7 +5445,7 @@ static gchar* string_substring (const gchar* self, glong offset, glong len) {
 	result = _tmp22_;
 #line 1325 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 7178 "FlickrPublishing.c"
+#line 5430 "FlickrPublishing.c"
 }
 
 
@@ -7227,48 +5456,48 @@ gchar* publishing_flickr_session_get_oauth_timestamp (PublishingFlickrSession* s
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 1040 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 712 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = g_get_real_time ();
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = g_strdup_printf ("%" G_GINT64_FORMAT, _tmp0_);
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _tmp1_;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = string_substring (_tmp2_, (glong) 0, (glong) 10);
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (_tmp2_);
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp4_;
-#line 1041 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 713 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 7207 "FlickrPublishing.c"
+#line 5459 "FlickrPublishing.c"
 }
 
 
-gchar* publishing_flickr_session_get_request_phase_token (PublishingFlickrSession* self) {
+gchar* publishing_flickr_session_get_consumer_key (PublishingFlickrSession* self) {
 	gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 1044 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 716 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->request_phase_token;
-#line 1045 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_assert (_tmp0_ != NULL, "request_phase_token != null");
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->request_phase_token;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp0_ = self->priv->consumer_key;
+#line 717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_assert (_tmp0_ != NULL, "consumer_key != null");
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp1_ = self->priv->consumer_key;
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp2_;
-#line 1046 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 718 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 7230 "FlickrPublishing.c"
+#line 5482 "FlickrPublishing.c"
 }
 
 
@@ -7277,44 +5506,21 @@ gchar* publishing_flickr_session_get_access_phase_token (PublishingFlickrSession
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 1049 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 721 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 722 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->access_phase_token;
-#line 1050 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 722 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_vala_assert (_tmp0_ != NULL, "access_phase_token != null");
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->access_phase_token;
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp2_;
-#line 1051 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 723 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 7253 "FlickrPublishing.c"
-}
-
-
-gchar* publishing_flickr_session_get_access_phase_token_secret (PublishingFlickrSession* self) {
-	gchar* result = NULL;
-	const gchar* _tmp0_ = NULL;
-	const gchar* _tmp1_ = NULL;
-	gchar* _tmp2_ = NULL;
-#line 1054 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp0_ = self->priv->access_phase_token_secret;
-#line 1055 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_assert (_tmp0_ != NULL, "access_phase_token_secret != null");
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp1_ = self->priv->access_phase_token_secret;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp2_ = g_strdup (_tmp1_);
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	result = _tmp2_;
-#line 1056 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	return result;
-#line 7276 "FlickrPublishing.c"
+#line 5505 "FlickrPublishing.c"
 }
 
 
@@ -7323,71 +5529,71 @@ gchar* publishing_flickr_session_get_username (PublishingFlickrSession* self) {
 	gboolean _tmp0_ = FALSE;
 	const gchar* _tmp1_ = NULL;
 	gchar* _tmp2_ = NULL;
-#line 1059 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 726 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (self), NULL);
-#line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
-#line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 727 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_vala_assert (_tmp0_, "is_authenticated()");
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->username;
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp2_;
-#line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 728 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 7299 "FlickrPublishing.c"
+#line 5528 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_session_class_init (PublishingFlickrSessionClass * klass) {
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_session_parent_class = g_type_class_peek_parent (klass);
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->finalize = publishing_flickr_session_finalize;
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFlickrSessionPrivate));
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportSessionClass *) klass)->is_authenticated = publishing_flickr_session_real_is_authenticated;
-#line 7312 "FlickrPublishing.c"
+#line 5541 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_session_instance_init (PublishingFlickrSession * self) {
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv = PUBLISHING_FLICKR_SESSION_GET_PRIVATE (self);
-#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->request_phase_token = NULL;
-#line 924 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->request_phase_token_secret = NULL;
-#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->access_phase_token = NULL;
-#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->access_phase_token_secret = NULL;
-#line 927 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->username = NULL;
-#line 7329 "FlickrPublishing.c"
+#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->consumer_key = NULL;
+#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->consumer_secret = NULL;
+#line 5558 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_session_finalize (PublishingRESTSupportSession* obj) {
 	PublishingFlickrSession * self;
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_SESSION, PublishingFlickrSession);
-#line 923 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->request_phase_token);
-#line 924 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_g_free0 (self->priv->request_phase_token_secret);
-#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 614 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token);
-#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 615 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->access_phase_token_secret);
-#line 927 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 616 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->priv->username);
-#line 922 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (self->priv->consumer_key);
+#line 618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_free0 (self->priv->consumer_secret);
+#line 613 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_SESSION_CLASS (publishing_flickr_session_parent_class)->finalize (obj);
-#line 7349 "FlickrPublishing.c"
+#line 5578 "FlickrPublishing.c"
 }
 
 
@@ -7404,30 +5610,30 @@ GType publishing_flickr_session_get_type (void) {
 
 
 static void _publishing_flickr_publishing_options_pane_on_visibility_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_on_visibility_changed ((PublishingFlickrPublishingOptionsPane*) self);
-#line 7368 "FlickrPublishing.c"
+#line 5597 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_publishing_options_pane_on_size_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_on_size_changed ((PublishingFlickrPublishingOptionsPane*) self);
-#line 7375 "FlickrPublishing.c"
+#line 5604 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_publishing_options_pane_on_logout_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_on_logout_clicked ((PublishingFlickrPublishingOptionsPane*) self);
-#line 7382 "FlickrPublishing.c"
+#line 5611 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_publishing_options_pane_on_publish_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_on_publish_clicked ((PublishingFlickrPublishingOptionsPane*) self);
-#line 7389 "FlickrPublishing.c"
+#line 5618 "FlickrPublishing.c"
 }
 
 
@@ -7467,399 +5673,435 @@ PublishingFlickrPublishingOptionsPane* publishing_flickr_publishing_options_pane
 	GtkBuilder* _tmp31_ = NULL;
 	GObject* _tmp32_ = NULL;
 	GtkCheckButton* _tmp33_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp34_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp35_ = NULL;
-	PublishingFlickrFlickrPublisher* _tmp36_ = NULL;
-	PublishingFlickrFlickrPublisher* _tmp37_ = NULL;
-	SpitPublishingPublisherMediaType _tmp38_ = 0;
-	gint _tmp39_ = 0;
-	PublishingFlickrPublishingOptionsPaneVisibilityEntry** _tmp40_ = NULL;
-	gint _tmp41_ = 0;
-	PublishingFlickrPublishingOptionsPaneSizeEntry** _tmp42_ = NULL;
-	gchar* upload_label_text = NULL;
-	const gchar* _tmp43_ = NULL;
+	PublishingFlickrFlickrPublisher* _tmp34_ = NULL;
+	SpitPublishingAuthenticator* _tmp35_ = NULL;
+	SpitPublishingAuthenticator* _tmp36_ = NULL;
+	gboolean _tmp37_ = FALSE;
+	gboolean _tmp38_ = FALSE;
+	PublishingFlickrPublishingParameters* _tmp43_ = NULL;
 	PublishingFlickrPublishingParameters* _tmp44_ = NULL;
-	const gchar* _tmp45_ = NULL;
-	gchar* _tmp46_ = NULL;
-	PublishingFlickrPublishingParameters* _tmp47_ = NULL;
-	PublishingFlickrUserKind _tmp48_ = 0;
-	GtkLabel* _tmp61_ = NULL;
-	const gchar* _tmp62_ = NULL;
+	PublishingFlickrFlickrPublisher* _tmp45_ = NULL;
+	PublishingFlickrFlickrPublisher* _tmp46_ = NULL;
+	SpitPublishingPublisherMediaType _tmp47_ = 0;
+	gint _tmp48_ = 0;
+	PublishingFlickrPublishingOptionsPaneVisibilityEntry** _tmp49_ = NULL;
+	gint _tmp50_ = 0;
+	PublishingFlickrPublishingOptionsPaneSizeEntry** _tmp51_ = NULL;
+	gchar* upload_label_text = NULL;
+	const gchar* _tmp52_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp53_ = NULL;
+	const gchar* _tmp54_ = NULL;
+	gchar* _tmp55_ = NULL;
+	PublishingFlickrPublishingParameters* _tmp56_ = NULL;
+	PublishingFlickrUserKind _tmp57_ = 0;
+	GtkLabel* _tmp70_ = NULL;
+	const gchar* _tmp71_ = NULL;
 	gchar* visibility_label_text = NULL;
-	const gchar* _tmp63_ = NULL;
-	gchar* _tmp64_ = NULL;
-	SpitPublishingPublisherMediaType _tmp65_ = 0;
-	GtkLabel* _tmp71_ = NULL;
 	const gchar* _tmp72_ = NULL;
-	GtkComboBoxText* _tmp73_ = NULL;
+	gchar* _tmp73_ = NULL;
 	SpitPublishingPublisherMediaType _tmp74_ = 0;
-	GtkCheckButton* _tmp78_ = NULL;
-	gboolean _tmp79_ = FALSE;
-	GtkButton* _tmp80_ = NULL;
-	GtkButton* _tmp81_ = NULL;
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	GtkLabel* _tmp80_ = NULL;
+	const gchar* _tmp81_ = NULL;
+	GtkComboBoxText* _tmp82_ = NULL;
+	SpitPublishingPublisherMediaType _tmp83_ = 0;
+	GtkCheckButton* _tmp87_ = NULL;
+	gboolean _tmp88_ = FALSE;
+	GtkButton* _tmp89_ = NULL;
+	GtkButton* _tmp90_ = NULL;
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_FLICKR_PUBLISHER (publisher), NULL);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_PARAMETERS (parameters), NULL);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrPublishingOptionsPane*) g_object_new (object_type, NULL);
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = builder;
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 1107 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->builder = _tmp1_;
-#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = builder;
-#line 1108 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 775 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_vala_assert (_tmp2_ != NULL, "builder != null");
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = builder;
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = gtk_builder_get_objects (_tmp3_);
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_;
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = g_slist_length (_tmp5_);
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_vala_assert (_tmp6_ > ((guint) 0), "builder.get_objects().length() > 0");
-#line 1109 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_slist_free0 (_tmp5_);
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = self->priv->builder;
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = gtk_builder_get_object (_tmp7_, "flickr_pane");
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_box_get_type (), GtkBox));
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 1112 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->pane_widget = _tmp9_;
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = self->priv->builder;
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = gtk_builder_get_object (_tmp10_, "visibility_label");
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_label_get_type (), GtkLabel));
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_label);
-#line 1113 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibility_label = _tmp12_;
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = self->priv->builder;
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = gtk_builder_get_object (_tmp13_, "upload_info_label");
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_label_get_type (), GtkLabel));
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->upload_info_label);
-#line 1114 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->upload_info_label = _tmp15_;
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = self->priv->builder;
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp17_ = gtk_builder_get_object (_tmp16_, "logout_button");
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp18_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, gtk_button_get_type (), GtkButton));
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 1115 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->logout_button = _tmp18_;
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp19_ = self->priv->builder;
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp20_ = gtk_builder_get_object (_tmp19_, "publish_button");
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp21_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_button_get_type (), GtkButton));
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->publish_button);
-#line 1116 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 783 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->publish_button = _tmp21_;
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp22_ = self->priv->builder;
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23_ = gtk_builder_get_object (_tmp22_, "visibility_combo");
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp24_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_combo);
-#line 1117 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibility_combo = _tmp24_;
-#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp25_ = self->priv->builder;
-#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp26_ = gtk_builder_get_object (_tmp25_, "size_combo");
-#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp27_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, gtk_combo_box_text_get_type (), GtkComboBoxText));
-#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->size_combo);
-#line 1118 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 785 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->size_combo = _tmp27_;
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp28_ = self->priv->builder;
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp29_ = gtk_builder_get_object (_tmp28_, "size_label");
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp30_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, gtk_label_get_type (), GtkLabel));
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->size_label);
-#line 1119 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 786 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->size_label = _tmp30_;
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp31_ = self->priv->builder;
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp32_ = gtk_builder_get_object (_tmp31_, "strip_metadata_check");
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp33_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, gtk_check_button_get_type (), GtkCheckButton));
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->strip_metadata_check);
-#line 1120 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 787 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->strip_metadata_check = _tmp33_;
-#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp34_ = parameters;
-#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp35_ = _publishing_flickr_publishing_parameters_ref0 (_tmp34_);
-#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp34_ = publisher;
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp35_ = publishing_flickr_flickr_publisher_get_authenticator (_tmp34_);
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp36_ = _tmp35_;
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp37_ = spit_publishing_authenticator_can_logout (_tmp36_);
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp38_ = !_tmp37_;
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_g_object_unref0 (_tmp36_);
+#line 789 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp38_) {
+#line 5829 "FlickrPublishing.c"
+		GtkButton* _tmp39_ = NULL;
+		GtkContainer* _tmp40_ = NULL;
+		GtkContainer* _tmp41_ = NULL;
+		GtkButton* _tmp42_ = NULL;
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp39_ = self->priv->logout_button;
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp40_ = gtk_widget_get_parent (G_TYPE_CHECK_INSTANCE_CAST (_tmp39_, gtk_widget_get_type (), GtkWidget));
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp41_ = _tmp40_;
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp42_ = self->priv->logout_button;
+#line 790 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		gtk_container_remove (_tmp41_, G_TYPE_CHECK_INSTANCE_CAST (_tmp42_, gtk_widget_get_type (), GtkWidget));
+#line 5844 "FlickrPublishing.c"
+	}
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp43_ = parameters;
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp44_ = _publishing_flickr_publishing_parameters_ref0 (_tmp43_);
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 1122 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->parameters = _tmp35_;
-#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp36_ = publisher;
-#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp37_ = _g_object_ref0 (_tmp36_);
-#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 793 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->parameters = _tmp44_;
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp45_ = publisher;
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp46_ = _g_object_ref0 (_tmp45_);
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 1123 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->publisher = _tmp37_;
-#line 1124 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp38_ = media_type;
-#line 1124 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->media_type = _tmp38_;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp40_ = publishing_flickr_publishing_options_pane_create_visibilities (self, &_tmp39_);
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 794 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->publisher = _tmp46_;
+#line 795 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp47_ = media_type;
+#line 795 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->media_type = _tmp47_;
+#line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp49_ = publishing_flickr_publishing_options_pane_create_visibilities (self, &_tmp48_);
+#line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibilities = (_vala_array_free (self->priv->visibilities, self->priv->visibilities_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_visibility_entry_unref), NULL);
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->visibilities = _tmp40_;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->visibilities_length1 = _tmp39_;
-#line 1126 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->visibilities = _tmp49_;
+#line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->visibilities_length1 = _tmp48_;
+#line 797 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->_visibilities_size_ = self->priv->visibilities_length1;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp42_ = publishing_flickr_publishing_options_pane_create_sizes (self, &_tmp41_);
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp51_ = publishing_flickr_publishing_options_pane_create_sizes (self, &_tmp50_);
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_size_entry_unref), NULL);
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->sizes = _tmp42_;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	self->priv->sizes_length1 = _tmp41_;
-#line 1127 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->sizes = _tmp51_;
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	self->priv->sizes_length1 = _tmp50_;
+#line 798 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->_sizes_size_ = self->priv->sizes_length1;
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp43_ = _ ("You are logged into Flickr as %s.\n\n");
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp44_ = parameters;
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp45_ = _tmp44_->username;
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp46_ = g_strdup_printf (_tmp43_, _tmp45_);
-#line 1129 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	upload_label_text = _tmp46_;
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp47_ = parameters;
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp48_ = _tmp47_->user_kind;
-#line 1130 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp48_ == PUBLISHING_FLICKR_USER_KIND_FREE) {
-#line 7637 "FlickrPublishing.c"
-		const gchar* _tmp49_ = NULL;
-		const gchar* _tmp50_ = NULL;
-		PublishingFlickrPublishingParameters* _tmp51_ = NULL;
-		gint64 _tmp52_ = 0LL;
-		gchar* _tmp53_ = NULL;
-		gchar* _tmp54_ = NULL;
-		gchar* _tmp55_ = NULL;
-		gchar* _tmp56_ = NULL;
-		gchar* _tmp57_ = NULL;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp49_ = upload_label_text;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp50_ = _ ("Your free Flickr account limits how much data you can upload per month" \
-".\n" \
-"This month you have %s remaining in your upload quota.");
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp51_ = parameters;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp52_ = _tmp51_->quota_free_bytes;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp53_ = g_format_size_full ((guint64) _tmp52_, G_FORMAT_SIZE_LONG_FORMAT | G_FORMAT_SIZE_IEC_UNITS);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp54_ = _tmp53_;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp55_ = g_strdup_printf (_tmp50_, _tmp54_);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp56_ = _tmp55_;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp57_ = g_strconcat (_tmp49_, _tmp56_, NULL);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (upload_label_text);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		upload_label_text = _tmp57_;
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp56_);
-#line 1131 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (_tmp54_);
-#line 7673 "FlickrPublishing.c"
-	} else {
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp52_ = _ ("You are logged into Flickr as %s.\n\n");
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp53_ = parameters;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp54_ = _tmp53_->username;
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp55_ = g_strdup_printf (_tmp52_, _tmp54_);
+#line 800 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	upload_label_text = _tmp55_;
+#line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp56_ = parameters;
+#line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp57_ = _tmp56_->user_kind;
+#line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp57_ == PUBLISHING_FLICKR_USER_KIND_FREE) {
+#line 5902 "FlickrPublishing.c"
 		const gchar* _tmp58_ = NULL;
 		const gchar* _tmp59_ = NULL;
-		gchar* _tmp60_ = NULL;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		PublishingFlickrPublishingParameters* _tmp60_ = NULL;
+		gint64 _tmp61_ = 0LL;
+		gchar* _tmp62_ = NULL;
+		gchar* _tmp63_ = NULL;
+		gchar* _tmp64_ = NULL;
+		gchar* _tmp65_ = NULL;
+		gchar* _tmp66_ = NULL;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp58_ = upload_label_text;
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp59_ = _ ("Your Flickr Pro account entitles you to unlimited uploads.");
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp60_ = g_strconcat (_tmp58_, _tmp59_, NULL);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp59_ = _ ("Your free Flickr account limits how much data you can upload per month" \
+".\n" \
+"This month you have %s remaining in your upload quota.");
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp60_ = parameters;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp61_ = _tmp60_->quota_free_bytes;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp62_ = g_format_size_full ((guint64) _tmp61_, G_FORMAT_SIZE_LONG_FORMAT | G_FORMAT_SIZE_IEC_UNITS);
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp63_ = _tmp62_;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp64_ = g_strdup_printf (_tmp59_, _tmp63_);
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp65_ = _tmp64_;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp66_ = g_strconcat (_tmp58_, _tmp65_, NULL);
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (upload_label_text);
-#line 1133 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		upload_label_text = _tmp60_;
-#line 7688 "FlickrPublishing.c"
-	}
-#line 1136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp61_ = self->priv->upload_info_label;
-#line 1136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp62_ = upload_label_text;
-#line 1136 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	gtk_label_set_label (_tmp61_, _tmp62_);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp63_ = _ ("Photos _visible to:");
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp64_ = g_strdup (_tmp63_);
-#line 1138 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	visibility_label_text = _tmp64_;
-#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp65_ = media_type;
-#line 1139 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp65_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 7706 "FlickrPublishing.c"
-		const gchar* _tmp66_ = NULL;
-		gchar* _tmp67_ = NULL;
-#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp66_ = _ ("Videos _visible to:");
-#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp67_ = g_strdup (_tmp66_);
-#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_g_free0 (visibility_label_text);
-#line 1140 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		visibility_label_text = _tmp67_;
-#line 7717 "FlickrPublishing.c"
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		upload_label_text = _tmp66_;
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (_tmp65_);
+#line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (_tmp63_);
+#line 5938 "FlickrPublishing.c"
 	} else {
-		SpitPublishingPublisherMediaType _tmp68_ = 0;
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp68_ = media_type;
-#line 1141 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		if (_tmp68_ == (SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO)) {
-#line 7724 "FlickrPublishing.c"
-			const gchar* _tmp69_ = NULL;
-			gchar* _tmp70_ = NULL;
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_tmp69_ = _ ("Photos and videos _visible to:");
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			_tmp70_ = g_strdup (_tmp69_);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		const gchar* _tmp67_ = NULL;
+		const gchar* _tmp68_ = NULL;
+		gchar* _tmp69_ = NULL;
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp67_ = upload_label_text;
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp68_ = _ ("Your Flickr Pro account entitles you to unlimited uploads.");
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp69_ = g_strconcat (_tmp67_, _tmp68_, NULL);
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (upload_label_text);
+#line 804 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		upload_label_text = _tmp69_;
+#line 5953 "FlickrPublishing.c"
+	}
+#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp70_ = self->priv->upload_info_label;
+#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp71_ = upload_label_text;
+#line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	gtk_label_set_label (_tmp70_, _tmp71_);
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp72_ = _ ("Photos _visible to:");
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp73_ = g_strdup (_tmp72_);
+#line 809 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	visibility_label_text = _tmp73_;
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp74_ = media_type;
+#line 810 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp74_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
+#line 5971 "FlickrPublishing.c"
+		const gchar* _tmp75_ = NULL;
+		gchar* _tmp76_ = NULL;
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp75_ = _ ("Videos _visible to:");
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp76_ = g_strdup (_tmp75_);
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_g_free0 (visibility_label_text);
+#line 811 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		visibility_label_text = _tmp76_;
+#line 5982 "FlickrPublishing.c"
+	} else {
+		SpitPublishingPublisherMediaType _tmp77_ = 0;
+#line 812 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp77_ = media_type;
+#line 812 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		if (_tmp77_ == (SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO)) {
+#line 5989 "FlickrPublishing.c"
+			const gchar* _tmp78_ = NULL;
+			gchar* _tmp79_ = NULL;
+#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+			_tmp78_ = _ ("Photos and videos _visible to:");
+#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+			_tmp79_ = g_strdup (_tmp78_);
+#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (visibility_label_text);
-#line 1143 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			visibility_label_text = _tmp70_;
-#line 7735 "FlickrPublishing.c"
+#line 814 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+			visibility_label_text = _tmp79_;
+#line 6000 "FlickrPublishing.c"
 		}
 	}
-#line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp71_ = self->priv->visibility_label;
-#line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp72_ = visibility_label_text;
-#line 1146 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	gtk_label_set_label (_tmp71_, _tmp72_);
-#line 1148 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp80_ = self->priv->visibility_label;
+#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp81_ = visibility_label_text;
+#line 817 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	gtk_label_set_label (_tmp80_, _tmp81_);
+#line 819 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_populate_visibility_combo (self);
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp73_ = self->priv->visibility_combo;
-#line 1149 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_flickr_publishing_options_pane_on_visibility_changed_gtk_combo_box_changed, self, 0);
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp74_ = media_type;
-#line 1151 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if (_tmp74_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 7754 "FlickrPublishing.c"
-		GtkComboBoxText* _tmp75_ = NULL;
-#line 1152 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp82_ = self->priv->visibility_combo;
+#line 820 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_flickr_publishing_options_pane_on_visibility_changed_gtk_combo_box_changed, self, 0);
+#line 822 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp83_ = media_type;
+#line 822 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if (_tmp83_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
+#line 6019 "FlickrPublishing.c"
+		GtkComboBoxText* _tmp84_ = NULL;
+#line 823 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_populate_size_combo (self);
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp75_ = self->priv->size_combo;
-#line 1153 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_flickr_publishing_options_pane_on_size_changed_gtk_combo_box_changed, self, 0);
-#line 7762 "FlickrPublishing.c"
+#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp84_ = self->priv->size_combo;
+#line 824 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, gtk_combo_box_get_type (), GtkComboBox), "changed", (GCallback) _publishing_flickr_publishing_options_pane_on_size_changed_gtk_combo_box_changed, self, 0);
+#line 6027 "FlickrPublishing.c"
 	} else {
-		GtkComboBoxText* _tmp76_ = NULL;
-		GtkLabel* _tmp77_ = NULL;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp76_ = self->priv->size_combo;
-#line 1156 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_tmp77_ = self->priv->size_label;
-#line 1157 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 7774 "FlickrPublishing.c"
+		GtkComboBoxText* _tmp85_ = NULL;
+		GtkLabel* _tmp86_ = NULL;
+#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp85_ = self->priv->size_combo;
+#line 827 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp85_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_tmp86_ = self->priv->size_label;
+#line 828 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp86_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 6039 "FlickrPublishing.c"
 	}
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp78_ = self->priv->strip_metadata_check;
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp79_ = strip_metadata;
-#line 1160 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp78_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp79_);
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp80_ = self->priv->logout_button;
-#line 1162 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (_tmp80_, "clicked", (GCallback) _publishing_flickr_publishing_options_pane_on_logout_clicked_gtk_button_clicked, self, 0);
-#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_tmp81_ = self->priv->publish_button;
-#line 1163 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	g_signal_connect_object (_tmp81_, "clicked", (GCallback) _publishing_flickr_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 831 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp87_ = self->priv->strip_metadata_check;
+#line 831 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp88_ = strip_metadata;
+#line 831 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp87_, gtk_toggle_button_get_type (), GtkToggleButton), _tmp88_);
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp89_ = self->priv->logout_button;
+#line 833 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_connect_object (_tmp89_, "clicked", (GCallback) _publishing_flickr_publishing_options_pane_on_logout_clicked_gtk_button_clicked, self, 0);
+#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_tmp90_ = self->priv->publish_button;
+#line 834 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	g_signal_connect_object (_tmp90_, "clicked", (GCallback) _publishing_flickr_publishing_options_pane_on_publish_clicked_gtk_button_clicked, self, 0);
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (visibility_label_text);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (upload_label_text);
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 7796 "FlickrPublishing.c"
+#line 6061 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrPublishingOptionsPane* publishing_flickr_publishing_options_pane_new (PublishingFlickrFlickrPublisher* publisher, PublishingFlickrPublishingParameters* parameters, SpitPublishingPublisherMediaType media_type, GtkBuilder* builder, gboolean strip_metadata) {
-#line 1105 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 772 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_publishing_options_pane_construct (PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, publisher, parameters, media_type, builder, strip_metadata);
-#line 7803 "FlickrPublishing.c"
+#line 6068 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_on_logout_clicked (PublishingFlickrPublishingOptionsPane* self) {
-#line 1166 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 837 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1167 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 838 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 7812 "FlickrPublishing.c"
+#line 6077 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_flickr_visibility_specification_ref0 (gpointer self) {
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_flickr_visibility_specification_ref (self) : NULL;
-#line 7819 "FlickrPublishing.c"
+#line 6084 "FlickrPublishing.c"
 }
 
 
@@ -7875,33 +6117,33 @@ static void publishing_flickr_publishing_options_pane_on_publish_clicked (Publis
 	SpitPublishingPublisherMediaType _tmp7_ = 0;
 	GtkCheckButton* _tmp14_ = NULL;
 	gboolean _tmp15_ = FALSE;
-#line 1170 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 841 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->parameters;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->visibilities;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = self->priv->visibilities_length1;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = self->priv->visibility_combo;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _tmp1_[_tmp3_];
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _tmp4_->specification;
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = _publishing_flickr_visibility_specification_ref0 (_tmp5_);
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp0_->visibility_specification);
-#line 1171 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 842 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_->visibility_specification = _tmp6_;
-#line 1174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = self->priv->media_type;
-#line 1174 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 845 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((_tmp7_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0) {
-#line 7861 "FlickrPublishing.c"
+#line 6126 "FlickrPublishing.c"
 		PublishingFlickrPublishingParameters* _tmp8_ = NULL;
 		PublishingFlickrPublishingOptionsPaneSizeEntry** _tmp9_ = NULL;
 		gint _tmp9__length1 = 0;
@@ -7909,116 +6151,116 @@ static void publishing_flickr_publishing_options_pane_on_publish_clicked (Publis
 		gint _tmp11_ = 0;
 		PublishingFlickrPublishingOptionsPaneSizeEntry* _tmp12_ = NULL;
 		gint _tmp13_ = 0;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = self->priv->parameters;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9_ = self->priv->sizes;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9__length1 = self->priv->sizes_length1;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp10_ = self->priv->size_combo;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp11_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp12_ = _tmp9_[_tmp11_];
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp13_ = _tmp12_->size;
-#line 1175 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 846 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_->photo_major_axis_size = _tmp13_;
-#line 7885 "FlickrPublishing.c"
+#line 6150 "FlickrPublishing.c"
 	}
-#line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = self->priv->strip_metadata_check;
-#line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1177 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 848 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_emit_by_name (self, "publish", _tmp15_);
-#line 7893 "FlickrPublishing.c"
-}
-
-
-static void _vala_array_add20 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if ((*length) == (*size)) {
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
-#line 7904 "FlickrPublishing.c"
-	}
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	(*array)[(*length)++] = value;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	(*array)[*length] = NULL;
-#line 7910 "FlickrPublishing.c"
+#line 6158 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add21 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
-#line 7921 "FlickrPublishing.c"
+#line 6169 "FlickrPublishing.c"
 	}
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7927 "FlickrPublishing.c"
+#line 6175 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add22 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
-#line 7938 "FlickrPublishing.c"
+#line 6186 "FlickrPublishing.c"
 	}
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7944 "FlickrPublishing.c"
+#line 6192 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add23 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
-#line 7955 "FlickrPublishing.c"
+#line 6203 "FlickrPublishing.c"
 	}
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7961 "FlickrPublishing.c"
+#line 6209 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add24 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
-#line 7972 "FlickrPublishing.c"
+#line 6220 "FlickrPublishing.c"
 	}
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 7978 "FlickrPublishing.c"
+#line 6226 "FlickrPublishing.c"
+}
+
+
+static void _vala_array_add25 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneVisibilityEntry* value) {
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if ((*length) == (*size)) {
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		*size = (*size) ? (2 * (*size)) : 4;
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		*array = g_renew (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, *array, (*size) + 1);
+#line 6237 "FlickrPublishing.c"
+	}
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	(*array)[(*length)++] = value;
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	(*array)[*length] = NULL;
+#line 6243 "FlickrPublishing.c"
 }
 
 
@@ -8060,118 +6302,118 @@ static PublishingFlickrPublishingOptionsPaneVisibilityEntry** publishing_flickr_
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry* _tmp25_ = NULL;
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry** _tmp26_ = NULL;
 	gint _tmp26__length1 = 0;
-#line 1180 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 851 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self), NULL);
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = g_new0 (PublishingFlickrPublishingOptionsPaneVisibilityEntry*, 0 + 1);
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result_ = _tmp0_;
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result__length1 = 0;
-#line 1181 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 852 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	__result__size_ = _result__length1;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _result_;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = _result__length1;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _ ("Everyone");
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_flickr_visibility_specification_new (1, 1, 1);
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _tmp3_;
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = publishing_flickr_publishing_options_pane_visibility_entry_new (_tmp2_, _tmp4_);
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add20 (&_result_, &_result__length1, &__result__size_, _tmp5_);
-#line 1183 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add21 (&_result_, &_result__length1, &__result__size_, _tmp5_);
+#line 854 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp4_);
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = _result_;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6__length1 = _result__length1;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _ ("Friends & family only");
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = publishing_flickr_visibility_specification_new (1, 1, 0);
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = _tmp8_;
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = publishing_flickr_publishing_options_pane_visibility_entry_new (_tmp7_, _tmp9_);
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add21 (&_result_, &_result__length1, &__result__size_, _tmp10_);
-#line 1184 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add22 (&_result_, &_result__length1, &__result__size_, _tmp10_);
+#line 855 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp9_);
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = _result_;
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11__length1 = _result__length1;
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = _ ("Family only");
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = publishing_flickr_visibility_specification_new (0, 1, 0);
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = _tmp13_;
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = publishing_flickr_publishing_options_pane_visibility_entry_new (_tmp12_, _tmp14_);
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add22 (&_result_, &_result__length1, &__result__size_, _tmp15_);
-#line 1185 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add23 (&_result_, &_result__length1, &__result__size_, _tmp15_);
+#line 856 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp14_);
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = _result_;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16__length1 = _result__length1;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp17_ = _ ("Friends only");
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp18_ = publishing_flickr_visibility_specification_new (1, 0, 0);
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp19_ = _tmp18_;
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp20_ = publishing_flickr_publishing_options_pane_visibility_entry_new (_tmp17_, _tmp19_);
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add23 (&_result_, &_result__length1, &__result__size_, _tmp20_);
-#line 1186 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add24 (&_result_, &_result__length1, &__result__size_, _tmp20_);
+#line 857 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp19_);
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp21_ = _result_;
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp21__length1 = _result__length1;
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp22_ = _ ("Just me");
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp23_ = publishing_flickr_visibility_specification_new (0, 0, 0);
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp24_ = _tmp23_;
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp25_ = publishing_flickr_publishing_options_pane_visibility_entry_new (_tmp22_, _tmp24_);
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add24 (&_result_, &_result__length1, &__result__size_, _tmp25_);
-#line 1187 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add25 (&_result_, &_result__length1, &__result__size_, _tmp25_);
+#line 858 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (_tmp24_);
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp26_ = _result_;
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp26__length1 = _result__length1;
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (result_length1) {
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*result_length1 = _tmp26__length1;
-#line 8118 "FlickrPublishing.c"
+#line 6383 "FlickrPublishing.c"
 	}
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp26_;
-#line 1189 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 860 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 8124 "FlickrPublishing.c"
+#line 6389 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_flickr_publishing_options_pane_visibility_entry_ref0 (gpointer self) {
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_flickr_publishing_options_pane_visibility_entry_ref (self) : NULL;
-#line 8131 "FlickrPublishing.c"
+#line 6396 "FlickrPublishing.c"
 }
 
 
@@ -8183,165 +6425,165 @@ static void publishing_flickr_publishing_options_pane_populate_visibility_combo 
 	GtkComboBoxText* _tmp8_ = NULL;
 	PublishingFlickrFlickrPublisher* _tmp9_ = NULL;
 	gint _tmp10_ = 0;
-#line 1192 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 863 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->visibilities;
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0__length1 = self->priv->visibilities_length1;
-#line 1193 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 864 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 8151 "FlickrPublishing.c"
+#line 6416 "FlickrPublishing.c"
 		gint _tmp1_ = 0;
 		PublishingFlickrPublishingOptionsPaneVisibilityEntry** _tmp2_ = NULL;
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp2_ = publishing_flickr_publishing_options_pane_create_visibilities (self, &_tmp1_);
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->visibilities = (_vala_array_free (self->priv->visibilities, self->priv->visibilities_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_visibility_entry_unref), NULL);
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->visibilities = _tmp2_;
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->visibilities_length1 = _tmp1_;
-#line 1194 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 865 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->_visibilities_size_ = self->priv->visibilities_length1;
-#line 8164 "FlickrPublishing.c"
+#line 6429 "FlickrPublishing.c"
 	}
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = self->priv->visibilities;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3__length1 = self->priv->visibilities_length1;
-#line 8170 "FlickrPublishing.c"
+#line 6435 "FlickrPublishing.c"
 	{
 		PublishingFlickrPublishingOptionsPaneVisibilityEntry** v_collection = NULL;
 		gint v_collection_length1 = 0;
 		gint _v_collection_size_ = 0;
 		gint v_it = 0;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		v_collection = _tmp3_;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		v_collection_length1 = _tmp3__length1;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		for (v_it = 0; v_it < _tmp3__length1; v_it = v_it + 1) {
-#line 8182 "FlickrPublishing.c"
+#line 6447 "FlickrPublishing.c"
 			PublishingFlickrPublishingOptionsPaneVisibilityEntry* _tmp4_ = NULL;
 			PublishingFlickrPublishingOptionsPaneVisibilityEntry* v = NULL;
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp4_ = _publishing_flickr_publishing_options_pane_visibility_entry_ref0 (v_collection[v_it]);
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			v = _tmp4_;
-#line 8189 "FlickrPublishing.c"
+#line 6454 "FlickrPublishing.c"
 			{
 				GtkComboBoxText* _tmp5_ = NULL;
 				PublishingFlickrPublishingOptionsPaneVisibilityEntry* _tmp6_ = NULL;
 				const gchar* _tmp7_ = NULL;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp5_ = self->priv->visibility_combo;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp6_ = v;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp7_ = _tmp6_->title;
-#line 1197 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 868 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				gtk_combo_box_text_append_text (_tmp5_, _tmp7_);
-#line 1196 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 867 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_publishing_flickr_publishing_options_pane_visibility_entry_unref0 (v);
-#line 8204 "FlickrPublishing.c"
+#line 6469 "FlickrPublishing.c"
 			}
 		}
 	}
-#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = self->priv->visibility_combo;
-#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = self->priv->publisher;
-#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = publishing_flickr_flickr_publisher_get_persistent_visibility (_tmp9_);
-#line 1199 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 870 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), _tmp10_);
-#line 8216 "FlickrPublishing.c"
-}
-
-
-static void _vala_array_add25 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	if ((*length) == (*size)) {
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		*size = (*size) ? (2 * (*size)) : 4;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
-#line 8227 "FlickrPublishing.c"
-	}
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	(*array)[(*length)++] = value;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	(*array)[*length] = NULL;
-#line 8233 "FlickrPublishing.c"
+#line 6481 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add26 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
-#line 8244 "FlickrPublishing.c"
+#line 6492 "FlickrPublishing.c"
 	}
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 8250 "FlickrPublishing.c"
+#line 6498 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add27 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
-#line 8261 "FlickrPublishing.c"
+#line 6509 "FlickrPublishing.c"
 	}
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 8267 "FlickrPublishing.c"
+#line 6515 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add28 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
-#line 8278 "FlickrPublishing.c"
+#line 6526 "FlickrPublishing.c"
 	}
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 8284 "FlickrPublishing.c"
+#line 6532 "FlickrPublishing.c"
 }
 
 
 static void _vala_array_add29 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
-#line 8295 "FlickrPublishing.c"
+#line 6543 "FlickrPublishing.c"
 	}
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 8301 "FlickrPublishing.c"
+#line 6549 "FlickrPublishing.c"
+}
+
+
+static void _vala_array_add30 (PublishingFlickrPublishingOptionsPaneSizeEntry*** array, int* length, int* size, PublishingFlickrPublishingOptionsPaneSizeEntry* value) {
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	if ((*length) == (*size)) {
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		*size = (*size) ? (2 * (*size)) : 4;
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		*array = g_renew (PublishingFlickrPublishingOptionsPaneSizeEntry*, *array, (*size) + 1);
+#line 6560 "FlickrPublishing.c"
+	}
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	(*array)[(*length)++] = value;
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	(*array)[*length] = NULL;
+#line 6566 "FlickrPublishing.c"
 }
 
 
@@ -8373,88 +6615,88 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry** publishing_flickr_publis
 	PublishingFlickrPublishingOptionsPaneSizeEntry* _tmp15_ = NULL;
 	PublishingFlickrPublishingOptionsPaneSizeEntry** _tmp16_ = NULL;
 	gint _tmp16__length1 = 0;
-#line 1202 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 873 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self), NULL);
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = g_new0 (PublishingFlickrPublishingOptionsPaneSizeEntry*, 0 + 1);
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result_ = _tmp0_;
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_result__length1 = 0;
-#line 1203 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 874 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	__result__size_ = _result__length1;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _result_;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = _result__length1;
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = _ ("500 × 375 pixels");
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp2_, 500);
-#line 1205 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add25 (&_result_, &_result__length1, &__result__size_, _tmp3_);
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 876 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add26 (&_result_, &_result__length1, &__result__size_, _tmp3_);
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = _result_;
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4__length1 = _result__length1;
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = _ ("1024 × 768 pixels");
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp5_, 1024);
-#line 1206 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add26 (&_result_, &_result__length1, &__result__size_, _tmp6_);
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 877 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add27 (&_result_, &_result__length1, &__result__size_, _tmp6_);
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = _result_;
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7__length1 = _result__length1;
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = _ ("2048 × 1536 pixels");
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp8_, 2048);
-#line 1207 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add27 (&_result_, &_result__length1, &__result__size_, _tmp9_);
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 878 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add28 (&_result_, &_result__length1, &__result__size_, _tmp9_);
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = _result_;
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10__length1 = _result__length1;
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp11_ = _ ("4096 × 3072 pixels");
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp12_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp11_, 4096);
-#line 1208 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add28 (&_result_, &_result__length1, &__result__size_, _tmp12_);
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 879 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add29 (&_result_, &_result__length1, &__result__size_, _tmp12_);
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13_ = _result_;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp13__length1 = _result__length1;
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = _ ("Original size");
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = publishing_flickr_publishing_options_pane_size_entry_new (_tmp14_, PUBLISHING_FLICKR_ORIGINAL_SIZE);
-#line 1209 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-	_vala_array_add29 (&_result_, &_result__length1, &__result__size_, _tmp15_);
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 880 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	_vala_array_add30 (&_result_, &_result__length1, &__result__size_, _tmp15_);
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = _result_;
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16__length1 = _result__length1;
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (result_length1) {
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*result_length1 = _tmp16__length1;
-#line 8401 "FlickrPublishing.c"
+#line 6666 "FlickrPublishing.c"
 	}
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp16_;
-#line 1211 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 882 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 8407 "FlickrPublishing.c"
+#line 6672 "FlickrPublishing.c"
 }
 
 
 static gpointer _publishing_flickr_publishing_options_pane_size_entry_ref0 (gpointer self) {
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self ? publishing_flickr_publishing_options_pane_size_entry_ref (self) : NULL;
-#line 8414 "FlickrPublishing.c"
+#line 6679 "FlickrPublishing.c"
 }
 
 
@@ -8466,80 +6708,80 @@ static void publishing_flickr_publishing_options_pane_populate_size_combo (Publi
 	GtkComboBoxText* _tmp8_ = NULL;
 	PublishingFlickrFlickrPublisher* _tmp9_ = NULL;
 	gint _tmp10_ = 0;
-#line 1214 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 885 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->sizes;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0__length1 = self->priv->sizes_length1;
-#line 1215 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 886 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp0_ == NULL) {
-#line 8434 "FlickrPublishing.c"
+#line 6699 "FlickrPublishing.c"
 		gint _tmp1_ = 0;
 		PublishingFlickrPublishingOptionsPaneSizeEntry** _tmp2_ = NULL;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp2_ = publishing_flickr_publishing_options_pane_create_sizes (self, &_tmp1_);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_size_entry_unref), NULL);
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->sizes = _tmp2_;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->sizes_length1 = _tmp1_;
-#line 1216 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 887 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		self->priv->_sizes_size_ = self->priv->sizes_length1;
-#line 8447 "FlickrPublishing.c"
+#line 6712 "FlickrPublishing.c"
 	}
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = self->priv->sizes;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3__length1 = self->priv->sizes_length1;
-#line 8453 "FlickrPublishing.c"
+#line 6718 "FlickrPublishing.c"
 	{
 		PublishingFlickrPublishingOptionsPaneSizeEntry** e_collection = NULL;
 		gint e_collection_length1 = 0;
 		gint _e_collection_size_ = 0;
 		gint e_it = 0;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		e_collection = _tmp3_;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		e_collection_length1 = _tmp3__length1;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		for (e_it = 0; e_it < _tmp3__length1; e_it = e_it + 1) {
-#line 8465 "FlickrPublishing.c"
+#line 6730 "FlickrPublishing.c"
 			PublishingFlickrPublishingOptionsPaneSizeEntry* _tmp4_ = NULL;
 			PublishingFlickrPublishingOptionsPaneSizeEntry* e = NULL;
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp4_ = _publishing_flickr_publishing_options_pane_size_entry_ref0 (e_collection[e_it]);
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			e = _tmp4_;
-#line 8472 "FlickrPublishing.c"
+#line 6737 "FlickrPublishing.c"
 			{
 				GtkComboBoxText* _tmp5_ = NULL;
 				PublishingFlickrPublishingOptionsPaneSizeEntry* _tmp6_ = NULL;
 				const gchar* _tmp7_ = NULL;
-#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp5_ = self->priv->size_combo;
-#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp6_ = e;
-#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_tmp7_ = _tmp6_->title;
-#line 1219 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 890 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				gtk_combo_box_text_append_text (_tmp5_, _tmp7_);
-#line 1218 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 889 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				_publishing_flickr_publishing_options_pane_size_entry_unref0 (e);
-#line 8487 "FlickrPublishing.c"
+#line 6752 "FlickrPublishing.c"
 			}
 		}
 	}
-#line 1221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = self->priv->size_combo;
-#line 1221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp9_ = self->priv->publisher;
-#line 1221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp10_ = publishing_flickr_flickr_publisher_get_persistent_default_size (_tmp9_);
-#line 1221 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 892 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	gtk_combo_box_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, gtk_combo_box_get_type (), GtkComboBox), _tmp10_);
-#line 8499 "FlickrPublishing.c"
+#line 6764 "FlickrPublishing.c"
 }
 
 
@@ -8547,17 +6789,17 @@ static void publishing_flickr_publishing_options_pane_on_size_changed (Publishin
 	PublishingFlickrFlickrPublisher* _tmp0_ = NULL;
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 1224 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 895 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->publisher;
-#line 1225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->size_combo;
-#line 1225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1225 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 896 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_set_persistent_default_size (_tmp0_, _tmp2_);
-#line 8517 "FlickrPublishing.c"
+#line 6782 "FlickrPublishing.c"
 }
 
 
@@ -8565,41 +6807,41 @@ static void publishing_flickr_publishing_options_pane_on_visibility_changed (Pub
 	PublishingFlickrFlickrPublisher* _tmp0_ = NULL;
 	GtkComboBoxText* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 1228 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 899 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->publisher;
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = self->priv->visibility_combo;
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = gtk_combo_box_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_combo_box_get_type (), GtkComboBox));
-#line 1229 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 900 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_flickr_publisher_set_persistent_visibility (_tmp0_, _tmp2_);
-#line 8535 "FlickrPublishing.c"
+#line 6800 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_publishing_options_pane_notify_publish (PublishingFlickrPublishingOptionsPane* self) {
 	GtkCheckButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
-#line 1232 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 903 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->strip_metadata_check;
-#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
-#line 1233 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 904 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_emit_by_name (self, "publish", _tmp1_);
-#line 8550 "FlickrPublishing.c"
+#line 6815 "FlickrPublishing.c"
 }
 
 
 void publishing_flickr_publishing_options_pane_notify_logout (PublishingFlickrPublishingOptionsPane* self) {
-#line 1236 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 907 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_OPTIONS_PANE (self));
-#line 1237 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 908 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_emit_by_name (self, "logout");
-#line 8559 "FlickrPublishing.c"
+#line 6824 "FlickrPublishing.c"
 }
 
 
@@ -8608,56 +6850,56 @@ static GtkWidget* publishing_flickr_publishing_options_pane_real_get_widget (Spi
 	GtkWidget* result = NULL;
 	GtkBox* _tmp0_ = NULL;
 	GtkWidget* _tmp1_ = NULL;
-#line 1240 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 911 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFlickrPublishingOptionsPane);
-#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = self->priv->pane_widget;
-#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget));
-#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp1_;
-#line 1241 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 912 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 8578 "FlickrPublishing.c"
+#line 6843 "FlickrPublishing.c"
 }
 
 
 static SpitPublishingDialogPaneGeometryOptions publishing_flickr_publishing_options_pane_real_get_preferred_geometry (SpitPublishingDialogPane* base) {
 	PublishingFlickrPublishingOptionsPane * self;
 	SpitPublishingDialogPaneGeometryOptions result = 0;
-#line 1244 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 915 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFlickrPublishingOptionsPane);
-#line 1245 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
-#line 1245 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 916 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 8591 "FlickrPublishing.c"
+#line 6856 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_publishing_options_pane_notify_publish_publishing_flickr_publishing_options_pane_publish (PublishingFlickrPublishingOptionsPane* _sender, gboolean strip_metadata, gpointer self) {
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_notify_publish ((PublishingFlickrPublishingOptionsPane*) self);
-#line 8598 "FlickrPublishing.c"
+#line 6863 "FlickrPublishing.c"
 }
 
 
 static void _publishing_flickr_publishing_options_pane_notify_logout_publishing_flickr_publishing_options_pane_logout (PublishingFlickrPublishingOptionsPane* _sender, gpointer self) {
-#line 1250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_notify_logout ((PublishingFlickrPublishingOptionsPane*) self);
-#line 8605 "FlickrPublishing.c"
+#line 6870 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_real_on_pane_installed (SpitPublishingDialogPane* base) {
 	PublishingFlickrPublishingOptionsPane * self;
-#line 1248 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 919 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFlickrPublishingOptionsPane);
-#line 1249 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 920 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (self, "publish", (GCallback) _publishing_flickr_publishing_options_pane_notify_publish_publishing_flickr_publishing_options_pane_publish, self, 0);
-#line 1250 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 921 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_connect_object (self, "logout", (GCallback) _publishing_flickr_publishing_options_pane_notify_logout_publishing_flickr_publishing_options_pane_logout, self, 0);
-#line 8617 "FlickrPublishing.c"
+#line 6882 "FlickrPublishing.c"
 }
 
 
@@ -8665,17 +6907,17 @@ static void publishing_flickr_publishing_options_pane_real_on_pane_uninstalled (
 	PublishingFlickrPublishingOptionsPane * self;
 	guint _tmp0_ = 0U;
 	guint _tmp1_ = 0U;
-#line 1253 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 924 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFlickrPublishingOptionsPane);
-#line 1254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("publish", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp0_, NULL, FALSE);
-#line 1254 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 925 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp0_, 0, NULL, (GCallback) _publishing_flickr_publishing_options_pane_notify_publish_publishing_flickr_publishing_options_pane_publish, self);
-#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_parse_name ("logout", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, &_tmp1_, NULL, FALSE);
-#line 1255 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 926 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_disconnect_matched (self, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _publishing_flickr_publishing_options_pane_notify_logout_publishing_flickr_publishing_options_pane_logout, self);
-#line 8635 "FlickrPublishing.c"
+#line 6900 "FlickrPublishing.c"
 }
 
 
@@ -8684,240 +6926,240 @@ static PublishingFlickrPublishingOptionsPaneSizeEntry* publishing_flickr_publish
 	const gchar* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
 	gint _tmp2_ = 0;
-#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (creator_title != NULL, NULL);
-#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrPublishingOptionsPaneSizeEntry*) g_type_create_instance (object_type);
-#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = creator_title;
-#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->title);
-#line 1071 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 738 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->title = _tmp1_;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = creator_size;
-#line 1072 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 739 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->size = _tmp2_;
-#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 8662 "FlickrPublishing.c"
+#line 6927 "FlickrPublishing.c"
 }
 
 
 static PublishingFlickrPublishingOptionsPaneSizeEntry* publishing_flickr_publishing_options_pane_size_entry_new (const gchar* creator_title, gint creator_size) {
-#line 1070 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 737 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_publishing_options_pane_size_entry_construct (PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY, creator_title, creator_size);
-#line 8669 "FlickrPublishing.c"
+#line 6934 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_size_entry_init (GValue* value) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 8676 "FlickrPublishing.c"
+#line 6941 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_size_entry_free_value (GValue* value) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_size_entry_unref (value->data[0].v_pointer);
-#line 8685 "FlickrPublishing.c"
+#line 6950 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_size_entry_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_flickr_publishing_options_pane_size_entry_ref (src_value->data[0].v_pointer);
-#line 8695 "FlickrPublishing.c"
+#line 6960 "FlickrPublishing.c"
 	} else {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 8699 "FlickrPublishing.c"
+#line 6964 "FlickrPublishing.c"
 	}
 }
 
 
 static gpointer publishing_flickr_publishing_options_pane_value_size_entry_peek_pointer (const GValue* value) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 8707 "FlickrPublishing.c"
+#line 6972 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_publishing_options_pane_value_size_entry_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 8714 "FlickrPublishing.c"
+#line 6979 "FlickrPublishing.c"
 		PublishingFlickrPublishingOptionsPaneSizeEntry* object;
 		object = collect_values[0].v_pointer;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8721 "FlickrPublishing.c"
+#line 6986 "FlickrPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 8725 "FlickrPublishing.c"
+#line 6990 "FlickrPublishing.c"
 		}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = publishing_flickr_publishing_options_pane_size_entry_ref (object);
-#line 8729 "FlickrPublishing.c"
+#line 6994 "FlickrPublishing.c"
 	} else {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8733 "FlickrPublishing.c"
+#line 6998 "FlickrPublishing.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 8737 "FlickrPublishing.c"
+#line 7002 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_publishing_options_pane_value_size_entry_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!object_p) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 8748 "FlickrPublishing.c"
+#line 7013 "FlickrPublishing.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = NULL;
-#line 8754 "FlickrPublishing.c"
+#line 7019 "FlickrPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 8758 "FlickrPublishing.c"
+#line 7023 "FlickrPublishing.c"
 	} else {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = publishing_flickr_publishing_options_pane_size_entry_ref (value->data[0].v_pointer);
-#line 8762 "FlickrPublishing.c"
+#line 7027 "FlickrPublishing.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 8766 "FlickrPublishing.c"
+#line 7031 "FlickrPublishing.c"
 }
 
 
 static GParamSpec* publishing_flickr_publishing_options_pane_param_spec_size_entry (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFlickrPublishingOptionsPaneParamSpecSizeEntry* spec;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY), NULL);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 8780 "FlickrPublishing.c"
+#line 7045 "FlickrPublishing.c"
 }
 
 
 static gpointer publishing_flickr_publishing_options_pane_value_get_size_entry (const GValue* value) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY), NULL);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 8789 "FlickrPublishing.c"
+#line 7054 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_set_size_entry (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry* old;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_size_entry_ref (value->data[0].v_pointer);
-#line 8809 "FlickrPublishing.c"
+#line 7074 "FlickrPublishing.c"
 	} else {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8813 "FlickrPublishing.c"
+#line 7078 "FlickrPublishing.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_size_entry_unref (old);
-#line 8819 "FlickrPublishing.c"
+#line 7084 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_take_size_entry (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry* old;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 8838 "FlickrPublishing.c"
+#line 7103 "FlickrPublishing.c"
 	} else {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 8842 "FlickrPublishing.c"
+#line 7107 "FlickrPublishing.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_size_entry_unref (old);
-#line 8848 "FlickrPublishing.c"
+#line 7113 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_size_entry_class_init (PublishingFlickrPublishingOptionsPaneSizeEntryClass * klass) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_size_entry_parent_class = g_type_class_peek_parent (klass);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingFlickrPublishingOptionsPaneSizeEntryClass *) klass)->finalize = publishing_flickr_publishing_options_pane_size_entry_finalize;
-#line 8858 "FlickrPublishing.c"
+#line 7123 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_size_entry_instance_init (PublishingFlickrPublishingOptionsPaneSizeEntry * self) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->ref_count = 1;
-#line 8865 "FlickrPublishing.c"
+#line 7130 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_size_entry_finalize (PublishingFlickrPublishingOptionsPaneSizeEntry* obj) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry * self;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_SIZE_ENTRY, PublishingFlickrPublishingOptionsPaneSizeEntry);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1067 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 734 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->title);
-#line 8877 "FlickrPublishing.c"
+#line 7142 "FlickrPublishing.c"
 }
 
 
@@ -8938,24 +7180,24 @@ static GType publishing_flickr_publishing_options_pane_size_entry_get_type (void
 static gpointer publishing_flickr_publishing_options_pane_size_entry_ref (gpointer instance) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry* self;
 	self = instance;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return instance;
-#line 8902 "FlickrPublishing.c"
+#line 7167 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_size_entry_unref (gpointer instance) {
 	PublishingFlickrPublishingOptionsPaneSizeEntry* self;
 	self = instance;
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_SIZE_ENTRY_GET_CLASS (self)->finalize (self);
-#line 1066 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 733 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 8915 "FlickrPublishing.c"
+#line 7180 "FlickrPublishing.c"
 	}
 }
 
@@ -8966,248 +7208,248 @@ static PublishingFlickrPublishingOptionsPaneVisibilityEntry* publishing_flickr_p
 	PublishingFlickrVisibilitySpecification* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (creator_title != NULL, NULL);
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_VISIBILITY_SPECIFICATION (creator_specification), NULL);
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrPublishingOptionsPaneVisibilityEntry*) g_type_create_instance (object_type);
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = creator_specification;
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _publishing_flickr_visibility_specification_ref0 (_tmp0_);
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (self->specification);
-#line 1081 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 748 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->specification = _tmp1_;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = creator_title;
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->title);
-#line 1082 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 749 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->title = _tmp3_;
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 8950 "FlickrPublishing.c"
+#line 7215 "FlickrPublishing.c"
 }
 
 
 static PublishingFlickrPublishingOptionsPaneVisibilityEntry* publishing_flickr_publishing_options_pane_visibility_entry_new (const gchar* creator_title, PublishingFlickrVisibilitySpecification* creator_specification) {
-#line 1080 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_publishing_options_pane_visibility_entry_construct (PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY, creator_title, creator_specification);
-#line 8957 "FlickrPublishing.c"
+#line 7222 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_visibility_entry_init (GValue* value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	value->data[0].v_pointer = NULL;
-#line 8964 "FlickrPublishing.c"
+#line 7229 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_visibility_entry_free_value (GValue* value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (value->data[0].v_pointer) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_visibility_entry_unref (value->data[0].v_pointer);
-#line 8973 "FlickrPublishing.c"
+#line 7238 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_visibility_entry_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (src_value->data[0].v_pointer) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = publishing_flickr_publishing_options_pane_visibility_entry_ref (src_value->data[0].v_pointer);
-#line 8983 "FlickrPublishing.c"
+#line 7248 "FlickrPublishing.c"
 	} else {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 8987 "FlickrPublishing.c"
+#line 7252 "FlickrPublishing.c"
 	}
 }
 
 
 static gpointer publishing_flickr_publishing_options_pane_value_visibility_entry_peek_pointer (const GValue* value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 8995 "FlickrPublishing.c"
+#line 7260 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_publishing_options_pane_value_visibility_entry_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (collect_values[0].v_pointer) {
-#line 9002 "FlickrPublishing.c"
+#line 7267 "FlickrPublishing.c"
 		PublishingFlickrPublishingOptionsPaneVisibilityEntry* object;
 		object = collect_values[0].v_pointer;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9009 "FlickrPublishing.c"
+#line 7274 "FlickrPublishing.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9013 "FlickrPublishing.c"
+#line 7278 "FlickrPublishing.c"
 		}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = publishing_flickr_publishing_options_pane_visibility_entry_ref (object);
-#line 9017 "FlickrPublishing.c"
+#line 7282 "FlickrPublishing.c"
 	} else {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9021 "FlickrPublishing.c"
+#line 7286 "FlickrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 9025 "FlickrPublishing.c"
+#line 7290 "FlickrPublishing.c"
 }
 
 
 static gchar* publishing_flickr_publishing_options_pane_value_visibility_entry_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!object_p) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9036 "FlickrPublishing.c"
+#line 7301 "FlickrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!value->data[0].v_pointer) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = NULL;
-#line 9042 "FlickrPublishing.c"
+#line 7307 "FlickrPublishing.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = value->data[0].v_pointer;
-#line 9046 "FlickrPublishing.c"
+#line 7311 "FlickrPublishing.c"
 	} else {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*object_p = publishing_flickr_publishing_options_pane_visibility_entry_ref (value->data[0].v_pointer);
-#line 9050 "FlickrPublishing.c"
+#line 7315 "FlickrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return NULL;
-#line 9054 "FlickrPublishing.c"
+#line 7319 "FlickrPublishing.c"
 }
 
 
 static GParamSpec* publishing_flickr_publishing_options_pane_param_spec_visibility_entry (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	PublishingFlickrPublishingOptionsPaneParamSpecVisibilityEntry* spec;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY), NULL);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return G_PARAM_SPEC (spec);
-#line 9068 "FlickrPublishing.c"
+#line 7333 "FlickrPublishing.c"
 }
 
 
 static gpointer publishing_flickr_publishing_options_pane_value_get_visibility_entry (const GValue* value) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY), NULL);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return value->data[0].v_pointer;
-#line 9077 "FlickrPublishing.c"
+#line 7342 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_set_visibility_entry (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry* old;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_visibility_entry_ref (value->data[0].v_pointer);
-#line 9097 "FlickrPublishing.c"
+#line 7362 "FlickrPublishing.c"
 	} else {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9101 "FlickrPublishing.c"
+#line 7366 "FlickrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_visibility_entry_unref (old);
-#line 9107 "FlickrPublishing.c"
+#line 7372 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_value_take_visibility_entry (GValue* value, gpointer v_object) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry* old;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	old = value->data[0].v_pointer;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (v_object) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = v_object;
-#line 9126 "FlickrPublishing.c"
+#line 7391 "FlickrPublishing.c"
 	} else {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		value->data[0].v_pointer = NULL;
-#line 9130 "FlickrPublishing.c"
+#line 7395 "FlickrPublishing.c"
 	}
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (old) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		publishing_flickr_publishing_options_pane_visibility_entry_unref (old);
-#line 9136 "FlickrPublishing.c"
+#line 7401 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_visibility_entry_class_init (PublishingFlickrPublishingOptionsPaneVisibilityEntryClass * klass) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_visibility_entry_parent_class = g_type_class_peek_parent (klass);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingFlickrPublishingOptionsPaneVisibilityEntryClass *) klass)->finalize = publishing_flickr_publishing_options_pane_visibility_entry_finalize;
-#line 9146 "FlickrPublishing.c"
+#line 7411 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_visibility_entry_instance_init (PublishingFlickrPublishingOptionsPaneVisibilityEntry * self) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->ref_count = 1;
-#line 9153 "FlickrPublishing.c"
+#line 7418 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_visibility_entry_finalize (PublishingFlickrPublishingOptionsPaneVisibilityEntry* obj) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry * self;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_TYPE_VISIBILITY_ENTRY, PublishingFlickrPublishingOptionsPaneVisibilityEntry);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_handlers_destroy (self);
-#line 1077 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 744 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_visibility_specification_unref0 (self->specification);
-#line 1078 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_free0 (self->title);
-#line 9167 "FlickrPublishing.c"
+#line 7432 "FlickrPublishing.c"
 }
 
 
@@ -9228,134 +7470,134 @@ static GType publishing_flickr_publishing_options_pane_visibility_entry_get_type
 static gpointer publishing_flickr_publishing_options_pane_visibility_entry_ref (gpointer instance) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry* self;
 	self = instance;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return instance;
-#line 9192 "FlickrPublishing.c"
+#line 7457 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_visibility_entry_unref (gpointer instance) {
 	PublishingFlickrPublishingOptionsPaneVisibilityEntry* self;
 	self = instance;
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_VISIBILITY_ENTRY_GET_CLASS (self)->finalize (self);
-#line 1076 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 743 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9205 "FlickrPublishing.c"
+#line 7470 "FlickrPublishing.c"
 	}
 }
 
 
 static void publishing_flickr_publishing_options_pane_class_init (PublishingFlickrPublishingOptionsPaneClass * klass) {
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_parent_class = g_type_class_peek_parent (klass);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFlickrPublishingOptionsPanePrivate));
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_flickr_publishing_options_pane_finalize;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_new ("publish", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN, G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_signal_new ("logout", PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 9221 "FlickrPublishing.c"
+#line 7486 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_spit_publishing_dialog_pane_interface_init (SpitPublishingDialogPaneIface * iface) {
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_publishing_options_pane_spit_publishing_dialog_pane_parent_iface = g_type_interface_peek_parent (iface);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->get_widget = (GtkWidget* (*)(SpitPublishingDialogPane*)) publishing_flickr_publishing_options_pane_real_get_widget;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->get_preferred_geometry = (SpitPublishingDialogPaneGeometryOptions (*)(SpitPublishingDialogPane*)) publishing_flickr_publishing_options_pane_real_get_preferred_geometry;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_flickr_publishing_options_pane_real_on_pane_installed;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_flickr_publishing_options_pane_real_on_pane_uninstalled;
-#line 9236 "FlickrPublishing.c"
+#line 7501 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_instance_init (PublishingFlickrPublishingOptionsPane * self) {
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv = PUBLISHING_FLICKR_PUBLISHING_OPTIONS_PANE_GET_PRIVATE (self);
-#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->pane_widget = NULL;
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibility_label = NULL;
-#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->upload_info_label = NULL;
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->size_label = NULL;
-#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->logout_button = NULL;
-#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 759 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->publish_button = NULL;
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibility_combo = NULL;
-#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->size_combo = NULL;
-#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->strip_metadata_check = NULL;
-#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibilities = NULL;
-#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibilities_length1 = 0;
-#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->_visibilities_size_ = self->priv->visibilities_length1;
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->sizes = NULL;
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->sizes_length1 = 0;
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->_sizes_size_ = self->priv->sizes_length1;
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->parameters = NULL;
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->publisher = NULL;
-#line 9277 "FlickrPublishing.c"
+#line 7542 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_publishing_options_pane_finalize (GObject* obj) {
 	PublishingFlickrPublishingOptionsPane * self;
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_PUBLISHING_OPTIONS_PANE, PublishingFlickrPublishingOptionsPane);
-#line 1086 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 753 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->builder);
-#line 1087 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 754 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->pane_widget);
-#line 1088 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_label);
-#line 1089 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 756 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->upload_info_label);
-#line 1090 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 757 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->size_label);
-#line 1091 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 758 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->logout_button);
-#line 1092 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 759 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->publish_button);
-#line 1093 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 760 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->visibility_combo);
-#line 1094 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 761 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->size_combo);
-#line 1095 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->strip_metadata_check);
-#line 1096 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->visibilities = (_vala_array_free (self->priv->visibilities, self->priv->visibilities_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_visibility_entry_unref), NULL);
-#line 1097 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->sizes = (_vala_array_free (self->priv->sizes, self->priv->sizes_length1, (GDestroyNotify) publishing_flickr_publishing_options_pane_size_entry_unref), NULL);
-#line 1098 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 765 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 1099 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 766 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (self->priv->publisher);
-#line 1065 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 732 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	G_OBJECT_CLASS (publishing_flickr_publishing_options_pane_parent_class)->finalize (obj);
-#line 9315 "FlickrPublishing.c"
+#line 7580 "FlickrPublishing.c"
 }
 
 
@@ -9381,57 +7623,57 @@ PublishingFlickrUploader* publishing_flickr_uploader_construct (GType object_typ
 	PublishingFlickrPublishingParameters* _tmp2_ = NULL;
 	PublishingFlickrPublishingParameters* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_SESSION (session), NULL);
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_FLICKR_IS_PUBLISHING_PARAMETERS (parameters), NULL);
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = session;
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = publishables;
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1__length1 = publishables_length1;
-#line 1265 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 936 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = (PublishingFlickrUploader*) publishing_rest_support_batch_uploader_construct (object_type, G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession), _tmp1_, _tmp1__length1);
-#line 1267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = parameters;
-#line 1267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = _publishing_flickr_publishing_parameters_ref0 (_tmp2_);
-#line 1267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 1267 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 938 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->parameters = _tmp3_;
-#line 1268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = strip_metadata;
-#line 1268 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 939 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv->strip_metadata = _tmp4_;
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return self;
-#line 9367 "FlickrPublishing.c"
+#line 7632 "FlickrPublishing.c"
 }
 
 
 PublishingFlickrUploader* publishing_flickr_uploader_new (PublishingFlickrSession* session, SpitPublishingPublishable** publishables, int publishables_length1, PublishingFlickrPublishingParameters* parameters, gboolean strip_metadata) {
-#line 1263 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 934 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return publishing_flickr_uploader_construct (PUBLISHING_FLICKR_TYPE_UPLOADER, session, publishables, publishables_length1, parameters, strip_metadata);
-#line 9374 "FlickrPublishing.c"
+#line 7639 "FlickrPublishing.c"
 }
 
 
-static void _vala_array_add30 (gchar*** array, int* length, int* size, gchar* value) {
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+static void _vala_array_add31 (gchar*** array, int* length, int* size, gchar* value) {
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if ((*length) == (*size)) {
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 9385 "FlickrPublishing.c"
+#line 7650 "FlickrPublishing.c"
 	}
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[(*length)++] = value;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	(*array)[*length] = NULL;
-#line 9391 "FlickrPublishing.c"
+#line 7656 "FlickrPublishing.c"
 }
 
 
@@ -9449,25 +7691,25 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 	GExiv2Metadata* _tmp32_ = NULL;
 	gboolean _tmp33_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (PUBLISHING_FLICKR_IS_UPLOADER (self));
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable));
-#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = publishable;
-#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = spit_publishing_publishable_get_media_type (_tmp0_);
-#line 1272 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 943 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp1_ != SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
-#line 1273 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 944 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 9421 "FlickrPublishing.c"
+#line 7686 "FlickrPublishing.c"
 	}
-#line 1275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 946 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = gexiv2_metadata_new ();
-#line 1275 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 946 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishable_metadata = _tmp2_;
-#line 9427 "FlickrPublishing.c"
+#line 7692 "FlickrPublishing.c"
 	{
 		GExiv2Metadata* _tmp3_ = NULL;
 		SpitPublishingPublishable* _tmp4_ = NULL;
@@ -9475,32 +7717,32 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 		GFile* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp3_ = publishable_metadata;
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp4_ = publishable;
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp5_ = spit_publishing_publishable_get_serialized_file (_tmp4_);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp6_ = _tmp5_;
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp7_ = g_file_get_path (_tmp6_);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp8_ = _tmp7_;
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gexiv2_metadata_open_path (_tmp3_, _tmp8_, &_inner_error_);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp8_);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (_tmp6_);
-#line 1277 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 948 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9455 "FlickrPublishing.c"
-			goto __catch25_g_error;
+#line 7720 "FlickrPublishing.c"
+			goto __catch18_g_error;
 		}
 	}
-	goto __finally25;
-	__catch25_g_error:
+	goto __finally18;
+	__catch18_g_error:
 	{
 		GError* err = NULL;
 		SpitPublishingPublishable* _tmp9_ = NULL;
@@ -9508,129 +7750,129 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 		GFile* _tmp11_ = NULL;
 		gchar* _tmp12_ = NULL;
 		gchar* _tmp13_ = NULL;
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		err = _inner_error_;
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_inner_error_ = NULL;
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp9_ = publishable;
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp10_ = spit_publishing_publishable_get_serialized_file (_tmp9_);
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp11_ = _tmp10_;
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp12_ = g_file_get_path (_tmp11_);
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp13_ = _tmp12_;
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		g_warning ("FlickrPublishing.vala:1279: couldn't read metadata from file '%s' for " \
-"upload preprocessing.", _tmp13_);
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		g_warning ("FlickrPublishing.vala:950: couldn't read metadata from file '%s' for u" \
+"pload preprocessing.", _tmp13_);
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp13_);
-#line 1279 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 950 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (_tmp11_);
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_error_free0 (err);
-#line 9490 "FlickrPublishing.c"
+#line 7755 "FlickrPublishing.c"
 	}
-	__finally25:
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+	__finally18:
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (publishable_metadata);
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		g_clear_error (&_inner_error_);
-#line 1276 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 947 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 9503 "FlickrPublishing.c"
+#line 7768 "FlickrPublishing.c"
 	}
-#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp14_ = publishable_metadata;
-#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp15_ = gexiv2_metadata_has_iptc (_tmp14_);
-#line 1287 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 958 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (!_tmp15_) {
-#line 1288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (publishable_metadata);
-#line 1288 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 959 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		return;
-#line 9515 "FlickrPublishing.c"
+#line 7780 "FlickrPublishing.c"
 	}
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp16_ = publishable_metadata;
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp17_ = gexiv2_metadata_has_tag (_tmp16_, "Iptc.Application2.Caption");
-#line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 961 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp17_) {
-#line 9523 "FlickrPublishing.c"
+#line 7788 "FlickrPublishing.c"
 		GExiv2Metadata* _tmp18_ = NULL;
 		GExiv2Metadata* _tmp19_ = NULL;
 		gchar* _tmp20_ = NULL;
 		gchar* _tmp21_ = NULL;
 		gchar* _tmp22_ = NULL;
 		gchar* _tmp23_ = NULL;
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp18_ = publishable_metadata;
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp19_ = publishable_metadata;
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp20_ = gexiv2_metadata_get_tag_string (_tmp19_, "Iptc.Application2.Caption");
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp21_ = _tmp20_;
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp22_ = publishing_rest_support_asciify_string (_tmp21_);
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp23_ = _tmp22_;
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gexiv2_metadata_set_tag_string (_tmp18_, "Iptc.Application2.Caption", _tmp23_);
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp23_);
-#line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 962 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp21_);
-#line 9548 "FlickrPublishing.c"
+#line 7813 "FlickrPublishing.c"
 	}
-#line 1295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp24_ = publishable_metadata;
-#line 1295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp25_ = gexiv2_metadata_has_tag (_tmp24_, "Iptc.Application2.Headline");
-#line 1295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 966 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp25_) {
-#line 9556 "FlickrPublishing.c"
+#line 7821 "FlickrPublishing.c"
 		GExiv2Metadata* _tmp26_ = NULL;
 		GExiv2Metadata* _tmp27_ = NULL;
 		gchar* _tmp28_ = NULL;
 		gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
 		gchar* _tmp31_ = NULL;
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp26_ = publishable_metadata;
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp27_ = publishable_metadata;
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp28_ = gexiv2_metadata_get_tag_string (_tmp27_, "Iptc.Application2.Headline");
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp29_ = _tmp28_;
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp30_ = publishing_rest_support_asciify_string (_tmp29_);
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp31_ = _tmp30_;
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gexiv2_metadata_set_tag_string (_tmp26_, "Iptc.Application2.Headline", _tmp31_);
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp31_);
-#line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 967 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp29_);
-#line 9581 "FlickrPublishing.c"
+#line 7846 "FlickrPublishing.c"
 	}
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp32_ = publishable_metadata;
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp33_ = gexiv2_metadata_has_tag (_tmp32_, "Iptc.Application2.Keywords");
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	if (_tmp33_) {
-#line 9589 "FlickrPublishing.c"
+#line 7854 "FlickrPublishing.c"
 		GeeSet* keyword_set = NULL;
 		GeeHashSet* _tmp34_ = NULL;
 		gchar** iptc_keywords = NULL;
@@ -9670,179 +7912,179 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 		GExiv2Metadata* _tmp60_ = NULL;
 		gchar** _tmp61_ = NULL;
 		gint _tmp61__length1 = 0;
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp34_ = gee_hash_set_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, g_free, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 1301 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 972 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		keyword_set = G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, GEE_TYPE_SET, GeeSet);
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp35_ = publishable_metadata;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp37_ = _tmp36_ = gexiv2_metadata_get_tag_multiple (_tmp35_, "Iptc.Application2.Keywords");
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		iptc_keywords = _tmp37_;
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		iptc_keywords_length1 = _vala_array_length (_tmp36_);
-#line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 973 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_iptc_keywords_size_ = iptc_keywords_length1;
-#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp38_ = iptc_keywords;
-#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp38__length1 = iptc_keywords_length1;
-#line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 974 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_tmp38_ != NULL) {
-#line 9649 "FlickrPublishing.c"
+#line 7914 "FlickrPublishing.c"
 			gchar** _tmp39_ = NULL;
 			gint _tmp39__length1 = 0;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp39_ = iptc_keywords;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp39__length1 = iptc_keywords_length1;
-#line 9656 "FlickrPublishing.c"
+#line 7921 "FlickrPublishing.c"
 			{
 				gchar** keyword_collection = NULL;
 				gint keyword_collection_length1 = 0;
 				gint _keyword_collection_size_ = 0;
 				gint keyword_it = 0;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				keyword_collection = _tmp39_;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				keyword_collection_length1 = _tmp39__length1;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				for (keyword_it = 0; keyword_it < _tmp39__length1; keyword_it = keyword_it + 1) {
-#line 9668 "FlickrPublishing.c"
+#line 7933 "FlickrPublishing.c"
 					gchar* _tmp40_ = NULL;
 					gchar* keyword = NULL;
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp40_ = g_strdup (keyword_collection[keyword_it]);
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					keyword = _tmp40_;
-#line 9675 "FlickrPublishing.c"
+#line 7940 "FlickrPublishing.c"
 					{
 						GeeSet* _tmp41_ = NULL;
 						const gchar* _tmp42_ = NULL;
-#line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_tmp41_ = keyword_set;
-#line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_tmp42_ = keyword;
-#line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 976 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, GEE_TYPE_COLLECTION, GeeCollection), _tmp42_);
-#line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 975 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_g_free0 (keyword);
-#line 9687 "FlickrPublishing.c"
+#line 7952 "FlickrPublishing.c"
 					}
 				}
 			}
 		}
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp43_ = publishable_metadata;
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp45_ = _tmp44_ = gexiv2_metadata_get_tag_multiple (_tmp43_, "Xmp.dc.subject");
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		xmp_keywords = _tmp45_;
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		xmp_keywords_length1 = _vala_array_length (_tmp44_);
-#line 1307 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 978 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_xmp_keywords_size_ = xmp_keywords_length1;
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp46_ = xmp_keywords;
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp46__length1 = xmp_keywords_length1;
-#line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 979 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (_tmp46_ != NULL) {
-#line 9708 "FlickrPublishing.c"
+#line 7973 "FlickrPublishing.c"
 			gchar** _tmp47_ = NULL;
 			gint _tmp47__length1 = 0;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp47_ = xmp_keywords;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp47__length1 = xmp_keywords_length1;
-#line 9715 "FlickrPublishing.c"
+#line 7980 "FlickrPublishing.c"
 			{
 				gchar** keyword_collection = NULL;
 				gint keyword_collection_length1 = 0;
 				gint _keyword_collection_size_ = 0;
 				gint keyword_it = 0;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				keyword_collection = _tmp47_;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				keyword_collection_length1 = _tmp47__length1;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 				for (keyword_it = 0; keyword_it < _tmp47__length1; keyword_it = keyword_it + 1) {
-#line 9727 "FlickrPublishing.c"
+#line 7992 "FlickrPublishing.c"
 					gchar* _tmp48_ = NULL;
 					gchar* keyword = NULL;
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					_tmp48_ = g_strdup (keyword_collection[keyword_it]);
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 					keyword = _tmp48_;
-#line 9734 "FlickrPublishing.c"
+#line 7999 "FlickrPublishing.c"
 					{
 						GeeSet* _tmp49_ = NULL;
 						const gchar* _tmp50_ = NULL;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_tmp49_ = keyword_set;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_tmp50_ = keyword;
-#line 1310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 981 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, GEE_TYPE_COLLECTION, GeeCollection), _tmp50_);
-#line 1309 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 980 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 						_g_free0 (keyword);
-#line 9746 "FlickrPublishing.c"
+#line 8011 "FlickrPublishing.c"
 					}
 				}
 			}
 		}
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp51_ = keyword_set;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp53_ = gee_collection_to_array (G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, GEE_TYPE_COLLECTION, GeeCollection), &_tmp52_);
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		all_keywords = _tmp53_;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		all_keywords_length1 = _tmp52_;
-#line 1312 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 983 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_all_keywords_size_ = all_keywords_length1;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp54_ = all_keywords;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp54__length1 = all_keywords_length1;
-#line 1317 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-		_vala_array_add30 (&all_keywords, &all_keywords_length1, &_all_keywords_size_, NULL);
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 988 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		_vala_array_add31 (&all_keywords, &all_keywords_length1, &_all_keywords_size_, NULL);
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp55_ = g_new0 (gchar*, 1 + 1);
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		no_keywords = _tmp55_;
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		no_keywords_length1 = 1;
-#line 1319 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 990 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_no_keywords_size_ = no_keywords_length1;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp56_ = no_keywords;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp56__length1 = no_keywords_length1;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_free0 (_tmp56_[0]);
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp56_[0] = NULL;
-#line 1324 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 995 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp57_ = _tmp56_[0];
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp58_ = publishable_metadata;
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp59_ = all_keywords;
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp59__length1 = all_keywords_length1;
-#line 1326 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 997 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gexiv2_metadata_set_tag_multiple (_tmp58_, "Xmp.dc.subject", _tmp59_);
-#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp60_ = publishable_metadata;
-#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp61_ = no_keywords;
-#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_tmp61__length1 = no_keywords_length1;
-#line 1327 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 998 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		gexiv2_metadata_set_tag_multiple (_tmp60_, "Iptc.Application2.Keywords", _tmp61_);
-#line 9801 "FlickrPublishing.c"
+#line 8066 "FlickrPublishing.c"
 		{
 			GExiv2Metadata* _tmp62_ = NULL;
 			SpitPublishingPublishable* _tmp63_ = NULL;
@@ -9850,32 +8092,32 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 			GFile* _tmp65_ = NULL;
 			gchar* _tmp66_ = NULL;
 			gchar* _tmp67_ = NULL;
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp62_ = publishable_metadata;
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp63_ = publishable;
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp64_ = spit_publishing_publishable_get_serialized_file (_tmp63_);
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp65_ = _tmp64_;
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp66_ = g_file_get_path (_tmp65_);
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp67_ = _tmp66_;
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			gexiv2_metadata_save_file (_tmp62_, _tmp67_, &_inner_error_);
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (_tmp67_);
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_object_unref0 (_tmp65_);
-#line 1330 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1001 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 9829 "FlickrPublishing.c"
-				goto __catch26_g_error;
+#line 8094 "FlickrPublishing.c"
+				goto __catch19_g_error;
 			}
 		}
-		goto __finally26;
-		__catch26_g_error:
+		goto __finally19;
+		__catch19_g_error:
 		{
 			GError* err = NULL;
 			SpitPublishingPublishable* _tmp68_ = NULL;
@@ -9883,69 +8125,69 @@ static void publishing_flickr_uploader_preprocess_publishable (PublishingFlickrU
 			GFile* _tmp70_ = NULL;
 			gchar* _tmp71_ = NULL;
 			gchar* _tmp72_ = NULL;
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			err = _inner_error_;
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_inner_error_ = NULL;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp68_ = publishable;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp69_ = spit_publishing_publishable_get_serialized_file (_tmp68_);
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp70_ = _tmp69_;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp71_ = g_file_get_path (_tmp70_);
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_tmp72_ = _tmp71_;
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
-			g_warning ("FlickrPublishing.vala:1332: couldn't write metadata to file '%s' for u" \
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+			g_warning ("FlickrPublishing.vala:1003: couldn't write metadata to file '%s' for u" \
 "pload preprocessing.", _tmp72_);
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_free0 (_tmp72_);
-#line 1332 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1003 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_object_unref0 (_tmp70_);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_error_free0 (err);
-#line 9864 "FlickrPublishing.c"
+#line 8129 "FlickrPublishing.c"
 		}
-		__finally26:
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+		__finally19:
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			no_keywords = (_vala_array_free (no_keywords, no_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			all_keywords = (_vala_array_free (all_keywords, all_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			xmp_keywords = (_vala_array_free (xmp_keywords, xmp_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			iptc_keywords = (_vala_array_free (iptc_keywords, iptc_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_object_unref0 (keyword_set);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			_g_object_unref0 (publishable_metadata);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			g_clear_error (&_inner_error_);
-#line 1329 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1000 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 			return;
-#line 9887 "FlickrPublishing.c"
+#line 8152 "FlickrPublishing.c"
 		}
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		no_keywords = (_vala_array_free (no_keywords, no_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		all_keywords = (_vala_array_free (all_keywords, all_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		xmp_keywords = (_vala_array_free (xmp_keywords, xmp_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		iptc_keywords = (_vala_array_free (iptc_keywords, iptc_keywords_length1, (GDestroyNotify) g_free), NULL);
-#line 1300 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 971 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 		_g_object_unref0 (keyword_set);
-#line 9899 "FlickrPublishing.c"
+#line 8164 "FlickrPublishing.c"
 	}
-#line 1271 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 942 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (publishable_metadata);
-#line 9903 "FlickrPublishing.c"
+#line 8168 "FlickrPublishing.c"
 }
 
 
@@ -9961,73 +8203,73 @@ static PublishingRESTSupportTransaction* publishing_flickr_uploader_real_create_
 	SpitPublishingPublishable* _tmp6_ = NULL;
 	PublishingFlickrUploadTransaction* _tmp7_ = NULL;
 	PublishingRESTSupportTransaction* _tmp8_ = NULL;
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_FLICKR_TYPE_UPLOADER, PublishingFlickrUploader);
-#line 1338 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1009 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_return_val_if_fail (SPIT_PUBLISHING_IS_PUBLISHABLE (publishable), NULL);
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp0_ = publishing_rest_support_batch_uploader_get_current_publishable (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp1_ = _tmp0_;
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_uploader_preprocess_publishable (self, _tmp1_);
-#line 1340 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1011 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp2_ = publishing_rest_support_batch_uploader_get_session (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp3_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, PUBLISHING_FLICKR_TYPE_SESSION, PublishingFlickrSession);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp4_ = self->priv->parameters;
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp5_ = publishing_rest_support_batch_uploader_get_current_publishable (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_BATCH_UPLOADER, PublishingRESTSupportBatchUploader));
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp6_ = _tmp5_;
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp7_ = publishing_flickr_upload_transaction_new (_tmp3_, _tmp4_, _tmp6_);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_tmp8_ = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_g_object_unref0 (_tmp6_);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_rest_support_session_unref0 (_tmp3_);
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	result = _tmp8_;
-#line 1341 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 1012 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	return result;
-#line 9953 "FlickrPublishing.c"
+#line 8218 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_uploader_class_init (PublishingFlickrUploaderClass * klass) {
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	publishing_flickr_uploader_parent_class = g_type_class_peek_parent (klass);
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->finalize = publishing_flickr_uploader_finalize;
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingFlickrUploaderPrivate));
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	((PublishingRESTSupportBatchUploaderClass *) klass)->create_transaction = publishing_flickr_uploader_real_create_transaction;
-#line 9966 "FlickrPublishing.c"
+#line 8231 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_uploader_instance_init (PublishingFlickrUploader * self) {
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self->priv = PUBLISHING_FLICKR_UPLOADER_GET_PRIVATE (self);
-#line 9973 "FlickrPublishing.c"
+#line 8238 "FlickrPublishing.c"
 }
 
 
 static void publishing_flickr_uploader_finalize (PublishingRESTSupportBatchUploader* obj) {
 	PublishingFlickrUploader * self;
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, PUBLISHING_FLICKR_TYPE_UPLOADER, PublishingFlickrUploader);
-#line 1260 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 931 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	_publishing_flickr_publishing_parameters_unref0 (self->priv->parameters);
-#line 1259 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
+#line 930 "/home/jens/Source/shotwell/plugins/shotwell-publishing/FlickrPublishing.vala"
 	PUBLISHING_REST_SUPPORT_BATCH_UPLOADER_CLASS (publishing_flickr_uploader_parent_class)->finalize (obj);
-#line 9985 "FlickrPublishing.c"
+#line 8250 "FlickrPublishing.c"
 }
 
 

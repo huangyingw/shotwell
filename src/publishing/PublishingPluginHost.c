@@ -1273,7 +1273,7 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 						if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 1272 "PublishingPluginHost.c"
-							goto __catch37_spit_publishing_publishing_error;
+							goto __catch38_spit_publishing_publishing_error;
 						}
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 						_g_object_unref0 (wrapper);
@@ -1293,8 +1293,8 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 					_g_object_unref0 (wrapper);
 #line 1291 "PublishingPluginHost.c"
 				}
-				goto __finally37;
-				__catch37_spit_publishing_publishing_error:
+				goto __finally38;
+				__catch38_spit_publishing_publishing_error:
 				{
 					GError* err = NULL;
 					GError* _tmp16_ = NULL;
@@ -1331,7 +1331,7 @@ static SpitPublishingProgressCallback spit_publishing_concrete_publishing_host_r
 					return result;
 #line 1329 "PublishingPluginHost.c"
 				}
-				__finally37:
+				__finally38:
 #line 212 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 212 "/home/jens/Source/shotwell/src/publishing/PublishingPluginHost.vala"

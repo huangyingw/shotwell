@@ -1,6 +1,1151 @@
+commit b83a820fc0a3f85f22484f3275adf086ad8e2ca3
+Author: Jens Georg <mail@jensge.org>
+Date:   Mon Mar 20 13:41:40 2017 +0100
+
+    Prepare shotwell 0.26.0
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+M	icons/Makefile.am
+A	icons/about-aachen.jpg
+M	org.gnome.Shotwell.gresource.xml
+M	src/AppWindow.vala
+M	src/Resources.vala
+
+commit a54ff87cce112a075b91591f811ed605d1d84430
+Author: Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Date:	Fri Mar 17 08:39:22 2017 +0000
+
+    Update Kazakh translation
+
+M	po/kk.po
+
+commit 683e673975674852828d17fc441a98e39a5c3bcd
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 16 20:51:15 2017 +0100
+
+    Fix some spelling errors in NEWS
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+
+commit 844c7b8357b4cb3790d9ffd3f8705f4e68d5b83c
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 16 20:44:50 2017 +0100
+
+    Update debian
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/changelog
+
+commit 3194563aa794a1700b1ce44f6dbe7ce3b6c3db8d
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Thu Mar 16 19:02:54 2017 +0100
+
+    Fix a syntax error in Latvian help translation
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=780116
+
+M	help/lv/lv.po
+
+commit 5e304722ad2e0f4caec6f7ecea71717d4de9ef39
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Thu Mar 16 10:20:58 2017 +0000
+
+    Update German translation
+
+M	po/de.po
+
+commit b134f99e439b6e21f0423805d1bc23fab3a5877d
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Thu Mar 16 07:15:37 2017 +0000
+
+    Update Spanish translation
+
+M	help/es/es.po
+
+commit e621cec664dedd62b0bc294b0bdacb0f8953f2ff
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Mar 15 22:32:08 2017 +0100
+
+    Use custom --enable-debug switch
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+D	m4/ax_check_enable_debug.m4
+
+commit fee674ea7a2bb57f11efa59bc04fe5b08332fb79
+Author: Balázs Úr <urbalazs@gmail.com>
+Date:	Wed Mar 15 17:11:57 2017 +0000
+
+    Update Hungarian translation
+
+M	po/hu.po
+
+commit 76e8aedfe6678c3b5a367d3d6f2ef0002fd33a95
+Author: gogo <trebelnik2@gmail.com>
+Date:	Wed Mar 15 11:10:14 2017 +0000
+
+    Update Croatian translation
+
+M	po/hr.po
+
+commit e0f75e01c38c17d5bef5c04c95e2810b3aad0c59
+Author: Marek Černocký <marek@manet.cz>
+Date:	Wed Mar 15 00:56:16 2017 +0100
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit b11f1b0fe626f50c5c715018d97bf7e438777fd7
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Mar 14 20:44:44 2017 +0100
+
+    Check for LC_MEASUREMENT in a more portable way
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=779844
+
+M	src/Resources.vala
+
+commit b9ac3e74033749b4864a59bb5b21b69dcc90678c
+Author: Josef Andersson <l10nl18nsweja@gmail.com>
+Date:	Tue Mar 14 13:43:49 2017 +0000
+
+    Update Swedish translation
+
+M	po/sv.po
+
+commit 05caf49deda458a49f9cc21babca5c4fb2c4b580
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Tue Mar 14 13:43:45 2017 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 190a7e948d679344c00d46695623e770aae06549
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 19:45:14 2017 +0100
+
+    Prepare 0.25.92
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+
+commit 3d71f6f68df5a0e965a395e501f22b816095f71e
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 20:57:57 2017 +0100
+
+    icons: Add missing files to tarball
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	icons/Makefile.am
+
+commit 5b2490388036237c82dd8837fc9267ea6b88ff57
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 20:40:38 2017 +0100
+
+    Fix issue with non-distributed ui files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/Makefile.am
+
+commit eaf7e88240369f87defe0f7f8ba9fe9f468a256e
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 19:33:07 2017 +0100
+
+    printing: Use inch/cm depending on locale settings
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=779844
+
+M	misc/org.yorba.shotwell.gschema.xml
+M	src/Printing.vala
+M	src/Resources.vala
+M	src/config/ConfigurationInterfaces.vala
+
+commit 31ee9ff2bbad67918f14efaf52903c177ce35d2b
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 19:08:57 2017 +0100
+
+    build: Remove debugging leftover
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 9fa3ac748d330b21400d15d883d2437073f231f4
+Author: Anders Jonsson <anders.jonsson@norsjovallen.se>
+Date:	Mon Mar 13 16:54:15 2017 +0100
+
+    Unique summary for each transition
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=779989
+
+M	misc/org.yorba.shotwell.gschema.xml
+
+commit 379ea72c323f7aa84383991075cc492cc0e3833e
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 19:03:11 2017 +0100
+
+    Enable GExiv2 GLib logging handler
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/main.vala
+
+commit 2f9ad9731ca512f888e716c7cf5e70d701dbcc51
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 19:02:29 2017 +0100
+
+    Prevent needless string copy
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Printing.vala
+
+commit e031ef34362cb656b40ddf7ad36e192a5b59b50f
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 13 18:59:27 2017 +0100
+
+    build: Use proper argument for AX_IS_RELEASE
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 3db3d1f357a85000d3f5c1fc825d7466420c0d28
+Author: Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+Date:	Sun Mar 12 04:10:09 2017 +0000
+
+    Update Kazakh translation
+
+M	po/kk.po
+
+commit e5e018338eda698432673038da85686db293fd0c
+Author: GNOME Translation Robot <gnome-sysadmin@gnome.org>
+Date:	Fri Mar 10 10:19:47 2017 +0000
+
+    Update Scottish Gaelic translation
+
+    (cherry picked from commit 9f41fcb9cc54734b4f02c0e5003f2b6309ece9e5)
+
+M	po/gd.po
+
+commit e7376bf09a8811a2380b23ccd553972d46dd4cc5
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 9 22:37:03 2017 +0100
+
+    viewer: Enable context menu
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/direct/DirectPhotoPage.vala
+
+commit eceb40c3578c9c795ad20612a0702024686eafba
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 9 21:24:28 2017 +0100
+
+    Use gp_file_new_from_fd for getting files
+
+    Previously, we would use a memory file and load the whole file into
+    memory and
+    write it to disk afterwards. That was probably ok for (small)
+    photos, but
+    totally killed memory usage with videos.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=732663
+
+M	src/camera/GPhoto.vala
+M	vapi/libgphoto2.vapi
+
+commit 764d257bd4e532b858c4338b6c52e69125505856
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Mar 8 22:01:06 2017 +0100
+
+    Allow CCW rotation by ctrl-Space on tool button
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=715501
+
+M	src/CollectionPage.vala
+M	src/PhotoPage.vala
+
+commit f24bd7af01eff3e3085134ba7de5a5e898e3fbbf
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Mar 7 23:53:25 2017 +0100
+
+    piwigo: Add .jpg extension to file name
+
+    Otherwise downloading files would cause the original RAW file name
+    created with JPEG contents
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=729091
+
+M	plugins/shotwell-publishing/PiwigoPublishing.vala
+
+commit 268e65fe6a1348f1bfcc702041048467b1f63d37
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Mar 7 22:40:30 2017 +0100
+
+    Speed-up autogen.sh
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	autogen.sh
+
+commit 8284f1a227050a99f0740222bacc0444d5859aa7
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Mar 7 22:31:58 2017 +0100
+
+    Simplify printing dialog a bit
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Printing.vala
+M	ui/printing_widget.ui
+
+commit bd3ccefcd6d8066d47fd4f998436668913fcc096
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 6 23:26:59 2017 +0100
+
+    Make custom printing widget a GtkTemplate
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	org.gnome.Shotwell.gresource.xml
+M	po/POTFILES.in
+M	src/Printing.vala
+A	ui/printing_widget.ui
+M	ui/shotwell.ui
+
+commit ece3fb96288db5ae7920417c99c02f7881a53b61
+Author: Gábor Kelemen <kelemeng@openscope.org>
+Date:	Tue Mar 7 00:20:49 2017 +0000
+
+    Update Hungarian translation
+
+M	po/hu.po
+
+commit de793a9b0af74c309486349395c8b9193043f87a
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 6 22:49:23 2017 +0100
+
+    Remove obsolete Glade helper
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+D	sw-glade
+D	ui/shotwell.xml
+
+commit 93ee36a52afe4a07b73ce499854aa3e8c10154d9
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 6 22:15:54 2017 +0100
+
+    Move ui files into resources
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	org.gnome.Shotwell.gresource.xml
+M	src/AppWindow.vala
+M	src/Page.vala
+M	src/Resources.vala
+M	src/SearchFilter.vala
+M	src/searches/Branch.vala
+M	src/sidebar/Tree.vala
+M	src/tags/Branch.vala
+M	ui/Makefile.am
+
+commit 056b465182a2cc4310dc999bd9f30a791a66e224
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 6 21:53:56 2017 +0100
+
+    Move icons into resource file
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	icons/Makefile.am
+M	org.gnome.Shotwell.gresource.xml
+M	src/AppDirs.vala
+M	src/Resources.vala
+M	src/editing_tools/EditingTools.vala
+M	src/main.vala
+
+commit 97c0e4f8829edb18c061fc7acd8fd30c5c5804f8
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Mar 6 21:52:39 2017 +0100
+
+    Fix compilation issue with no authenticators enabled
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/shotwell-publishing.vala
+
+commit 7ee7bbf9126faa3d49df74656843bc2602bfbf2c
+Author: Мирослав Николић <miroslavnikolic@rocketmail.com>
+Date:	Sun Mar 5 20:58:03 2017 +0100
+
+    Updated Serbian translation
+
+M	po/sr.po
+M	po/sr@latin.po
+
+commit 33f86a14c2e5e99465292c863f5e1f2ce74b6659
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Mar 5 20:24:08 2017 +0100
+
+    Remove obsolete top.ui
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	po/POTFILES.in
+M	ui/Makefile.am
+D	ui/top.ui
+
+commit 4b60125bfa77bbe725b7de598eea24a3d1e244a1
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Sun Mar 5 12:40:28 2017 +0000
+
+    Update German translation
+
+M	po/de.po
+
+commit 3d26c342a7e7aaf8e89c5ab4b695618a0f6ee1a7
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 15:58:58 2017 +0100
+
+    Make it possible to disable individual publishers
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=775158
+
+M	configure.ac
+M	plugins/shotwell-publishing-extras/shotwell-publishing-extras.vala
+M	plugins/shotwell-publishing/shotwell-publishing.vala
+M	publish-extra.am
+M	publish.am
+
+commit 13f8bd03ebb7883abe23917f1ee84ea618f924fe
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 11:51:50 2017 +0100
+
+    Temporarily remove goa and uoa from configure
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 954da8e7e7bf1430dd5b1ec6544745f96dd04ce9
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 10:47:39 2017 +0100
+
+    Remove [Version] tag from gdata vapi
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	vapi/libgdata.vapi
+
+commit 2ca6abe3443a845a3bc6b1a8bbd71b48ed61ad5d
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 10:25:04 2017 +0100
+
+    Minor debian fixes
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	debian/changelog
+M	debian/control
+
+commit 8e539a21c46141aaa891057ce50fafaf6497b10a
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 09:43:23 2017 +0100
+
+    Remove web dependencies of core shotwell
+
+    Only necessary for plugins or authenticators
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 0c383826ec9c45fcfb8e9d42b57b97eabce214b4
+Author: Jörg Frings-Fürst <debian@jff-webhosting.net>
+Date:	Sat Aug 20 18:29:03 2016 +0000
+
+    manpage: Remove wrong macro 'R'
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=779558
+
+M	help/shotwell.1
+
+commit 83aa3870cae8d958a253630c988a1f4a48dd5783
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Mar 4 00:05:43 2017 +0100
+
+    viewer: Don't always add photo again after saving
+
+    This seems to cause the photo being in the collection twice, causing
+    not being able to navigate to the previous photo anymore
+
+    Just do it when the photo we save isn't the current photo.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=734816
+
+M	src/direct/DirectPhotoPage.vala
+
+commit 054ca90f435498d1a58a2f4c91b6ed4857553398
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 2 23:32:48 2017 +0100
+
+    Fix toolbox not visible in fullscreen
+
+    Seems to affect Cinnamon so far. Most likely due to the work-around
+    for crashing on wayland (1eec412e97c255c9ca235e039dcdc59ee4c3c140)
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/PhotoPage.vala
+
+commit 8b6b33f14aecf448a14eef5372219d4f524bccab
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Mar 2 21:49:57 2017 +0100
+
+    Fix issue when deleting image in Fullscreen
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Page.vala
+
+commit 8e4268248f035bf0f1ae071d451b335321e6c686
+Author: Jordi Mas <jmas@softcatala.org>
+Date:	Tue Feb 28 20:05:45 2017 +0100
+
+    Fix Catalan translation
+
+M	po/ca.po
+
+commit 70e9071a01d1d596fca9851f393a8ff847c79bb3
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 27 21:01:51 2017 +0100
+
+    Post-release version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit 46cb5788d823338f0b0e2e64ec79851f701ab444
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 27 20:45:28 2017 +0100
+
+    Prepare 0.25.90
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit e590ff354add6024dda62eab9c1aa9fe6cb4bca1
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 27 20:29:06 2017 +0100
+
+    picasa: Skip default url from album list
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 9afb5a61f866768b0c45344448fa9958edf15636
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Feb 26 20:53:43 2017 +0100
+
+    More Save As => Export
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/event.ui
+M	ui/tags.ui
+
+commit 5a944fb2379f63b2278cf2192022911da1723f74
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sun Feb 26 18:33:19 2017 +0100
+
+    Update Polish translation
+
+M	po/pl.po
+
+commit 969d102177f150ee7fbd700acb6304648b41e461
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Feb 26 17:01:42 2017 +0100
+
+    Drop GOA dependency
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	publish.am
+M	vapi/libgdata.vapi
+
+commit 1ae4e1315fa9b20ef59946e1885de886b04f7f2b
+Author: Мирослав Николић <miroslavnikolic@rocketmail.com>
+Date:	Sun Feb 26 10:33:30 2017 +0100
+
+    Updated Serbian translation
+
+M	po/sr.po
+M	po/sr@latin.po
+
+commit d6328842ef4da39c9dbe20579ceb4177ff5950b3
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 25 23:41:03 2017 +0100
+
+    Re-introduce "Export" menu
+
+    Accidently named "Save As" because the mixing up the icon with
+    the label
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/media.ui
+M	ui/photo.ui
+
+commit a334c78881f0ddbec4a2c2a2656d7c7d9f1fd8a8
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 25 23:24:31 2017 +0100
+
+    Fix import of files ending in ogg
+
+    This will only work for "local" imports, not from camera.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=717305
+
+M	src/BatchImport.vala
+M	src/VideoSupport.vala
+
+commit da83d231f6efe00e2bea5ccc7d1a5fbab8a20749
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Oct 12 16:20:09 2016 +0200
+
+    Get prefetched copy after setting the developer
+
+    Avoid doing a raw development if we want the embedded developer
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Photo.vala
+
+commit 50cce33b66a3bd40f9edc347e56c9b8a19b1b234
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 9 18:26:00 2016 +0200
+
+    Don't uncessarily do a raw processing for thumbs
+
+    Try to use the embedded preview instead.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=718248
+
+M	src/photos/RawSupport.vala
+
+commit 5873a3c4f46ddf1a3045387876cb20415e267338
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Oct 9 18:24:41 2016 +0200
+
+    Attach a role to PhotoFileReader
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/Photo.vala
+M	src/photos/PhotoFileAdapter.vala
+
+commit ead1bd5373ce572380f598ea14ad443568822b62
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 25 22:07:50 2017 +0100
+
+    youtube: Show progress while uploading
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 8776a682fb305aa91111533cea10fc7b403de913
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 25 20:47:45 2017 +0100
+
+    youtube: Add local gdata vapi, fix authorizer
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+M	publish.am
+A	vapi/libgdata.vapi
+
+commit e63a88e328ab268e3cea3d178a47e519f2e03b87
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Feb 21 23:48:07 2017 +0100
+
+    google: Extract access token expiry time
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+
+commit f5a89c745f00f15d88e63a401e9fb6d9c4fca7e5
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 11 22:29:39 2017 +0100
+
+    youtube: Port to libgdata
+
+    Make YouTube upload work again
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=777910
+
+M	configure.ac
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+M	publish.am
+
+commit dca35c362b741c1379676c2e1c7099d39e4d1755
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 11 22:28:47 2017 +0100
+
+    Update Google API keys
+
+    Old API keys were not activated for YouTube Data API v3 uploading.
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 5d3559d149c4e9c21dd78e396edcfe82bbe702f6
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 23 19:27:12 2017 +0100
+
+    Update debian
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	debian/changelog
+
+commit 441e36711a52a65540345c8d385488f4169fe0e5
+Author: Jiri Grönroos <jiri.gronroos@iki.fi>
+Date:	Wed Feb 22 18:50:12 2017 +0000
+
+    Update Finnish translation
+
+M	po/fi.po
+
+commit ddcc9c9b4eb4e3c2582f939235282791465157ba
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Feb 21 22:57:47 2017 +0100
+
+    picasa: Use proper mime type for video
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+
+commit b3fe24ea953ca86310dca39226a1b87f54bfb8ee
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Feb 21 22:05:49 2017 +0100
+
+    picasa: Remove possibility to create new albums
+
+    This has been dropped from the Picasa Web API / Google Photos
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/picasa_publishing_options_pane.ui
+
+commit 12dd77b2e08712eb9a4fc8f85bd2639092422bc5
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Feb 21 21:36:21 2017 +0100
+
+    picasa: Remove obsolete comment
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+
+commit 4aa315083e4fa1984905a907788e595510f183de
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Feb 19 17:49:00 2017 +0100
+
+    Post-releease version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
+commit cfb0e920a3328d07787dab0e7751d6da7a9cf72a
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 13 21:39:24 2017 +0100
+
+    Prepare 0.25.5
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	NEWS
+
+commit 178070af02ea3dd9af920ec33d112b2fb354055c
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 13 21:37:01 2017 +0100
+
+    Distribute resource and header files
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	authenticator.am
+
+commit b834fe3d8cd117b9bda916e9b8abc23472c005bd
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 13 20:51:14 2017 +0100
+
+    Fix dependencies for authenticator library
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	authenticator.am
+
+commit e96362678ca4e8b5650df2fdbfd0e55ee50cb326
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 13 20:50:51 2017 +0100
+
+    Introduce "refresh()" method to authenticator
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M
+plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala
+M	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	src/plugins/PublishingInterfaces.vala
+
+commit 841db576d864fb0252e1b34e086bcbab94f8ef5d
+Author: Anders Jonsson <anders.jonsson@norsjovallen.se>
+Date:	Sun Feb 12 14:59:45 2017 +0000
+
+    Update Swedish translation
+
+M	help/sv/sv.po
+
+commit 5c64525827f751dad749c39706f1630e7e189e84
+Author: Piotr Drąg <piotrdrag@gmail.com>
+Date:	Sat Feb 11 20:11:02 2017 +0100
+
+    Update POTFILES.in and POTFILES.skip
+
+M	po/POTFILES.in
+M	po/POTFILES.skip
+
+commit d4687a780564111e8d312f60efd87e42b31c5ee1
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 11 19:34:25 2017 +0100
+
+    i18n: Update POTFILES.{in,skip}
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	po/POTFILES.in
+M	po/POTFILES.skip
+
+commit 0a170a63276965e5548b7e2c561bccdd401bd7d5
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Feb 11 00:04:20 2017 +0100
+
+    Only show logout button if authenticator supports it
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit b0fa855491788456973575794ec97ee753ea514c
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 9 23:02:15 2017 +0100
+
+    Flickr: Fix authentication from persistent data
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+
+commit f0f65a1275e84b9dfab2124be6a36396997f8683
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 9 22:38:42 2017 +0100
+
+    google: Persistency handling in authenticator
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit 161c19ba01045b942e050e6dd5956c759c1fa140
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 9 22:17:45 2017 +0100
+
+    Make pluggables depend on authenticator availability
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala
+M	plugins/shotwell-publishing/shotwell-publishing.vala
+M	src/plugins/PublishingInterfaces.vala
+
+commit abad9e07aeaae6a91c571ddeb99cfedfb4afa5e3
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 9 22:16:53 2017 +0100
+
+    Facebook: Move persitency into authenticator
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M
+plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+
+commit 7544a3eba84686cbfeafed8cab572e3aff9ba9b8
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Feb 9 21:36:14 2017 +0100
+
+    flickr: Move persistency to authenticator
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+
+commit b8b39ef517ae0a944175e66d3a27262e5503c6df
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Feb 8 23:15:04 2017 +0100
+
+    Extract Google authenticator
+
+    Put it into the authenticator library as well
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	authenticator.am
+M	configure.ac
+A	plugins/authenticator/shotwell/GoogleAuthenticator.vala
+M	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala
+M	plugins/common/RESTSupport.vala
+M	plugins/shotwell-publishing/PicasaPublishing.vala
+M	plugins/shotwell-publishing/YouTubePublishing.vala
+
+commit a3b6e0f6f73069ad2472ffa68f36f77adadd0485
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 6 19:08:31 2017 +0100
+
+    Put authenticators into separate library
+
+M	Makefile.am
+A	authenticator.am
+M	configure.ac
+R096	plugins/shotwell-publishing/FacebookPublishingAuthenticator.vala
+plugins/authenticator/shotwell/FacebookPublishingAuthenticator.vala
+R066	plugins/shotwell-publishing/FlickrPublishingAuthenticator.vala
+plugins/authenticator/shotwell/FlickrPublishingAuthenticator.vala
+A	plugins/authenticator/shotwell/ShotwellAuthenticatorFactory.vala
+R100	plugins/shotwell-publishing/flickr_pin_entry_pane.ui
+plugins/authenticator/shotwell/flickr_pin_entry_pane.ui
+A
+plugins/authenticator/shotwell/org.gnome.Shotwell.Authenticator.gresource.xml
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M
+plugins/shotwell-publishing/org.gnome.Shotwell.Publishing.gresource.xml
+M	publish.am
+M	src/plugins/PublishingInterfaces.vala
+
+commit a90cf2623f57ec50f1ad2284a7ae552f33381be4
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Jan 4 11:37:43 2017 +0100
+
+    No need for request phase tokens in Flickr publisher
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+
+commit 6b6e2818218e80d90dfcca5382da635e9b16b580
+Author: Jens Georg <mail@jensge.org>
+Date:	Wed Jan 4 11:28:05 2017 +0100
+
+    flickr: Move API keys into authenticator
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+M	plugins/shotwell-publishing/FlickrPublishingAuthenticator.vala
+
+commit b473cddea88394badb66faaf7dab5091a620c027
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 22 21:05:41 2016 +0100
+
+    Extract Flickr authentication into own class
+
+M	plugins/shotwell-publishing/FlickrPublishing.vala
+A	plugins/shotwell-publishing/FlickrPublishingAuthenticator.vala
+M	publish.am
+
+commit 3351086742689b8397dd8df0c2961e42a46499be
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Dec 19 19:28:39 2016 +0100
+
+    Move Facebook authenticator in extra file
+
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+A	plugins/shotwell-publishing/FacebookPublishingAuthenticator.vala
+M	po/POTFILES.in
+M	po/POTFILES.skip
+M	publish.am
+
+commit 25ec931a9447eefbcffb34e0a1d5362eb3b5cb55
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 18 23:09:04 2016 +0100
+
+    Only show Facebook logout button if supported
+
+    If authenticator does not have logout feature, don't show it
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+
+commit a8bda161eb06acafadc95c907b1acb0e2b34212d
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Dec 18 23:02:29 2016 +0100
+
+    Extract Facebook authentication process
+
+    Put it into extra class implementing the Authenticator interface
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	plugins/shotwell-publishing/FacebookPublishing.vala
+M	src/plugins/PublishingInterfaces.vala
+
+commit 9a04c84ec121a6a027540a8aad422c5fffa90d69
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Dec 15 20:08:54 2016 +0100
+
+    Define Authenticator interface
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	src/plugins/PublishingInterfaces.vala
+
+commit 535b205eb061bc1d95cf83fb07a415d7515f31f3
+Author: Alan Mortensen <alanmortensen.am@gmail.com>
+Date:	Sat Feb 11 19:14:45 2017 +0100
+
+    Updated Danish translation
+
+M	po/da.po
+
+commit c73d7b5f14b71f12df11a654dc688edd566f8592
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon Feb 6 19:52:49 2017 +0100
+
+    libraw.vapi: Fix setting of parameters on OutputParams
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=778174
+
+M	src/photos/GRaw.vala
+M	vapi/libraw.vapi
+
+commit 478e943e82926ee617126f659fffd8810e202b65
+Author: Enrico Nicoletto <liverig@gmail.com>
+Date:	Mon Feb 6 12:17:32 2017 +0000
+
+    Update Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit 6c6182f341dafdb39c2b270fd11edb5fa8e30941
+Author: Debarshi Ray <debarshir@gnome.org>
+Date:	Sat Feb 4 16:48:24 2017 +0100
+
+    graw, libraw.vapi: Use the correct type for use_camera_matrix
+
+    libraw_output_params_t.use_camera_matrix is a tri-state value, not a
+    boolean. Since any non-zero value counts as 'true', let's use the
+    default unless someone finds a reason not to.
+
+    See:
+    http://www.libraw.org/docs/API-datastruct-eng.html#libraw_output_params_t
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=778174
+
+M	src/photos/GRaw.vala
+M	vapi/libraw.vapi
+
+commit e045b9b48851dd4f21387e99de1aa3a1e10a3a66
+Author: Debarshi Ray <debarshir@gnome.org>
+Date:	Sat Feb 4 16:21:17 2017 +0100
+
+    libraw.vapi: Set the correct power value for the gamma curve
+
+    libraw_output_params_t.gamm[0] is meant to have the inverted gamma or
+    power value. See:
+    http://www.libraw.org/docs/API-datastruct-eng.html#libraw_output_params_t
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=778174
+
+M	vapi/libraw.vapi
+
+commit dac7891bd25d9d3b62f773cb0743c78b41692f24
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Jan 31 21:43:57 2017 +0100
+
+    Post-release version bump
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	configure.ac
+
 commit 8d2e927e78abb7699f1e9c8e9fd60119ea01999a
 Author: Jens Georg <mail@jensge.org>
-Date:   Tue Jan 31 21:25:06 2017 +0100
+Date:	Tue Jan 31 21:25:06 2017 +0100
 
     Prepare 0.25.4
 

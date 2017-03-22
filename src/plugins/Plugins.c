@@ -1894,11 +1894,11 @@ void plugins_init (GError** error) {
 #line 133 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1896 "Plugins.c"
-						goto __catch34_g_error;
+						goto __catch35_g_error;
 					}
 				}
-				goto __finally34;
-				__catch34_g_error:
+				goto __finally35;
+				__catch35_g_error:
 				{
 					GError* err = NULL;
 					GFile* _tmp13_ = NULL;
@@ -1928,7 +1928,7 @@ void plugins_init (GError** error) {
 					_g_error_free0 (err);
 #line 1929 "Plugins.c"
 				}
-				__finally34:
+				__finally35:
 #line 132 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 132 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
@@ -3801,11 +3801,11 @@ void plugins_search_for_plugins (GFile* dir, GError** error) {
 #line 335 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 3803 "Plugins.c"
-							goto __catch35_g_error;
+							goto __catch36_g_error;
 						}
 					}
-					goto __finally35;
-					__catch35_g_error:
+					goto __finally36;
+					__catch36_g_error:
 					{
 						GError* err = NULL;
 						GFile* _tmp18_ = NULL;
@@ -3835,7 +3835,7 @@ void plugins_search_for_plugins (GFile* dir, GError** error) {
 						_g_error_free0 (err);
 #line 3836 "Plugins.c"
 					}
-					__finally35:
+					__finally36:
 #line 334 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 334 "/home/jens/Source/shotwell/src/plugins/Plugins.vala"

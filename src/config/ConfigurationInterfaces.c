@@ -55,6 +55,8 @@ typedef struct _Dimensions Dimensions;
 #define _g_free0(var) (var = (g_free (var), NULL))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 
+#define RESOURCES_TYPE_UNIT_SYSTEM (resources_unit_system_get_type ())
+
 typedef enum  {
 	CONFIGURATION_ERROR_PROPERTY_HAS_NO_VALUE,
 	CONFIGURATION_ERROR_ENGINE_ERROR
@@ -353,6 +355,12 @@ struct _ConfigurationFacadePrivate {
 	ConfigurationEngine* engine;
 };
 
+typedef enum  {
+	RESOURCES_UNIT_SYSTEM_IMPERIAL,
+	RESOURCES_UNIT_SYSTEM_METRIC,
+	RESOURCES_UNIT_SYSTEM_UNKNOWN
+} ResourcesUnitSystem;
+
 
 static gpointer configuration_facade_parent_class = NULL;
 
@@ -609,6 +617,8 @@ void configuration_facade_set_printing_print_titles (ConfigurationFacade* self, 
 static void configuration_facade_real_set_printing_print_titles (ConfigurationFacade* self, gboolean print_titles);
 gint configuration_facade_get_printing_size_selection (ConfigurationFacade* self);
 static gint configuration_facade_real_get_printing_size_selection (ConfigurationFacade* self);
+GType resources_unit_system_get_type (void) G_GNUC_CONST;
+ResourcesUnitSystem resources_get_default_measurement_unit (void);
 void configuration_facade_set_printing_size_selection (ConfigurationFacade* self, gint size_code);
 static void configuration_facade_real_set_printing_size_selection (ConfigurationFacade* self, gint size_code);
 gchar* configuration_facade_get_printing_titles_font (ConfigurationFacade* self);
@@ -702,7 +712,7 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 	switch (self) {
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY:
-#line 706 "ConfigurationInterfaces.c"
+#line 716 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp0_ = NULL;
 #line 99 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -711,11 +721,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp0_;
 #line 99 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 715 "ConfigurationInterfaces.c"
+#line 725 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_BG_COLOR_NAME:
-#line 719 "ConfigurationInterfaces.c"
+#line 729 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp1_ = NULL;
 #line 102 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -724,11 +734,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp1_;
 #line 102 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 728 "ConfigurationInterfaces.c"
+#line 738 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS:
-#line 732 "ConfigurationInterfaces.c"
+#line 742 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp2_ = NULL;
 #line 105 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -737,11 +747,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp2_;
 #line 105 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 741 "ConfigurationInterfaces.c"
+#line 751 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_FILE:
-#line 745 "ConfigurationInterfaces.c"
+#line 755 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp3_ = NULL;
 #line 108 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -750,11 +760,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp3_;
 #line 108 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 754 "ConfigurationInterfaces.c"
+#line 764 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DESKTOP_BACKGROUND_MODE:
-#line 758 "ConfigurationInterfaces.c"
+#line 768 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp4_ = NULL;
 #line 111 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -763,11 +773,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp4_;
 #line 111 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 767 "ConfigurationInterfaces.c"
+#line 777 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SCREENSAVER_FILE:
-#line 771 "ConfigurationInterfaces.c"
+#line 781 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp5_ = NULL;
 #line 114 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -776,11 +786,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp5_;
 #line 114 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 780 "ConfigurationInterfaces.c"
+#line 790 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SCREENSAVER_MODE:
-#line 784 "ConfigurationInterfaces.c"
+#line 794 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp6_ = NULL;
 #line 117 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -789,11 +799,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp6_;
 #line 117 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 793 "ConfigurationInterfaces.c"
+#line 803 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN:
-#line 797 "ConfigurationInterfaces.c"
+#line 807 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp7_ = NULL;
 #line 120 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -802,11 +812,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp7_;
 #line 120 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 806 "ConfigurationInterfaces.c"
+#line 816 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DIRECTORY_PATTERN_CUSTOM:
-#line 810 "ConfigurationInterfaces.c"
+#line 820 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp8_ = NULL;
 #line 123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -815,11 +825,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp8_;
 #line 123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 819 "ConfigurationInterfaces.c"
+#line 829 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DIRECT_WINDOW_HEIGHT:
-#line 823 "ConfigurationInterfaces.c"
+#line 833 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp9_ = NULL;
 #line 126 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -828,11 +838,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp9_;
 #line 126 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 832 "ConfigurationInterfaces.c"
+#line 842 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DIRECT_WINDOW_MAXIMIZE:
-#line 836 "ConfigurationInterfaces.c"
+#line 846 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp10_ = NULL;
 #line 129 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -841,11 +851,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp10_;
 #line 129 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 845 "ConfigurationInterfaces.c"
+#line 855 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DIRECT_WINDOW_WIDTH:
-#line 849 "ConfigurationInterfaces.c"
+#line 859 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp11_ = NULL;
 #line 132 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -854,11 +864,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp11_;
 #line 132 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 858 "ConfigurationInterfaces.c"
+#line 868 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_BASIC_PROPERTIES:
-#line 862 "ConfigurationInterfaces.c"
+#line 872 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp12_ = NULL;
 #line 135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -867,11 +877,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp12_;
 #line 135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 871 "ConfigurationInterfaces.c"
+#line 881 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_EXTENDED_PROPERTIES:
-#line 875 "ConfigurationInterfaces.c"
+#line 885 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp13_ = NULL;
 #line 138 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -880,11 +890,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp13_;
 #line 138 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 884 "ConfigurationInterfaces.c"
+#line 894 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_SIDEBAR:
-#line 888 "ConfigurationInterfaces.c"
+#line 898 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp14_ = NULL;
 #line 141 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -893,11 +903,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp14_;
 #line 141 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 897 "ConfigurationInterfaces.c"
+#line 907 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_TOOLBAR:
-#line 901 "ConfigurationInterfaces.c"
+#line 911 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp15_ = NULL;
 #line 144 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -906,11 +916,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp15_;
 #line 144 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 910 "ConfigurationInterfaces.c"
+#line 920 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_SEARCH_BAR:
-#line 914 "ConfigurationInterfaces.c"
+#line 924 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp16_ = NULL;
 #line 147 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -919,11 +929,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp16_;
 #line 147 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 923 "ConfigurationInterfaces.c"
+#line 933 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_RATINGS:
-#line 927 "ConfigurationInterfaces.c"
+#line 937 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp17_ = NULL;
 #line 150 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -932,11 +942,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp17_;
 #line 150 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 936 "ConfigurationInterfaces.c"
+#line 946 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TAGS:
-#line 940 "ConfigurationInterfaces.c"
+#line 950 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp18_ = NULL;
 #line 153 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -945,11 +955,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp18_;
 #line 153 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 949 "ConfigurationInterfaces.c"
+#line 959 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_TITLES:
-#line 953 "ConfigurationInterfaces.c"
+#line 963 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp19_ = NULL;
 #line 156 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -958,11 +968,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp19_;
 #line 156 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 962 "ConfigurationInterfaces.c"
+#line 972 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_PHOTO_COMMENTS:
-#line 966 "ConfigurationInterfaces.c"
+#line 976 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp20_ = NULL;
 #line 159 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -971,11 +981,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp20_;
 #line 159 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 975 "ConfigurationInterfaces.c"
+#line 985 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_DISPLAY_EVENT_COMMENTS:
-#line 979 "ConfigurationInterfaces.c"
+#line 989 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp21_ = NULL;
 #line 162 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -984,11 +994,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp21_;
 #line 162 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 988 "ConfigurationInterfaces.c"
+#line 998 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_ASCENDING:
-#line 992 "ConfigurationInterfaces.c"
+#line 1002 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp22_ = NULL;
 #line 165 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -997,11 +1007,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp22_;
 #line 165 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1001 "ConfigurationInterfaces.c"
+#line 1011 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EVENT_PHOTOS_SORT_BY:
-#line 1005 "ConfigurationInterfaces.c"
+#line 1015 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp23_ = NULL;
 #line 168 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1010,11 +1020,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp23_;
 #line 168 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1014 "ConfigurationInterfaces.c"
+#line 1024 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING:
-#line 1018 "ConfigurationInterfaces.c"
+#line 1028 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp24_ = NULL;
 #line 171 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1023,11 +1033,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp24_;
 #line 171 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1027 "ConfigurationInterfaces.c"
+#line 1037 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_CONSTRAINT:
-#line 1031 "ConfigurationInterfaces.c"
+#line 1041 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp25_ = NULL;
 #line 174 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1036,11 +1046,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp25_;
 #line 174 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1040 "ConfigurationInterfaces.c"
+#line 1050 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_EXPORT_FORMAT_MODE:
-#line 1044 "ConfigurationInterfaces.c"
+#line 1054 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp26_ = NULL;
 #line 177 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1049,11 +1059,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp26_;
 #line 177 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1053 "ConfigurationInterfaces.c"
+#line 1063 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_EXPORT_METADATA:
-#line 1057 "ConfigurationInterfaces.c"
+#line 1067 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp27_ = NULL;
 #line 180 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1062,11 +1072,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp27_;
 #line 180 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1066 "ConfigurationInterfaces.c"
+#line 1076 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_PHOTO_FILE_FORMAT:
-#line 1070 "ConfigurationInterfaces.c"
+#line 1080 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp28_ = NULL;
 #line 183 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1075,11 +1085,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp28_;
 #line 183 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1079 "ConfigurationInterfaces.c"
+#line 1089 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_QUALITY:
-#line 1083 "ConfigurationInterfaces.c"
+#line 1093 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp29_ = NULL;
 #line 186 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1088,11 +1098,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp29_;
 #line 186 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1092 "ConfigurationInterfaces.c"
+#line 1102 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXPORT_SCALE:
-#line 1096 "ConfigurationInterfaces.c"
+#line 1106 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp30_ = NULL;
 #line 189 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1101,11 +1111,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp30_;
 #line 189 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1105 "ConfigurationInterfaces.c"
+#line 1115 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP:
-#line 1109 "ConfigurationInterfaces.c"
+#line 1119 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp31_ = NULL;
 #line 192 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1114,11 +1124,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp31_;
 #line 192 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1118 "ConfigurationInterfaces.c"
+#line 1128 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP:
-#line 1122 "ConfigurationInterfaces.c"
+#line 1132 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp32_ = NULL;
 #line 195 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1127,11 +1137,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp32_;
 #line 195 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1131 "ConfigurationInterfaces.c"
+#line 1141 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_HIDE_PHOTOS_ALREADY_IMPORTED:
-#line 1135 "ConfigurationInterfaces.c"
+#line 1145 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp33_ = NULL;
 #line 198 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1140,11 +1150,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp33_;
 #line 198 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1144 "ConfigurationInterfaces.c"
+#line 1154 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_IMPORT_DIR:
-#line 1148 "ConfigurationInterfaces.c"
+#line 1158 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp34_ = NULL;
 #line 201 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1153,11 +1163,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp34_;
 #line 201 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1157 "ConfigurationInterfaces.c"
+#line 1167 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_KEEP_RELATIVITY:
-#line 1161 "ConfigurationInterfaces.c"
+#line 1171 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp35_ = NULL;
 #line 204 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1166,11 +1176,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp35_;
 #line 204 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1170 "ConfigurationInterfaces.c"
+#line 1180 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LAST_CROP_HEIGHT:
-#line 1174 "ConfigurationInterfaces.c"
+#line 1184 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp36_ = NULL;
 #line 207 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1179,11 +1189,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp36_;
 #line 207 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1183 "ConfigurationInterfaces.c"
+#line 1193 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LAST_CROP_MENU_CHOICE:
-#line 1187 "ConfigurationInterfaces.c"
+#line 1197 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp37_ = NULL;
 #line 210 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1192,11 +1202,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp37_;
 #line 210 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1196 "ConfigurationInterfaces.c"
+#line 1206 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LAST_CROP_WIDTH:
-#line 1200 "ConfigurationInterfaces.c"
+#line 1210 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp38_ = NULL;
 #line 213 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1205,11 +1215,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp38_;
 #line 213 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1209 "ConfigurationInterfaces.c"
+#line 1219 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LAST_USED_SERVICE:
-#line 1213 "ConfigurationInterfaces.c"
+#line 1223 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp39_ = NULL;
 #line 216 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1218,11 +1228,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp39_;
 #line 216 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1222 "ConfigurationInterfaces.c"
+#line 1232 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LAST_USED_DATAIMPORTS_SERVICE:
-#line 1226 "ConfigurationInterfaces.c"
+#line 1236 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp40_ = NULL;
 #line 219 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1231,11 +1241,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp40_;
 #line 219 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1235 "ConfigurationInterfaces.c"
+#line 1245 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_ASCENDING:
-#line 1239 "ConfigurationInterfaces.c"
+#line 1249 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp41_ = NULL;
 #line 222 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1244,11 +1254,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp41_;
 #line 222 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1248 "ConfigurationInterfaces.c"
+#line 1258 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LIBRARY_PHOTOS_SORT_BY:
-#line 1252 "ConfigurationInterfaces.c"
+#line 1262 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp42_ = NULL;
 #line 225 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1257,11 +1267,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp42_;
 #line 225 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1261 "ConfigurationInterfaces.c"
+#line 1271 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_HEIGHT:
-#line 1265 "ConfigurationInterfaces.c"
+#line 1275 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp43_ = NULL;
 #line 228 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1270,11 +1280,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp43_;
 #line 228 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1274 "ConfigurationInterfaces.c"
+#line 1284 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_MAXIMIZE:
-#line 1278 "ConfigurationInterfaces.c"
+#line 1288 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp44_ = NULL;
 #line 231 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1283,11 +1293,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp44_;
 #line 231 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1287 "ConfigurationInterfaces.c"
+#line 1297 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_LIBRARY_WINDOW_WIDTH:
-#line 1291 "ConfigurationInterfaces.c"
+#line 1301 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp45_ = NULL;
 #line 234 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1296,11 +1306,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp45_;
 #line 234 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1300 "ConfigurationInterfaces.c"
+#line 1310 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_MODIFY_ORIGINALS:
-#line 1304 "ConfigurationInterfaces.c"
+#line 1314 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp46_ = NULL;
 #line 237 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1309,11 +1319,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp46_;
 #line 237 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1313 "ConfigurationInterfaces.c"
+#line 1323 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PHOTO_THUMBNAIL_SCALE:
-#line 1317 "ConfigurationInterfaces.c"
+#line 1327 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp47_ = NULL;
 #line 240 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1322,11 +1332,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp47_;
 #line 240 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1326 "ConfigurationInterfaces.c"
+#line 1336 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PIN_TOOLBAR_STATE:
-#line 1330 "ConfigurationInterfaces.c"
+#line 1340 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp48_ = NULL;
 #line 243 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1335,11 +1345,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp48_;
 #line 243 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1339 "ConfigurationInterfaces.c"
+#line 1349 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_CONTENT_HEIGHT:
-#line 1343 "ConfigurationInterfaces.c"
+#line 1353 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp49_ = NULL;
 #line 246 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1348,11 +1358,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp49_;
 #line 246 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1352 "ConfigurationInterfaces.c"
+#line 1362 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_CONTENT_LAYOUT:
-#line 1356 "ConfigurationInterfaces.c"
+#line 1366 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp50_ = NULL;
 #line 249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1361,11 +1371,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp50_;
 #line 249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1365 "ConfigurationInterfaces.c"
+#line 1375 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_CONTENT_PPI:
-#line 1369 "ConfigurationInterfaces.c"
+#line 1379 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp51_ = NULL;
 #line 252 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1374,11 +1384,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp51_;
 #line 252 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1378 "ConfigurationInterfaces.c"
+#line 1388 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_CONTENT_UNITS:
-#line 1382 "ConfigurationInterfaces.c"
+#line 1392 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp52_ = NULL;
 #line 255 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1387,11 +1397,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp52_;
 #line 255 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1391 "ConfigurationInterfaces.c"
+#line 1401 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_CONTENT_WIDTH:
-#line 1395 "ConfigurationInterfaces.c"
+#line 1405 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp53_ = NULL;
 #line 258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1400,11 +1410,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp53_;
 #line 258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1404 "ConfigurationInterfaces.c"
+#line 1414 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_IMAGES_PER_PAGE:
-#line 1408 "ConfigurationInterfaces.c"
+#line 1418 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp54_ = NULL;
 #line 261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1413,11 +1423,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp54_;
 #line 261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1417 "ConfigurationInterfaces.c"
+#line 1427 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_MATCH_ASPECT_RATIO:
-#line 1421 "ConfigurationInterfaces.c"
+#line 1431 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp55_ = NULL;
 #line 264 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1426,11 +1436,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp55_;
 #line 264 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1430 "ConfigurationInterfaces.c"
+#line 1440 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_PRINT_TITLES:
-#line 1434 "ConfigurationInterfaces.c"
+#line 1444 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp56_ = NULL;
 #line 267 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1439,11 +1449,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp56_;
 #line 267 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1443 "ConfigurationInterfaces.c"
+#line 1453 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION:
-#line 1447 "ConfigurationInterfaces.c"
+#line 1457 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp57_ = NULL;
 #line 270 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1452,11 +1462,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp57_;
 #line 270 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1456 "ConfigurationInterfaces.c"
+#line 1466 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT:
-#line 1460 "ConfigurationInterfaces.c"
+#line 1470 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp58_ = NULL;
 #line 273 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1465,11 +1475,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp58_;
 #line 273 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1469 "ConfigurationInterfaces.c"
+#line 1479 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_RAW_DEVELOPER_DEFAULT:
-#line 1473 "ConfigurationInterfaces.c"
+#line 1483 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp59_ = NULL;
 #line 276 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1478,11 +1488,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp59_;
 #line 276 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1482 "ConfigurationInterfaces.c"
+#line 1492 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG:
-#line 1486 "ConfigurationInterfaces.c"
+#line 1496 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp60_ = NULL;
 #line 279 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1491,11 +1501,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp60_;
 #line 279 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1495 "ConfigurationInterfaces.c"
+#line 1505 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SIDEBAR_POSITION:
-#line 1499 "ConfigurationInterfaces.c"
+#line 1509 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp61_ = NULL;
 #line 282 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1504,11 +1514,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp61_;
 #line 282 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1508 "ConfigurationInterfaces.c"
+#line 1518 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY:
-#line 1512 "ConfigurationInterfaces.c"
+#line 1522 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp62_ = NULL;
 #line 285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1517,11 +1527,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp62_;
 #line 285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1521 "ConfigurationInterfaces.c"
+#line 1531 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY:
-#line 1525 "ConfigurationInterfaces.c"
+#line 1535 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp63_ = NULL;
 #line 288 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1530,11 +1540,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp63_;
 #line 288 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1534 "ConfigurationInterfaces.c"
+#line 1544 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID:
-#line 1538 "ConfigurationInterfaces.c"
+#line 1548 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp64_ = NULL;
 #line 291 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1543,11 +1553,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp64_;
 #line 291 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1547 "ConfigurationInterfaces.c"
+#line 1557 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE:
-#line 1551 "ConfigurationInterfaces.c"
+#line 1561 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp65_ = NULL;
 #line 294 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1556,11 +1566,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp65_;
 #line 294 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1560 "ConfigurationInterfaces.c"
+#line 1570 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME:
-#line 1564 "ConfigurationInterfaces.c"
+#line 1574 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp66_ = NULL;
 #line 297 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1569,11 +1579,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp66_;
 #line 297 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1573 "ConfigurationInterfaces.c"
+#line 1583 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES:
-#line 1577 "ConfigurationInterfaces.c"
+#line 1587 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp67_ = NULL;
 #line 300 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1582,11 +1592,11 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp67_;
 #line 300 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1586 "ConfigurationInterfaces.c"
+#line 1596 "ConfigurationInterfaces.c"
 		}
 #line 97 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE:
-#line 1590 "ConfigurationInterfaces.c"
+#line 1600 "ConfigurationInterfaces.c"
 		{
 			gchar* _tmp68_ = NULL;
 #line 303 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -1595,14 +1605,14 @@ gchar* configurable_property_to_string (ConfigurableProperty self) {
 			result = _tmp68_;
 #line 303 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return result;
-#line 1599 "ConfigurationInterfaces.c"
+#line 1609 "ConfigurationInterfaces.c"
 		}
 		default:
 		{
 #line 306 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_error ("ConfigurationInterfaces.vala:306: unknown ConfigurableProperty enumera" \
 "tion value");
-#line 1605 "ConfigurationInterfaces.c"
+#line 1615 "ConfigurationInterfaces.c"
 		}
 	}
 }
@@ -1625,7 +1635,7 @@ gchar* configuration_engine_get_name (ConfigurationEngine* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), NULL);
 #line 314 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_name (self);
-#line 1628 "ConfigurationInterfaces.c"
+#line 1638 "ConfigurationInterfaces.c"
 }
 
 
@@ -1634,7 +1644,7 @@ gint configuration_engine_get_int_property (ConfigurationEngine* self, Configura
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0);
 #line 316 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_int_property (self, p, error);
-#line 1637 "ConfigurationInterfaces.c"
+#line 1647 "ConfigurationInterfaces.c"
 }
 
 
@@ -1643,7 +1653,7 @@ void configuration_engine_set_int_property (ConfigurationEngine* self, Configura
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 317 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_int_property (self, p, val, error);
-#line 1646 "ConfigurationInterfaces.c"
+#line 1656 "ConfigurationInterfaces.c"
 }
 
 
@@ -1652,7 +1662,7 @@ gint configuration_engine_get_enum_property (ConfigurationEngine* self, Configur
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0);
 #line 319 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_enum_property (self, p, error);
-#line 1655 "ConfigurationInterfaces.c"
+#line 1665 "ConfigurationInterfaces.c"
 }
 
 
@@ -1661,7 +1671,7 @@ void configuration_engine_set_enum_property (ConfigurationEngine* self, Configur
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 320 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_enum_property (self, p, val, error);
-#line 1664 "ConfigurationInterfaces.c"
+#line 1674 "ConfigurationInterfaces.c"
 }
 
 
@@ -1670,7 +1680,7 @@ gchar* configuration_engine_get_string_property (ConfigurationEngine* self, Conf
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), NULL);
 #line 322 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_string_property (self, p, error);
-#line 1673 "ConfigurationInterfaces.c"
+#line 1683 "ConfigurationInterfaces.c"
 }
 
 
@@ -1679,7 +1689,7 @@ void configuration_engine_set_string_property (ConfigurationEngine* self, Config
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_string_property (self, p, val, error);
-#line 1682 "ConfigurationInterfaces.c"
+#line 1692 "ConfigurationInterfaces.c"
 }
 
 
@@ -1688,7 +1698,7 @@ gboolean configuration_engine_get_bool_property (ConfigurationEngine* self, Conf
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), FALSE);
 #line 325 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_bool_property (self, p, error);
-#line 1691 "ConfigurationInterfaces.c"
+#line 1701 "ConfigurationInterfaces.c"
 }
 
 
@@ -1697,7 +1707,7 @@ void configuration_engine_set_bool_property (ConfigurationEngine* self, Configur
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 326 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_bool_property (self, p, val, error);
-#line 1700 "ConfigurationInterfaces.c"
+#line 1710 "ConfigurationInterfaces.c"
 }
 
 
@@ -1706,7 +1716,7 @@ gdouble configuration_engine_get_double_property (ConfigurationEngine* self, Con
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0.0);
 #line 328 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_double_property (self, p, error);
-#line 1709 "ConfigurationInterfaces.c"
+#line 1719 "ConfigurationInterfaces.c"
 }
 
 
@@ -1715,7 +1725,7 @@ void configuration_engine_set_double_property (ConfigurationEngine* self, Config
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 329 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_double_property (self, p, val, error);
-#line 1718 "ConfigurationInterfaces.c"
+#line 1728 "ConfigurationInterfaces.c"
 }
 
 
@@ -1724,7 +1734,7 @@ gboolean configuration_engine_get_plugin_bool (ConfigurationEngine* self, const 
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), FALSE);
 #line 331 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_plugin_bool (self, domain, id, key, def);
-#line 1727 "ConfigurationInterfaces.c"
+#line 1737 "ConfigurationInterfaces.c"
 }
 
 
@@ -1733,7 +1743,7 @@ void configuration_engine_set_plugin_bool (ConfigurationEngine* self, const gcha
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 332 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_plugin_bool (self, domain, id, key, val);
-#line 1736 "ConfigurationInterfaces.c"
+#line 1746 "ConfigurationInterfaces.c"
 }
 
 
@@ -1742,7 +1752,7 @@ gdouble configuration_engine_get_plugin_double (ConfigurationEngine* self, const
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0.0);
 #line 333 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_plugin_double (self, domain, id, key, def);
-#line 1745 "ConfigurationInterfaces.c"
+#line 1755 "ConfigurationInterfaces.c"
 }
 
 
@@ -1751,7 +1761,7 @@ void configuration_engine_set_plugin_double (ConfigurationEngine* self, const gc
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 334 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_plugin_double (self, domain, id, key, val);
-#line 1754 "ConfigurationInterfaces.c"
+#line 1764 "ConfigurationInterfaces.c"
 }
 
 
@@ -1760,7 +1770,7 @@ gint configuration_engine_get_plugin_int (ConfigurationEngine* self, const gchar
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0);
 #line 335 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_plugin_int (self, domain, id, key, def);
-#line 1763 "ConfigurationInterfaces.c"
+#line 1773 "ConfigurationInterfaces.c"
 }
 
 
@@ -1769,7 +1779,7 @@ void configuration_engine_set_plugin_int (ConfigurationEngine* self, const gchar
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 336 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_plugin_int (self, domain, id, key, val);
-#line 1772 "ConfigurationInterfaces.c"
+#line 1782 "ConfigurationInterfaces.c"
 }
 
 
@@ -1778,7 +1788,7 @@ gchar* configuration_engine_get_plugin_string (ConfigurationEngine* self, const 
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), NULL);
 #line 337 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->get_plugin_string (self, domain, id, key, def);
-#line 1781 "ConfigurationInterfaces.c"
+#line 1791 "ConfigurationInterfaces.c"
 }
 
 
@@ -1787,7 +1797,7 @@ void configuration_engine_set_plugin_string (ConfigurationEngine* self, const gc
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 338 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_plugin_string (self, domain, id, key, val);
-#line 1790 "ConfigurationInterfaces.c"
+#line 1800 "ConfigurationInterfaces.c"
 }
 
 
@@ -1796,7 +1806,7 @@ void configuration_engine_unset_plugin_key (ConfigurationEngine* self, const gch
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 339 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->unset_plugin_key (self, domain, id, key);
-#line 1799 "ConfigurationInterfaces.c"
+#line 1809 "ConfigurationInterfaces.c"
 }
 
 
@@ -1805,7 +1815,7 @@ FuzzyPropertyState configuration_engine_is_plugin_enabled (ConfigurationEngine* 
 	g_return_val_if_fail (IS_CONFIGURATION_ENGINE (self), 0);
 #line 341 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_ENGINE_GET_INTERFACE (self)->is_plugin_enabled (self, id);
-#line 1808 "ConfigurationInterfaces.c"
+#line 1818 "ConfigurationInterfaces.c"
 }
 
 
@@ -1814,7 +1824,7 @@ void configuration_engine_set_plugin_enabled (ConfigurationEngine* self, const g
 	g_return_if_fail (IS_CONFIGURATION_ENGINE (self));
 #line 342 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_ENGINE_GET_INTERFACE (self)->set_plugin_enabled (self, id, enabled);
-#line 1817 "ConfigurationInterfaces.c"
+#line 1827 "ConfigurationInterfaces.c"
 }
 
 
@@ -1827,7 +1837,7 @@ static void configuration_engine_base_init (ConfigurationEngineIface * iface) {
 		initialized = TRUE;
 #line 311 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_signal_new ("property_changed", TYPE_CONFIGURATION_ENGINE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__ENUM, G_TYPE_NONE, 1, TYPE_CONFIGURABLE_PROPERTY);
-#line 1830 "ConfigurationInterfaces.c"
+#line 1840 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -1848,14 +1858,14 @@ GType configuration_engine_get_type (void) {
 static gpointer _g_object_ref0 (gpointer self) {
 #line 356 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 1851 "ConfigurationInterfaces.c"
+#line 1861 "ConfigurationInterfaces.c"
 }
 
 
 static void _configuration_facade_on_property_changed_configuration_engine_property_changed (ConfigurationEngine* _sender, ConfigurableProperty p, gpointer self) {
 #line 358 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_facade_on_property_changed ((ConfigurationFacade*) self, p);
-#line 1858 "ConfigurationInterfaces.c"
+#line 1868 "ConfigurationInterfaces.c"
 }
 
 
@@ -1882,7 +1892,7 @@ ConfigurationFacade* configuration_facade_construct (GType object_type, Configur
 	g_signal_connect_object (_tmp2_, "property-changed", (GCallback) _configuration_facade_on_property_changed_configuration_engine_property_changed, self, 0);
 #line 355 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return self;
-#line 1885 "ConfigurationInterfaces.c"
+#line 1895 "ConfigurationInterfaces.c"
 }
 
 
@@ -1910,70 +1920,70 @@ static void configuration_facade_on_property_changed (ConfigurationFacade* self,
 	switch (_tmp3_) {
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_AUTO_IMPORT_FROM_LIBRARY:
-#line 1912 "ConfigurationInterfaces.c"
+#line 1922 "ConfigurationInterfaces.c"
 		{
 #line 366 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "auto-import-from-library-changed");
 #line 367 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1918 "ConfigurationInterfaces.c"
+#line 1928 "ConfigurationInterfaces.c"
 		}
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_BG_COLOR_NAME:
-#line 1922 "ConfigurationInterfaces.c"
+#line 1932 "ConfigurationInterfaces.c"
 		{
 #line 370 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "bg-color-name-changed");
 #line 371 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1928 "ConfigurationInterfaces.c"
+#line 1938 "ConfigurationInterfaces.c"
 		}
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_COMMIT_METADATA_TO_MASTERS:
-#line 1932 "ConfigurationInterfaces.c"
+#line 1942 "ConfigurationInterfaces.c"
 		{
 #line 374 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "commit-metadata-to-masters-changed");
 #line 375 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1938 "ConfigurationInterfaces.c"
+#line 1948 "ConfigurationInterfaces.c"
 		}
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EVENTS_SORT_ASCENDING:
-#line 1942 "ConfigurationInterfaces.c"
+#line 1952 "ConfigurationInterfaces.c"
 		{
 #line 378 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "events-sort-ascending-changed");
 #line 379 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1948 "ConfigurationInterfaces.c"
+#line 1958 "ConfigurationInterfaces.c"
 		}
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXTERNAL_PHOTO_APP:
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_EXTERNAL_RAW_APP:
-#line 1954 "ConfigurationInterfaces.c"
+#line 1964 "ConfigurationInterfaces.c"
 		{
 #line 383 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "external-app-changed");
 #line 384 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1960 "ConfigurationInterfaces.c"
+#line 1970 "ConfigurationInterfaces.c"
 		}
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		case CONFIGURABLE_PROPERTY_IMPORT_DIR:
-#line 1964 "ConfigurationInterfaces.c"
+#line 1974 "ConfigurationInterfaces.c"
 		{
 #line 387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_signal_emit_by_name (self, "import-directory-changed");
 #line 388 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			break;
-#line 1970 "ConfigurationInterfaces.c"
+#line 1980 "ConfigurationInterfaces.c"
 		}
 		default:
 #line 364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		break;
-#line 1975 "ConfigurationInterfaces.c"
+#line 1985 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -1992,7 +2002,7 @@ ConfigurationEngine* configuration_facade_get_engine (ConfigurationFacade* self)
 	result = _tmp1_;
 #line 393 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 1994 "ConfigurationInterfaces.c"
+#line 2004 "ConfigurationInterfaces.c"
 }
 
 
@@ -2004,7 +2014,7 @@ void configuration_facade_on_configuration_error (ConfigurationFacade* self, GEr
 	_tmp0_ = err;
 #line 397 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (g_error_matches (_tmp0_, CONFIGURATION_ERROR, CONFIGURATION_ERROR_PROPERTY_HAS_NO_VALUE)) {
-#line 2006 "ConfigurationInterfaces.c"
+#line 2016 "ConfigurationInterfaces.c"
 		ConfigurationEngine* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
@@ -2025,14 +2035,14 @@ void configuration_facade_on_configuration_error (ConfigurationFacade* self, GEr
 "OPERTY_HAS_NO_VALUE error: %s", _tmp3_, _tmp5_);
 #line 398 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_free0 (_tmp3_);
-#line 2026 "ConfigurationInterfaces.c"
+#line 2036 "ConfigurationInterfaces.c"
 	} else {
 		GError* _tmp6_ = NULL;
 #line 401 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp6_ = err;
 #line 401 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (g_error_matches (_tmp6_, CONFIGURATION_ERROR, CONFIGURATION_ERROR_ENGINE_ERROR)) {
-#line 2033 "ConfigurationInterfaces.c"
+#line 2043 "ConfigurationInterfaces.c"
 			ConfigurationEngine* _tmp7_ = NULL;
 			gchar* _tmp8_ = NULL;
 			gchar* _tmp9_ = NULL;
@@ -2053,7 +2063,7 @@ void configuration_facade_on_configuration_error (ConfigurationFacade* self, GEr
 "GINE_ERROR: %s", _tmp9_, _tmp11_);
 #line 402 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			_g_free0 (_tmp9_);
-#line 2053 "ConfigurationInterfaces.c"
+#line 2063 "ConfigurationInterfaces.c"
 		} else {
 			ConfigurationEngine* _tmp12_ = NULL;
 			gchar* _tmp13_ = NULL;
@@ -2075,7 +2085,7 @@ void configuration_facade_on_configuration_error (ConfigurationFacade* self, GEr
 "known error: %s", _tmp14_, _tmp16_);
 #line 405 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			_g_free0 (_tmp14_);
-#line 2074 "ConfigurationInterfaces.c"
+#line 2084 "ConfigurationInterfaces.c"
 		}
 	}
 }
@@ -2106,8 +2116,8 @@ static gboolean configuration_facade_real_get_auto_import_from_library (Configur
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 415 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2105 "ConfigurationInterfaces.c"
-				goto __catch81_configuration_error;
+#line 2115 "ConfigurationInterfaces.c"
+				goto __catch82_configuration_error;
 			}
 #line 415 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2115,16 +2125,16 @@ static gboolean configuration_facade_real_get_auto_import_from_library (Configur
 			g_clear_error (&_inner_error_);
 #line 415 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 2114 "ConfigurationInterfaces.c"
+#line 2124 "ConfigurationInterfaces.c"
 		}
 #line 415 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 415 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2120 "ConfigurationInterfaces.c"
+#line 2130 "ConfigurationInterfaces.c"
 	}
-	goto __finally81;
-	__catch81_configuration_error:
+	goto __finally82;
+	__catch82_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2142,16 +2152,16 @@ static gboolean configuration_facade_real_get_auto_import_from_library (Configur
 		_g_error_free0 (err);
 #line 419 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2141 "ConfigurationInterfaces.c"
+#line 2151 "ConfigurationInterfaces.c"
 	}
-	__finally81:
+	__finally82:
 #line 414 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 414 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 414 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 2150 "ConfigurationInterfaces.c"
+#line 2160 "ConfigurationInterfaces.c"
 }
 
 
@@ -2160,7 +2170,7 @@ gboolean configuration_facade_get_auto_import_from_library (ConfigurationFacade*
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 413 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_auto_import_from_library (self);
-#line 2159 "ConfigurationInterfaces.c"
+#line 2169 "ConfigurationInterfaces.c"
 }
 
 
@@ -2184,8 +2194,8 @@ static void configuration_facade_real_set_auto_import_from_library (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 425 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2183 "ConfigurationInterfaces.c"
-				goto __catch82_configuration_error;
+#line 2193 "ConfigurationInterfaces.c"
+				goto __catch83_configuration_error;
 			}
 #line 425 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2193,11 +2203,11 @@ static void configuration_facade_real_set_auto_import_from_library (Configuratio
 			g_clear_error (&_inner_error_);
 #line 425 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2192 "ConfigurationInterfaces.c"
+#line 2202 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally82;
-	__catch82_configuration_error:
+	goto __finally83;
+	__catch83_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -2213,9 +2223,9 @@ static void configuration_facade_real_set_auto_import_from_library (Configuratio
 		_g_error_free0 (err);
 #line 429 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2212 "ConfigurationInterfaces.c"
+#line 2222 "ConfigurationInterfaces.c"
 	}
-	__finally82:
+	__finally83:
 #line 424 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 424 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -2224,7 +2234,7 @@ static void configuration_facade_real_set_auto_import_from_library (Configuratio
 		g_clear_error (&_inner_error_);
 #line 424 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2223 "ConfigurationInterfaces.c"
+#line 2233 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -2234,7 +2244,7 @@ void configuration_facade_set_auto_import_from_library (ConfigurationFacade* sel
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 423 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_auto_import_from_library (self, auto_import);
-#line 2233 "ConfigurationInterfaces.c"
+#line 2243 "ConfigurationInterfaces.c"
 }
 
 
@@ -2264,8 +2274,8 @@ static gchar* configuration_facade_real_get_bg_color_name (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2263 "ConfigurationInterfaces.c"
-				goto __catch83_configuration_error;
+#line 2273 "ConfigurationInterfaces.c"
+				goto __catch84_configuration_error;
 			}
 #line 438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2273,7 +2283,7 @@ static gchar* configuration_facade_real_get_bg_color_name (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 2272 "ConfigurationInterfaces.c"
+#line 2282 "ConfigurationInterfaces.c"
 		}
 #line 438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -2285,10 +2295,10 @@ static gchar* configuration_facade_real_get_bg_color_name (ConfigurationFacade* 
 		_g_free0 (_tmp0_);
 #line 438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2284 "ConfigurationInterfaces.c"
+#line 2294 "ConfigurationInterfaces.c"
 	}
-	goto __finally83;
-	__catch83_configuration_error:
+	goto __finally84;
+	__catch84_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -2309,16 +2319,16 @@ static gchar* configuration_facade_real_get_bg_color_name (ConfigurationFacade* 
 		_g_error_free0 (err);
 #line 442 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2308 "ConfigurationInterfaces.c"
+#line 2318 "ConfigurationInterfaces.c"
 	}
-	__finally83:
+	__finally84:
 #line 437 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 437 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 437 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 2317 "ConfigurationInterfaces.c"
+#line 2327 "ConfigurationInterfaces.c"
 }
 
 
@@ -2327,7 +2337,7 @@ gchar* configuration_facade_get_bg_color_name (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 436 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_bg_color_name (self);
-#line 2326 "ConfigurationInterfaces.c"
+#line 2336 "ConfigurationInterfaces.c"
 }
 
 
@@ -2335,7 +2345,7 @@ static void configuration_facade_real_set_bg_color_name (ConfigurationFacade* se
 	GError * _inner_error_ = NULL;
 #line 446 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (color_name != NULL);
-#line 2334 "ConfigurationInterfaces.c"
+#line 2344 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -2354,8 +2364,8 @@ static void configuration_facade_real_set_bg_color_name (ConfigurationFacade* se
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 448 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2353 "ConfigurationInterfaces.c"
-				goto __catch84_configuration_error;
+#line 2363 "ConfigurationInterfaces.c"
+				goto __catch85_configuration_error;
 			}
 #line 448 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2363,11 +2373,11 @@ static void configuration_facade_real_set_bg_color_name (ConfigurationFacade* se
 			g_clear_error (&_inner_error_);
 #line 448 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2362 "ConfigurationInterfaces.c"
+#line 2372 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally84;
-	__catch84_configuration_error:
+	goto __finally85;
+	__catch85_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -2383,9 +2393,9 @@ static void configuration_facade_real_set_bg_color_name (ConfigurationFacade* se
 		_g_error_free0 (err);
 #line 451 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2382 "ConfigurationInterfaces.c"
+#line 2392 "ConfigurationInterfaces.c"
 	}
-	__finally84:
+	__finally85:
 #line 447 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 447 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -2394,7 +2404,7 @@ static void configuration_facade_real_set_bg_color_name (ConfigurationFacade* se
 		g_clear_error (&_inner_error_);
 #line 447 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2393 "ConfigurationInterfaces.c"
+#line 2403 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -2404,7 +2414,7 @@ void configuration_facade_set_bg_color_name (ConfigurationFacade* self, const gc
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 446 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_bg_color_name (self, color_name);
-#line 2403 "ConfigurationInterfaces.c"
+#line 2413 "ConfigurationInterfaces.c"
 }
 
 
@@ -2433,8 +2443,8 @@ static gboolean configuration_facade_real_get_commit_metadata_to_masters (Config
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2432 "ConfigurationInterfaces.c"
-				goto __catch85_configuration_error;
+#line 2442 "ConfigurationInterfaces.c"
+				goto __catch86_configuration_error;
 			}
 #line 460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2442,16 +2452,16 @@ static gboolean configuration_facade_real_get_commit_metadata_to_masters (Config
 			g_clear_error (&_inner_error_);
 #line 460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 2441 "ConfigurationInterfaces.c"
+#line 2451 "ConfigurationInterfaces.c"
 		}
 #line 460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2447 "ConfigurationInterfaces.c"
+#line 2457 "ConfigurationInterfaces.c"
 	}
-	goto __finally85;
-	__catch85_configuration_error:
+	goto __finally86;
+	__catch86_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2469,16 +2479,16 @@ static gboolean configuration_facade_real_get_commit_metadata_to_masters (Config
 		_g_error_free0 (err);
 #line 464 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2468 "ConfigurationInterfaces.c"
+#line 2478 "ConfigurationInterfaces.c"
 	}
-	__finally85:
+	__finally86:
 #line 459 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 459 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 459 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 2477 "ConfigurationInterfaces.c"
+#line 2487 "ConfigurationInterfaces.c"
 }
 
 
@@ -2487,7 +2497,7 @@ gboolean configuration_facade_get_commit_metadata_to_masters (ConfigurationFacad
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 458 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_commit_metadata_to_masters (self);
-#line 2486 "ConfigurationInterfaces.c"
+#line 2496 "ConfigurationInterfaces.c"
 }
 
 
@@ -2511,8 +2521,8 @@ static void configuration_facade_real_set_commit_metadata_to_masters (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 470 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2510 "ConfigurationInterfaces.c"
-				goto __catch86_configuration_error;
+#line 2520 "ConfigurationInterfaces.c"
+				goto __catch87_configuration_error;
 			}
 #line 470 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2520,11 +2530,11 @@ static void configuration_facade_real_set_commit_metadata_to_masters (Configurat
 			g_clear_error (&_inner_error_);
 #line 470 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2519 "ConfigurationInterfaces.c"
+#line 2529 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally86;
-	__catch86_configuration_error:
+	goto __finally87;
+	__catch87_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -2540,9 +2550,9 @@ static void configuration_facade_real_set_commit_metadata_to_masters (Configurat
 		_g_error_free0 (err);
 #line 474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2539 "ConfigurationInterfaces.c"
+#line 2549 "ConfigurationInterfaces.c"
 	}
-	__finally86:
+	__finally87:
 #line 469 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 469 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -2551,7 +2561,7 @@ static void configuration_facade_real_set_commit_metadata_to_masters (Configurat
 		g_clear_error (&_inner_error_);
 #line 469 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2550 "ConfigurationInterfaces.c"
+#line 2560 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -2561,7 +2571,7 @@ void configuration_facade_set_commit_metadata_to_masters (ConfigurationFacade* s
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 468 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_commit_metadata_to_masters (self, commit_metadata);
-#line 2560 "ConfigurationInterfaces.c"
+#line 2570 "ConfigurationInterfaces.c"
 }
 
 
@@ -2591,8 +2601,8 @@ static gchar* configuration_facade_real_get_desktop_background (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2590 "ConfigurationInterfaces.c"
-				goto __catch87_configuration_error;
+#line 2600 "ConfigurationInterfaces.c"
+				goto __catch88_configuration_error;
 			}
 #line 483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2600,7 +2610,7 @@ static gchar* configuration_facade_real_get_desktop_background (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 2599 "ConfigurationInterfaces.c"
+#line 2609 "ConfigurationInterfaces.c"
 		}
 #line 483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -2612,10 +2622,10 @@ static gchar* configuration_facade_real_get_desktop_background (ConfigurationFac
 		_g_free0 (_tmp0_);
 #line 483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2611 "ConfigurationInterfaces.c"
+#line 2621 "ConfigurationInterfaces.c"
 	}
-	goto __finally87;
-	__catch87_configuration_error:
+	goto __finally88;
+	__catch88_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -2636,16 +2646,16 @@ static gchar* configuration_facade_real_get_desktop_background (ConfigurationFac
 		_g_error_free0 (err);
 #line 487 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2635 "ConfigurationInterfaces.c"
+#line 2645 "ConfigurationInterfaces.c"
 	}
-	__finally87:
+	__finally88:
 #line 482 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 482 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 482 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 2644 "ConfigurationInterfaces.c"
+#line 2654 "ConfigurationInterfaces.c"
 }
 
 
@@ -2654,7 +2664,7 @@ gchar* configuration_facade_get_desktop_background (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 481 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_desktop_background (self);
-#line 2653 "ConfigurationInterfaces.c"
+#line 2663 "ConfigurationInterfaces.c"
 }
 
 
@@ -2662,7 +2672,7 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 	GError * _inner_error_ = NULL;
 #line 491 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (filename != NULL);
-#line 2661 "ConfigurationInterfaces.c"
+#line 2671 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -2683,8 +2693,8 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 493 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2682 "ConfigurationInterfaces.c"
-				goto __catch88_configuration_error;
+#line 2692 "ConfigurationInterfaces.c"
+				goto __catch89_configuration_error;
 			}
 #line 493 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2692,7 +2702,7 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 493 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2691 "ConfigurationInterfaces.c"
+#line 2701 "ConfigurationInterfaces.c"
 		}
 #line 495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -2706,8 +2716,8 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2705 "ConfigurationInterfaces.c"
-				goto __catch88_configuration_error;
+#line 2715 "ConfigurationInterfaces.c"
+				goto __catch89_configuration_error;
 			}
 #line 495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2715,11 +2725,11 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2714 "ConfigurationInterfaces.c"
+#line 2724 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally88;
-	__catch88_configuration_error:
+	goto __finally89;
+	__catch89_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2733,9 +2743,9 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 		configuration_facade_on_configuration_error (self, _tmp5_);
 #line 492 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 2732 "ConfigurationInterfaces.c"
+#line 2742 "ConfigurationInterfaces.c"
 	}
-	__finally88:
+	__finally89:
 #line 492 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 492 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -2744,7 +2754,7 @@ static void configuration_facade_real_set_desktop_background (ConfigurationFacad
 		g_clear_error (&_inner_error_);
 #line 492 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2743 "ConfigurationInterfaces.c"
+#line 2753 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -2754,7 +2764,7 @@ void configuration_facade_set_desktop_background (ConfigurationFacade* self, con
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 491 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_desktop_background (self, filename);
-#line 2753 "ConfigurationInterfaces.c"
+#line 2763 "ConfigurationInterfaces.c"
 }
 
 
@@ -2784,8 +2794,8 @@ static gchar* configuration_facade_real_get_screensaver (ConfigurationFacade* se
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 507 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2783 "ConfigurationInterfaces.c"
-				goto __catch89_configuration_error;
+#line 2793 "ConfigurationInterfaces.c"
+				goto __catch90_configuration_error;
 			}
 #line 507 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2793,7 +2803,7 @@ static gchar* configuration_facade_real_get_screensaver (ConfigurationFacade* se
 			g_clear_error (&_inner_error_);
 #line 507 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 2792 "ConfigurationInterfaces.c"
+#line 2802 "ConfigurationInterfaces.c"
 		}
 #line 507 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -2805,10 +2815,10 @@ static gchar* configuration_facade_real_get_screensaver (ConfigurationFacade* se
 		_g_free0 (_tmp0_);
 #line 507 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2804 "ConfigurationInterfaces.c"
+#line 2814 "ConfigurationInterfaces.c"
 	}
-	goto __finally89;
-	__catch89_configuration_error:
+	goto __finally90;
+	__catch90_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -2829,16 +2839,16 @@ static gchar* configuration_facade_real_get_screensaver (ConfigurationFacade* se
 		_g_error_free0 (err);
 #line 511 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 2828 "ConfigurationInterfaces.c"
+#line 2838 "ConfigurationInterfaces.c"
 	}
-	__finally89:
+	__finally90:
 #line 506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 2837 "ConfigurationInterfaces.c"
+#line 2847 "ConfigurationInterfaces.c"
 }
 
 
@@ -2847,7 +2857,7 @@ gchar* configuration_facade_get_screensaver (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 505 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_screensaver (self);
-#line 2846 "ConfigurationInterfaces.c"
+#line 2856 "ConfigurationInterfaces.c"
 }
 
 
@@ -2855,7 +2865,7 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 	GError * _inner_error_ = NULL;
 #line 515 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (filename != NULL);
-#line 2854 "ConfigurationInterfaces.c"
+#line 2864 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -2876,8 +2886,8 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2875 "ConfigurationInterfaces.c"
-				goto __catch90_configuration_error;
+#line 2885 "ConfigurationInterfaces.c"
+				goto __catch91_configuration_error;
 			}
 #line 517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2885,7 +2895,7 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 			g_clear_error (&_inner_error_);
 #line 517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2884 "ConfigurationInterfaces.c"
+#line 2894 "ConfigurationInterfaces.c"
 		}
 #line 519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -2899,8 +2909,8 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2898 "ConfigurationInterfaces.c"
-				goto __catch90_configuration_error;
+#line 2908 "ConfigurationInterfaces.c"
+				goto __catch91_configuration_error;
 			}
 #line 519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2908,11 +2918,11 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 			g_clear_error (&_inner_error_);
 #line 519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 2907 "ConfigurationInterfaces.c"
+#line 2917 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally90;
-	__catch90_configuration_error:
+	goto __finally91;
+	__catch91_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2926,9 +2936,9 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 		configuration_facade_on_configuration_error (self, _tmp5_);
 #line 516 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 2925 "ConfigurationInterfaces.c"
+#line 2935 "ConfigurationInterfaces.c"
 	}
-	__finally90:
+	__finally91:
 #line 516 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 516 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -2937,7 +2947,7 @@ static void configuration_facade_real_set_screensaver (ConfigurationFacade* self
 		g_clear_error (&_inner_error_);
 #line 516 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 2936 "ConfigurationInterfaces.c"
+#line 2946 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -2947,7 +2957,7 @@ void configuration_facade_set_screensaver (ConfigurationFacade* self, const gcha
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 515 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_screensaver (self, filename);
-#line 2946 "ConfigurationInterfaces.c"
+#line 2956 "ConfigurationInterfaces.c"
 }
 
 
@@ -2978,8 +2988,8 @@ static gchar* configuration_facade_real_get_directory_pattern (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 2977 "ConfigurationInterfaces.c"
-				goto __catch91_configuration_error;
+#line 2987 "ConfigurationInterfaces.c"
+				goto __catch92_configuration_error;
 			}
 #line 531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -2987,17 +2997,17 @@ static gchar* configuration_facade_real_get_directory_pattern (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 2986 "ConfigurationInterfaces.c"
+#line 2996 "ConfigurationInterfaces.c"
 		}
 #line 532 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (g_strcmp0 (s, "") == 0) {
 #line 532 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			_tmp4_ = NULL;
-#line 2992 "ConfigurationInterfaces.c"
+#line 3002 "ConfigurationInterfaces.c"
 		} else {
 #line 532 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			_tmp4_ = s;
-#line 2996 "ConfigurationInterfaces.c"
+#line 3006 "ConfigurationInterfaces.c"
 		}
 #line 532 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = g_strdup (_tmp4_);
@@ -3007,10 +3017,10 @@ static gchar* configuration_facade_real_get_directory_pattern (ConfigurationFaca
 		_g_free0 (s);
 #line 532 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3006 "ConfigurationInterfaces.c"
+#line 3016 "ConfigurationInterfaces.c"
 	}
-	goto __finally91;
-	__catch91_configuration_error:
+	goto __finally92;
+	__catch92_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -3031,16 +3041,16 @@ static gchar* configuration_facade_real_get_directory_pattern (ConfigurationFaca
 		_g_error_free0 (err);
 #line 536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3030 "ConfigurationInterfaces.c"
+#line 3040 "ConfigurationInterfaces.c"
 	}
-	__finally91:
+	__finally92:
 #line 530 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 530 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 530 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 3039 "ConfigurationInterfaces.c"
+#line 3049 "ConfigurationInterfaces.c"
 }
 
 
@@ -3049,7 +3059,7 @@ gchar* configuration_facade_get_directory_pattern (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 529 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_directory_pattern (self);
-#line 3048 "ConfigurationInterfaces.c"
+#line 3058 "ConfigurationInterfaces.c"
 }
 
 
@@ -3066,7 +3076,7 @@ static void configuration_facade_real_set_directory_pattern (ConfigurationFacade
 		if (_tmp0_ == NULL) {
 #line 543 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			s = "";
-#line 3065 "ConfigurationInterfaces.c"
+#line 3075 "ConfigurationInterfaces.c"
 		}
 #line 545 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
@@ -3082,8 +3092,8 @@ static void configuration_facade_real_set_directory_pattern (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 545 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3081 "ConfigurationInterfaces.c"
-				goto __catch92_configuration_error;
+#line 3091 "ConfigurationInterfaces.c"
+				goto __catch93_configuration_error;
 			}
 #line 545 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3091,11 +3101,11 @@ static void configuration_facade_real_set_directory_pattern (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 545 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3090 "ConfigurationInterfaces.c"
+#line 3100 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally92;
-	__catch92_configuration_error:
+	goto __finally93;
+	__catch93_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -3109,9 +3119,9 @@ static void configuration_facade_real_set_directory_pattern (ConfigurationFacade
 		configuration_facade_on_configuration_error (self, _tmp4_);
 #line 541 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3108 "ConfigurationInterfaces.c"
+#line 3118 "ConfigurationInterfaces.c"
 	}
-	__finally92:
+	__finally93:
 #line 541 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 541 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3120,7 +3130,7 @@ static void configuration_facade_real_set_directory_pattern (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 541 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3119 "ConfigurationInterfaces.c"
+#line 3129 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3130,7 +3140,7 @@ void configuration_facade_set_directory_pattern (ConfigurationFacade* self, cons
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_directory_pattern (self, s);
-#line 3129 "ConfigurationInterfaces.c"
+#line 3139 "ConfigurationInterfaces.c"
 }
 
 
@@ -3160,8 +3170,8 @@ static gchar* configuration_facade_real_get_directory_pattern_custom (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 556 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3159 "ConfigurationInterfaces.c"
-				goto __catch93_configuration_error;
+#line 3169 "ConfigurationInterfaces.c"
+				goto __catch94_configuration_error;
 			}
 #line 556 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3169,7 +3179,7 @@ static gchar* configuration_facade_real_get_directory_pattern_custom (Configurat
 			g_clear_error (&_inner_error_);
 #line 556 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 3168 "ConfigurationInterfaces.c"
+#line 3178 "ConfigurationInterfaces.c"
 		}
 #line 556 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -3181,10 +3191,10 @@ static gchar* configuration_facade_real_get_directory_pattern_custom (Configurat
 		_g_free0 (_tmp0_);
 #line 556 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3180 "ConfigurationInterfaces.c"
+#line 3190 "ConfigurationInterfaces.c"
 	}
-	goto __finally93;
-	__catch93_configuration_error:
+	goto __finally94;
+	__catch94_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -3205,16 +3215,16 @@ static gchar* configuration_facade_real_get_directory_pattern_custom (Configurat
 		_g_error_free0 (err);
 #line 560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3204 "ConfigurationInterfaces.c"
+#line 3214 "ConfigurationInterfaces.c"
 	}
-	__finally93:
+	__finally94:
 #line 555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 3213 "ConfigurationInterfaces.c"
+#line 3223 "ConfigurationInterfaces.c"
 }
 
 
@@ -3223,7 +3233,7 @@ gchar* configuration_facade_get_directory_pattern_custom (ConfigurationFacade* s
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 554 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_directory_pattern_custom (self);
-#line 3222 "ConfigurationInterfaces.c"
+#line 3232 "ConfigurationInterfaces.c"
 }
 
 
@@ -3231,7 +3241,7 @@ static void configuration_facade_real_set_directory_pattern_custom (Configuratio
 	GError * _inner_error_ = NULL;
 #line 564 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (s != NULL);
-#line 3230 "ConfigurationInterfaces.c"
+#line 3240 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -3250,8 +3260,8 @@ static void configuration_facade_real_set_directory_pattern_custom (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 566 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3249 "ConfigurationInterfaces.c"
-				goto __catch94_configuration_error;
+#line 3259 "ConfigurationInterfaces.c"
+				goto __catch95_configuration_error;
 			}
 #line 566 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3259,11 +3269,11 @@ static void configuration_facade_real_set_directory_pattern_custom (Configuratio
 			g_clear_error (&_inner_error_);
 #line 566 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3258 "ConfigurationInterfaces.c"
+#line 3268 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally94;
-	__catch94_configuration_error:
+	goto __finally95;
+	__catch95_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -3277,9 +3287,9 @@ static void configuration_facade_real_set_directory_pattern_custom (Configuratio
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3276 "ConfigurationInterfaces.c"
+#line 3286 "ConfigurationInterfaces.c"
 	}
-	__finally94:
+	__finally95:
 #line 565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3288,7 +3298,7 @@ static void configuration_facade_real_set_directory_pattern_custom (Configuratio
 		g_clear_error (&_inner_error_);
 #line 565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3287 "ConfigurationInterfaces.c"
+#line 3297 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3298,7 +3308,7 @@ void configuration_facade_set_directory_pattern_custom (ConfigurationFacade* sel
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 564 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_directory_pattern_custom (self, s);
-#line 3297 "ConfigurationInterfaces.c"
+#line 3307 "ConfigurationInterfaces.c"
 }
 
 
@@ -3310,7 +3320,7 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 	_vala_maximize = FALSE;
 #line 577 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	dimensions_init (&_vala_dimensions, 1024, 768);
-#line 3309 "ConfigurationInterfaces.c"
+#line 3319 "ConfigurationInterfaces.c"
 	{
 		gboolean _tmp0_ = FALSE;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -3345,8 +3355,8 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 579 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3344 "ConfigurationInterfaces.c"
-				goto __catch95_configuration_error;
+#line 3354 "ConfigurationInterfaces.c"
+				goto __catch96_configuration_error;
 			}
 #line 579 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3354,7 +3364,7 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 579 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3353 "ConfigurationInterfaces.c"
+#line 3363 "ConfigurationInterfaces.c"
 		}
 #line 579 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_maximize = _tmp0_;
@@ -3374,8 +3384,8 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 580 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3373 "ConfigurationInterfaces.c"
-				goto __catch95_configuration_error;
+#line 3383 "ConfigurationInterfaces.c"
+				goto __catch96_configuration_error;
 			}
 #line 580 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3383,7 +3393,7 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 580 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3382 "ConfigurationInterfaces.c"
+#line 3392 "ConfigurationInterfaces.c"
 		}
 #line 581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp9_ = configuration_facade_get_engine (self);
@@ -3401,8 +3411,8 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3400 "ConfigurationInterfaces.c"
-				goto __catch95_configuration_error;
+#line 3410 "ConfigurationInterfaces.c"
+				goto __catch96_configuration_error;
 			}
 #line 581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3410,7 +3420,7 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3409 "ConfigurationInterfaces.c"
+#line 3419 "ConfigurationInterfaces.c"
 		}
 #line 582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp13_ = w;
@@ -3418,10 +3428,10 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		_tmp14_ = h;
 #line 582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		dimensions_init (&_vala_dimensions, _tmp13_, _tmp14_);
-#line 3417 "ConfigurationInterfaces.c"
+#line 3427 "ConfigurationInterfaces.c"
 	}
-	goto __finally95;
-	__catch95_configuration_error:
+	goto __finally96;
+	__catch96_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp15_ = NULL;
@@ -3435,9 +3445,9 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		configuration_facade_on_configuration_error (self, _tmp15_);
 #line 578 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3434 "ConfigurationInterfaces.c"
+#line 3444 "ConfigurationInterfaces.c"
 	}
-	__finally95:
+	__finally96:
 #line 578 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 578 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3446,19 +3456,19 @@ static void configuration_facade_real_get_direct_window_state (ConfigurationFaca
 		g_clear_error (&_inner_error_);
 #line 578 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3445 "ConfigurationInterfaces.c"
+#line 3455 "ConfigurationInterfaces.c"
 	}
 #line 575 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (maximize) {
 #line 575 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*maximize = _vala_maximize;
-#line 3451 "ConfigurationInterfaces.c"
+#line 3461 "ConfigurationInterfaces.c"
 	}
 #line 575 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (dimensions) {
 #line 575 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*dimensions = _vala_dimensions;
-#line 3457 "ConfigurationInterfaces.c"
+#line 3467 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3468,7 +3478,7 @@ void configuration_facade_get_direct_window_state (ConfigurationFacade* self, gb
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 575 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->get_direct_window_state (self, maximize, dimensions);
-#line 3467 "ConfigurationInterfaces.c"
+#line 3477 "ConfigurationInterfaces.c"
 }
 
 
@@ -3476,7 +3486,7 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 	GError * _inner_error_ = NULL;
 #line 588 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (dimensions != NULL);
-#line 3475 "ConfigurationInterfaces.c"
+#line 3485 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -3503,8 +3513,8 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 590 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3502 "ConfigurationInterfaces.c"
-				goto __catch96_configuration_error;
+#line 3512 "ConfigurationInterfaces.c"
+				goto __catch97_configuration_error;
 			}
 #line 590 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3512,7 +3522,7 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 590 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3511 "ConfigurationInterfaces.c"
+#line 3521 "ConfigurationInterfaces.c"
 		}
 #line 591 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -3530,8 +3540,8 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 591 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3529 "ConfigurationInterfaces.c"
-				goto __catch96_configuration_error;
+#line 3539 "ConfigurationInterfaces.c"
+				goto __catch97_configuration_error;
 			}
 #line 591 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3539,7 +3549,7 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 591 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3538 "ConfigurationInterfaces.c"
+#line 3548 "ConfigurationInterfaces.c"
 		}
 #line 593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp7_ = configuration_facade_get_engine (self);
@@ -3557,8 +3567,8 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3556 "ConfigurationInterfaces.c"
-				goto __catch96_configuration_error;
+#line 3566 "ConfigurationInterfaces.c"
+				goto __catch97_configuration_error;
 			}
 #line 593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3566,11 +3576,11 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3565 "ConfigurationInterfaces.c"
+#line 3575 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally96;
-	__catch96_configuration_error:
+	goto __finally97;
+	__catch97_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp11_ = NULL;
@@ -3584,9 +3594,9 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 		configuration_facade_on_configuration_error (self, _tmp11_);
 #line 589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3583 "ConfigurationInterfaces.c"
+#line 3593 "ConfigurationInterfaces.c"
 	}
-	__finally96:
+	__finally97:
 #line 589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3595,7 +3605,7 @@ static void configuration_facade_real_set_direct_window_state (ConfigurationFaca
 		g_clear_error (&_inner_error_);
 #line 589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3594 "ConfigurationInterfaces.c"
+#line 3604 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3605,7 +3615,7 @@ void configuration_facade_set_direct_window_state (ConfigurationFacade* self, gb
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 588 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_direct_window_state (self, maximize, dimensions);
-#line 3604 "ConfigurationInterfaces.c"
+#line 3614 "ConfigurationInterfaces.c"
 }
 
 
@@ -3634,8 +3644,8 @@ static gboolean configuration_facade_real_get_display_basic_properties (Configur
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3633 "ConfigurationInterfaces.c"
-				goto __catch97_configuration_error;
+#line 3643 "ConfigurationInterfaces.c"
+				goto __catch98_configuration_error;
 			}
 #line 605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3643,16 +3653,16 @@ static gboolean configuration_facade_real_get_display_basic_properties (Configur
 			g_clear_error (&_inner_error_);
 #line 605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 3642 "ConfigurationInterfaces.c"
+#line 3652 "ConfigurationInterfaces.c"
 		}
 #line 605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3648 "ConfigurationInterfaces.c"
+#line 3658 "ConfigurationInterfaces.c"
 	}
-	goto __finally97;
-	__catch97_configuration_error:
+	goto __finally98;
+	__catch98_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -3670,16 +3680,16 @@ static gboolean configuration_facade_real_get_display_basic_properties (Configur
 		_g_error_free0 (err);
 #line 609 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3669 "ConfigurationInterfaces.c"
+#line 3679 "ConfigurationInterfaces.c"
 	}
-	__finally97:
+	__finally98:
 #line 604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 3678 "ConfigurationInterfaces.c"
+#line 3688 "ConfigurationInterfaces.c"
 }
 
 
@@ -3688,7 +3698,7 @@ gboolean configuration_facade_get_display_basic_properties (ConfigurationFacade*
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_basic_properties (self);
-#line 3687 "ConfigurationInterfaces.c"
+#line 3697 "ConfigurationInterfaces.c"
 }
 
 
@@ -3712,8 +3722,8 @@ static void configuration_facade_real_set_display_basic_properties (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3711 "ConfigurationInterfaces.c"
-				goto __catch98_configuration_error;
+#line 3721 "ConfigurationInterfaces.c"
+				goto __catch99_configuration_error;
 			}
 #line 615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3721,11 +3731,11 @@ static void configuration_facade_real_set_display_basic_properties (Configuratio
 			g_clear_error (&_inner_error_);
 #line 615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3720 "ConfigurationInterfaces.c"
+#line 3730 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally98;
-	__catch98_configuration_error:
+	goto __finally99;
+	__catch99_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -3739,9 +3749,9 @@ static void configuration_facade_real_set_display_basic_properties (Configuratio
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3738 "ConfigurationInterfaces.c"
+#line 3748 "ConfigurationInterfaces.c"
 	}
-	__finally98:
+	__finally99:
 #line 614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3750,7 +3760,7 @@ static void configuration_facade_real_set_display_basic_properties (Configuratio
 		g_clear_error (&_inner_error_);
 #line 614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3749 "ConfigurationInterfaces.c"
+#line 3759 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3760,7 +3770,7 @@ void configuration_facade_set_display_basic_properties (ConfigurationFacade* sel
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 613 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_basic_properties (self, display);
-#line 3759 "ConfigurationInterfaces.c"
+#line 3769 "ConfigurationInterfaces.c"
 }
 
 
@@ -3789,8 +3799,8 @@ static gboolean configuration_facade_real_get_display_extended_properties (Confi
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3788 "ConfigurationInterfaces.c"
-				goto __catch99_configuration_error;
+#line 3798 "ConfigurationInterfaces.c"
+				goto __catch100_configuration_error;
 			}
 #line 626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3798,16 +3808,16 @@ static gboolean configuration_facade_real_get_display_extended_properties (Confi
 			g_clear_error (&_inner_error_);
 #line 626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 3797 "ConfigurationInterfaces.c"
+#line 3807 "ConfigurationInterfaces.c"
 		}
 #line 626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3803 "ConfigurationInterfaces.c"
+#line 3813 "ConfigurationInterfaces.c"
 	}
-	goto __finally99;
-	__catch99_configuration_error:
+	goto __finally100;
+	__catch100_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -3825,16 +3835,16 @@ static gboolean configuration_facade_real_get_display_extended_properties (Confi
 		_g_error_free0 (err);
 #line 630 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3824 "ConfigurationInterfaces.c"
+#line 3834 "ConfigurationInterfaces.c"
 	}
-	__finally99:
+	__finally100:
 #line 625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 3833 "ConfigurationInterfaces.c"
+#line 3843 "ConfigurationInterfaces.c"
 }
 
 
@@ -3843,7 +3853,7 @@ gboolean configuration_facade_get_display_extended_properties (ConfigurationFaca
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_extended_properties (self);
-#line 3842 "ConfigurationInterfaces.c"
+#line 3852 "ConfigurationInterfaces.c"
 }
 
 
@@ -3867,8 +3877,8 @@ static void configuration_facade_real_set_display_extended_properties (Configura
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3866 "ConfigurationInterfaces.c"
-				goto __catch100_configuration_error;
+#line 3876 "ConfigurationInterfaces.c"
+				goto __catch101_configuration_error;
 			}
 #line 636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3876,11 +3886,11 @@ static void configuration_facade_real_set_display_extended_properties (Configura
 			g_clear_error (&_inner_error_);
 #line 636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 3875 "ConfigurationInterfaces.c"
+#line 3885 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally100;
-	__catch100_configuration_error:
+	goto __finally101;
+	__catch101_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -3894,9 +3904,9 @@ static void configuration_facade_real_set_display_extended_properties (Configura
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 3893 "ConfigurationInterfaces.c"
+#line 3903 "ConfigurationInterfaces.c"
 	}
-	__finally100:
+	__finally101:
 #line 635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -3905,7 +3915,7 @@ static void configuration_facade_real_set_display_extended_properties (Configura
 		g_clear_error (&_inner_error_);
 #line 635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 3904 "ConfigurationInterfaces.c"
+#line 3914 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -3915,7 +3925,7 @@ void configuration_facade_set_display_extended_properties (ConfigurationFacade* 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 634 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_extended_properties (self, display);
-#line 3914 "ConfigurationInterfaces.c"
+#line 3924 "ConfigurationInterfaces.c"
 }
 
 
@@ -3944,8 +3954,8 @@ static gboolean configuration_facade_real_get_display_sidebar (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 3943 "ConfigurationInterfaces.c"
-				goto __catch101_configuration_error;
+#line 3953 "ConfigurationInterfaces.c"
+				goto __catch102_configuration_error;
 			}
 #line 648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3953,16 +3963,16 @@ static gboolean configuration_facade_real_get_display_sidebar (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 3952 "ConfigurationInterfaces.c"
+#line 3962 "ConfigurationInterfaces.c"
 		}
 #line 648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3958 "ConfigurationInterfaces.c"
+#line 3968 "ConfigurationInterfaces.c"
 	}
-	goto __finally101;
-	__catch101_configuration_error:
+	goto __finally102;
+	__catch102_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -3980,16 +3990,16 @@ static gboolean configuration_facade_real_get_display_sidebar (ConfigurationFaca
 		_g_error_free0 (err);
 #line 652 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 3979 "ConfigurationInterfaces.c"
+#line 3989 "ConfigurationInterfaces.c"
 	}
-	__finally101:
+	__finally102:
 #line 647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 3988 "ConfigurationInterfaces.c"
+#line 3998 "ConfigurationInterfaces.c"
 }
 
 
@@ -3998,7 +4008,7 @@ gboolean configuration_facade_get_display_sidebar (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_sidebar (self);
-#line 3997 "ConfigurationInterfaces.c"
+#line 4007 "ConfigurationInterfaces.c"
 }
 
 
@@ -4022,8 +4032,8 @@ static void configuration_facade_real_set_display_sidebar (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4021 "ConfigurationInterfaces.c"
-				goto __catch102_configuration_error;
+#line 4031 "ConfigurationInterfaces.c"
+				goto __catch103_configuration_error;
 			}
 #line 658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4031,11 +4041,11 @@ static void configuration_facade_real_set_display_sidebar (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4030 "ConfigurationInterfaces.c"
+#line 4040 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally102;
-	__catch102_configuration_error:
+	goto __finally103;
+	__catch103_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4049,9 +4059,9 @@ static void configuration_facade_real_set_display_sidebar (ConfigurationFacade* 
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4048 "ConfigurationInterfaces.c"
+#line 4058 "ConfigurationInterfaces.c"
 	}
-	__finally102:
+	__finally103:
 #line 657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4060,7 +4070,7 @@ static void configuration_facade_real_set_display_sidebar (ConfigurationFacade* 
 		g_clear_error (&_inner_error_);
 #line 657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4059 "ConfigurationInterfaces.c"
+#line 4069 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4070,7 +4080,7 @@ void configuration_facade_set_display_sidebar (ConfigurationFacade* self, gboole
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 656 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_sidebar (self, display);
-#line 4069 "ConfigurationInterfaces.c"
+#line 4079 "ConfigurationInterfaces.c"
 }
 
 
@@ -4099,8 +4109,8 @@ static gboolean configuration_facade_real_get_display_toolbar (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4098 "ConfigurationInterfaces.c"
-				goto __catch103_configuration_error;
+#line 4108 "ConfigurationInterfaces.c"
+				goto __catch104_configuration_error;
 			}
 #line 670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4108,16 +4118,16 @@ static gboolean configuration_facade_real_get_display_toolbar (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4107 "ConfigurationInterfaces.c"
+#line 4117 "ConfigurationInterfaces.c"
 		}
 #line 670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4113 "ConfigurationInterfaces.c"
+#line 4123 "ConfigurationInterfaces.c"
 	}
-	goto __finally103;
-	__catch103_configuration_error:
+	goto __finally104;
+	__catch104_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4135,16 +4145,16 @@ static gboolean configuration_facade_real_get_display_toolbar (ConfigurationFaca
 		_g_error_free0 (err);
 #line 674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4134 "ConfigurationInterfaces.c"
+#line 4144 "ConfigurationInterfaces.c"
 	}
-	__finally103:
+	__finally104:
 #line 669 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 669 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 669 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4143 "ConfigurationInterfaces.c"
+#line 4153 "ConfigurationInterfaces.c"
 }
 
 
@@ -4153,7 +4163,7 @@ gboolean configuration_facade_get_display_toolbar (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 668 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_toolbar (self);
-#line 4152 "ConfigurationInterfaces.c"
+#line 4162 "ConfigurationInterfaces.c"
 }
 
 
@@ -4177,8 +4187,8 @@ static void configuration_facade_real_set_display_toolbar (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 680 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4176 "ConfigurationInterfaces.c"
-				goto __catch104_configuration_error;
+#line 4186 "ConfigurationInterfaces.c"
+				goto __catch105_configuration_error;
 			}
 #line 680 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4186,11 +4196,11 @@ static void configuration_facade_real_set_display_toolbar (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 680 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4185 "ConfigurationInterfaces.c"
+#line 4195 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally104;
-	__catch104_configuration_error:
+	goto __finally105;
+	__catch105_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4204,9 +4214,9 @@ static void configuration_facade_real_set_display_toolbar (ConfigurationFacade* 
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4203 "ConfigurationInterfaces.c"
+#line 4213 "ConfigurationInterfaces.c"
 	}
-	__finally104:
+	__finally105:
 #line 679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4215,7 +4225,7 @@ static void configuration_facade_real_set_display_toolbar (ConfigurationFacade* 
 		g_clear_error (&_inner_error_);
 #line 679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4214 "ConfigurationInterfaces.c"
+#line 4224 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4225,7 +4235,7 @@ void configuration_facade_set_display_toolbar (ConfigurationFacade* self, gboole
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 678 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_toolbar (self, display);
-#line 4224 "ConfigurationInterfaces.c"
+#line 4234 "ConfigurationInterfaces.c"
 }
 
 
@@ -4254,8 +4264,8 @@ static gboolean configuration_facade_real_get_display_search_bar (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 691 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4253 "ConfigurationInterfaces.c"
-				goto __catch105_configuration_error;
+#line 4263 "ConfigurationInterfaces.c"
+				goto __catch106_configuration_error;
 			}
 #line 691 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4263,16 +4273,16 @@ static gboolean configuration_facade_real_get_display_search_bar (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 691 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4262 "ConfigurationInterfaces.c"
+#line 4272 "ConfigurationInterfaces.c"
 		}
 #line 691 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 691 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4268 "ConfigurationInterfaces.c"
+#line 4278 "ConfigurationInterfaces.c"
 	}
-	goto __finally105;
-	__catch105_configuration_error:
+	goto __finally106;
+	__catch106_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4290,16 +4300,16 @@ static gboolean configuration_facade_real_get_display_search_bar (ConfigurationF
 		_g_error_free0 (err);
 #line 695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4289 "ConfigurationInterfaces.c"
+#line 4299 "ConfigurationInterfaces.c"
 	}
-	__finally105:
+	__finally106:
 #line 690 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 690 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 690 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4298 "ConfigurationInterfaces.c"
+#line 4308 "ConfigurationInterfaces.c"
 }
 
 
@@ -4308,7 +4318,7 @@ gboolean configuration_facade_get_display_search_bar (ConfigurationFacade* self)
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 689 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_search_bar (self);
-#line 4307 "ConfigurationInterfaces.c"
+#line 4317 "ConfigurationInterfaces.c"
 }
 
 
@@ -4332,8 +4342,8 @@ static void configuration_facade_real_set_display_search_bar (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 701 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4331 "ConfigurationInterfaces.c"
-				goto __catch106_configuration_error;
+#line 4341 "ConfigurationInterfaces.c"
+				goto __catch107_configuration_error;
 			}
 #line 701 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4341,11 +4351,11 @@ static void configuration_facade_real_set_display_search_bar (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 701 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4340 "ConfigurationInterfaces.c"
+#line 4350 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally106;
-	__catch106_configuration_error:
+	goto __finally107;
+	__catch107_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4359,9 +4369,9 @@ static void configuration_facade_real_set_display_search_bar (ConfigurationFacad
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 700 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4358 "ConfigurationInterfaces.c"
+#line 4368 "ConfigurationInterfaces.c"
 	}
-	__finally106:
+	__finally107:
 #line 700 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 700 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4370,7 +4380,7 @@ static void configuration_facade_real_set_display_search_bar (ConfigurationFacad
 		g_clear_error (&_inner_error_);
 #line 700 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4369 "ConfigurationInterfaces.c"
+#line 4379 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4380,7 +4390,7 @@ void configuration_facade_set_display_search_bar (ConfigurationFacade* self, gbo
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 699 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_search_bar (self, display);
-#line 4379 "ConfigurationInterfaces.c"
+#line 4389 "ConfigurationInterfaces.c"
 }
 
 
@@ -4409,8 +4419,8 @@ static gboolean configuration_facade_real_get_display_photo_ratings (Configurati
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 712 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4408 "ConfigurationInterfaces.c"
-				goto __catch107_configuration_error;
+#line 4418 "ConfigurationInterfaces.c"
+				goto __catch108_configuration_error;
 			}
 #line 712 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4418,16 +4428,16 @@ static gboolean configuration_facade_real_get_display_photo_ratings (Configurati
 			g_clear_error (&_inner_error_);
 #line 712 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4417 "ConfigurationInterfaces.c"
+#line 4427 "ConfigurationInterfaces.c"
 		}
 #line 712 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 712 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4423 "ConfigurationInterfaces.c"
+#line 4433 "ConfigurationInterfaces.c"
 	}
-	goto __finally107;
-	__catch107_configuration_error:
+	goto __finally108;
+	__catch108_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4445,16 +4455,16 @@ static gboolean configuration_facade_real_get_display_photo_ratings (Configurati
 		_g_error_free0 (err);
 #line 716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4444 "ConfigurationInterfaces.c"
+#line 4454 "ConfigurationInterfaces.c"
 	}
-	__finally107:
+	__finally108:
 #line 711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4453 "ConfigurationInterfaces.c"
+#line 4463 "ConfigurationInterfaces.c"
 }
 
 
@@ -4463,7 +4473,7 @@ gboolean configuration_facade_get_display_photo_ratings (ConfigurationFacade* se
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 710 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_photo_ratings (self);
-#line 4462 "ConfigurationInterfaces.c"
+#line 4472 "ConfigurationInterfaces.c"
 }
 
 
@@ -4487,8 +4497,8 @@ static void configuration_facade_real_set_display_photo_ratings (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 722 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4486 "ConfigurationInterfaces.c"
-				goto __catch108_configuration_error;
+#line 4496 "ConfigurationInterfaces.c"
+				goto __catch109_configuration_error;
 			}
 #line 722 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4496,11 +4506,11 @@ static void configuration_facade_real_set_display_photo_ratings (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 722 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4495 "ConfigurationInterfaces.c"
+#line 4505 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally108;
-	__catch108_configuration_error:
+	goto __finally109;
+	__catch109_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4514,9 +4524,9 @@ static void configuration_facade_real_set_display_photo_ratings (ConfigurationFa
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4513 "ConfigurationInterfaces.c"
+#line 4523 "ConfigurationInterfaces.c"
 	}
-	__finally108:
+	__finally109:
 #line 721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4525,7 +4535,7 @@ static void configuration_facade_real_set_display_photo_ratings (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4524 "ConfigurationInterfaces.c"
+#line 4534 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4535,7 +4545,7 @@ void configuration_facade_set_display_photo_ratings (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 720 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_photo_ratings (self, display);
-#line 4534 "ConfigurationInterfaces.c"
+#line 4544 "ConfigurationInterfaces.c"
 }
 
 
@@ -4564,8 +4574,8 @@ static gboolean configuration_facade_real_get_display_photo_tags (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 733 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4563 "ConfigurationInterfaces.c"
-				goto __catch109_configuration_error;
+#line 4573 "ConfigurationInterfaces.c"
+				goto __catch110_configuration_error;
 			}
 #line 733 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4573,16 +4583,16 @@ static gboolean configuration_facade_real_get_display_photo_tags (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 733 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4572 "ConfigurationInterfaces.c"
+#line 4582 "ConfigurationInterfaces.c"
 		}
 #line 733 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 733 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4578 "ConfigurationInterfaces.c"
+#line 4588 "ConfigurationInterfaces.c"
 	}
-	goto __finally109;
-	__catch109_configuration_error:
+	goto __finally110;
+	__catch110_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4600,16 +4610,16 @@ static gboolean configuration_facade_real_get_display_photo_tags (ConfigurationF
 		_g_error_free0 (err);
 #line 737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4599 "ConfigurationInterfaces.c"
+#line 4609 "ConfigurationInterfaces.c"
 	}
-	__finally109:
+	__finally110:
 #line 732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4608 "ConfigurationInterfaces.c"
+#line 4618 "ConfigurationInterfaces.c"
 }
 
 
@@ -4618,7 +4628,7 @@ gboolean configuration_facade_get_display_photo_tags (ConfigurationFacade* self)
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 731 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_photo_tags (self);
-#line 4617 "ConfigurationInterfaces.c"
+#line 4627 "ConfigurationInterfaces.c"
 }
 
 
@@ -4642,8 +4652,8 @@ static void configuration_facade_real_set_display_photo_tags (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 743 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4641 "ConfigurationInterfaces.c"
-				goto __catch110_configuration_error;
+#line 4651 "ConfigurationInterfaces.c"
+				goto __catch111_configuration_error;
 			}
 #line 743 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4651,11 +4661,11 @@ static void configuration_facade_real_set_display_photo_tags (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 743 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4650 "ConfigurationInterfaces.c"
+#line 4660 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally110;
-	__catch110_configuration_error:
+	goto __finally111;
+	__catch111_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4669,9 +4679,9 @@ static void configuration_facade_real_set_display_photo_tags (ConfigurationFacad
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 742 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4668 "ConfigurationInterfaces.c"
+#line 4678 "ConfigurationInterfaces.c"
 	}
-	__finally110:
+	__finally111:
 #line 742 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 742 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4680,7 +4690,7 @@ static void configuration_facade_real_set_display_photo_tags (ConfigurationFacad
 		g_clear_error (&_inner_error_);
 #line 742 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4679 "ConfigurationInterfaces.c"
+#line 4689 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4690,7 +4700,7 @@ void configuration_facade_set_display_photo_tags (ConfigurationFacade* self, gbo
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 741 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_photo_tags (self, display);
-#line 4689 "ConfigurationInterfaces.c"
+#line 4699 "ConfigurationInterfaces.c"
 }
 
 
@@ -4719,8 +4729,8 @@ static gboolean configuration_facade_real_get_display_photo_titles (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4718 "ConfigurationInterfaces.c"
-				goto __catch111_configuration_error;
+#line 4728 "ConfigurationInterfaces.c"
+				goto __catch112_configuration_error;
 			}
 #line 754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4728,16 +4738,16 @@ static gboolean configuration_facade_real_get_display_photo_titles (Configuratio
 			g_clear_error (&_inner_error_);
 #line 754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4727 "ConfigurationInterfaces.c"
+#line 4737 "ConfigurationInterfaces.c"
 		}
 #line 754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4733 "ConfigurationInterfaces.c"
+#line 4743 "ConfigurationInterfaces.c"
 	}
-	goto __finally111;
-	__catch111_configuration_error:
+	goto __finally112;
+	__catch112_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4755,16 +4765,16 @@ static gboolean configuration_facade_real_get_display_photo_titles (Configuratio
 		_g_error_free0 (err);
 #line 758 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4754 "ConfigurationInterfaces.c"
+#line 4764 "ConfigurationInterfaces.c"
 	}
-	__finally111:
+	__finally112:
 #line 753 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 753 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 753 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4763 "ConfigurationInterfaces.c"
+#line 4773 "ConfigurationInterfaces.c"
 }
 
 
@@ -4773,7 +4783,7 @@ gboolean configuration_facade_get_display_photo_titles (ConfigurationFacade* sel
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 752 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_photo_titles (self);
-#line 4772 "ConfigurationInterfaces.c"
+#line 4782 "ConfigurationInterfaces.c"
 }
 
 
@@ -4797,8 +4807,8 @@ static void configuration_facade_real_set_display_photo_titles (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 764 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4796 "ConfigurationInterfaces.c"
-				goto __catch112_configuration_error;
+#line 4806 "ConfigurationInterfaces.c"
+				goto __catch113_configuration_error;
 			}
 #line 764 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4806,11 +4816,11 @@ static void configuration_facade_real_set_display_photo_titles (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 764 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4805 "ConfigurationInterfaces.c"
+#line 4815 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally112;
-	__catch112_configuration_error:
+	goto __finally113;
+	__catch113_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4824,9 +4834,9 @@ static void configuration_facade_real_set_display_photo_titles (ConfigurationFac
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4823 "ConfigurationInterfaces.c"
+#line 4833 "ConfigurationInterfaces.c"
 	}
-	__finally112:
+	__finally113:
 #line 763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4835,7 +4845,7 @@ static void configuration_facade_real_set_display_photo_titles (ConfigurationFac
 		g_clear_error (&_inner_error_);
 #line 763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4834 "ConfigurationInterfaces.c"
+#line 4844 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -4845,7 +4855,7 @@ void configuration_facade_set_display_photo_titles (ConfigurationFacade* self, g
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_photo_titles (self, display);
-#line 4844 "ConfigurationInterfaces.c"
+#line 4854 "ConfigurationInterfaces.c"
 }
 
 
@@ -4874,8 +4884,8 @@ static gboolean configuration_facade_real_get_display_photo_comments (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4873 "ConfigurationInterfaces.c"
-				goto __catch113_configuration_error;
+#line 4883 "ConfigurationInterfaces.c"
+				goto __catch114_configuration_error;
 			}
 #line 775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4883,16 +4893,16 @@ static gboolean configuration_facade_real_get_display_photo_comments (Configurat
 			g_clear_error (&_inner_error_);
 #line 775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 4882 "ConfigurationInterfaces.c"
+#line 4892 "ConfigurationInterfaces.c"
 		}
 #line 775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4888 "ConfigurationInterfaces.c"
+#line 4898 "ConfigurationInterfaces.c"
 	}
-	goto __finally113;
-	__catch113_configuration_error:
+	goto __finally114;
+	__catch114_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -4910,16 +4920,16 @@ static gboolean configuration_facade_real_get_display_photo_comments (Configurat
 		_g_error_free0 (err);
 #line 779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 4909 "ConfigurationInterfaces.c"
+#line 4919 "ConfigurationInterfaces.c"
 	}
-	__finally113:
+	__finally114:
 #line 774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 4918 "ConfigurationInterfaces.c"
+#line 4928 "ConfigurationInterfaces.c"
 }
 
 
@@ -4928,7 +4938,7 @@ gboolean configuration_facade_get_display_photo_comments (ConfigurationFacade* s
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_photo_comments (self);
-#line 4927 "ConfigurationInterfaces.c"
+#line 4937 "ConfigurationInterfaces.c"
 }
 
 
@@ -4952,8 +4962,8 @@ static void configuration_facade_real_set_display_photo_comments (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 4951 "ConfigurationInterfaces.c"
-				goto __catch114_configuration_error;
+#line 4961 "ConfigurationInterfaces.c"
+				goto __catch115_configuration_error;
 			}
 #line 785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4961,11 +4971,11 @@ static void configuration_facade_real_set_display_photo_comments (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 4960 "ConfigurationInterfaces.c"
+#line 4970 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally114;
-	__catch114_configuration_error:
+	goto __finally115;
+	__catch115_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -4979,9 +4989,9 @@ static void configuration_facade_real_set_display_photo_comments (ConfigurationF
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 784 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 4978 "ConfigurationInterfaces.c"
+#line 4988 "ConfigurationInterfaces.c"
 	}
-	__finally114:
+	__finally115:
 #line 784 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 784 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -4990,7 +5000,7 @@ static void configuration_facade_real_set_display_photo_comments (ConfigurationF
 		g_clear_error (&_inner_error_);
 #line 784 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 4989 "ConfigurationInterfaces.c"
+#line 4999 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5000,7 +5010,7 @@ void configuration_facade_set_display_photo_comments (ConfigurationFacade* self,
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_photo_comments (self, display);
-#line 4999 "ConfigurationInterfaces.c"
+#line 5009 "ConfigurationInterfaces.c"
 }
 
 
@@ -5029,8 +5039,8 @@ static gboolean configuration_facade_real_get_display_event_comments (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5028 "ConfigurationInterfaces.c"
-				goto __catch115_configuration_error;
+#line 5038 "ConfigurationInterfaces.c"
+				goto __catch116_configuration_error;
 			}
 #line 796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5038,16 +5048,16 @@ static gboolean configuration_facade_real_get_display_event_comments (Configurat
 			g_clear_error (&_inner_error_);
 #line 796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 5037 "ConfigurationInterfaces.c"
+#line 5047 "ConfigurationInterfaces.c"
 		}
 #line 796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5043 "ConfigurationInterfaces.c"
+#line 5053 "ConfigurationInterfaces.c"
 	}
-	goto __finally115;
-	__catch115_configuration_error:
+	goto __finally116;
+	__catch116_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -5065,16 +5075,16 @@ static gboolean configuration_facade_real_get_display_event_comments (Configurat
 		_g_error_free0 (err);
 #line 800 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5064 "ConfigurationInterfaces.c"
+#line 5074 "ConfigurationInterfaces.c"
 	}
-	__finally115:
+	__finally116:
 #line 795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 5073 "ConfigurationInterfaces.c"
+#line 5083 "ConfigurationInterfaces.c"
 }
 
 
@@ -5083,7 +5093,7 @@ gboolean configuration_facade_get_display_event_comments (ConfigurationFacade* s
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_display_event_comments (self);
-#line 5082 "ConfigurationInterfaces.c"
+#line 5092 "ConfigurationInterfaces.c"
 }
 
 
@@ -5107,8 +5117,8 @@ static void configuration_facade_real_set_display_event_comments (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5106 "ConfigurationInterfaces.c"
-				goto __catch116_configuration_error;
+#line 5116 "ConfigurationInterfaces.c"
+				goto __catch117_configuration_error;
 			}
 #line 806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5116,11 +5126,11 @@ static void configuration_facade_real_set_display_event_comments (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5115 "ConfigurationInterfaces.c"
+#line 5125 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally116;
-	__catch116_configuration_error:
+	goto __finally117;
+	__catch117_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -5134,9 +5144,9 @@ static void configuration_facade_real_set_display_event_comments (ConfigurationF
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 5133 "ConfigurationInterfaces.c"
+#line 5143 "ConfigurationInterfaces.c"
 	}
-	__finally116:
+	__finally117:
 #line 805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5145,7 +5155,7 @@ static void configuration_facade_real_set_display_event_comments (ConfigurationF
 		g_clear_error (&_inner_error_);
 #line 805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5144 "ConfigurationInterfaces.c"
+#line 5154 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5155,7 +5165,7 @@ void configuration_facade_set_display_event_comments (ConfigurationFacade* self,
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 804 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_display_event_comments (self, display);
-#line 5154 "ConfigurationInterfaces.c"
+#line 5164 "ConfigurationInterfaces.c"
 }
 
 
@@ -5167,7 +5177,7 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 	_vala_sort_order = FALSE;
 #line 817 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_vala_sort_by = 2;
-#line 5166 "ConfigurationInterfaces.c"
+#line 5176 "ConfigurationInterfaces.c"
 	{
 		gboolean _tmp0_ = FALSE;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -5195,8 +5205,8 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 819 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5194 "ConfigurationInterfaces.c"
-				goto __catch117_configuration_error;
+#line 5204 "ConfigurationInterfaces.c"
+				goto __catch118_configuration_error;
 			}
 #line 819 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5204,7 +5214,7 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 819 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5203 "ConfigurationInterfaces.c"
+#line 5213 "ConfigurationInterfaces.c"
 		}
 #line 819 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_sort_order = _tmp0_;
@@ -5224,8 +5234,8 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 821 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5223 "ConfigurationInterfaces.c"
-				goto __catch117_configuration_error;
+#line 5233 "ConfigurationInterfaces.c"
+				goto __catch118_configuration_error;
 			}
 #line 821 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5233,14 +5243,14 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 821 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5232 "ConfigurationInterfaces.c"
+#line 5242 "ConfigurationInterfaces.c"
 		}
 #line 821 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_sort_by = _tmp5_;
-#line 5236 "ConfigurationInterfaces.c"
+#line 5246 "ConfigurationInterfaces.c"
 	}
-	goto __finally117;
-	__catch117_configuration_error:
+	goto __finally118;
+	__catch118_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -5254,9 +5264,9 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 		configuration_facade_on_configuration_error (self, _tmp10_);
 #line 818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 5253 "ConfigurationInterfaces.c"
+#line 5263 "ConfigurationInterfaces.c"
 	}
-	__finally117:
+	__finally118:
 #line 818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5265,19 +5275,19 @@ static void configuration_facade_real_get_event_photos_sort (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5264 "ConfigurationInterfaces.c"
+#line 5274 "ConfigurationInterfaces.c"
 	}
 #line 815 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (sort_order) {
 #line 815 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*sort_order = _vala_sort_order;
-#line 5270 "ConfigurationInterfaces.c"
+#line 5280 "ConfigurationInterfaces.c"
 	}
 #line 815 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (sort_by) {
 #line 815 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*sort_by = _vala_sort_by;
-#line 5276 "ConfigurationInterfaces.c"
+#line 5286 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5287,7 +5297,7 @@ void configuration_facade_get_event_photos_sort (ConfigurationFacade* self, gboo
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 815 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->get_event_photos_sort (self, sort_order, sort_by);
-#line 5286 "ConfigurationInterfaces.c"
+#line 5296 "ConfigurationInterfaces.c"
 }
 
 
@@ -5314,8 +5324,8 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 829 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5313 "ConfigurationInterfaces.c"
-				goto __catch118_configuration_error;
+#line 5323 "ConfigurationInterfaces.c"
+				goto __catch119_configuration_error;
 			}
 #line 829 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5323,7 +5333,7 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 829 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5322 "ConfigurationInterfaces.c"
+#line 5332 "ConfigurationInterfaces.c"
 		}
 #line 831 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -5339,8 +5349,8 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 831 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5338 "ConfigurationInterfaces.c"
-				goto __catch118_configuration_error;
+#line 5348 "ConfigurationInterfaces.c"
+				goto __catch119_configuration_error;
 			}
 #line 831 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5348,11 +5358,11 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 831 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5347 "ConfigurationInterfaces.c"
+#line 5357 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally118;
-	__catch118_configuration_error:
+	goto __finally119;
+	__catch119_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -5366,9 +5376,9 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 		configuration_facade_on_configuration_error (self, _tmp6_);
 #line 828 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 5365 "ConfigurationInterfaces.c"
+#line 5375 "ConfigurationInterfaces.c"
 	}
-	__finally118:
+	__finally119:
 #line 828 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 828 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5377,7 +5387,7 @@ static void configuration_facade_real_set_event_photos_sort (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 828 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5376 "ConfigurationInterfaces.c"
+#line 5386 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5387,7 +5397,7 @@ void configuration_facade_set_event_photos_sort (ConfigurationFacade* self, gboo
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 827 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_event_photos_sort (self, sort_order, sort_by);
-#line 5386 "ConfigurationInterfaces.c"
+#line 5396 "ConfigurationInterfaces.c"
 }
 
 
@@ -5416,8 +5426,8 @@ static gboolean configuration_facade_real_get_events_sort_ascending (Configurati
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 843 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5415 "ConfigurationInterfaces.c"
-				goto __catch119_configuration_error;
+#line 5425 "ConfigurationInterfaces.c"
+				goto __catch120_configuration_error;
 			}
 #line 843 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5425,16 +5435,16 @@ static gboolean configuration_facade_real_get_events_sort_ascending (Configurati
 			g_clear_error (&_inner_error_);
 #line 843 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 5424 "ConfigurationInterfaces.c"
+#line 5434 "ConfigurationInterfaces.c"
 		}
 #line 843 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 843 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5430 "ConfigurationInterfaces.c"
+#line 5440 "ConfigurationInterfaces.c"
 	}
-	goto __finally119;
-	__catch119_configuration_error:
+	goto __finally120;
+	__catch120_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -5452,16 +5462,16 @@ static gboolean configuration_facade_real_get_events_sort_ascending (Configurati
 		_g_error_free0 (err);
 #line 847 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5451 "ConfigurationInterfaces.c"
+#line 5461 "ConfigurationInterfaces.c"
 	}
-	__finally119:
+	__finally120:
 #line 842 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 842 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 842 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 5460 "ConfigurationInterfaces.c"
+#line 5470 "ConfigurationInterfaces.c"
 }
 
 
@@ -5470,7 +5480,7 @@ gboolean configuration_facade_get_events_sort_ascending (ConfigurationFacade* se
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 841 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_events_sort_ascending (self);
-#line 5469 "ConfigurationInterfaces.c"
+#line 5479 "ConfigurationInterfaces.c"
 }
 
 
@@ -5494,8 +5504,8 @@ static void configuration_facade_real_set_events_sort_ascending (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 853 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5493 "ConfigurationInterfaces.c"
-				goto __catch120_configuration_error;
+#line 5503 "ConfigurationInterfaces.c"
+				goto __catch121_configuration_error;
 			}
 #line 853 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5503,11 +5513,11 @@ static void configuration_facade_real_set_events_sort_ascending (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 853 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5502 "ConfigurationInterfaces.c"
+#line 5512 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally120;
-	__catch120_configuration_error:
+	goto __finally121;
+	__catch121_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -5523,9 +5533,9 @@ static void configuration_facade_real_set_events_sort_ascending (ConfigurationFa
 		_g_error_free0 (err);
 #line 856 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5522 "ConfigurationInterfaces.c"
+#line 5532 "ConfigurationInterfaces.c"
 	}
-	__finally120:
+	__finally121:
 #line 852 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 852 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5534,7 +5544,7 @@ static void configuration_facade_real_set_events_sort_ascending (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 852 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5533 "ConfigurationInterfaces.c"
+#line 5543 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5544,7 +5554,7 @@ void configuration_facade_set_events_sort_ascending (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 851 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_events_sort_ascending (self, sort);
-#line 5543 "ConfigurationInterfaces.c"
+#line 5553 "ConfigurationInterfaces.c"
 }
 
 
@@ -5574,8 +5584,8 @@ static gchar* configuration_facade_real_get_external_photo_app (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 865 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5573 "ConfigurationInterfaces.c"
-				goto __catch121_configuration_error;
+#line 5583 "ConfigurationInterfaces.c"
+				goto __catch122_configuration_error;
 			}
 #line 865 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5583,7 +5593,7 @@ static gchar* configuration_facade_real_get_external_photo_app (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 865 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 5582 "ConfigurationInterfaces.c"
+#line 5592 "ConfigurationInterfaces.c"
 		}
 #line 865 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -5595,10 +5605,10 @@ static gchar* configuration_facade_real_get_external_photo_app (ConfigurationFac
 		_g_free0 (_tmp0_);
 #line 865 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5594 "ConfigurationInterfaces.c"
+#line 5604 "ConfigurationInterfaces.c"
 	}
-	goto __finally121;
-	__catch121_configuration_error:
+	goto __finally122;
+	__catch122_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -5619,16 +5629,16 @@ static gchar* configuration_facade_real_get_external_photo_app (ConfigurationFac
 		_g_error_free0 (err);
 #line 869 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5618 "ConfigurationInterfaces.c"
+#line 5628 "ConfigurationInterfaces.c"
 	}
-	__finally121:
+	__finally122:
 #line 864 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 864 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 864 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 5627 "ConfigurationInterfaces.c"
+#line 5637 "ConfigurationInterfaces.c"
 }
 
 
@@ -5637,7 +5647,7 @@ gchar* configuration_facade_get_external_photo_app (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 863 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_external_photo_app (self);
-#line 5636 "ConfigurationInterfaces.c"
+#line 5646 "ConfigurationInterfaces.c"
 }
 
 
@@ -5645,7 +5655,7 @@ static void configuration_facade_real_set_external_photo_app (ConfigurationFacad
 	GError * _inner_error_ = NULL;
 #line 873 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (external_photo_app != NULL);
-#line 5644 "ConfigurationInterfaces.c"
+#line 5654 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -5664,8 +5674,8 @@ static void configuration_facade_real_set_external_photo_app (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 875 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5663 "ConfigurationInterfaces.c"
-				goto __catch122_configuration_error;
+#line 5673 "ConfigurationInterfaces.c"
+				goto __catch123_configuration_error;
 			}
 #line 875 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5673,11 +5683,11 @@ static void configuration_facade_real_set_external_photo_app (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 875 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5672 "ConfigurationInterfaces.c"
+#line 5682 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally122;
-	__catch122_configuration_error:
+	goto __finally123;
+	__catch123_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -5693,9 +5703,9 @@ static void configuration_facade_real_set_external_photo_app (ConfigurationFacad
 		_g_error_free0 (err);
 #line 879 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5692 "ConfigurationInterfaces.c"
+#line 5702 "ConfigurationInterfaces.c"
 	}
-	__finally122:
+	__finally123:
 #line 874 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 874 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5704,7 +5714,7 @@ static void configuration_facade_real_set_external_photo_app (ConfigurationFacad
 		g_clear_error (&_inner_error_);
 #line 874 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5703 "ConfigurationInterfaces.c"
+#line 5713 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5714,7 +5724,7 @@ void configuration_facade_set_external_photo_app (ConfigurationFacade* self, con
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 873 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_external_photo_app (self, external_photo_app);
-#line 5713 "ConfigurationInterfaces.c"
+#line 5723 "ConfigurationInterfaces.c"
 }
 
 
@@ -5744,8 +5754,8 @@ static gchar* configuration_facade_real_get_external_raw_app (ConfigurationFacad
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 888 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5743 "ConfigurationInterfaces.c"
-				goto __catch123_configuration_error;
+#line 5753 "ConfigurationInterfaces.c"
+				goto __catch124_configuration_error;
 			}
 #line 888 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5753,7 +5763,7 @@ static gchar* configuration_facade_real_get_external_raw_app (ConfigurationFacad
 			g_clear_error (&_inner_error_);
 #line 888 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 5752 "ConfigurationInterfaces.c"
+#line 5762 "ConfigurationInterfaces.c"
 		}
 #line 888 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -5765,10 +5775,10 @@ static gchar* configuration_facade_real_get_external_raw_app (ConfigurationFacad
 		_g_free0 (_tmp0_);
 #line 888 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5764 "ConfigurationInterfaces.c"
+#line 5774 "ConfigurationInterfaces.c"
 	}
-	goto __finally123;
-	__catch123_configuration_error:
+	goto __finally124;
+	__catch124_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -5789,16 +5799,16 @@ static gchar* configuration_facade_real_get_external_raw_app (ConfigurationFacad
 		_g_error_free0 (err);
 #line 892 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5788 "ConfigurationInterfaces.c"
+#line 5798 "ConfigurationInterfaces.c"
 	}
-	__finally123:
+	__finally124:
 #line 887 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 887 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 887 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 5797 "ConfigurationInterfaces.c"
+#line 5807 "ConfigurationInterfaces.c"
 }
 
 
@@ -5807,7 +5817,7 @@ gchar* configuration_facade_get_external_raw_app (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 886 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_external_raw_app (self);
-#line 5806 "ConfigurationInterfaces.c"
+#line 5816 "ConfigurationInterfaces.c"
 }
 
 
@@ -5815,7 +5825,7 @@ static void configuration_facade_real_set_external_raw_app (ConfigurationFacade*
 	GError * _inner_error_ = NULL;
 #line 896 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (external_raw_app != NULL);
-#line 5814 "ConfigurationInterfaces.c"
+#line 5824 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -5834,8 +5844,8 @@ static void configuration_facade_real_set_external_raw_app (ConfigurationFacade*
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 898 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5833 "ConfigurationInterfaces.c"
-				goto __catch124_configuration_error;
+#line 5843 "ConfigurationInterfaces.c"
+				goto __catch125_configuration_error;
 			}
 #line 898 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5843,11 +5853,11 @@ static void configuration_facade_real_set_external_raw_app (ConfigurationFacade*
 			g_clear_error (&_inner_error_);
 #line 898 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5842 "ConfigurationInterfaces.c"
+#line 5852 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally124;
-	__catch124_configuration_error:
+	goto __finally125;
+	__catch125_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -5863,9 +5873,9 @@ static void configuration_facade_real_set_external_raw_app (ConfigurationFacade*
 		_g_error_free0 (err);
 #line 902 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5862 "ConfigurationInterfaces.c"
+#line 5872 "ConfigurationInterfaces.c"
 	}
-	__finally124:
+	__finally125:
 #line 897 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 897 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -5874,7 +5884,7 @@ static void configuration_facade_real_set_external_raw_app (ConfigurationFacade*
 		g_clear_error (&_inner_error_);
 #line 897 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 5873 "ConfigurationInterfaces.c"
+#line 5883 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -5884,7 +5894,7 @@ void configuration_facade_set_external_raw_app (ConfigurationFacade* self, const
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 896 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_external_raw_app (self, external_raw_app);
-#line 5883 "ConfigurationInterfaces.c"
+#line 5893 "ConfigurationInterfaces.c"
 }
 
 
@@ -5913,8 +5923,8 @@ static ScaleConstraint configuration_facade_real_get_export_constraint (Configur
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 911 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5912 "ConfigurationInterfaces.c"
-				goto __catch125_configuration_error;
+#line 5922 "ConfigurationInterfaces.c"
+				goto __catch126_configuration_error;
 			}
 #line 911 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5922,16 +5932,16 @@ static ScaleConstraint configuration_facade_real_get_export_constraint (Configur
 			g_clear_error (&_inner_error_);
 #line 911 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 5921 "ConfigurationInterfaces.c"
+#line 5931 "ConfigurationInterfaces.c"
 		}
 #line 911 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = (ScaleConstraint) _tmp0_;
 #line 911 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5927 "ConfigurationInterfaces.c"
+#line 5937 "ConfigurationInterfaces.c"
 	}
-	goto __finally125;
-	__catch125_configuration_error:
+	goto __finally126;
+	__catch126_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -5949,16 +5959,16 @@ static ScaleConstraint configuration_facade_real_get_export_constraint (Configur
 		_g_error_free0 (err);
 #line 915 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 5948 "ConfigurationInterfaces.c"
+#line 5958 "ConfigurationInterfaces.c"
 	}
-	__finally125:
+	__finally126:
 #line 910 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 910 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 910 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 5957 "ConfigurationInterfaces.c"
+#line 5967 "ConfigurationInterfaces.c"
 }
 
 
@@ -5967,7 +5977,7 @@ ScaleConstraint configuration_facade_get_export_constraint (ConfigurationFacade*
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 909 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_constraint (self);
-#line 5966 "ConfigurationInterfaces.c"
+#line 5976 "ConfigurationInterfaces.c"
 }
 
 
@@ -5991,8 +6001,8 @@ static void configuration_facade_real_set_export_constraint (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 921 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 5990 "ConfigurationInterfaces.c"
-				goto __catch126_configuration_error;
+#line 6000 "ConfigurationInterfaces.c"
+				goto __catch127_configuration_error;
 			}
 #line 921 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6000,11 +6010,11 @@ static void configuration_facade_real_set_export_constraint (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 921 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 5999 "ConfigurationInterfaces.c"
+#line 6009 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally126;
-	__catch126_configuration_error:
+	goto __finally127;
+	__catch127_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -6020,9 +6030,9 @@ static void configuration_facade_real_set_export_constraint (ConfigurationFacade
 		_g_error_free0 (err);
 #line 924 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6019 "ConfigurationInterfaces.c"
+#line 6029 "ConfigurationInterfaces.c"
 	}
-	__finally126:
+	__finally127:
 #line 920 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 920 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6031,7 +6041,7 @@ static void configuration_facade_real_set_export_constraint (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 920 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6030 "ConfigurationInterfaces.c"
+#line 6040 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6041,7 +6051,7 @@ void configuration_facade_set_export_constraint (ConfigurationFacade* self, Scal
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 919 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_constraint (self, constraint);
-#line 6040 "ConfigurationInterfaces.c"
+#line 6050 "ConfigurationInterfaces.c"
 }
 
 
@@ -6070,8 +6080,8 @@ static ExportFormatMode configuration_facade_real_get_export_export_format_mode 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 930 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6069 "ConfigurationInterfaces.c"
-				goto __catch127_configuration_error;
+#line 6079 "ConfigurationInterfaces.c"
+				goto __catch128_configuration_error;
 			}
 #line 930 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6079,16 +6089,16 @@ static ExportFormatMode configuration_facade_real_get_export_export_format_mode 
 			g_clear_error (&_inner_error_);
 #line 930 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 6078 "ConfigurationInterfaces.c"
+#line 6088 "ConfigurationInterfaces.c"
 		}
 #line 930 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = (ExportFormatMode) _tmp0_;
 #line 930 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6084 "ConfigurationInterfaces.c"
+#line 6094 "ConfigurationInterfaces.c"
 	}
-	goto __finally127;
-	__catch127_configuration_error:
+	goto __finally128;
+	__catch128_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -6106,16 +6116,16 @@ static ExportFormatMode configuration_facade_real_get_export_export_format_mode 
 		_g_error_free0 (err);
 #line 934 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6105 "ConfigurationInterfaces.c"
+#line 6115 "ConfigurationInterfaces.c"
 	}
-	__finally127:
+	__finally128:
 #line 929 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 929 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 929 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 6114 "ConfigurationInterfaces.c"
+#line 6124 "ConfigurationInterfaces.c"
 }
 
 
@@ -6124,7 +6134,7 @@ ExportFormatMode configuration_facade_get_export_export_format_mode (Configurati
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 928 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_export_format_mode (self);
-#line 6123 "ConfigurationInterfaces.c"
+#line 6133 "ConfigurationInterfaces.c"
 }
 
 
@@ -6148,8 +6158,8 @@ static void configuration_facade_real_set_export_export_format_mode (Configurati
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 940 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6147 "ConfigurationInterfaces.c"
-				goto __catch128_configuration_error;
+#line 6157 "ConfigurationInterfaces.c"
+				goto __catch129_configuration_error;
 			}
 #line 940 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6157,11 +6167,11 @@ static void configuration_facade_real_set_export_export_format_mode (Configurati
 			g_clear_error (&_inner_error_);
 #line 940 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6156 "ConfigurationInterfaces.c"
+#line 6166 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally128;
-	__catch128_configuration_error:
+	goto __finally129;
+	__catch129_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -6177,9 +6187,9 @@ static void configuration_facade_real_set_export_export_format_mode (Configurati
 		_g_error_free0 (err);
 #line 943 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6176 "ConfigurationInterfaces.c"
+#line 6186 "ConfigurationInterfaces.c"
 	}
-	__finally128:
+	__finally129:
 #line 939 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 939 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6188,7 +6198,7 @@ static void configuration_facade_real_set_export_export_format_mode (Configurati
 		g_clear_error (&_inner_error_);
 #line 939 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6187 "ConfigurationInterfaces.c"
+#line 6197 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6198,7 +6208,7 @@ void configuration_facade_set_export_export_format_mode (ConfigurationFacade* se
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 938 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_export_format_mode (self, export_format_mode);
-#line 6197 "ConfigurationInterfaces.c"
+#line 6207 "ConfigurationInterfaces.c"
 }
 
 
@@ -6227,8 +6237,8 @@ static gboolean configuration_facade_real_get_export_export_metadata (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 949 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6226 "ConfigurationInterfaces.c"
-				goto __catch129_configuration_error;
+#line 6236 "ConfigurationInterfaces.c"
+				goto __catch130_configuration_error;
 			}
 #line 949 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6236,16 +6246,16 @@ static gboolean configuration_facade_real_get_export_export_metadata (Configurat
 			g_clear_error (&_inner_error_);
 #line 949 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 6235 "ConfigurationInterfaces.c"
+#line 6245 "ConfigurationInterfaces.c"
 		}
 #line 949 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 949 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6241 "ConfigurationInterfaces.c"
+#line 6251 "ConfigurationInterfaces.c"
 	}
-	goto __finally129;
-	__catch129_configuration_error:
+	goto __finally130;
+	__catch130_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -6263,16 +6273,16 @@ static gboolean configuration_facade_real_get_export_export_metadata (Configurat
 		_g_error_free0 (err);
 #line 953 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6262 "ConfigurationInterfaces.c"
+#line 6272 "ConfigurationInterfaces.c"
 	}
-	__finally129:
+	__finally130:
 #line 948 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 948 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 948 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 6271 "ConfigurationInterfaces.c"
+#line 6281 "ConfigurationInterfaces.c"
 }
 
 
@@ -6281,7 +6291,7 @@ gboolean configuration_facade_get_export_export_metadata (ConfigurationFacade* s
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 947 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_export_metadata (self);
-#line 6280 "ConfigurationInterfaces.c"
+#line 6290 "ConfigurationInterfaces.c"
 }
 
 
@@ -6305,8 +6315,8 @@ static void configuration_facade_real_set_export_export_metadata (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 959 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6304 "ConfigurationInterfaces.c"
-				goto __catch130_configuration_error;
+#line 6314 "ConfigurationInterfaces.c"
+				goto __catch131_configuration_error;
 			}
 #line 959 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6314,11 +6324,11 @@ static void configuration_facade_real_set_export_export_metadata (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 959 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6313 "ConfigurationInterfaces.c"
+#line 6323 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally130;
-	__catch130_configuration_error:
+	goto __finally131;
+	__catch131_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -6334,9 +6344,9 @@ static void configuration_facade_real_set_export_export_metadata (ConfigurationF
 		_g_error_free0 (err);
 #line 962 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6333 "ConfigurationInterfaces.c"
+#line 6343 "ConfigurationInterfaces.c"
 	}
-	__finally130:
+	__finally131:
 #line 958 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 958 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6345,7 +6355,7 @@ static void configuration_facade_real_set_export_export_metadata (ConfigurationF
 		g_clear_error (&_inner_error_);
 #line 958 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6344 "ConfigurationInterfaces.c"
+#line 6354 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6355,7 +6365,7 @@ void configuration_facade_set_export_export_metadata (ConfigurationFacade* self,
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 957 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_export_metadata (self, export_metadata);
-#line 6354 "ConfigurationInterfaces.c"
+#line 6364 "ConfigurationInterfaces.c"
 }
 
 
@@ -6385,8 +6395,8 @@ static PhotoFileFormat configuration_facade_real_get_export_photo_file_format (C
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 968 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6384 "ConfigurationInterfaces.c"
-				goto __catch131_configuration_error;
+#line 6394 "ConfigurationInterfaces.c"
+				goto __catch132_configuration_error;
 			}
 #line 968 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6394,7 +6404,7 @@ static PhotoFileFormat configuration_facade_real_get_export_photo_file_format (C
 			g_clear_error (&_inner_error_);
 #line 968 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 6393 "ConfigurationInterfaces.c"
+#line 6403 "ConfigurationInterfaces.c"
 		}
 #line 968 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = photo_file_format_unserialize (_tmp0_);
@@ -6402,10 +6412,10 @@ static PhotoFileFormat configuration_facade_real_get_export_photo_file_format (C
 		result = _tmp5_;
 #line 968 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6401 "ConfigurationInterfaces.c"
+#line 6411 "ConfigurationInterfaces.c"
 	}
-	goto __finally131;
-	__catch131_configuration_error:
+	goto __finally132;
+	__catch132_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -6423,16 +6433,16 @@ static PhotoFileFormat configuration_facade_real_get_export_photo_file_format (C
 		_g_error_free0 (err);
 #line 972 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6422 "ConfigurationInterfaces.c"
+#line 6432 "ConfigurationInterfaces.c"
 	}
-	__finally131:
+	__finally132:
 #line 967 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 967 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 967 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 6431 "ConfigurationInterfaces.c"
+#line 6441 "ConfigurationInterfaces.c"
 }
 
 
@@ -6441,7 +6451,7 @@ PhotoFileFormat configuration_facade_get_export_photo_file_format (Configuration
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 966 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_photo_file_format (self);
-#line 6440 "ConfigurationInterfaces.c"
+#line 6450 "ConfigurationInterfaces.c"
 }
 
 
@@ -6468,8 +6478,8 @@ static void configuration_facade_real_set_export_photo_file_format (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 978 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6467 "ConfigurationInterfaces.c"
-				goto __catch132_configuration_error;
+#line 6477 "ConfigurationInterfaces.c"
+				goto __catch133_configuration_error;
 			}
 #line 978 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6477,11 +6487,11 @@ static void configuration_facade_real_set_export_photo_file_format (Configuratio
 			g_clear_error (&_inner_error_);
 #line 978 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6476 "ConfigurationInterfaces.c"
+#line 6486 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally132;
-	__catch132_configuration_error:
+	goto __finally133;
+	__catch133_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -6497,9 +6507,9 @@ static void configuration_facade_real_set_export_photo_file_format (Configuratio
 		_g_error_free0 (err);
 #line 981 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6496 "ConfigurationInterfaces.c"
+#line 6506 "ConfigurationInterfaces.c"
 	}
-	__finally132:
+	__finally133:
 #line 977 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 977 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6508,7 +6518,7 @@ static void configuration_facade_real_set_export_photo_file_format (Configuratio
 		g_clear_error (&_inner_error_);
 #line 977 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6507 "ConfigurationInterfaces.c"
+#line 6517 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6518,7 +6528,7 @@ void configuration_facade_set_export_photo_file_format (ConfigurationFacade* sel
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 976 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_photo_file_format (self, photo_file_format);
-#line 6517 "ConfigurationInterfaces.c"
+#line 6527 "ConfigurationInterfaces.c"
 }
 
 
@@ -6547,8 +6557,8 @@ static JpegQuality configuration_facade_real_get_export_quality (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 987 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6546 "ConfigurationInterfaces.c"
-				goto __catch133_configuration_error;
+#line 6556 "ConfigurationInterfaces.c"
+				goto __catch134_configuration_error;
 			}
 #line 987 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6556,16 +6566,16 @@ static JpegQuality configuration_facade_real_get_export_quality (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 987 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 6555 "ConfigurationInterfaces.c"
+#line 6565 "ConfigurationInterfaces.c"
 		}
 #line 987 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = (JpegQuality) _tmp0_;
 #line 987 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6561 "ConfigurationInterfaces.c"
+#line 6571 "ConfigurationInterfaces.c"
 	}
-	goto __finally133;
-	__catch133_configuration_error:
+	goto __finally134;
+	__catch134_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -6583,16 +6593,16 @@ static JpegQuality configuration_facade_real_get_export_quality (ConfigurationFa
 		_g_error_free0 (err);
 #line 991 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6582 "ConfigurationInterfaces.c"
+#line 6592 "ConfigurationInterfaces.c"
 	}
-	__finally133:
+	__finally134:
 #line 986 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 986 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 986 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 6591 "ConfigurationInterfaces.c"
+#line 6601 "ConfigurationInterfaces.c"
 }
 
 
@@ -6601,7 +6611,7 @@ JpegQuality configuration_facade_get_export_quality (ConfigurationFacade* self) 
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 985 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_quality (self);
-#line 6600 "ConfigurationInterfaces.c"
+#line 6610 "ConfigurationInterfaces.c"
 }
 
 
@@ -6625,8 +6635,8 @@ static void configuration_facade_real_set_export_quality (ConfigurationFacade* s
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 997 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6624 "ConfigurationInterfaces.c"
-				goto __catch134_configuration_error;
+#line 6634 "ConfigurationInterfaces.c"
+				goto __catch135_configuration_error;
 			}
 #line 997 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6634,11 +6644,11 @@ static void configuration_facade_real_set_export_quality (ConfigurationFacade* s
 			g_clear_error (&_inner_error_);
 #line 997 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6633 "ConfigurationInterfaces.c"
+#line 6643 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally134;
-	__catch134_configuration_error:
+	goto __finally135;
+	__catch135_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -6654,9 +6664,9 @@ static void configuration_facade_real_set_export_quality (ConfigurationFacade* s
 		_g_error_free0 (err);
 #line 1000 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6653 "ConfigurationInterfaces.c"
+#line 6663 "ConfigurationInterfaces.c"
 	}
-	__finally134:
+	__finally135:
 #line 996 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 996 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6665,7 +6675,7 @@ static void configuration_facade_real_set_export_quality (ConfigurationFacade* s
 		g_clear_error (&_inner_error_);
 #line 996 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6664 "ConfigurationInterfaces.c"
+#line 6674 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6675,7 +6685,7 @@ void configuration_facade_set_export_quality (ConfigurationFacade* self, JpegQua
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 995 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_quality (self, quality);
-#line 6674 "ConfigurationInterfaces.c"
+#line 6684 "ConfigurationInterfaces.c"
 }
 
 
@@ -6704,8 +6714,8 @@ static gint configuration_facade_real_get_export_scale (ConfigurationFacade* sel
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1006 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6703 "ConfigurationInterfaces.c"
-				goto __catch135_configuration_error;
+#line 6713 "ConfigurationInterfaces.c"
+				goto __catch136_configuration_error;
 			}
 #line 1006 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6713,16 +6723,16 @@ static gint configuration_facade_real_get_export_scale (ConfigurationFacade* sel
 			g_clear_error (&_inner_error_);
 #line 1006 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 6712 "ConfigurationInterfaces.c"
+#line 6722 "ConfigurationInterfaces.c"
 		}
 #line 1006 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1006 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6718 "ConfigurationInterfaces.c"
+#line 6728 "ConfigurationInterfaces.c"
 	}
-	goto __finally135;
-	__catch135_configuration_error:
+	goto __finally136;
+	__catch136_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -6740,16 +6750,16 @@ static gint configuration_facade_real_get_export_scale (ConfigurationFacade* sel
 		_g_error_free0 (err);
 #line 1010 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6739 "ConfigurationInterfaces.c"
+#line 6749 "ConfigurationInterfaces.c"
 	}
-	__finally135:
+	__finally136:
 #line 1005 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1005 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1005 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 6748 "ConfigurationInterfaces.c"
+#line 6758 "ConfigurationInterfaces.c"
 }
 
 
@@ -6758,7 +6768,7 @@ gint configuration_facade_get_export_scale (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1004 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_export_scale (self);
-#line 6757 "ConfigurationInterfaces.c"
+#line 6767 "ConfigurationInterfaces.c"
 }
 
 
@@ -6782,8 +6792,8 @@ static void configuration_facade_real_set_export_scale (ConfigurationFacade* sel
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1016 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6781 "ConfigurationInterfaces.c"
-				goto __catch136_configuration_error;
+#line 6791 "ConfigurationInterfaces.c"
+				goto __catch137_configuration_error;
 			}
 #line 1016 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6791,11 +6801,11 @@ static void configuration_facade_real_set_export_scale (ConfigurationFacade* sel
 			g_clear_error (&_inner_error_);
 #line 1016 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6790 "ConfigurationInterfaces.c"
+#line 6800 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally136;
-	__catch136_configuration_error:
+	goto __finally137;
+	__catch137_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -6811,9 +6821,9 @@ static void configuration_facade_real_set_export_scale (ConfigurationFacade* sel
 		_g_error_free0 (err);
 #line 1019 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6810 "ConfigurationInterfaces.c"
+#line 6820 "ConfigurationInterfaces.c"
 	}
-	__finally136:
+	__finally137:
 #line 1015 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1015 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6822,7 +6832,7 @@ static void configuration_facade_real_set_export_scale (ConfigurationFacade* sel
 		g_clear_error (&_inner_error_);
 #line 1015 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6821 "ConfigurationInterfaces.c"
+#line 6831 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -6832,7 +6842,7 @@ void configuration_facade_set_export_scale (ConfigurationFacade* self, gint scal
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1014 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_export_scale (self, scale);
-#line 6831 "ConfigurationInterfaces.c"
+#line 6841 "ConfigurationInterfaces.c"
 }
 
 
@@ -6862,8 +6872,8 @@ static RawDeveloper configuration_facade_real_get_default_raw_developer (Configu
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1028 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6861 "ConfigurationInterfaces.c"
-				goto __catch137_configuration_error;
+#line 6871 "ConfigurationInterfaces.c"
+				goto __catch138_configuration_error;
 			}
 #line 1028 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6871,7 +6881,7 @@ static RawDeveloper configuration_facade_real_get_default_raw_developer (Configu
 			g_clear_error (&_inner_error_);
 #line 1028 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 6870 "ConfigurationInterfaces.c"
+#line 6880 "ConfigurationInterfaces.c"
 		}
 #line 1028 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = raw_developer_from_string (_tmp0_);
@@ -6881,10 +6891,10 @@ static RawDeveloper configuration_facade_real_get_default_raw_developer (Configu
 		_g_free0 (_tmp0_);
 #line 1028 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6880 "ConfigurationInterfaces.c"
+#line 6890 "ConfigurationInterfaces.c"
 	}
-	goto __finally137;
-	__catch137_configuration_error:
+	goto __finally138;
+	__catch138_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -6902,16 +6912,16 @@ static RawDeveloper configuration_facade_real_get_default_raw_developer (Configu
 		_g_error_free0 (err);
 #line 1033 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 6901 "ConfigurationInterfaces.c"
+#line 6911 "ConfigurationInterfaces.c"
 	}
-	__finally137:
+	__finally138:
 #line 1027 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1027 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1027 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 6910 "ConfigurationInterfaces.c"
+#line 6920 "ConfigurationInterfaces.c"
 }
 
 
@@ -6920,7 +6930,7 @@ RawDeveloper configuration_facade_get_default_raw_developer (ConfigurationFacade
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1026 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_default_raw_developer (self);
-#line 6919 "ConfigurationInterfaces.c"
+#line 6929 "ConfigurationInterfaces.c"
 }
 
 
@@ -6952,8 +6962,8 @@ static void configuration_facade_real_set_default_raw_developer (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1039 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 6951 "ConfigurationInterfaces.c"
-				goto __catch138_configuration_error;
+#line 6961 "ConfigurationInterfaces.c"
+				goto __catch139_configuration_error;
 			}
 #line 1039 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -6961,11 +6971,11 @@ static void configuration_facade_real_set_default_raw_developer (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1039 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 6960 "ConfigurationInterfaces.c"
+#line 6970 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally138;
-	__catch138_configuration_error:
+	goto __finally139;
+	__catch139_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -6981,9 +6991,9 @@ static void configuration_facade_real_set_default_raw_developer (ConfigurationFa
 		_g_error_free0 (err);
 #line 1043 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6980 "ConfigurationInterfaces.c"
+#line 6990 "ConfigurationInterfaces.c"
 	}
-	__finally138:
+	__finally139:
 #line 1038 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1038 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -6992,7 +7002,7 @@ static void configuration_facade_real_set_default_raw_developer (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 1038 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 6991 "ConfigurationInterfaces.c"
+#line 7001 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7002,7 +7012,7 @@ void configuration_facade_set_default_raw_developer (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1037 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_default_raw_developer (self, d);
-#line 7001 "ConfigurationInterfaces.c"
+#line 7011 "ConfigurationInterfaces.c"
 }
 
 
@@ -7031,8 +7041,8 @@ static gboolean configuration_facade_real_get_hide_photos_already_imported (Conf
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1052 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7030 "ConfigurationInterfaces.c"
-				goto __catch139_configuration_error;
+#line 7040 "ConfigurationInterfaces.c"
+				goto __catch140_configuration_error;
 			}
 #line 1052 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7040,16 +7050,16 @@ static gboolean configuration_facade_real_get_hide_photos_already_imported (Conf
 			g_clear_error (&_inner_error_);
 #line 1052 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 7039 "ConfigurationInterfaces.c"
+#line 7049 "ConfigurationInterfaces.c"
 		}
 #line 1052 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1052 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7045 "ConfigurationInterfaces.c"
+#line 7055 "ConfigurationInterfaces.c"
 	}
-	goto __finally139;
-	__catch139_configuration_error:
+	goto __finally140;
+	__catch140_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -7067,16 +7077,16 @@ static gboolean configuration_facade_real_get_hide_photos_already_imported (Conf
 		_g_error_free0 (err);
 #line 1056 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7066 "ConfigurationInterfaces.c"
+#line 7076 "ConfigurationInterfaces.c"
 	}
-	__finally139:
+	__finally140:
 #line 1051 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1051 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1051 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 7075 "ConfigurationInterfaces.c"
+#line 7085 "ConfigurationInterfaces.c"
 }
 
 
@@ -7085,7 +7095,7 @@ gboolean configuration_facade_get_hide_photos_already_imported (ConfigurationFac
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1050 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_hide_photos_already_imported (self);
-#line 7084 "ConfigurationInterfaces.c"
+#line 7094 "ConfigurationInterfaces.c"
 }
 
 
@@ -7109,8 +7119,8 @@ static void configuration_facade_real_set_hide_photos_already_imported (Configur
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1062 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7108 "ConfigurationInterfaces.c"
-				goto __catch140_configuration_error;
+#line 7118 "ConfigurationInterfaces.c"
+				goto __catch141_configuration_error;
 			}
 #line 1062 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7118,11 +7128,11 @@ static void configuration_facade_real_set_hide_photos_already_imported (Configur
 			g_clear_error (&_inner_error_);
 #line 1062 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7117 "ConfigurationInterfaces.c"
+#line 7127 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally140;
-	__catch140_configuration_error:
+	goto __finally141;
+	__catch141_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7136,9 +7146,9 @@ static void configuration_facade_real_set_hide_photos_already_imported (Configur
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1061 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7135 "ConfigurationInterfaces.c"
+#line 7145 "ConfigurationInterfaces.c"
 	}
-	__finally140:
+	__finally141:
 #line 1061 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1061 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7147,7 +7157,7 @@ static void configuration_facade_real_set_hide_photos_already_imported (Configur
 		g_clear_error (&_inner_error_);
 #line 1061 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7146 "ConfigurationInterfaces.c"
+#line 7156 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7157,7 +7167,7 @@ void configuration_facade_set_hide_photos_already_imported (ConfigurationFacade*
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1060 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_hide_photos_already_imported (self, hide_imported);
-#line 7156 "ConfigurationInterfaces.c"
+#line 7166 "ConfigurationInterfaces.c"
 }
 
 
@@ -7187,8 +7197,8 @@ static gchar* configuration_facade_real_get_import_dir (ConfigurationFacade* sel
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1073 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7186 "ConfigurationInterfaces.c"
-				goto __catch141_configuration_error;
+#line 7196 "ConfigurationInterfaces.c"
+				goto __catch142_configuration_error;
 			}
 #line 1073 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7196,7 +7206,7 @@ static gchar* configuration_facade_real_get_import_dir (ConfigurationFacade* sel
 			g_clear_error (&_inner_error_);
 #line 1073 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 7195 "ConfigurationInterfaces.c"
+#line 7205 "ConfigurationInterfaces.c"
 		}
 #line 1073 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -7208,10 +7218,10 @@ static gchar* configuration_facade_real_get_import_dir (ConfigurationFacade* sel
 		_g_free0 (_tmp0_);
 #line 1073 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7207 "ConfigurationInterfaces.c"
+#line 7217 "ConfigurationInterfaces.c"
 	}
-	goto __finally141;
-	__catch141_configuration_error:
+	goto __finally142;
+	__catch142_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -7232,16 +7242,16 @@ static gchar* configuration_facade_real_get_import_dir (ConfigurationFacade* sel
 		_g_error_free0 (err);
 #line 1077 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7231 "ConfigurationInterfaces.c"
+#line 7241 "ConfigurationInterfaces.c"
 	}
-	__finally141:
+	__finally142:
 #line 1072 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1072 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1072 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 7240 "ConfigurationInterfaces.c"
+#line 7250 "ConfigurationInterfaces.c"
 }
 
 
@@ -7250,7 +7260,7 @@ gchar* configuration_facade_get_import_dir (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 1071 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_import_dir (self);
-#line 7249 "ConfigurationInterfaces.c"
+#line 7259 "ConfigurationInterfaces.c"
 }
 
 
@@ -7258,7 +7268,7 @@ static void configuration_facade_real_set_import_dir (ConfigurationFacade* self,
 	GError * _inner_error_ = NULL;
 #line 1081 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (import_dir != NULL);
-#line 7257 "ConfigurationInterfaces.c"
+#line 7267 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -7277,8 +7287,8 @@ static void configuration_facade_real_set_import_dir (ConfigurationFacade* self,
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1083 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7276 "ConfigurationInterfaces.c"
-				goto __catch142_configuration_error;
+#line 7286 "ConfigurationInterfaces.c"
+				goto __catch143_configuration_error;
 			}
 #line 1083 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7286,11 +7296,11 @@ static void configuration_facade_real_set_import_dir (ConfigurationFacade* self,
 			g_clear_error (&_inner_error_);
 #line 1083 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7285 "ConfigurationInterfaces.c"
+#line 7295 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally142;
-	__catch142_configuration_error:
+	goto __finally143;
+	__catch143_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7304,9 +7314,9 @@ static void configuration_facade_real_set_import_dir (ConfigurationFacade* self,
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1082 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7303 "ConfigurationInterfaces.c"
+#line 7313 "ConfigurationInterfaces.c"
 	}
-	__finally142:
+	__finally143:
 #line 1082 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1082 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7315,7 +7325,7 @@ static void configuration_facade_real_set_import_dir (ConfigurationFacade* self,
 		g_clear_error (&_inner_error_);
 #line 1082 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7314 "ConfigurationInterfaces.c"
+#line 7324 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7325,7 +7335,7 @@ void configuration_facade_set_import_dir (ConfigurationFacade* self, const gchar
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1081 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_import_dir (self, import_dir);
-#line 7324 "ConfigurationInterfaces.c"
+#line 7334 "ConfigurationInterfaces.c"
 }
 
 
@@ -7354,8 +7364,8 @@ static gboolean configuration_facade_real_get_keep_relativity (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1094 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7353 "ConfigurationInterfaces.c"
-				goto __catch143_configuration_error;
+#line 7363 "ConfigurationInterfaces.c"
+				goto __catch144_configuration_error;
 			}
 #line 1094 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7363,16 +7373,16 @@ static gboolean configuration_facade_real_get_keep_relativity (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1094 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 7362 "ConfigurationInterfaces.c"
+#line 7372 "ConfigurationInterfaces.c"
 		}
 #line 1094 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1094 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7368 "ConfigurationInterfaces.c"
+#line 7378 "ConfigurationInterfaces.c"
 	}
-	goto __finally143;
-	__catch143_configuration_error:
+	goto __finally144;
+	__catch144_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -7390,16 +7400,16 @@ static gboolean configuration_facade_real_get_keep_relativity (ConfigurationFaca
 		_g_error_free0 (err);
 #line 1098 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7389 "ConfigurationInterfaces.c"
+#line 7399 "ConfigurationInterfaces.c"
 	}
-	__finally143:
+	__finally144:
 #line 1093 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1093 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1093 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 7398 "ConfigurationInterfaces.c"
+#line 7408 "ConfigurationInterfaces.c"
 }
 
 
@@ -7408,7 +7418,7 @@ gboolean configuration_facade_get_keep_relativity (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1092 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_keep_relativity (self);
-#line 7407 "ConfigurationInterfaces.c"
+#line 7417 "ConfigurationInterfaces.c"
 }
 
 
@@ -7432,8 +7442,8 @@ static void configuration_facade_real_set_keep_relativity (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1104 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7431 "ConfigurationInterfaces.c"
-				goto __catch144_configuration_error;
+#line 7441 "ConfigurationInterfaces.c"
+				goto __catch145_configuration_error;
 			}
 #line 1104 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7441,11 +7451,11 @@ static void configuration_facade_real_set_keep_relativity (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 1104 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7440 "ConfigurationInterfaces.c"
+#line 7450 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally144;
-	__catch144_configuration_error:
+	goto __finally145;
+	__catch145_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7459,9 +7469,9 @@ static void configuration_facade_real_set_keep_relativity (ConfigurationFacade* 
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1103 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7458 "ConfigurationInterfaces.c"
+#line 7468 "ConfigurationInterfaces.c"
 	}
-	__finally144:
+	__finally145:
 #line 1103 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1103 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7470,7 +7480,7 @@ static void configuration_facade_real_set_keep_relativity (ConfigurationFacade* 
 		g_clear_error (&_inner_error_);
 #line 1103 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7469 "ConfigurationInterfaces.c"
+#line 7479 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7480,7 +7490,7 @@ void configuration_facade_set_keep_relativity (ConfigurationFacade* self, gboole
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1102 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_keep_relativity (self, keep_relativity);
-#line 7479 "ConfigurationInterfaces.c"
+#line 7489 "ConfigurationInterfaces.c"
 }
 
 
@@ -7509,8 +7519,8 @@ static gboolean configuration_facade_real_get_pin_toolbar_state (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1115 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7508 "ConfigurationInterfaces.c"
-				goto __catch145_configuration_error;
+#line 7518 "ConfigurationInterfaces.c"
+				goto __catch146_configuration_error;
 			}
 #line 1115 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7518,16 +7528,16 @@ static gboolean configuration_facade_real_get_pin_toolbar_state (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1115 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 7517 "ConfigurationInterfaces.c"
+#line 7527 "ConfigurationInterfaces.c"
 		}
 #line 1115 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1115 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7523 "ConfigurationInterfaces.c"
+#line 7533 "ConfigurationInterfaces.c"
 	}
-	goto __finally145;
-	__catch145_configuration_error:
+	goto __finally146;
+	__catch146_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -7545,16 +7555,16 @@ static gboolean configuration_facade_real_get_pin_toolbar_state (ConfigurationFa
 		_g_error_free0 (err);
 #line 1118 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7544 "ConfigurationInterfaces.c"
+#line 7554 "ConfigurationInterfaces.c"
 	}
-	__finally145:
+	__finally146:
 #line 1114 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1114 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1114 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 7553 "ConfigurationInterfaces.c"
+#line 7563 "ConfigurationInterfaces.c"
 }
 
 
@@ -7563,7 +7573,7 @@ gboolean configuration_facade_get_pin_toolbar_state (ConfigurationFacade* self) 
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1113 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_pin_toolbar_state (self);
-#line 7562 "ConfigurationInterfaces.c"
+#line 7572 "ConfigurationInterfaces.c"
 }
 
 
@@ -7587,8 +7597,8 @@ static void configuration_facade_real_set_pin_toolbar_state (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1124 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7586 "ConfigurationInterfaces.c"
-				goto __catch146_configuration_error;
+#line 7596 "ConfigurationInterfaces.c"
+				goto __catch147_configuration_error;
 			}
 #line 1124 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7596,11 +7606,11 @@ static void configuration_facade_real_set_pin_toolbar_state (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 1124 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7595 "ConfigurationInterfaces.c"
+#line 7605 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally146;
-	__catch146_configuration_error:
+	goto __finally147;
+	__catch147_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7614,9 +7624,9 @@ static void configuration_facade_real_set_pin_toolbar_state (ConfigurationFacade
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7613 "ConfigurationInterfaces.c"
+#line 7623 "ConfigurationInterfaces.c"
 	}
-	__finally146:
+	__finally147:
 #line 1123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7625,7 +7635,7 @@ static void configuration_facade_real_set_pin_toolbar_state (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 1123 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7624 "ConfigurationInterfaces.c"
+#line 7634 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7635,7 +7645,7 @@ void configuration_facade_set_pin_toolbar_state (ConfigurationFacade* self, gboo
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1122 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_pin_toolbar_state (self, state);
-#line 7634 "ConfigurationInterfaces.c"
+#line 7644 "ConfigurationInterfaces.c"
 }
 
 
@@ -7664,8 +7674,8 @@ static gint configuration_facade_real_get_last_crop_height (ConfigurationFacade*
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7663 "ConfigurationInterfaces.c"
-				goto __catch147_configuration_error;
+#line 7673 "ConfigurationInterfaces.c"
+				goto __catch148_configuration_error;
 			}
 #line 1135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7673,16 +7683,16 @@ static gint configuration_facade_real_get_last_crop_height (ConfigurationFacade*
 			g_clear_error (&_inner_error_);
 #line 1135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 7672 "ConfigurationInterfaces.c"
+#line 7682 "ConfigurationInterfaces.c"
 		}
 #line 1135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1135 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7678 "ConfigurationInterfaces.c"
+#line 7688 "ConfigurationInterfaces.c"
 	}
-	goto __finally147;
-	__catch147_configuration_error:
+	goto __finally148;
+	__catch148_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -7700,16 +7710,16 @@ static gint configuration_facade_real_get_last_crop_height (ConfigurationFacade*
 		_g_error_free0 (err);
 #line 1138 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7699 "ConfigurationInterfaces.c"
+#line 7709 "ConfigurationInterfaces.c"
 	}
-	__finally147:
+	__finally148:
 #line 1134 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1134 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1134 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 7708 "ConfigurationInterfaces.c"
+#line 7718 "ConfigurationInterfaces.c"
 }
 
 
@@ -7718,7 +7728,7 @@ gint configuration_facade_get_last_crop_height (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1133 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_last_crop_height (self);
-#line 7717 "ConfigurationInterfaces.c"
+#line 7727 "ConfigurationInterfaces.c"
 }
 
 
@@ -7742,8 +7752,8 @@ static void configuration_facade_real_set_last_crop_height (ConfigurationFacade*
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1144 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7741 "ConfigurationInterfaces.c"
-				goto __catch148_configuration_error;
+#line 7751 "ConfigurationInterfaces.c"
+				goto __catch149_configuration_error;
 			}
 #line 1144 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7751,11 +7761,11 @@ static void configuration_facade_real_set_last_crop_height (ConfigurationFacade*
 			g_clear_error (&_inner_error_);
 #line 1144 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7750 "ConfigurationInterfaces.c"
+#line 7760 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally148;
-	__catch148_configuration_error:
+	goto __finally149;
+	__catch149_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7769,9 +7779,9 @@ static void configuration_facade_real_set_last_crop_height (ConfigurationFacade*
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1143 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7768 "ConfigurationInterfaces.c"
+#line 7778 "ConfigurationInterfaces.c"
 	}
-	__finally148:
+	__finally149:
 #line 1143 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1143 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7780,7 +7790,7 @@ static void configuration_facade_real_set_last_crop_height (ConfigurationFacade*
 		g_clear_error (&_inner_error_);
 #line 1143 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7779 "ConfigurationInterfaces.c"
+#line 7789 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7790,7 +7800,7 @@ void configuration_facade_set_last_crop_height (ConfigurationFacade* self, gint 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1142 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_last_crop_height (self, choice);
-#line 7789 "ConfigurationInterfaces.c"
+#line 7799 "ConfigurationInterfaces.c"
 }
 
 
@@ -7819,8 +7829,8 @@ static gint configuration_facade_real_get_last_crop_menu_choice (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1155 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7818 "ConfigurationInterfaces.c"
-				goto __catch149_configuration_error;
+#line 7828 "ConfigurationInterfaces.c"
+				goto __catch150_configuration_error;
 			}
 #line 1155 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7828,16 +7838,16 @@ static gint configuration_facade_real_get_last_crop_menu_choice (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1155 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 7827 "ConfigurationInterfaces.c"
+#line 7837 "ConfigurationInterfaces.c"
 		}
 #line 1155 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1155 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7833 "ConfigurationInterfaces.c"
+#line 7843 "ConfigurationInterfaces.c"
 	}
-	goto __finally149;
-	__catch149_configuration_error:
+	goto __finally150;
+	__catch150_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -7855,16 +7865,16 @@ static gint configuration_facade_real_get_last_crop_menu_choice (ConfigurationFa
 		_g_error_free0 (err);
 #line 1162 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7854 "ConfigurationInterfaces.c"
+#line 7864 "ConfigurationInterfaces.c"
 	}
-	__finally149:
+	__finally150:
 #line 1154 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1154 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1154 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 7863 "ConfigurationInterfaces.c"
+#line 7873 "ConfigurationInterfaces.c"
 }
 
 
@@ -7873,7 +7883,7 @@ gint configuration_facade_get_last_crop_menu_choice (ConfigurationFacade* self) 
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1153 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_last_crop_menu_choice (self);
-#line 7872 "ConfigurationInterfaces.c"
+#line 7882 "ConfigurationInterfaces.c"
 }
 
 
@@ -7897,8 +7907,8 @@ static void configuration_facade_real_set_last_crop_menu_choice (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1168 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7896 "ConfigurationInterfaces.c"
-				goto __catch150_configuration_error;
+#line 7906 "ConfigurationInterfaces.c"
+				goto __catch151_configuration_error;
 			}
 #line 1168 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7906,11 +7916,11 @@ static void configuration_facade_real_set_last_crop_menu_choice (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1168 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 7905 "ConfigurationInterfaces.c"
+#line 7915 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally150;
-	__catch150_configuration_error:
+	goto __finally151;
+	__catch151_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -7924,9 +7934,9 @@ static void configuration_facade_real_set_last_crop_menu_choice (ConfigurationFa
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1167 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 7923 "ConfigurationInterfaces.c"
+#line 7933 "ConfigurationInterfaces.c"
 	}
-	__finally150:
+	__finally151:
 #line 1167 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1167 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -7935,7 +7945,7 @@ static void configuration_facade_real_set_last_crop_menu_choice (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 1167 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 7934 "ConfigurationInterfaces.c"
+#line 7944 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -7945,7 +7955,7 @@ void configuration_facade_set_last_crop_menu_choice (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1166 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_last_crop_menu_choice (self, choice);
-#line 7944 "ConfigurationInterfaces.c"
+#line 7954 "ConfigurationInterfaces.c"
 }
 
 
@@ -7974,8 +7984,8 @@ static gint configuration_facade_real_get_last_crop_width (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1179 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 7973 "ConfigurationInterfaces.c"
-				goto __catch151_configuration_error;
+#line 7983 "ConfigurationInterfaces.c"
+				goto __catch152_configuration_error;
 			}
 #line 1179 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -7983,16 +7993,16 @@ static gint configuration_facade_real_get_last_crop_width (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 1179 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 7982 "ConfigurationInterfaces.c"
+#line 7992 "ConfigurationInterfaces.c"
 		}
 #line 1179 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1179 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 7988 "ConfigurationInterfaces.c"
+#line 7998 "ConfigurationInterfaces.c"
 	}
-	goto __finally151;
-	__catch151_configuration_error:
+	goto __finally152;
+	__catch152_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -8010,16 +8020,16 @@ static gint configuration_facade_real_get_last_crop_width (ConfigurationFacade* 
 		_g_error_free0 (err);
 #line 1182 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 8009 "ConfigurationInterfaces.c"
+#line 8019 "ConfigurationInterfaces.c"
 	}
-	__finally151:
+	__finally152:
 #line 1178 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1178 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1178 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 8018 "ConfigurationInterfaces.c"
+#line 8028 "ConfigurationInterfaces.c"
 }
 
 
@@ -8028,7 +8038,7 @@ gint configuration_facade_get_last_crop_width (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1177 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_last_crop_width (self);
-#line 8027 "ConfigurationInterfaces.c"
+#line 8037 "ConfigurationInterfaces.c"
 }
 
 
@@ -8052,8 +8062,8 @@ static void configuration_facade_real_set_last_crop_width (ConfigurationFacade* 
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1188 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8051 "ConfigurationInterfaces.c"
-				goto __catch152_configuration_error;
+#line 8061 "ConfigurationInterfaces.c"
+				goto __catch153_configuration_error;
 			}
 #line 1188 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8061,11 +8071,11 @@ static void configuration_facade_real_set_last_crop_width (ConfigurationFacade* 
 			g_clear_error (&_inner_error_);
 #line 1188 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8060 "ConfigurationInterfaces.c"
+#line 8070 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally152;
-	__catch152_configuration_error:
+	goto __finally153;
+	__catch153_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -8079,9 +8089,9 @@ static void configuration_facade_real_set_last_crop_width (ConfigurationFacade* 
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1187 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8078 "ConfigurationInterfaces.c"
+#line 8088 "ConfigurationInterfaces.c"
 	}
-	__finally152:
+	__finally153:
 #line 1187 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1187 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8090,7 +8100,7 @@ static void configuration_facade_real_set_last_crop_width (ConfigurationFacade* 
 		g_clear_error (&_inner_error_);
 #line 1187 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8089 "ConfigurationInterfaces.c"
+#line 8099 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8100,7 +8110,7 @@ void configuration_facade_set_last_crop_width (ConfigurationFacade* self, gint c
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1186 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_last_crop_width (self, choice);
-#line 8099 "ConfigurationInterfaces.c"
+#line 8109 "ConfigurationInterfaces.c"
 }
 
 
@@ -8130,8 +8140,8 @@ static gchar* configuration_facade_real_get_last_used_service (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1199 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8129 "ConfigurationInterfaces.c"
-				goto __catch153_configuration_error;
+#line 8139 "ConfigurationInterfaces.c"
+				goto __catch154_configuration_error;
 			}
 #line 1199 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8139,7 +8149,7 @@ static gchar* configuration_facade_real_get_last_used_service (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1199 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 8138 "ConfigurationInterfaces.c"
+#line 8148 "ConfigurationInterfaces.c"
 		}
 #line 1199 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -8151,10 +8161,10 @@ static gchar* configuration_facade_real_get_last_used_service (ConfigurationFaca
 		_g_free0 (_tmp0_);
 #line 1199 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 8150 "ConfigurationInterfaces.c"
+#line 8160 "ConfigurationInterfaces.c"
 	}
-	goto __finally153;
-	__catch153_configuration_error:
+	goto __finally154;
+	__catch154_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -8175,16 +8185,16 @@ static gchar* configuration_facade_real_get_last_used_service (ConfigurationFaca
 		_g_error_free0 (err);
 #line 1206 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 8174 "ConfigurationInterfaces.c"
+#line 8184 "ConfigurationInterfaces.c"
 	}
-	__finally153:
+	__finally154:
 #line 1198 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1198 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1198 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 8183 "ConfigurationInterfaces.c"
+#line 8193 "ConfigurationInterfaces.c"
 }
 
 
@@ -8193,7 +8203,7 @@ gchar* configuration_facade_get_last_used_service (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 1197 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_last_used_service (self);
-#line 8192 "ConfigurationInterfaces.c"
+#line 8202 "ConfigurationInterfaces.c"
 }
 
 
@@ -8201,7 +8211,7 @@ static void configuration_facade_real_set_last_used_service (ConfigurationFacade
 	GError * _inner_error_ = NULL;
 #line 1210 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (service_name != NULL);
-#line 8200 "ConfigurationInterfaces.c"
+#line 8210 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -8220,8 +8230,8 @@ static void configuration_facade_real_set_last_used_service (ConfigurationFacade
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1212 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8219 "ConfigurationInterfaces.c"
-				goto __catch154_configuration_error;
+#line 8229 "ConfigurationInterfaces.c"
+				goto __catch155_configuration_error;
 			}
 #line 1212 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8229,11 +8239,11 @@ static void configuration_facade_real_set_last_used_service (ConfigurationFacade
 			g_clear_error (&_inner_error_);
 #line 1212 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8228 "ConfigurationInterfaces.c"
+#line 8238 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally154;
-	__catch154_configuration_error:
+	goto __finally155;
+	__catch155_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -8247,9 +8257,9 @@ static void configuration_facade_real_set_last_used_service (ConfigurationFacade
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1211 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8246 "ConfigurationInterfaces.c"
+#line 8256 "ConfigurationInterfaces.c"
 	}
-	__finally154:
+	__finally155:
 #line 1211 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1211 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8258,7 +8268,7 @@ static void configuration_facade_real_set_last_used_service (ConfigurationFacade
 		g_clear_error (&_inner_error_);
 #line 1211 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8257 "ConfigurationInterfaces.c"
+#line 8267 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8268,7 +8278,7 @@ void configuration_facade_set_last_used_service (ConfigurationFacade* self, cons
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1210 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_last_used_service (self, service_name);
-#line 8267 "ConfigurationInterfaces.c"
+#line 8277 "ConfigurationInterfaces.c"
 }
 
 
@@ -8298,8 +8308,8 @@ static gchar* configuration_facade_real_get_last_used_dataimports_service (Confi
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1223 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8297 "ConfigurationInterfaces.c"
-				goto __catch155_configuration_error;
+#line 8307 "ConfigurationInterfaces.c"
+				goto __catch156_configuration_error;
 			}
 #line 1223 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8307,7 +8317,7 @@ static gchar* configuration_facade_real_get_last_used_dataimports_service (Confi
 			g_clear_error (&_inner_error_);
 #line 1223 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return NULL;
-#line 8306 "ConfigurationInterfaces.c"
+#line 8316 "ConfigurationInterfaces.c"
 		}
 #line 1223 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = _tmp0_;
@@ -8319,10 +8329,10 @@ static gchar* configuration_facade_real_get_last_used_dataimports_service (Confi
 		_g_free0 (_tmp0_);
 #line 1223 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 8318 "ConfigurationInterfaces.c"
+#line 8328 "ConfigurationInterfaces.c"
 	}
-	goto __finally155;
-	__catch155_configuration_error:
+	goto __finally156;
+	__catch156_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -8343,16 +8353,16 @@ static gchar* configuration_facade_real_get_last_used_dataimports_service (Confi
 		_g_error_free0 (err);
 #line 1230 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 8342 "ConfigurationInterfaces.c"
+#line 8352 "ConfigurationInterfaces.c"
 	}
-	__finally155:
+	__finally156:
 #line 1222 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1222 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1222 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return NULL;
-#line 8351 "ConfigurationInterfaces.c"
+#line 8361 "ConfigurationInterfaces.c"
 }
 
 
@@ -8361,7 +8371,7 @@ gchar* configuration_facade_get_last_used_dataimports_service (ConfigurationFaca
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
 #line 1221 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_last_used_dataimports_service (self);
-#line 8360 "ConfigurationInterfaces.c"
+#line 8370 "ConfigurationInterfaces.c"
 }
 
 
@@ -8369,7 +8379,7 @@ static void configuration_facade_real_set_last_used_dataimports_service (Configu
 	GError * _inner_error_ = NULL;
 #line 1234 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (service_name != NULL);
-#line 8368 "ConfigurationInterfaces.c"
+#line 8378 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -8388,8 +8398,8 @@ static void configuration_facade_real_set_last_used_dataimports_service (Configu
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1236 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8387 "ConfigurationInterfaces.c"
-				goto __catch156_configuration_error;
+#line 8397 "ConfigurationInterfaces.c"
+				goto __catch157_configuration_error;
 			}
 #line 1236 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8397,11 +8407,11 @@ static void configuration_facade_real_set_last_used_dataimports_service (Configu
 			g_clear_error (&_inner_error_);
 #line 1236 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8396 "ConfigurationInterfaces.c"
+#line 8406 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally156;
-	__catch156_configuration_error:
+	goto __finally157;
+	__catch157_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -8415,9 +8425,9 @@ static void configuration_facade_real_set_last_used_dataimports_service (Configu
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1235 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8414 "ConfigurationInterfaces.c"
+#line 8424 "ConfigurationInterfaces.c"
 	}
-	__finally156:
+	__finally157:
 #line 1235 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1235 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8426,7 +8436,7 @@ static void configuration_facade_real_set_last_used_dataimports_service (Configu
 		g_clear_error (&_inner_error_);
 #line 1235 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8425 "ConfigurationInterfaces.c"
+#line 8435 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8436,7 +8446,7 @@ void configuration_facade_set_last_used_dataimports_service (ConfigurationFacade
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1234 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_last_used_dataimports_service (self, service_name);
-#line 8435 "ConfigurationInterfaces.c"
+#line 8445 "ConfigurationInterfaces.c"
 }
 
 
@@ -8448,7 +8458,7 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 	_vala_sort_order = FALSE;
 #line 1247 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_vala_sort_by = 2;
-#line 8447 "ConfigurationInterfaces.c"
+#line 8457 "ConfigurationInterfaces.c"
 	{
 		gboolean _tmp0_ = FALSE;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -8476,8 +8486,8 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8475 "ConfigurationInterfaces.c"
-				goto __catch157_configuration_error;
+#line 8485 "ConfigurationInterfaces.c"
+				goto __catch158_configuration_error;
 			}
 #line 1249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8485,7 +8495,7 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8484 "ConfigurationInterfaces.c"
+#line 8494 "ConfigurationInterfaces.c"
 		}
 #line 1249 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_sort_order = _tmp0_;
@@ -8505,8 +8515,8 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1251 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8504 "ConfigurationInterfaces.c"
-				goto __catch157_configuration_error;
+#line 8514 "ConfigurationInterfaces.c"
+				goto __catch158_configuration_error;
 			}
 #line 1251 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8514,14 +8524,14 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1251 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8513 "ConfigurationInterfaces.c"
+#line 8523 "ConfigurationInterfaces.c"
 		}
 #line 1251 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_sort_by = _tmp5_;
-#line 8517 "ConfigurationInterfaces.c"
+#line 8527 "ConfigurationInterfaces.c"
 	}
-	goto __finally157;
-	__catch157_configuration_error:
+	goto __finally158;
+	__catch158_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp10_ = NULL;
@@ -8535,9 +8545,9 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 		configuration_facade_on_configuration_error (self, _tmp10_);
 #line 1248 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8534 "ConfigurationInterfaces.c"
+#line 8544 "ConfigurationInterfaces.c"
 	}
-	__finally157:
+	__finally158:
 #line 1248 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1248 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8546,19 +8556,19 @@ static void configuration_facade_real_get_library_photos_sort (ConfigurationFaca
 		g_clear_error (&_inner_error_);
 #line 1248 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8545 "ConfigurationInterfaces.c"
+#line 8555 "ConfigurationInterfaces.c"
 	}
 #line 1245 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (sort_order) {
 #line 1245 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*sort_order = _vala_sort_order;
-#line 8551 "ConfigurationInterfaces.c"
+#line 8561 "ConfigurationInterfaces.c"
 	}
 #line 1245 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (sort_by) {
 #line 1245 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*sort_by = _vala_sort_by;
-#line 8557 "ConfigurationInterfaces.c"
+#line 8567 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8568,7 +8578,7 @@ void configuration_facade_get_library_photos_sort (ConfigurationFacade* self, gb
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1245 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->get_library_photos_sort (self, sort_order, sort_by);
-#line 8567 "ConfigurationInterfaces.c"
+#line 8577 "ConfigurationInterfaces.c"
 }
 
 
@@ -8595,8 +8605,8 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1259 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8594 "ConfigurationInterfaces.c"
-				goto __catch158_configuration_error;
+#line 8604 "ConfigurationInterfaces.c"
+				goto __catch159_configuration_error;
 			}
 #line 1259 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8604,7 +8614,7 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1259 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8603 "ConfigurationInterfaces.c"
+#line 8613 "ConfigurationInterfaces.c"
 		}
 #line 1261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -8620,8 +8630,8 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8619 "ConfigurationInterfaces.c"
-				goto __catch158_configuration_error;
+#line 8629 "ConfigurationInterfaces.c"
+				goto __catch159_configuration_error;
 			}
 #line 1261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8629,11 +8639,11 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 			g_clear_error (&_inner_error_);
 #line 1261 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8628 "ConfigurationInterfaces.c"
+#line 8638 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally158;
-	__catch158_configuration_error:
+	goto __finally159;
+	__catch159_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp6_ = NULL;
@@ -8647,9 +8657,9 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 		configuration_facade_on_configuration_error (self, _tmp6_);
 #line 1258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8646 "ConfigurationInterfaces.c"
+#line 8656 "ConfigurationInterfaces.c"
 	}
-	__finally158:
+	__finally159:
 #line 1258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8658,7 +8668,7 @@ static void configuration_facade_real_set_library_photos_sort (ConfigurationFaca
 		g_clear_error (&_inner_error_);
 #line 1258 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8657 "ConfigurationInterfaces.c"
+#line 8667 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8668,7 +8678,7 @@ void configuration_facade_set_library_photos_sort (ConfigurationFacade* self, gb
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1257 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_library_photos_sort (self, sort_order, sort_by);
-#line 8667 "ConfigurationInterfaces.c"
+#line 8677 "ConfigurationInterfaces.c"
 }
 
 
@@ -8680,7 +8690,7 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 	_vala_maximize = FALSE;
 #line 1273 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	dimensions_init (&_vala_dimensions, 1024, 768);
-#line 8679 "ConfigurationInterfaces.c"
+#line 8689 "ConfigurationInterfaces.c"
 	{
 		gboolean _tmp0_ = FALSE;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -8715,8 +8725,8 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1275 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8714 "ConfigurationInterfaces.c"
-				goto __catch159_configuration_error;
+#line 8724 "ConfigurationInterfaces.c"
+				goto __catch160_configuration_error;
 			}
 #line 1275 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8724,7 +8734,7 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1275 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8723 "ConfigurationInterfaces.c"
+#line 8733 "ConfigurationInterfaces.c"
 		}
 #line 1275 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_vala_maximize = _tmp0_;
@@ -8744,8 +8754,8 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1276 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8743 "ConfigurationInterfaces.c"
-				goto __catch159_configuration_error;
+#line 8753 "ConfigurationInterfaces.c"
+				goto __catch160_configuration_error;
 			}
 #line 1276 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8753,7 +8763,7 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1276 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8752 "ConfigurationInterfaces.c"
+#line 8762 "ConfigurationInterfaces.c"
 		}
 #line 1277 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp9_ = configuration_facade_get_engine (self);
@@ -8771,8 +8781,8 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1277 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8770 "ConfigurationInterfaces.c"
-				goto __catch159_configuration_error;
+#line 8780 "ConfigurationInterfaces.c"
+				goto __catch160_configuration_error;
 			}
 #line 1277 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8780,7 +8790,7 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1277 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8779 "ConfigurationInterfaces.c"
+#line 8789 "ConfigurationInterfaces.c"
 		}
 #line 1278 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp13_ = w;
@@ -8788,10 +8798,10 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		_tmp14_ = h;
 #line 1278 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		dimensions_init (&_vala_dimensions, _tmp13_, _tmp14_);
-#line 8787 "ConfigurationInterfaces.c"
+#line 8797 "ConfigurationInterfaces.c"
 	}
-	goto __finally159;
-	__catch159_configuration_error:
+	goto __finally160;
+	__catch160_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp15_ = NULL;
@@ -8805,9 +8815,9 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		configuration_facade_on_configuration_error (self, _tmp15_);
 #line 1274 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8804 "ConfigurationInterfaces.c"
+#line 8814 "ConfigurationInterfaces.c"
 	}
-	__finally159:
+	__finally160:
 #line 1274 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1274 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8816,19 +8826,19 @@ static void configuration_facade_real_get_library_window_state (ConfigurationFac
 		g_clear_error (&_inner_error_);
 #line 1274 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8815 "ConfigurationInterfaces.c"
+#line 8825 "ConfigurationInterfaces.c"
 	}
 #line 1271 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (maximize) {
 #line 1271 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*maximize = _vala_maximize;
-#line 8821 "ConfigurationInterfaces.c"
+#line 8831 "ConfigurationInterfaces.c"
 	}
 #line 1271 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (dimensions) {
 #line 1271 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		*dimensions = _vala_dimensions;
-#line 8827 "ConfigurationInterfaces.c"
+#line 8837 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8838,7 +8848,7 @@ void configuration_facade_get_library_window_state (ConfigurationFacade* self, g
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1271 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->get_library_window_state (self, maximize, dimensions);
-#line 8837 "ConfigurationInterfaces.c"
+#line 8847 "ConfigurationInterfaces.c"
 }
 
 
@@ -8846,7 +8856,7 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 	GError * _inner_error_ = NULL;
 #line 1284 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (dimensions != NULL);
-#line 8845 "ConfigurationInterfaces.c"
+#line 8855 "ConfigurationInterfaces.c"
 	{
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
@@ -8873,8 +8883,8 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1286 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8872 "ConfigurationInterfaces.c"
-				goto __catch160_configuration_error;
+#line 8882 "ConfigurationInterfaces.c"
+				goto __catch161_configuration_error;
 			}
 #line 1286 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8882,7 +8892,7 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1286 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8881 "ConfigurationInterfaces.c"
+#line 8891 "ConfigurationInterfaces.c"
 		}
 #line 1287 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_facade_get_engine (self);
@@ -8900,8 +8910,8 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1287 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8899 "ConfigurationInterfaces.c"
-				goto __catch160_configuration_error;
+#line 8909 "ConfigurationInterfaces.c"
+				goto __catch161_configuration_error;
 			}
 #line 1287 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8909,7 +8919,7 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1287 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8908 "ConfigurationInterfaces.c"
+#line 8918 "ConfigurationInterfaces.c"
 		}
 #line 1289 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp7_ = configuration_facade_get_engine (self);
@@ -8927,8 +8937,8 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1289 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 8926 "ConfigurationInterfaces.c"
-				goto __catch160_configuration_error;
+#line 8936 "ConfigurationInterfaces.c"
+				goto __catch161_configuration_error;
 			}
 #line 1289 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -8936,11 +8946,11 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1289 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 8935 "ConfigurationInterfaces.c"
+#line 8945 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally160;
-	__catch160_configuration_error:
+	goto __finally161;
+	__catch161_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp11_ = NULL;
@@ -8954,9 +8964,9 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 		configuration_facade_on_configuration_error (self, _tmp11_);
 #line 1285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 8953 "ConfigurationInterfaces.c"
+#line 8963 "ConfigurationInterfaces.c"
 	}
-	__finally160:
+	__finally161:
 #line 1285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -8965,7 +8975,7 @@ static void configuration_facade_real_set_library_window_state (ConfigurationFac
 		g_clear_error (&_inner_error_);
 #line 1285 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 8964 "ConfigurationInterfaces.c"
+#line 8974 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -8975,7 +8985,7 @@ void configuration_facade_set_library_window_state (ConfigurationFacade* self, g
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1284 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_library_window_state (self, maximize, dimensions);
-#line 8974 "ConfigurationInterfaces.c"
+#line 8984 "ConfigurationInterfaces.c"
 }
 
 
@@ -9004,8 +9014,8 @@ static gboolean configuration_facade_real_get_modify_originals (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1301 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9003 "ConfigurationInterfaces.c"
-				goto __catch161_configuration_error;
+#line 9013 "ConfigurationInterfaces.c"
+				goto __catch162_configuration_error;
 			}
 #line 1301 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9013,16 +9023,16 @@ static gboolean configuration_facade_real_get_modify_originals (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1301 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 9012 "ConfigurationInterfaces.c"
+#line 9022 "ConfigurationInterfaces.c"
 		}
 #line 1301 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1301 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9018 "ConfigurationInterfaces.c"
+#line 9028 "ConfigurationInterfaces.c"
 	}
-	goto __finally161;
-	__catch161_configuration_error:
+	goto __finally162;
+	__catch162_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9040,16 +9050,16 @@ static gboolean configuration_facade_real_get_modify_originals (ConfigurationFac
 		_g_error_free0 (err);
 #line 1306 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9039 "ConfigurationInterfaces.c"
+#line 9049 "ConfigurationInterfaces.c"
 	}
-	__finally161:
+	__finally162:
 #line 1300 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1300 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1300 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 9048 "ConfigurationInterfaces.c"
+#line 9058 "ConfigurationInterfaces.c"
 }
 
 
@@ -9058,7 +9068,7 @@ gboolean configuration_facade_get_modify_originals (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1299 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_modify_originals (self);
-#line 9057 "ConfigurationInterfaces.c"
+#line 9067 "ConfigurationInterfaces.c"
 }
 
 
@@ -9082,8 +9092,8 @@ static void configuration_facade_real_set_modify_originals (ConfigurationFacade*
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1312 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9081 "ConfigurationInterfaces.c"
-				goto __catch162_configuration_error;
+#line 9091 "ConfigurationInterfaces.c"
+				goto __catch163_configuration_error;
 			}
 #line 1312 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9091,11 +9101,11 @@ static void configuration_facade_real_set_modify_originals (ConfigurationFacade*
 			g_clear_error (&_inner_error_);
 #line 1312 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9090 "ConfigurationInterfaces.c"
+#line 9100 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally162;
-	__catch162_configuration_error:
+	goto __finally163;
+	__catch163_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9109,9 +9119,9 @@ static void configuration_facade_real_set_modify_originals (ConfigurationFacade*
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1311 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9108 "ConfigurationInterfaces.c"
+#line 9118 "ConfigurationInterfaces.c"
 	}
-	__finally162:
+	__finally163:
 #line 1311 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1311 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9120,7 +9130,7 @@ static void configuration_facade_real_set_modify_originals (ConfigurationFacade*
 		g_clear_error (&_inner_error_);
 #line 1311 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9119 "ConfigurationInterfaces.c"
+#line 9129 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9130,7 +9140,7 @@ void configuration_facade_set_modify_originals (ConfigurationFacade* self, gbool
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1310 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_modify_originals (self, modify_originals);
-#line 9129 "ConfigurationInterfaces.c"
+#line 9139 "ConfigurationInterfaces.c"
 }
 
 
@@ -9159,8 +9169,8 @@ static gint configuration_facade_real_get_photo_thumbnail_scale (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9158 "ConfigurationInterfaces.c"
-				goto __catch163_configuration_error;
+#line 9168 "ConfigurationInterfaces.c"
+				goto __catch164_configuration_error;
 			}
 #line 1323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9168,16 +9178,16 @@ static gint configuration_facade_real_get_photo_thumbnail_scale (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 9167 "ConfigurationInterfaces.c"
+#line 9177 "ConfigurationInterfaces.c"
 		}
 #line 1323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1323 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9173 "ConfigurationInterfaces.c"
+#line 9183 "ConfigurationInterfaces.c"
 	}
-	goto __finally163;
-	__catch163_configuration_error:
+	goto __finally164;
+	__catch164_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9201,16 +9211,16 @@ static gint configuration_facade_real_get_photo_thumbnail_scale (ConfigurationFa
 		_g_error_free0 (err);
 #line 1326 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9200 "ConfigurationInterfaces.c"
+#line 9210 "ConfigurationInterfaces.c"
 	}
-	__finally163:
+	__finally164:
 #line 1322 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1322 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1322 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 9209 "ConfigurationInterfaces.c"
+#line 9219 "ConfigurationInterfaces.c"
 }
 
 
@@ -9219,7 +9229,7 @@ gint configuration_facade_get_photo_thumbnail_scale (ConfigurationFacade* self) 
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1321 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_photo_thumbnail_scale (self);
-#line 9218 "ConfigurationInterfaces.c"
+#line 9228 "ConfigurationInterfaces.c"
 }
 
 
@@ -9243,8 +9253,8 @@ static void configuration_facade_real_set_photo_thumbnail_scale (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1332 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9242 "ConfigurationInterfaces.c"
-				goto __catch164_configuration_error;
+#line 9252 "ConfigurationInterfaces.c"
+				goto __catch165_configuration_error;
 			}
 #line 1332 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9252,11 +9262,11 @@ static void configuration_facade_real_set_photo_thumbnail_scale (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1332 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9251 "ConfigurationInterfaces.c"
+#line 9261 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally164;
-	__catch164_configuration_error:
+	goto __finally165;
+	__catch165_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9270,9 +9280,9 @@ static void configuration_facade_real_set_photo_thumbnail_scale (ConfigurationFa
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1331 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9269 "ConfigurationInterfaces.c"
+#line 9279 "ConfigurationInterfaces.c"
 	}
-	__finally164:
+	__finally165:
 #line 1331 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1331 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9281,7 +9291,7 @@ static void configuration_facade_real_set_photo_thumbnail_scale (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 1331 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9280 "ConfigurationInterfaces.c"
+#line 9290 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9291,7 +9301,7 @@ void configuration_facade_set_photo_thumbnail_scale (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1330 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_photo_thumbnail_scale (self, scale);
-#line 9290 "ConfigurationInterfaces.c"
+#line 9300 "ConfigurationInterfaces.c"
 }
 
 
@@ -9320,8 +9330,8 @@ static gdouble configuration_facade_real_get_printing_content_height (Configurat
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1343 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9319 "ConfigurationInterfaces.c"
-				goto __catch165_configuration_error;
+#line 9329 "ConfigurationInterfaces.c"
+				goto __catch166_configuration_error;
 			}
 #line 1343 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9329,16 +9339,16 @@ static gdouble configuration_facade_real_get_printing_content_height (Configurat
 			g_clear_error (&_inner_error_);
 #line 1343 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0.0;
-#line 9328 "ConfigurationInterfaces.c"
+#line 9338 "ConfigurationInterfaces.c"
 		}
 #line 1343 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1343 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9334 "ConfigurationInterfaces.c"
+#line 9344 "ConfigurationInterfaces.c"
 	}
-	goto __finally165;
-	__catch165_configuration_error:
+	goto __finally166;
+	__catch166_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9356,16 +9366,16 @@ static gdouble configuration_facade_real_get_printing_content_height (Configurat
 		_g_error_free0 (err);
 #line 1347 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9355 "ConfigurationInterfaces.c"
+#line 9365 "ConfigurationInterfaces.c"
 	}
-	__finally165:
+	__finally166:
 #line 1342 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1342 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1342 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0.0;
-#line 9364 "ConfigurationInterfaces.c"
+#line 9374 "ConfigurationInterfaces.c"
 }
 
 
@@ -9374,7 +9384,7 @@ gdouble configuration_facade_get_printing_content_height (ConfigurationFacade* s
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0.0);
 #line 1341 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_content_height (self);
-#line 9373 "ConfigurationInterfaces.c"
+#line 9383 "ConfigurationInterfaces.c"
 }
 
 
@@ -9398,8 +9408,8 @@ static void configuration_facade_real_set_printing_content_height (Configuration
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1353 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9397 "ConfigurationInterfaces.c"
-				goto __catch166_configuration_error;
+#line 9407 "ConfigurationInterfaces.c"
+				goto __catch167_configuration_error;
 			}
 #line 1353 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9407,11 +9417,11 @@ static void configuration_facade_real_set_printing_content_height (Configuration
 			g_clear_error (&_inner_error_);
 #line 1353 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9406 "ConfigurationInterfaces.c"
+#line 9416 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally166;
-	__catch166_configuration_error:
+	goto __finally167;
+	__catch167_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9425,9 +9435,9 @@ static void configuration_facade_real_set_printing_content_height (Configuration
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1352 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9424 "ConfigurationInterfaces.c"
+#line 9434 "ConfigurationInterfaces.c"
 	}
-	__finally166:
+	__finally167:
 #line 1352 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1352 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9436,7 +9446,7 @@ static void configuration_facade_real_set_printing_content_height (Configuration
 		g_clear_error (&_inner_error_);
 #line 1352 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9435 "ConfigurationInterfaces.c"
+#line 9445 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9446,7 +9456,7 @@ void configuration_facade_set_printing_content_height (ConfigurationFacade* self
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1351 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_content_height (self, content_height);
-#line 9445 "ConfigurationInterfaces.c"
+#line 9455 "ConfigurationInterfaces.c"
 }
 
 
@@ -9475,8 +9485,8 @@ static gint configuration_facade_real_get_printing_content_layout (Configuration
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1365 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9474 "ConfigurationInterfaces.c"
-				goto __catch167_configuration_error;
+#line 9484 "ConfigurationInterfaces.c"
+				goto __catch168_configuration_error;
 			}
 #line 1365 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9484,16 +9494,16 @@ static gint configuration_facade_real_get_printing_content_layout (Configuration
 			g_clear_error (&_inner_error_);
 #line 1365 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 9483 "ConfigurationInterfaces.c"
+#line 9493 "ConfigurationInterfaces.c"
 		}
 #line 1365 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_ - 1;
 #line 1365 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9489 "ConfigurationInterfaces.c"
+#line 9499 "ConfigurationInterfaces.c"
 	}
-	goto __finally167;
-	__catch167_configuration_error:
+	goto __finally168;
+	__catch168_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9511,16 +9521,16 @@ static gint configuration_facade_real_get_printing_content_layout (Configuration
 		_g_error_free0 (err);
 #line 1369 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9510 "ConfigurationInterfaces.c"
+#line 9520 "ConfigurationInterfaces.c"
 	}
-	__finally167:
+	__finally168:
 #line 1364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1364 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 9519 "ConfigurationInterfaces.c"
+#line 9529 "ConfigurationInterfaces.c"
 }
 
 
@@ -9529,7 +9539,7 @@ gint configuration_facade_get_printing_content_layout (ConfigurationFacade* self
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1363 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_content_layout (self);
-#line 9528 "ConfigurationInterfaces.c"
+#line 9538 "ConfigurationInterfaces.c"
 }
 
 
@@ -9553,8 +9563,8 @@ static void configuration_facade_real_set_printing_content_layout (Configuration
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1375 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9552 "ConfigurationInterfaces.c"
-				goto __catch168_configuration_error;
+#line 9562 "ConfigurationInterfaces.c"
+				goto __catch169_configuration_error;
 			}
 #line 1375 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9562,11 +9572,11 @@ static void configuration_facade_real_set_printing_content_layout (Configuration
 			g_clear_error (&_inner_error_);
 #line 1375 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9561 "ConfigurationInterfaces.c"
+#line 9571 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally168;
-	__catch168_configuration_error:
+	goto __finally169;
+	__catch169_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9580,9 +9590,9 @@ static void configuration_facade_real_set_printing_content_layout (Configuration
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1374 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9579 "ConfigurationInterfaces.c"
+#line 9589 "ConfigurationInterfaces.c"
 	}
-	__finally168:
+	__finally169:
 #line 1374 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1374 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9591,7 +9601,7 @@ static void configuration_facade_real_set_printing_content_layout (Configuration
 		g_clear_error (&_inner_error_);
 #line 1374 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9590 "ConfigurationInterfaces.c"
+#line 9600 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9601,7 +9611,7 @@ void configuration_facade_set_printing_content_layout (ConfigurationFacade* self
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1373 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_content_layout (self, layout_code);
-#line 9600 "ConfigurationInterfaces.c"
+#line 9610 "ConfigurationInterfaces.c"
 }
 
 
@@ -9630,8 +9640,8 @@ static gint configuration_facade_real_get_printing_content_ppi (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9629 "ConfigurationInterfaces.c"
-				goto __catch169_configuration_error;
+#line 9639 "ConfigurationInterfaces.c"
+				goto __catch170_configuration_error;
 			}
 #line 1387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9639,16 +9649,16 @@ static gint configuration_facade_real_get_printing_content_ppi (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 9638 "ConfigurationInterfaces.c"
+#line 9648 "ConfigurationInterfaces.c"
 		}
 #line 1387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1387 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9644 "ConfigurationInterfaces.c"
+#line 9654 "ConfigurationInterfaces.c"
 	}
-	goto __finally169;
-	__catch169_configuration_error:
+	goto __finally170;
+	__catch170_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9666,16 +9676,16 @@ static gint configuration_facade_real_get_printing_content_ppi (ConfigurationFac
 		_g_error_free0 (err);
 #line 1391 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9665 "ConfigurationInterfaces.c"
+#line 9675 "ConfigurationInterfaces.c"
 	}
-	__finally169:
+	__finally170:
 #line 1386 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1386 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1386 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 9674 "ConfigurationInterfaces.c"
+#line 9684 "ConfigurationInterfaces.c"
 }
 
 
@@ -9684,7 +9694,7 @@ gint configuration_facade_get_printing_content_ppi (ConfigurationFacade* self) {
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1385 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_content_ppi (self);
-#line 9683 "ConfigurationInterfaces.c"
+#line 9693 "ConfigurationInterfaces.c"
 }
 
 
@@ -9708,8 +9718,8 @@ static void configuration_facade_real_set_printing_content_ppi (ConfigurationFac
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1397 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9707 "ConfigurationInterfaces.c"
-				goto __catch170_configuration_error;
+#line 9717 "ConfigurationInterfaces.c"
+				goto __catch171_configuration_error;
 			}
 #line 1397 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9717,11 +9727,11 @@ static void configuration_facade_real_set_printing_content_ppi (ConfigurationFac
 			g_clear_error (&_inner_error_);
 #line 1397 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9716 "ConfigurationInterfaces.c"
+#line 9726 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally170;
-	__catch170_configuration_error:
+	goto __finally171;
+	__catch171_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9735,9 +9745,9 @@ static void configuration_facade_real_set_printing_content_ppi (ConfigurationFac
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1396 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9734 "ConfigurationInterfaces.c"
+#line 9744 "ConfigurationInterfaces.c"
 	}
-	__finally170:
+	__finally171:
 #line 1396 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1396 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9746,7 +9756,7 @@ static void configuration_facade_real_set_printing_content_ppi (ConfigurationFac
 		g_clear_error (&_inner_error_);
 #line 1396 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9745 "ConfigurationInterfaces.c"
+#line 9755 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9756,7 +9766,7 @@ void configuration_facade_set_printing_content_ppi (ConfigurationFacade* self, g
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1395 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_content_ppi (self, content_ppi);
-#line 9755 "ConfigurationInterfaces.c"
+#line 9765 "ConfigurationInterfaces.c"
 }
 
 
@@ -9785,8 +9795,8 @@ static gint configuration_facade_real_get_printing_content_units (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1408 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9784 "ConfigurationInterfaces.c"
-				goto __catch171_configuration_error;
+#line 9794 "ConfigurationInterfaces.c"
+				goto __catch172_configuration_error;
 			}
 #line 1408 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9794,16 +9804,16 @@ static gint configuration_facade_real_get_printing_content_units (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 1408 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 9793 "ConfigurationInterfaces.c"
+#line 9803 "ConfigurationInterfaces.c"
 		}
 #line 1408 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_ - 1;
 #line 1408 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9799 "ConfigurationInterfaces.c"
+#line 9809 "ConfigurationInterfaces.c"
 	}
-	goto __finally171;
-	__catch171_configuration_error:
+	goto __finally172;
+	__catch172_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9821,16 +9831,16 @@ static gint configuration_facade_real_get_printing_content_units (ConfigurationF
 		_g_error_free0 (err);
 #line 1412 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9820 "ConfigurationInterfaces.c"
+#line 9830 "ConfigurationInterfaces.c"
 	}
-	__finally171:
+	__finally172:
 #line 1407 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1407 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1407 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 9829 "ConfigurationInterfaces.c"
+#line 9839 "ConfigurationInterfaces.c"
 }
 
 
@@ -9839,7 +9849,7 @@ gint configuration_facade_get_printing_content_units (ConfigurationFacade* self)
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1406 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_content_units (self);
-#line 9838 "ConfigurationInterfaces.c"
+#line 9848 "ConfigurationInterfaces.c"
 }
 
 
@@ -9863,8 +9873,8 @@ static void configuration_facade_real_set_printing_content_units (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1418 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9862 "ConfigurationInterfaces.c"
-				goto __catch172_configuration_error;
+#line 9872 "ConfigurationInterfaces.c"
+				goto __catch173_configuration_error;
 			}
 #line 1418 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9872,11 +9882,11 @@ static void configuration_facade_real_set_printing_content_units (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 1418 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 9871 "ConfigurationInterfaces.c"
+#line 9881 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally172;
-	__catch172_configuration_error:
+	goto __finally173;
+	__catch173_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -9890,9 +9900,9 @@ static void configuration_facade_real_set_printing_content_units (ConfigurationF
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1417 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 9889 "ConfigurationInterfaces.c"
+#line 9899 "ConfigurationInterfaces.c"
 	}
-	__finally172:
+	__finally173:
 #line 1417 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1417 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -9901,7 +9911,7 @@ static void configuration_facade_real_set_printing_content_units (ConfigurationF
 		g_clear_error (&_inner_error_);
 #line 1417 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 9900 "ConfigurationInterfaces.c"
+#line 9910 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -9911,7 +9921,7 @@ void configuration_facade_set_printing_content_units (ConfigurationFacade* self,
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1416 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_content_units (self, units_code);
-#line 9910 "ConfigurationInterfaces.c"
+#line 9920 "ConfigurationInterfaces.c"
 }
 
 
@@ -9940,8 +9950,8 @@ static gdouble configuration_facade_real_get_printing_content_width (Configurati
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1430 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 9939 "ConfigurationInterfaces.c"
-				goto __catch173_configuration_error;
+#line 9949 "ConfigurationInterfaces.c"
+				goto __catch174_configuration_error;
 			}
 #line 1430 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -9949,16 +9959,16 @@ static gdouble configuration_facade_real_get_printing_content_width (Configurati
 			g_clear_error (&_inner_error_);
 #line 1430 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0.0;
-#line 9948 "ConfigurationInterfaces.c"
+#line 9958 "ConfigurationInterfaces.c"
 		}
 #line 1430 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1430 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9954 "ConfigurationInterfaces.c"
+#line 9964 "ConfigurationInterfaces.c"
 	}
-	goto __finally173;
-	__catch173_configuration_error:
+	goto __finally174;
+	__catch174_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -9976,16 +9986,16 @@ static gdouble configuration_facade_real_get_printing_content_width (Configurati
 		_g_error_free0 (err);
 #line 1434 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 9975 "ConfigurationInterfaces.c"
+#line 9985 "ConfigurationInterfaces.c"
 	}
-	__finally173:
+	__finally174:
 #line 1429 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1429 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1429 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0.0;
-#line 9984 "ConfigurationInterfaces.c"
+#line 9994 "ConfigurationInterfaces.c"
 }
 
 
@@ -9994,7 +10004,7 @@ gdouble configuration_facade_get_printing_content_width (ConfigurationFacade* se
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0.0);
 #line 1428 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_content_width (self);
-#line 9993 "ConfigurationInterfaces.c"
+#line 10003 "ConfigurationInterfaces.c"
 }
 
 
@@ -10018,8 +10028,8 @@ static void configuration_facade_real_set_printing_content_width (ConfigurationF
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1440 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10017 "ConfigurationInterfaces.c"
-				goto __catch174_configuration_error;
+#line 10027 "ConfigurationInterfaces.c"
+				goto __catch175_configuration_error;
 			}
 #line 1440 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10027,11 +10037,11 @@ static void configuration_facade_real_set_printing_content_width (ConfigurationF
 			g_clear_error (&_inner_error_);
 #line 1440 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10026 "ConfigurationInterfaces.c"
+#line 10036 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally174;
-	__catch174_configuration_error:
+	goto __finally175;
+	__catch175_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -10045,9 +10055,9 @@ static void configuration_facade_real_set_printing_content_width (ConfigurationF
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1439 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10044 "ConfigurationInterfaces.c"
+#line 10054 "ConfigurationInterfaces.c"
 	}
-	__finally174:
+	__finally175:
 #line 1439 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1439 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -10056,7 +10066,7 @@ static void configuration_facade_real_set_printing_content_width (ConfigurationF
 		g_clear_error (&_inner_error_);
 #line 1439 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10055 "ConfigurationInterfaces.c"
+#line 10065 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -10066,7 +10076,7 @@ void configuration_facade_set_printing_content_width (ConfigurationFacade* self,
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1438 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_content_width (self, content_width);
-#line 10065 "ConfigurationInterfaces.c"
+#line 10075 "ConfigurationInterfaces.c"
 }
 
 
@@ -10095,8 +10105,8 @@ static gint configuration_facade_real_get_printing_images_per_page (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1452 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10094 "ConfigurationInterfaces.c"
-				goto __catch175_configuration_error;
+#line 10104 "ConfigurationInterfaces.c"
+				goto __catch176_configuration_error;
 			}
 #line 1452 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10104,16 +10114,16 @@ static gint configuration_facade_real_get_printing_images_per_page (Configuratio
 			g_clear_error (&_inner_error_);
 #line 1452 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 10103 "ConfigurationInterfaces.c"
+#line 10113 "ConfigurationInterfaces.c"
 		}
 #line 1452 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_ - 1;
 #line 1452 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10109 "ConfigurationInterfaces.c"
+#line 10119 "ConfigurationInterfaces.c"
 	}
-	goto __finally175;
-	__catch175_configuration_error:
+	goto __finally176;
+	__catch176_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -10131,16 +10141,16 @@ static gint configuration_facade_real_get_printing_images_per_page (Configuratio
 		_g_error_free0 (err);
 #line 1456 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10130 "ConfigurationInterfaces.c"
+#line 10140 "ConfigurationInterfaces.c"
 	}
-	__finally175:
+	__finally176:
 #line 1451 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1451 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1451 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 10139 "ConfigurationInterfaces.c"
+#line 10149 "ConfigurationInterfaces.c"
 }
 
 
@@ -10149,7 +10159,7 @@ gint configuration_facade_get_printing_images_per_page (ConfigurationFacade* sel
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1450 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_images_per_page (self);
-#line 10148 "ConfigurationInterfaces.c"
+#line 10158 "ConfigurationInterfaces.c"
 }
 
 
@@ -10173,8 +10183,8 @@ static void configuration_facade_real_set_printing_images_per_page (Configuratio
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1462 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10172 "ConfigurationInterfaces.c"
-				goto __catch176_configuration_error;
+#line 10182 "ConfigurationInterfaces.c"
+				goto __catch177_configuration_error;
 			}
 #line 1462 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10182,11 +10192,11 @@ static void configuration_facade_real_set_printing_images_per_page (Configuratio
 			g_clear_error (&_inner_error_);
 #line 1462 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10181 "ConfigurationInterfaces.c"
+#line 10191 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally176;
-	__catch176_configuration_error:
+	goto __finally177;
+	__catch177_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -10200,9 +10210,9 @@ static void configuration_facade_real_set_printing_images_per_page (Configuratio
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1461 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10199 "ConfigurationInterfaces.c"
+#line 10209 "ConfigurationInterfaces.c"
 	}
-	__finally176:
+	__finally177:
 #line 1461 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1461 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -10211,7 +10221,7 @@ static void configuration_facade_real_set_printing_images_per_page (Configuratio
 		g_clear_error (&_inner_error_);
 #line 1461 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10210 "ConfigurationInterfaces.c"
+#line 10220 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -10221,7 +10231,7 @@ void configuration_facade_set_printing_images_per_page (ConfigurationFacade* sel
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1460 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_images_per_page (self, images_per_page_code);
-#line 10220 "ConfigurationInterfaces.c"
+#line 10230 "ConfigurationInterfaces.c"
 }
 
 
@@ -10250,8 +10260,8 @@ static gboolean configuration_facade_real_get_printing_match_aspect_ratio (Confi
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10249 "ConfigurationInterfaces.c"
-				goto __catch177_configuration_error;
+#line 10259 "ConfigurationInterfaces.c"
+				goto __catch178_configuration_error;
 			}
 #line 1474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10259,16 +10269,16 @@ static gboolean configuration_facade_real_get_printing_match_aspect_ratio (Confi
 			g_clear_error (&_inner_error_);
 #line 1474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 10258 "ConfigurationInterfaces.c"
+#line 10268 "ConfigurationInterfaces.c"
 		}
 #line 1474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1474 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10264 "ConfigurationInterfaces.c"
+#line 10274 "ConfigurationInterfaces.c"
 	}
-	goto __finally177;
-	__catch177_configuration_error:
+	goto __finally178;
+	__catch178_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -10286,16 +10296,16 @@ static gboolean configuration_facade_real_get_printing_match_aspect_ratio (Confi
 		_g_error_free0 (err);
 #line 1478 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10285 "ConfigurationInterfaces.c"
+#line 10295 "ConfigurationInterfaces.c"
 	}
-	__finally177:
+	__finally178:
 #line 1473 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1473 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1473 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 10294 "ConfigurationInterfaces.c"
+#line 10304 "ConfigurationInterfaces.c"
 }
 
 
@@ -10304,7 +10314,7 @@ gboolean configuration_facade_get_printing_match_aspect_ratio (ConfigurationFaca
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1472 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_match_aspect_ratio (self);
-#line 10303 "ConfigurationInterfaces.c"
+#line 10313 "ConfigurationInterfaces.c"
 }
 
 
@@ -10328,8 +10338,8 @@ static void configuration_facade_real_set_printing_match_aspect_ratio (Configura
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1484 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10327 "ConfigurationInterfaces.c"
-				goto __catch178_configuration_error;
+#line 10337 "ConfigurationInterfaces.c"
+				goto __catch179_configuration_error;
 			}
 #line 1484 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10337,11 +10347,11 @@ static void configuration_facade_real_set_printing_match_aspect_ratio (Configura
 			g_clear_error (&_inner_error_);
 #line 1484 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10336 "ConfigurationInterfaces.c"
+#line 10346 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally178;
-	__catch178_configuration_error:
+	goto __finally179;
+	__catch179_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -10355,9 +10365,9 @@ static void configuration_facade_real_set_printing_match_aspect_ratio (Configura
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10354 "ConfigurationInterfaces.c"
+#line 10364 "ConfigurationInterfaces.c"
 	}
-	__finally178:
+	__finally179:
 #line 1483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -10366,7 +10376,7 @@ static void configuration_facade_real_set_printing_match_aspect_ratio (Configura
 		g_clear_error (&_inner_error_);
 #line 1483 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10365 "ConfigurationInterfaces.c"
+#line 10375 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -10376,7 +10386,7 @@ void configuration_facade_set_printing_match_aspect_ratio (ConfigurationFacade* 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1482 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_match_aspect_ratio (self, match_aspect_ratio);
-#line 10375 "ConfigurationInterfaces.c"
+#line 10385 "ConfigurationInterfaces.c"
 }
 
 
@@ -10405,8 +10415,8 @@ static gboolean configuration_facade_real_get_printing_print_titles (Configurati
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1496 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10404 "ConfigurationInterfaces.c"
-				goto __catch179_configuration_error;
+#line 10414 "ConfigurationInterfaces.c"
+				goto __catch180_configuration_error;
 			}
 #line 1496 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10414,16 +10424,16 @@ static gboolean configuration_facade_real_get_printing_print_titles (Configurati
 			g_clear_error (&_inner_error_);
 #line 1496 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 10413 "ConfigurationInterfaces.c"
+#line 10423 "ConfigurationInterfaces.c"
 		}
 #line 1496 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
 #line 1496 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10419 "ConfigurationInterfaces.c"
+#line 10429 "ConfigurationInterfaces.c"
 	}
-	goto __finally179;
-	__catch179_configuration_error:
+	goto __finally180;
+	__catch180_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -10441,16 +10451,16 @@ static gboolean configuration_facade_real_get_printing_print_titles (Configurati
 		_g_error_free0 (err);
 #line 1500 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10440 "ConfigurationInterfaces.c"
+#line 10450 "ConfigurationInterfaces.c"
 	}
-	__finally179:
+	__finally180:
 #line 1495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1495 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 10449 "ConfigurationInterfaces.c"
+#line 10459 "ConfigurationInterfaces.c"
 }
 
 
@@ -10459,7 +10469,7 @@ gboolean configuration_facade_get_printing_print_titles (ConfigurationFacade* se
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
 #line 1494 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_print_titles (self);
-#line 10458 "ConfigurationInterfaces.c"
+#line 10468 "ConfigurationInterfaces.c"
 }
 
 
@@ -10483,8 +10493,8 @@ static void configuration_facade_real_set_printing_print_titles (ConfigurationFa
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10482 "ConfigurationInterfaces.c"
-				goto __catch180_configuration_error;
+#line 10492 "ConfigurationInterfaces.c"
+				goto __catch181_configuration_error;
 			}
 #line 1506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10492,11 +10502,11 @@ static void configuration_facade_real_set_printing_print_titles (ConfigurationFa
 			g_clear_error (&_inner_error_);
 #line 1506 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10491 "ConfigurationInterfaces.c"
+#line 10501 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally180;
-	__catch180_configuration_error:
+	goto __finally181;
+	__catch181_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
@@ -10510,9 +10520,9 @@ static void configuration_facade_real_set_printing_print_titles (ConfigurationFa
 		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1505 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10509 "ConfigurationInterfaces.c"
+#line 10519 "ConfigurationInterfaces.c"
 	}
-	__finally180:
+	__finally181:
 #line 1505 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1505 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -10521,7 +10531,7 @@ static void configuration_facade_real_set_printing_print_titles (ConfigurationFa
 		g_clear_error (&_inner_error_);
 #line 1505 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10520 "ConfigurationInterfaces.c"
+#line 10530 "ConfigurationInterfaces.c"
 	}
 }
 
@@ -10531,7 +10541,7 @@ void configuration_facade_set_printing_print_titles (ConfigurationFacade* self, 
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
 #line 1504 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_print_titles (self, print_titles);
-#line 10530 "ConfigurationInterfaces.c"
+#line 10540 "ConfigurationInterfaces.c"
 }
 
 
@@ -10544,6 +10554,8 @@ static gint configuration_facade_real_get_printing_size_selection (Configuration
 		ConfigurationEngine* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
+		gint val = 0;
+		gint _tmp5_ = 0;
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
@@ -10560,8 +10572,8 @@ static gint configuration_facade_real_get_printing_size_selection (Configuration
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10559 "ConfigurationInterfaces.c"
-				goto __catch181_configuration_error;
+#line 10571 "ConfigurationInterfaces.c"
+				goto __catch182_configuration_error;
 			}
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -10569,43 +10581,64 @@ static gint configuration_facade_real_get_printing_size_selection (Configuration
 			g_clear_error (&_inner_error_);
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 10568 "ConfigurationInterfaces.c"
+#line 10580 "ConfigurationInterfaces.c"
 		}
 #line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		result = _tmp0_ - 1;
-#line 1518 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		val = _tmp0_ - 1;
+#line 1519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp5_ = val;
+#line 1519 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		if (_tmp5_ == -2) {
+#line 10588 "ConfigurationInterfaces.c"
+			ResourcesUnitSystem _tmp6_ = 0;
+#line 1520 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			_tmp6_ = resources_get_default_measurement_unit ();
+#line 1520 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			if (_tmp6_ == RESOURCES_UNIT_SYSTEM_IMPERIAL) {
+#line 1521 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+				val = 2;
+#line 10596 "ConfigurationInterfaces.c"
+			} else {
+#line 1523 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+				val = 10;
+#line 10600 "ConfigurationInterfaces.c"
+			}
+		}
+#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		result = val;
+#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10574 "ConfigurationInterfaces.c"
+#line 10607 "ConfigurationInterfaces.c"
 	}
-	goto __finally181;
-	__catch181_configuration_error:
+	goto __finally182;
+	__catch182_configuration_error:
 	{
 		GError* err = NULL;
-		GError* _tmp5_ = NULL;
+		GError* _tmp7_ = NULL;
 #line 1517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
 #line 1517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1520 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp5_ = err;
-#line 1520 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1522 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1529 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp7_ = err;
+#line 1529 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_facade_on_configuration_error (self, _tmp7_);
+#line 1531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = 0;
-#line 1522 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1522 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10595 "ConfigurationInterfaces.c"
+#line 10628 "ConfigurationInterfaces.c"
 	}
-	__finally181:
+	__finally182:
 #line 1517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
 #line 1517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
 #line 1517 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 10604 "ConfigurationInterfaces.c"
+#line 10637 "ConfigurationInterfaces.c"
 }
 
 
@@ -10614,7 +10647,7 @@ gint configuration_facade_get_printing_size_selection (ConfigurationFacade* self
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
 #line 1516 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_size_selection (self);
-#line 10613 "ConfigurationInterfaces.c"
+#line 10646 "ConfigurationInterfaces.c"
 }
 
 
@@ -10624,69 +10657,69 @@ static void configuration_facade_real_set_printing_size_selection (Configuration
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = size_code;
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_int_property (_tmp1_, CONFIGURABLE_PROPERTY_PRINTING_SIZE_SELECTION, _tmp2_ + 1, &_inner_error_);
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10637 "ConfigurationInterfaces.c"
-				goto __catch182_configuration_error;
+#line 10670 "ConfigurationInterfaces.c"
+				goto __catch183_configuration_error;
 			}
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1528 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1537 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10646 "ConfigurationInterfaces.c"
+#line 10679 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally182;
-	__catch182_configuration_error:
+	goto __finally183;
+	__catch183_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1531 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10664 "ConfigurationInterfaces.c"
+#line 10697 "ConfigurationInterfaces.c"
 	}
-	__finally182:
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally183:
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1527 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1536 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10675 "ConfigurationInterfaces.c"
+#line 10708 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_printing_size_selection (ConfigurationFacade* self, gint size_code) {
-#line 1526 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1535 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1526 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1535 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_size_selection (self, size_code);
-#line 10685 "ConfigurationInterfaces.c"
+#line 10718 "ConfigurationInterfaces.c"
 }
 
 
@@ -10700,161 +10733,161 @@ static gchar* configuration_facade_real_get_printing_titles_font (ConfigurationF
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_string_property (_tmp2_, CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT, &_inner_error_);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10715 "ConfigurationInterfaces.c"
-				goto __catch183_configuration_error;
-			}
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			g_clear_error (&_inner_error_);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			return NULL;
-#line 10724 "ConfigurationInterfaces.c"
-		}
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp5_ = _tmp0_;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp0_ = NULL;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		result = _tmp5_;
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_free0 (_tmp0_);
-#line 1540 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		return result;
-#line 10736 "ConfigurationInterfaces.c"
-	}
-	goto __finally183;
-	__catch183_configuration_error:
-	{
-		GError* err = NULL;
-		GError* _tmp6_ = NULL;
-		gchar* _tmp7_ = NULL;
-#line 1539 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		err = _inner_error_;
-#line 1539 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_inner_error_ = NULL;
-#line 1542 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp6_ = err;
-#line 1542 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_facade_on_configuration_error (self, _tmp6_);
-#line 1546 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp7_ = g_strdup ("Sans Bold 12");
-#line 1546 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		result = _tmp7_;
-#line 1546 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_error_free0 (err);
-#line 1546 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		return result;
-#line 10760 "ConfigurationInterfaces.c"
-	}
-	__finally183:
-#line 1539 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1539 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_clear_error (&_inner_error_);
-#line 1539 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	return NULL;
-#line 10769 "ConfigurationInterfaces.c"
-}
-
-
-gchar* configuration_facade_get_printing_titles_font (ConfigurationFacade* self) {
-#line 1538 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
-#line 1538 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_titles_font (self);
-#line 10778 "ConfigurationInterfaces.c"
-}
-
-
-static void configuration_facade_real_set_printing_titles_font (ConfigurationFacade* self, const gchar* font_name) {
-	GError * _inner_error_ = NULL;
-#line 1550 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_return_if_fail (font_name != NULL);
-#line 10786 "ConfigurationInterfaces.c"
-	{
-		ConfigurationEngine* _tmp0_ = NULL;
-		ConfigurationEngine* _tmp1_ = NULL;
-		const gchar* _tmp2_ = NULL;
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp0_ = configuration_facade_get_engine (self);
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp1_ = _tmp0_;
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp2_ = font_name;
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_engine_set_string_property (_tmp1_, CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT, _tmp2_, &_inner_error_);
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_object_unref0 (_tmp1_);
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10805 "ConfigurationInterfaces.c"
+#line 10748 "ConfigurationInterfaces.c"
 				goto __catch184_configuration_error;
 			}
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1552 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			return;
-#line 10814 "ConfigurationInterfaces.c"
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			return NULL;
+#line 10757 "ConfigurationInterfaces.c"
 		}
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp5_ = _tmp0_;
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp0_ = NULL;
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		result = _tmp5_;
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_free0 (_tmp0_);
+#line 1549 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		return result;
+#line 10769 "ConfigurationInterfaces.c"
 	}
 	goto __finally184;
 	__catch184_configuration_error:
 	{
 		GError* err = NULL;
-		GError* _tmp3_ = NULL;
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		GError* _tmp6_ = NULL;
+		gchar* _tmp7_ = NULL;
+#line 1548 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1548 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1554 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp3_ = err;
-#line 1554 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp6_ = err;
+#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_facade_on_configuration_error (self, _tmp6_);
+#line 1555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp7_ = g_strdup ("Sans Bold 12");
+#line 1555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		result = _tmp7_;
+#line 1555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10832 "ConfigurationInterfaces.c"
+#line 1555 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		return result;
+#line 10793 "ConfigurationInterfaces.c"
 	}
 	__finally184:
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1548 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1548 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_clear_error (&_inner_error_);
+#line 1548 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	return NULL;
+#line 10802 "ConfigurationInterfaces.c"
+}
+
+
+gchar* configuration_facade_get_printing_titles_font (ConfigurationFacade* self) {
+#line 1547 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
+#line 1547 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	return CONFIGURATION_FACADE_GET_CLASS (self)->get_printing_titles_font (self);
+#line 10811 "ConfigurationInterfaces.c"
+}
+
+
+static void configuration_facade_real_set_printing_titles_font (ConfigurationFacade* self, const gchar* font_name) {
+	GError * _inner_error_ = NULL;
+#line 1559 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_return_if_fail (font_name != NULL);
+#line 10819 "ConfigurationInterfaces.c"
+	{
+		ConfigurationEngine* _tmp0_ = NULL;
+		ConfigurationEngine* _tmp1_ = NULL;
+		const gchar* _tmp2_ = NULL;
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp0_ = configuration_facade_get_engine (self);
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp1_ = _tmp0_;
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp2_ = font_name;
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_engine_set_string_property (_tmp1_, CONFIGURABLE_PROPERTY_PRINTING_TITLES_FONT, _tmp2_, &_inner_error_);
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_object_unref0 (_tmp1_);
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 10838 "ConfigurationInterfaces.c"
+				goto __catch185_configuration_error;
+			}
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			g_clear_error (&_inner_error_);
+#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			return;
+#line 10847 "ConfigurationInterfaces.c"
+		}
+	}
+	goto __finally185;
+	__catch185_configuration_error:
+	{
+		GError* err = NULL;
+		GError* _tmp3_ = NULL;
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		err = _inner_error_;
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_inner_error_ = NULL;
+#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp3_ = err;
+#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_facade_on_configuration_error (self, _tmp3_);
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_error_free0 (err);
+#line 10865 "ConfigurationInterfaces.c"
+	}
+	__finally185:
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1551 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1560 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10843 "ConfigurationInterfaces.c"
+#line 10876 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_printing_titles_font (ConfigurationFacade* self, const gchar* font_name) {
-#line 1550 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1559 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1550 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1559 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_printing_titles_font (self, font_name);
-#line 10853 "ConfigurationInterfaces.c"
+#line 10886 "ConfigurationInterfaces.c"
 }
 
 
@@ -10867,77 +10900,77 @@ static gboolean configuration_facade_real_get_show_welcome_dialog (Configuration
 		ConfigurationEngine* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 		gboolean _tmp4_ = FALSE;
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_bool_property (_tmp2_, CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG, &_inner_error_);
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10882 "ConfigurationInterfaces.c"
-				goto __catch185_configuration_error;
+#line 10915 "ConfigurationInterfaces.c"
+				goto __catch186_configuration_error;
 			}
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 10891 "ConfigurationInterfaces.c"
+#line 10924 "ConfigurationInterfaces.c"
 		}
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1563 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10897 "ConfigurationInterfaces.c"
+#line 10930 "ConfigurationInterfaces.c"
 	}
-	goto __finally185;
-	__catch185_configuration_error:
+	goto __finally186;
+	__catch186_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1562 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1562 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1574 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1565 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1574 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1567 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1576 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = TRUE;
-#line 1567 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1576 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1567 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1576 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 10918 "ConfigurationInterfaces.c"
+#line 10951 "ConfigurationInterfaces.c"
 	}
-	__finally185:
-#line 1562 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally186:
+#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1562 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1562 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 10927 "ConfigurationInterfaces.c"
+#line 10960 "ConfigurationInterfaces.c"
 }
 
 
 gboolean configuration_facade_get_show_welcome_dialog (ConfigurationFacade* self) {
-#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1570 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
-#line 1561 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1570 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_show_welcome_dialog (self);
-#line 10936 "ConfigurationInterfaces.c"
+#line 10969 "ConfigurationInterfaces.c"
 }
 
 
@@ -10947,69 +10980,69 @@ static void configuration_facade_real_set_show_welcome_dialog (ConfigurationFaca
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = show;
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_bool_property (_tmp1_, CONFIGURABLE_PROPERTY_SHOW_WELCOME_DIALOG, _tmp2_, &_inner_error_);
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 10960 "ConfigurationInterfaces.c"
-				goto __catch186_configuration_error;
+#line 10993 "ConfigurationInterfaces.c"
+				goto __catch187_configuration_error;
 			}
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1573 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1582 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 10969 "ConfigurationInterfaces.c"
+#line 11002 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally186;
-	__catch186_configuration_error:
+	goto __finally187;
+	__catch187_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1576 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1576 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 10987 "ConfigurationInterfaces.c"
+#line 11020 "ConfigurationInterfaces.c"
 	}
-	__finally186:
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally187:
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1572 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1581 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 10998 "ConfigurationInterfaces.c"
+#line 11031 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_show_welcome_dialog (ConfigurationFacade* self, gboolean show) {
-#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1580 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1571 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1580 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_show_welcome_dialog (self, show);
-#line 11008 "ConfigurationInterfaces.c"
+#line 11041 "ConfigurationInterfaces.c"
 }
 
 
@@ -11022,77 +11055,77 @@ static gint configuration_facade_real_get_sidebar_position (ConfigurationFacade*
 		ConfigurationEngine* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_int_property (_tmp2_, CONFIGURABLE_PROPERTY_SIDEBAR_POSITION, &_inner_error_);
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11037 "ConfigurationInterfaces.c"
-				goto __catch187_configuration_error;
+#line 11070 "ConfigurationInterfaces.c"
+				goto __catch188_configuration_error;
 			}
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 11046 "ConfigurationInterfaces.c"
+#line 11079 "ConfigurationInterfaces.c"
 		}
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1585 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11052 "ConfigurationInterfaces.c"
+#line 11085 "ConfigurationInterfaces.c"
 	}
-	goto __finally187;
-	__catch187_configuration_error:
+	goto __finally188;
+	__catch188_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1584 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1584 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1587 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1596 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1587 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1596 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1598 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = 180;
-#line 1589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1598 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1589 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1598 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11073 "ConfigurationInterfaces.c"
+#line 11106 "ConfigurationInterfaces.c"
 	}
-	__finally187:
-#line 1584 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally188:
+#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1584 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1584 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 11082 "ConfigurationInterfaces.c"
+#line 11115 "ConfigurationInterfaces.c"
 }
 
 
 gint configuration_facade_get_sidebar_position (ConfigurationFacade* self) {
-#line 1583 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1592 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
-#line 1583 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1592 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_sidebar_position (self);
-#line 11091 "ConfigurationInterfaces.c"
+#line 11124 "ConfigurationInterfaces.c"
 }
 
 
@@ -11102,69 +11135,69 @@ static void configuration_facade_real_set_sidebar_position (ConfigurationFacade*
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = position;
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_int_property (_tmp1_, CONFIGURABLE_PROPERTY_SIDEBAR_POSITION, _tmp2_, &_inner_error_);
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11115 "ConfigurationInterfaces.c"
-				goto __catch188_configuration_error;
+#line 11148 "ConfigurationInterfaces.c"
+				goto __catch189_configuration_error;
 			}
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1595 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 11124 "ConfigurationInterfaces.c"
+#line 11157 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally188;
-	__catch188_configuration_error:
+	goto __finally189;
+	__catch189_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1597 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1597 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 11142 "ConfigurationInterfaces.c"
+#line 11175 "ConfigurationInterfaces.c"
 	}
-	__finally188:
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally189:
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1594 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1603 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 11153 "ConfigurationInterfaces.c"
+#line 11186 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_sidebar_position (ConfigurationFacade* self, gint position) {
-#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1602 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1593 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1602 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_sidebar_position (self, position);
-#line 11163 "ConfigurationInterfaces.c"
+#line 11196 "ConfigurationInterfaces.c"
 }
 
 
@@ -11177,77 +11210,77 @@ static gdouble configuration_facade_real_get_slideshow_delay (ConfigurationFacad
 		ConfigurationEngine* _tmp2_ = NULL;
 		gdouble _tmp3_ = 0.0;
 		gdouble _tmp4_ = 0.0;
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_double_property (_tmp2_, CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY, &_inner_error_);
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11192 "ConfigurationInterfaces.c"
-				goto __catch189_configuration_error;
+#line 11225 "ConfigurationInterfaces.c"
+				goto __catch190_configuration_error;
 			}
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0.0;
-#line 11201 "ConfigurationInterfaces.c"
+#line 11234 "ConfigurationInterfaces.c"
 		}
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1606 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11207 "ConfigurationInterfaces.c"
+#line 11240 "ConfigurationInterfaces.c"
 	}
-	goto __finally189;
-	__catch189_configuration_error:
+	goto __finally190;
+	__catch190_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1608 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1617 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1608 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1617 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1610 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1619 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = 3.0;
-#line 1610 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1619 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1610 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1619 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11228 "ConfigurationInterfaces.c"
+#line 11261 "ConfigurationInterfaces.c"
 	}
-	__finally189:
-#line 1605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally190:
+#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1605 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0.0;
-#line 11237 "ConfigurationInterfaces.c"
+#line 11270 "ConfigurationInterfaces.c"
 }
 
 
 gdouble configuration_facade_get_slideshow_delay (ConfigurationFacade* self) {
-#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1613 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0.0);
-#line 1604 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1613 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_slideshow_delay (self);
-#line 11246 "ConfigurationInterfaces.c"
+#line 11279 "ConfigurationInterfaces.c"
 }
 
 
@@ -11257,69 +11290,69 @@ static void configuration_facade_real_set_slideshow_delay (ConfigurationFacade* 
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gdouble _tmp2_ = 0.0;
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = delay;
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_double_property (_tmp1_, CONFIGURABLE_PROPERTY_SLIDESHOW_DELAY, _tmp2_, &_inner_error_);
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11270 "ConfigurationInterfaces.c"
-				goto __catch190_configuration_error;
+#line 11303 "ConfigurationInterfaces.c"
+				goto __catch191_configuration_error;
 			}
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1616 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 11279 "ConfigurationInterfaces.c"
+#line 11312 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally190;
-	__catch190_configuration_error:
+	goto __finally191;
+	__catch191_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1618 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1618 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 11297 "ConfigurationInterfaces.c"
+#line 11330 "ConfigurationInterfaces.c"
 	}
-	__finally190:
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally191:
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1615 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1624 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 11308 "ConfigurationInterfaces.c"
+#line 11341 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_slideshow_delay (ConfigurationFacade* self, gdouble delay) {
-#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1623 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1614 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1623 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_slideshow_delay (self, delay);
-#line 11318 "ConfigurationInterfaces.c"
+#line 11351 "ConfigurationInterfaces.c"
 }
 
 
@@ -11332,77 +11365,77 @@ static gdouble configuration_facade_real_get_slideshow_transition_delay (Configu
 		ConfigurationEngine* _tmp2_ = NULL;
 		gdouble _tmp3_ = 0.0;
 		gdouble _tmp4_ = 0.0;
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_double_property (_tmp2_, CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY, &_inner_error_);
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11347 "ConfigurationInterfaces.c"
-				goto __catch191_configuration_error;
+#line 11380 "ConfigurationInterfaces.c"
+				goto __catch192_configuration_error;
 			}
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0.0;
-#line 11356 "ConfigurationInterfaces.c"
+#line 11389 "ConfigurationInterfaces.c"
 		}
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1627 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11362 "ConfigurationInterfaces.c"
+#line 11395 "ConfigurationInterfaces.c"
 	}
-	goto __finally191;
-	__catch191_configuration_error:
+	goto __finally192;
+	__catch192_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1630 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1639 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1630 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1639 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1632 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1641 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = 0.3;
-#line 1632 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1641 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1632 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1641 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11383 "ConfigurationInterfaces.c"
+#line 11416 "ConfigurationInterfaces.c"
 	}
-	__finally191:
-#line 1626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally192:
+#line 1635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1626 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1635 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0.0;
-#line 11392 "ConfigurationInterfaces.c"
+#line 11425 "ConfigurationInterfaces.c"
 }
 
 
 gdouble configuration_facade_get_slideshow_transition_delay (ConfigurationFacade* self) {
-#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1634 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0.0);
-#line 1625 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1634 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_slideshow_transition_delay (self);
-#line 11401 "ConfigurationInterfaces.c"
+#line 11434 "ConfigurationInterfaces.c"
 }
 
 
@@ -11412,69 +11445,69 @@ static void configuration_facade_real_set_slideshow_transition_delay (Configurat
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gdouble _tmp2_ = 0.0;
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = delay;
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_double_property (_tmp1_, CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_DELAY, _tmp2_, &_inner_error_);
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11425 "ConfigurationInterfaces.c"
-				goto __catch192_configuration_error;
+#line 11458 "ConfigurationInterfaces.c"
+				goto __catch193_configuration_error;
 			}
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1638 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1647 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 11434 "ConfigurationInterfaces.c"
+#line 11467 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally192;
-	__catch192_configuration_error:
+	goto __finally193;
+	__catch193_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1641 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1641 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 11452 "ConfigurationInterfaces.c"
+#line 11485 "ConfigurationInterfaces.c"
 	}
-	__finally192:
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally193:
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1637 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1646 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 11463 "ConfigurationInterfaces.c"
+#line 11496 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_slideshow_transition_delay (ConfigurationFacade* self, gdouble delay) {
-#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1645 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1636 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1645 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_slideshow_transition_delay (self, delay);
-#line 11473 "ConfigurationInterfaces.c"
+#line 11506 "ConfigurationInterfaces.c"
 }
 
 
@@ -11488,161 +11521,161 @@ static gchar* configuration_facade_real_get_slideshow_transition_effect_id (Conf
 		gchar* _tmp3_ = NULL;
 		gchar* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_string_property (_tmp2_, CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID, &_inner_error_);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11503 "ConfigurationInterfaces.c"
-				goto __catch193_configuration_error;
-			}
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			g_clear_error (&_inner_error_);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			return NULL;
-#line 11512 "ConfigurationInterfaces.c"
-		}
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp5_ = _tmp0_;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp0_ = NULL;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		result = _tmp5_;
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_free0 (_tmp0_);
-#line 1650 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		return result;
-#line 11524 "ConfigurationInterfaces.c"
-	}
-	goto __finally193;
-	__catch193_configuration_error:
-	{
-		GError* err = NULL;
-		GError* _tmp6_ = NULL;
-		gchar* _tmp7_ = NULL;
-#line 1649 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		err = _inner_error_;
-#line 1649 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_inner_error_ = NULL;
-#line 1653 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp6_ = err;
-#line 1653 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_facade_on_configuration_error (self, _tmp6_);
-#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp7_ = g_strdup (TRANSITION_EFFECTS_MANAGER_NULL_EFFECT_ID);
-#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		result = _tmp7_;
-#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_error_free0 (err);
-#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		return result;
-#line 11548 "ConfigurationInterfaces.c"
-	}
-	__finally193:
-#line 1649 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1649 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_clear_error (&_inner_error_);
-#line 1649 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	return NULL;
-#line 11557 "ConfigurationInterfaces.c"
-}
-
-
-gchar* configuration_facade_get_slideshow_transition_effect_id (ConfigurationFacade* self) {
-#line 1648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
-#line 1648 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	return CONFIGURATION_FACADE_GET_CLASS (self)->get_slideshow_transition_effect_id (self);
-#line 11566 "ConfigurationInterfaces.c"
-}
-
-
-static void configuration_facade_real_set_slideshow_transition_effect_id (ConfigurationFacade* self, const gchar* id) {
-	GError * _inner_error_ = NULL;
-#line 1661 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-	g_return_if_fail (id != NULL);
-#line 11574 "ConfigurationInterfaces.c"
-	{
-		ConfigurationEngine* _tmp0_ = NULL;
-		ConfigurationEngine* _tmp1_ = NULL;
-		const gchar* _tmp2_ = NULL;
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp0_ = configuration_facade_get_engine (self);
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp1_ = _tmp0_;
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp2_ = id;
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_engine_set_string_property (_tmp1_, CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID, _tmp2_, &_inner_error_);
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_g_object_unref0 (_tmp1_);
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11593 "ConfigurationInterfaces.c"
+#line 11536 "ConfigurationInterfaces.c"
 				goto __catch194_configuration_error;
 			}
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1663 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-			return;
-#line 11602 "ConfigurationInterfaces.c"
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			return NULL;
+#line 11545 "ConfigurationInterfaces.c"
 		}
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp5_ = _tmp0_;
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp0_ = NULL;
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		result = _tmp5_;
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_free0 (_tmp0_);
+#line 1659 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		return result;
+#line 11557 "ConfigurationInterfaces.c"
 	}
 	goto __finally194;
 	__catch194_configuration_error:
 	{
 		GError* err = NULL;
-		GError* _tmp3_ = NULL;
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		GError* _tmp6_ = NULL;
+		gchar* _tmp7_ = NULL;
+#line 1658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		_tmp3_ = err;
-#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
-		configuration_facade_on_configuration_error (self, _tmp3_);
 #line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp6_ = err;
+#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_facade_on_configuration_error (self, _tmp6_);
+#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp7_ = g_strdup (TRANSITION_EFFECTS_MANAGER_NULL_EFFECT_ID);
+#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		result = _tmp7_;
+#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 11620 "ConfigurationInterfaces.c"
+#line 1666 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		return result;
+#line 11581 "ConfigurationInterfaces.c"
 	}
 	__finally194:
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_clear_error (&_inner_error_);
+#line 1658 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	return NULL;
+#line 11590 "ConfigurationInterfaces.c"
+}
+
+
+gchar* configuration_facade_get_slideshow_transition_effect_id (ConfigurationFacade* self) {
+#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
+#line 1657 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	return CONFIGURATION_FACADE_GET_CLASS (self)->get_slideshow_transition_effect_id (self);
+#line 11599 "ConfigurationInterfaces.c"
+}
+
+
+static void configuration_facade_real_set_slideshow_transition_effect_id (ConfigurationFacade* self, const gchar* id) {
+	GError * _inner_error_ = NULL;
+#line 1670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	g_return_if_fail (id != NULL);
+#line 11607 "ConfigurationInterfaces.c"
+	{
+		ConfigurationEngine* _tmp0_ = NULL;
+		ConfigurationEngine* _tmp1_ = NULL;
+		const gchar* _tmp2_ = NULL;
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp0_ = configuration_facade_get_engine (self);
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp1_ = _tmp0_;
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp2_ = id;
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_engine_set_string_property (_tmp1_, CONFIGURABLE_PROPERTY_SLIDESHOW_TRANSITION_EFFECT_ID, _tmp2_, &_inner_error_);
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_object_unref0 (_tmp1_);
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			if (_inner_error_->domain == CONFIGURATION_ERROR) {
+#line 11626 "ConfigurationInterfaces.c"
+				goto __catch195_configuration_error;
+			}
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			g_clear_error (&_inner_error_);
+#line 1672 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+			return;
+#line 11635 "ConfigurationInterfaces.c"
+		}
+	}
+	goto __finally195;
+	__catch195_configuration_error:
+	{
+		GError* err = NULL;
+		GError* _tmp3_ = NULL;
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		err = _inner_error_;
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_inner_error_ = NULL;
+#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_tmp3_ = err;
+#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		configuration_facade_on_configuration_error (self, _tmp3_);
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+		_g_error_free0 (err);
+#line 11653 "ConfigurationInterfaces.c"
+	}
+	__finally195:
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1662 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1671 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 11631 "ConfigurationInterfaces.c"
+#line 11664 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_slideshow_transition_effect_id (ConfigurationFacade* self, const gchar* id) {
-#line 1661 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1661 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1670 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_slideshow_transition_effect_id (self, id);
-#line 11641 "ConfigurationInterfaces.c"
+#line 11674 "ConfigurationInterfaces.c"
 }
 
 
@@ -11655,77 +11688,77 @@ static gboolean configuration_facade_real_get_slideshow_show_title (Configuratio
 		ConfigurationEngine* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 		gboolean _tmp4_ = FALSE;
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_bool_property (_tmp2_, CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE, &_inner_error_);
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11670 "ConfigurationInterfaces.c"
-				goto __catch195_configuration_error;
+#line 11703 "ConfigurationInterfaces.c"
+				goto __catch196_configuration_error;
 			}
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 11679 "ConfigurationInterfaces.c"
+#line 11712 "ConfigurationInterfaces.c"
 		}
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1675 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11685 "ConfigurationInterfaces.c"
+#line 11718 "ConfigurationInterfaces.c"
 	}
-	goto __finally195;
-	__catch195_configuration_error:
+	goto __finally196;
+	__catch196_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1677 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1686 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1677 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1686 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1688 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = FALSE;
-#line 1679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1688 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1679 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1688 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11706 "ConfigurationInterfaces.c"
+#line 11739 "ConfigurationInterfaces.c"
 	}
-	__finally195:
-#line 1674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally196:
+#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1674 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 11715 "ConfigurationInterfaces.c"
+#line 11748 "ConfigurationInterfaces.c"
 }
 
 
 gboolean configuration_facade_get_slideshow_show_title (ConfigurationFacade* self) {
-#line 1673 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1682 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
-#line 1673 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1682 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_slideshow_show_title (self);
-#line 11724 "ConfigurationInterfaces.c"
+#line 11757 "ConfigurationInterfaces.c"
 }
 
 
@@ -11735,69 +11768,69 @@ static void configuration_facade_real_set_slideshow_show_title (ConfigurationFac
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = show_title;
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_bool_property (_tmp1_, CONFIGURABLE_PROPERTY_SLIDESHOW_SHOW_TITLE, _tmp2_, &_inner_error_);
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11748 "ConfigurationInterfaces.c"
-				goto __catch196_configuration_error;
+#line 11781 "ConfigurationInterfaces.c"
+				goto __catch197_configuration_error;
 			}
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1685 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 11757 "ConfigurationInterfaces.c"
+#line 11790 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally196;
-	__catch196_configuration_error:
+	goto __finally197;
+	__catch197_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1687 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1687 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 11775 "ConfigurationInterfaces.c"
+#line 11808 "ConfigurationInterfaces.c"
 	}
-	__finally196:
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally197:
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1684 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1693 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 11786 "ConfigurationInterfaces.c"
+#line 11819 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_slideshow_show_title (ConfigurationFacade* self, gboolean show_title) {
-#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1692 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1683 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1692 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_slideshow_show_title (self, show_title);
-#line 11796 "ConfigurationInterfaces.c"
+#line 11829 "ConfigurationInterfaces.c"
 }
 
 
@@ -11812,7 +11845,7 @@ static void g_time_local (time_t time, struct tm* result) {
 	*result = _result_;
 #line 2751 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return;
-#line 11811 "ConfigurationInterfaces.c"
+#line 11844 "ConfigurationInterfaces.c"
 }
 
 
@@ -11858,7 +11891,7 @@ static gchar* g_time_format (struct tm *self, const gchar* format) {
 	buffer = (g_free (buffer), NULL);
 #line 2761 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 11857 "ConfigurationInterfaces.c"
+#line 11890 "ConfigurationInterfaces.c"
 }
 
 
@@ -11871,41 +11904,41 @@ static gboolean configuration_facade_real_get_use_24_hour_time (ConfigurationFac
 		ConfigurationEngine* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 		gboolean _tmp4_ = FALSE;
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_bool_property (_tmp2_, CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME, &_inner_error_);
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11886 "ConfigurationInterfaces.c"
-				goto __catch197_configuration_error;
+#line 11919 "ConfigurationInterfaces.c"
+				goto __catch198_configuration_error;
 			}
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 11895 "ConfigurationInterfaces.c"
+#line 11928 "ConfigurationInterfaces.c"
 		}
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1696 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1705 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11901 "ConfigurationInterfaces.c"
+#line 11934 "ConfigurationInterfaces.c"
 	}
-	goto __finally197;
-	__catch197_configuration_error:
+	goto __finally198;
+	__catch198_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -11914,51 +11947,51 @@ static gboolean configuration_facade_real_get_use_24_hour_time (ConfigurationFac
 		gchar* _tmp8_ = NULL;
 		gboolean _tmp9_ = FALSE;
 		gboolean _tmp10_ = FALSE;
-#line 1695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1704 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1704 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1698 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1698 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_time_local ((time_t) 0, &_tmp6_);
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp7_ = g_time_format (&_tmp6_, "%p");
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp8_ = _tmp7_;
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp9_ = is_string_empty (_tmp8_);
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp10_ = _tmp9_;
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_free0 (_tmp8_);
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp10_;
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1702 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1711 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 11939 "ConfigurationInterfaces.c"
+#line 11972 "ConfigurationInterfaces.c"
 	}
-	__finally197:
-#line 1695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally198:
+#line 1704 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1704 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1695 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1704 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 11948 "ConfigurationInterfaces.c"
+#line 11981 "ConfigurationInterfaces.c"
 }
 
 
 gboolean configuration_facade_get_use_24_hour_time (ConfigurationFacade* self) {
-#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1703 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
-#line 1694 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1703 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_use_24_hour_time (self);
-#line 11957 "ConfigurationInterfaces.c"
+#line 11990 "ConfigurationInterfaces.c"
 }
 
 
@@ -11968,69 +12001,69 @@ static void configuration_facade_real_set_use_24_hour_time (ConfigurationFacade*
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = use_24_hour_time;
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_bool_property (_tmp1_, CONFIGURABLE_PROPERTY_USE_24_HOUR_TIME, _tmp2_, &_inner_error_);
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 11981 "ConfigurationInterfaces.c"
-				goto __catch198_configuration_error;
+#line 12014 "ConfigurationInterfaces.c"
+				goto __catch199_configuration_error;
 			}
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1708 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 11990 "ConfigurationInterfaces.c"
+#line 12023 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally198;
-	__catch198_configuration_error:
+	goto __finally199;
+	__catch199_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1710 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1710 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 12008 "ConfigurationInterfaces.c"
+#line 12041 "ConfigurationInterfaces.c"
 	}
-	__finally198:
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally199:
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1707 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1716 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 12019 "ConfigurationInterfaces.c"
+#line 12052 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_use_24_hour_time (ConfigurationFacade* self, gboolean use_24_hour_time) {
-#line 1706 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1715 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1706 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1715 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_use_24_hour_time (self, use_24_hour_time);
-#line 12029 "ConfigurationInterfaces.c"
+#line 12062 "ConfigurationInterfaces.c"
 }
 
 
@@ -12043,77 +12076,77 @@ static gboolean configuration_facade_real_get_use_lowercase_filenames (Configura
 		ConfigurationEngine* _tmp2_ = NULL;
 		gboolean _tmp3_ = FALSE;
 		gboolean _tmp4_ = FALSE;
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_bool_property (_tmp2_, CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES, &_inner_error_);
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 12058 "ConfigurationInterfaces.c"
-				goto __catch199_configuration_error;
+#line 12091 "ConfigurationInterfaces.c"
+				goto __catch200_configuration_error;
 			}
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return FALSE;
-#line 12067 "ConfigurationInterfaces.c"
+#line 12100 "ConfigurationInterfaces.c"
 		}
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1719 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 12073 "ConfigurationInterfaces.c"
+#line 12106 "ConfigurationInterfaces.c"
 	}
-	goto __finally199;
-	__catch199_configuration_error:
+	goto __finally200;
+	__catch200_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1718 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1718 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1730 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1721 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1730 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1723 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = FALSE;
-#line 1723 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1723 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1732 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 12094 "ConfigurationInterfaces.c"
+#line 12127 "ConfigurationInterfaces.c"
 	}
-	__finally199:
-#line 1718 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally200:
+#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1718 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1718 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return FALSE;
-#line 12103 "ConfigurationInterfaces.c"
+#line 12136 "ConfigurationInterfaces.c"
 }
 
 
 gboolean configuration_facade_get_use_lowercase_filenames (ConfigurationFacade* self) {
-#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1726 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
-#line 1717 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1726 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_use_lowercase_filenames (self);
-#line 12112 "ConfigurationInterfaces.c"
+#line 12145 "ConfigurationInterfaces.c"
 }
 
 
@@ -12123,69 +12156,69 @@ static void configuration_facade_real_set_use_lowercase_filenames (Configuration
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gboolean _tmp2_ = FALSE;
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = b;
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_bool_property (_tmp1_, CONFIGURABLE_PROPERTY_USE_LOWERCASE_FILENAMES, _tmp2_, &_inner_error_);
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 12136 "ConfigurationInterfaces.c"
-				goto __catch200_configuration_error;
+#line 12169 "ConfigurationInterfaces.c"
+				goto __catch201_configuration_error;
 			}
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1729 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 12145 "ConfigurationInterfaces.c"
+#line 12178 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally200;
-	__catch200_configuration_error:
+	goto __finally201;
+	__catch201_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1731 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1731 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 12163 "ConfigurationInterfaces.c"
+#line 12196 "ConfigurationInterfaces.c"
 	}
-	__finally200:
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally201:
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1728 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1737 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 12174 "ConfigurationInterfaces.c"
+#line 12207 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_use_lowercase_filenames (ConfigurationFacade* self, gboolean b) {
-#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1736 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1727 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1736 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_use_lowercase_filenames (self, b);
-#line 12184 "ConfigurationInterfaces.c"
+#line 12217 "ConfigurationInterfaces.c"
 }
 
 
@@ -12198,77 +12231,77 @@ static gint configuration_facade_real_get_video_interpreter_state_cookie (Config
 		ConfigurationEngine* _tmp2_ = NULL;
 		gint _tmp3_ = 0;
 		gint _tmp4_ = 0;
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = configuration_facade_get_engine (self);
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = _tmp1_;
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = configuration_engine_get_int_property (_tmp2_, CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE, &_inner_error_);
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp4_ = _tmp3_;
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp2_);
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = _tmp4_;
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 12213 "ConfigurationInterfaces.c"
-				goto __catch201_configuration_error;
+#line 12246 "ConfigurationInterfaces.c"
+				goto __catch202_configuration_error;
 			}
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return 0;
-#line 12222 "ConfigurationInterfaces.c"
+#line 12255 "ConfigurationInterfaces.c"
 		}
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = _tmp0_;
-#line 1740 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 12228 "ConfigurationInterfaces.c"
+#line 12261 "ConfigurationInterfaces.c"
 	}
-	goto __finally201;
-	__catch201_configuration_error:
+	goto __finally202;
+	__catch202_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
-#line 1739 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1748 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1739 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1748 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1743 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1752 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp5_ = err;
-#line 1743 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1752 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp5_);
-#line 1745 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		result = -1;
-#line 1745 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 1745 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return result;
-#line 12249 "ConfigurationInterfaces.c"
+#line 12282 "ConfigurationInterfaces.c"
 	}
-	__finally201:
-#line 1739 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally202:
+#line 1748 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1739 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1748 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_clear_error (&_inner_error_);
-#line 1739 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1748 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return 0;
-#line 12258 "ConfigurationInterfaces.c"
+#line 12291 "ConfigurationInterfaces.c"
 }
 
 
 gint configuration_facade_get_video_interpreter_state_cookie (ConfigurationFacade* self) {
-#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1747 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
-#line 1738 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1747 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_video_interpreter_state_cookie (self);
-#line 12267 "ConfigurationInterfaces.c"
+#line 12300 "ConfigurationInterfaces.c"
 }
 
 
@@ -12278,69 +12311,69 @@ static void configuration_facade_real_set_video_interpreter_state_cookie (Config
 		ConfigurationEngine* _tmp0_ = NULL;
 		ConfigurationEngine* _tmp1_ = NULL;
 		gint _tmp2_ = 0;
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp0_ = configuration_facade_get_engine (self);
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp1_ = _tmp0_;
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp2_ = state_cookie;
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_engine_set_int_property (_tmp1_, CONFIGURABLE_PROPERTY_VIDEO_INTERPRETER_STATE_COOKIE, _tmp2_, &_inner_error_);
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_object_unref0 (_tmp1_);
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			if (_inner_error_->domain == CONFIGURATION_ERROR) {
-#line 12291 "ConfigurationInterfaces.c"
-				goto __catch202_configuration_error;
+#line 12324 "ConfigurationInterfaces.c"
+				goto __catch203_configuration_error;
 			}
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			g_clear_error (&_inner_error_);
-#line 1751 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1760 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 			return;
-#line 12300 "ConfigurationInterfaces.c"
+#line 12333 "ConfigurationInterfaces.c"
 		}
 	}
-	goto __finally202;
-	__catch202_configuration_error:
+	goto __finally203;
+	__catch203_configuration_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		err = _inner_error_;
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_inner_error_ = NULL;
-#line 1754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp3_ = err;
-#line 1754 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1763 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		configuration_facade_on_configuration_error (self, _tmp3_);
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_g_error_free0 (err);
-#line 12318 "ConfigurationInterfaces.c"
+#line 12351 "ConfigurationInterfaces.c"
 	}
-	__finally202:
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+	__finally203:
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		g_clear_error (&_inner_error_);
-#line 1750 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1759 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		return;
-#line 12329 "ConfigurationInterfaces.c"
+#line 12362 "ConfigurationInterfaces.c"
 	}
 }
 
 
 void configuration_facade_set_video_interpreter_state_cookie (ConfigurationFacade* self, gint state_cookie) {
-#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1758 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1749 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1758 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_video_interpreter_state_cookie (self, state_cookie);
-#line 12339 "ConfigurationInterfaces.c"
+#line 12372 "ConfigurationInterfaces.c"
 }
 
 
@@ -12354,44 +12387,44 @@ static gboolean configuration_facade_real_get_plugin_bool (ConfigurationFacade* 
 	gboolean _tmp5_ = FALSE;
 	gboolean _tmp6_ = FALSE;
 	gboolean _tmp7_ = FALSE;
-#line 1761 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (domain != NULL, FALSE);
-#line 1761 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (id != NULL, FALSE);
-#line 1761 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (key != NULL, FALSE);
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = def;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp6_ = configuration_engine_get_plugin_bool (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp7_ = _tmp6_;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	result = _tmp7_;
-#line 1762 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1771 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 12381 "ConfigurationInterfaces.c"
+#line 12414 "ConfigurationInterfaces.c"
 }
 
 
 gboolean configuration_facade_get_plugin_bool (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gboolean def) {
-#line 1761 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), FALSE);
-#line 1761 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_plugin_bool (self, domain, id, key, def);
-#line 12390 "ConfigurationInterfaces.c"
+#line 12423 "ConfigurationInterfaces.c"
 }
 
 
@@ -12402,38 +12435,38 @@ static void configuration_facade_real_set_plugin_bool (ConfigurationFacade* self
 	const gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gboolean _tmp5_ = FALSE;
-#line 1765 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (domain != NULL);
-#line 1765 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1765 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (key != NULL);
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = val;
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_set_plugin_bool (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1766 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1775 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 12423 "ConfigurationInterfaces.c"
+#line 12456 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_set_plugin_bool (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gboolean val) {
-#line 1765 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1765 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_plugin_bool (self, domain, id, key, val);
-#line 12432 "ConfigurationInterfaces.c"
+#line 12465 "ConfigurationInterfaces.c"
 }
 
 
@@ -12447,44 +12480,44 @@ static gdouble configuration_facade_real_get_plugin_double (ConfigurationFacade*
 	gdouble _tmp5_ = 0.0;
 	gdouble _tmp6_ = 0.0;
 	gdouble _tmp7_ = 0.0;
-#line 1769 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (domain != NULL, 0.0);
-#line 1769 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (id != NULL, 0.0);
-#line 1769 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (key != NULL, 0.0);
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = def;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp6_ = configuration_engine_get_plugin_double (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp7_ = _tmp6_;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	result = _tmp7_;
-#line 1770 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1779 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 12474 "ConfigurationInterfaces.c"
+#line 12507 "ConfigurationInterfaces.c"
 }
 
 
 gdouble configuration_facade_get_plugin_double (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gdouble def) {
-#line 1769 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0.0);
-#line 1769 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_plugin_double (self, domain, id, key, def);
-#line 12483 "ConfigurationInterfaces.c"
+#line 12516 "ConfigurationInterfaces.c"
 }
 
 
@@ -12495,38 +12528,38 @@ static void configuration_facade_real_set_plugin_double (ConfigurationFacade* se
 	const gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gdouble _tmp5_ = 0.0;
-#line 1773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (domain != NULL);
-#line 1773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (key != NULL);
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = val;
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_set_plugin_double (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1774 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1783 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 12516 "ConfigurationInterfaces.c"
+#line 12549 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_set_plugin_double (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gdouble val) {
-#line 1773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1773 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_plugin_double (self, domain, id, key, val);
-#line 12525 "ConfigurationInterfaces.c"
+#line 12558 "ConfigurationInterfaces.c"
 }
 
 
@@ -12540,44 +12573,44 @@ static gint configuration_facade_real_get_plugin_int (ConfigurationFacade* self,
 	gint _tmp5_ = 0;
 	gint _tmp6_ = 0;
 	gint _tmp7_ = 0;
-#line 1777 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (domain != NULL, 0);
-#line 1777 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (id != NULL, 0);
-#line 1777 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (key != NULL, 0);
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = def;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp6_ = configuration_engine_get_plugin_int (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp7_ = _tmp6_;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	result = _tmp7_;
-#line 1778 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 12567 "ConfigurationInterfaces.c"
+#line 12600 "ConfigurationInterfaces.c"
 }
 
 
 gint configuration_facade_get_plugin_int (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gint def) {
-#line 1777 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
-#line 1777 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_plugin_int (self, domain, id, key, def);
-#line 12576 "ConfigurationInterfaces.c"
+#line 12609 "ConfigurationInterfaces.c"
 }
 
 
@@ -12588,38 +12621,38 @@ static void configuration_facade_real_set_plugin_int (ConfigurationFacade* self,
 	const gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
 	gint _tmp5_ = 0;
-#line 1781 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (domain != NULL);
-#line 1781 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1781 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (key != NULL);
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = val;
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_set_plugin_int (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1782 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 12609 "ConfigurationInterfaces.c"
+#line 12642 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_set_plugin_int (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, gint val) {
-#line 1781 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1781 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_plugin_int (self, domain, id, key, val);
-#line 12618 "ConfigurationInterfaces.c"
+#line 12651 "ConfigurationInterfaces.c"
 }
 
 
@@ -12637,65 +12670,65 @@ static gchar* configuration_facade_real_get_plugin_string (ConfigurationFacade* 
 	const gchar* _tmp8_ = NULL;
 	const gchar* _tmp9_ = NULL;
 	gchar* _tmp11_ = NULL;
-#line 1785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (domain != NULL, NULL);
-#line 1785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (id != NULL, NULL);
-#line 1785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (key != NULL, NULL);
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = def;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp6_ = configuration_engine_get_plugin_string (_tmp1_, _tmp2_, _tmp3_, _tmp4_, _tmp5_);
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp7_ = _tmp6_;
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1786 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1795 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_result_ = _tmp7_;
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp9_ = _result_;
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (g_strcmp0 (_tmp9_, "") == 0) {
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp8_ = NULL;
-#line 12668 "ConfigurationInterfaces.c"
+#line 12701 "ConfigurationInterfaces.c"
 	} else {
 		const gchar* _tmp10_ = NULL;
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp10_ = _result_;
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		_tmp8_ = _tmp10_;
-#line 12675 "ConfigurationInterfaces.c"
+#line 12708 "ConfigurationInterfaces.c"
 	}
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp11_ = g_strdup (_tmp8_);
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	result = _tmp11_;
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_free0 (_result_);
-#line 1787 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1796 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 12685 "ConfigurationInterfaces.c"
+#line 12718 "ConfigurationInterfaces.c"
 }
 
 
 gchar* configuration_facade_get_plugin_string (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, const gchar* def) {
-#line 1785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), NULL);
-#line 1785 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->get_plugin_string (self, domain, id, key, def);
-#line 12694 "ConfigurationInterfaces.c"
+#line 12727 "ConfigurationInterfaces.c"
 }
 
 
@@ -12707,46 +12740,46 @@ static void configuration_facade_real_set_plugin_string (ConfigurationFacade* se
 	const gchar* _tmp4_ = NULL;
 	const gchar* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
-#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1799 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (domain != NULL);
-#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1799 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1799 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (key != NULL);
-#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1800 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = val;
-#line 1791 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1800 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	if (_tmp0_ == NULL) {
-#line 1792 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1801 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 		val = "";
-#line 12718 "ConfigurationInterfaces.c"
+#line 12751 "ConfigurationInterfaces.c"
 	}
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = configuration_facade_get_engine (self);
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = _tmp1_;
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = domain;
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = id;
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp5_ = key;
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp6_ = val;
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_set_plugin_string (_tmp2_, _tmp3_, _tmp4_, _tmp5_, _tmp6_);
-#line 1794 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1803 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp2_);
-#line 12736 "ConfigurationInterfaces.c"
+#line 12769 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_set_plugin_string (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key, const gchar* val) {
-#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1799 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1790 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1799 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_plugin_string (self, domain, id, key, val);
-#line 12745 "ConfigurationInterfaces.c"
+#line 12778 "ConfigurationInterfaces.c"
 }
 
 
@@ -12756,36 +12789,36 @@ static void configuration_facade_real_unset_plugin_key (ConfigurationFacade* sel
 	const gchar* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	const gchar* _tmp4_ = NULL;
-#line 1797 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (domain != NULL);
-#line 1797 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1797 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (key != NULL);
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = domain;
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = id;
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = key;
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_unset_plugin_key (_tmp1_, _tmp2_, _tmp3_, _tmp4_);
-#line 1798 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1807 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 12775 "ConfigurationInterfaces.c"
+#line 12808 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_unset_plugin_key (ConfigurationFacade* self, const gchar* domain, const gchar* id, const gchar* key) {
-#line 1797 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1797 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1806 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->unset_plugin_key (self, domain, id, key);
-#line 12784 "ConfigurationInterfaces.c"
+#line 12817 "ConfigurationInterfaces.c"
 }
 
 
@@ -12796,34 +12829,34 @@ static FuzzyPropertyState configuration_facade_real_is_plugin_enabled (Configura
 	const gchar* _tmp2_ = NULL;
 	FuzzyPropertyState _tmp3_ = 0;
 	FuzzyPropertyState _tmp4_ = 0;
-#line 1804 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1813 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (id != NULL, 0);
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = id;
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = configuration_engine_is_plugin_enabled (_tmp1_, _tmp2_);
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp4_ = _tmp3_;
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	result = _tmp4_;
-#line 1805 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1814 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return result;
-#line 12813 "ConfigurationInterfaces.c"
+#line 12846 "ConfigurationInterfaces.c"
 }
 
 
 FuzzyPropertyState configuration_facade_is_plugin_enabled (ConfigurationFacade* self, const gchar* id) {
-#line 1804 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1813 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_val_if_fail (IS_CONFIGURATION_FACADE (self), 0);
-#line 1804 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1813 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	return CONFIGURATION_FACADE_GET_CLASS (self)->is_plugin_enabled (self, id);
-#line 12822 "ConfigurationInterfaces.c"
+#line 12855 "ConfigurationInterfaces.c"
 }
 
 
@@ -12832,30 +12865,30 @@ static void configuration_facade_real_set_plugin_enabled (ConfigurationFacade* s
 	ConfigurationEngine* _tmp1_ = NULL;
 	const gchar* _tmp2_ = NULL;
 	gboolean _tmp3_ = FALSE;
-#line 1808 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1817 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (id != NULL);
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp0_ = configuration_facade_get_engine (self);
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp1_ = _tmp0_;
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp2_ = id;
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_tmp3_ = enabled;
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	configuration_engine_set_plugin_enabled (_tmp1_, _tmp2_, _tmp3_);
-#line 1809 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1818 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	_g_object_unref0 (_tmp1_);
-#line 12845 "ConfigurationInterfaces.c"
+#line 12878 "ConfigurationInterfaces.c"
 }
 
 
 void configuration_facade_set_plugin_enabled (ConfigurationFacade* self, const gchar* id, gboolean enabled) {
-#line 1808 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1817 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_return_if_fail (IS_CONFIGURATION_FACADE (self));
-#line 1808 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
+#line 1817 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	CONFIGURATION_FACADE_GET_CLASS (self)->set_plugin_enabled (self, id, enabled);
-#line 12854 "ConfigurationInterfaces.c"
+#line 12887 "ConfigurationInterfaces.c"
 }
 
 
@@ -13144,14 +13177,14 @@ static void configuration_facade_class_init (ConfigurationFacadeClass * klass) {
 	g_signal_new ("external_app_changed", TYPE_CONFIGURATION_FACADE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 345 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	g_signal_new ("import_directory_changed", TYPE_CONFIGURATION_FACADE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 13143 "ConfigurationInterfaces.c"
+#line 13176 "ConfigurationInterfaces.c"
 }
 
 
 static void configuration_facade_instance_init (ConfigurationFacade * self) {
 #line 345 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	self->priv = CONFIGURATION_FACADE_GET_PRIVATE (self);
-#line 13150 "ConfigurationInterfaces.c"
+#line 13183 "ConfigurationInterfaces.c"
 }
 
 
@@ -13163,7 +13196,7 @@ static void configuration_facade_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->engine);
 #line 345 "/home/jens/Source/shotwell/src/config/ConfigurationInterfaces.vala"
 	G_OBJECT_CLASS (configuration_facade_parent_class)->finalize (obj);
-#line 13162 "ConfigurationInterfaces.c"
+#line 13195 "ConfigurationInterfaces.c"
 }
 
 

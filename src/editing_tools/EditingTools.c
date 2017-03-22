@@ -12676,7 +12676,7 @@ static EditingToolsCropToolCropToolWindow* editing_tools_crop_tool_crop_tool_win
 #line 677 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	gtk_combo_box_set_active (_tmp12_, 0);
 #line 679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
-	_tmp13_ = (GtkImage*) gtk_image_new_from_resource ("/org/gnome/Shotwell/crop-pivot-reticle.png");
+	_tmp13_ = (GtkImage*) gtk_image_new_from_icon_name ("crop-pivot-reticle", GTK_ICON_SIZE_LARGE_TOOLBAR);
 #line 679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"
 	g_object_ref_sink (_tmp13_);
 #line 679 "/home/jens/Source/shotwell/src/editing_tools/EditingTools.vala"

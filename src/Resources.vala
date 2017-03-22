@@ -87,7 +87,8 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     public const string GO_PREVIOUS = "go-previous";
 
     
-    public const string ICON_ABOUT_LOGO = "shotwell-street.jpg";
+    //public const string ICON_ABOUT_LOGO = "shotwell-street.jpg";
+    public const string ICON_ABOUT_LOGO = "about-aachen.jpg";
     public const string ICON_GENERIC_PLUGIN = "generic-plugin.png";
     public const string ICON_SLIDESHOW_EXTENSION_POINT = "slideshow-extension-point";
     public const string ICON_RATING_REJECTED = "rejected.svg";
@@ -686,11 +687,10 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     private string END_MULTIDAY_DATE_FORMAT_STRING = null;
     private string START_MULTIMONTH_DATE_FORMAT_STRING = null;
     private string END_MULTIMONTH_DATE_FORMAT_STRING = null;
-        
+
     public void init () {
-        var icon_theme = Gtk.IconTheme.get_default();
+        get_icon_theme_engine();
         // load application-wide stock icons as IconSets
-        icon_theme.append_search_path(AppDirs.get_resources_dir().get_child("icons").get_path());
         generate_rating_strings();
     }
     
@@ -766,6 +766,40 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
         if (old_language != null) {
             Environment.set_variable("LANGUAGE", old_language, true);
         }
+
+    }
+
+    public enum UnitSystem {
+        IMPERIAL,
+        METRIC,
+        UNKNOWN
+    }
+
+    private string lc_measurement = null;
+    private UnitSystem unit_system = UnitSystem.UNKNOWN;
+    private const string IMPERIAL_COUNTRIES[] = {"unm_US", "es_US", "en_US", "yi_US" };
+
+    public UnitSystem get_default_measurement_unit() {
+        if (unit_system != UnitSystem.UNKNOWN) {
+            return unit_system;
+        }
+
+        lc_measurement = Environment.get_variable("LC_MEASUREMENT");
+        if (lc_measurement == null) {
+            lc_measurement = Intl.get_language_names()[0];
+        }
+
+        var index = lc_measurement.last_index_of_char('.');
+        if (index > 0) {
+            lc_measurement = lc_measurement.substring(0, index);
+        }
+
+        unit_system = UnitSystem.METRIC;
+        if (lc_measurement in IMPERIAL_COUNTRIES) {
+            unit_system = UnitSystem.IMPERIAL;
+        }
+
+        return unit_system;
     }
     
     /**
@@ -828,8 +862,8 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
         return END_MULTIMONTH_DATE_FORMAT_STRING;
     }
 
-    public File get_ui(string filename) {
-        return AppDirs.get_resources_dir().get_child("ui").get_child(filename);
+    public string get_ui(string filename) {
+        return "/org/gnome/Shotwell/ui/%s".printf(filename);
     }
 
     private const string NONINTERPRETABLE_BADGE_FILE = "noninterpretable-video.png";
@@ -838,8 +872,8 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     public Gdk.Pixbuf? get_noninterpretable_badge_pixbuf() {
         if (noninterpretable_badge_pixbuf == null) {
             try {
-                noninterpretable_badge_pixbuf = new Gdk.Pixbuf.from_file(AppDirs.get_resources_dir().get_child(
-                    "icons").get_child(NONINTERPRETABLE_BADGE_FILE).get_path());
+                var path = "/org/gnome/Shotwell/icons/" + NONINTERPRETABLE_BADGE_FILE;
+                noninterpretable_badge_pixbuf = new Gdk.Pixbuf.from_resource(path);
             } catch (Error err) {
                 error("VideoReader can't load noninterpretable badge image: %s", err.message);
             }
@@ -850,7 +884,7 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     
     public Gtk.IconTheme get_icon_theme_engine() {
         Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
-        icon_theme.append_search_path(AppDirs.get_resources_dir().get_child("icons").get_path());
+        icon_theme.add_resource_path("/org/gnome/Shotwell/icons");
         
         return icon_theme;
     }
@@ -893,18 +927,17 @@ along with Shotwell; if not, write to the Free Software Foundation, Inc.,
     }
     
     public Gdk.Pixbuf? load_icon(string name, int scale = DEFAULT_ICON_SCALE) {
-        File icons_dir = AppDirs.get_resources_dir().get_child("icons");
-        
         Gdk.Pixbuf pixbuf = null;
         try {
-            pixbuf = new Gdk.Pixbuf.from_file(icons_dir.get_child(name).get_path());
+            var path = "/org/gnome/Shotwell/icons/%s".printf(name);
+            pixbuf = new Gdk.Pixbuf.from_resource(path);
         } catch (Error err) {
             critical("Unable to load icon %s: %s", name, err.message);
         }
 
         if (pixbuf == null)
             return null;
-        
+
         return (scale > 0) ? scale_pixbuf(pixbuf, scale, Gdk.InterpType.BILINEAR, false) : pixbuf;
     }
     

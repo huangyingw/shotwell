@@ -79,6 +79,8 @@ typedef struct _PhotoMetadataClass PhotoMetadataClass;
 #define TYPE_DIMENSIONS (dimensions_get_type ())
 typedef struct _Dimensions Dimensions;
 
+#define PHOTO_FILE_READER_TYPE_ROLE (photo_file_reader_role_get_type ())
+
 #define TYPE_PHOTO_FILE_WRITER (photo_file_writer_get_type ())
 #define PHOTO_FILE_WRITER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PHOTO_FILE_WRITER, PhotoFileWriter))
 #define PHOTO_FILE_WRITER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PHOTO_FILE_WRITER, PhotoFileWriterClass))
@@ -153,6 +155,15 @@ struct _PhotoFileReaderClass {
 };
 
 typedef enum  {
+	PHOTO_FILE_READER_ROLE_DEFAULT,
+	PHOTO_FILE_READER_ROLE_THUMBNAIL
+} PhotoFileReaderRole;
+
+struct _PhotoFileReaderPrivate {
+	PhotoFileReaderRole role;
+};
+
+typedef enum  {
 	PHOTO_FORMAT_ERROR_READ_ONLY
 } PhotoFormatError;
 #define PHOTO_FORMAT_ERROR photo_format_error_quark ()
@@ -219,6 +230,8 @@ GType photo_metadata_get_type (void) G_GNUC_CONST;
 GType dimensions_get_type (void) G_GNUC_CONST;
 Dimensions* dimensions_dup (const Dimensions* self);
 void dimensions_free (Dimensions* self);
+GType photo_file_reader_role_get_type (void) G_GNUC_CONST;
+#define PHOTO_FILE_READER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_PHOTO_FILE_READER, PhotoFileReaderPrivate))
 enum  {
 	PHOTO_FILE_READER_DUMMY_PROPERTY
 };
@@ -237,6 +250,9 @@ static GdkPixbuf* photo_file_reader_real_unscaled_read (PhotoFileReader* self, G
 GdkPixbuf* photo_file_reader_scaled_read (PhotoFileReader* self, Dimensions* full, Dimensions* scaled, GError** error);
 static GdkPixbuf* photo_file_reader_real_scaled_read (PhotoFileReader* self, Dimensions* full, Dimensions* scaled, GError** error);
 GdkPixbuf* resize_pixbuf (GdkPixbuf* pixbuf, Dimensions* resized, GdkInterpType interp);
+void photo_file_reader_set_role (PhotoFileReader* self, PhotoFileReaderRole role);
+PhotoFileReaderRole photo_file_reader_get_role (PhotoFileReader* self);
+static void photo_file_reader_finalize (PhotoFileAdapter* obj);
 GType jpeg_quality_get_type (void) G_GNUC_CONST;
 enum  {
 	PHOTO_FILE_WRITER_DUMMY_PROPERTY
@@ -278,7 +294,7 @@ PhotoFileAdapter* photo_file_adapter_construct (GType object_type, const gchar* 
 	self->priv->file_format = _tmp2_;
 #line 25 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return self;
-#line 282 "PhotoFileAdapter.c"
+#line 298 "PhotoFileAdapter.c"
 }
 
 
@@ -296,7 +312,7 @@ gboolean photo_file_adapter_file_exists (PhotoFileAdapter* self) {
 	result = _tmp1_;
 #line 31 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 300 "PhotoFileAdapter.c"
+#line 316 "PhotoFileAdapter.c"
 }
 
 
@@ -314,14 +330,14 @@ gchar* photo_file_adapter_get_filepath (PhotoFileAdapter* self) {
 	result = _tmp1_;
 #line 35 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 318 "PhotoFileAdapter.c"
+#line 334 "PhotoFileAdapter.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 44 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 325 "PhotoFileAdapter.c"
+#line 341 "PhotoFileAdapter.c"
 }
 
 
@@ -331,14 +347,14 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 	GError * _inner_error_ = NULL;
 #line 38 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_ADAPTER (self), NULL);
-#line 335 "PhotoFileAdapter.c"
+#line 351 "PhotoFileAdapter.c"
 	{
 		GFile* _tmp0_ = NULL;
 #line 40 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		_tmp0_ = self->priv->file;
 #line 40 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		g_rec_mutex_lock (&self->priv->__lock_file);
-#line 342 "PhotoFileAdapter.c"
+#line 358 "PhotoFileAdapter.c"
 		{
 			GFile* _tmp1_ = NULL;
 			GFile* _tmp4_ = NULL;
@@ -347,7 +363,7 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 			_tmp1_ = self->priv->file;
 #line 41 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			if (_tmp1_ == NULL) {
-#line 351 "PhotoFileAdapter.c"
+#line 367 "PhotoFileAdapter.c"
 				const gchar* _tmp2_ = NULL;
 				GFile* _tmp3_ = NULL;
 #line 42 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
@@ -358,7 +374,7 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 				_g_object_unref0 (self->priv->file);
 #line 42 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 				self->priv->file = _tmp3_;
-#line 362 "PhotoFileAdapter.c"
+#line 378 "PhotoFileAdapter.c"
 			}
 #line 44 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			_tmp4_ = self->priv->file;
@@ -368,7 +384,7 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 			_g_object_unref0 (_result_);
 #line 44 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			_result_ = _tmp5_;
-#line 372 "PhotoFileAdapter.c"
+#line 388 "PhotoFileAdapter.c"
 		}
 		__finally24:
 		{
@@ -377,7 +393,7 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 			_tmp6_ = self->priv->file;
 #line 40 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_rec_mutex_unlock (&self->priv->__lock_file);
-#line 381 "PhotoFileAdapter.c"
+#line 397 "PhotoFileAdapter.c"
 		}
 #line 40 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
@@ -389,14 +405,14 @@ GFile* photo_file_adapter_get_file (PhotoFileAdapter* self) {
 			g_clear_error (&_inner_error_);
 #line 40 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return NULL;
-#line 393 "PhotoFileAdapter.c"
+#line 409 "PhotoFileAdapter.c"
 		}
 	}
 #line 47 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _result_;
 #line 47 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 400 "PhotoFileAdapter.c"
+#line 416 "PhotoFileAdapter.c"
 }
 
 
@@ -411,14 +427,14 @@ PhotoFileFormat photo_file_adapter_get_file_format (PhotoFileAdapter* self) {
 	result = _tmp0_;
 #line 51 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 415 "PhotoFileAdapter.c"
+#line 431 "PhotoFileAdapter.c"
 }
 
 
 static void value_photo_file_adapter_init (GValue* value) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	value->data[0].v_pointer = NULL;
-#line 422 "PhotoFileAdapter.c"
+#line 438 "PhotoFileAdapter.c"
 }
 
 
@@ -427,7 +443,7 @@ static void value_photo_file_adapter_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		photo_file_adapter_unref (value->data[0].v_pointer);
-#line 431 "PhotoFileAdapter.c"
+#line 447 "PhotoFileAdapter.c"
 	}
 }
 
@@ -437,11 +453,11 @@ static void value_photo_file_adapter_copy_value (const GValue* src_value, GValue
 	if (src_value->data[0].v_pointer) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		dest_value->data[0].v_pointer = photo_file_adapter_ref (src_value->data[0].v_pointer);
-#line 441 "PhotoFileAdapter.c"
+#line 457 "PhotoFileAdapter.c"
 	} else {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 445 "PhotoFileAdapter.c"
+#line 461 "PhotoFileAdapter.c"
 	}
 }
 
@@ -449,37 +465,37 @@ static void value_photo_file_adapter_copy_value (const GValue* src_value, GValue
 static gpointer value_photo_file_adapter_peek_pointer (const GValue* value) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return value->data[0].v_pointer;
-#line 453 "PhotoFileAdapter.c"
+#line 469 "PhotoFileAdapter.c"
 }
 
 
 static gchar* value_photo_file_adapter_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (collect_values[0].v_pointer) {
-#line 460 "PhotoFileAdapter.c"
+#line 476 "PhotoFileAdapter.c"
 		PhotoFileAdapter* object;
 		object = collect_values[0].v_pointer;
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 467 "PhotoFileAdapter.c"
+#line 483 "PhotoFileAdapter.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 471 "PhotoFileAdapter.c"
+#line 487 "PhotoFileAdapter.c"
 		}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		value->data[0].v_pointer = photo_file_adapter_ref (object);
-#line 475 "PhotoFileAdapter.c"
+#line 491 "PhotoFileAdapter.c"
 	} else {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		value->data[0].v_pointer = NULL;
-#line 479 "PhotoFileAdapter.c"
+#line 495 "PhotoFileAdapter.c"
 	}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return NULL;
-#line 483 "PhotoFileAdapter.c"
+#line 499 "PhotoFileAdapter.c"
 }
 
 
@@ -490,25 +506,25 @@ static gchar* value_photo_file_adapter_lcopy_value (const GValue* value, guint n
 	if (!object_p) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 494 "PhotoFileAdapter.c"
+#line 510 "PhotoFileAdapter.c"
 	}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (!value->data[0].v_pointer) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		*object_p = NULL;
-#line 500 "PhotoFileAdapter.c"
+#line 516 "PhotoFileAdapter.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		*object_p = value->data[0].v_pointer;
-#line 504 "PhotoFileAdapter.c"
+#line 520 "PhotoFileAdapter.c"
 	} else {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		*object_p = photo_file_adapter_ref (value->data[0].v_pointer);
-#line 508 "PhotoFileAdapter.c"
+#line 524 "PhotoFileAdapter.c"
 	}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return NULL;
-#line 512 "PhotoFileAdapter.c"
+#line 528 "PhotoFileAdapter.c"
 }
 
 
@@ -522,7 +538,7 @@ GParamSpec* param_spec_photo_file_adapter (const gchar* name, const gchar* nick,
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return G_PARAM_SPEC (spec);
-#line 526 "PhotoFileAdapter.c"
+#line 542 "PhotoFileAdapter.c"
 }
 
 
@@ -531,7 +547,7 @@ gpointer value_get_photo_file_adapter (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, TYPE_PHOTO_FILE_ADAPTER), NULL);
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return value->data[0].v_pointer;
-#line 535 "PhotoFileAdapter.c"
+#line 551 "PhotoFileAdapter.c"
 }
 
 
@@ -551,17 +567,17 @@ void value_set_photo_file_adapter (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		photo_file_adapter_ref (value->data[0].v_pointer);
-#line 555 "PhotoFileAdapter.c"
+#line 571 "PhotoFileAdapter.c"
 	} else {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		value->data[0].v_pointer = NULL;
-#line 559 "PhotoFileAdapter.c"
+#line 575 "PhotoFileAdapter.c"
 	}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (old) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		photo_file_adapter_unref (old);
-#line 565 "PhotoFileAdapter.c"
+#line 581 "PhotoFileAdapter.c"
 	}
 }
 
@@ -580,17 +596,17 @@ void value_take_photo_file_adapter (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		value->data[0].v_pointer = v_object;
-#line 584 "PhotoFileAdapter.c"
+#line 600 "PhotoFileAdapter.c"
 	} else {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		value->data[0].v_pointer = NULL;
-#line 588 "PhotoFileAdapter.c"
+#line 604 "PhotoFileAdapter.c"
 	}
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (old) {
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		photo_file_adapter_unref (old);
-#line 594 "PhotoFileAdapter.c"
+#line 610 "PhotoFileAdapter.c"
 	}
 }
 
@@ -602,7 +618,7 @@ static void photo_file_adapter_class_init (PhotoFileAdapterClass * klass) {
 	((PhotoFileAdapterClass *) klass)->finalize = photo_file_adapter_finalize;
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_type_class_add_private (klass, sizeof (PhotoFileAdapterPrivate));
-#line 606 "PhotoFileAdapter.c"
+#line 622 "PhotoFileAdapter.c"
 }
 
 
@@ -615,7 +631,7 @@ static void photo_file_adapter_instance_init (PhotoFileAdapter * self) {
 	self->priv->file = NULL;
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	self->ref_count = 1;
-#line 619 "PhotoFileAdapter.c"
+#line 635 "PhotoFileAdapter.c"
 }
 
 
@@ -631,7 +647,7 @@ static void photo_file_adapter_finalize (PhotoFileAdapter* obj) {
 	g_rec_mutex_clear (&self->priv->__lock_file);
 #line 23 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_object_unref0 (self->priv->file);
-#line 635 "PhotoFileAdapter.c"
+#line 651 "PhotoFileAdapter.c"
 }
 
 
@@ -656,7 +672,7 @@ gpointer photo_file_adapter_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return instance;
-#line 660 "PhotoFileAdapter.c"
+#line 676 "PhotoFileAdapter.c"
 }
 
 
@@ -669,8 +685,20 @@ void photo_file_adapter_unref (gpointer instance) {
 		PHOTO_FILE_ADAPTER_GET_CLASS (self)->finalize (self);
 #line 20 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 673 "PhotoFileAdapter.c"
+#line 689 "PhotoFileAdapter.c"
 	}
+}
+
+
+GType photo_file_reader_role_get_type (void) {
+	static volatile gsize photo_file_reader_role_type_id__volatile = 0;
+	if (g_once_init_enter (&photo_file_reader_role_type_id__volatile)) {
+		static const GEnumValue values[] = {{PHOTO_FILE_READER_ROLE_DEFAULT, "PHOTO_FILE_READER_ROLE_DEFAULT", "default"}, {PHOTO_FILE_READER_ROLE_THUMBNAIL, "PHOTO_FILE_READER_ROLE_THUMBNAIL", "thumbnail"}, {0, NULL, NULL}};
+		GType photo_file_reader_role_type_id;
+		photo_file_reader_role_type_id = g_enum_register_static ("PhotoFileReaderRole", values);
+		g_once_init_leave (&photo_file_reader_role_type_id__volatile, photo_file_reader_role_type_id);
+	}
+	return photo_file_reader_role_type_id__volatile;
 }
 
 
@@ -678,17 +706,17 @@ PhotoFileReader* photo_file_reader_construct (GType object_type, const gchar* fi
 	PhotoFileReader* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	PhotoFileFormat _tmp1_ = 0;
-#line 60 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 67 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (filepath != NULL, NULL);
-#line 61 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = filepath;
-#line 61 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = file_format;
-#line 61 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 68 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	self = (PhotoFileReader*) photo_file_adapter_construct (object_type, _tmp0_, _tmp1_);
-#line 60 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 67 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return self;
-#line 692 "PhotoFileAdapter.c"
+#line 720 "PhotoFileAdapter.c"
 }
 
 
@@ -702,52 +730,52 @@ PhotoFileWriter* photo_file_reader_create_writer (PhotoFileReader* self, GError*
 	PhotoFileWriter* _tmp5_ = NULL;
 	PhotoFileWriter* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 64 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 71 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), NULL);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp2_ = photo_file_adapter_get_filepath (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp3_ = _tmp2_;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp4_ = photo_file_format_create_writer (_tmp1_, _tmp3_, &_inner_error_);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp5_ = _tmp4_;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_free0 (_tmp3_);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = _tmp5_;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		if (_inner_error_->domain == PHOTO_FORMAT_ERROR) {
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_propagate_error (error, _inner_error_);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return NULL;
-#line 730 "PhotoFileAdapter.c"
+#line 758 "PhotoFileAdapter.c"
 		} else {
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_clear_error (&_inner_error_);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return NULL;
-#line 738 "PhotoFileAdapter.c"
+#line 766 "PhotoFileAdapter.c"
 		}
 	}
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp6_ = _tmp0_;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = NULL;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _tmp6_;
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_photo_file_adapter_unref0 (_tmp0_);
-#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 751 "PhotoFileAdapter.c"
+#line 779 "PhotoFileAdapter.c"
 }
 
 
@@ -761,88 +789,88 @@ PhotoFileMetadataWriter* photo_file_reader_create_metadata_writer (PhotoFileRead
 	PhotoFileMetadataWriter* _tmp5_ = NULL;
 	PhotoFileMetadataWriter* _tmp6_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 68 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 75 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), NULL);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp2_ = photo_file_adapter_get_filepath (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp3_ = _tmp2_;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp4_ = photo_file_format_create_metadata_writer (_tmp1_, _tmp3_, &_inner_error_);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp5_ = _tmp4_;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_free0 (_tmp3_);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = _tmp5_;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		if (_inner_error_->domain == PHOTO_FORMAT_ERROR) {
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_propagate_error (error, _inner_error_);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return NULL;
-#line 789 "PhotoFileAdapter.c"
+#line 817 "PhotoFileAdapter.c"
 		} else {
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			g_clear_error (&_inner_error_);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 			return NULL;
-#line 797 "PhotoFileAdapter.c"
+#line 825 "PhotoFileAdapter.c"
 		}
 	}
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp6_ = _tmp0_;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = NULL;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _tmp6_;
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_photo_file_adapter_unref0 (_tmp0_);
-#line 69 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 810 "PhotoFileAdapter.c"
+#line 838 "PhotoFileAdapter.c"
 }
 
 
 static PhotoMetadata* photo_file_reader_real_read_metadata (PhotoFileReader* self, GError** error) {
-#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 79 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_critical ("Type `%s' does not implement abstract method `photo_file_reader_read_metadata'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 79 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return NULL;
-#line 819 "PhotoFileAdapter.c"
+#line 847 "PhotoFileAdapter.c"
 }
 
 
 PhotoMetadata* photo_file_reader_read_metadata (PhotoFileReader* self, GError** error) {
-#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 79 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), NULL);
-#line 72 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 79 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return PHOTO_FILE_READER_GET_CLASS (self)->read_metadata (self, error);
-#line 828 "PhotoFileAdapter.c"
+#line 856 "PhotoFileAdapter.c"
 }
 
 
 static GdkPixbuf* photo_file_reader_real_unscaled_read (PhotoFileReader* self, GError** error) {
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 81 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_critical ("Type `%s' does not implement abstract method `photo_file_reader_unscaled_read'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 81 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return NULL;
-#line 837 "PhotoFileAdapter.c"
+#line 865 "PhotoFileAdapter.c"
 }
 
 
 GdkPixbuf* photo_file_reader_unscaled_read (PhotoFileReader* self, GError** error) {
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 81 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), NULL);
-#line 74 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 81 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return PHOTO_FILE_READER_GET_CLASS (self)->unscaled_read (self, error);
-#line 846 "PhotoFileAdapter.c"
+#line 874 "PhotoFileAdapter.c"
 }
 
 
@@ -853,42 +881,69 @@ static GdkPixbuf* photo_file_reader_real_scaled_read (PhotoFileReader* self, Dim
 	Dimensions _tmp2_ = {0};
 	GdkPixbuf* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 83 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (full != NULL, NULL);
-#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 83 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (scaled != NULL, NULL);
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = photo_file_reader_unscaled_read (self, &_inner_error_);
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = _tmp1_;
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		g_propagate_error (error, _inner_error_);
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 		return NULL;
-#line 871 "PhotoFileAdapter.c"
+#line 899 "PhotoFileAdapter.c"
 	}
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp2_ = *scaled;
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp3_ = resize_pixbuf (_tmp0_, &_tmp2_, GDK_INTERP_BILINEAR);
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _tmp3_;
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_object_unref0 (_tmp0_);
-#line 77 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 84 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 883 "PhotoFileAdapter.c"
+#line 911 "PhotoFileAdapter.c"
 }
 
 
 GdkPixbuf* photo_file_reader_scaled_read (PhotoFileReader* self, Dimensions* full, Dimensions* scaled, GError** error) {
-#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 83 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), NULL);
-#line 76 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 83 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return PHOTO_FILE_READER_GET_CLASS (self)->scaled_read (self, full, scaled, error);
-#line 892 "PhotoFileAdapter.c"
+#line 920 "PhotoFileAdapter.c"
+}
+
+
+void photo_file_reader_set_role (PhotoFileReader* self, PhotoFileReaderRole role) {
+	PhotoFileReaderRole _tmp0_ = 0;
+#line 87 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	g_return_if_fail (IS_PHOTO_FILE_READER (self));
+#line 88 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	_tmp0_ = role;
+#line 88 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	self->priv->role = _tmp0_;
+#line 932 "PhotoFileAdapter.c"
+}
+
+
+PhotoFileReaderRole photo_file_reader_get_role (PhotoFileReader* self) {
+	PhotoFileReaderRole result = 0;
+	PhotoFileReaderRole _tmp0_ = 0;
+#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	g_return_val_if_fail (IS_PHOTO_FILE_READER (self), 0);
+#line 92 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	_tmp0_ = self->priv->role;
+#line 92 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	result = _tmp0_;
+#line 92 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	return result;
+#line 947 "PhotoFileAdapter.c"
 }
 
 
@@ -896,16 +951,35 @@ static void photo_file_reader_class_init (PhotoFileReaderClass * klass) {
 #line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	photo_file_reader_parent_class = g_type_class_peek_parent (klass);
 #line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	((PhotoFileAdapterClass *) klass)->finalize = photo_file_reader_finalize;
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	g_type_class_add_private (klass, sizeof (PhotoFileReaderPrivate));
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	((PhotoFileReaderClass *) klass)->read_metadata = photo_file_reader_real_read_metadata;
 #line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	((PhotoFileReaderClass *) klass)->unscaled_read = photo_file_reader_real_unscaled_read;
 #line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	((PhotoFileReaderClass *) klass)->scaled_read = photo_file_reader_real_scaled_read;
-#line 905 "PhotoFileAdapter.c"
+#line 964 "PhotoFileAdapter.c"
 }
 
 
 static void photo_file_reader_instance_init (PhotoFileReader * self) {
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	self->priv = PHOTO_FILE_READER_GET_PRIVATE (self);
+#line 65 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	self->priv->role = PHOTO_FILE_READER_ROLE_DEFAULT;
+#line 973 "PhotoFileAdapter.c"
+}
+
+
+static void photo_file_reader_finalize (PhotoFileAdapter* obj) {
+	PhotoFileReader * self;
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_PHOTO_FILE_READER, PhotoFileReader);
+#line 59 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+	PHOTO_FILE_ADAPTER_CLASS (photo_file_reader_parent_class)->finalize (obj);
+#line 983 "PhotoFileAdapter.c"
 }
 
 
@@ -925,17 +999,17 @@ PhotoFileWriter* photo_file_writer_construct (GType object_type, const gchar* fi
 	PhotoFileWriter* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	PhotoFileFormat _tmp1_ = 0;
-#line 86 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 101 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (filepath != NULL, NULL);
-#line 87 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 102 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = filepath;
-#line 87 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 102 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = file_format;
-#line 87 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 102 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	self = (PhotoFileWriter*) photo_file_adapter_construct (object_type, _tmp0_, _tmp1_);
-#line 86 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 101 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return self;
-#line 939 "PhotoFileAdapter.c"
+#line 1013 "PhotoFileAdapter.c"
 }
 
 
@@ -946,52 +1020,52 @@ PhotoFileReader* photo_file_writer_create_reader (PhotoFileWriter* self) {
 	gchar* _tmp2_ = NULL;
 	PhotoFileReader* _tmp3_ = NULL;
 	PhotoFileReader* _tmp4_ = NULL;
-#line 90 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 105 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_WRITER (self), NULL);
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = photo_file_adapter_get_filepath (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp2_ = _tmp1_;
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp3_ = photo_file_format_create_reader (_tmp0_, _tmp2_);
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp4_ = _tmp3_;
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_free0 (_tmp2_);
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _tmp4_;
-#line 91 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 968 "PhotoFileAdapter.c"
+#line 1042 "PhotoFileAdapter.c"
 }
 
 
 static void photo_file_writer_real_write (PhotoFileWriter* self, GdkPixbuf* pixbuf, JpegQuality quality, GError** error) {
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 109 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_critical ("Type `%s' does not implement abstract method `photo_file_writer_write'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 109 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return;
-#line 977 "PhotoFileAdapter.c"
+#line 1051 "PhotoFileAdapter.c"
 }
 
 
 void photo_file_writer_write (PhotoFileWriter* self, GdkPixbuf* pixbuf, JpegQuality quality, GError** error) {
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 109 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_if_fail (IS_PHOTO_FILE_WRITER (self));
-#line 94 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 109 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	PHOTO_FILE_WRITER_GET_CLASS (self)->write (self, pixbuf, quality, error);
-#line 986 "PhotoFileAdapter.c"
+#line 1060 "PhotoFileAdapter.c"
 }
 
 
 static void photo_file_writer_class_init (PhotoFileWriterClass * klass) {
-#line 85 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 100 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	photo_file_writer_parent_class = g_type_class_peek_parent (klass);
-#line 85 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 100 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	((PhotoFileWriterClass *) klass)->write = photo_file_writer_real_write;
-#line 995 "PhotoFileAdapter.c"
+#line 1069 "PhotoFileAdapter.c"
 }
 
 
@@ -1015,17 +1089,17 @@ PhotoFileMetadataWriter* photo_file_metadata_writer_construct (GType object_type
 	PhotoFileMetadataWriter* self = NULL;
 	const gchar* _tmp0_ = NULL;
 	PhotoFileFormat _tmp1_ = 0;
-#line 102 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 117 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (filepath != NULL, NULL);
-#line 103 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = filepath;
-#line 103 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = file_format;
-#line 103 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 118 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	self = (PhotoFileMetadataWriter*) photo_file_adapter_construct (object_type, _tmp0_, _tmp1_);
-#line 102 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 117 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return self;
-#line 1029 "PhotoFileAdapter.c"
+#line 1103 "PhotoFileAdapter.c"
 }
 
 
@@ -1036,52 +1110,52 @@ PhotoFileReader* photo_file_metadata_writer_create_reader (PhotoFileMetadataWrit
 	gchar* _tmp2_ = NULL;
 	PhotoFileReader* _tmp3_ = NULL;
 	PhotoFileReader* _tmp4_ = NULL;
-#line 106 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 121 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_val_if_fail (IS_PHOTO_FILE_METADATA_WRITER (self), NULL);
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp0_ = photo_file_adapter_get_file_format (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp1_ = photo_file_adapter_get_filepath (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_PHOTO_FILE_ADAPTER, PhotoFileAdapter));
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp2_ = _tmp1_;
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp3_ = photo_file_format_create_reader (_tmp0_, _tmp2_);
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_tmp4_ = _tmp3_;
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	_g_free0 (_tmp2_);
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	result = _tmp4_;
-#line 107 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 122 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return result;
-#line 1058 "PhotoFileAdapter.c"
+#line 1132 "PhotoFileAdapter.c"
 }
 
 
 static void photo_file_metadata_writer_real_write_metadata (PhotoFileMetadataWriter* self, PhotoMetadata* metadata, GError** error) {
-#line 110 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 125 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_critical ("Type `%s' does not implement abstract method `photo_file_metadata_writer_write_metadata'", g_type_name (G_TYPE_FROM_INSTANCE (self)));
-#line 110 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 125 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	return;
-#line 1067 "PhotoFileAdapter.c"
+#line 1141 "PhotoFileAdapter.c"
 }
 
 
 void photo_file_metadata_writer_write_metadata (PhotoFileMetadataWriter* self, PhotoMetadata* metadata, GError** error) {
-#line 110 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 125 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	g_return_if_fail (IS_PHOTO_FILE_METADATA_WRITER (self));
-#line 110 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 125 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	PHOTO_FILE_METADATA_WRITER_GET_CLASS (self)->write_metadata (self, metadata, error);
-#line 1076 "PhotoFileAdapter.c"
+#line 1150 "PhotoFileAdapter.c"
 }
 
 
 static void photo_file_metadata_writer_class_init (PhotoFileMetadataWriterClass * klass) {
-#line 101 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 116 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	photo_file_metadata_writer_parent_class = g_type_class_peek_parent (klass);
-#line 101 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
+#line 116 "/home/jens/Source/shotwell/src/photos/PhotoFileAdapter.vala"
 	((PhotoFileMetadataWriterClass *) klass)->write_metadata = photo_file_metadata_writer_real_write_metadata;
-#line 1085 "PhotoFileAdapter.c"
+#line 1159 "PhotoFileAdapter.c"
 }
 
 

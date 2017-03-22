@@ -8921,7 +8921,7 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 #line 925 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8909 "Dialogs.c"
-				goto __catch423_g_error;
+				goto __catch424_g_error;
 			}
 #line 926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp18_ = outstream;
@@ -8940,7 +8940,7 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 #line 926 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (outstream);
 #line 8928 "Dialogs.c"
-				goto __catch423_g_error;
+				goto __catch424_g_error;
 			}
 #line 927 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_tmp22_ = outstream;
@@ -8951,14 +8951,14 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 #line 927 "/home/jens/Source/shotwell/src/Dialogs.vala"
 				_g_object_unref0 (outstream);
 #line 8939 "Dialogs.c"
-				goto __catch423_g_error;
+				goto __catch424_g_error;
 			}
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (outstream);
 #line 8944 "Dialogs.c"
 		}
-		goto __finally423;
-		__catch423_g_error:
+		goto __finally424;
+		__catch424_g_error:
 		{
 			GError* err = NULL;
 			GFile* _tmp23_ = NULL;
@@ -8988,7 +8988,7 @@ void import_ui_save_import_results (GtkWindow* chooser_dialog_parent, const gcha
 			_g_error_free0 (err);
 #line 8975 "Dialogs.c"
 		}
-		__finally423:
+		__finally424:
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 924 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -14259,7 +14259,7 @@ AdjustDateTimeDialog* adjust_date_time_dialog_construct (GType object_type, Date
 #line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 14247 "Dialogs.c"
-			goto __catch424_g_error;
+			goto __catch425_g_error;
 		}
 #line 1753 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp116_ = _tmp113_;
@@ -14273,8 +14273,8 @@ AdjustDateTimeDialog* adjust_date_time_dialog_construct (GType object_type, Date
 		_g_object_unref0 (_tmp113_);
 #line 14260 "Dialogs.c"
 	}
-	goto __finally424;
-	__catch424_g_error:
+	goto __finally425;
+	__catch425_g_error:
 	{
 		GError* err = NULL;
 		Dateable* _tmp117_ = NULL;
@@ -14298,7 +14298,7 @@ AdjustDateTimeDialog* adjust_date_time_dialog_construct (GType object_type, Date
 		_g_error_free0 (err);
 #line 14285 "Dialogs.c"
 	}
-	__finally424:
+	__finally425:
 #line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1750 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -17580,7 +17580,7 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 #line 2255 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 17566 "Dialogs.c"
-			goto __catch425_g_error;
+			goto __catch426_g_error;
 		}
 #line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp8_ = syspics_child_enum;
@@ -17593,7 +17593,7 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 #line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			_g_object_unref0 (syspics_child_enum);
 #line 17579 "Dialogs.c"
-			goto __catch425_g_error;
+			goto __catch426_g_error;
 		}
 #line 2257 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		_tmp10_ = _tmp7_;
@@ -17617,8 +17617,8 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 		return result;
 #line 17602 "Dialogs.c"
 	}
-	goto __finally425;
-	__catch425_g_error:
+	goto __finally426;
+	__catch426_g_error:
 	{
 		GError* e = NULL;
 #line 2254 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -17635,7 +17635,7 @@ static gboolean welcome_dialog_is_system_pictures_import_possible (void) {
 		return result;
 #line 17620 "Dialogs.c"
 	}
-	__finally425:
+	__finally426:
 #line 2254 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	_g_object_unref0 (system_pictures);
 #line 2254 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -18527,11 +18527,11 @@ static gboolean preferences_dialog_on_local_pattern_help (PreferencesDialog* sel
 #line 2401 "/home/jens/Source/shotwell/src/Dialogs.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 18513 "Dialogs.c"
-			goto __catch426_g_error;
+			goto __catch427_g_error;
 		}
 	}
-	goto __finally426;
-	__catch426_g_error:
+	goto __finally427;
+	__catch427_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp3_ = NULL;
@@ -18550,7 +18550,7 @@ static gboolean preferences_dialog_on_local_pattern_help (PreferencesDialog* sel
 		_g_error_free0 (e);
 #line 18535 "Dialogs.c"
 	}
-	__finally426:
+	__finally427:
 #line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2400 "/home/jens/Source/shotwell/src/Dialogs.vala"
@@ -18791,7 +18791,7 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 #line 2438 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 18777 "Dialogs.c"
-						goto __catch427_g_error;
+						goto __catch428_g_error;
 					}
 #line 2438 "/home/jens/Source/shotwell/src/Dialogs.vala"
 					_tmp37_ = combo_store;
@@ -18843,7 +18843,7 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 #line 2442 "/home/jens/Source/shotwell/src/Dialogs.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 18829 "Dialogs.c"
-							goto __catch427_g_error;
+							goto __catch428_g_error;
 						}
 #line 2446 "/home/jens/Source/shotwell/src/Dialogs.vala"
 						_tmp48_ = combo_store;
@@ -18865,8 +18865,8 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 					}
 				}
 			}
-			goto __finally427;
-			__catch427_g_error:
+			goto __finally428;
+			__catch428_g_error:
 			{
 				GError* _error_ = NULL;
 				GError* _tmp52_ = NULL;
@@ -18893,7 +18893,7 @@ static void preferences_dialog_populate_app_combo_box (PreferencesDialog* self, 
 				_g_error_free0 (_error_);
 #line 18878 "Dialogs.c"
 			}
-			__finally427:
+			__finally428:
 #line 2436 "/home/jens/Source/shotwell/src/Dialogs.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2436 "/home/jens/Source/shotwell/src/Dialogs.vala"

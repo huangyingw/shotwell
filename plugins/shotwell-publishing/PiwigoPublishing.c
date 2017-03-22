@@ -698,8 +698,8 @@ static void publishing_piwigo_piwigo_publisher_do_show_ssl_downgrade_pane (Publi
 GType publishing_piwigo_ssl_error_pane_get_type (void) G_GNUC_CONST;
 PublishingPiwigoSSLErrorPane* publishing_piwigo_ssl_error_pane_new (PublishingPiwigoSessionLoginTransaction* transaction, const gchar* host);
 PublishingPiwigoSSLErrorPane* publishing_piwigo_ssl_error_pane_construct (GType object_type, PublishingPiwigoSessionLoginTransaction* transaction, const gchar* host);
-static void __lambda6_ (PublishingPiwigoPiwigoPublisher* self);
-static void ___lambda6__publishing_piwigo_ssl_error_pane_proceed (PublishingPiwigoSSLErrorPane* _sender, gpointer self);
+static void __lambda7_ (PublishingPiwigoPiwigoPublisher* self);
+static void ___lambda7__publishing_piwigo_ssl_error_pane_proceed (PublishingPiwigoSSLErrorPane* _sender, gpointer self);
 static void _vala_SoupURI_free (SoupURI* self);
 gchar* publishing_piwigo_piwigo_publisher_normalise_url (const gchar* url);
 PublishingPiwigoSessionLoginTransaction* publishing_piwigo_session_login_transaction_new (PublishingPiwigoSession* session, const gchar* url, const gchar* username, const gchar* password);
@@ -737,7 +737,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_error (Publishi
 static void _publishing_piwigo_piwigo_publisher_on_category_fetch_error_publishing_rest_support_transaction_network_error (PublishingRESTSupportTransaction* _sender, GError* err, gpointer self);
 static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (PublishingPiwigoPiwigoPublisher* self, PublishingRESTSupportTransaction* txn);
 static void _publishing_piwigo_piwigo_publisher_on_category_fetch_complete_publishing_rest_support_transaction_completed (PublishingRESTSupportTransaction* _sender, gpointer self);
-static void _vala_array_add34 (PublishingPiwigoCategory*** array, int* length, int* size, PublishingPiwigoCategory* value);
+static void _vala_array_add35 (PublishingPiwigoCategory*** array, int* length, int* size, PublishingPiwigoCategory* value);
 static void publishing_piwigo_piwigo_publisher_do_show_publishing_options_pane (PublishingPiwigoPiwigoPublisher* self);
 GType publishing_piwigo_publishing_options_pane_get_type (void) G_GNUC_CONST;
 PublishingPiwigoPublishingOptionsPane* publishing_piwigo_publishing_options_pane_new (PublishingPiwigoPiwigoPublisher* publisher, PublishingPiwigoCategory** categories, int categories_length1, gint last_category, gint last_permission_level, gint last_photo_size, gboolean last_title_as_comment, gboolean last_no_upload_tags, gboolean strip_metadata_enabled);
@@ -798,11 +798,11 @@ enum  {
 static void publishing_piwigo_ssl_error_pane_real_constructed (GObject* base);
 gchar* publishing_piwigo_ssl_error_pane_get_host (PublishingPiwigoSSLErrorPane* self);
 gchar* publishing_piwigo_ssl_error_pane_get_error_text (PublishingPiwigoSSLErrorPane* self);
-static void __lambda4_ (PublishingPiwigoSSLErrorPane* self);
-static GTlsCertificate* publishing_piwigo_ssl_error_pane_get_cert (PublishingPiwigoSSLErrorPane* self);
-static void ___lambda4__gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void __lambda5_ (PublishingPiwigoSSLErrorPane* self);
+static GTlsCertificate* publishing_piwigo_ssl_error_pane_get_cert (PublishingPiwigoSSLErrorPane* self);
 static void ___lambda5__gtk_button_clicked (GtkButton* _sender, gpointer self);
+static void __lambda6_ (PublishingPiwigoSSLErrorPane* self);
+static void ___lambda6__gtk_button_clicked (GtkButton* _sender, gpointer self);
 static void publishing_piwigo_ssl_error_pane_set_host (PublishingPiwigoSSLErrorPane* self, const gchar* value);
 static void publishing_piwigo_ssl_error_pane_set_cert (PublishingPiwigoSSLErrorPane* self, GTlsCertificate* value);
 static void publishing_piwigo_ssl_error_pane_set_error_text (PublishingPiwigoSSLErrorPane* self, const gchar* value);
@@ -868,16 +868,16 @@ static void _publishing_piwigo_publishing_options_pane_on_existing_combo_changed
 static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pane_create_perm_levels (PublishingPiwigoPublishingOptionsPane* self, int* result_length1);
 static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_create_sizes (PublishingPiwigoPublishingOptionsPane* self, int* result_length1);
 static const gchar* publishing_piwigo_publishing_options_pane_get_default_comment (PublishingPiwigoPublishingOptionsPane* self);
-static void _vala_array_add35 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
 static void _vala_array_add36 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
 static void _vala_array_add37 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
 static void _vala_array_add38 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
 static void _vala_array_add39 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
-static void _vala_array_add40 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
+static void _vala_array_add40 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value);
 static void _vala_array_add41 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
 static void _vala_array_add42 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
 static void _vala_array_add43 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
 static void _vala_array_add44 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
+static void _vala_array_add45 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value);
 static GeeList* publishing_piwigo_publishing_options_pane_get_existing_categories (PublishingPiwigoPublishingOptionsPane* self);
 static void publishing_piwigo_publishing_options_pane_update_publish_button_sensitivity (PublishingPiwigoPublishingOptionsPane* self);
 static gboolean publishing_piwigo_publishing_options_pane_category_already_exists (PublishingPiwigoPublishingOptionsPane* self, const gchar* category_name);
@@ -3124,7 +3124,7 @@ static void publishing_piwigo_piwigo_publisher_do_show_authentication_pane (Publ
 }
 
 
-static void __lambda6_ (PublishingPiwigoPiwigoPublisher* self) {
+static void __lambda7_ (PublishingPiwigoPiwigoPublisher* self) {
 	PublishingPiwigoSession* _tmp0_ = NULL;
 	PublishingPiwigoSession* _tmp1_ = NULL;
 	gchar* persistent_url = NULL;
@@ -3224,9 +3224,9 @@ static void __lambda6_ (PublishingPiwigoPiwigoPublisher* self) {
 }
 
 
-static void ___lambda6__publishing_piwigo_ssl_error_pane_proceed (PublishingPiwigoSSLErrorPane* _sender, gpointer self) {
+static void ___lambda7__publishing_piwigo_ssl_error_pane_proceed (PublishingPiwigoSSLErrorPane* _sender, gpointer self) {
 #line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	__lambda6_ ((PublishingPiwigoPiwigoPublisher*) self);
+	__lambda7_ ((PublishingPiwigoPiwigoPublisher*) self);
 #line 3229 "PiwigoPublishing.c"
 }
 
@@ -3276,7 +3276,7 @@ static void publishing_piwigo_piwigo_publisher_do_show_ssl_downgrade_pane (Publi
 #line 295 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	ssl_pane = _tmp5_;
 #line 296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	g_signal_connect_object (ssl_pane, "proceed", (GCallback) ___lambda6__publishing_piwigo_ssl_error_pane_proceed, self, 0);
+	g_signal_connect_object (ssl_pane, "proceed", (GCallback) ___lambda7__publishing_piwigo_ssl_error_pane_proceed, self, 0);
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp6_ = self->priv->host;
 #line 310 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -3459,7 +3459,7 @@ static void publishing_piwigo_piwigo_publisher_do_network_login (PublishingPiwig
 #line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 3460 "PiwigoPublishing.c"
-				goto __catch32_spit_publishing_publishing_error;
+				goto __catch23_spit_publishing_publishing_error;
 			}
 #line 364 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (login_trans);
@@ -3472,8 +3472,8 @@ static void publishing_piwigo_piwigo_publisher_do_network_login (PublishingPiwig
 #line 3471 "PiwigoPublishing.c"
 		}
 	}
-	goto __finally32;
-	__catch32_spit_publishing_publishing_error:
+	goto __finally23;
+	__catch23_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp13_ = NULL;
@@ -3508,7 +3508,7 @@ static void publishing_piwigo_piwigo_publisher_do_network_login (PublishingPiwig
 		_g_error_free0 (err);
 #line 3508 "PiwigoPublishing.c"
 	}
-	__finally32:
+	__finally23:
 #line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 363 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -3722,7 +3722,7 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 #line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 3723 "PiwigoPublishing.c"
-				goto __catch33_spit_publishing_publishing_error;
+				goto __catch24_spit_publishing_publishing_error;
 			}
 #line 412 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -3733,8 +3733,8 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 #line 3732 "PiwigoPublishing.c"
 		}
 	}
-	goto __finally33;
-	__catch33_spit_publishing_publishing_error:
+	goto __finally24;
+	__catch24_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 #line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -3767,7 +3767,7 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 #line 417 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 3768 "PiwigoPublishing.c"
-					goto __catch34_spit_publishing_publishing_error;
+					goto __catch25_spit_publishing_publishing_error;
 				}
 #line 417 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_g_error_free0 (err);
@@ -3780,8 +3780,8 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 #line 3779 "PiwigoPublishing.c"
 			}
 		}
-		goto __finally34;
-		__catch34_spit_publishing_publishing_error:
+		goto __finally25;
+		__catch25_spit_publishing_publishing_error:
 		{
 			GError* code = NULL;
 			gint code_int = 0;
@@ -3824,7 +3824,7 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 			_g_error_free0 (code);
 #line 3824 "PiwigoPublishing.c"
 		}
-		__finally34:
+		__finally25:
 #line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 416 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -3845,7 +3845,7 @@ static void publishing_piwigo_piwigo_publisher_on_login_network_complete (Publis
 		return;
 #line 3845 "PiwigoPublishing.c"
 	}
-	__finally33:
+	__finally24:
 #line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 411 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4038,7 +4038,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 #line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4039 "PiwigoPublishing.c"
-					goto __catch35_spit_publishing_publishing_error;
+					goto __catch26_spit_publishing_publishing_error;
 				}
 #line 487 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_publishing_rest_support_transaction_unref0 (status_txn);
@@ -4051,8 +4051,8 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 #line 4050 "PiwigoPublishing.c"
 			}
 		}
-		goto __finally35;
-		__catch35_spit_publishing_publishing_error:
+		goto __finally26;
+		__catch26_spit_publishing_publishing_error:
 		{
 			GError* err = NULL;
 			GError* _tmp11_ = NULL;
@@ -4071,7 +4071,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 			_g_error_free0 (err);
 #line 4070 "PiwigoPublishing.c"
 		}
-		__finally35:
+		__finally26:
 #line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 486 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4119,7 +4119,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4119 "PiwigoPublishing.c"
-					goto __catch36_spit_publishing_publishing_error;
+					goto __catch27_spit_publishing_publishing_error;
 				}
 #line 498 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_publishing_rest_support_transaction_unref0 (status_txn);
@@ -4132,8 +4132,8 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 #line 4130 "PiwigoPublishing.c"
 			}
 		}
-		goto __finally36;
-		__catch36_spit_publishing_publishing_error:
+		goto __finally27;
+		__catch27_spit_publishing_publishing_error:
 		{
 			GError* err = NULL;
 			GError* _tmp17_ = NULL;
@@ -4152,7 +4152,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_session_status (Publishi
 			_g_error_free0 (err);
 #line 4150 "PiwigoPublishing.c"
 		}
-		__finally36:
+		__finally27:
 #line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 497 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4266,7 +4266,7 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 #line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4265 "PiwigoPublishing.c"
-					goto __catch37_spit_publishing_publishing_error;
+					goto __catch28_spit_publishing_publishing_error;
 				}
 #line 524 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_g_free0 (pwg_id);
@@ -4319,7 +4319,7 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 #line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4318 "PiwigoPublishing.c"
-						goto __catch38_spit_publishing_publishing_error;
+						goto __catch29_spit_publishing_publishing_error;
 					}
 #line 530 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					_publishing_rest_support_xml_document_unref0 (doc);
@@ -4383,8 +4383,8 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 				_g_free0 (username);
 #line 4381 "PiwigoPublishing.c"
 			}
-			goto __finally38;
-			__catch38_spit_publishing_publishing_error:
+			goto __finally29;
+			__catch29_spit_publishing_publishing_error:
 			{
 				GError* err2 = NULL;
 				GError* _tmp35_ = NULL;
@@ -4411,7 +4411,7 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 				return;
 #line 4408 "PiwigoPublishing.c"
 			}
-			__finally38:
+			__finally29:
 #line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4419,7 +4419,7 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 #line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4417 "PiwigoPublishing.c"
-					goto __catch37_spit_publishing_publishing_error;
+					goto __catch28_spit_publishing_publishing_error;
 				}
 #line 529 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_publishing_rest_support_xml_document_unref0 (doc);
@@ -4439,8 +4439,8 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 			_publishing_rest_support_xml_document_unref0 (doc);
 #line 4436 "PiwigoPublishing.c"
 		}
-		goto __finally37;
-		__catch37_spit_publishing_publishing_error:
+		goto __finally28;
+		__catch28_spit_publishing_publishing_error:
 		{
 			GError* err = NULL;
 			GError* _tmp36_ = NULL;
@@ -4465,7 +4465,7 @@ static void publishing_piwigo_piwigo_publisher_on_session_get_status_complete (P
 			return;
 #line 4461 "PiwigoPublishing.c"
 		}
-		__finally37:
+		__finally28:
 #line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 523 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4589,7 +4589,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_categories (PublishingPi
 #line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4586 "PiwigoPublishing.c"
-				goto __catch39_spit_publishing_publishing_error;
+				goto __catch30_spit_publishing_publishing_error;
 			}
 #line 584 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (cat_trans);
@@ -4602,8 +4602,8 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_categories (PublishingPi
 #line 4597 "PiwigoPublishing.c"
 		}
 	}
-	goto __finally39;
-	__catch39_spit_publishing_publishing_error:
+	goto __finally30;
+	__catch30_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -4621,7 +4621,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_categories (PublishingPi
 		_g_error_free0 (err);
 #line 4617 "PiwigoPublishing.c"
 	}
-	__finally39:
+	__finally30:
 #line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 583 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4647,7 +4647,7 @@ static void publishing_piwigo_piwigo_publisher_do_fetch_categories (PublishingPi
      * populates the categories list. It then triggers the display of the
      * publishing options pane.
      */
-static void _vala_array_add34 (PublishingPiwigoCategory*** array, int* length, int* size, PublishingPiwigoCategory* value) {
+static void _vala_array_add35 (PublishingPiwigoCategory*** array, int* length, int* size, PublishingPiwigoCategory* value) {
 #line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -4764,7 +4764,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 #line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4761 "PiwigoPublishing.c"
-				goto __catch40_spit_publishing_publishing_error;
+				goto __catch31_spit_publishing_publishing_error;
 			}
 #line 609 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4889,7 +4889,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 #line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4886 "PiwigoPublishing.c"
-						goto __catch40_spit_publishing_publishing_error;
+						goto __catch31_spit_publishing_publishing_error;
 					}
 #line 623 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					_g_object_unref0 (id_map);
@@ -4942,7 +4942,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 #line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 4939 "PiwigoPublishing.c"
-						goto __catch40_spit_publishing_publishing_error;
+						goto __catch31_spit_publishing_publishing_error;
 					}
 #line 625 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 					_g_object_unref0 (id_map);
@@ -5023,7 +5023,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 #line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_tmp51_ = publishing_piwigo_category_new (_tmp48_, _tmp49_, _tmp50_, "");
 #line 633 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-				_vala_array_add34 (&self->priv->categories, &self->priv->categories_length1, &self->priv->_categories_size_, _tmp51_);
+				_vala_array_add35 (&self->priv->categories, &self->priv->categories_length1, &self->priv->_categories_size_, _tmp51_);
 #line 5022 "PiwigoPublishing.c"
 			}
 		}
@@ -5227,8 +5227,8 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 		_publishing_rest_support_xml_document_unref0 (doc);
 #line 5223 "PiwigoPublishing.c"
 	}
-	goto __finally40;
-	__catch40_spit_publishing_publishing_error:
+	goto __finally31;
+	__catch31_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp82_ = NULL;
@@ -5248,7 +5248,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_fetch_complete (Publi
 		return;
 #line 5244 "PiwigoPublishing.c"
 	}
-	__finally40:
+	__finally31:
 #line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 608 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -5437,7 +5437,7 @@ static void publishing_piwigo_piwigo_publisher_on_publishing_options_pane_logout
 #line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 5433 "PiwigoPublishing.c"
-				goto __catch41_spit_publishing_publishing_error;
+				goto __catch32_spit_publishing_publishing_error;
 			}
 #line 698 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (logout_trans);
@@ -5450,8 +5450,8 @@ static void publishing_piwigo_piwigo_publisher_on_publishing_options_pane_logout
 #line 5444 "PiwigoPublishing.c"
 		}
 	}
-	goto __finally41;
-	__catch41_spit_publishing_publishing_error:
+	goto __finally32;
+	__catch32_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -5470,7 +5470,7 @@ static void publishing_piwigo_piwigo_publisher_on_publishing_options_pane_logout
 		_g_error_free0 (err);
 #line 5464 "PiwigoPublishing.c"
 	}
-	__finally41:
+	__finally32:
 #line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 697 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -5798,7 +5798,7 @@ static void publishing_piwigo_piwigo_publisher_do_create_category (PublishingPiw
 #line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 5792 "PiwigoPublishing.c"
-				goto __catch42_spit_publishing_publishing_error;
+				goto __catch33_spit_publishing_publishing_error;
 			}
 #line 781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_publishing_rest_support_transaction_unref0 (creation_trans);
@@ -5811,8 +5811,8 @@ static void publishing_piwigo_piwigo_publisher_do_create_category (PublishingPiw
 #line 5803 "PiwigoPublishing.c"
 		}
 	}
-	goto __finally42;
-	__catch42_spit_publishing_publishing_error:
+	goto __finally33;
+	__catch33_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp25_ = NULL;
@@ -5830,7 +5830,7 @@ static void publishing_piwigo_piwigo_publisher_do_create_category (PublishingPiw
 		_g_error_free0 (err);
 #line 5823 "PiwigoPublishing.c"
 	}
-	__finally42:
+	__finally33:
 #line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 780 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -5925,7 +5925,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_add_complete (Publish
 #line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 5919 "PiwigoPublishing.c"
-				goto __catch43_spit_publishing_publishing_error;
+				goto __catch34_spit_publishing_publishing_error;
 			}
 #line 802 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -5956,7 +5956,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_add_complete (Publish
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 5950 "PiwigoPublishing.c"
-				goto __catch43_spit_publishing_publishing_error;
+				goto __catch34_spit_publishing_publishing_error;
 			}
 #line 807 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_publishing_rest_support_xml_document_unref0 (doc);
@@ -6000,8 +6000,8 @@ static void publishing_piwigo_piwigo_publisher_on_category_add_complete (Publish
 		_publishing_rest_support_xml_document_unref0 (doc);
 #line 5993 "PiwigoPublishing.c"
 	}
-	goto __finally43;
-	__catch43_spit_publishing_publishing_error:
+	goto __finally34;
+	__catch34_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		GError* _tmp23_ = NULL;
@@ -6019,7 +6019,7 @@ static void publishing_piwigo_piwigo_publisher_on_category_add_complete (Publish
 		_g_error_free0 (err);
 #line 6012 "PiwigoPublishing.c"
 	}
-	__finally43:
+	__finally34:
 #line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 801 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -6974,7 +6974,7 @@ PublishingPiwigoSSLErrorPane* publishing_piwigo_ssl_error_pane_new (PublishingPi
 }
 
 
-static void __lambda4_ (PublishingPiwigoSSLErrorPane* self) {
+static void __lambda5_ (PublishingPiwigoSSLErrorPane* self) {
 	GcrSimpleCertificate* simple_cert = NULL;
 	GTlsCertificate* _tmp0_ = NULL;
 	GByteArray* _tmp1_ = NULL;
@@ -7106,23 +7106,23 @@ static void __lambda4_ (PublishingPiwigoSSLErrorPane* self) {
 }
 
 
-static void ___lambda4__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+static void ___lambda5__gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	__lambda4_ ((PublishingPiwigoSSLErrorPane*) self);
+	__lambda5_ ((PublishingPiwigoSSLErrorPane*) self);
 #line 7103 "PiwigoPublishing.c"
 }
 
 
-static void __lambda5_ (PublishingPiwigoSSLErrorPane* self) {
+static void __lambda6_ (PublishingPiwigoSSLErrorPane* self) {
 #line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	g_signal_emit_by_name (self, "proceed");
 #line 7110 "PiwigoPublishing.c"
 }
 
 
-static void ___lambda5__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+static void ___lambda6__gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	__lambda5_ ((PublishingPiwigoSSLErrorPane*) self);
+	__lambda6_ ((PublishingPiwigoSSLErrorPane*) self);
 #line 7117 "PiwigoPublishing.c"
 }
 
@@ -7248,7 +7248,7 @@ static void publishing_piwigo_ssl_error_pane_real_constructed (GObject* base) {
 #line 1036 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	info = _tmp25_;
 #line 1037 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	g_signal_connect_object (info, "clicked", (GCallback) ___lambda4__gtk_button_clicked, self, 0);
+	g_signal_connect_object (info, "clicked", (GCallback) ___lambda5__gtk_button_clicked, self, 0);
 #line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp26_ = shotwell_plugins_common_builder_pane_get_builder (G_TYPE_CHECK_INSTANCE_CAST (self, SHOTWELL_PLUGINS_COMMON_TYPE_BUILDER_PANE, ShotwellPluginsCommonBuilderPane));
 #line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -7264,7 +7264,7 @@ static void publishing_piwigo_ssl_error_pane_real_constructed (GObject* base) {
 #line 1060 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	proceed = _tmp30_;
 #line 1061 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	g_signal_connect_object (proceed, "clicked", (GCallback) ___lambda5__gtk_button_clicked, self, 0);
+	g_signal_connect_object (proceed, "clicked", (GCallback) ___lambda6__gtk_button_clicked, self, 0);
 #line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_g_object_unref0 (proceed);
 #line 1025 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8690,7 +8690,7 @@ static void publishing_piwigo_publishing_options_pane_real_constructed (GObject*
 }
 
 
-static void _vala_array_add35 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
+static void _vala_array_add36 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
 #line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8707,7 +8707,7 @@ static void _vala_array_add35 (PublishingPiwigoPermissionLevel*** array, int* le
 }
 
 
-static void _vala_array_add36 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
+static void _vala_array_add37 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8724,7 +8724,7 @@ static void _vala_array_add36 (PublishingPiwigoPermissionLevel*** array, int* le
 }
 
 
-static void _vala_array_add37 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
+static void _vala_array_add38 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8741,7 +8741,7 @@ static void _vala_array_add37 (PublishingPiwigoPermissionLevel*** array, int* le
 }
 
 
-static void _vala_array_add38 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
+static void _vala_array_add39 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8758,7 +8758,7 @@ static void _vala_array_add38 (PublishingPiwigoPermissionLevel*** array, int* le
 }
 
 
-static void _vala_array_add39 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
+static void _vala_array_add40 (PublishingPiwigoPermissionLevel*** array, int* length, int* size, PublishingPiwigoPermissionLevel* value) {
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8822,7 +8822,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 #line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp3_ = publishing_piwigo_permission_level_new (0, _tmp2_);
 #line 1290 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add35 (&_result_, &_result__length1, &__result__size_, _tmp3_);
+	_vala_array_add36 (&_result_, &_result__length1, &__result__size_, _tmp3_);
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp4_ = _result_;
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8832,7 +8832,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp6_ = publishing_piwigo_permission_level_new (1, _tmp5_);
 #line 1291 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add36 (&_result_, &_result__length1, &__result__size_, _tmp6_);
+	_vala_array_add37 (&_result_, &_result__length1, &__result__size_, _tmp6_);
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp7_ = _result_;
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8842,7 +8842,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp9_ = publishing_piwigo_permission_level_new (2, _tmp8_);
 #line 1292 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add37 (&_result_, &_result__length1, &__result__size_, _tmp9_);
+	_vala_array_add38 (&_result_, &_result__length1, &__result__size_, _tmp9_);
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp10_ = _result_;
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8852,7 +8852,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp12_ = publishing_piwigo_permission_level_new (4, _tmp11_);
 #line 1293 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add38 (&_result_, &_result__length1, &__result__size_, _tmp12_);
+	_vala_array_add39 (&_result_, &_result__length1, &__result__size_, _tmp12_);
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp13_ = _result_;
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8862,7 +8862,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp15_ = publishing_piwigo_permission_level_new (8, _tmp14_);
 #line 1294 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add39 (&_result_, &_result__length1, &__result__size_, _tmp15_);
+	_vala_array_add40 (&_result_, &_result__length1, &__result__size_, _tmp15_);
 #line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp16_ = _result_;
 #line 1296 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8881,7 +8881,7 @@ static PublishingPiwigoPermissionLevel** publishing_piwigo_publishing_options_pa
 }
 
 
-static void _vala_array_add40 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
+static void _vala_array_add41 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
 #line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8898,7 +8898,7 @@ static void _vala_array_add40 (PublishingPiwigoSizeEntry*** array, int* length, 
 }
 
 
-static void _vala_array_add41 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
+static void _vala_array_add42 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8915,7 +8915,7 @@ static void _vala_array_add41 (PublishingPiwigoSizeEntry*** array, int* length, 
 }
 
 
-static void _vala_array_add42 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
+static void _vala_array_add43 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8932,7 +8932,7 @@ static void _vala_array_add42 (PublishingPiwigoSizeEntry*** array, int* length, 
 }
 
 
-static void _vala_array_add43 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
+static void _vala_array_add44 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -8949,7 +8949,7 @@ static void _vala_array_add43 (PublishingPiwigoSizeEntry*** array, int* length, 
 }
 
 
-static void _vala_array_add44 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
+static void _vala_array_add45 (PublishingPiwigoSizeEntry*** array, int* length, int* size, PublishingPiwigoSizeEntry* value) {
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if ((*length) == (*size)) {
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -9013,7 +9013,7 @@ static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_cre
 #line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp3_ = publishing_piwigo_size_entry_new (500, _tmp2_);
 #line 1302 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add40 (&_result_, &_result__length1, &__result__size_, _tmp3_);
+	_vala_array_add41 (&_result_, &_result__length1, &__result__size_, _tmp3_);
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp4_ = _result_;
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -9023,7 +9023,7 @@ static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_cre
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp6_ = publishing_piwigo_size_entry_new (1024, _tmp5_);
 #line 1303 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add41 (&_result_, &_result__length1, &__result__size_, _tmp6_);
+	_vala_array_add42 (&_result_, &_result__length1, &__result__size_, _tmp6_);
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp7_ = _result_;
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -9033,7 +9033,7 @@ static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_cre
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp9_ = publishing_piwigo_size_entry_new (2048, _tmp8_);
 #line 1304 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add42 (&_result_, &_result__length1, &__result__size_, _tmp9_);
+	_vala_array_add43 (&_result_, &_result__length1, &__result__size_, _tmp9_);
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp10_ = _result_;
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -9043,7 +9043,7 @@ static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_cre
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp12_ = publishing_piwigo_size_entry_new (4096, _tmp11_);
 #line 1305 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add43 (&_result_, &_result__length1, &__result__size_, _tmp12_);
+	_vala_array_add44 (&_result_, &_result__length1, &__result__size_, _tmp12_);
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp13_ = _result_;
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -9053,7 +9053,7 @@ static PublishingPiwigoSizeEntry** publishing_piwigo_publishing_options_pane_cre
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp15_ = publishing_piwigo_size_entry_new (PUBLISHING_PIWIGO_ORIGINAL_SIZE, _tmp14_);
 #line 1306 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_vala_array_add44 (&_result_, &_result__length1, &__result__size_, _tmp15_);
+	_vala_array_add45 (&_result_, &_result__length1, &__result__size_, _tmp15_);
 #line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp16_ = _result_;
 #line 1308 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -11577,7 +11577,7 @@ gchar* publishing_piwigo_transaction_validate_xml (PublishingRESTSupportXmlDocum
 #line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 11565 "PiwigoPublishing.c"
-				goto __catch44_spit_publishing_publishing_error;
+				goto __catch35_spit_publishing_publishing_error;
 			}
 #line 1618 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_g_free0 (status);
@@ -11593,8 +11593,8 @@ gchar* publishing_piwigo_transaction_validate_xml (PublishingRESTSupportXmlDocum
 		errcode = _tmp7_;
 #line 11580 "PiwigoPublishing.c"
 	}
-	goto __finally44;
-	__catch44_spit_publishing_publishing_error:
+	goto __finally35;
+	__catch35_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp11_ = NULL;
@@ -11614,7 +11614,7 @@ gchar* publishing_piwigo_transaction_validate_xml (PublishingRESTSupportXmlDocum
 		return result;
 #line 11601 "PiwigoPublishing.c"
 	}
-	__finally44:
+	__finally35:
 #line 1617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1617 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -11693,7 +11693,7 @@ gchar* publishing_piwigo_transaction_get_error_code (PublishingRESTSupportXmlDoc
 #line 1630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_inner_error_->domain == SPIT_PUBLISHING_PUBLISHING_ERROR) {
 #line 11681 "PiwigoPublishing.c"
-				goto __catch45_spit_publishing_publishing_error;
+				goto __catch36_spit_publishing_publishing_error;
 			}
 #line 1630 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -11707,8 +11707,8 @@ gchar* publishing_piwigo_transaction_get_error_code (PublishingRESTSupportXmlDoc
 		errcode = _tmp2_;
 #line 11694 "PiwigoPublishing.c"
 	}
-	goto __finally45;
-	__catch45_spit_publishing_publishing_error:
+	goto __finally36;
+	__catch36_spit_publishing_publishing_error:
 	{
 		GError* err = NULL;
 		gchar* _tmp6_ = NULL;
@@ -11726,7 +11726,7 @@ gchar* publishing_piwigo_transaction_get_error_code (PublishingRESTSupportXmlDoc
 		return result;
 #line 11713 "PiwigoPublishing.c"
 	}
-	__finally45:
+	__finally36:
 #line 1629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1629 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -12704,13 +12704,23 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	GHashFunc _tmp69_ = NULL;
 	GEqualFunc _tmp70_ = NULL;
 	GHashTable* _tmp71_ = NULL;
-	gchar* _tmp72_ = NULL;
-	SpitPublishingPublishable* _tmp73_ = NULL;
-	gchar* _tmp74_ = NULL;
-	gchar* _tmp75_ = NULL;
+	gchar* basename = NULL;
+	SpitPublishingPublishable* _tmp72_ = NULL;
+	gchar* _tmp73_ = NULL;
+	gboolean _tmp74_ = FALSE;
+	const gchar* _tmp75_ = NULL;
 	gchar* _tmp76_ = NULL;
 	gchar* _tmp77_ = NULL;
-	gchar* _tmp78_ = NULL;
+	gboolean _tmp78_ = FALSE;
+	gboolean _tmp79_ = FALSE;
+	GHashTable* _tmp86_ = NULL;
+	gchar* _tmp87_ = NULL;
+	const gchar* _tmp88_ = NULL;
+	gchar* _tmp89_ = NULL;
+	GHashTable* _tmp90_ = NULL;
+	gchar* _tmp91_ = NULL;
+	gchar* _tmp92_ = NULL;
+	GHashTable* _tmp93_ = NULL;
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	g_return_val_if_fail (PUBLISHING_PIWIGO_IS_SESSION (session), NULL);
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -12737,7 +12747,7 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	_tmp6_ = publishing_rest_support_session_is_authenticated (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, PUBLISHING_REST_SUPPORT_TYPE_SESSION, PublishingRESTSupportSession));
 #line 1719 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (_tmp6_) {
-#line 12726 "PiwigoPublishing.c"
+#line 12736 "PiwigoPublishing.c"
 		PublishingPiwigoSession* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
@@ -12759,7 +12769,7 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 		_g_free0 (_tmp11_);
 #line 1720 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		_g_free0 (_tmp9_);
-#line 12748 "PiwigoPublishing.c"
+#line 12758 "PiwigoPublishing.c"
 	}
 #line 1722 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp12_ = parameters;
@@ -12789,7 +12799,7 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	_tmp18__length1 = keywords_length1;
 #line 1726 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (_tmp18_ != NULL) {
-#line 12778 "PiwigoPublishing.c"
+#line 12788 "PiwigoPublishing.c"
 		gchar** _tmp19_ = NULL;
 		gint _tmp19__length1 = 0;
 		gchar* _tmp20_ = NULL;
@@ -12803,7 +12813,7 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 		_g_free0 (tags);
 #line 1727 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		tags = _tmp20_;
-#line 12792 "PiwigoPublishing.c"
+#line 12802 "PiwigoPublishing.c"
 	}
 #line 1730 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_tmp21_ = publishable;
@@ -12852,18 +12862,18 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	if (_tmp37_ == NULL) {
 #line 1736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		_tmp36_ = TRUE;
-#line 12840 "PiwigoPublishing.c"
+#line 12850 "PiwigoPublishing.c"
 	} else {
 		const gchar* _tmp38_ = NULL;
 #line 1736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		_tmp38_ = name;
 #line 1736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		_tmp36_ = g_strcmp0 (_tmp38_, "") == 0;
-#line 12847 "PiwigoPublishing.c"
+#line 12857 "PiwigoPublishing.c"
 	}
 #line 1736 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (_tmp36_) {
-#line 12851 "PiwigoPublishing.c"
+#line 12861 "PiwigoPublishing.c"
 		SpitPublishingPublishable* _tmp39_ = NULL;
 		gchar* _tmp40_ = NULL;
 		const gchar* _tmp41_ = NULL;
@@ -12885,27 +12895,27 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 		_tmp43_ = comment;
 #line 1740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (_tmp43_ != NULL) {
-#line 12873 "PiwigoPublishing.c"
+#line 12883 "PiwigoPublishing.c"
 			const gchar* _tmp44_ = NULL;
 #line 1740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp44_ = comment;
 #line 1740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp42_ = g_strcmp0 (_tmp44_, "") != 0;
-#line 12879 "PiwigoPublishing.c"
+#line 12889 "PiwigoPublishing.c"
 		} else {
 #line 1740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp42_ = FALSE;
-#line 12883 "PiwigoPublishing.c"
+#line 12893 "PiwigoPublishing.c"
 		}
 #line 1740 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (_tmp42_) {
-#line 12887 "PiwigoPublishing.c"
+#line 12897 "PiwigoPublishing.c"
 			const gchar* _tmp45_ = NULL;
 #line 1741 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp45_ = comment;
 #line 1741 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "comment", _tmp45_);
-#line 12893 "PiwigoPublishing.c"
+#line 12903 "PiwigoPublishing.c"
 		}
 	} else {
 		gboolean _tmp46_ = FALSE;
@@ -12914,21 +12924,21 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 		_tmp47_ = comment;
 #line 1745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (_tmp47_ != NULL) {
-#line 12902 "PiwigoPublishing.c"
+#line 12912 "PiwigoPublishing.c"
 			const gchar* _tmp48_ = NULL;
 #line 1745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp48_ = comment;
 #line 1745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp46_ = g_strcmp0 (_tmp48_, "") != 0;
-#line 12908 "PiwigoPublishing.c"
+#line 12918 "PiwigoPublishing.c"
 		} else {
 #line 1745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp46_ = FALSE;
-#line 12912 "PiwigoPublishing.c"
+#line 12922 "PiwigoPublishing.c"
 		}
 #line 1745 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (_tmp46_) {
-#line 12916 "PiwigoPublishing.c"
+#line 12926 "PiwigoPublishing.c"
 			const gchar* _tmp49_ = NULL;
 			const gchar* _tmp50_ = NULL;
 #line 1746 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -12939,7 +12949,7 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 			_tmp50_ = comment;
 #line 1747 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "comment", _tmp50_);
-#line 12927 "PiwigoPublishing.c"
+#line 12937 "PiwigoPublishing.c"
 		} else {
 			PublishingPiwigoPublishingParameters* _tmp51_ = NULL;
 			gboolean _tmp52_ = FALSE;
@@ -12949,20 +12959,20 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 			_tmp52_ = _tmp51_->title_as_comment;
 #line 1752 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			if (_tmp52_) {
-#line 12937 "PiwigoPublishing.c"
+#line 12947 "PiwigoPublishing.c"
 				const gchar* _tmp53_ = NULL;
 #line 1753 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_tmp53_ = name;
 #line 1753 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "comment", _tmp53_);
-#line 12943 "PiwigoPublishing.c"
+#line 12953 "PiwigoPublishing.c"
 			} else {
 				const gchar* _tmp54_ = NULL;
 #line 1755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				_tmp54_ = name;
 #line 1755 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 				publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "name", _tmp54_);
-#line 12950 "PiwigoPublishing.c"
+#line 12960 "PiwigoPublishing.c"
 			}
 		}
 	}
@@ -13002,19 +13012,19 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	_tmp66_ = _tmp65_->no_upload_tags;
 #line 1762 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	if (!_tmp66_) {
-#line 12990 "PiwigoPublishing.c"
+#line 13000 "PiwigoPublishing.c"
 		const gchar* _tmp67_ = NULL;
 #line 1763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		_tmp67_ = tags;
 #line 1763 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 		if (g_strcmp0 (_tmp67_, "") != 0) {
-#line 12996 "PiwigoPublishing.c"
+#line 13006 "PiwigoPublishing.c"
 			const gchar* _tmp68_ = NULL;
 #line 1764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			_tmp68_ = tags;
 #line 1764 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 			publishing_rest_support_transaction_add_argument (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_TRANSACTION, PublishingRESTSupportTransaction), "tags", _tmp68_);
-#line 13002 "PiwigoPublishing.c"
+#line 13012 "PiwigoPublishing.c"
 		}
 	}
 #line 1774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -13026,27 +13036,87 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 #line 1774 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	disposition_table = _tmp71_;
 #line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp72_ = g_strdup ("filename");
+	_tmp72_ = publishable;
 #line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp73_ = publishable;
+	_tmp73_ = spit_publishing_publishable_get_param_string (_tmp72_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
 #line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp74_ = spit_publishing_publishable_get_param_string (_tmp73_, SPIT_PUBLISHING_PUBLISHABLE_PARAM_STRING_BASENAME);
-#line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp75_ = _tmp74_;
-#line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp76_ = soup_uri_encode (_tmp75_, NULL);
-#line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	g_hash_table_insert (disposition_table, _tmp72_, _tmp76_);
-#line 1776 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_g_free0 (_tmp75_);
+	basename = _tmp73_;
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp75_ = basename;
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp76_ = g_utf8_strdown (_tmp75_, (gssize) -1);
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp77_ = _tmp76_;
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp78_ = g_str_has_suffix (_tmp77_, ".jpeg");
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp79_ = !_tmp78_;
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_g_free0 (_tmp77_);
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	if (_tmp79_) {
+#line 13043 "PiwigoPublishing.c"
+		const gchar* _tmp80_ = NULL;
+		gchar* _tmp81_ = NULL;
+		gchar* _tmp82_ = NULL;
+		gboolean _tmp83_ = FALSE;
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp80_ = basename;
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp81_ = g_utf8_strdown (_tmp80_, (gssize) -1);
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp82_ = _tmp81_;
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp83_ = g_str_has_suffix (_tmp82_, ".jpg");
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp74_ = !_tmp83_;
+#line 1778 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_g_free0 (_tmp82_);
+#line 13060 "PiwigoPublishing.c"
+	} else {
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		_tmp74_ = FALSE;
+#line 13064 "PiwigoPublishing.c"
+	}
+#line 1777 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	if (_tmp74_) {
+#line 13068 "PiwigoPublishing.c"
+		const gchar* _tmp84_ = NULL;
+		gchar* _tmp85_ = NULL;
 #line 1779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp77_ = g_strdup ("name");
+		_tmp84_ = basename;
 #line 1779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	_tmp78_ = g_strdup ("image");
+		_tmp85_ = g_strconcat (_tmp84_, ".jpg", NULL);
 #line 1779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	g_hash_table_insert (disposition_table, _tmp77_, _tmp78_);
+		_g_free0 (basename);
+#line 1779 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+		basename = _tmp85_;
+#line 13079 "PiwigoPublishing.c"
+	}
 #line 1781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
-	publishing_rest_support_upload_transaction_set_binary_disposition_table (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), disposition_table);
+	_tmp86_ = disposition_table;
+#line 1781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp87_ = g_strdup ("filename");
+#line 1781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp88_ = basename;
+#line 1781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp89_ = soup_uri_encode (_tmp88_, NULL);
+#line 1781 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	g_hash_table_insert (_tmp86_, _tmp87_, _tmp89_);
+#line 1782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp90_ = disposition_table;
+#line 1782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp91_ = g_strdup ("name");
+#line 1782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp92_ = g_strdup ("image");
+#line 1782 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	g_hash_table_insert (_tmp90_, _tmp91_, _tmp92_);
+#line 1784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_tmp93_ = disposition_table;
+#line 1784 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	publishing_rest_support_upload_transaction_set_binary_disposition_table (G_TYPE_CHECK_INSTANCE_CAST (self, PUBLISHING_REST_SUPPORT_TYPE_UPLOAD_TRANSACTION, PublishingRESTSupportUploadTransaction), _tmp93_);
+#line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
+	_g_free0 (basename);
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	_g_hash_table_unref0 (disposition_table);
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
@@ -13059,14 +13129,14 @@ PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_c
 	keywords = (_vala_array_free (keywords, keywords_length1, (GDestroyNotify) g_free), NULL);
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	return self;
-#line 13047 "PiwigoPublishing.c"
+#line 13117 "PiwigoPublishing.c"
 }
 
 
 PublishingPiwigoImagesAddTransaction* publishing_piwigo_images_add_transaction_new (PublishingPiwigoSession* session, PublishingPiwigoPublishingParameters* parameters, SpitPublishingPublishable* publishable) {
 #line 1717 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	return publishing_piwigo_images_add_transaction_construct (PUBLISHING_PIWIGO_TYPE_IMAGES_ADD_TRANSACTION, session, parameters, publishable);
-#line 13054 "PiwigoPublishing.c"
+#line 13124 "PiwigoPublishing.c"
 }
 
 
@@ -13077,7 +13147,7 @@ static void publishing_piwigo_images_add_transaction_class_init (PublishingPiwig
 	((PublishingRESTSupportTransactionClass *) klass)->finalize = publishing_piwigo_images_add_transaction_finalize;
 #line 1714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	g_type_class_add_private (klass, sizeof (PublishingPiwigoImagesAddTransactionPrivate));
-#line 13065 "PiwigoPublishing.c"
+#line 13135 "PiwigoPublishing.c"
 }
 
 
@@ -13086,7 +13156,7 @@ static void publishing_piwigo_images_add_transaction_instance_init (PublishingPi
 	self->priv = PUBLISHING_PIWIGO_IMAGES_ADD_TRANSACTION_GET_PRIVATE (self);
 #line 1715 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	self->priv->parameters = NULL;
-#line 13074 "PiwigoPublishing.c"
+#line 13144 "PiwigoPublishing.c"
 }
 
 
@@ -13098,7 +13168,7 @@ static void publishing_piwigo_images_add_transaction_finalize (PublishingRESTSup
 	_publishing_piwigo_publishing_parameters_unref0 (self->priv->parameters);
 #line 1714 "/home/jens/Source/shotwell/plugins/shotwell-publishing/PiwigoPublishing.vala"
 	PUBLISHING_REST_SUPPORT_TRANSACTION_CLASS (publishing_piwigo_images_add_transaction_parent_class)->finalize (obj);
-#line 13086 "PiwigoPublishing.c"
+#line 13156 "PiwigoPublishing.c"
 }
 
 
