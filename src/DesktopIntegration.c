@@ -1173,7 +1173,7 @@ void desktop_integration_files_send_to (GFile** files, int files_length1) {
 #line 110 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1176 "DesktopIntegration.c"
-			goto __catch564_g_error;
+			goto __catch566_g_error;
 		}
 #line 118 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp21_ = app_window_get_instance ();
@@ -1185,8 +1185,8 @@ void desktop_integration_files_send_to (GFile** files, int files_length1) {
 		_g_object_unref0 (_tmp22_);
 #line 1187 "DesktopIntegration.c"
 	}
-	goto __finally564;
-	__catch564_g_error:
+	goto __finally566;
+	__catch566_g_error:
 	{
 		GError* err = NULL;
 		AppWindow* _tmp23_ = NULL;
@@ -1226,7 +1226,7 @@ void desktop_integration_files_send_to (GFile** files, int files_length1) {
 		_g_error_free0 (err);
 #line 1228 "DesktopIntegration.c"
 	}
-	__finally564:
+	__finally566:
 #line 106 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 106 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -1568,11 +1568,11 @@ void desktop_integration_set_background (Photo* photo, gboolean desktop, gboolea
 #line 172 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1571 "DesktopIntegration.c"
-			goto __catch565_g_error;
+			goto __catch567_g_error;
 		}
 	}
-	goto __finally565;
-	__catch565_g_error:
+	goto __finally567;
+	__catch567_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp27_ = NULL;
@@ -1617,7 +1617,7 @@ void desktop_integration_set_background (Photo* photo, gboolean desktop, gboolea
 		return;
 #line 1619 "DesktopIntegration.c"
 	}
-	__finally565:
+	__finally567:
 #line 171 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 171 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2588,11 +2588,11 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 #line 278 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2591 "DesktopIntegration.c"
-			goto __catch566_g_error;
+			goto __catch568_g_error;
 		}
 	}
-	goto __finally566;
-	__catch566_g_error:
+	goto __finally568;
+	__catch568_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp8_ = NULL;
@@ -2612,7 +2612,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 		_g_error_free0 (err);
 #line 2613 "DesktopIntegration.c"
 	}
-	__finally566:
+	__finally568:
 #line 277 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 277 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2747,7 +2747,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 #line 304 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2749 "DesktopIntegration.c"
-			goto __catch567_g_error;
+			goto __catch569_g_error;
 		}
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp10_ = exporter;
@@ -2789,7 +2789,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 #line 307 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 						file_collection = (_vala_array_free (file_collection, file_collection_length1, (GDestroyNotify) g_object_unref), NULL);
 #line 2791 "DesktopIntegration.c"
-						goto __catch567_g_error;
+						goto __catch569_g_error;
 					}
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 					_g_object_unref0 (file);
@@ -2809,7 +2809,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 #line 309 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2811 "DesktopIntegration.c"
-			goto __catch567_g_error;
+			goto __catch569_g_error;
 		}
 #line 309 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp19_ = _tmp16_;
@@ -2823,8 +2823,8 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		_g_object_unref0 (_tmp16_);
 #line 2824 "DesktopIntegration.c"
 	}
-	goto __finally567;
-	__catch567_g_error:
+	goto __finally569;
+	__catch569_g_error:
 	{
 		GError* err = NULL;
 		const gchar* _tmp20_ = NULL;
@@ -2860,7 +2860,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		return;
 #line 2861 "DesktopIntegration.c"
 	}
-	__finally567:
+	__finally569:
 #line 303 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 303 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"

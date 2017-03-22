@@ -29,6 +29,8 @@
 
 #define GRAW_TYPE_INTERPOLATION_QUALITY (graw_interpolation_quality_get_type ())
 
+#define GRAW_TYPE_USE_CAMERA_MATRIX (graw_use_camera_matrix_get_type ())
+
 #define GRAW_TYPE_PROCESSED_IMAGE (graw_processed_image_get_type ())
 #define GRAW_PROCESSED_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GRAW_TYPE_PROCESSED_IMAGE, GRawProcessedImage))
 #define GRAW_PROCESSED_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GRAW_TYPE_PROCESSED_IMAGE, GRawProcessedImageClass))
@@ -115,6 +117,12 @@ typedef enum  {
 	GRAW_INTERPOLATION_QUALITY_AHD = 3
 } GRawInterpolationQuality;
 
+typedef enum  {
+	GRAW_USE_CAMERA_MATRIX_IGNORE = 0,
+	GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_PROFILE = 1,
+	GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_DATA = 3
+} GRawUseCameraMatrix;
+
 struct _GRawProcessedImage {
 	GTypeInstance parent_instance;
 	volatile int ref_count;
@@ -168,6 +176,7 @@ GType graw_flip_get_type (void) G_GNUC_CONST;
 GType graw_fuji_rotate_get_type (void) G_GNUC_CONST;
 GType graw_highlight_mode_get_type (void) G_GNUC_CONST;
 GType graw_interpolation_quality_get_type (void) G_GNUC_CONST;
+GType graw_use_camera_matrix_get_type (void) G_GNUC_CONST;
 gpointer graw_processed_image_ref (gpointer instance);
 void graw_processed_image_unref (gpointer instance);
 GParamSpec* graw_param_spec_processed_image (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
@@ -290,6 +299,18 @@ GType graw_interpolation_quality_get_type (void) {
 }
 
 
+GType graw_use_camera_matrix_get_type (void) {
+	static volatile gsize graw_use_camera_matrix_type_id__volatile = 0;
+	if (g_once_init_enter (&graw_use_camera_matrix_type_id__volatile)) {
+		static const GEnumValue values[] = {{GRAW_USE_CAMERA_MATRIX_IGNORE, "GRAW_USE_CAMERA_MATRIX_IGNORE", "ignore"}, {GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_PROFILE, "GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_PROFILE", "embedded-color-profile"}, {GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_DATA, "GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_DATA", "embedded-color-data"}, {0, NULL, NULL}};
+		GType graw_use_camera_matrix_type_id;
+		graw_use_camera_matrix_type_id = g_enum_register_static ("GRawUseCameraMatrix", values);
+		g_once_init_leave (&graw_use_camera_matrix_type_id__volatile, graw_use_camera_matrix_type_id);
+	}
+	return graw_use_camera_matrix_type_id__volatile;
+}
+
+
 GRawProcessedImage* graw_processed_image_construct (GType object_type, libraw_data_t* proc, GError** error) {
 	GRawProcessedImage* self = NULL;
 	enum LibRaw_errors _result_ = 0;
@@ -312,91 +333,91 @@ GRawProcessedImage* graw_processed_image_construct (GType object_type, libraw_da
 	gushort _tmp15_ = 0U;
 	GdkPixbuf* _tmp16_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 106 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 112 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (proc != NULL, NULL);
-#line 106 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 112 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self = (GRawProcessedImage*) g_type_create_instance (object_type);
-#line 107 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 113 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_result_ = LIBRAW_SUCCESS;
-#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = proc;
-#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_dcraw_make_mem_image (_tmp0_, &_result_);
-#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_free0 (self->priv->image);
-#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv->image = _tmp1_;
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = _result_;
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("ProcessedImage", _tmp2_, &_inner_error_);
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_graw_processed_image_unref0 (self);
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 344 "GRaw.c"
+#line 365 "GRaw.c"
 		} else {
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 109 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 115 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 352 "GRaw.c"
+#line 373 "GRaw.c"
 		}
 	}
-#line 110 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 116 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp3_ = self->priv->image;
-#line 110 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 116 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_vala_assert (_tmp3_ != NULL, "image != null");
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp4_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp5_ = _tmp4_->data;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp5__length1 = _tmp4_->data_size;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp6_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp7_ = _tmp6_->bits;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp8_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp9_ = _tmp8_->width;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp10_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp11_ = _tmp10_->height;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp12_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp13_ = _tmp12_->width;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp14_ = self->priv->image;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp15_ = _tmp14_->colors;
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp16_ = gdk_pixbuf_new_from_data (_tmp5_, GDK_COLORSPACE_RGB, FALSE, (gint) _tmp7_, (gint) _tmp9_, (gint) _tmp11_, (gint) (_tmp13_ * _tmp15_), (GdkPixbufDestroyNotify) NULL, NULL);
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_g_object_unref0 (self->priv->pixbuf);
-#line 114 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv->pixbuf = _tmp16_;
-#line 106 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 112 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return self;
-#line 393 "GRaw.c"
+#line 414 "GRaw.c"
 }
 
 
 GRawProcessedImage* graw_processed_image_new (libraw_data_t* proc, GError** error) {
-#line 106 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 112 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return graw_processed_image_construct (GRAW_TYPE_PROCESSED_IMAGE, proc, error);
-#line 400 "GRaw.c"
+#line 421 "GRaw.c"
 }
 
 
@@ -424,50 +445,50 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 	gint _tmp31_ = 0;
 	gint _tmp32_ = 0;
 	GError * _inner_error_ = NULL;
-#line 118 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 124 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (proc != NULL, NULL);
-#line 118 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 124 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self = (GRawProcessedImage*) g_type_create_instance (object_type);
-#line 119 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 125 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_result_ = LIBRAW_SUCCESS;
-#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 126 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = proc;
-#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 126 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_dcraw_make_mem_thumb (_tmp0_, &_result_);
-#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 126 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_free0 (self->priv->image);
-#line 120 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 126 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv->image = _tmp1_;
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = _result_;
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("ProcessedImage.from_thumb", _tmp2_, &_inner_error_);
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_graw_processed_image_unref0 (self);
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 456 "GRaw.c"
+#line 477 "GRaw.c"
 		} else {
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 121 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 464 "GRaw.c"
+#line 485 "GRaw.c"
 		}
 	}
-#line 122 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp3_ = self->priv->image;
-#line 122 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_vala_assert (_tmp3_ != NULL, "image != null");
-#line 471 "GRaw.c"
+#line 492 "GRaw.c"
 	{
 		GBytes* bytes = NULL;
 		libraw_processed_image_t* _tmp4_ = NULL;
@@ -481,50 +502,50 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 		GdkPixbuf* _tmp11_ = NULL;
 		GdkPixbuf* _tmp12_ = NULL;
 		GdkPixbuf* _tmp13_ = NULL;
-#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 134 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp4_ = self->priv->image;
-#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 134 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp5_ = _tmp4_->data;
-#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 134 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp5__length1 = _tmp4_->data_size;
-#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 134 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp6_ = g_bytes_new_static (_tmp5_, _tmp5__length1);
-#line 128 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 134 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		bytes = _tmp6_;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp8_ = bytes;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp9_ = (GMemoryInputStream*) g_memory_input_stream_new_from_bytes (_tmp8_);
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp10_ = _tmp9_;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp11_ = gdk_pixbuf_new_from_stream (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, g_input_stream_get_type (), GInputStream), NULL, &_inner_error_);
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp12_ = _tmp11_;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_object_unref0 (_tmp10_);
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp7_ = _tmp12_;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_g_bytes_unref0 (bytes);
-#line 513 "GRaw.c"
+#line 534 "GRaw.c"
 			goto __catch29_g_error;
 		}
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp13_ = _tmp7_;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp7_ = NULL;
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_object_unref0 (self->priv->pixbuf);
-#line 129 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 135 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		self->priv->pixbuf = _tmp13_;
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_object_unref0 (_tmp7_);
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_bytes_unref0 (bytes);
-#line 528 "GRaw.c"
+#line 549 "GRaw.c"
 	}
 	goto __finally29;
 	__catch29_g_error:
@@ -533,95 +554,95 @@ GRawProcessedImage* graw_processed_image_construct_from_thumb (GType object_type
 		GError* _tmp14_ = NULL;
 		const gchar* _tmp15_ = NULL;
 		GError* _tmp16_ = NULL;
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		err = _inner_error_;
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_inner_error_ = NULL;
-#line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp14_ = err;
-#line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp15_ = _tmp14_->message;
-#line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp16_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSUPPORTED_THUMBNAIL, _tmp15_);
-#line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_inner_error_ = _tmp16_;
-#line 132 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_g_error_free0 (err);
-#line 551 "GRaw.c"
+#line 572 "GRaw.c"
 		goto __finally29;
 	}
 	__finally29:
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_graw_processed_image_unref0 (self);
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 565 "GRaw.c"
+#line 586 "GRaw.c"
 		} else {
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 127 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 133 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 573 "GRaw.c"
+#line 594 "GRaw.c"
 		}
 	}
-#line 136 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 142 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp17_ = self->priv->image;
-#line 136 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 142 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp18_ = self->priv->pixbuf;
-#line 136 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 142 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp19_ = gdk_pixbuf_get_width (_tmp18_);
-#line 136 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 142 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp20_ = _tmp19_;
-#line 136 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 142 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp17_->width = (gushort) _tmp20_;
-#line 137 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp21_ = self->priv->image;
-#line 137 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp22_ = self->priv->pixbuf;
-#line 137 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp23_ = gdk_pixbuf_get_height (_tmp22_);
-#line 137 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp24_ = _tmp23_;
-#line 137 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp21_->height = (gushort) _tmp24_;
-#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp25_ = self->priv->image;
-#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp26_ = self->priv->pixbuf;
-#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp27_ = gdk_pixbuf_get_n_channels (_tmp26_);
-#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp28_ = _tmp27_;
-#line 138 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp25_->colors = (gushort) _tmp28_;
-#line 139 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 145 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp29_ = self->priv->image;
-#line 139 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 145 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp30_ = self->priv->pixbuf;
-#line 139 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 145 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp31_ = gdk_pixbuf_get_bits_per_sample (_tmp30_);
-#line 139 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 145 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp32_ = _tmp31_;
-#line 139 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 145 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp29_->bits = (gushort) _tmp32_;
-#line 118 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 124 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return self;
-#line 618 "GRaw.c"
+#line 639 "GRaw.c"
 }
 
 
 GRawProcessedImage* graw_processed_image_new_from_thumb (libraw_data_t* proc, GError** error) {
-#line 118 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 124 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return graw_processed_image_construct_from_thumb (GRAW_TYPE_PROCESSED_IMAGE, proc, error);
-#line 625 "GRaw.c"
+#line 646 "GRaw.c"
 }
 
 
@@ -629,39 +650,21 @@ GdkPixbuf* graw_processed_image_get_pixbuf_copy (GRawProcessedImage* self) {
 	GdkPixbuf* result = NULL;
 	GdkPixbuf* _tmp0_ = NULL;
 	GdkPixbuf* _tmp1_ = NULL;
-#line 143 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 149 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), NULL);
-#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->pixbuf;
-#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = gdk_pixbuf_copy (_tmp0_);
-#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
-#line 144 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 150 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 643 "GRaw.c"
+#line 664 "GRaw.c"
 }
 
 
 gushort graw_processed_image_get_width (GRawProcessedImage* self) {
-	gushort result;
-	libraw_processed_image_t* _tmp0_ = NULL;
-	gushort _tmp1_ = 0U;
-#line 71 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), 0U);
-#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp0_ = self->priv->image;
-#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->width;
-#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	result = _tmp1_;
-#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	return result;
-#line 661 "GRaw.c"
-}
-
-
-gushort graw_processed_image_get_height (GRawProcessedImage* self) {
 	gushort result;
 	libraw_processed_image_t* _tmp0_ = NULL;
 	gushort _tmp1_ = 0U;
@@ -670,16 +673,16 @@ gushort graw_processed_image_get_height (GRawProcessedImage* self) {
 #line 78 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->image;
 #line 78 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->height;
+	_tmp1_ = _tmp0_->width;
 #line 78 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
 #line 78 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 679 "GRaw.c"
+#line 682 "GRaw.c"
 }
 
 
-gushort graw_processed_image_get_colors (GRawProcessedImage* self) {
+gushort graw_processed_image_get_height (GRawProcessedImage* self) {
 	gushort result;
 	libraw_processed_image_t* _tmp0_ = NULL;
 	gushort _tmp1_ = 0U;
@@ -688,16 +691,16 @@ gushort graw_processed_image_get_colors (GRawProcessedImage* self) {
 #line 84 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->image;
 #line 84 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->colors;
+	_tmp1_ = _tmp0_->height;
 #line 84 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
 #line 84 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 697 "GRaw.c"
+#line 700 "GRaw.c"
 }
 
 
-gushort graw_processed_image_get_bits (GRawProcessedImage* self) {
+gushort graw_processed_image_get_colors (GRawProcessedImage* self) {
 	gushort result;
 	libraw_processed_image_t* _tmp0_ = NULL;
 	gushort _tmp1_ = 0U;
@@ -706,28 +709,25 @@ gushort graw_processed_image_get_bits (GRawProcessedImage* self) {
 #line 90 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->image;
 #line 90 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->bits;
+	_tmp1_ = _tmp0_->colors;
 #line 90 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
 #line 90 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 715 "GRaw.c"
+#line 718 "GRaw.c"
 }
 
 
-guint8* graw_processed_image_get_data (GRawProcessedImage* self) {
-	guint8* result;
+gushort graw_processed_image_get_bits (GRawProcessedImage* self) {
+	gushort result;
 	libraw_processed_image_t* _tmp0_ = NULL;
-	guint8* _tmp1_ = NULL;
-	gint _tmp1__length1 = 0;
+	gushort _tmp1_ = 0U;
 #line 95 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), NULL);
+	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), 0U);
 #line 96 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->image;
 #line 96 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->data;
-#line 96 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1__length1 = _tmp0_->data_size;
+	_tmp1_ = _tmp0_->bits;
 #line 96 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
 #line 96 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
@@ -736,237 +736,258 @@ guint8* graw_processed_image_get_data (GRawProcessedImage* self) {
 }
 
 
-guint graw_processed_image_get_data_size (GRawProcessedImage* self) {
-	guint result;
+guint8* graw_processed_image_get_data (GRawProcessedImage* self) {
+	guint8* result;
 	libraw_processed_image_t* _tmp0_ = NULL;
-	guint _tmp1_ = 0U;
+	guint8* _tmp1_ = NULL;
+	gint _tmp1__length1 = 0;
 #line 101 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), 0U);
+	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), NULL);
 #line 102 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->image;
 #line 102 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	_tmp1_ = _tmp0_->data_size;
+	_tmp1_ = _tmp0_->data;
+#line 102 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	_tmp1__length1 = _tmp0_->data_size;
 #line 102 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
 #line 102 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 754 "GRaw.c"
+#line 757 "GRaw.c"
+}
+
+
+guint graw_processed_image_get_data_size (GRawProcessedImage* self) {
+	guint result;
+	libraw_processed_image_t* _tmp0_ = NULL;
+	guint _tmp1_ = 0U;
+#line 107 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	g_return_val_if_fail (GRAW_IS_PROCESSED_IMAGE (self), 0U);
+#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	_tmp0_ = self->priv->image;
+#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	_tmp1_ = _tmp0_->data_size;
+#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	result = _tmp1_;
+#line 108 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	return result;
+#line 775 "GRaw.c"
 }
 
 
 static void graw_value_processed_image_init (GValue* value) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	value->data[0].v_pointer = NULL;
-#line 761 "GRaw.c"
+#line 782 "GRaw.c"
 }
 
 
 static void graw_value_processed_image_free_value (GValue* value) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (value->data[0].v_pointer) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processed_image_unref (value->data[0].v_pointer);
-#line 770 "GRaw.c"
+#line 791 "GRaw.c"
 	}
 }
 
 
 static void graw_value_processed_image_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (src_value->data[0].v_pointer) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		dest_value->data[0].v_pointer = graw_processed_image_ref (src_value->data[0].v_pointer);
-#line 780 "GRaw.c"
+#line 801 "GRaw.c"
 	} else {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 784 "GRaw.c"
+#line 805 "GRaw.c"
 	}
 }
 
 
 static gpointer graw_value_processed_image_peek_pointer (const GValue* value) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return value->data[0].v_pointer;
-#line 792 "GRaw.c"
+#line 813 "GRaw.c"
 }
 
 
 static gchar* graw_value_processed_image_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (collect_values[0].v_pointer) {
-#line 799 "GRaw.c"
+#line 820 "GRaw.c"
 		GRawProcessedImage* object;
 		object = collect_values[0].v_pointer;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 806 "GRaw.c"
+#line 827 "GRaw.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 810 "GRaw.c"
+#line 831 "GRaw.c"
 		}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = graw_processed_image_ref (object);
-#line 814 "GRaw.c"
+#line 835 "GRaw.c"
 	} else {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 818 "GRaw.c"
+#line 839 "GRaw.c"
 	}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return NULL;
-#line 822 "GRaw.c"
+#line 843 "GRaw.c"
 }
 
 
 static gchar* graw_value_processed_image_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	GRawProcessedImage** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (!object_p) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 833 "GRaw.c"
+#line 854 "GRaw.c"
 	}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (!value->data[0].v_pointer) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = NULL;
-#line 839 "GRaw.c"
+#line 860 "GRaw.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = value->data[0].v_pointer;
-#line 843 "GRaw.c"
+#line 864 "GRaw.c"
 	} else {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = graw_processed_image_ref (value->data[0].v_pointer);
-#line 847 "GRaw.c"
+#line 868 "GRaw.c"
 	}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return NULL;
-#line 851 "GRaw.c"
+#line 872 "GRaw.c"
 }
 
 
 GParamSpec* graw_param_spec_processed_image (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	GRawParamSpecProcessedImage* spec;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, GRAW_TYPE_PROCESSED_IMAGE), NULL);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return G_PARAM_SPEC (spec);
-#line 865 "GRaw.c"
+#line 886 "GRaw.c"
 }
 
 
 gpointer graw_value_get_processed_image (const GValue* value) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSED_IMAGE), NULL);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return value->data[0].v_pointer;
-#line 874 "GRaw.c"
+#line 895 "GRaw.c"
 }
 
 
 void graw_value_set_processed_image (GValue* value, gpointer v_object) {
 	GRawProcessedImage* old;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSED_IMAGE));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	old = value->data[0].v_pointer;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (v_object) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, GRAW_TYPE_PROCESSED_IMAGE));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = v_object;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processed_image_ref (value->data[0].v_pointer);
-#line 894 "GRaw.c"
+#line 915 "GRaw.c"
 	} else {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 898 "GRaw.c"
+#line 919 "GRaw.c"
 	}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (old) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processed_image_unref (old);
-#line 904 "GRaw.c"
+#line 925 "GRaw.c"
 	}
 }
 
 
 void graw_value_take_processed_image (GValue* value, gpointer v_object) {
 	GRawProcessedImage* old;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSED_IMAGE));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	old = value->data[0].v_pointer;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (v_object) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, GRAW_TYPE_PROCESSED_IMAGE));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = v_object;
-#line 923 "GRaw.c"
+#line 944 "GRaw.c"
 	} else {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 927 "GRaw.c"
+#line 948 "GRaw.c"
 	}
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (old) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processed_image_unref (old);
-#line 933 "GRaw.c"
+#line 954 "GRaw.c"
 	}
 }
 
 
 static void graw_processed_image_class_init (GRawProcessedImageClass * klass) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_processed_image_parent_class = g_type_class_peek_parent (klass);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	((GRawProcessedImageClass *) klass)->finalize = graw_processed_image_finalize;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_type_class_add_private (klass, sizeof (GRawProcessedImagePrivate));
-#line 945 "GRaw.c"
+#line 966 "GRaw.c"
 }
 
 
 static void graw_processed_image_instance_init (GRawProcessedImage * self) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv = GRAW_PROCESSED_IMAGE_GET_PRIVATE (self);
-#line 68 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 74 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv->pixbuf = NULL;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->ref_count = 1;
-#line 956 "GRaw.c"
+#line 977 "GRaw.c"
 }
 
 
 static void graw_processed_image_finalize (GRawProcessedImage* obj) {
 	GRawProcessedImage * self;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, GRAW_TYPE_PROCESSED_IMAGE, GRawProcessedImage);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_signal_handlers_destroy (self);
-#line 67 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 73 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_free0 (self->priv->image);
-#line 68 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 74 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_g_object_unref0 (self->priv->pixbuf);
-#line 970 "GRaw.c"
+#line 991 "GRaw.c"
 }
 
 
@@ -987,24 +1008,24 @@ GType graw_processed_image_get_type (void) {
 gpointer graw_processed_image_ref (gpointer instance) {
 	GRawProcessedImage* self;
 	self = instance;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return instance;
-#line 995 "GRaw.c"
+#line 1016 "GRaw.c"
 }
 
 
 void graw_processed_image_unref (gpointer instance) {
 	GRawProcessedImage* self;
 	self = instance;
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		GRAW_PROCESSED_IMAGE_GET_CLASS (self)->finalize (self);
-#line 66 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 72 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 1008 "GRaw.c"
+#line 1029 "GRaw.c"
 	}
 }
 
@@ -1013,26 +1034,26 @@ GRawProcessor* graw_processor_construct (GType object_type, enum LibRaw_construc
 	GRawProcessor* self = NULL;
 	enum LibRaw_constructor_flags _tmp0_ = 0;
 	libraw_data_t* _tmp1_ = NULL;
-#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 163 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self = (GRawProcessor*) g_type_create_instance (object_type);
-#line 158 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 164 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = options;
-#line 158 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 164 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_init (_tmp0_);
-#line 158 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 164 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_libraw_close0 (self->priv->proc);
-#line 158 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 164 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv->proc = _tmp1_;
-#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 163 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return self;
-#line 1029 "GRaw.c"
+#line 1050 "GRaw.c"
 }
 
 
 GRawProcessor* graw_processor_new (enum LibRaw_constructor_flags options) {
-#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 163 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return graw_processor_construct (GRAW_TYPE_PROCESSOR, options);
-#line 1036 "GRaw.c"
+#line 1057 "GRaw.c"
 }
 
 
@@ -1040,31 +1061,31 @@ void graw_processor_adjust_sizes_info_only (GRawProcessor* self, GError** error)
 	libraw_data_t* _tmp0_ = NULL;
 	enum LibRaw_errors _tmp1_ = 0;
 	GError * _inner_error_ = NULL;
-#line 161 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 167 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_adjust_sizes_info_only (_tmp0_);
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("adjust_sizes_info_only", _tmp1_, &_inner_error_);
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1060 "GRaw.c"
+#line 1081 "GRaw.c"
 		} else {
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 162 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 168 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1068 "GRaw.c"
+#line 1089 "GRaw.c"
 		}
 	}
 }
@@ -1081,7 +1102,7 @@ static libraw_imgother_t libraw_get_image_other (libraw_data_t* self) {
 	result = _tmp0_;
 #line 188 "/home/jens/Source/shotwell/vapi/libraw.vapi"
 	return result;
-#line 1085 "GRaw.c"
+#line 1106 "GRaw.c"
 }
 
 
@@ -1089,17 +1110,17 @@ libraw_imgother_t graw_processor_get_image_other (GRawProcessor* self) {
 	libraw_imgother_t result = {0};
 	libraw_data_t* _tmp0_ = NULL;
 	libraw_imgother_t _tmp1_ = {0};
-#line 165 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 171 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), result);
-#line 166 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 172 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 166 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 172 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_get_image_other (_tmp0_);
-#line 166 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 172 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
-#line 166 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 172 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1103 "GRaw.c"
+#line 1124 "GRaw.c"
 }
 
 
@@ -1114,7 +1135,7 @@ static libraw_iparams_t libraw_get_image_params (libraw_data_t* self) {
 	result = _tmp0_;
 #line 189 "/home/jens/Source/shotwell/vapi/libraw.vapi"
 	return result;
-#line 1118 "GRaw.c"
+#line 1139 "GRaw.c"
 }
 
 
@@ -1122,17 +1143,17 @@ libraw_iparams_t graw_processor_get_image_params (GRawProcessor* self) {
 	libraw_iparams_t result = {0};
 	libraw_data_t* _tmp0_ = NULL;
 	libraw_iparams_t _tmp1_ = {0};
-#line 169 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 175 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), result);
-#line 170 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 176 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 170 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 176 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_get_image_params (_tmp0_);
-#line 170 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 176 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
-#line 170 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 176 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1136 "GRaw.c"
+#line 1157 "GRaw.c"
 }
 
 
@@ -1147,7 +1168,7 @@ static libraw_image_sizes_t libraw_get_sizes (libraw_data_t* self) {
 	result = _tmp0_;
 #line 192 "/home/jens/Source/shotwell/vapi/libraw.vapi"
 	return result;
-#line 1151 "GRaw.c"
+#line 1172 "GRaw.c"
 }
 
 
@@ -1155,17 +1176,17 @@ libraw_image_sizes_t graw_processor_get_sizes (GRawProcessor* self) {
 	libraw_image_sizes_t result = {0};
 	libraw_data_t* _tmp0_ = NULL;
 	libraw_image_sizes_t _tmp1_ = {0};
-#line 173 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 179 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), result);
-#line 174 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 180 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 174 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 180 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_get_sizes (_tmp0_);
-#line 174 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 180 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
-#line 174 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 180 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1169 "GRaw.c"
+#line 1190 "GRaw.c"
 }
 
 
@@ -1180,7 +1201,7 @@ static libraw_thumbnail_t libraw_get_thumbnail (libraw_data_t* self) {
 	result = _tmp0_;
 #line 193 "/home/jens/Source/shotwell/vapi/libraw.vapi"
 	return result;
-#line 1184 "GRaw.c"
+#line 1205 "GRaw.c"
 }
 
 
@@ -1188,17 +1209,17 @@ libraw_thumbnail_t graw_processor_get_thumbnail (GRawProcessor* self) {
 	libraw_thumbnail_t result = {0};
 	libraw_data_t* _tmp0_ = NULL;
 	libraw_thumbnail_t _tmp1_ = {0};
-#line 177 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 183 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), result);
-#line 178 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 184 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 178 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 184 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_get_thumbnail (_tmp0_);
-#line 178 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 184 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp1_;
-#line 178 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 184 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1202 "GRaw.c"
+#line 1223 "GRaw.c"
 }
 
 
@@ -1209,44 +1230,44 @@ GRawProcessedImage* graw_processor_make_mem_image (GRawProcessor* self, GError**
 	GRawProcessedImage* _tmp2_ = NULL;
 	GRawProcessedImage* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 181 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 187 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), NULL);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = self->priv->proc;
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = graw_processed_image_new (_tmp1_, &_inner_error_);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = _tmp2_;
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 1229 "GRaw.c"
+#line 1250 "GRaw.c"
 		} else {
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 1237 "GRaw.c"
+#line 1258 "GRaw.c"
 		}
 	}
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp3_ = _tmp0_;
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = NULL;
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp3_;
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_graw_processed_image_unref0 (_tmp0_);
-#line 182 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 188 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1250 "GRaw.c"
+#line 1271 "GRaw.c"
 }
 
 
@@ -1257,44 +1278,44 @@ GRawProcessedImage* graw_processor_make_thumb_image (GRawProcessor* self, GError
 	GRawProcessedImage* _tmp2_ = NULL;
 	GRawProcessedImage* _tmp3_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 185 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 191 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), NULL);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = self->priv->proc;
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = graw_processed_image_new_from_thumb (_tmp1_, &_inner_error_);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = _tmp2_;
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 1277 "GRaw.c"
+#line 1298 "GRaw.c"
 		} else {
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return NULL;
-#line 1285 "GRaw.c"
+#line 1306 "GRaw.c"
 		}
 	}
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp3_ = _tmp0_;
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = NULL;
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = _tmp3_;
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_graw_processed_image_unref0 (_tmp0_);
-#line 186 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 192 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1298 "GRaw.c"
+#line 1319 "GRaw.c"
 }
 
 
@@ -1304,35 +1325,35 @@ void graw_processor_open_buffer (GRawProcessor* self, guint8* buffer, int buffer
 	gint _tmp1__length1 = 0;
 	enum LibRaw_errors _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 189 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 195 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = buffer;
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1__length1 = buffer_length1;
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = libraw_open_buffer (_tmp0_, _tmp1_, _tmp1__length1);
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("open_buffer", _tmp2_, &_inner_error_);
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1328 "GRaw.c"
+#line 1349 "GRaw.c"
 		} else {
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 190 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 196 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1336 "GRaw.c"
+#line 1357 "GRaw.c"
 		}
 	}
 }
@@ -1343,35 +1364,35 @@ void graw_processor_open_file (GRawProcessor* self, const gchar* filename, GErro
 	const gchar* _tmp1_ = NULL;
 	enum LibRaw_errors _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 193 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 199 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 193 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 199 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (filename != NULL);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = filename;
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = libraw_open_file (_tmp0_, _tmp1_);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("open_file", _tmp2_, &_inner_error_);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1367 "GRaw.c"
+#line 1388 "GRaw.c"
 		} else {
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 194 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 200 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1375 "GRaw.c"
+#line 1396 "GRaw.c"
 		}
 	}
 }
@@ -1381,31 +1402,31 @@ void graw_processor_process (GRawProcessor* self, GError** error) {
 	libraw_data_t* _tmp0_ = NULL;
 	enum LibRaw_errors _tmp1_ = 0;
 	GError * _inner_error_ = NULL;
-#line 197 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 203 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_dcraw_process (_tmp0_);
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("process", _tmp1_, &_inner_error_);
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1401 "GRaw.c"
+#line 1422 "GRaw.c"
 		} else {
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 198 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 204 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1409 "GRaw.c"
+#line 1430 "GRaw.c"
 		}
 	}
 }
@@ -1416,35 +1437,35 @@ void graw_processor_ppm_tiff_writer (GRawProcessor* self, const gchar* filename,
 	const gchar* _tmp1_ = NULL;
 	enum LibRaw_errors _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 201 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 207 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 201 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 207 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (filename != NULL);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = filename;
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = libraw_dcraw_ppm_tiff_writer (_tmp0_, _tmp1_);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("ppm_tiff_writer", _tmp2_, &_inner_error_);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1440 "GRaw.c"
+#line 1461 "GRaw.c"
 		} else {
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 202 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 208 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1448 "GRaw.c"
+#line 1469 "GRaw.c"
 		}
 	}
 }
@@ -1455,35 +1476,35 @@ void graw_processor_thumb_writer (GRawProcessor* self, const gchar* filename, GE
 	const gchar* _tmp1_ = NULL;
 	enum LibRaw_errors _tmp2_ = 0;
 	GError * _inner_error_ = NULL;
-#line 205 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 205 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 211 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (filename != NULL);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = filename;
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = libraw_dcraw_thumb_writer (_tmp0_, _tmp1_);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("thumb_writer", _tmp2_, &_inner_error_);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1479 "GRaw.c"
+#line 1500 "GRaw.c"
 		} else {
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 206 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 212 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1487 "GRaw.c"
+#line 1508 "GRaw.c"
 		}
 	}
 }
@@ -1491,13 +1512,13 @@ void graw_processor_thumb_writer (GRawProcessor* self, const gchar* filename, GE
 
 void graw_processor_recycle (GRawProcessor* self) {
 	libraw_data_t* _tmp0_ = NULL;
-#line 209 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 215 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 210 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 216 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 210 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 216 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	libraw_recycle (_tmp0_);
-#line 1501 "GRaw.c"
+#line 1522 "GRaw.c"
 }
 
 
@@ -1505,31 +1526,31 @@ void graw_processor_unpack (GRawProcessor* self, GError** error) {
 	libraw_data_t* _tmp0_ = NULL;
 	enum LibRaw_errors _tmp1_ = 0;
 	GError * _inner_error_ = NULL;
-#line 213 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 219 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_unpack (_tmp0_);
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("unpack", _tmp1_, &_inner_error_);
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1525 "GRaw.c"
+#line 1546 "GRaw.c"
 		} else {
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 214 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 220 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1533 "GRaw.c"
+#line 1554 "GRaw.c"
 		}
 	}
 }
@@ -1539,75 +1560,87 @@ void graw_processor_unpack_thumb (GRawProcessor* self, GError** error) {
 	libraw_data_t* _tmp0_ = NULL;
 	enum LibRaw_errors _tmp1_ = 0;
 	GError * _inner_error_ = NULL;
-#line 217 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 223 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = libraw_unpack_thumb (_tmp0_);
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_throw_exception ("unpack_thumb", _tmp1_, &_inner_error_);
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_propagate_error (error, _inner_error_);
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1559 "GRaw.c"
+#line 1580 "GRaw.c"
 		} else {
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			g_clear_error (&_inner_error_);
-#line 218 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 1567 "GRaw.c"
+#line 1588 "GRaw.c"
 		}
 	}
 }
 
 
-static void lib_raw_output_params_set_chromatic_aberrations (libraw_output_params_t self, gdouble red_multiplier, gdouble green_multiplier) {
-	gdouble _tmp0_ = 0.0;
+static void lib_raw_output_params_set_chromatic_aberrations (libraw_output_params_t* params, gdouble red_multiplier, gdouble green_multiplier) {
+	libraw_output_params_t* _tmp0_ = NULL;
 	gdouble _tmp1_ = 0.0;
 	gdouble _tmp2_ = 0.0;
-	gdouble _tmp3_ = 0.0;
+	libraw_output_params_t* _tmp3_ = NULL;
+	gdouble _tmp4_ = 0.0;
+	gdouble _tmp5_ = 0.0;
 #line 148 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp0_ = red_multiplier;
+	_tmp0_ = params;
 #line 148 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	self.aber[0] = _tmp0_;
+	_tmp1_ = red_multiplier;
 #line 148 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp1_ = self.aber[0];
+	(*_tmp0_).aber[0] = _tmp1_;
+#line 148 "/home/jens/Source/shotwell/vapi/libraw.vapi"
+	_tmp2_ = (*_tmp0_).aber[0];
 #line 149 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp2_ = green_multiplier;
+	_tmp3_ = params;
 #line 149 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	self.aber[2] = _tmp2_;
+	_tmp4_ = green_multiplier;
 #line 149 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp3_ = self.aber[2];
-#line 1590 "GRaw.c"
+	(*_tmp3_).aber[2] = _tmp4_;
+#line 149 "/home/jens/Source/shotwell/vapi/libraw.vapi"
+	_tmp5_ = (*_tmp3_).aber[2];
+#line 1617 "GRaw.c"
 }
 
 
-static void lib_raw_output_params_set_gamma_curve (libraw_output_params_t self, gdouble power, gdouble slope) {
-	gdouble _tmp0_ = 0.0;
+static void lib_raw_output_params_set_gamma_curve (libraw_output_params_t* params, gdouble power, gdouble slope) {
+	libraw_output_params_t* _tmp0_ = NULL;
 	gdouble _tmp1_ = 0.0;
 	gdouble _tmp2_ = 0.0;
-	gdouble _tmp3_ = 0.0;
+	libraw_output_params_t* _tmp3_ = NULL;
+	gdouble _tmp4_ = 0.0;
+	gdouble _tmp5_ = 0.0;
 #line 153 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp0_ = power;
+	_tmp0_ = params;
 #line 153 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	self.gamm[0] = _tmp0_;
+	_tmp1_ = power;
 #line 153 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp1_ = self.gamm[0];
+	(*_tmp0_).gamm[0] = 1.0 / _tmp1_;
+#line 153 "/home/jens/Source/shotwell/vapi/libraw.vapi"
+	_tmp2_ = (*_tmp0_).gamm[0];
 #line 154 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp2_ = slope;
+	_tmp3_ = params;
 #line 154 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	self.gamm[1] = _tmp2_;
+	_tmp4_ = slope;
 #line 154 "/home/jens/Source/shotwell/vapi/libraw.vapi"
-	_tmp3_ = self.gamm[1];
-#line 1611 "GRaw.c"
+	(*_tmp3_).gamm[1] = _tmp4_;
+#line 154 "/home/jens/Source/shotwell/vapi/libraw.vapi"
+	_tmp5_ = (*_tmp3_).gamm[1];
+#line 1644 "GRaw.c"
 }
 
 
@@ -1643,328 +1676,328 @@ void graw_processor_configure_for_rgb_display (GRawProcessor* self, gboolean hal
 	libraw_output_params_t* _tmp28_ = NULL;
 	libraw_output_params_t* _tmp29_ = NULL;
 	libraw_output_params_t* _tmp30_ = NULL;
-#line 224 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 230 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (GRAW_IS_PROCESSOR (self));
-#line 229 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = graw_processor_get_output_params (self);
-#line 229 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp1_ = _tmp0_;
-#line 229 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	lib_raw_output_params_set_chromatic_aberrations (*_tmp1_, 1.0, 1.0);
-#line 230 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 235 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	lib_raw_output_params_set_chromatic_aberrations (_tmp1_, 1.0, 1.0);
+#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp2_ = graw_processor_get_output_params (self);
-#line 230 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp3_ = _tmp2_;
-#line 230 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	lib_raw_output_params_set_gamma_curve (*_tmp3_, GRAW_SRGB_POWER, GRAW_SRGB_SLOPE);
-#line 234 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	lib_raw_output_params_set_gamma_curve (_tmp3_, GRAW_SRGB_POWER, GRAW_SRGB_SLOPE);
+#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp4_ = graw_processor_get_output_params (self);
-#line 234 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp5_ = _tmp4_;
-#line 234 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp5_).bright = 1.0f;
-#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp6_ = graw_processor_get_output_params (self);
-#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp7_ = _tmp6_;
-#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp8_ = half_size;
-#line 236 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp7_).half_size = _tmp8_;
-#line 238 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp9_ = graw_processor_get_output_params (self);
-#line 238 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp10_ = _tmp9_;
-#line 238 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 244 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp10_).highlight = (gint) GRAW_HIGHLIGHT_MODE_CLIP;
-#line 239 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp11_ = graw_processor_get_output_params (self);
-#line 239 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp12_ = _tmp11_;
-#line 239 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 245 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp12_).use_auto_wb = TRUE;
-#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp13_ = graw_processor_get_output_params (self);
-#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp14_ = _tmp13_;
-#line 240 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 246 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp14_).use_camera_wb = TRUE;
-#line 241 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp15_ = graw_processor_get_output_params (self);
-#line 241 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp16_ = _tmp15_;
-#line 241 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-	(*_tmp16_).use_camera_matrix = TRUE;
-#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+	(*_tmp16_).use_camera_matrix = (gint) GRAW_USE_CAMERA_MATRIX_EMBEDDED_COLOR_PROFILE;
+#line 248 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp17_ = graw_processor_get_output_params (self);
-#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp18_ = _tmp17_;
-#line 242 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 248 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp18_).output_color = (gint) GRAW_COLORSPACE_SRGB;
-#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 253 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp19_ = graw_processor_get_output_params (self);
-#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 253 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp20_ = _tmp19_;
-#line 247 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 253 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp20_).output_bps = 8;
-#line 249 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp21_ = graw_processor_get_output_params (self);
-#line 249 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp22_ = _tmp21_;
-#line 249 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp22_).user_flip = (gint) GRAW_FLIP_FROM_SOURCE;
-#line 250 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp23_ = graw_processor_get_output_params (self);
-#line 250 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp24_ = _tmp23_;
-#line 250 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp24_).user_qual = (gint) GRAW_INTERPOLATION_QUALITY_PPG;
-#line 254 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp25_ = graw_processor_get_output_params (self);
-#line 254 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp26_ = _tmp25_;
-#line 254 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 260 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp26_).no_auto_bright = TRUE;
-#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 261 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp27_ = graw_processor_get_output_params (self);
-#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 261 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp28_ = _tmp27_;
-#line 255 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 261 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp28_).auto_bright_thr = 0.01f;
-#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 262 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp29_ = graw_processor_get_output_params (self);
-#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 262 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp30_ = _tmp29_;
-#line 256 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 262 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	(*_tmp30_).use_fuji_rotate = (gint) GRAW_FUJI_ROTATE_USE;
-#line 1741 "GRaw.c"
+#line 1774 "GRaw.c"
 }
 
 
 libraw_output_params_t* graw_processor_get_output_params (GRawProcessor* self) {
 	libraw_output_params_t* result;
 	libraw_data_t* _tmp0_ = NULL;
-#line 150 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 156 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (GRAW_IS_PROCESSOR (self), NULL);
-#line 151 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = self->priv->proc;
-#line 151 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	result = &_tmp0_->params;
-#line 151 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 157 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return result;
-#line 1756 "GRaw.c"
+#line 1789 "GRaw.c"
 }
 
 
 static void graw_value_processor_init (GValue* value) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	value->data[0].v_pointer = NULL;
-#line 1763 "GRaw.c"
+#line 1796 "GRaw.c"
 }
 
 
 static void graw_value_processor_free_value (GValue* value) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (value->data[0].v_pointer) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processor_unref (value->data[0].v_pointer);
-#line 1772 "GRaw.c"
+#line 1805 "GRaw.c"
 	}
 }
 
 
 static void graw_value_processor_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (src_value->data[0].v_pointer) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		dest_value->data[0].v_pointer = graw_processor_ref (src_value->data[0].v_pointer);
-#line 1782 "GRaw.c"
+#line 1815 "GRaw.c"
 	} else {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 1786 "GRaw.c"
+#line 1819 "GRaw.c"
 	}
 }
 
 
 static gpointer graw_value_processor_peek_pointer (const GValue* value) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return value->data[0].v_pointer;
-#line 1794 "GRaw.c"
+#line 1827 "GRaw.c"
 }
 
 
 static gchar* graw_value_processor_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (collect_values[0].v_pointer) {
-#line 1801 "GRaw.c"
+#line 1834 "GRaw.c"
 		GRawProcessor* object;
 		object = collect_values[0].v_pointer;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1808 "GRaw.c"
+#line 1841 "GRaw.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 1812 "GRaw.c"
+#line 1845 "GRaw.c"
 		}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = graw_processor_ref (object);
-#line 1816 "GRaw.c"
+#line 1849 "GRaw.c"
 	} else {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 1820 "GRaw.c"
+#line 1853 "GRaw.c"
 	}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return NULL;
-#line 1824 "GRaw.c"
+#line 1857 "GRaw.c"
 }
 
 
 static gchar* graw_value_processor_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	GRawProcessor** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (!object_p) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 1835 "GRaw.c"
+#line 1868 "GRaw.c"
 	}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (!value->data[0].v_pointer) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = NULL;
-#line 1841 "GRaw.c"
+#line 1874 "GRaw.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = value->data[0].v_pointer;
-#line 1845 "GRaw.c"
+#line 1878 "GRaw.c"
 	} else {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		*object_p = graw_processor_ref (value->data[0].v_pointer);
-#line 1849 "GRaw.c"
+#line 1882 "GRaw.c"
 	}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return NULL;
-#line 1853 "GRaw.c"
+#line 1886 "GRaw.c"
 }
 
 
 GParamSpec* graw_param_spec_processor (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	GRawParamSpecProcessor* spec;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, GRAW_TYPE_PROCESSOR), NULL);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return G_PARAM_SPEC (spec);
-#line 1867 "GRaw.c"
+#line 1900 "GRaw.c"
 }
 
 
 gpointer graw_value_get_processor (const GValue* value) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSOR), NULL);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return value->data[0].v_pointer;
-#line 1876 "GRaw.c"
+#line 1909 "GRaw.c"
 }
 
 
 void graw_value_set_processor (GValue* value, gpointer v_object) {
 	GRawProcessor* old;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSOR));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	old = value->data[0].v_pointer;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (v_object) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, GRAW_TYPE_PROCESSOR));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = v_object;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processor_ref (value->data[0].v_pointer);
-#line 1896 "GRaw.c"
+#line 1929 "GRaw.c"
 	} else {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 1900 "GRaw.c"
+#line 1933 "GRaw.c"
 	}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (old) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processor_unref (old);
-#line 1906 "GRaw.c"
+#line 1939 "GRaw.c"
 	}
 }
 
 
 void graw_value_take_processor (GValue* value, gpointer v_object) {
 	GRawProcessor* old;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GRAW_TYPE_PROCESSOR));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	old = value->data[0].v_pointer;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (v_object) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, GRAW_TYPE_PROCESSOR));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = v_object;
-#line 1925 "GRaw.c"
+#line 1958 "GRaw.c"
 	} else {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		value->data[0].v_pointer = NULL;
-#line 1929 "GRaw.c"
+#line 1962 "GRaw.c"
 	}
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (old) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		graw_processor_unref (old);
-#line 1935 "GRaw.c"
+#line 1968 "GRaw.c"
 	}
 }
 
 
 static void graw_processor_class_init (GRawProcessorClass * klass) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	graw_processor_parent_class = g_type_class_peek_parent (klass);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	((GRawProcessorClass *) klass)->finalize = graw_processor_finalize;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_type_class_add_private (klass, sizeof (GRawProcessorPrivate));
-#line 1947 "GRaw.c"
+#line 1980 "GRaw.c"
 }
 
 
 static void graw_processor_instance_init (GRawProcessor * self) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->priv = GRAW_PROCESSOR_GET_PRIVATE (self);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self->ref_count = 1;
-#line 1956 "GRaw.c"
+#line 1989 "GRaw.c"
 }
 
 
 static void graw_processor_finalize (GRawProcessor* obj) {
 	GRawProcessor * self;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, GRAW_TYPE_PROCESSOR, GRawProcessor);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_signal_handlers_destroy (self);
-#line 155 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 161 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_libraw_close0 (self->priv->proc);
-#line 1968 "GRaw.c"
+#line 2001 "GRaw.c"
 }
 
 
@@ -1985,24 +2018,24 @@ GType graw_processor_get_type (void) {
 gpointer graw_processor_ref (gpointer instance) {
 	GRawProcessor* self;
 	self = instance;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	return instance;
-#line 1993 "GRaw.c"
+#line 2026 "GRaw.c"
 }
 
 
 void graw_processor_unref (gpointer instance) {
 	GRawProcessor* self;
 	self = instance;
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		GRAW_PROCESSOR_GET_CLASS (self)->finalize (self);
-#line 148 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 154 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2006 "GRaw.c"
+#line 2039 "GRaw.c"
 	}
 }
 
@@ -2016,446 +2049,446 @@ void graw_throw_exception (const gchar* caller, enum LibRaw_errors _result_, GEr
 	gchar* _tmp10_ = NULL;
 	enum LibRaw_errors _tmp11_ = 0;
 	GError * _inner_error_ = NULL;
-#line 260 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	g_return_if_fail (caller != NULL);
-#line 261 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 267 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp0_ = _result_;
-#line 261 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 267 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	if (_tmp0_ == LIBRAW_SUCCESS) {
-#line 262 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		return;
-#line 2028 "GRaw.c"
+#line 2061 "GRaw.c"
 	} else {
 		enum LibRaw_errors _tmp1_ = 0;
-#line 263 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 269 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		_tmp1_ = _result_;
-#line 263 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 269 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		if (_tmp1_ > 0) {
-#line 2035 "GRaw.c"
+#line 2068 "GRaw.c"
 			const gchar* _tmp2_ = NULL;
 			enum LibRaw_errors _tmp3_ = 0;
 			enum LibRaw_errors _tmp4_ = 0;
 			const gchar* _tmp5_ = NULL;
 			GError* _tmp6_ = NULL;
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp2_ = caller;
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp3_ = _result_;
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp4_ = _result_;
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp5_ = g_strerror ((gint) _tmp4_);
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp6_ = g_error_new (GRAW_EXCEPTION, GRAW_EXCEPTION_SYSTEM_ERROR, "%s: System error %d: %s", _tmp2_, (gint) _tmp3_, _tmp5_);
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_inner_error_ = _tmp6_;
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
-#line 2059 "GRaw.c"
+#line 2092 "GRaw.c"
 			} else {
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 264 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
-#line 2067 "GRaw.c"
+#line 2100 "GRaw.c"
 			}
 		}
 	}
-#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 272 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp7_ = caller;
-#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 272 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp8_ = _result_;
-#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 272 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp9_ = libraw_strerror (_tmp8_);
-#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 272 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp10_ = g_strdup_printf ("%s: %s", _tmp7_, _tmp9_);
-#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 272 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	msg = _tmp10_;
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_tmp11_ = _result_;
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	switch (_tmp11_) {
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 		case LIBRAW_UNSPECIFIED_ERROR:
-#line 2087 "GRaw.c"
+#line 2120 "GRaw.c"
 		{
 			const gchar* _tmp12_ = NULL;
 			GError* _tmp13_ = NULL;
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp12_ = msg;
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_tmp13_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSPECIFIED, _tmp12_);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_inner_error_ = _tmp13_;
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				return;
-#line 2105 "GRaw.c"
-			} else {
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				_g_free0 (msg);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				g_clear_error (&_inner_error_);
-#line 270 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				return;
-#line 2115 "GRaw.c"
-			}
-		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_FILE_UNSUPPORTED:
-#line 2120 "GRaw.c"
-		{
-			const gchar* _tmp14_ = NULL;
-			GError* _tmp15_ = NULL;
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp14_ = msg;
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp15_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSUPPORTED_FILE, _tmp14_);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp15_;
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				g_propagate_error (error, _inner_error_);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-				_g_free0 (msg);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2138 "GRaw.c"
 			} else {
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 273 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2148 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_REQUEST_FOR_NONEXISTENT_IMAGE:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_FILE_UNSUPPORTED:
 #line 2153 "GRaw.c"
 		{
-			const gchar* _tmp16_ = NULL;
-			GError* _tmp17_ = NULL;
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp16_ = msg;
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp17_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_NONEXISTANT_IMAGE, _tmp16_);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp17_;
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp14_ = NULL;
+			GError* _tmp15_ = NULL;
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp14_ = msg;
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp15_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSUPPORTED_FILE, _tmp14_);
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp15_;
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2171 "GRaw.c"
 			} else {
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 276 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2181 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_OUT_OF_ORDER_CALL:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_REQUEST_FOR_NONEXISTENT_IMAGE:
 #line 2186 "GRaw.c"
 		{
-			const gchar* _tmp18_ = NULL;
-			GError* _tmp19_ = NULL;
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp18_ = msg;
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp19_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_OUT_OF_ORDER_CALL, _tmp18_);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp19_;
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp16_ = NULL;
+			GError* _tmp17_ = NULL;
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp16_ = msg;
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp17_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_NONEXISTANT_IMAGE, _tmp16_);
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp17_;
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2204 "GRaw.c"
 			} else {
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 279 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2214 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_NO_THUMBNAIL:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_OUT_OF_ORDER_CALL:
 #line 2219 "GRaw.c"
 		{
-			const gchar* _tmp20_ = NULL;
-			GError* _tmp21_ = NULL;
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp20_ = msg;
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp21_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_NO_THUMBNAIL, _tmp20_);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp21_;
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp18_ = NULL;
+			GError* _tmp19_ = NULL;
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp18_ = msg;
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp19_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_OUT_OF_ORDER_CALL, _tmp18_);
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp19_;
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2237 "GRaw.c"
 			} else {
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 282 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2247 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_UNSUPPORTED_THUMBNAIL:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_NO_THUMBNAIL:
 #line 2252 "GRaw.c"
 		{
-			const gchar* _tmp22_ = NULL;
-			GError* _tmp23_ = NULL;
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp22_ = msg;
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp23_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSUPPORTED_THUMBNAIL, _tmp22_);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp23_;
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp20_ = NULL;
+			GError* _tmp21_ = NULL;
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp20_ = msg;
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp21_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_NO_THUMBNAIL, _tmp20_);
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp21_;
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2270 "GRaw.c"
 			} else {
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 285 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2280 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_UNSUFFICIENT_MEMORY:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_UNSUPPORTED_THUMBNAIL:
 #line 2285 "GRaw.c"
 		{
-			const gchar* _tmp24_ = NULL;
-			GError* _tmp25_ = NULL;
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp24_ = msg;
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp25_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_OUT_OF_MEMORY, _tmp24_);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp25_;
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp22_ = NULL;
+			GError* _tmp23_ = NULL;
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp22_ = msg;
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp23_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_UNSUPPORTED_THUMBNAIL, _tmp22_);
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp23_;
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2303 "GRaw.c"
 			} else {
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 288 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2313 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_DATA_ERROR:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_UNSUFFICIENT_MEMORY:
 #line 2318 "GRaw.c"
 		{
-			const gchar* _tmp26_ = NULL;
-			GError* _tmp27_ = NULL;
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp26_ = msg;
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp27_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_DATA_ERROR, _tmp26_);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp27_;
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp24_ = NULL;
+			GError* _tmp25_ = NULL;
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp24_ = msg;
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp25_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_OUT_OF_MEMORY, _tmp24_);
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp25_;
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2336 "GRaw.c"
 			} else {
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 291 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2346 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_IO_ERROR:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_DATA_ERROR:
 #line 2351 "GRaw.c"
 		{
-			const gchar* _tmp28_ = NULL;
-			GError* _tmp29_ = NULL;
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp28_ = msg;
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp29_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_IO_ERROR, _tmp28_);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp29_;
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp26_ = NULL;
+			GError* _tmp27_ = NULL;
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp26_ = msg;
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp27_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_DATA_ERROR, _tmp26_);
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp27_;
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2369 "GRaw.c"
 			} else {
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 294 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2379 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_CANCELLED_BY_CALLBACK:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_IO_ERROR:
 #line 2384 "GRaw.c"
 		{
-			const gchar* _tmp30_ = NULL;
-			GError* _tmp31_ = NULL;
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp30_ = msg;
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp31_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_CANCELLED_BY_CALLBACK, _tmp30_);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp31_;
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp28_ = NULL;
+			GError* _tmp29_ = NULL;
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp28_ = msg;
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp29_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_IO_ERROR, _tmp28_);
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp29_;
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2402 "GRaw.c"
 			} else {
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 297 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2412 "GRaw.c"
 			}
 		}
-#line 268 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-		case LIBRAW_BAD_CROP:
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_CANCELLED_BY_CALLBACK:
 #line 2417 "GRaw.c"
 		{
-			const gchar* _tmp32_ = NULL;
-			GError* _tmp33_ = NULL;
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp32_ = msg;
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_tmp33_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_BAD_CROP, _tmp32_);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
-			_inner_error_ = _tmp33_;
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			const gchar* _tmp30_ = NULL;
+			GError* _tmp31_ = NULL;
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp30_ = msg;
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp31_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_CANCELLED_BY_CALLBACK, _tmp30_);
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp31_;
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			if (_inner_error_->domain == GRAW_EXCEPTION) {
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_propagate_error (error, _inner_error_);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2435 "GRaw.c"
 			} else {
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				_g_free0 (msg);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				g_clear_error (&_inner_error_);
-#line 300 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 				return;
 #line 2445 "GRaw.c"
 			}
 		}
+#line 274 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+		case LIBRAW_BAD_CROP:
+#line 2450 "GRaw.c"
+		{
+			const gchar* _tmp32_ = NULL;
+			GError* _tmp33_ = NULL;
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp32_ = msg;
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_tmp33_ = g_error_new_literal (GRAW_EXCEPTION, GRAW_EXCEPTION_BAD_CROP, _tmp32_);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			_inner_error_ = _tmp33_;
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+			if (_inner_error_->domain == GRAW_EXCEPTION) {
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				g_propagate_error (error, _inner_error_);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				_g_free0 (msg);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				return;
+#line 2468 "GRaw.c"
+			} else {
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				_g_free0 (msg);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				g_clear_error (&_inner_error_);
+#line 306 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+				return;
+#line 2478 "GRaw.c"
+			}
+		}
 		default:
 		{
-#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			_g_free0 (msg);
-#line 303 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 309 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 			return;
-#line 2454 "GRaw.c"
+#line 2487 "GRaw.c"
 		}
 	}
-#line 260 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
+#line 266 "/home/jens/Source/shotwell/src/photos/GRaw.vala"
 	_g_free0 (msg);
-#line 2459 "GRaw.c"
+#line 2492 "GRaw.c"
 }
 
 

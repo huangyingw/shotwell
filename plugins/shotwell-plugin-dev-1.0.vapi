@@ -119,6 +119,21 @@ namespace Spit {
 	}
 	namespace Publishing {
 		[CCode (cheader_filename = "shotwell-plugin-dev-1.0.h")]
+		public interface Authenticator : GLib.Object {
+			public abstract void authenticate ();
+			public abstract bool can_logout ();
+			public abstract GLib.HashTable<string,GLib.Variant> get_authentication_parameter ();
+			public abstract void logout ();
+			public abstract void refresh ();
+			public signal void authenticated ();
+			public signal void authentication_failed ();
+		}
+		[CCode (cheader_filename = "shotwell-plugin-dev-1.0.h")]
+		public interface AuthenticatorFactory : GLib.Object {
+			public abstract Spit.Publishing.Authenticator? create (string provider, Spit.Publishing.PluginHost host);
+			public abstract Gee.List<string> get_available_authenticators ();
+		}
+		[CCode (cheader_filename = "shotwell-plugin-dev-1.0.h")]
 		public interface DialogPane : GLib.Object {
 			public enum GeometryOptions {
 				NONE,

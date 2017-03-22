@@ -4512,7 +4512,7 @@ static void extended_properties_window_extended_properties_real_get_single_prope
 #line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 4515 "Properties.c"
-				goto __catch432_g_error;
+				goto __catch433_g_error;
 			}
 #line 543 "/home/jens/Source/shotwell/src/Properties.vala"
 			_tmp23_ = _tmp20_;
@@ -4526,8 +4526,8 @@ static void extended_properties_window_extended_properties_real_get_single_prope
 			_media_metadata_unref0 (_tmp20_);
 #line 4528 "Properties.c"
 		}
-		goto __finally432;
-		__catch432_g_error:
+		goto __finally433;
+		__catch433_g_error:
 		{
 			GError* e = NULL;
 			Photo* _tmp24_ = NULL;
@@ -4548,7 +4548,7 @@ static void extended_properties_window_extended_properties_real_get_single_prope
 			_g_error_free0 (e);
 #line 4550 "Properties.c"
 		}
-		__finally432:
+		__finally433:
 #line 538 "/home/jens/Source/shotwell/src/Properties.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 538 "/home/jens/Source/shotwell/src/Properties.vala"
@@ -4840,7 +4840,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 4843 "Properties.c"
-				goto __catch433_g_regex_error;
+				goto __catch434_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4865,7 +4865,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 4868 "Properties.c"
-				goto __catch433_g_regex_error;
+				goto __catch434_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -4891,8 +4891,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 4893 "Properties.c"
 	}
-	goto __finally433;
-	__catch433_g_regex_error:
+	goto __finally434;
+	__catch434_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4905,7 +4905,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 4907 "Properties.c"
 	}
-	__finally433:
+	__finally434:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

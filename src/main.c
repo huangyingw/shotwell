@@ -506,7 +506,6 @@ ProgressDialog* progress_dialog_new (GtkWindow* owner, const gchar* text, GCance
 ProgressDialog* progress_dialog_construct (GType object_type, GtkWindow* owner, const gchar* text, GCancellable* cancellable);
 void progress_dialog_update_display_every (ProgressDialog* self, gint update_every);
 void progress_dialog_set_minimum_on_screen_time_msec (ProgressDialog* self, gint minimum_on_screen_time_msec);
-GFile* app_dirs_get_resources_dir (void);
 gboolean progress_dialog_monitor (ProgressDialog* self, guint64 count, guint64 total, gboolean do_event_loop);
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self);
 AggregateProgressMonitor* aggregate_progress_monitor_new (guint64 grand_total, ProgressMonitor wrapped_monitor, void* wrapped_monitor_target);
@@ -697,25 +696,25 @@ GType shotwell_command_get_type (void) {
 static gboolean _progress_dialog_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self) {
 	gboolean result;
 	result = progress_dialog_monitor ((ProgressDialog*) self, current, total, do_event_loop);
-#line 114 "/home/jens/Source/shotwell/src/main.vala"
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
 	return result;
-#line 703 "main.c"
+#line 702 "main.c"
 }
 
 
 static gboolean _aggregate_progress_monitor_monitor_progress_monitor (guint64 current, guint64 total, gboolean do_event_loop, gpointer self) {
 	gboolean result;
 	result = aggregate_progress_monitor_monitor ((AggregateProgressMonitor*) self, current, total);
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 	return result;
-#line 712 "main.c"
+#line 711 "main.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 719 "main.c"
+#line 718 "main.c"
 }
 
 
@@ -741,55 +740,55 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	void* monitor_target = NULL;
 	GDestroyNotify monitor_target_destroy_notify = NULL;
 	gboolean _tmp39_ = FALSE;
-	AggregateProgressMonitor* _tmp79_ = NULL;
-	ProgressMonitor _tmp81_ = NULL;
-	void* _tmp81__target = NULL;
-	AggregateProgressMonitor* _tmp82_ = NULL;
-	ProgressMonitor _tmp84_ = NULL;
-	void* _tmp84__target = NULL;
-	AggregateProgressMonitor* _tmp85_ = NULL;
-	Upgrades* _tmp87_ = NULL;
-	Upgrades* _tmp88_ = NULL;
+	AggregateProgressMonitor* _tmp70_ = NULL;
+	ProgressMonitor _tmp72_ = NULL;
+	void* _tmp72__target = NULL;
+	AggregateProgressMonitor* _tmp73_ = NULL;
+	ProgressMonitor _tmp75_ = NULL;
+	void* _tmp75__target = NULL;
+	AggregateProgressMonitor* _tmp76_ = NULL;
+	Upgrades* _tmp78_ = NULL;
+	Upgrades* _tmp79_ = NULL;
 	MediaCollectionRegistry* registry = NULL;
-	MediaCollectionRegistry* _tmp89_ = NULL;
-	MediaCollectionRegistry* _tmp90_ = NULL;
-	LibraryPhotoSourceCollection* _tmp91_ = NULL;
-	MediaCollectionRegistry* _tmp92_ = NULL;
-	VideoSourceCollection* _tmp93_ = NULL;
-	AggregateProgressMonitor* _tmp94_ = NULL;
-	ProgressMonitor _tmp96_ = NULL;
-	void* _tmp96__target = NULL;
-	AggregateProgressMonitor* _tmp97_ = NULL;
-	ProgressMonitor _tmp99_ = NULL;
-	void* _tmp99__target = NULL;
-	Application* _tmp100_ = NULL;
-	Application* _tmp101_ = NULL;
-	AggregateProgressMonitor* _tmp102_ = NULL;
+	MediaCollectionRegistry* _tmp80_ = NULL;
+	MediaCollectionRegistry* _tmp81_ = NULL;
+	LibraryPhotoSourceCollection* _tmp82_ = NULL;
+	MediaCollectionRegistry* _tmp83_ = NULL;
+	VideoSourceCollection* _tmp84_ = NULL;
+	AggregateProgressMonitor* _tmp85_ = NULL;
+	ProgressMonitor _tmp87_ = NULL;
+	void* _tmp87__target = NULL;
+	AggregateProgressMonitor* _tmp88_ = NULL;
+	ProgressMonitor _tmp90_ = NULL;
+	void* _tmp90__target = NULL;
+	Application* _tmp91_ = NULL;
+	Application* _tmp92_ = NULL;
+	AggregateProgressMonitor* _tmp93_ = NULL;
 	LibraryWindow* library_window = NULL;
-	ProgressMonitor _tmp104_ = NULL;
-	void* _tmp104__target = NULL;
+	ProgressMonitor _tmp95_ = NULL;
+	void* _tmp95__target = NULL;
+	LibraryWindow* _tmp96_ = NULL;
+	AggregateProgressMonitor* _tmp97_ = NULL;
+	ProgressDialog* _tmp99_ = NULL;
+	gchar** _tmp101_ = NULL;
+	gint _tmp101__length1 = 0;
 	LibraryWindow* _tmp105_ = NULL;
-	AggregateProgressMonitor* _tmp106_ = NULL;
-	ProgressDialog* _tmp108_ = NULL;
-	gchar** _tmp110_ = NULL;
-	gint _tmp110__length1 = 0;
-	LibraryWindow* _tmp114_ = NULL;
 	WelcomeServiceEntry** selected_import_entries = NULL;
-	WelcomeServiceEntry** _tmp115_ = NULL;
+	WelcomeServiceEntry** _tmp106_ = NULL;
 	gint selected_import_entries_length1 = 0;
 	gint _selected_import_entries_size_ = 0;
-	gboolean _tmp116_ = FALSE;
-	ConfigFacade* _tmp117_ = NULL;
-	ConfigFacade* _tmp118_ = NULL;
-	gboolean _tmp119_ = FALSE;
-	gboolean _tmp120_ = FALSE;
-	WelcomeServiceEntry** _tmp134_ = NULL;
-	gint _tmp134__length1 = 0;
-	gboolean _tmp138_ = FALSE;
-	GTimer* _tmp139_ = NULL;
-	gdouble _tmp140_ = 0.0;
-	Application* _tmp141_ = NULL;
-	Application* _tmp142_ = NULL;
+	gboolean _tmp107_ = FALSE;
+	ConfigFacade* _tmp108_ = NULL;
+	ConfigFacade* _tmp109_ = NULL;
+	gboolean _tmp110_ = FALSE;
+	gboolean _tmp111_ = FALSE;
+	WelcomeServiceEntry** _tmp125_ = NULL;
+	gint _tmp125__length1 = 0;
+	gboolean _tmp129_ = FALSE;
+	GTimer* _tmp130_ = NULL;
+	gdouble _tmp131_ = 0.0;
+	Application* _tmp132_ = NULL;
+	Application* _tmp133_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 16 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0_ = application_get_is_remote ();
@@ -799,7 +798,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	_tmp1_ = was_already_running;
 #line 18 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp1_) {
-#line 803 "main.c"
+#line 802 "main.c"
 		gchar** _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
 #line 25 "/home/jens/Source/shotwell/src/main.vala"
@@ -812,7 +811,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		application_send_to_primary_instance (_tmp2_, _tmp2__length1);
 #line 27 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 816 "main.c"
+#line 815 "main.c"
 	}
 #line 31 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp3_ = app_dirs_get_data_subdir ("data", NULL);
@@ -828,18 +827,18 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	_g_object_unref0 (_tmp6_);
 #line 31 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (_tmp4_);
-#line 832 "main.c"
+#line 831 "main.c"
 	{
 #line 35 "/home/jens/Source/shotwell/src/main.vala"
 		library_app_init (&_inner_error_);
 #line 35 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 838 "main.c"
-			goto __catch220_g_error;
+#line 837 "main.c"
+			goto __catch221_g_error;
 		}
 	}
-	goto __finally220;
-	__catch220_g_error:
+	goto __finally221;
+	__catch221_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp7_ = NULL;
@@ -858,9 +857,9 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		_g_error_free0 (err);
 #line 39 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 862 "main.c"
+#line 861 "main.c"
 	}
-	__finally220:
+	__finally221:
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
@@ -869,7 +868,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		g_clear_error (&_inner_error_);
 #line 34 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 873 "main.c"
+#line 872 "main.c"
 	}
 #line 43 "/home/jens/Source/shotwell/src/main.vala"
 	g_message ("main.vala:43: Verifying database…");
@@ -891,15 +890,15 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	switch (_tmp12_) {
 #line 48 "/home/jens/Source/shotwell/src/main.vala"
 		case DB_VERIFY_RESULT_OK:
-#line 895 "main.c"
+#line 894 "main.c"
 		{
 #line 51 "/home/jens/Source/shotwell/src/main.vala"
 			break;
-#line 899 "main.c"
+#line 898 "main.c"
 		}
 #line 48 "/home/jens/Source/shotwell/src/main.vala"
 		case DB_VERIFY_RESULT_FUTURE_VERSION:
-#line 903 "main.c"
+#line 902 "main.c"
 		{
 			const gchar* _tmp13_ = NULL;
 			const gchar* _tmp14_ = NULL;
@@ -921,11 +920,11 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			errormsg = _tmp16_;
 #line 56 "/home/jens/Source/shotwell/src/main.vala"
 			break;
-#line 923 "main.c"
+#line 922 "main.c"
 		}
 #line 48 "/home/jens/Source/shotwell/src/main.vala"
 		case DB_VERIFY_RESULT_UPGRADE_ERROR:
-#line 927 "main.c"
+#line 926 "main.c"
 		{
 			const gchar* _tmp17_ = NULL;
 			const gchar* _tmp18_ = NULL;
@@ -947,11 +946,11 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			errormsg = _tmp20_;
 #line 62 "/home/jens/Source/shotwell/src/main.vala"
 			break;
-#line 947 "main.c"
+#line 946 "main.c"
 		}
 #line 48 "/home/jens/Source/shotwell/src/main.vala"
 		case DB_VERIFY_RESULT_NO_UPGRADE_AVAILABLE:
-#line 951 "main.c"
+#line 950 "main.c"
 		{
 			const gchar* _tmp21_ = NULL;
 			const gchar* _tmp22_ = NULL;
@@ -990,7 +989,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			_g_object_unref0 (_tmp25_);
 #line 68 "/home/jens/Source/shotwell/src/main.vala"
 			break;
-#line 987 "main.c"
+#line 986 "main.c"
 		}
 		default:
 		{
@@ -1012,14 +1011,14 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			errormsg = _tmp32_;
 #line 73 "/home/jens/Source/shotwell/src/main.vala"
 			break;
-#line 1009 "main.c"
+#line 1008 "main.c"
 		}
 	}
 #line 76 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp33_ = errormsg;
 #line 76 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp33_ != NULL) {
-#line 1016 "main.c"
+#line 1015 "main.c"
 		GtkMessageDialog* dialog = NULL;
 		const gchar* _tmp34_ = NULL;
 		GtkMessageDialog* _tmp35_ = NULL;
@@ -1056,7 +1055,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		_g_free0 (errormsg);
 #line 85 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 1053 "main.c"
+#line 1052 "main.c"
 	}
 #line 88 "/home/jens/Source/shotwell/src/main.vala"
 	upgrades_init ();
@@ -1074,7 +1073,7 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	_tmp39_ = commandline_options_no_startup_progress;
 #line 94 "/home/jens/Source/shotwell/src/main.vala"
 	if (!_tmp39_) {
-#line 1071 "main.c"
+#line 1070 "main.c"
 		guint64 grand_total = 0ULL;
 		PhotoTable* _tmp40_ = NULL;
 		PhotoTable* _tmp41_ = NULL;
@@ -1141,15 +1140,15 @@ void library_exec (gchar** mounts, int mounts_length1) {
 		_tmp56_ = grand_total;
 #line 103 "/home/jens/Source/shotwell/src/main.vala"
 		if (_tmp56_ > ((guint64) 5000)) {
-#line 1138 "main.c"
+#line 1137 "main.c"
 			const gchar* _tmp57_ = NULL;
 			ProgressDialog* _tmp58_ = NULL;
 			ProgressDialog* _tmp59_ = NULL;
 			ProgressDialog* _tmp60_ = NULL;
-			guint64 _tmp75_ = 0ULL;
-			ProgressDialog* _tmp76_ = NULL;
-			AggregateProgressMonitor* _tmp77_ = NULL;
-			AggregateProgressMonitor* _tmp78_ = NULL;
+			guint64 _tmp66_ = 0ULL;
+			ProgressDialog* _tmp67_ = NULL;
+			AggregateProgressMonitor* _tmp68_ = NULL;
+			AggregateProgressMonitor* _tmp69_ = NULL;
 #line 104 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp57_ = _ ("Loading Shotwell");
 #line 104 "/home/jens/Source/shotwell/src/main.vala"
@@ -1168,90 +1167,50 @@ void library_exec (gchar** mounts, int mounts_length1) {
 			_tmp60_ = progress_dialog;
 #line 106 "/home/jens/Source/shotwell/src/main.vala"
 			progress_dialog_set_minimum_on_screen_time_msec (_tmp60_, 250);
-#line 1165 "main.c"
+#line 1164 "main.c"
 			{
-				gchar* icon_path = NULL;
-				GFile* _tmp61_ = NULL;
-				GFile* _tmp62_ = NULL;
-				GFile* _tmp63_ = NULL;
-				GFile* _tmp64_ = NULL;
-				GFile* _tmp65_ = NULL;
-				GFile* _tmp66_ = NULL;
-				gchar* _tmp67_ = NULL;
-				gchar* _tmp68_ = NULL;
-				GdkPixbuf* _tmp69_ = NULL;
-				const gchar* _tmp70_ = NULL;
-				GdkPixbuf* _tmp71_ = NULL;
-				ProgressDialog* _tmp72_ = NULL;
+				GdkPixbuf* _tmp61_ = NULL;
+				GdkPixbuf* _tmp62_ = NULL;
+				ProgressDialog* _tmp63_ = NULL;
 #line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp61_ = app_dirs_get_resources_dir ();
+				_tmp62_ = gdk_pixbuf_new_from_resource ("/org/gnome/Shotwell/icons/shotwell.svg", &_inner_error_);
 #line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp62_ = _tmp61_;
+				_tmp61_ = _tmp62_;
 #line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp63_ = g_file_get_child (_tmp62_, "icons");
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp64_ = _tmp63_;
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp65_ = g_file_get_child (_tmp64_, "shotwell.svg");
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp66_ = _tmp65_;
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp67_ = g_file_get_path (_tmp66_);
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp68_ = _tmp67_;
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_g_object_unref0 (_tmp66_);
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_g_object_unref0 (_tmp64_);
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				_g_object_unref0 (_tmp62_);
-#line 108 "/home/jens/Source/shotwell/src/main.vala"
-				icon_path = _tmp68_;
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp70_ = icon_path;
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp71_ = gdk_pixbuf_new_from_file (_tmp70_, &_inner_error_);
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp69_ = _tmp71_;
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
 				if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-					_g_free0 (icon_path);
-#line 1214 "main.c"
-					goto __catch221_g_error;
+#line 1175 "main.c"
+					goto __catch222_g_error;
 				}
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp72_ = progress_dialog;
-#line 109 "/home/jens/Source/shotwell/src/main.vala"
-				gtk_window_set_icon (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, gtk_window_get_type (), GtkWindow), _tmp69_);
+#line 108 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp63_ = progress_dialog;
+#line 108 "/home/jens/Source/shotwell/src/main.vala"
+				gtk_window_set_icon (G_TYPE_CHECK_INSTANCE_CAST (_tmp63_, gtk_window_get_type (), GtkWindow), _tmp61_);
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
-				_g_object_unref0 (_tmp69_);
-#line 107 "/home/jens/Source/shotwell/src/main.vala"
-				_g_free0 (icon_path);
-#line 1225 "main.c"
+				_g_object_unref0 (_tmp61_);
+#line 1184 "main.c"
 			}
-			goto __finally221;
-			__catch221_g_error:
+			goto __finally222;
+			__catch222_g_error:
 			{
 				GError* err = NULL;
-				GError* _tmp73_ = NULL;
-				const gchar* _tmp74_ = NULL;
+				GError* _tmp64_ = NULL;
+				const gchar* _tmp65_ = NULL;
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 				err = _inner_error_;
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 				_inner_error_ = NULL;
-#line 111 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp73_ = err;
-#line 111 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp74_ = _tmp73_->message;
-#line 111 "/home/jens/Source/shotwell/src/main.vala"
-				g_debug ("main.vala:111: Warning - could not load application icon for loading w" \
-"indow: %s", _tmp74_);
+#line 110 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp64_ = err;
+#line 110 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp65_ = _tmp64_->message;
+#line 110 "/home/jens/Source/shotwell/src/main.vala"
+				g_debug ("main.vala:110: Warning - could not load application icon for loading w" \
+"indow: %s", _tmp65_);
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 				_g_error_free0 (err);
-#line 1245 "main.c"
+#line 1204 "main.c"
 			}
-			__finally221:
+			__finally222:
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
@@ -1276,461 +1235,461 @@ void library_exec (gchar** mounts, int mounts_length1) {
 				g_clear_error (&_inner_error_);
 #line 107 "/home/jens/Source/shotwell/src/main.vala"
 				return;
-#line 1272 "main.c"
+#line 1231 "main.c"
 			}
-#line 114 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp75_ = grand_total;
-#line 114 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp76_ = progress_dialog;
-#line 114 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp77_ = aggregate_progress_monitor_new (_tmp75_, _progress_dialog_monitor_progress_monitor, _tmp76_);
-#line 114 "/home/jens/Source/shotwell/src/main.vala"
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
+			_tmp66_ = grand_total;
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
+			_tmp67_ = progress_dialog;
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
+			_tmp68_ = aggregate_progress_monitor_new (_tmp66_, _progress_dialog_monitor_progress_monitor, _tmp67_);
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
 			_aggregate_progress_monitor_unref0 (aggregate_monitor);
+#line 113 "/home/jens/Source/shotwell/src/main.vala"
+			aggregate_monitor = _tmp68_;
 #line 114 "/home/jens/Source/shotwell/src/main.vala"
-			aggregate_monitor = _tmp77_;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp78_ = aggregate_monitor;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+			_tmp69_ = aggregate_monitor;
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			(monitor_target_destroy_notify == NULL) ? NULL : (monitor_target_destroy_notify (monitor_target), NULL);
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			monitor = NULL;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			monitor_target = NULL;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			monitor_target_destroy_notify = NULL;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			monitor = _aggregate_progress_monitor_monitor_progress_monitor;
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
-			monitor_target = aggregate_progress_monitor_ref (_tmp78_);
-#line 115 "/home/jens/Source/shotwell/src/main.vala"
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
+			monitor_target = aggregate_progress_monitor_ref (_tmp69_);
+#line 114 "/home/jens/Source/shotwell/src/main.vala"
 			monitor_target_destroy_notify = aggregate_progress_monitor_unref;
-#line 1300 "main.c"
+#line 1259 "main.c"
 		}
 	}
-#line 119 "/home/jens/Source/shotwell/src/main.vala"
+#line 118 "/home/jens/Source/shotwell/src/main.vala"
 	thumbnail_cache_init ();
-#line 120 "/home/jens/Source/shotwell/src/main.vala"
+#line 119 "/home/jens/Source/shotwell/src/main.vala"
 	tombstone_init ();
+#line 121 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp70_ = aggregate_monitor;
+#line 121 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp70_ != NULL) {
+#line 1270 "main.c"
+		AggregateProgressMonitor* _tmp71_ = NULL;
 #line 122 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp79_ = aggregate_monitor;
+		_tmp71_ = aggregate_monitor;
 #line 122 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp79_ != NULL) {
-#line 1311 "main.c"
-		AggregateProgressMonitor* _tmp80_ = NULL;
+		aggregate_progress_monitor_next_step (_tmp71_, "LibraryPhoto.init");
+#line 1276 "main.c"
+	}
 #line 123 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp80_ = aggregate_monitor;
+	_tmp72_ = monitor;
 #line 123 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp80_, "LibraryPhoto.init");
-#line 1317 "main.c"
-	}
+	_tmp72__target = monitor_target;
+#line 123 "/home/jens/Source/shotwell/src/main.vala"
+	library_photo_init (_tmp72_, _tmp72__target);
 #line 124 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp81_ = monitor;
+	_tmp73_ = aggregate_monitor;
 #line 124 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp81__target = monitor_target;
-#line 124 "/home/jens/Source/shotwell/src/main.vala"
-	library_photo_init (_tmp81_, _tmp81__target);
+	if (_tmp73_ != NULL) {
+#line 1288 "main.c"
+		AggregateProgressMonitor* _tmp74_ = NULL;
 #line 125 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp82_ = aggregate_monitor;
+		_tmp74_ = aggregate_monitor;
 #line 125 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp82_ != NULL) {
-#line 1329 "main.c"
-		AggregateProgressMonitor* _tmp83_ = NULL;
-#line 126 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp83_ = aggregate_monitor;
-#line 126 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp83_, "Video.init");
-#line 1335 "main.c"
+		aggregate_progress_monitor_next_step (_tmp74_, "Video.init");
+#line 1294 "main.c"
 	}
+#line 126 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp75_ = monitor;
+#line 126 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp75__target = monitor_target;
+#line 126 "/home/jens/Source/shotwell/src/main.vala"
+	video_init (_tmp75_, _tmp75__target);
 #line 127 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp84_ = monitor;
+	_tmp76_ = aggregate_monitor;
 #line 127 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp84__target = monitor_target;
-#line 127 "/home/jens/Source/shotwell/src/main.vala"
-	video_init (_tmp84_, _tmp84__target);
+	if (_tmp76_ != NULL) {
+#line 1306 "main.c"
+		AggregateProgressMonitor* _tmp77_ = NULL;
 #line 128 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp85_ = aggregate_monitor;
+		_tmp77_ = aggregate_monitor;
 #line 128 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp85_ != NULL) {
-#line 1347 "main.c"
-		AggregateProgressMonitor* _tmp86_ = NULL;
-#line 129 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp86_ = aggregate_monitor;
-#line 129 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp86_, "Upgrades.execute");
-#line 1353 "main.c"
+		aggregate_progress_monitor_next_step (_tmp77_, "Upgrades.execute");
+#line 1312 "main.c"
 	}
-#line 130 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp87_ = upgrades_get_instance ();
-#line 130 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp88_ = _tmp87_;
-#line 130 "/home/jens/Source/shotwell/src/main.vala"
-	upgrades_execute (_tmp88_, NULL, NULL);
-#line 130 "/home/jens/Source/shotwell/src/main.vala"
-	_upgrades_unref0 (_tmp88_);
-#line 132 "/home/jens/Source/shotwell/src/main.vala"
+#line 129 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp78_ = upgrades_get_instance ();
+#line 129 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp79_ = _tmp78_;
+#line 129 "/home/jens/Source/shotwell/src/main.vala"
+	upgrades_execute (_tmp79_, NULL, NULL);
+#line 129 "/home/jens/Source/shotwell/src/main.vala"
+	_upgrades_unref0 (_tmp79_);
+#line 131 "/home/jens/Source/shotwell/src/main.vala"
 	library_monitor_pool_init ();
-#line 133 "/home/jens/Source/shotwell/src/main.vala"
+#line 132 "/home/jens/Source/shotwell/src/main.vala"
 	media_collection_registry_init ();
+#line 133 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp80_ = media_collection_registry_get_instance ();
+#line 133 "/home/jens/Source/shotwell/src/main.vala"
+	registry = _tmp80_;
 #line 134 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp89_ = media_collection_registry_get_instance ();
+	_tmp81_ = registry;
 #line 134 "/home/jens/Source/shotwell/src/main.vala"
-	registry = _tmp89_;
+	_tmp82_ = library_photo_global;
+#line 134 "/home/jens/Source/shotwell/src/main.vala"
+	media_collection_registry_register_collection (_tmp81_, G_TYPE_CHECK_INSTANCE_CAST (_tmp82_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
 #line 135 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp90_ = registry;
+	_tmp83_ = registry;
 #line 135 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp91_ = library_photo_global;
+	_tmp84_ = video_global;
 #line 135 "/home/jens/Source/shotwell/src/main.vala"
-	media_collection_registry_register_collection (_tmp90_, G_TYPE_CHECK_INSTANCE_CAST (_tmp91_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
-#line 136 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp92_ = registry;
-#line 136 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp93_ = video_global;
-#line 136 "/home/jens/Source/shotwell/src/main.vala"
-	media_collection_registry_register_collection (_tmp92_, G_TYPE_CHECK_INSTANCE_CAST (_tmp93_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
+	media_collection_registry_register_collection (_tmp83_, G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, TYPE_MEDIA_SOURCE_COLLECTION, MediaSourceCollection));
+#line 137 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp85_ = aggregate_monitor;
+#line 137 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp85_ != NULL) {
+#line 1346 "main.c"
+		AggregateProgressMonitor* _tmp86_ = NULL;
 #line 138 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp94_ = aggregate_monitor;
+		_tmp86_ = aggregate_monitor;
 #line 138 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp94_ != NULL) {
-#line 1387 "main.c"
-		AggregateProgressMonitor* _tmp95_ = NULL;
-#line 139 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp95_ = aggregate_monitor;
-#line 139 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp95_, "Event.init");
-#line 1393 "main.c"
+		aggregate_progress_monitor_next_step (_tmp86_, "Event.init");
+#line 1352 "main.c"
 	}
+#line 139 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp87_ = monitor;
+#line 139 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp87__target = monitor_target;
+#line 139 "/home/jens/Source/shotwell/src/main.vala"
+	event_init (_tmp87_, _tmp87__target);
 #line 140 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp96_ = monitor;
+	_tmp88_ = aggregate_monitor;
 #line 140 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp96__target = monitor_target;
-#line 140 "/home/jens/Source/shotwell/src/main.vala"
-	event_init (_tmp96_, _tmp96__target);
+	if (_tmp88_ != NULL) {
+#line 1364 "main.c"
+		AggregateProgressMonitor* _tmp89_ = NULL;
 #line 141 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp97_ = aggregate_monitor;
+		_tmp89_ = aggregate_monitor;
 #line 141 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp97_ != NULL) {
-#line 1405 "main.c"
-		AggregateProgressMonitor* _tmp98_ = NULL;
-#line 142 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp98_ = aggregate_monitor;
-#line 142 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp98_, "Tag.init");
-#line 1411 "main.c"
+		aggregate_progress_monitor_next_step (_tmp89_, "Tag.init");
+#line 1370 "main.c"
 	}
-#line 143 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp99_ = monitor;
-#line 143 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp99__target = monitor_target;
-#line 143 "/home/jens/Source/shotwell/src/main.vala"
-	tag_init (_tmp99_, _tmp99__target);
-#line 145 "/home/jens/Source/shotwell/src/main.vala"
+#line 142 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp90_ = monitor;
+#line 142 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp90__target = monitor_target;
+#line 142 "/home/jens/Source/shotwell/src/main.vala"
+	tag_init (_tmp90_, _tmp90__target);
+#line 144 "/home/jens/Source/shotwell/src/main.vala"
 	metadata_writer_init ();
-#line 146 "/home/jens/Source/shotwell/src/main.vala"
+#line 145 "/home/jens/Source/shotwell/src/main.vala"
 	desktop_integration_init ();
-#line 148 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp100_ = application_get_instance ();
-#line 148 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp101_ = _tmp100_;
-#line 148 "/home/jens/Source/shotwell/src/main.vala"
-	g_signal_emit_by_name (_tmp101_, "init-done");
-#line 148 "/home/jens/Source/shotwell/src/main.vala"
-	_application_unref0 (_tmp101_);
+#line 147 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp91_ = application_get_instance ();
+#line 147 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp92_ = _tmp91_;
+#line 147 "/home/jens/Source/shotwell/src/main.vala"
+	g_signal_emit_by_name (_tmp92_, "init-done");
+#line 147 "/home/jens/Source/shotwell/src/main.vala"
+	_application_unref0 (_tmp92_);
+#line 150 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp93_ = aggregate_monitor;
+#line 150 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp93_ != NULL) {
+#line 1394 "main.c"
+		AggregateProgressMonitor* _tmp94_ = NULL;
 #line 151 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp102_ = aggregate_monitor;
+		_tmp94_ = aggregate_monitor;
 #line 151 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp102_ != NULL) {
-#line 1435 "main.c"
-		AggregateProgressMonitor* _tmp103_ = NULL;
-#line 152 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp103_ = aggregate_monitor;
-#line 152 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp103_, "LibraryWindow");
-#line 1441 "main.c"
+		aggregate_progress_monitor_next_step (_tmp94_, "LibraryWindow");
+#line 1400 "main.c"
 	}
-#line 153 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp104_ = monitor;
-#line 153 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp104__target = monitor_target;
-#line 153 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp105_ = library_window_new (_tmp104_, _tmp104__target);
-#line 153 "/home/jens/Source/shotwell/src/main.vala"
-	g_object_ref_sink (_tmp105_);
-#line 153 "/home/jens/Source/shotwell/src/main.vala"
-	library_window = _tmp105_;
+#line 152 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp95_ = monitor;
+#line 152 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp95__target = monitor_target;
+#line 152 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp96_ = library_window_new (_tmp95_, _tmp95__target);
+#line 152 "/home/jens/Source/shotwell/src/main.vala"
+	g_object_ref_sink (_tmp96_);
+#line 152 "/home/jens/Source/shotwell/src/main.vala"
+	library_window = _tmp96_;
+#line 154 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp97_ = aggregate_monitor;
+#line 154 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp97_ != NULL) {
+#line 1416 "main.c"
+		AggregateProgressMonitor* _tmp98_ = NULL;
 #line 155 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp106_ = aggregate_monitor;
+		_tmp98_ = aggregate_monitor;
 #line 155 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp106_ != NULL) {
-#line 1457 "main.c"
-		AggregateProgressMonitor* _tmp107_ = NULL;
-#line 156 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp107_ = aggregate_monitor;
-#line 156 "/home/jens/Source/shotwell/src/main.vala"
-		aggregate_progress_monitor_next_step (_tmp107_, "done");
-#line 1463 "main.c"
+		aggregate_progress_monitor_next_step (_tmp98_, "done");
+#line 1422 "main.c"
 	}
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
 	(monitor_target_destroy_notify == NULL) ? NULL : (monitor_target_destroy_notify (monitor_target), NULL);
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
 	monitor = NULL;
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
 	monitor_target = NULL;
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
+	monitor_target_destroy_notify = NULL;
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
+	monitor = NULL;
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
+	monitor_target = NULL;
+#line 160 "/home/jens/Source/shotwell/src/main.vala"
 	monitor_target_destroy_notify = NULL;
 #line 161 "/home/jens/Source/shotwell/src/main.vala"
-	monitor = NULL;
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
-	monitor_target = NULL;
-#line 161 "/home/jens/Source/shotwell/src/main.vala"
-	monitor_target_destroy_notify = NULL;
-#line 162 "/home/jens/Source/shotwell/src/main.vala"
 	_aggregate_progress_monitor_unref0 (aggregate_monitor);
-#line 162 "/home/jens/Source/shotwell/src/main.vala"
+#line 161 "/home/jens/Source/shotwell/src/main.vala"
 	aggregate_monitor = NULL;
+#line 162 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp99_ = progress_dialog;
+#line 162 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp99_ != NULL) {
+#line 1446 "main.c"
+		ProgressDialog* _tmp100_ = NULL;
 #line 163 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp108_ = progress_dialog;
+		_tmp100_ = progress_dialog;
 #line 163 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp108_ != NULL) {
-#line 1487 "main.c"
-		ProgressDialog* _tmp109_ = NULL;
-#line 164 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp109_ = progress_dialog;
-#line 164 "/home/jens/Source/shotwell/src/main.vala"
-		gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp109_, gtk_widget_get_type (), GtkWidget));
-#line 1493 "main.c"
+		gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp100_, gtk_widget_get_type (), GtkWidget));
+#line 1452 "main.c"
 	}
-#line 165 "/home/jens/Source/shotwell/src/main.vala"
+#line 164 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (progress_dialog);
-#line 165 "/home/jens/Source/shotwell/src/main.vala"
+#line 164 "/home/jens/Source/shotwell/src/main.vala"
 	progress_dialog = NULL;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp110_ = mounts;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp110__length1 = mounts_length1;
-#line 1503 "main.c"
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp101_ = mounts;
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp101__length1 = mounts_length1;
+#line 1462 "main.c"
 	{
 		gchar** mount_collection = NULL;
 		gint mount_collection_length1 = 0;
 		gint _mount_collection_size_ = 0;
 		gint mount_it = 0;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-		mount_collection = _tmp110_;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-		mount_collection_length1 = _tmp110__length1;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-		for (mount_it = 0; mount_it < _tmp110__length1; mount_it = mount_it + 1) {
-#line 1515 "main.c"
-			gchar* _tmp111_ = NULL;
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+		mount_collection = _tmp101_;
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+		mount_collection_length1 = _tmp101__length1;
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+		for (mount_it = 0; mount_it < _tmp101__length1; mount_it = mount_it + 1) {
+#line 1474 "main.c"
+			gchar* _tmp102_ = NULL;
 			gchar* mount = NULL;
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-			_tmp111_ = g_strdup (mount_collection[mount_it]);
-#line 168 "/home/jens/Source/shotwell/src/main.vala"
-			mount = _tmp111_;
-#line 1522 "main.c"
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+			_tmp102_ = g_strdup (mount_collection[mount_it]);
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
+			mount = _tmp102_;
+#line 1481 "main.c"
 			{
-				LibraryWindow* _tmp112_ = NULL;
-				const gchar* _tmp113_ = NULL;
-#line 169 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp112_ = library_window;
-#line 169 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp113_ = mount;
-#line 169 "/home/jens/Source/shotwell/src/main.vala"
-				library_window_mounted_camera_shell_notification (_tmp112_, _tmp113_, TRUE);
+				LibraryWindow* _tmp103_ = NULL;
+				const gchar* _tmp104_ = NULL;
 #line 168 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp103_ = library_window;
+#line 168 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp104_ = mount;
+#line 168 "/home/jens/Source/shotwell/src/main.vala"
+				library_window_mounted_camera_shell_notification (_tmp103_, _tmp104_, TRUE);
+#line 167 "/home/jens/Source/shotwell/src/main.vala"
 				_g_free0 (mount);
-#line 1534 "main.c"
+#line 1493 "main.c"
 			}
 		}
 	}
-#line 171 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp114_ = library_window;
-#line 171 "/home/jens/Source/shotwell/src/main.vala"
-	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp114_, gtk_widget_get_type (), GtkWidget));
-#line 173 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp115_ = g_new0 (WelcomeServiceEntry*, 0 + 1);
-#line 173 "/home/jens/Source/shotwell/src/main.vala"
-	selected_import_entries = _tmp115_;
-#line 173 "/home/jens/Source/shotwell/src/main.vala"
+#line 170 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp105_ = library_window;
+#line 170 "/home/jens/Source/shotwell/src/main.vala"
+	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp105_, gtk_widget_get_type (), GtkWidget));
+#line 172 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp106_ = g_new0 (WelcomeServiceEntry*, 0 + 1);
+#line 172 "/home/jens/Source/shotwell/src/main.vala"
+	selected_import_entries = _tmp106_;
+#line 172 "/home/jens/Source/shotwell/src/main.vala"
 	selected_import_entries_length1 = 0;
-#line 173 "/home/jens/Source/shotwell/src/main.vala"
+#line 172 "/home/jens/Source/shotwell/src/main.vala"
 	_selected_import_entries_size_ = selected_import_entries_length1;
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp108_ = config_facade_get_instance ();
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp109_ = _tmp108_;
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp110_ = configuration_facade_get_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp109_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp111_ = _tmp110_;
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	_g_object_unref0 (_tmp109_);
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp111_) {
+#line 1521 "main.c"
+		LibraryPhotoSourceCollection* _tmp112_ = NULL;
+		gint _tmp113_ = 0;
 #line 174 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp117_ = config_facade_get_instance ();
+		_tmp112_ = library_photo_global;
 #line 174 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp118_ = _tmp117_;
+		_tmp113_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp112_, TYPE_DATA_COLLECTION, DataCollection));
 #line 174 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp119_ = configuration_facade_get_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp118_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp120_ = _tmp119_;
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
-	_g_object_unref0 (_tmp118_);
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp120_) {
-#line 1562 "main.c"
-		LibraryPhotoSourceCollection* _tmp121_ = NULL;
-		gint _tmp122_ = 0;
-#line 175 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp121_ = library_photo_global;
-#line 175 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp122_ = data_collection_get_count (G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, TYPE_DATA_COLLECTION, DataCollection));
-#line 175 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp116_ = _tmp122_ == 0;
-#line 1571 "main.c"
+		_tmp107_ = _tmp113_ == 0;
+#line 1530 "main.c"
 	} else {
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp116_ = FALSE;
-#line 1575 "main.c"
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp107_ = FALSE;
+#line 1534 "main.c"
 	}
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp116_) {
-#line 1579 "main.c"
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp107_) {
+#line 1538 "main.c"
 		WelcomeDialog* welcome = NULL;
-		LibraryWindow* _tmp123_ = NULL;
-		WelcomeDialog* _tmp124_ = NULL;
-		ConfigFacade* _tmp125_ = NULL;
-		ConfigFacade* _tmp126_ = NULL;
-		WelcomeDialog* _tmp127_ = NULL;
-		WelcomeServiceEntry** _tmp128_ = NULL;
-		gint _tmp129_ = 0;
-		gboolean _tmp130_ = FALSE;
-		gboolean _tmp131_ = FALSE;
+		LibraryWindow* _tmp114_ = NULL;
+		WelcomeDialog* _tmp115_ = NULL;
+		ConfigFacade* _tmp116_ = NULL;
+		ConfigFacade* _tmp117_ = NULL;
+		WelcomeDialog* _tmp118_ = NULL;
+		WelcomeServiceEntry** _tmp119_ = NULL;
+		gint _tmp120_ = 0;
+		gboolean _tmp121_ = FALSE;
+		gboolean _tmp122_ = FALSE;
+#line 175 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp114_ = library_window;
+#line 175 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp115_ = welcome_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp114_, gtk_window_get_type (), GtkWindow));
+#line 175 "/home/jens/Source/shotwell/src/main.vala"
+		g_object_ref_sink (_tmp115_);
+#line 175 "/home/jens/Source/shotwell/src/main.vala"
+		welcome = _tmp115_;
 #line 176 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp123_ = library_window;
+		_tmp116_ = config_facade_get_instance ();
 #line 176 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp124_ = welcome_dialog_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp123_, gtk_window_get_type (), GtkWindow));
+		_tmp117_ = _tmp116_;
 #line 176 "/home/jens/Source/shotwell/src/main.vala"
-		g_object_ref_sink (_tmp124_);
+		_tmp118_ = welcome;
 #line 176 "/home/jens/Source/shotwell/src/main.vala"
-		welcome = _tmp124_;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp125_ = config_facade_get_instance ();
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp126_ = _tmp125_;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp127_ = welcome;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp131_ = welcome_dialog_execute (_tmp127_, &_tmp128_, &_tmp129_, &_tmp130_);
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp122_ = welcome_dialog_execute (_tmp118_, &_tmp119_, &_tmp120_, &_tmp121_);
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
 		selected_import_entries = (_vala_array_free (selected_import_entries, selected_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		selected_import_entries = _tmp128_;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		selected_import_entries_length1 = _tmp129_;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
+		selected_import_entries = _tmp119_;
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
+		selected_import_entries_length1 = _tmp120_;
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
 		_selected_import_entries_size_ = selected_import_entries_length1;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		do_system_pictures_import = _tmp130_;
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		configuration_facade_set_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp126_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp131_);
-#line 177 "/home/jens/Source/shotwell/src/main.vala"
-		_g_object_unref0 (_tmp126_);
-#line 174 "/home/jens/Source/shotwell/src/main.vala"
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
+		do_system_pictures_import = _tmp121_;
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
+		configuration_facade_set_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp117_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp122_);
+#line 176 "/home/jens/Source/shotwell/src/main.vala"
+		_g_object_unref0 (_tmp117_);
+#line 173 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (welcome);
-#line 1622 "main.c"
+#line 1581 "main.c"
 	} else {
-		ConfigFacade* _tmp132_ = NULL;
-		ConfigFacade* _tmp133_ = NULL;
-#line 180 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp132_ = config_facade_get_instance ();
-#line 180 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp133_ = _tmp132_;
-#line 180 "/home/jens/Source/shotwell/src/main.vala"
-		configuration_facade_set_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp133_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), FALSE);
-#line 180 "/home/jens/Source/shotwell/src/main.vala"
-		_g_object_unref0 (_tmp133_);
-#line 1634 "main.c"
+		ConfigFacade* _tmp123_ = NULL;
+		ConfigFacade* _tmp124_ = NULL;
+#line 179 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp123_ = config_facade_get_instance ();
+#line 179 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp124_ = _tmp123_;
+#line 179 "/home/jens/Source/shotwell/src/main.vala"
+		configuration_facade_set_show_welcome_dialog (G_TYPE_CHECK_INSTANCE_CAST (_tmp124_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), FALSE);
+#line 179 "/home/jens/Source/shotwell/src/main.vala"
+		_g_object_unref0 (_tmp124_);
+#line 1593 "main.c"
 	}
+#line 182 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp125_ = selected_import_entries;
+#line 182 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp125__length1 = selected_import_entries_length1;
+#line 182 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp125__length1 > 0) {
+#line 1601 "main.c"
+		WelcomeServiceEntry** _tmp126_ = NULL;
+		gint _tmp126__length1 = 0;
 #line 183 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp134_ = selected_import_entries;
-#line 183 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp134__length1 = selected_import_entries_length1;
-#line 183 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp134__length1 > 0) {
-#line 1642 "main.c"
-		WelcomeServiceEntry** _tmp135_ = NULL;
-		gint _tmp135__length1 = 0;
-#line 184 "/home/jens/Source/shotwell/src/main.vala"
 		do_external_import = TRUE;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp135_ = selected_import_entries;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp135__length1 = selected_import_entries_length1;
-#line 1651 "main.c"
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp126_ = selected_import_entries;
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp126__length1 = selected_import_entries_length1;
+#line 1610 "main.c"
 		{
 			WelcomeServiceEntry** entry_collection = NULL;
 			gint entry_collection_length1 = 0;
 			gint _entry_collection_size_ = 0;
 			gint entry_it = 0;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-			entry_collection = _tmp135_;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-			entry_collection_length1 = _tmp135__length1;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-			for (entry_it = 0; entry_it < _tmp135__length1; entry_it = entry_it + 1) {
-#line 1663 "main.c"
-				WelcomeServiceEntry* _tmp136_ = NULL;
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+			entry_collection = _tmp126_;
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+			entry_collection_length1 = _tmp126__length1;
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+			for (entry_it = 0; entry_it < _tmp126__length1; entry_it = entry_it + 1) {
+#line 1622 "main.c"
+				WelcomeServiceEntry* _tmp127_ = NULL;
 				WelcomeServiceEntry* entry = NULL;
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-				_tmp136_ = _g_object_ref0 (entry_collection[entry_it]);
-#line 185 "/home/jens/Source/shotwell/src/main.vala"
-				entry = _tmp136_;
-#line 1670 "main.c"
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+				_tmp127_ = _g_object_ref0 (entry_collection[entry_it]);
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
+				entry = _tmp127_;
+#line 1629 "main.c"
 				{
-					WelcomeServiceEntry* _tmp137_ = NULL;
-#line 186 "/home/jens/Source/shotwell/src/main.vala"
-					_tmp137_ = entry;
-#line 186 "/home/jens/Source/shotwell/src/main.vala"
-					welcome_service_entry_execute (_tmp137_);
+					WelcomeServiceEntry* _tmp128_ = NULL;
 #line 185 "/home/jens/Source/shotwell/src/main.vala"
+					_tmp128_ = entry;
+#line 185 "/home/jens/Source/shotwell/src/main.vala"
+					welcome_service_entry_execute (_tmp128_);
+#line 184 "/home/jens/Source/shotwell/src/main.vala"
 					_g_object_unref0 (entry);
-#line 1679 "main.c"
+#line 1638 "main.c"
 				}
 			}
 		}
 	}
-#line 188 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp138_ = do_system_pictures_import;
-#line 188 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp138_) {
-#line 192 "/home/jens/Source/shotwell/src/main.vala"
+#line 187 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp129_ = do_system_pictures_import;
+#line 187 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp129_) {
+#line 191 "/home/jens/Source/shotwell/src/main.vala"
 		run_system_pictures_import (NULL);
-#line 1690 "main.c"
+#line 1649 "main.c"
 	}
-#line 195 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp139_ = startup_timer;
-#line 195 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp140_ = g_timer_elapsed (_tmp139_, NULL);
-#line 195 "/home/jens/Source/shotwell/src/main.vala"
-	g_debug ("main.vala:195: %lf seconds to Gtk.main()", _tmp140_);
-#line 197 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp141_ = application_get_instance ();
-#line 197 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp142_ = _tmp141_;
-#line 197 "/home/jens/Source/shotwell/src/main.vala"
-	application_start (_tmp142_, NULL, 0);
-#line 197 "/home/jens/Source/shotwell/src/main.vala"
-	_application_unref0 (_tmp142_);
-#line 199 "/home/jens/Source/shotwell/src/main.vala"
+#line 194 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp130_ = startup_timer;
+#line 194 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp131_ = g_timer_elapsed (_tmp130_, NULL);
+#line 194 "/home/jens/Source/shotwell/src/main.vala"
+	g_debug ("main.vala:194: %lf seconds to Gtk.main()", _tmp131_);
+#line 196 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp132_ = application_get_instance ();
+#line 196 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp133_ = _tmp132_;
+#line 196 "/home/jens/Source/shotwell/src/main.vala"
+	application_start (_tmp133_, NULL, 0);
+#line 196 "/home/jens/Source/shotwell/src/main.vala"
+	_application_unref0 (_tmp133_);
+#line 198 "/home/jens/Source/shotwell/src/main.vala"
 	desktop_integration_terminate ();
-#line 200 "/home/jens/Source/shotwell/src/main.vala"
+#line 199 "/home/jens/Source/shotwell/src/main.vala"
 	metadata_writer_terminate ();
-#line 201 "/home/jens/Source/shotwell/src/main.vala"
+#line 200 "/home/jens/Source/shotwell/src/main.vala"
 	tag_terminate ();
-#line 202 "/home/jens/Source/shotwell/src/main.vala"
+#line 201 "/home/jens/Source/shotwell/src/main.vala"
 	event_terminate ();
-#line 203 "/home/jens/Source/shotwell/src/main.vala"
+#line 202 "/home/jens/Source/shotwell/src/main.vala"
 	library_photo_terminate ();
-#line 204 "/home/jens/Source/shotwell/src/main.vala"
+#line 203 "/home/jens/Source/shotwell/src/main.vala"
 	media_collection_registry_terminate ();
-#line 205 "/home/jens/Source/shotwell/src/main.vala"
+#line 204 "/home/jens/Source/shotwell/src/main.vala"
 	library_monitor_pool_terminate ();
-#line 206 "/home/jens/Source/shotwell/src/main.vala"
+#line 205 "/home/jens/Source/shotwell/src/main.vala"
 	tombstone_terminate ();
-#line 207 "/home/jens/Source/shotwell/src/main.vala"
+#line 206 "/home/jens/Source/shotwell/src/main.vala"
 	thumbnail_cache_terminate ();
-#line 208 "/home/jens/Source/shotwell/src/main.vala"
+#line 207 "/home/jens/Source/shotwell/src/main.vala"
 	video_terminate ();
-#line 209 "/home/jens/Source/shotwell/src/main.vala"
+#line 208 "/home/jens/Source/shotwell/src/main.vala"
 	library_app_terminate ();
 #line 15 "/home/jens/Source/shotwell/src/main.vala"
 	selected_import_entries = (_vala_array_free (selected_import_entries, selected_import_entries_length1, (GDestroyNotify) g_object_unref), NULL);
@@ -1754,14 +1713,14 @@ void library_exec (gchar** mounts, int mounts_length1) {
 	_g_free0 (app_version);
 #line 15 "/home/jens/Source/shotwell/src/main.vala"
 	_g_free0 (errormsg);
-#line 1750 "main.c"
+#line 1709 "main.c"
 }
 
 
 static void _report_system_pictures_import_batch_import_import_reporter (ImportManifest* manifest, BatchImportRoll* import_roll, gpointer self) {
-#line 224 "/home/jens/Source/shotwell/src/main.vala"
+#line 223 "/home/jens/Source/shotwell/src/main.vala"
 	report_system_pictures_import (manifest, import_roll);
-#line 1757 "main.c"
+#line 1716 "main.c"
 }
 
 
@@ -1783,65 +1742,65 @@ void run_system_pictures_import (ImportManifest* external_exclusion_manifest) {
 	LibraryWindow* _tmp11_ = NULL;
 	BatchImport* _tmp12_ = NULL;
 	LibraryWindow* _tmp13_ = NULL;
-#line 215 "/home/jens/Source/shotwell/src/main.vala"
+#line 214 "/home/jens/Source/shotwell/src/main.vala"
 	g_return_if_fail ((external_exclusion_manifest == NULL) || IS_IMPORT_MANIFEST (external_exclusion_manifest));
-#line 216 "/home/jens/Source/shotwell/src/main.vala"
+#line 215 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0_ = do_system_pictures_import;
-#line 216 "/home/jens/Source/shotwell/src/main.vala"
+#line 215 "/home/jens/Source/shotwell/src/main.vala"
 	if (!_tmp0_) {
-#line 217 "/home/jens/Source/shotwell/src/main.vala"
+#line 216 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 1787 "main.c"
+#line 1746 "main.c"
 	}
-#line 219 "/home/jens/Source/shotwell/src/main.vala"
+#line 218 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp1_ = gee_array_list_new (TYPE_FILE_IMPORT_JOB, (GBoxedCopyFunc) batch_import_job_ref, batch_import_job_unref, NULL, NULL, NULL);
-#line 219 "/home/jens/Source/shotwell/src/main.vala"
+#line 218 "/home/jens/Source/shotwell/src/main.vala"
 	jobs = _tmp1_;
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp2_ = jobs;
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp3_ = app_dirs_get_import_dir ();
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp4_ = _tmp3_;
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp5_ = file_import_job_new (_tmp4_, FALSE);
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_ = _tmp5_;
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp6_);
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_batch_import_job_unref0 (_tmp6_);
-#line 220 "/home/jens/Source/shotwell/src/main.vala"
+#line 219 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (_tmp4_);
-#line 222 "/home/jens/Source/shotwell/src/main.vala"
+#line 221 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp7_ = app_window_get_instance ();
-#line 222 "/home/jens/Source/shotwell/src/main.vala"
+#line 221 "/home/jens/Source/shotwell/src/main.vala"
 	library_window = G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, TYPE_LIBRARY_WINDOW, LibraryWindow);
-#line 224 "/home/jens/Source/shotwell/src/main.vala"
+#line 223 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp8_ = jobs;
-#line 224 "/home/jens/Source/shotwell/src/main.vala"
+#line 223 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp9_ = external_exclusion_manifest;
-#line 224 "/home/jens/Source/shotwell/src/main.vala"
+#line 223 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_ = batch_import_new (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_ITERABLE, GeeIterable), "startup_import", _report_system_pictures_import_batch_import_import_reporter, NULL, NULL, NULL, NULL, NULL, _tmp9_);
-#line 224 "/home/jens/Source/shotwell/src/main.vala"
+#line 223 "/home/jens/Source/shotwell/src/main.vala"
 	batch_import = _tmp10_;
-#line 226 "/home/jens/Source/shotwell/src/main.vala"
+#line 225 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp11_ = library_window;
-#line 226 "/home/jens/Source/shotwell/src/main.vala"
+#line 225 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp12_ = batch_import;
-#line 226 "/home/jens/Source/shotwell/src/main.vala"
+#line 225 "/home/jens/Source/shotwell/src/main.vala"
 	library_window_enqueue_batch_import (_tmp11_, _tmp12_, TRUE);
-#line 228 "/home/jens/Source/shotwell/src/main.vala"
+#line 227 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp13_ = library_window;
-#line 228 "/home/jens/Source/shotwell/src/main.vala"
+#line 227 "/home/jens/Source/shotwell/src/main.vala"
 	library_window_switch_to_import_queue_page (_tmp13_);
-#line 215 "/home/jens/Source/shotwell/src/main.vala"
+#line 214 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (batch_import);
-#line 215 "/home/jens/Source/shotwell/src/main.vala"
+#line 214 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (library_window);
-#line 215 "/home/jens/Source/shotwell/src/main.vala"
+#line 214 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (jobs);
-#line 1837 "main.c"
+#line 1796 "main.c"
 }
 
 
@@ -1849,46 +1808,46 @@ void report_system_pictures_import (ImportManifest* manifest, BatchImportRoll* i
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	ImportManifest* _tmp6_ = NULL;
-#line 231 "/home/jens/Source/shotwell/src/main.vala"
+#line 230 "/home/jens/Source/shotwell/src/main.vala"
 	g_return_if_fail (IS_IMPORT_MANIFEST (manifest));
-#line 231 "/home/jens/Source/shotwell/src/main.vala"
+#line 230 "/home/jens/Source/shotwell/src/main.vala"
 	g_return_if_fail (IS_BATCH_IMPORT_ROLL (import_roll));
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp1_ = do_external_import;
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp1_) {
-#line 1853 "main.c"
+#line 1812 "main.c"
 		ImportManifest* _tmp2_ = NULL;
 		GeeList* _tmp3_ = NULL;
 		gint _tmp4_ = 0;
 		gint _tmp5_ = 0;
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp2_ = manifest;
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp3_ = _tmp2_->all;
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp4_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp5_ = _tmp4_;
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp0_ = _tmp5_ == 0;
-#line 1868 "main.c"
+#line 1827 "main.c"
 	} else {
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp0_ = FALSE;
-#line 1872 "main.c"
+#line 1831 "main.c"
 	}
-#line 238 "/home/jens/Source/shotwell/src/main.vala"
+#line 237 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp0_) {
-#line 239 "/home/jens/Source/shotwell/src/main.vala"
+#line 238 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 1878 "main.c"
+#line 1837 "main.c"
 	}
-#line 241 "/home/jens/Source/shotwell/src/main.vala"
+#line 240 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_ = manifest;
-#line 241 "/home/jens/Source/shotwell/src/main.vala"
+#line 240 "/home/jens/Source/shotwell/src/main.vala"
 	import_ui_report_manifest (_tmp6_, TRUE, NULL);
-#line 1884 "main.c"
+#line 1843 "main.c"
 }
 
 
@@ -1906,193 +1865,193 @@ void editing_exec (const gchar* filename) {
 	Application* _tmp10_ = NULL;
 	Application* _tmp11_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 244 "/home/jens/Source/shotwell/src/main.vala"
+#line 243 "/home/jens/Source/shotwell/src/main.vala"
 	g_return_if_fail (filename != NULL);
-#line 245 "/home/jens/Source/shotwell/src/main.vala"
+#line 244 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0_ = filename;
-#line 245 "/home/jens/Source/shotwell/src/main.vala"
+#line 244 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp1_ = g_file_new_for_commandline_arg (_tmp0_);
-#line 245 "/home/jens/Source/shotwell/src/main.vala"
+#line 244 "/home/jens/Source/shotwell/src/main.vala"
 	initial_file = _tmp1_;
-#line 248 "/home/jens/Source/shotwell/src/main.vala"
+#line 247 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp2_ = initial_file;
-#line 248 "/home/jens/Source/shotwell/src/main.vala"
+#line 247 "/home/jens/Source/shotwell/src/main.vala"
 	direct_preconfigure (_tmp2_);
-#line 249 "/home/jens/Source/shotwell/src/main.vala"
+#line 248 "/home/jens/Source/shotwell/src/main.vala"
 	db_preconfigure (NULL);
-#line 1916 "main.c"
+#line 1875 "main.c"
 	{
-#line 253 "/home/jens/Source/shotwell/src/main.vala"
+#line 252 "/home/jens/Source/shotwell/src/main.vala"
 		direct_app_init (&_inner_error_);
-#line 253 "/home/jens/Source/shotwell/src/main.vala"
+#line 252 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1922 "main.c"
-			goto __catch222_g_error;
+#line 1881 "main.c"
+			goto __catch223_g_error;
 		}
 	}
-	goto __finally222;
-	__catch222_g_error:
+	goto __finally223;
+	__catch223_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		err = _inner_error_;
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		_inner_error_ = NULL;
-#line 255 "/home/jens/Source/shotwell/src/main.vala"
+#line 254 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp3_ = err;
-#line 255 "/home/jens/Source/shotwell/src/main.vala"
+#line 254 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp4_ = _tmp3_->message;
-#line 255 "/home/jens/Source/shotwell/src/main.vala"
+#line 254 "/home/jens/Source/shotwell/src/main.vala"
 		app_window_panic (_tmp4_);
-#line 257 "/home/jens/Source/shotwell/src/main.vala"
+#line 256 "/home/jens/Source/shotwell/src/main.vala"
 		_g_error_free0 (err);
-#line 257 "/home/jens/Source/shotwell/src/main.vala"
+#line 256 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (initial_file);
-#line 257 "/home/jens/Source/shotwell/src/main.vala"
+#line 256 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 1948 "main.c"
+#line 1907 "main.c"
 	}
-	__finally222:
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+	__finally223:
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (initial_file);
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		g_clear_error (&_inner_error_);
-#line 252 "/home/jens/Source/shotwell/src/main.vala"
+#line 251 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 1961 "main.c"
+#line 1920 "main.c"
 	}
-#line 261 "/home/jens/Source/shotwell/src/main.vala"
+#line 260 "/home/jens/Source/shotwell/src/main.vala"
 	desktop_integration_init ();
-#line 267 "/home/jens/Source/shotwell/src/main.vala"
+#line 266 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp5_ = initial_file;
-#line 267 "/home/jens/Source/shotwell/src/main.vala"
+#line 266 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_ = direct_window_new (_tmp5_);
-#line 267 "/home/jens/Source/shotwell/src/main.vala"
+#line 266 "/home/jens/Source/shotwell/src/main.vala"
 	g_object_ref_sink (_tmp6_);
-#line 267 "/home/jens/Source/shotwell/src/main.vala"
+#line 266 "/home/jens/Source/shotwell/src/main.vala"
 	direct_window = _tmp6_;
-#line 268 "/home/jens/Source/shotwell/src/main.vala"
+#line 267 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp7_ = direct_window;
-#line 268 "/home/jens/Source/shotwell/src/main.vala"
+#line 267 "/home/jens/Source/shotwell/src/main.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_widget_get_type (), GtkWidget));
-#line 270 "/home/jens/Source/shotwell/src/main.vala"
+#line 269 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp8_ = startup_timer;
-#line 270 "/home/jens/Source/shotwell/src/main.vala"
+#line 269 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp9_ = g_timer_elapsed (_tmp8_, NULL);
-#line 270 "/home/jens/Source/shotwell/src/main.vala"
-	g_debug ("main.vala:270: %lf seconds to Gtk.main()", _tmp9_);
-#line 272 "/home/jens/Source/shotwell/src/main.vala"
+#line 269 "/home/jens/Source/shotwell/src/main.vala"
+	g_debug ("main.vala:269: %lf seconds to Gtk.main()", _tmp9_);
+#line 271 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_ = application_get_instance ();
-#line 272 "/home/jens/Source/shotwell/src/main.vala"
+#line 271 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp11_ = _tmp10_;
-#line 272 "/home/jens/Source/shotwell/src/main.vala"
+#line 271 "/home/jens/Source/shotwell/src/main.vala"
 	application_start (_tmp11_, NULL, 0);
-#line 272 "/home/jens/Source/shotwell/src/main.vala"
+#line 271 "/home/jens/Source/shotwell/src/main.vala"
 	_application_unref0 (_tmp11_);
-#line 274 "/home/jens/Source/shotwell/src/main.vala"
+#line 273 "/home/jens/Source/shotwell/src/main.vala"
 	desktop_integration_terminate ();
-#line 277 "/home/jens/Source/shotwell/src/main.vala"
+#line 276 "/home/jens/Source/shotwell/src/main.vala"
 	direct_app_terminate ();
-#line 244 "/home/jens/Source/shotwell/src/main.vala"
+#line 243 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (direct_window);
-#line 244 "/home/jens/Source/shotwell/src/main.vala"
+#line 243 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (initial_file);
-#line 1999 "main.c"
+#line 1958 "main.c"
 }
 
 
 static GOptionEntry* _vala_array_dup26 (GOptionEntry* self, int length) {
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 	return g_memdup (self, length * sizeof (GOptionEntry));
-#line 2006 "main.c"
+#line 1965 "main.c"
 }
 
 
 static void _vala_array_add70 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (GOptionEntry, *array, *size);
-#line 2017 "main.c"
+#line 1976 "main.c"
 	}
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = *value;
-#line 2021 "main.c"
+#line 1980 "main.c"
 }
 
 
 static void _vala_array_add71 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (GOptionEntry, *array, *size);
-#line 2032 "main.c"
+#line 1991 "main.c"
 	}
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = *value;
-#line 2036 "main.c"
+#line 1995 "main.c"
 }
 
 
 static void _vala_array_add72 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (GOptionEntry, *array, *size);
-#line 2047 "main.c"
+#line 2006 "main.c"
 	}
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = *value;
-#line 2051 "main.c"
+#line 2010 "main.c"
 }
 
 
 static void _vala_array_add73 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (GOptionEntry, *array, *size);
-#line 2062 "main.c"
+#line 2021 "main.c"
 	}
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = *value;
-#line 2066 "main.c"
+#line 2025 "main.c"
 }
 
 
 static void _vala_array_add74 (GOptionEntry** array, int* length, int* size, const GOptionEntry* value) {
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (GOptionEntry, *array, *size);
-#line 2077 "main.c"
+#line 2036 "main.c"
 	}
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = *value;
-#line 2081 "main.c"
+#line 2040 "main.c"
 }
 
 
 static GOptionEntry* _vala_array_dup27 (GOptionEntry* self, int length) {
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	return g_memdup (self, length * sizeof (GOptionEntry));
-#line 2088 "main.c"
+#line 2047 "main.c"
 }
 
 
@@ -2136,213 +2095,213 @@ GOptionEntry* commandline_options_get_options (int* result_length1) {
 	gint _tmp25__length1 = 0;
 	GOptionEntry* _tmp26_ = NULL;
 	gint _tmp26__length1 = 0;
-#line 290 "/home/jens/Source/shotwell/src/main.vala"
+#line 289 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0_ = commandline_options_entries;
-#line 290 "/home/jens/Source/shotwell/src/main.vala"
+#line 289 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0__length1 = commandline_options_entries_length1;
-#line 290 "/home/jens/Source/shotwell/src/main.vala"
+#line 289 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp0_ != NULL) {
-#line 2138 "main.c"
+#line 2097 "main.c"
 		GOptionEntry* _tmp1_ = NULL;
 		gint _tmp1__length1 = 0;
 		GOptionEntry* _tmp2_ = NULL;
 		gint _tmp2__length1 = 0;
 		GOptionEntry* _tmp3_ = NULL;
 		gint _tmp3__length1 = 0;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp1_ = commandline_options_entries;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp1__length1 = commandline_options_entries_length1;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp2_ = (_tmp1_ != NULL) ? _vala_array_dup26 (_tmp1_, _tmp1__length1) : ((gpointer) _tmp1_);
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp2__length1 = _tmp1__length1;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp3_ = _tmp2_;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp3__length1 = _tmp2__length1;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		if (result_length1) {
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 			*result_length1 = _tmp3__length1;
-#line 2161 "main.c"
+#line 2120 "main.c"
 		}
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		result = _tmp3_;
-#line 291 "/home/jens/Source/shotwell/src/main.vala"
+#line 290 "/home/jens/Source/shotwell/src/main.vala"
 		return result;
-#line 2167 "main.c"
+#line 2126 "main.c"
 	}
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp4_ = _ ("Path to Shotwell’s private data");
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp5_ = _ ("DIRECTORY");
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.long_name = "datadir";
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.short_name = 'd';
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.flags = 0;
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.arg = G_OPTION_ARG_FILENAME;
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.arg_data = &commandline_options_data_dir;
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.description = _tmp4_;
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp6_.arg_description = _tmp5_;
-#line 293 "/home/jens/Source/shotwell/src/main.vala"
+#line 292 "/home/jens/Source/shotwell/src/main.vala"
 	datadir = _tmp6_;
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp7_ = commandline_options_entries;
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp7__length1 = commandline_options_entries_length1;
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp8_ = datadir;
-#line 295 "/home/jens/Source/shotwell/src/main.vala"
+#line 294 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add70 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp8_);
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp9_ = _ ("Do not monitor library directory at runtime for changes");
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.long_name = "no-runtime-monitoring";
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.short_name = (gchar) 0;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.flags = 0;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.arg = G_OPTION_ARG_NONE;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.arg_data = &commandline_options_no_runtime_monitoring;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.description = _tmp9_;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp10_.arg_description = NULL;
-#line 297 "/home/jens/Source/shotwell/src/main.vala"
+#line 296 "/home/jens/Source/shotwell/src/main.vala"
 	no_monitoring = _tmp10_;
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp11_ = commandline_options_entries;
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp11__length1 = commandline_options_entries_length1;
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp12_ = no_monitoring;
-#line 299 "/home/jens/Source/shotwell/src/main.vala"
+#line 298 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add71 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp12_);
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp13_ = _ ("Don’t display startup progress meter");
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.long_name = "no-startup-progress";
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.short_name = (gchar) 0;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.flags = 0;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.arg = G_OPTION_ARG_NONE;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.arg_data = &commandline_options_no_startup_progress;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.description = _tmp13_;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp14_.arg_description = NULL;
-#line 301 "/home/jens/Source/shotwell/src/main.vala"
+#line 300 "/home/jens/Source/shotwell/src/main.vala"
 	no_startup = _tmp14_;
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp15_ = commandline_options_entries;
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp15__length1 = commandline_options_entries_length1;
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp16_ = no_startup;
-#line 303 "/home/jens/Source/shotwell/src/main.vala"
+#line 302 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add72 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp16_);
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp17_ = _ ("Show the application’s version");
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.long_name = "version";
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.short_name = 'V';
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.flags = 0;
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.arg = G_OPTION_ARG_NONE;
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.arg_data = &commandline_options_show_version;
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.description = _tmp17_;
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp18_.arg_description = NULL;
-#line 305 "/home/jens/Source/shotwell/src/main.vala"
+#line 304 "/home/jens/Source/shotwell/src/main.vala"
 	version = _tmp18_;
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp19_ = commandline_options_entries;
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp19__length1 = commandline_options_entries_length1;
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp20_ = version;
-#line 307 "/home/jens/Source/shotwell/src/main.vala"
+#line 306 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add73 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp20_);
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.long_name = NULL;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.short_name = (gchar) 0;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.flags = 0;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.arg = 0;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.arg_data = NULL;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.description = NULL;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp21_.arg_description = NULL;
-#line 309 "/home/jens/Source/shotwell/src/main.vala"
+#line 308 "/home/jens/Source/shotwell/src/main.vala"
 	terminator = _tmp21_;
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp22_ = commandline_options_entries;
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp22__length1 = commandline_options_entries_length1;
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp23_ = terminator;
-#line 310 "/home/jens/Source/shotwell/src/main.vala"
+#line 309 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_array_add74 (&commandline_options_entries, &commandline_options_entries_length1, &_commandline_options_entries_size_, &_tmp23_);
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp24_ = commandline_options_entries;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp24__length1 = commandline_options_entries_length1;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp25_ = (_tmp24_ != NULL) ? _vala_array_dup27 (_tmp24_, _tmp24__length1) : ((gpointer) _tmp24_);
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp25__length1 = _tmp24__length1;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp26_ = _tmp25_;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp26__length1 = _tmp25__length1;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	if (result_length1) {
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 		*result_length1 = _tmp26__length1;
-#line 2315 "main.c"
+#line 2274 "main.c"
 	}
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	result = _tmp26_;
-#line 312 "/home/jens/Source/shotwell/src/main.vala"
+#line 311 "/home/jens/Source/shotwell/src/main.vala"
 	return result;
-#line 2321 "main.c"
+#line 2280 "main.c"
 }
 
 
 static void _vala_array_add75 (gchar*** array, int* length, int* size, gchar* value) {
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 	if ((*length) == (*size)) {
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 		*array = g_renew (gchar*, *array, (*size) + 1);
-#line 2332 "main.c"
+#line 2291 "main.c"
 	}
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[(*length)++] = value;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 	(*array)[*length] = NULL;
-#line 2338 "main.c"
+#line 2297 "main.c"
 }
 
 
@@ -2362,7 +2321,7 @@ static gboolean string_contains (const gchar* self, const gchar* needle) {
 	result = _tmp1_ != NULL;
 #line 1377 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 2358 "main.c"
+#line 2317 "main.c"
 }
 
 
@@ -2398,54 +2357,58 @@ void _vala_main (gchar** args, int args_length1) {
 	const gchar* _tmp68_ = NULL;
 	gboolean _tmp69_ = FALSE;
 	GError * _inner_error_ = NULL;
-#line 320 "/home/jens/Source/shotwell/src/main.vala"
+#line 319 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0_ = args;
-#line 320 "/home/jens/Source/shotwell/src/main.vala"
+#line 319 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp0__length1 = args_length1;
-#line 320 "/home/jens/Source/shotwell/src/main.vala"
+#line 319 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp1_ = _tmp0_[0];
-#line 320 "/home/jens/Source/shotwell/src/main.vala"
+#line 319 "/home/jens/Source/shotwell/src/main.vala"
 	app_dirs_init (_tmp1_);
-#line 325 "/home/jens/Source/shotwell/src/main.vala"
+#line 324 "/home/jens/Source/shotwell/src/main.vala"
 	gexiv2_initialize ();
-#line 331 "/home/jens/Source/shotwell/src/main.vala"
+#line 325 "/home/jens/Source/shotwell/src/main.vala"
+	gexiv2_log_use_glib_logging ();
+#line 329 "/home/jens/Source/shotwell/src/main.vala"
+	gexiv2_log_set_level (GEXIV2_LOG_LEVEL_DEBUG);
+#line 335 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp2_ = app_dirs_get_install_dir ();
-#line 331 "/home/jens/Source/shotwell/src/main.vala"
+#line 335 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp3_ = _tmp2_;
-#line 331 "/home/jens/Source/shotwell/src/main.vala"
+#line 335 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp4_ = _tmp3_ == NULL;
-#line 331 "/home/jens/Source/shotwell/src/main.vala"
+#line 335 "/home/jens/Source/shotwell/src/main.vala"
 	_g_object_unref0 (_tmp3_);
-#line 331 "/home/jens/Source/shotwell/src/main.vala"
+#line 335 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp4_) {
-#line 2414 "main.c"
+#line 2377 "main.c"
 		GFile* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
 		gchar* _tmp7_ = NULL;
 		gchar* _tmp8_ = NULL;
 		gchar* _tmp9_ = NULL;
 		gchar* _tmp10_ = NULL;
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp5_ = app_dirs_get_exec_dir ();
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp6_ = _tmp5_;
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp7_ = g_file_get_path (_tmp6_);
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp8_ = _tmp7_;
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp9_ = g_strconcat (_tmp8_, "/misc", NULL);
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp10_ = _tmp9_;
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		g_setenv ("GSETTINGS_SCHEMA_DIR", _tmp10_, TRUE);
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (_tmp10_);
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (_tmp8_);
-#line 332 "/home/jens/Source/shotwell/src/main.vala"
+#line 336 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (_tmp6_);
-#line 2441 "main.c"
+#line 2404 "main.c"
 	}
 	{
 		const gchar* _tmp11_ = NULL;
@@ -2453,26 +2416,26 @@ void _vala_main (gchar** args, int args_length1) {
 		GOptionEntry* _tmp13_ = NULL;
 		GOptionEntry* _tmp14_ = NULL;
 		gint _tmp14__length1 = 0;
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp11_ = _ ("[FILE]");
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp13_ = commandline_options_get_options (&_tmp12_);
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp14_ = _tmp13_;
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp14__length1 = _tmp12_;
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		gtk_init_with_args (&args_length1, &args, _tmp11_, _tmp14_, RESOURCES_APP_GETTEXT_PACKAGE, &_inner_error_);
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp14_ = (g_free (_tmp14_), NULL);
-#line 338 "/home/jens/Source/shotwell/src/main.vala"
+#line 342 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2463 "main.c"
-			goto __catch223_g_error;
+#line 2426 "main.c"
+			goto __catch224_g_error;
 		}
 	}
-	goto __finally223;
-	__catch223_g_error:
+	goto __finally224;
+	__catch224_g_error:
 	{
 		GError* e = NULL;
 		GError* _tmp15_ = NULL;
@@ -2483,94 +2446,94 @@ void _vala_main (gchar** args, int args_length1) {
 		gchar** _tmp20_ = NULL;
 		gint _tmp20__length1 = 0;
 		const gchar* _tmp21_ = NULL;
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
 		e = _inner_error_;
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
 		_inner_error_ = NULL;
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp15_ = e;
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp16_ = _tmp15_->message;
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp17_ = g_strconcat (_tmp16_, "\n", NULL);
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp18_ = _tmp17_;
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		g_print ("%s", _tmp18_);
-#line 341 "/home/jens/Source/shotwell/src/main.vala"
+#line 345 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (_tmp18_);
-#line 342 "/home/jens/Source/shotwell/src/main.vala"
+#line 346 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp19_ = _ ("Run “%s --help” to see a full list of available command line options.\n");
-#line 342 "/home/jens/Source/shotwell/src/main.vala"
+#line 346 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp20_ = args;
-#line 342 "/home/jens/Source/shotwell/src/main.vala"
+#line 346 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp20__length1 = args_length1;
-#line 342 "/home/jens/Source/shotwell/src/main.vala"
+#line 346 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp21_ = _tmp20_[0];
-#line 342 "/home/jens/Source/shotwell/src/main.vala"
+#line 346 "/home/jens/Source/shotwell/src/main.vala"
 		g_print (_tmp19_, _tmp21_);
-#line 343 "/home/jens/Source/shotwell/src/main.vala"
+#line 347 "/home/jens/Source/shotwell/src/main.vala"
 		app_dirs_terminate ();
-#line 344 "/home/jens/Source/shotwell/src/main.vala"
-		_g_error_free0 (e);
-#line 344 "/home/jens/Source/shotwell/src/main.vala"
-		return;
-#line 2511 "main.c"
-	}
-	__finally223:
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
-	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
-		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
-		g_clear_error (&_inner_error_);
-#line 337 "/home/jens/Source/shotwell/src/main.vala"
-		return;
-#line 2522 "main.c"
-	}
-#line 347 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp22_ = commandline_options_show_version;
-#line 347 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp22_) {
 #line 348 "/home/jens/Source/shotwell/src/main.vala"
-		if (RESOURCES_GIT_VERSION != NULL) {
-#line 349 "/home/jens/Source/shotwell/src/main.vala"
-			g_print ("%s %s (%s)\n", RESOURCES_APP_TITLE, RESOURCES_APP_VERSION, RESOURCES_GIT_VERSION);
-#line 2532 "main.c"
-		} else {
-#line 351 "/home/jens/Source/shotwell/src/main.vala"
-			g_print ("%s %s\n", RESOURCES_APP_TITLE, RESOURCES_APP_VERSION);
-#line 2536 "main.c"
-		}
-#line 353 "/home/jens/Source/shotwell/src/main.vala"
-		app_dirs_terminate ();
-#line 355 "/home/jens/Source/shotwell/src/main.vala"
+		_g_error_free0 (e);
+#line 348 "/home/jens/Source/shotwell/src/main.vala"
 		return;
-#line 2542 "main.c"
+#line 2474 "main.c"
 	}
-#line 365 "/home/jens/Source/shotwell/src/main.vala"
+	__finally224:
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
+		g_clear_error (&_inner_error_);
+#line 341 "/home/jens/Source/shotwell/src/main.vala"
+		return;
+#line 2485 "main.c"
+	}
+#line 351 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp22_ = commandline_options_show_version;
+#line 351 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp22_) {
+#line 352 "/home/jens/Source/shotwell/src/main.vala"
+		if (RESOURCES_GIT_VERSION != NULL) {
+#line 353 "/home/jens/Source/shotwell/src/main.vala"
+			g_print ("%s %s (%s)\n", RESOURCES_APP_TITLE, RESOURCES_APP_VERSION, RESOURCES_GIT_VERSION);
+#line 2495 "main.c"
+		} else {
+#line 355 "/home/jens/Source/shotwell/src/main.vala"
+			g_print ("%s %s\n", RESOURCES_APP_TITLE, RESOURCES_APP_VERSION);
+#line 2499 "main.c"
+		}
+#line 357 "/home/jens/Source/shotwell/src/main.vala"
+		app_dirs_terminate ();
+#line 359 "/home/jens/Source/shotwell/src/main.vala"
+		return;
+#line 2505 "main.c"
+	}
+#line 369 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp23_ = g_new0 (gchar*, 0 + 1);
-#line 365 "/home/jens/Source/shotwell/src/main.vala"
+#line 369 "/home/jens/Source/shotwell/src/main.vala"
 	mounts = _tmp23_;
-#line 365 "/home/jens/Source/shotwell/src/main.vala"
+#line 369 "/home/jens/Source/shotwell/src/main.vala"
 	mounts_length1 = 0;
-#line 365 "/home/jens/Source/shotwell/src/main.vala"
+#line 369 "/home/jens/Source/shotwell/src/main.vala"
 	_mounts_size_ = mounts_length1;
-#line 366 "/home/jens/Source/shotwell/src/main.vala"
+#line 370 "/home/jens/Source/shotwell/src/main.vala"
 	filename = NULL;
-#line 2554 "main.c"
+#line 2517 "main.c"
 	{
 		gint ctr = 0;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 		ctr = 1;
-#line 2559 "main.c"
+#line 2522 "main.c"
 		{
 			gboolean _tmp24_ = FALSE;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp24_ = TRUE;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 			while (TRUE) {
-#line 2566 "main.c"
+#line 2529 "main.c"
 				gint _tmp26_ = 0;
 				gchar** _tmp27_ = NULL;
 				gint _tmp27__length1 = 0;
@@ -2582,281 +2545,281 @@ void _vala_main (gchar** args, int args_length1) {
 				gchar* _tmp31_ = NULL;
 				const gchar* _tmp32_ = NULL;
 				gboolean _tmp33_ = FALSE;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				if (!_tmp24_) {
-#line 2580 "main.c"
+#line 2543 "main.c"
 					gint _tmp25_ = 0;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp25_ = ctr;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 					ctr = _tmp25_ + 1;
-#line 2586 "main.c"
+#line 2549 "main.c"
 				}
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp24_ = FALSE;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp26_ = ctr;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp27_ = args;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp27__length1 = args_length1;
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				if (!(_tmp26_ < _tmp27__length1)) {
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 					break;
-#line 2600 "main.c"
+#line 2563 "main.c"
 				}
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp28_ = args;
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp28__length1 = args_length1;
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp29_ = ctr;
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp30_ = _tmp28_[_tmp29_];
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp31_ = g_strdup (_tmp30_);
-#line 369 "/home/jens/Source/shotwell/src/main.vala"
+#line 373 "/home/jens/Source/shotwell/src/main.vala"
 				arg = _tmp31_;
-#line 371 "/home/jens/Source/shotwell/src/main.vala"
+#line 375 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp32_ = arg;
-#line 371 "/home/jens/Source/shotwell/src/main.vala"
+#line 375 "/home/jens/Source/shotwell/src/main.vala"
 				_tmp33_ = library_window_is_mount_uri_supported (_tmp32_);
-#line 371 "/home/jens/Source/shotwell/src/main.vala"
+#line 375 "/home/jens/Source/shotwell/src/main.vala"
 				if (_tmp33_) {
-#line 2620 "main.c"
+#line 2583 "main.c"
 					gchar** _tmp34_ = NULL;
 					gint _tmp34__length1 = 0;
 					const gchar* _tmp35_ = NULL;
 					gchar* _tmp36_ = NULL;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp34_ = mounts;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp34__length1 = mounts_length1;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp35_ = arg;
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp36_ = g_strdup (_tmp35_);
-#line 372 "/home/jens/Source/shotwell/src/main.vala"
+#line 376 "/home/jens/Source/shotwell/src/main.vala"
 					_vala_array_add75 (&mounts, &mounts_length1, &_mounts_size_, _tmp36_);
-#line 2635 "main.c"
+#line 2598 "main.c"
 				} else {
 					gboolean _tmp37_ = FALSE;
 					const gchar* _tmp38_ = NULL;
 					gboolean _tmp39_ = FALSE;
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp38_ = filename;
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 					_tmp39_ = is_string_empty (_tmp38_);
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 					if (_tmp39_) {
-#line 2646 "main.c"
+#line 2609 "main.c"
 						const gchar* _tmp40_ = NULL;
 						gboolean _tmp41_ = FALSE;
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp40_ = arg;
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp41_ = string_contains (_tmp40_, "://");
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp37_ = !_tmp41_;
-#line 2655 "main.c"
+#line 2618 "main.c"
 					} else {
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp37_ = FALSE;
-#line 2659 "main.c"
+#line 2622 "main.c"
 					}
-#line 373 "/home/jens/Source/shotwell/src/main.vala"
+#line 377 "/home/jens/Source/shotwell/src/main.vala"
 					if (_tmp37_) {
-#line 2663 "main.c"
+#line 2626 "main.c"
 						const gchar* _tmp42_ = NULL;
 						gchar* _tmp43_ = NULL;
-#line 374 "/home/jens/Source/shotwell/src/main.vala"
+#line 378 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp42_ = arg;
-#line 374 "/home/jens/Source/shotwell/src/main.vala"
+#line 378 "/home/jens/Source/shotwell/src/main.vala"
 						_tmp43_ = g_strdup (_tmp42_);
-#line 374 "/home/jens/Source/shotwell/src/main.vala"
+#line 378 "/home/jens/Source/shotwell/src/main.vala"
 						_g_free0 (filename);
-#line 374 "/home/jens/Source/shotwell/src/main.vala"
+#line 378 "/home/jens/Source/shotwell/src/main.vala"
 						filename = _tmp43_;
-#line 2674 "main.c"
+#line 2637 "main.c"
 					}
 				}
-#line 368 "/home/jens/Source/shotwell/src/main.vala"
+#line 372 "/home/jens/Source/shotwell/src/main.vala"
 				_g_free0 (arg);
-#line 2679 "main.c"
+#line 2642 "main.c"
 			}
 		}
 	}
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp45_ = filename;
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp46_ = is_string_empty (_tmp45_);
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp46_) {
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp44_ = DEBUG_LIBRARY_PREFIX;
-#line 2691 "main.c"
+#line 2654 "main.c"
 	} else {
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp44_ = DEBUG_VIEWER_PREFIX;
-#line 2695 "main.c"
+#line 2658 "main.c"
 	}
-#line 378 "/home/jens/Source/shotwell/src/main.vala"
+#line 382 "/home/jens/Source/shotwell/src/main.vala"
 	debug_init (_tmp44_);
-#line 380 "/home/jens/Source/shotwell/src/main.vala"
+#line 384 "/home/jens/Source/shotwell/src/main.vala"
 	if (RESOURCES_GIT_VERSION != NULL) {
-#line 2701 "main.c"
+#line 2664 "main.c"
 		const gchar* _tmp47_ = NULL;
 		const gchar* _tmp48_ = NULL;
 		gboolean _tmp49_ = FALSE;
-#line 382 "/home/jens/Source/shotwell/src/main.vala"
+#line 386 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp48_ = filename;
-#line 382 "/home/jens/Source/shotwell/src/main.vala"
+#line 386 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp49_ = is_string_empty (_tmp48_);
-#line 382 "/home/jens/Source/shotwell/src/main.vala"
+#line 386 "/home/jens/Source/shotwell/src/main.vala"
 		if (_tmp49_) {
-#line 382 "/home/jens/Source/shotwell/src/main.vala"
+#line 386 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp47_ = RESOURCES_APP_LIBRARY_ROLE;
-#line 2713 "main.c"
+#line 2676 "main.c"
 		} else {
-#line 382 "/home/jens/Source/shotwell/src/main.vala"
+#line 386 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp47_ = RESOURCES_APP_DIRECT_ROLE;
-#line 2717 "main.c"
+#line 2680 "main.c"
 		}
-#line 381 "/home/jens/Source/shotwell/src/main.vala"
-		g_message ("main.vala:381: Shotwell %s %s (%s)", _tmp47_, RESOURCES_APP_VERSION, RESOURCES_GIT_VERSION);
-#line 2721 "main.c"
+#line 385 "/home/jens/Source/shotwell/src/main.vala"
+		g_message ("main.vala:385: Shotwell %s %s (%s)", _tmp47_, RESOURCES_APP_VERSION, RESOURCES_GIT_VERSION);
+#line 2684 "main.c"
 	} else {
 		const gchar* _tmp50_ = NULL;
 		const gchar* _tmp51_ = NULL;
 		gboolean _tmp52_ = FALSE;
-#line 386 "/home/jens/Source/shotwell/src/main.vala"
+#line 390 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp51_ = filename;
-#line 386 "/home/jens/Source/shotwell/src/main.vala"
+#line 390 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp52_ = is_string_empty (_tmp51_);
-#line 386 "/home/jens/Source/shotwell/src/main.vala"
+#line 390 "/home/jens/Source/shotwell/src/main.vala"
 		if (_tmp52_) {
-#line 386 "/home/jens/Source/shotwell/src/main.vala"
+#line 390 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp50_ = RESOURCES_APP_LIBRARY_ROLE;
-#line 2734 "main.c"
+#line 2697 "main.c"
 		} else {
-#line 386 "/home/jens/Source/shotwell/src/main.vala"
+#line 390 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp50_ = RESOURCES_APP_DIRECT_ROLE;
-#line 2738 "main.c"
+#line 2701 "main.c"
 		}
-#line 385 "/home/jens/Source/shotwell/src/main.vala"
-		g_message ("main.vala:385: Shotwell %s %s", _tmp50_, RESOURCES_APP_VERSION);
-#line 2742 "main.c"
-	}
 #line 389 "/home/jens/Source/shotwell/src/main.vala"
+		g_message ("main.vala:389: Shotwell %s %s", _tmp50_, RESOURCES_APP_VERSION);
+#line 2705 "main.c"
+	}
+#line 393 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp53_ = g_date_time_new_now_local ();
-#line 389 "/home/jens/Source/shotwell/src/main.vala"
+#line 393 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp54_ = _tmp53_;
-#line 389 "/home/jens/Source/shotwell/src/main.vala"
+#line 393 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp55_ = g_date_time_get_timezone_abbreviation (_tmp54_);
-#line 389 "/home/jens/Source/shotwell/src/main.vala"
-	g_debug ("main.vala:389: Shotwell is running in timezone %s", _tmp55_);
-#line 389 "/home/jens/Source/shotwell/src/main.vala"
+#line 393 "/home/jens/Source/shotwell/src/main.vala"
+	g_debug ("main.vala:393: Shotwell is running in timezone %s", _tmp55_);
+#line 393 "/home/jens/Source/shotwell/src/main.vala"
 	_g_date_time_unref0 (_tmp54_);
-#line 394 "/home/jens/Source/shotwell/src/main.vala"
+#line 398 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp56_ = filename;
-#line 394 "/home/jens/Source/shotwell/src/main.vala"
+#line 398 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp57_ = is_string_empty (_tmp56_);
-#line 394 "/home/jens/Source/shotwell/src/main.vala"
+#line 398 "/home/jens/Source/shotwell/src/main.vala"
 	application_init (!_tmp57_);
-#line 397 "/home/jens/Source/shotwell/src/main.vala"
+#line 401 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp58_ = commandline_options_data_dir;
-#line 397 "/home/jens/Source/shotwell/src/main.vala"
+#line 401 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp58_ != NULL) {
-#line 2764 "main.c"
+#line 2727 "main.c"
 		const gchar* _tmp59_ = NULL;
-#line 398 "/home/jens/Source/shotwell/src/main.vala"
+#line 402 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp59_ = commandline_options_data_dir;
-#line 398 "/home/jens/Source/shotwell/src/main.vala"
+#line 402 "/home/jens/Source/shotwell/src/main.vala"
 		app_dirs_set_data_dir (_tmp59_);
-#line 2770 "main.c"
+#line 2733 "main.c"
 	} else {
-#line 400 "/home/jens/Source/shotwell/src/main.vala"
-		app_dirs_try_migrate_data ();
-#line 2774 "main.c"
-	}
-#line 403 "/home/jens/Source/shotwell/src/main.vala"
-	app_dirs_verify_data_dir ();
 #line 404 "/home/jens/Source/shotwell/src/main.vala"
+		app_dirs_try_migrate_data ();
+#line 2737 "main.c"
+	}
+#line 407 "/home/jens/Source/shotwell/src/main.vala"
+	app_dirs_verify_data_dir ();
+#line 408 "/home/jens/Source/shotwell/src/main.vala"
 	app_dirs_verify_cache_dir ();
-#line 407 "/home/jens/Source/shotwell/src/main.vala"
+#line 411 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp60_ = args;
-#line 407 "/home/jens/Source/shotwell/src/main.vala"
+#line 411 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp60__length1 = args_length1;
-#line 407 "/home/jens/Source/shotwell/src/main.vala"
+#line 411 "/home/jens/Source/shotwell/src/main.vala"
 	international_support_init (RESOURCES_APP_GETTEXT_PACKAGE, _tmp60_, _tmp60__length1, INTERNATIONAL_SUPPORT_SYSTEM_LOCALE);
-#line 409 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp61_ = g_timer_new ();
-#line 409 "/home/jens/Source/shotwell/src/main.vala"
-	_g_timer_destroy0 (startup_timer);
-#line 409 "/home/jens/Source/shotwell/src/main.vala"
-	startup_timer = _tmp61_;
-#line 410 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp62_ = startup_timer;
-#line 410 "/home/jens/Source/shotwell/src/main.vala"
-	g_timer_start (_tmp62_);
 #line 413 "/home/jens/Source/shotwell/src/main.vala"
-	g_set_application_name (RESOURCES_APP_TITLE);
+	_tmp61_ = g_timer_new ();
+#line 413 "/home/jens/Source/shotwell/src/main.vala"
+	_g_timer_destroy0 (startup_timer);
+#line 413 "/home/jens/Source/shotwell/src/main.vala"
+	startup_timer = _tmp61_;
+#line 414 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp62_ = startup_timer;
+#line 414 "/home/jens/Source/shotwell/src/main.vala"
+	g_timer_start (_tmp62_);
 #line 417 "/home/jens/Source/shotwell/src/main.vala"
+	g_set_application_name (RESOURCES_APP_TITLE);
+#line 421 "/home/jens/Source/shotwell/src/main.vala"
 	resources_init ();
-#line 422 "/home/jens/Source/shotwell/src/main.vala"
+#line 426 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp63_ = filename;
-#line 422 "/home/jens/Source/shotwell/src/main.vala"
+#line 426 "/home/jens/Source/shotwell/src/main.vala"
 	_tmp64_ = is_string_empty (_tmp63_);
-#line 422 "/home/jens/Source/shotwell/src/main.vala"
+#line 426 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp64_) {
-#line 2806 "main.c"
+#line 2769 "main.c"
 		gchar** _tmp65_ = NULL;
 		gint _tmp65__length1 = 0;
-#line 423 "/home/jens/Source/shotwell/src/main.vala"
+#line 427 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp65_ = mounts;
-#line 423 "/home/jens/Source/shotwell/src/main.vala"
+#line 427 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp65__length1 = mounts_length1;
-#line 423 "/home/jens/Source/shotwell/src/main.vala"
+#line 427 "/home/jens/Source/shotwell/src/main.vala"
 		library_exec (_tmp65_, _tmp65__length1);
-#line 2815 "main.c"
+#line 2778 "main.c"
 	} else {
 		const gchar* _tmp66_ = NULL;
-#line 425 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp66_ = filename;
-#line 425 "/home/jens/Source/shotwell/src/main.vala"
-		editing_exec (_tmp66_);
-#line 2822 "main.c"
-	}
-#line 428 "/home/jens/Source/shotwell/src/main.vala"
-	resources_terminate ();
 #line 429 "/home/jens/Source/shotwell/src/main.vala"
-	application_terminate ();
-#line 430 "/home/jens/Source/shotwell/src/main.vala"
-	debug_terminate ();
-#line 431 "/home/jens/Source/shotwell/src/main.vala"
-	app_dirs_terminate ();
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp68_ = filename;
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-	_tmp69_ = is_string_empty (_tmp68_);
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-	if (_tmp69_) {
-#line 2838 "main.c"
-		gboolean _tmp70_ = FALSE;
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp70_ = was_already_running;
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp67_ = !_tmp70_;
-#line 2844 "main.c"
-	} else {
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
-		_tmp67_ = FALSE;
-#line 2848 "main.c"
+		_tmp66_ = filename;
+#line 429 "/home/jens/Source/shotwell/src/main.vala"
+		editing_exec (_tmp66_);
+#line 2785 "main.c"
 	}
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
+#line 432 "/home/jens/Source/shotwell/src/main.vala"
+	resources_terminate ();
+#line 433 "/home/jens/Source/shotwell/src/main.vala"
+	application_terminate ();
+#line 434 "/home/jens/Source/shotwell/src/main.vala"
+	debug_terminate ();
+#line 435 "/home/jens/Source/shotwell/src/main.vala"
+	app_dirs_terminate ();
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp68_ = filename;
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+	_tmp69_ = is_string_empty (_tmp68_);
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+	if (_tmp69_) {
+#line 2801 "main.c"
+		gboolean _tmp70_ = FALSE;
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp70_ = was_already_running;
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp67_ = !_tmp70_;
+#line 2807 "main.c"
+	} else {
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
+		_tmp67_ = FALSE;
+#line 2811 "main.c"
+	}
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
 	if (_tmp67_) {
-#line 2852 "main.c"
+#line 2815 "main.c"
 		gchar* orig_path = NULL;
 		GFile* _tmp71_ = NULL;
 		GFile* _tmp72_ = NULL;
@@ -2867,31 +2830,31 @@ void _vala_main (gchar** args, int args_length1) {
 		gchar* backup_path = NULL;
 		const gchar* _tmp77_ = NULL;
 		gchar* _tmp78_ = NULL;
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp71_ = app_dirs_get_data_subdir ("data", NULL);
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp72_ = _tmp71_;
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp73_ = g_file_get_child (_tmp72_, "photo.db");
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp74_ = _tmp73_;
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp75_ = g_file_get_path (_tmp74_);
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp76_ = _tmp75_;
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (_tmp74_);
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		_g_object_unref0 (_tmp72_);
-#line 437 "/home/jens/Source/shotwell/src/main.vala"
+#line 441 "/home/jens/Source/shotwell/src/main.vala"
 		orig_path = _tmp76_;
-#line 438 "/home/jens/Source/shotwell/src/main.vala"
+#line 442 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp77_ = orig_path;
-#line 438 "/home/jens/Source/shotwell/src/main.vala"
+#line 442 "/home/jens/Source/shotwell/src/main.vala"
 		_tmp78_ = g_strconcat (_tmp77_, ".bak", NULL);
-#line 438 "/home/jens/Source/shotwell/src/main.vala"
+#line 442 "/home/jens/Source/shotwell/src/main.vala"
 		backup_path = _tmp78_;
-#line 2887 "main.c"
+#line 2850 "main.c"
 		{
 			GFile* src = NULL;
 			const gchar* _tmp79_ = NULL;
@@ -2901,91 +2864,91 @@ void _vala_main (gchar** args, int args_length1) {
 			GFile* _tmp82_ = NULL;
 			GFile* _tmp83_ = NULL;
 			GFile* _tmp84_ = NULL;
-#line 440 "/home/jens/Source/shotwell/src/main.vala"
+#line 444 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp79_ = orig_path;
-#line 440 "/home/jens/Source/shotwell/src/main.vala"
+#line 444 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp80_ = g_file_new_for_commandline_arg (_tmp79_);
-#line 440 "/home/jens/Source/shotwell/src/main.vala"
+#line 444 "/home/jens/Source/shotwell/src/main.vala"
 			src = _tmp80_;
-#line 441 "/home/jens/Source/shotwell/src/main.vala"
+#line 445 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp81_ = backup_path;
-#line 441 "/home/jens/Source/shotwell/src/main.vala"
+#line 445 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp82_ = g_file_new_for_commandline_arg (_tmp81_);
-#line 441 "/home/jens/Source/shotwell/src/main.vala"
+#line 445 "/home/jens/Source/shotwell/src/main.vala"
 			dest = _tmp82_;
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp83_ = src;
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp84_ = dest;
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 			g_file_copy (_tmp83_, _tmp84_, G_FILE_COPY_OVERWRITE | G_FILE_COPY_ALL_METADATA, NULL, NULL, NULL, &_inner_error_);
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 				_g_object_unref0 (dest);
-#line 442 "/home/jens/Source/shotwell/src/main.vala"
+#line 446 "/home/jens/Source/shotwell/src/main.vala"
 				_g_object_unref0 (src);
-#line 2921 "main.c"
-				goto __catch224_g_error;
+#line 2884 "main.c"
+				goto __catch225_g_error;
 			}
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_object_unref0 (dest);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_object_unref0 (src);
-#line 2928 "main.c"
+#line 2891 "main.c"
 		}
-		goto __finally224;
-		__catch224_g_error:
+		goto __finally225;
+		__catch225_g_error:
 		{
 			GError* _error_ = NULL;
 			GError* _tmp85_ = NULL;
 			const gchar* _tmp86_ = NULL;
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_error_ = _inner_error_;
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_inner_error_ = NULL;
-#line 446 "/home/jens/Source/shotwell/src/main.vala"
+#line 450 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp85_ = _error_;
-#line 446 "/home/jens/Source/shotwell/src/main.vala"
+#line 450 "/home/jens/Source/shotwell/src/main.vala"
 			_tmp86_ = _tmp85_->message;
-#line 446 "/home/jens/Source/shotwell/src/main.vala"
-			g_warning ("main.vala:446: Failed to create backup file of database: %s", _tmp86_);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 450 "/home/jens/Source/shotwell/src/main.vala"
+			g_warning ("main.vala:450: Failed to create backup file of database: %s", _tmp86_);
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_error_free0 (_error_);
-#line 2948 "main.c"
+#line 2911 "main.c"
 		}
-		__finally224:
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+		__finally225:
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_free0 (backup_path);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_free0 (orig_path);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			_g_free0 (filename);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			mounts = (_vala_array_free (mounts, mounts_length1, (GDestroyNotify) g_free), NULL);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			g_clear_error (&_inner_error_);
-#line 439 "/home/jens/Source/shotwell/src/main.vala"
+#line 443 "/home/jens/Source/shotwell/src/main.vala"
 			return;
-#line 2967 "main.c"
+#line 2930 "main.c"
 		}
-#line 449 "/home/jens/Source/shotwell/src/main.vala"
+#line 453 "/home/jens/Source/shotwell/src/main.vala"
 		sync ();
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (backup_path);
-#line 436 "/home/jens/Source/shotwell/src/main.vala"
+#line 440 "/home/jens/Source/shotwell/src/main.vala"
 		_g_free0 (orig_path);
-#line 2975 "main.c"
+#line 2938 "main.c"
 	}
-#line 317 "/home/jens/Source/shotwell/src/main.vala"
+#line 316 "/home/jens/Source/shotwell/src/main.vala"
 	_g_free0 (filename);
-#line 317 "/home/jens/Source/shotwell/src/main.vala"
+#line 316 "/home/jens/Source/shotwell/src/main.vala"
 	mounts = (_vala_array_free (mounts, mounts_length1, (GDestroyNotify) g_free), NULL);
-#line 2981 "main.c"
+#line 2944 "main.c"
 }
 
 
@@ -2996,11 +2959,11 @@ int main (int argc, char ** argv) {
 #if !GLIB_CHECK_VERSION (2,35,0)
 	g_type_init ();
 #endif
-#line 317 "/home/jens/Source/shotwell/src/main.vala"
+#line 316 "/home/jens/Source/shotwell/src/main.vala"
 	_vala_main (argv, argc);
-#line 317 "/home/jens/Source/shotwell/src/main.vala"
+#line 316 "/home/jens/Source/shotwell/src/main.vala"
 	return 0;
-#line 2996 "main.c"
+#line 2959 "main.c"
 }
 
 

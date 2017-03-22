@@ -15,6 +15,7 @@
 #include <gdk/gdk.h>
 #include <cairo.h>
 #include <gtk/gtk.h>
+#include <gee.h>
 #include <time.h>
 
 G_BEGIN_DECLS
@@ -135,6 +136,22 @@ typedef struct _SpitPublishingPublishable SpitPublishingPublishable;
 typedef struct _SpitPublishingPublishableIface SpitPublishingPublishableIface;
 
 #define SPIT_PUBLISHING_PUBLISHER_TYPE_MEDIA_TYPE (spit_publishing_publisher_media_type_get_type ())
+
+#define SPIT_PUBLISHING_TYPE_AUTHENTICATOR (spit_publishing_authenticator_get_type ())
+#define SPIT_PUBLISHING_AUTHENTICATOR(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR, SpitPublishingAuthenticator))
+#define SPIT_PUBLISHING_IS_AUTHENTICATOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR))
+#define SPIT_PUBLISHING_AUTHENTICATOR_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR, SpitPublishingAuthenticatorIface))
+
+typedef struct _SpitPublishingAuthenticator SpitPublishingAuthenticator;
+typedef struct _SpitPublishingAuthenticatorIface SpitPublishingAuthenticatorIface;
+
+#define SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY (spit_publishing_authenticator_factory_get_type ())
+#define SPIT_PUBLISHING_AUTHENTICATOR_FACTORY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactory))
+#define SPIT_PUBLISHING_IS_AUTHENTICATOR_FACTORY(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY))
+#define SPIT_PUBLISHING_AUTHENTICATOR_FACTORY_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactoryIface))
+
+typedef struct _SpitPublishingAuthenticatorFactory SpitPublishingAuthenticatorFactory;
+typedef struct _SpitPublishingAuthenticatorFactoryIface SpitPublishingAuthenticatorFactoryIface;
 
 #define SPIT_DATA_IMPORTS_TYPE_DATA_IMPORTER (spit_data_imports_data_importer_get_type ())
 #define SPIT_DATA_IMPORTS_DATA_IMPORTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SPIT_DATA_IMPORTS_TYPE_DATA_IMPORTER, SpitDataImportsDataImporter))
@@ -483,6 +500,21 @@ struct _SpitPublishingPublisherIface {
 	void (*reserved7) (SpitPublishingPublisher* self);
 };
 
+struct _SpitPublishingAuthenticatorIface {
+	GTypeInterface parent_iface;
+	void (*authenticate) (SpitPublishingAuthenticator* self);
+	gboolean (*can_logout) (SpitPublishingAuthenticator* self);
+	void (*logout) (SpitPublishingAuthenticator* self);
+	void (*refresh) (SpitPublishingAuthenticator* self);
+	GHashTable* (*get_authentication_parameter) (SpitPublishingAuthenticator* self);
+};
+
+struct _SpitPublishingAuthenticatorFactoryIface {
+	GTypeInterface parent_iface;
+	GeeList* (*get_available_authenticators) (SpitPublishingAuthenticatorFactory* self);
+	SpitPublishingAuthenticator* (*create) (SpitPublishingAuthenticatorFactory* self, const gchar* provider, SpitPublishingPluginHost* host);
+};
+
 typedef enum  {
 	SPIT_DATA_IMPORTS_DATA_IMPORT_ERROR_UNSUPPORTED_VERSION
 } SpitDataImportsDataImportError;
@@ -811,6 +843,15 @@ void spit_publishing_service_reserved4 (SpitPublishingService* self);
 void spit_publishing_service_reserved5 (SpitPublishingService* self);
 void spit_publishing_service_reserved6 (SpitPublishingService* self);
 void spit_publishing_service_reserved7 (SpitPublishingService* self);
+GType spit_publishing_authenticator_get_type (void) G_GNUC_CONST;
+void spit_publishing_authenticator_authenticate (SpitPublishingAuthenticator* self);
+gboolean spit_publishing_authenticator_can_logout (SpitPublishingAuthenticator* self);
+void spit_publishing_authenticator_logout (SpitPublishingAuthenticator* self);
+void spit_publishing_authenticator_refresh (SpitPublishingAuthenticator* self);
+GHashTable* spit_publishing_authenticator_get_authentication_parameter (SpitPublishingAuthenticator* self);
+GType spit_publishing_authenticator_factory_get_type (void) G_GNUC_CONST;
+GeeList* spit_publishing_authenticator_factory_get_available_authenticators (SpitPublishingAuthenticatorFactory* self);
+SpitPublishingAuthenticator* spit_publishing_authenticator_factory_create (SpitPublishingAuthenticatorFactory* self, const gchar* provider, SpitPublishingPluginHost* host);
 #define SPIT_DATA_IMPORTS_CURRENT_INTERFACE 0
 GQuark spit_data_imports_data_import_error_quark (void);
 GType spit_data_imports_dialog_pane_geometry_options_get_type (void) G_GNUC_CONST;

@@ -1428,7 +1428,7 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 #line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1431 "ManifestWidget.c"
-							goto __catch36_g_error;
+							goto __catch37_g_error;
 						}
 #line 179 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 						_tmp53_ = _tmp50_;
@@ -1442,8 +1442,8 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 						_g_object_unref0 (_tmp50_);
 #line 1444 "ManifestWidget.c"
 					}
-					goto __finally36;
-					__catch36_g_error:
+					goto __finally37;
+					__catch37_g_error:
 					{
 						GError* err = NULL;
 						PluginsExtensionPoint* _tmp54_ = NULL;
@@ -1471,7 +1471,7 @@ PluginsManifestListView* plugins_manifest_list_view_construct (GType object_type
 						_g_error_free0 (err);
 #line 1473 "ManifestWidget.c"
 					}
-					__finally36:
+					__finally37:
 #line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"
 					if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 178 "/home/jens/Source/shotwell/src/plugins/ManifestWidget.vala"

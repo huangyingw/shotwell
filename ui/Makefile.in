@@ -90,9 +90,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = ui
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/appdata-xml.m4 \
-	$(top_srcdir)/m4/ax_check_enable_debug.m4 \
-	$(top_srcdir)/m4/ax_generate_changelog.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_generate_changelog.m4 \
 	$(top_srcdir)/m4/ax_is_release.m4 \
 	$(top_srcdir)/m4/ax_require_defined.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/gsettings.m4 \
@@ -107,7 +105,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/appdata-xml.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(dist_noinst_DATA) \
-	$(dist_ui_DATA) $(am__DIST_COMMON)
+	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
@@ -131,35 +129,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
-am__installdirs = "$(DESTDIR)$(uidir)"
-DATA = $(dist_noinst_DATA) $(dist_ui_DATA)
+DATA = $(dist_noinst_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 am__DIST_COMMON = $(srcdir)/Makefile.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -170,6 +140,9 @@ AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
 API_VERSION = @API_VERSION@
 APPSTREAM_UTIL = @APPSTREAM_UTIL@
 AR = @AR@
+AUTHENTICATOR_CFLAGS = @AUTHENTICATOR_CFLAGS@
+AUTHENTICATOR_LIBS = @AUTHENTICATOR_LIBS@
+AUTHENTICATOR_PACKAGES = @AUTHENTICATOR_PACKAGES@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -257,6 +230,7 @@ PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 PLUGIN_CFLAGS = @PLUGIN_CFLAGS@
 PLUGIN_LIBS = @PLUGIN_LIBS@
 POSUB = @POSUB@
+PUBLISHER_VALAFLAGS = @PUBLISHER_VALAFLAGS@
 PUBLISHING_CFLAGS = @PUBLISHING_CFLAGS@
 PUBLISHING_LIBS = @PUBLISHING_LIBS@
 RANLIB = @RANLIB@
@@ -338,8 +312,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-uidir = $(datadir)/shotwell/ui
-dist_ui_DATA = \
+dist_noinst_DATA = \
 	collection.ui \
 	direct_context.ui \
 	direct.ui \
@@ -352,19 +325,17 @@ dist_ui_DATA = \
 	offline.ui \
 	photo_context.ui \
 	photo.ui \
+	printing_widget.ui \
 	savedsearch.ui \
 	search_bar.ui \
 	search_sidebar_context.ui \
+	set_background_dialog.ui \
+	set_background_slideshow_dialog.ui \
 	shotwell.ui \
 	sidebar_default_context.ui \
 	tag_sidebar_context.ui \
 	tags.ui \
-	top.ui \
 	trash.ui
-
-dist_noinst_DATA = \
-	set_background_dialog.ui \
-	set_background_slideshow_dialog.ui
 
 all: all-am
 
@@ -404,27 +375,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-dist_uiDATA: $(dist_ui_DATA)
-	@$(NORMAL_INSTALL)
-	@list='$(dist_ui_DATA)'; test -n "$(uidir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(uidir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(uidir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(uidir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(uidir)" || exit $$?; \
-	done
-
-uninstall-dist_uiDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(dist_ui_DATA)'; test -n "$(uidir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(uidir)'; $(am__uninstall_files_from_dir)
 tags TAGS:
 
 ctags CTAGS:
@@ -466,9 +416,6 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(uidir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -519,7 +466,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-dist_uiDATA
+install-data-am:
 
 install-dvi: install-dvi-am
 
@@ -563,22 +510,21 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-dist_uiDATA
+uninstall-am:
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	cscopelist-am ctags-am distclean distclean-generic \
 	distclean-libtool distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am \
-	install-dist_uiDATA install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags-am uninstall \
-	uninstall-am uninstall-dist_uiDATA
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags-am uninstall uninstall-am
 
 .PRECIOUS: Makefile
 

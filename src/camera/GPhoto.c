@@ -23,6 +23,10 @@
 #include <gio/gio.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gphoto2/gphoto2-file.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <unistd.h>
 #include <gobject/gvaluecollector.h>
 
 
@@ -236,28 +240,28 @@ GQuark gphoto_error_quark (void) {
 static void _gp_context_wrapper_on_idle_gp_context_idle_func (GPContext* context, gpointer self) {
 #line 18 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_idle ((GPContextWrapper*) self, context);
-#line 240 "GPhoto.c"
+#line 244 "GPhoto.c"
 }
 
 
 static void _gp_context_wrapper_on_error_gp_context_error_func (GPContext* context, const gchar* text, gpointer self) {
 #line 19 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_error ((GPContextWrapper*) self, context, text);
-#line 247 "GPhoto.c"
+#line 251 "GPhoto.c"
 }
 
 
 static void _gp_context_wrapper_on_status_gp_context_status_func (GPContext* context, const gchar* text, gpointer self) {
 #line 20 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_status ((GPContextWrapper*) self, context, text);
-#line 254 "GPhoto.c"
+#line 258 "GPhoto.c"
 }
 
 
 static void _gp_context_wrapper_on_message_gp_context_message_func (GPContext* context, const gchar* text, gpointer self) {
 #line 21 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_message ((GPContextWrapper*) self, context, text);
-#line 261 "GPhoto.c"
+#line 265 "GPhoto.c"
 }
 
 
@@ -266,21 +270,21 @@ static guint _gp_context_wrapper_on_progress_start_gp_context_progress_start_fun
 	result = gp_context_wrapper_on_progress_start ((GPContextWrapper*) self, context, target, text);
 #line 22 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 270 "GPhoto.c"
+#line 274 "GPhoto.c"
 }
 
 
 static void _gp_context_wrapper_on_progress_update_gp_context_progress_update_func (GPContext* context, guint id, gfloat current, gpointer self) {
 #line 22 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_progress_update ((GPContextWrapper*) self, context, id, current);
-#line 277 "GPhoto.c"
+#line 281 "GPhoto.c"
 }
 
 
 static void _gp_context_wrapper_on_progress_stop_gp_context_progress_stop_func (GPContext* context, guint id, gpointer self) {
 #line 22 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_on_progress_stop ((GPContextWrapper*) self, context, id);
-#line 284 "GPhoto.c"
+#line 288 "GPhoto.c"
 }
 
 
@@ -315,14 +319,14 @@ GPContextWrapper* gp_context_wrapper_construct (GType object_type) {
 	gp_context_set_progress_funcs (_tmp4_, _gp_context_wrapper_on_progress_start_gp_context_progress_start_func, _gp_context_wrapper_on_progress_update_gp_context_progress_update_func, _gp_context_wrapper_on_progress_stop_gp_context_progress_stop_func, self);
 #line 17 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return self;
-#line 319 "GPhoto.c"
+#line 323 "GPhoto.c"
 }
 
 
 GPContextWrapper* gp_context_wrapper_new (void) {
 #line 17 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return gp_context_wrapper_construct (GP_TYPE_CONTEXT_WRAPPER);
-#line 326 "GPhoto.c"
+#line 330 "GPhoto.c"
 }
 
 
@@ -335,14 +339,14 @@ void gp_context_wrapper_idle (GPContextWrapper* self) {
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 25 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->idle (self);
-#line 339 "GPhoto.c"
+#line 343 "GPhoto.c"
 }
 
 
 static void gp_context_wrapper_real_error (GPContextWrapper* self, const gchar* text, void* data) {
 #line 28 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (text != NULL);
-#line 346 "GPhoto.c"
+#line 350 "GPhoto.c"
 }
 
 
@@ -351,14 +355,14 @@ void gp_context_wrapper_error (GPContextWrapper* self, const gchar* text, void* 
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 28 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->error (self, text, data);
-#line 355 "GPhoto.c"
+#line 359 "GPhoto.c"
 }
 
 
 static void gp_context_wrapper_real_status (GPContextWrapper* self, const gchar* text, void* data) {
 #line 31 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (text != NULL);
-#line 362 "GPhoto.c"
+#line 366 "GPhoto.c"
 }
 
 
@@ -367,14 +371,14 @@ void gp_context_wrapper_status (GPContextWrapper* self, const gchar* text, void*
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 31 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->status (self, text, data);
-#line 371 "GPhoto.c"
+#line 375 "GPhoto.c"
 }
 
 
 static void gp_context_wrapper_real_message (GPContextWrapper* self, const gchar* text, void* data) {
 #line 34 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (text != NULL);
-#line 378 "GPhoto.c"
+#line 382 "GPhoto.c"
 }
 
 
@@ -383,14 +387,14 @@ void gp_context_wrapper_message (GPContextWrapper* self, const gchar* text, void
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 34 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->message (self, text, data);
-#line 387 "GPhoto.c"
+#line 391 "GPhoto.c"
 }
 
 
 static void gp_context_wrapper_real_progress_start (GPContextWrapper* self, gfloat current, const gchar* text, void* data) {
 #line 37 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (text != NULL);
-#line 394 "GPhoto.c"
+#line 398 "GPhoto.c"
 }
 
 
@@ -399,7 +403,7 @@ void gp_context_wrapper_progress_start (GPContextWrapper* self, gfloat current, 
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 37 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->progress_start (self, current, text, data);
-#line 403 "GPhoto.c"
+#line 407 "GPhoto.c"
 }
 
 
@@ -412,7 +416,7 @@ void gp_context_wrapper_progress_update (GPContextWrapper* self, gfloat current,
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 40 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->progress_update (self, current, data);
-#line 416 "GPhoto.c"
+#line 420 "GPhoto.c"
 }
 
 
@@ -425,7 +429,7 @@ void gp_context_wrapper_progress_stop (GPContextWrapper* self) {
 	g_return_if_fail (GP_IS_CONTEXT_WRAPPER (self));
 #line 43 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	GP_CONTEXT_WRAPPER_GET_CLASS (self)->progress_stop (self);
-#line 429 "GPhoto.c"
+#line 433 "GPhoto.c"
 }
 
 
@@ -436,7 +440,7 @@ static void gp_context_wrapper_on_idle (GPContextWrapper* self, GPContext* conte
 	g_return_if_fail (context != NULL);
 #line 47 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_idle (self);
-#line 440 "GPhoto.c"
+#line 444 "GPhoto.c"
 }
 
 
@@ -452,7 +456,7 @@ static void gp_context_wrapper_on_error (GPContextWrapper* self, GPContext* cont
 	_tmp0_ = text;
 #line 51 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_error (self, _tmp0_, NULL);
-#line 456 "GPhoto.c"
+#line 460 "GPhoto.c"
 }
 
 
@@ -468,7 +472,7 @@ static void gp_context_wrapper_on_status (GPContextWrapper* self, GPContext* con
 	_tmp0_ = text;
 #line 55 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_status (self, _tmp0_, NULL);
-#line 472 "GPhoto.c"
+#line 476 "GPhoto.c"
 }
 
 
@@ -484,7 +488,7 @@ static void gp_context_wrapper_on_message (GPContextWrapper* self, GPContext* co
 	_tmp0_ = text;
 #line 59 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_message (self, _tmp0_, NULL);
-#line 488 "GPhoto.c"
+#line 492 "GPhoto.c"
 }
 
 
@@ -508,7 +512,7 @@ static guint gp_context_wrapper_on_progress_start (GPContextWrapper* self, GPCon
 	result = (guint) 0;
 #line 65 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 512 "GPhoto.c"
+#line 516 "GPhoto.c"
 }
 
 
@@ -522,7 +526,7 @@ static void gp_context_wrapper_on_progress_update (GPContextWrapper* self, GPCon
 	_tmp0_ = current;
 #line 69 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_progress_update (self, _tmp0_, NULL);
-#line 526 "GPhoto.c"
+#line 530 "GPhoto.c"
 }
 
 
@@ -533,14 +537,14 @@ static void gp_context_wrapper_on_progress_stop (GPContextWrapper* self, GPConte
 	g_return_if_fail (context != NULL);
 #line 73 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_context_wrapper_progress_stop (self);
-#line 537 "GPhoto.c"
+#line 541 "GPhoto.c"
 }
 
 
 static void gp_value_context_wrapper_init (GValue* value) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	value->data[0].v_pointer = NULL;
-#line 544 "GPhoto.c"
+#line 548 "GPhoto.c"
 }
 
 
@@ -549,7 +553,7 @@ static void gp_value_context_wrapper_free_value (GValue* value) {
 	if (value->data[0].v_pointer) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		gp_context_wrapper_unref (value->data[0].v_pointer);
-#line 553 "GPhoto.c"
+#line 557 "GPhoto.c"
 	}
 }
 
@@ -559,11 +563,11 @@ static void gp_value_context_wrapper_copy_value (const GValue* src_value, GValue
 	if (src_value->data[0].v_pointer) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		dest_value->data[0].v_pointer = gp_context_wrapper_ref (src_value->data[0].v_pointer);
-#line 563 "GPhoto.c"
+#line 567 "GPhoto.c"
 	} else {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 567 "GPhoto.c"
+#line 571 "GPhoto.c"
 	}
 }
 
@@ -571,37 +575,37 @@ static void gp_value_context_wrapper_copy_value (const GValue* src_value, GValue
 static gpointer gp_value_context_wrapper_peek_pointer (const GValue* value) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return value->data[0].v_pointer;
-#line 575 "GPhoto.c"
+#line 579 "GPhoto.c"
 }
 
 
 static gchar* gp_value_context_wrapper_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (collect_values[0].v_pointer) {
-#line 582 "GPhoto.c"
+#line 586 "GPhoto.c"
 		GPContextWrapper* object;
 		object = collect_values[0].v_pointer;
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 589 "GPhoto.c"
+#line 593 "GPhoto.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 593 "GPhoto.c"
+#line 597 "GPhoto.c"
 		}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		value->data[0].v_pointer = gp_context_wrapper_ref (object);
-#line 597 "GPhoto.c"
+#line 601 "GPhoto.c"
 	} else {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		value->data[0].v_pointer = NULL;
-#line 601 "GPhoto.c"
+#line 605 "GPhoto.c"
 	}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return NULL;
-#line 605 "GPhoto.c"
+#line 609 "GPhoto.c"
 }
 
 
@@ -612,25 +616,25 @@ static gchar* gp_value_context_wrapper_lcopy_value (const GValue* value, guint n
 	if (!object_p) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 616 "GPhoto.c"
+#line 620 "GPhoto.c"
 	}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (!value->data[0].v_pointer) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*object_p = NULL;
-#line 622 "GPhoto.c"
+#line 626 "GPhoto.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*object_p = value->data[0].v_pointer;
-#line 626 "GPhoto.c"
+#line 630 "GPhoto.c"
 	} else {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*object_p = gp_context_wrapper_ref (value->data[0].v_pointer);
-#line 630 "GPhoto.c"
+#line 634 "GPhoto.c"
 	}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return NULL;
-#line 634 "GPhoto.c"
+#line 638 "GPhoto.c"
 }
 
 
@@ -644,7 +648,7 @@ GParamSpec* gp_param_spec_context_wrapper (const gchar* name, const gchar* nick,
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return G_PARAM_SPEC (spec);
-#line 648 "GPhoto.c"
+#line 652 "GPhoto.c"
 }
 
 
@@ -653,7 +657,7 @@ gpointer gp_value_get_context_wrapper (const GValue* value) {
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, GP_TYPE_CONTEXT_WRAPPER), NULL);
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return value->data[0].v_pointer;
-#line 657 "GPhoto.c"
+#line 661 "GPhoto.c"
 }
 
 
@@ -673,17 +677,17 @@ void gp_value_set_context_wrapper (GValue* value, gpointer v_object) {
 		value->data[0].v_pointer = v_object;
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		gp_context_wrapper_ref (value->data[0].v_pointer);
-#line 677 "GPhoto.c"
+#line 681 "GPhoto.c"
 	} else {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		value->data[0].v_pointer = NULL;
-#line 681 "GPhoto.c"
+#line 685 "GPhoto.c"
 	}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (old) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		gp_context_wrapper_unref (old);
-#line 687 "GPhoto.c"
+#line 691 "GPhoto.c"
 	}
 }
 
@@ -702,17 +706,17 @@ void gp_value_take_context_wrapper (GValue* value, gpointer v_object) {
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		value->data[0].v_pointer = v_object;
-#line 706 "GPhoto.c"
+#line 710 "GPhoto.c"
 	} else {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		value->data[0].v_pointer = NULL;
-#line 710 "GPhoto.c"
+#line 714 "GPhoto.c"
 	}
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (old) {
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		gp_context_wrapper_unref (old);
-#line 716 "GPhoto.c"
+#line 720 "GPhoto.c"
 	}
 }
 
@@ -736,7 +740,7 @@ static void gp_context_wrapper_class_init (GPContextWrapperClass * klass) {
 	((GPContextWrapperClass *) klass)->progress_update = gp_context_wrapper_real_progress_update;
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	((GPContextWrapperClass *) klass)->progress_stop = gp_context_wrapper_real_progress_stop;
-#line 740 "GPhoto.c"
+#line 744 "GPhoto.c"
 }
 
 
@@ -748,7 +752,7 @@ static void gp_context_wrapper_instance_init (GPContextWrapper * self) {
 	self->context = _tmp0_;
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	self->ref_count = 1;
-#line 752 "GPhoto.c"
+#line 756 "GPhoto.c"
 }
 
 
@@ -760,7 +764,7 @@ static void gp_context_wrapper_finalize (GPContextWrapper* obj) {
 	g_signal_handlers_destroy (self);
 #line 15 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_context_unref0 (self->context);
-#line 764 "GPhoto.c"
+#line 768 "GPhoto.c"
 }
 
 
@@ -785,7 +789,7 @@ gpointer gp_context_wrapper_ref (gpointer instance) {
 	g_atomic_int_inc (&self->ref_count);
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return instance;
-#line 789 "GPhoto.c"
+#line 793 "GPhoto.c"
 }
 
 
@@ -798,7 +802,7 @@ void gp_context_wrapper_unref (gpointer instance) {
 		GP_CONTEXT_WRAPPER_GET_CLASS (self)->finalize (self);
 #line 14 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 802 "GPhoto.c"
+#line 806 "GPhoto.c"
 	}
 }
 
@@ -809,14 +813,14 @@ GPSpinIdleWrapper* gp_spin_idle_wrapper_construct (GType object_type) {
 	self = (GPSpinIdleWrapper*) gp_context_wrapper_construct (object_type);
 #line 79 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return self;
-#line 813 "GPhoto.c"
+#line 817 "GPhoto.c"
 }
 
 
 GPSpinIdleWrapper* gp_spin_idle_wrapper_new (void) {
 #line 79 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return gp_spin_idle_wrapper_construct (GP_TYPE_SPIN_IDLE_WRAPPER);
-#line 820 "GPhoto.c"
+#line 824 "GPhoto.c"
 }
 
 
@@ -828,7 +832,7 @@ static void gp_spin_idle_wrapper_real_idle (GPContextWrapper* base) {
 	GP_CONTEXT_WRAPPER_CLASS (gp_spin_idle_wrapper_parent_class)->idle (G_TYPE_CHECK_INSTANCE_CAST (self, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper));
 #line 85 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	spin_event_loop ();
-#line 832 "GPhoto.c"
+#line 836 "GPhoto.c"
 }
 
 
@@ -846,7 +850,7 @@ static void gp_spin_idle_wrapper_real_progress_update (GPContextWrapper* base, g
 	GP_CONTEXT_WRAPPER_CLASS (gp_spin_idle_wrapper_parent_class)->progress_update (G_TYPE_CHECK_INSTANCE_CAST (self, GP_TYPE_CONTEXT_WRAPPER, GPContextWrapper), _tmp0_, _tmp1_);
 #line 91 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	spin_event_loop ();
-#line 850 "GPhoto.c"
+#line 854 "GPhoto.c"
 }
 
 
@@ -857,7 +861,7 @@ static void gp_spin_idle_wrapper_class_init (GPSpinIdleWrapperClass * klass) {
 	((GPContextWrapperClass *) klass)->idle = gp_spin_idle_wrapper_real_idle;
 #line 78 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	((GPContextWrapperClass *) klass)->progress_update = gp_spin_idle_wrapper_real_progress_update;
-#line 861 "GPhoto.c"
+#line 865 "GPhoto.c"
 }
 
 
@@ -911,7 +915,7 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 	if (_tmp3_ > GP_MAX_BASEDIR_LENGTH) {
 #line 104 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = TRUE;
-#line 915 "GPhoto.c"
+#line 919 "GPhoto.c"
 	} else {
 		const gchar* _tmp4_ = NULL;
 		gint _tmp5_ = 0;
@@ -924,11 +928,11 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 		_tmp6_ = _tmp5_;
 #line 104 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = _tmp6_ > GP_MAX_FILENAME_LENGTH;
-#line 928 "GPhoto.c"
+#line 932 "GPhoto.c"
 	}
 #line 104 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp0_) {
-#line 932 "GPhoto.c"
+#line 936 "GPhoto.c"
 		CameraFileInfo _tmp7_ = {0};
 #line 105 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		 (_vala_info);
@@ -940,15 +944,15 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 		if (info) {
 #line 107 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			*info = _vala_info;
-#line 944 "GPhoto.c"
+#line 948 "GPhoto.c"
 		} else {
 #line 107 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			 (_vala_info);
-#line 948 "GPhoto.c"
+#line 952 "GPhoto.c"
 		}
 #line 107 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 952 "GPhoto.c"
+#line 956 "GPhoto.c"
 	}
 #line 110 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp8_ = camera;
@@ -970,7 +974,7 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 	_tmp14_ = res;
 #line 111 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp14_ != GP_OK) {
-#line 974 "GPhoto.c"
+#line 978 "GPhoto.c"
 		int _tmp15_ = 0;
 		const gchar* _tmp16_ = NULL;
 		const gchar* _tmp17_ = NULL;
@@ -995,7 +999,7 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 		g_propagate_error (error, _inner_error_);
 #line 112 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return FALSE;
-#line 999 "GPhoto.c"
+#line 1003 "GPhoto.c"
 	}
 #line 115 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	result = TRUE;
@@ -1003,15 +1007,15 @@ gboolean gp_get_info (GPContext* context, Camera* camera, const gchar* folder, c
 	if (info) {
 #line 115 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*info = _vala_info;
-#line 1007 "GPhoto.c"
+#line 1011 "GPhoto.c"
 	} else {
 #line 115 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		 (_vala_info);
-#line 1011 "GPhoto.c"
+#line 1015 "GPhoto.c"
 	}
 #line 115 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 1015 "GPhoto.c"
+#line 1019 "GPhoto.c"
 }
 
 
@@ -1044,7 +1048,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	_tmp2_ = start;
 #line 1330 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp2_ < ((glong) 0)) {
-#line 1048 "GPhoto.c"
+#line 1052 "GPhoto.c"
 		glong _tmp3_ = 0L;
 		glong _tmp4_ = 0L;
 #line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1053,13 +1057,13 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp4_ = start;
 #line 1331 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		start = _tmp3_ + _tmp4_;
-#line 1057 "GPhoto.c"
+#line 1061 "GPhoto.c"
 	}
 #line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp5_ = end;
 #line 1333 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp5_ < ((glong) 0)) {
-#line 1063 "GPhoto.c"
+#line 1067 "GPhoto.c"
 		glong _tmp6_ = 0L;
 		glong _tmp7_ = 0L;
 #line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1068,13 +1072,13 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp7_ = end;
 #line 1334 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		end = _tmp6_ + _tmp7_;
-#line 1072 "GPhoto.c"
+#line 1076 "GPhoto.c"
 	}
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	_tmp9_ = start;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp9_ >= ((glong) 0)) {
-#line 1078 "GPhoto.c"
+#line 1082 "GPhoto.c"
 		glong _tmp10_ = 0L;
 		glong _tmp11_ = 0L;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1083,11 +1087,11 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp11_ = string_length;
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp8_ = _tmp10_ <= _tmp11_;
-#line 1087 "GPhoto.c"
+#line 1091 "GPhoto.c"
 	} else {
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp8_ = FALSE;
-#line 1091 "GPhoto.c"
+#line 1095 "GPhoto.c"
 	}
 #line 1336 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (_tmp8_, NULL);
@@ -1095,7 +1099,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	_tmp13_ = end;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (_tmp13_ >= ((glong) 0)) {
-#line 1099 "GPhoto.c"
+#line 1103 "GPhoto.c"
 		glong _tmp14_ = 0L;
 		glong _tmp15_ = 0L;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1104,11 +1108,11 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 		_tmp15_ = string_length;
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp12_ = _tmp14_ <= _tmp15_;
-#line 1108 "GPhoto.c"
+#line 1112 "GPhoto.c"
 	} else {
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 		_tmp12_ = FALSE;
-#line 1112 "GPhoto.c"
+#line 1116 "GPhoto.c"
 	}
 #line 1337 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	g_return_val_if_fail (_tmp12_, NULL);
@@ -1130,7 +1134,7 @@ static gchar* string_slice (const gchar* self, glong start, glong end) {
 	result = _tmp21_;
 #line 1339 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	return result;
-#line 1134 "GPhoto.c"
+#line 1138 "GPhoto.c"
 }
 
 
@@ -1200,7 +1204,7 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 	_tmp9_ = g_str_has_prefix (_tmp8_, prefix);
 #line 133 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp9_) {
-#line 1204 "GPhoto.c"
+#line 1208 "GPhoto.c"
 		const gchar* _tmp10_ = NULL;
 		gint _tmp11_ = 0;
 		gint _tmp12_ = 0;
@@ -1226,7 +1230,7 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		_g_free0 (path);
 #line 134 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		path = _tmp16_;
-#line 1230 "GPhoto.c"
+#line 1234 "GPhoto.c"
 	} else {
 #line 136 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		result = NULL;
@@ -1238,13 +1242,13 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		 (port_info);
 #line 136 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 1242 "GPhoto.c"
+#line 1246 "GPhoto.c"
 	}
 #line 138 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp17_ = photo_metadata_new ();
 #line 138 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	metadata = _tmp17_;
-#line 1248 "GPhoto.c"
+#line 1252 "GPhoto.c"
 	{
 		PhotoMetadata* _tmp18_ = NULL;
 		const gchar* _tmp19_ = NULL;
@@ -1294,12 +1298,12 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		_g_free0 (_tmp22_);
 #line 140 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1298 "GPhoto.c"
-			goto __catch60_g_error;
+#line 1302 "GPhoto.c"
+			goto __catch61_g_error;
 		}
 	}
-	goto __finally60;
-	__catch60_g_error:
+	goto __finally61;
+	__catch61_g_error:
 	{
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_clear_error (&_inner_error_);
@@ -1309,9 +1313,9 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		_media_metadata_unref0 (metadata);
 #line 142 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		metadata = NULL;
-#line 1313 "GPhoto.c"
+#line 1317 "GPhoto.c"
 	}
-	__finally60:
+	__finally61:
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
@@ -1328,7 +1332,7 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 		g_clear_error (&_inner_error_);
 #line 139 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 1332 "GPhoto.c"
+#line 1336 "GPhoto.c"
 	}
 #line 145 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	result = metadata;
@@ -1340,14 +1344,14 @@ PhotoMetadata* gp_get_fallback_metadata (Camera* camera, GPContext* context, con
 	 (port_info);
 #line 145 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 1344 "GPhoto.c"
+#line 1348 "GPhoto.c"
 }
 
 
 static guint8* _vala_array_dup23 (guint8* self, int length) {
 #line 186 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return g_memdup (self, length * sizeof (guint8));
-#line 1351 "GPhoto.c"
+#line 1355 "GPhoto.c"
 }
 
 
@@ -1388,7 +1392,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 	_vala_raw_length1 = 0;
 #line 151 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_vala_raw_length = (gsize) 0;
-#line 1392 "GPhoto.c"
+#line 1396 "GPhoto.c"
 	{
 		guint8* _tmp0_ = NULL;
 		GPContext* _tmp1_ = NULL;
@@ -1419,8 +1423,8 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		__tmp0__size_ = _tmp0__length1;
 #line 154 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 1423 "GPhoto.c"
-			goto __catch61_g_error;
+#line 1427 "GPhoto.c"
+			goto __catch62_g_error;
 		}
 #line 154 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp7_ = _tmp0_;
@@ -1438,10 +1442,10 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		_vala_raw_length1 = _tmp7__length1;
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = (g_free (_tmp0_), NULL);
-#line 1442 "GPhoto.c"
+#line 1446 "GPhoto.c"
 	}
-	goto __finally61;
-	__catch61_g_error:
+	goto __finally62;
+	__catch62_g_error:
 	{
 		PhotoMetadata* metadata = NULL;
 		Camera* _tmp8_ = NULL;
@@ -1493,27 +1497,27 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 			if (raw) {
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw = _vala_raw;
-#line 1497 "GPhoto.c"
+#line 1501 "GPhoto.c"
 			} else {
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				_vala_raw = (g_free (_vala_raw), NULL);
-#line 1501 "GPhoto.c"
+#line 1505 "GPhoto.c"
 			}
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			if (raw_length1) {
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw_length1 = _vala_raw_length1;
-#line 1507 "GPhoto.c"
+#line 1511 "GPhoto.c"
 			}
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			if (raw_length) {
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw_length = _vala_raw_length;
-#line 1513 "GPhoto.c"
+#line 1517 "GPhoto.c"
 			}
 #line 158 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			return result;
-#line 1517 "GPhoto.c"
+#line 1521 "GPhoto.c"
 		}
 #line 159 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp14_ = metadata;
@@ -1529,27 +1533,27 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 			if (raw) {
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw = _vala_raw;
-#line 1533 "GPhoto.c"
+#line 1537 "GPhoto.c"
 			} else {
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				_vala_raw = (g_free (_vala_raw), NULL);
-#line 1537 "GPhoto.c"
+#line 1541 "GPhoto.c"
 			}
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			if (raw_length1) {
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw_length1 = _vala_raw_length1;
-#line 1543 "GPhoto.c"
+#line 1547 "GPhoto.c"
 			}
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			if (raw_length) {
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				*raw_length = _vala_raw_length;
-#line 1549 "GPhoto.c"
+#line 1553 "GPhoto.c"
 			}
 #line 160 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			return result;
-#line 1553 "GPhoto.c"
+#line 1557 "GPhoto.c"
 		}
 #line 161 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp16_ = metadata;
@@ -1577,8 +1581,8 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 			_photo_preview_unref0 (preview);
 #line 162 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			_media_metadata_unref0 (metadata);
-#line 1581 "GPhoto.c"
-			goto __finally61;
+#line 1585 "GPhoto.c"
+			goto __finally62;
 		}
 #line 162 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp24_ = _tmp20_;
@@ -1600,16 +1604,16 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		_photo_preview_unref0 (preview);
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_media_metadata_unref0 (metadata);
-#line 1604 "GPhoto.c"
+#line 1608 "GPhoto.c"
 	}
-	__finally61:
+	__finally62:
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
 #line 153 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 1613 "GPhoto.c"
+#line 1617 "GPhoto.c"
 	}
 #line 165 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp25_ = _vala_raw;
@@ -1625,27 +1629,27 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		if (raw) {
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			*raw = _vala_raw;
-#line 1629 "GPhoto.c"
+#line 1633 "GPhoto.c"
 		} else {
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			_vala_raw = (g_free (_vala_raw), NULL);
-#line 1633 "GPhoto.c"
+#line 1637 "GPhoto.c"
 		}
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (raw_length1) {
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			*raw_length1 = _vala_raw_length1;
-#line 1639 "GPhoto.c"
+#line 1643 "GPhoto.c"
 		}
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (raw_length) {
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			*raw_length = _vala_raw_length;
-#line 1645 "GPhoto.c"
+#line 1649 "GPhoto.c"
 		}
 #line 167 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 1649 "GPhoto.c"
+#line 1653 "GPhoto.c"
 	}
 #line 170 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp26_ = _vala_raw;
@@ -1657,7 +1661,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 	_tmp27_ = _vala_raw_length;
 #line 176 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp27_ > ((gsize) 32)) {
-#line 1661 "GPhoto.c"
+#line 1665 "GPhoto.c"
 		{
 			gsize i = 0UL;
 			gsize _tmp28_ = 0UL;
@@ -1665,14 +1669,14 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 			_tmp28_ = _vala_raw_length;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			i = _tmp28_ - 2;
-#line 1669 "GPhoto.c"
+#line 1673 "GPhoto.c"
 			{
 				gboolean _tmp29_ = FALSE;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				_tmp29_ = TRUE;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 				while (TRUE) {
-#line 1676 "GPhoto.c"
+#line 1680 "GPhoto.c"
 					gsize _tmp31_ = 0UL;
 					gsize _tmp32_ = 0UL;
 					gboolean _tmp33_ = FALSE;
@@ -1682,13 +1686,13 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 					guint8 _tmp36_ = 0U;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 					if (!_tmp29_) {
-#line 1686 "GPhoto.c"
+#line 1690 "GPhoto.c"
 						gsize _tmp30_ = 0UL;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						_tmp30_ = i;
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						i = _tmp30_ - 1;
-#line 1692 "GPhoto.c"
+#line 1696 "GPhoto.c"
 					}
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 					_tmp29_ = FALSE;
@@ -1700,7 +1704,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 					if (!(_tmp31_ > (_tmp32_ - 32))) {
 #line 177 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						break;
-#line 1704 "GPhoto.c"
+#line 1708 "GPhoto.c"
 					}
 #line 178 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 					_tmp34_ = _vala_raw;
@@ -1712,7 +1716,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 					_tmp36_ = _tmp34_[_tmp35_];
 #line 178 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 					if (_tmp36_ == JPEG_MARKER_PREFIX) {
-#line 1716 "GPhoto.c"
+#line 1720 "GPhoto.c"
 						guint8* _tmp37_ = NULL;
 						gint _tmp37__length1 = 0;
 						gsize _tmp38_ = 0UL;
@@ -1727,15 +1731,15 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 						_tmp39_ = _tmp37_[_tmp38_ + 1];
 #line 178 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						_tmp33_ = _tmp39_ == JPEG_MARKER_EOI;
-#line 1731 "GPhoto.c"
+#line 1735 "GPhoto.c"
 					} else {
 #line 178 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						_tmp33_ = FALSE;
-#line 1735 "GPhoto.c"
+#line 1739 "GPhoto.c"
 					}
 #line 178 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 					if (_tmp33_) {
-#line 1739 "GPhoto.c"
+#line 1743 "GPhoto.c"
 						const gchar* _tmp40_ = NULL;
 						gsize _tmp41_ = 0UL;
 #line 179 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
@@ -1748,7 +1752,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 						_vala_raw_length = _tmp41_ + 2;
 #line 181 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 						break;
-#line 1752 "GPhoto.c"
+#line 1756 "GPhoto.c"
 					}
 				}
 			}
@@ -1780,7 +1784,7 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 		_g_object_unref0 (mins);
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 1784 "GPhoto.c"
+#line 1788 "GPhoto.c"
 	}
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp48_ = _tmp45_;
@@ -1796,27 +1800,27 @@ GdkPixbuf* gp_load_preview (GPContext* context, Camera* camera, const gchar* fol
 	if (raw) {
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*raw = _vala_raw;
-#line 1800 "GPhoto.c"
+#line 1804 "GPhoto.c"
 	} else {
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_vala_raw = (g_free (_vala_raw), NULL);
-#line 1804 "GPhoto.c"
+#line 1808 "GPhoto.c"
 	}
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (raw_length1) {
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*raw_length1 = _vala_raw_length1;
-#line 1810 "GPhoto.c"
+#line 1814 "GPhoto.c"
 	}
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (raw_length) {
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*raw_length = _vala_raw_length;
-#line 1816 "GPhoto.c"
+#line 1820 "GPhoto.c"
 	}
 #line 187 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 1820 "GPhoto.c"
+#line 1824 "GPhoto.c"
 }
 
 
@@ -1860,7 +1864,7 @@ GdkPixbuf* gp_load_image (GPContext* context, Camera* camera, const gchar* folde
 		g_propagate_error (error, _inner_error_);
 #line 192 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 1864 "GPhoto.c"
+#line 1868 "GPhoto.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp5_ = ins;
@@ -1872,7 +1876,7 @@ GdkPixbuf* gp_load_image (GPContext* context, Camera* camera, const gchar* folde
 		_g_object_unref0 (ins);
 #line 194 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 1876 "GPhoto.c"
+#line 1880 "GPhoto.c"
 	}
 #line 196 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp7_ = ins;
@@ -1888,7 +1892,7 @@ GdkPixbuf* gp_load_image (GPContext* context, Camera* camera, const gchar* folde
 		_g_object_unref0 (ins);
 #line 196 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 1892 "GPhoto.c"
+#line 1896 "GPhoto.c"
 	}
 #line 196 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp9_ = _tmp6_;
@@ -1902,29 +1906,32 @@ GdkPixbuf* gp_load_image (GPContext* context, Camera* camera, const gchar* folde
 	_g_object_unref0 (ins);
 #line 196 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 1906 "GPhoto.c"
+#line 1910 "GPhoto.c"
 }
 
 
 void gp_save_image (GPContext* context, Camera* camera, const gchar* folder, const gchar* filename, GFile* dest_file, GError** error) {
+	gint fd = 0;
+	GFile* _tmp0_ = NULL;
+	gchar* _tmp1_ = NULL;
+	gchar* _tmp2_ = NULL;
+	gint _tmp3_ = 0;
+	gint _tmp4_ = 0;
+	gint _tmp5_ = 0;
 	CameraFile* camera_file = NULL;
 	int res = 0;
-	CameraFile* _tmp0_ = NULL;
-	int _tmp1_ = 0;
-	int _tmp2_ = 0;
-	Camera* _tmp7_ = NULL;
-	const gchar* _tmp8_ = NULL;
-	const gchar* _tmp9_ = NULL;
-	CameraFile* _tmp10_ = NULL;
-	GPContext* _tmp11_ = NULL;
-	int _tmp12_ = 0;
-	int _tmp13_ = 0;
-	CameraFile* _tmp20_ = NULL;
-	GFile* _tmp21_ = NULL;
-	gchar* _tmp22_ = NULL;
-	gchar* _tmp23_ = NULL;
-	int _tmp24_ = 0;
-	int _tmp25_ = 0;
+	gint _tmp12_ = 0;
+	CameraFile* _tmp13_ = NULL;
+	int _tmp14_ = 0;
+	int _tmp15_ = 0;
+	Camera* _tmp21_ = NULL;
+	const gchar* _tmp22_ = NULL;
+	const gchar* _tmp23_ = NULL;
+	CameraFile* _tmp24_ = NULL;
+	GPContext* _tmp25_ = NULL;
+	int _tmp26_ = 0;
+	int _tmp27_ = 0;
+	gint _tmp35_ = 0;
 	GError * _inner_error_ = NULL;
 #line 199 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (context != NULL);
@@ -1936,152 +1943,154 @@ void gp_save_image (GPContext* context, Camera* camera, const gchar* folder, con
 	g_return_if_fail (filename != NULL);
 #line 199 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_if_fail (G_IS_FILE (dest_file));
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp0_ = dest_file;
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp1_ = g_file_get_path (_tmp0_);
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp2_ = _tmp1_;
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp3_ = creat (_tmp2_, (mode_t) 0640);
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp4_ = _tmp3_;
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_g_free0 (_tmp2_);
+#line 200 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	fd = _tmp4_;
+#line 201 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp5_ = fd;
+#line 201 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	if (_tmp5_ < 0) {
+#line 1965 "GPhoto.c"
+		gint _tmp6_ = 0;
+		GFile* _tmp7_ = NULL;
+		gchar* _tmp8_ = NULL;
+		gchar* _tmp9_ = NULL;
+		GError* _tmp10_ = NULL;
+		GError* _tmp11_ = NULL;
 #line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp1_ = gp_file_new (&_tmp0_);
+		_tmp6_ = errno;
 #line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp7_ = dest_file;
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp8_ = g_file_get_path (_tmp7_);
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp9_ = _tmp8_;
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp10_ = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED, "[%d] Error creating file %s: %m", _tmp6_, _tmp9_);
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp11_ = _tmp10_;
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_g_free0 (_tmp9_);
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_inner_error_ = _tmp11_;
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		g_propagate_error (error, _inner_error_);
+#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		return;
+#line 1992 "GPhoto.c"
+	}
+#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp12_ = fd;
+#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp14_ = gp_file_new_from_fd (&_tmp13_, _tmp12_);
+#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	camera_file = _tmp0_;
-#line 202 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	res = _tmp1_;
-#line 203 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp2_ = res;
-#line 203 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	if (_tmp2_ != GP_OK) {
-#line 1952 "GPhoto.c"
-		int _tmp3_ = 0;
-		int _tmp4_ = 0;
-		const gchar* _tmp5_ = NULL;
-		GError* _tmp6_ = NULL;
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp3_ = res;
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp4_ = res;
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp5_ = gp_port_result_as_string (_tmp4_);
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp6_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error allocating camera file: %s", (gint) _tmp3_, _tmp5_);
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_inner_error_ = _tmp6_;
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		g_propagate_error (error, _inner_error_);
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_gp_file_unref0 (camera_file);
-#line 204 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		return;
-#line 1973 "GPhoto.c"
-	}
 #line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp7_ = camera;
+	camera_file = _tmp13_;
 #line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp8_ = folder;
-#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp9_ = filename;
-#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp10_ = camera_file;
-#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp11_ = context;
-#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp12_ = gp_camera_file_get (_tmp7_, _tmp8_, _tmp9_, GP_FILE_TYPE_NORMAL, _tmp10_, _tmp11_);
-#line 206 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	res = _tmp12_;
+	res = _tmp14_;
 #line 207 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp13_ = res;
+	_tmp15_ = res;
 #line 207 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	if (_tmp13_ != GP_OK) {
-#line 1993 "GPhoto.c"
-		int _tmp14_ = 0;
-		const gchar* _tmp15_ = NULL;
-		const gchar* _tmp16_ = NULL;
+	if (_tmp15_ != GP_OK) {
+#line 2008 "GPhoto.c"
+		gint _tmp16_ = 0;
 		int _tmp17_ = 0;
-		const gchar* _tmp18_ = NULL;
-		GError* _tmp19_ = NULL;
+		int _tmp18_ = 0;
+		const gchar* _tmp19_ = NULL;
+		GError* _tmp20_ = NULL;
 #line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp14_ = res;
+		_tmp16_ = fd;
 #line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp15_ = folder;
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp16_ = filename;
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		close (_tmp16_);
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp17_ = res;
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp18_ = gp_port_result_as_string (_tmp17_);
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp19_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error retrieving file object for %s/%s: %s", (gint) _tmp14_, _tmp15_, _tmp16_, _tmp18_);
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_inner_error_ = _tmp19_;
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp18_ = res;
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp19_ = gp_port_result_as_string (_tmp18_);
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp20_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error allocating camera file: %s", (gint) _tmp17_, _tmp19_);
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_inner_error_ = _tmp20_;
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 208 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 209 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return;
-#line 2020 "GPhoto.c"
+#line 2034 "GPhoto.c"
 	}
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp20_ = camera_file;
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp21_ = dest_file;
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp22_ = g_file_get_path (_tmp21_);
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp23_ = _tmp22_;
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp24_ = gp_file_save (_tmp20_, _tmp23_);
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	res = _tmp24_;
-#line 211 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_g_free0 (_tmp23_);
 #line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	_tmp25_ = res;
+	_tmp21_ = camera;
 #line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-	if (_tmp25_ != GP_OK) {
-#line 2040 "GPhoto.c"
-		int _tmp26_ = 0;
-		const gchar* _tmp27_ = NULL;
-		const gchar* _tmp28_ = NULL;
-		GFile* _tmp29_ = NULL;
-		gchar* _tmp30_ = NULL;
-		gchar* _tmp31_ = NULL;
+	_tmp22_ = folder;
+#line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp23_ = filename;
+#line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp24_ = camera_file;
+#line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp25_ = context;
+#line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp26_ = gp_camera_file_get (_tmp21_, _tmp22_, _tmp23_, GP_FILE_TYPE_NORMAL, _tmp24_, _tmp25_);
+#line 212 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	res = _tmp26_;
+#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp27_ = res;
+#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	if (_tmp27_ != GP_OK) {
+#line 2054 "GPhoto.c"
+		gint _tmp28_ = 0;
+		int _tmp29_ = 0;
+		const gchar* _tmp30_ = NULL;
+		const gchar* _tmp31_ = NULL;
 		int _tmp32_ = 0;
 		const gchar* _tmp33_ = NULL;
 		GError* _tmp34_ = NULL;
-		GError* _tmp35_ = NULL;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp26_ = res;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp27_ = folder;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp28_ = filename;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp29_ = dest_file;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp30_ = g_file_get_path (_tmp29_);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp31_ = _tmp30_;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 214 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp28_ = fd;
+#line 214 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		close (_tmp28_);
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp29_ = res;
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp30_ = folder;
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp31_ = filename;
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp32_ = res;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp33_ = gp_port_result_as_string (_tmp32_);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp34_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error copying file %s/%s to %s: %s", (gint) _tmp26_, _tmp27_, _tmp28_, _tmp31_, _tmp33_);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_tmp35_ = _tmp34_;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_g_free0 (_tmp31_);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
-		_inner_error_ = _tmp35_;
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_tmp34_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error retrieving file object for %s/%s: %s", (gint) _tmp29_, _tmp30_, _tmp31_, _tmp33_);
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+		_inner_error_ = _tmp34_;
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 213 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 215 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return;
-#line 2081 "GPhoto.c"
+#line 2086 "GPhoto.c"
 	}
+#line 219 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	_tmp35_ = fd;
+#line 219 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	close (_tmp35_);
 #line 199 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 2085 "GPhoto.c"
+#line 2094 "GPhoto.c"
 }
 
 
@@ -2099,21 +2108,21 @@ PhotoMetadata* gp_load_metadata (GPContext* context, Camera* camera, const gchar
 	guint8* _tmp18_ = NULL;
 	gint _tmp18__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 217 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 222 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (context != NULL, NULL);
-#line 217 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 222 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (camera != NULL, NULL);
-#line 217 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 222 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (folder != NULL, NULL);
-#line 217 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 222 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (filename != NULL, NULL);
-#line 219 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 224 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	camera_raw = NULL;
-#line 219 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 224 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	camera_raw_length1 = 0;
-#line 219 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 224 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_camera_raw_size_ = camera_raw_length1;
-#line 2117 "GPhoto.c"
+#line 2126 "GPhoto.c"
 	{
 		guint8* _tmp0_ = NULL;
 		GPContext* _tmp1_ = NULL;
@@ -2126,163 +2135,163 @@ PhotoMetadata* gp_load_metadata (GPContext* context, Camera* camera, const gchar
 		gint __tmp0__size_ = 0;
 		guint8* _tmp7_ = NULL;
 		gint _tmp7__length1 = 0;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp1_ = context;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp2_ = camera;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp3_ = folder;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp4_ = filename;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp6_ = gp_load_file_into_buffer (_tmp1_, _tmp2_, _tmp3_, _tmp4_, GP_FILE_TYPE_EXIF, &_tmp5_, &_inner_error_);
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = _tmp6_;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0__length1 = _tmp5_;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		__tmp0__size_ = _tmp0__length1;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2148 "GPhoto.c"
-			goto __catch62_g_error;
+#line 2157 "GPhoto.c"
+			goto __catch63_g_error;
 		}
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp7_ = _tmp0_;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp7__length1 = _tmp0__length1;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = NULL;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0__length1 = 0;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = (g_free (camera_raw), NULL);
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = _tmp7_;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw_length1 = _tmp7__length1;
-#line 221 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_camera_raw_size_ = camera_raw_length1;
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp0_ = (g_free (_tmp0_), NULL);
-#line 2169 "GPhoto.c"
+#line 2178 "GPhoto.c"
 	}
-	goto __finally62;
-	__catch62_g_error:
+	goto __finally63;
+	__catch63_g_error:
 	{
 		Camera* _tmp8_ = NULL;
 		GPContext* _tmp9_ = NULL;
 		const gchar* _tmp10_ = NULL;
 		const gchar* _tmp11_ = NULL;
 		PhotoMetadata* _tmp12_ = NULL;
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_clear_error (&_inner_error_);
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = NULL;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp8_ = camera;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp9_ = context;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp10_ = folder;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp11_ = filename;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp12_ = gp_get_fallback_metadata (_tmp8_, _tmp9_, _tmp10_, _tmp11_);
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		result = _tmp12_;
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = (g_free (camera_raw), NULL);
-#line 223 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 228 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 2199 "GPhoto.c"
+#line 2208 "GPhoto.c"
 	}
-	__finally62:
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+	__finally63:
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = (g_free (camera_raw), NULL);
-#line 220 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 225 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2210 "GPhoto.c"
+#line 2219 "GPhoto.c"
 	}
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp14_ = camera_raw;
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp14__length1 = camera_raw_length1;
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp14_ == NULL) {
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp13_ = TRUE;
-#line 2220 "GPhoto.c"
+#line 2229 "GPhoto.c"
 	} else {
 		guint8* _tmp15_ = NULL;
 		gint _tmp15__length1 = 0;
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp15_ = camera_raw;
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp15__length1 = camera_raw_length1;
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp13_ = _tmp15__length1 == 0;
-#line 2230 "GPhoto.c"
+#line 2239 "GPhoto.c"
 	}
-#line 226 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 231 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp13_) {
-#line 227 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		result = NULL;
-#line 227 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = (g_free (camera_raw), NULL);
-#line 227 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 2240 "GPhoto.c"
+#line 2249 "GPhoto.c"
 	}
-#line 229 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 234 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp16_ = photo_metadata_new ();
-#line 229 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 234 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	metadata = _tmp16_;
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp17_ = metadata;
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp18_ = camera_raw;
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp18__length1 = camera_raw_length1;
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	photo_metadata_read_from_app1_segment (_tmp17_, _tmp18_, _tmp18__length1, 0, &_inner_error_);
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_media_metadata_unref0 (metadata);
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		camera_raw = (g_free (camera_raw), NULL);
-#line 230 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 235 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2264 "GPhoto.c"
+#line 2273 "GPhoto.c"
 	}
-#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	result = metadata;
-#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	camera_raw = (g_free (camera_raw), NULL);
-#line 232 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 2272 "GPhoto.c"
+#line 2281 "GPhoto.c"
 }
 
 
 static guint8* _vala_array_dup24 (guint8* self, int length) {
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return g_memdup (self, length * sizeof (guint8));
-#line 2279 "GPhoto.c"
+#line 2288 "GPhoto.c"
 }
 
 
 static void _gp_on_mins_destroyed_gdestroy_notify (void* data) {
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	gp_on_mins_destroyed (data);
-#line 2286 "GPhoto.c"
+#line 2295 "GPhoto.c"
 }
 
 
@@ -2321,109 +2330,109 @@ GInputStream* gp_load_file_into_stream (GPContext* context, Camera* camera, cons
 	GFileInputStream* _tmp53_ = NULL;
 	GFileInputStream* _tmp54_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (context != NULL, NULL);
-#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (camera != NULL, NULL);
-#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (folder != NULL, NULL);
-#line 237 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (filename != NULL, NULL);
-#line 240 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp1_ = gp_file_new (&_tmp0_);
-#line 240 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 240 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	camera_file = _tmp0_;
-#line 240 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp1_;
-#line 241 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp2_ = res;
-#line 241 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp2_ != GP_OK) {
-#line 2345 "GPhoto.c"
+#line 2354 "GPhoto.c"
 		int _tmp3_ = 0;
 		int _tmp4_ = 0;
 		const gchar* _tmp5_ = NULL;
 		GError* _tmp6_ = NULL;
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp3_ = res;
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp4_ = res;
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp5_ = gp_port_result_as_string (_tmp4_);
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp6_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error allocating camera file: %s", (gint) _tmp3_, _tmp5_);
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = _tmp6_;
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 242 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 247 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2366 "GPhoto.c"
+#line 2375 "GPhoto.c"
 	}
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp7_ = camera;
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp8_ = folder;
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp9_ = filename;
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp10_ = filetype;
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp11_ = context;
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp12_ = gp_camera_file_get (_tmp7_, _tmp8_, _tmp9_, _tmp10_, camera_file, _tmp11_);
-#line 244 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 249 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp12_;
-#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 250 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp13_ = res;
-#line 245 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 250 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp13_ != GP_OK) {
-#line 2386 "GPhoto.c"
+#line 2395 "GPhoto.c"
 		int _tmp14_ = 0;
 		const gchar* _tmp15_ = NULL;
 		const gchar* _tmp16_ = NULL;
 		int _tmp17_ = 0;
 		const gchar* _tmp18_ = NULL;
 		GError* _tmp19_ = NULL;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp14_ = res;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp15_ = folder;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp16_ = filename;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp17_ = res;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp18_ = gp_port_result_as_string (_tmp17_);
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp19_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error retrieving file object for %s/%s: %s", (gint) _tmp14_, _tmp15_, _tmp16_, _tmp18_);
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = _tmp19_;
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 246 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 251 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2413 "GPhoto.c"
+#line 2422 "GPhoto.c"
 	}
-#line 254 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp22_ = gp_file_get_data_and_size (camera_file, &_tmp20_, &_tmp21_);
-#line 254 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	data = _tmp20_;
-#line 254 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	data_len = _tmp21_;
-#line 254 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp22_;
-#line 255 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 260 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp23_ = res;
-#line 255 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 260 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp23_ == GP_OK) {
-#line 2427 "GPhoto.c"
+#line 2436 "GPhoto.c"
 		guint8* buffer = NULL;
 		gulong _tmp24_ = 0UL;
 		guint8* _tmp25_ = NULL;
@@ -2439,77 +2448,77 @@ GInputStream* gp_load_file_into_stream (GPContext* context, Camera* camera, cons
 		guint8* _tmp30_ = NULL;
 		gint _tmp30__length1 = 0;
 		GMemoryInputStream* _tmp31_ = NULL;
-#line 256 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 261 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp24_ = data_len;
-#line 256 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 261 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp25_ = g_new0 (guint8, _tmp24_);
-#line 256 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 261 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		buffer = _tmp25_;
-#line 256 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 261 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		buffer_length1 = _tmp24_;
-#line 256 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 261 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_buffer_size_ = buffer_length1;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp26_ = buffer;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp26__length1 = buffer_length1;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp27_ = data;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp28_ = buffer;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp28__length1 = buffer_length1;
-#line 257 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 262 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		memcpy (_tmp26_, _tmp27_, (gsize) _tmp28__length1);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp29_ = buffer;
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp29__length1 = buffer_length1;
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp30_ = (_tmp29_ != NULL) ? _vala_array_dup24 (_tmp29_, _tmp29__length1) : ((gpointer) _tmp29_);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp30__length1 = _tmp29__length1;
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp31_ = (GMemoryInputStream*) g_memory_input_stream_new_from_data (_tmp30_, _tmp30__length1, _gp_on_mins_destroyed_gdestroy_notify);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		result = G_TYPE_CHECK_INSTANCE_CAST (_tmp31_, g_input_stream_get_type (), GInputStream);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		buffer = (g_free (buffer), NULL);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 259 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 2483 "GPhoto.c"
+#line 2492 "GPhoto.c"
 	}
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp32_ = app_dirs_get_temp_dir ();
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp33_ = _tmp32_;
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp34_ = g_file_get_child (_tmp33_, "import.tmp");
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp35_ = _tmp34_;
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_g_object_unref0 (_tmp33_);
-#line 263 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 268 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	temp = _tmp35_;
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp36_ = temp;
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp37_ = g_file_get_path (_tmp36_);
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp38_ = _tmp37_;
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp39_ = gp_file_save (camera_file, _tmp38_);
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp39_;
-#line 264 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_g_free0 (_tmp38_);
-#line 265 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 270 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp40_ = res;
-#line 265 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 270 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp40_ != GP_OK) {
-#line 2513 "GPhoto.c"
+#line 2522 "GPhoto.c"
 		int _tmp41_ = 0;
 		const gchar* _tmp42_ = NULL;
 		const gchar* _tmp43_ = NULL;
@@ -2520,83 +2529,83 @@ GInputStream* gp_load_file_into_stream (GPContext* context, Camera* camera, cons
 		const gchar* _tmp48_ = NULL;
 		GError* _tmp49_ = NULL;
 		GError* _tmp50_ = NULL;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp41_ = res;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp42_ = folder;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp43_ = filename;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp44_ = temp;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp45_ = g_file_get_path (_tmp44_);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp46_ = _tmp45_;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp47_ = res;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp48_ = gp_port_result_as_string (_tmp47_);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp49_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error copying file %s/%s to %s: %s", (gint) _tmp41_, _tmp42_, _tmp43_, _tmp46_, _tmp48_);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp50_ = _tmp49_;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_g_free0 (_tmp46_);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = _tmp50_;
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_g_object_unref0 (temp);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 266 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 271 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2556 "GPhoto.c"
+#line 2565 "GPhoto.c"
 	}
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp52_ = temp;
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp53_ = g_file_read (_tmp52_, NULL, &_inner_error_);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp51_ = _tmp53_;
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_g_object_unref0 (temp);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2574 "GPhoto.c"
+#line 2583 "GPhoto.c"
 	}
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp54_ = _tmp51_;
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp51_ = NULL;
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, g_input_stream_get_type (), GInputStream);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_g_object_unref0 (_tmp51_);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_g_object_unref0 (temp);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 269 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 274 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 2590 "GPhoto.c"
+#line 2599 "GPhoto.c"
 }
 
 
 void gp_on_mins_destroyed (void* data) {
 	void* _tmp0_ = NULL;
-#line 273 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 278 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp0_ = data;
-#line 273 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 278 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_free (_tmp0_);
-#line 2600 "GPhoto.c"
+#line 2609 "GPhoto.c"
 }
 
 
@@ -2635,172 +2644,172 @@ guint8* gp_load_file_into_buffer (GPContext* context, Camera* camera, const gcha
 	guint8* _tmp32_ = NULL;
 	gint _tmp32__length1 = 0;
 	GError * _inner_error_ = NULL;
-#line 277 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (context != NULL, NULL);
-#line 277 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (camera != NULL, NULL);
-#line 277 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (folder != NULL, NULL);
-#line 277 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	g_return_val_if_fail (filename != NULL, NULL);
-#line 280 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp1_ = gp_file_new (&_tmp0_);
-#line 280 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 280 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	camera_file = _tmp0_;
-#line 280 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp1_;
-#line 281 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp2_ = res;
-#line 281 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp2_ != GP_OK) {
-#line 2659 "GPhoto.c"
+#line 2668 "GPhoto.c"
 		int _tmp3_ = 0;
 		int _tmp4_ = 0;
 		const gchar* _tmp5_ = NULL;
 		GError* _tmp6_ = NULL;
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp3_ = res;
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp4_ = res;
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp5_ = gp_port_result_as_string (_tmp4_);
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp6_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error allocating camera file: %s", (gint) _tmp3_, _tmp5_);
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = _tmp6_;
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 282 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 287 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2680 "GPhoto.c"
+#line 2689 "GPhoto.c"
 	}
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp7_ = camera;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp8_ = folder;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp9_ = filename;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp10_ = filetype;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp11_ = camera_file;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp12_ = context;
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp13_ = gp_camera_file_get (_tmp7_, _tmp8_, _tmp9_, _tmp10_, _tmp11_, _tmp12_);
-#line 284 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 289 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp13_;
-#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 290 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp14_ = res;
-#line 285 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 290 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp14_ != GP_OK) {
-#line 2702 "GPhoto.c"
+#line 2711 "GPhoto.c"
 		int _tmp15_ = 0;
 		const gchar* _tmp16_ = NULL;
 		const gchar* _tmp17_ = NULL;
 		int _tmp18_ = 0;
 		const gchar* _tmp19_ = NULL;
 		GError* _tmp20_ = NULL;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp15_ = res;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp16_ = folder;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp17_ = filename;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp18_ = res;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp19_ = gp_port_result_as_string (_tmp18_);
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp20_ = g_error_new (GPHOTO_ERROR, GPHOTO_ERROR_LIBRARY, "[%d] Error retrieving file object for %s/%s: %s", (gint) _tmp15_, _tmp16_, _tmp17_, _tmp19_);
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_inner_error_ = _tmp20_;
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		g_propagate_error (error, _inner_error_);
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 286 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 291 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return NULL;
-#line 2729 "GPhoto.c"
+#line 2738 "GPhoto.c"
 	}
-#line 293 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp21_ = camera_file;
-#line 293 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp24_ = gp_file_get_data_and_size (_tmp21_, &_tmp22_, &_tmp23_);
-#line 293 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	data = _tmp22_;
-#line 293 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	data_len = _tmp23_;
-#line 293 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	res = _tmp24_;
-#line 294 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 299 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp25_ = res;
-#line 294 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 299 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (_tmp25_ != GP_OK) {
-#line 2745 "GPhoto.c"
+#line 2754 "GPhoto.c"
 		guint8* _tmp26_ = NULL;
 		gint _tmp26__length1 = 0;
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp26_ = NULL;
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_tmp26__length1 = 0;
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		if (result_length1) {
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 			*result_length1 = _tmp26__length1;
-#line 2756 "GPhoto.c"
+#line 2765 "GPhoto.c"
 		}
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		result = _tmp26_;
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		_gp_file_unref0 (camera_file);
-#line 295 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		return result;
-#line 2764 "GPhoto.c"
+#line 2773 "GPhoto.c"
 	}
-#line 297 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 302 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp27_ = data_len;
-#line 297 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 302 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp28_ = g_new0 (guint8, _tmp27_);
-#line 297 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 302 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	buffer = _tmp28_;
-#line 297 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 302 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	buffer_length1 = _tmp27_;
-#line 297 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 302 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_buffer_size_ = buffer_length1;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp29_ = buffer;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp29__length1 = buffer_length1;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp30_ = data;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp31_ = buffer;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp31__length1 = buffer_length1;
-#line 298 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 303 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	memcpy (_tmp29_, _tmp30_, (gsize) _tmp31__length1);
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp32_ = buffer;
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_tmp32__length1 = buffer_length1;
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	if (result_length1) {
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 		*result_length1 = _tmp32__length1;
-#line 2796 "GPhoto.c"
+#line 2805 "GPhoto.c"
 	}
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	result = _tmp32_;
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	_gp_file_unref0 (camera_file);
-#line 300 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
+#line 305 "/home/jens/Source/shotwell/src/camera/GPhoto.vala"
 	return result;
-#line 2804 "GPhoto.c"
+#line 2813 "GPhoto.c"
 }
 
 

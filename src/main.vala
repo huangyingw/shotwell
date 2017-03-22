@@ -105,8 +105,7 @@ void library_exec(string[] mounts) {
             progress_dialog.update_display_every(100);
             progress_dialog.set_minimum_on_screen_time_msec(250);
             try {
-                string icon_path = AppDirs.get_resources_dir().get_child("icons").get_child("shotwell.svg").get_path();
-                progress_dialog.icon = new Gdk.Pixbuf.from_file(icon_path);
+                progress_dialog.icon = new Gdk.Pixbuf.from_resource("/org/gnome/Shotwell/icons/shotwell.svg");
             } catch (Error err) {
                 debug("Warning - could not load application icon for loading window: %s", err.message);
             }
@@ -323,6 +322,11 @@ void main(string[] args) {
     // parser is initialized in a thread-safe fashion; please see 
     // http://redmine.yorba.org/issues/4120 for details.
     GExiv2.initialize();
+    GExiv2.log_use_glib_logging();
+
+    // Set GExiv2 log level to DEBUG, filtering will be done through Shotwell
+    // logging mechanisms
+    GExiv2.log_set_level(GExiv2.LogLevel.DEBUG);
 
     // following the GIO programming guidelines at http://developer.gnome.org/gio/2.26/ch03.html,
     // set the GSETTINGS_SCHEMA_DIR environment variable to allow us to load GSettings schemas from 

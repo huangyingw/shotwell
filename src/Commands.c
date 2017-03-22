@@ -5446,7 +5446,7 @@ static void multiple_data_source_at_once_command_real_execute (Command* base) {
 #line 448 "/home/jens/Source/shotwell/src/Commands.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5449 "Commands.c"
-				goto __catch454_database_error;
+				goto __catch455_database_error;
 			}
 			{
 				AppWindow* _tmp7_ = NULL;
@@ -5470,8 +5470,8 @@ static void multiple_data_source_at_once_command_real_execute (Command* base) {
 #line 5471 "Commands.c"
 		}
 	}
-	goto __finally454;
-	__catch454_database_error:
+	goto __finally455;
+	__catch455_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -5487,7 +5487,7 @@ static void multiple_data_source_at_once_command_real_execute (Command* base) {
 		_g_error_free0 (err);
 #line 5489 "Commands.c"
 	}
-	__finally454:
+	__finally455:
 	{
 		AppWindow* _tmp10_ = NULL;
 		AppWindow* _tmp11_ = NULL;
@@ -5583,7 +5583,7 @@ static void multiple_data_source_at_once_command_real_undo (Command* base) {
 #line 468 "/home/jens/Source/shotwell/src/Commands.vala"
 			if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5586 "Commands.c"
-				goto __catch455_database_error;
+				goto __catch456_database_error;
 			}
 			{
 				AppWindow* _tmp7_ = NULL;
@@ -5607,8 +5607,8 @@ static void multiple_data_source_at_once_command_real_undo (Command* base) {
 #line 5608 "Commands.c"
 		}
 	}
-	goto __finally455;
-	__catch455_database_error:
+	goto __finally456;
+	__catch456_database_error:
 	{
 		GError* err = NULL;
 		GError* _tmp9_ = NULL;
@@ -5624,7 +5624,7 @@ static void multiple_data_source_at_once_command_real_undo (Command* base) {
 		_g_error_free0 (err);
 #line 5626 "Commands.c"
 	}
-	__finally455:
+	__finally456:
 	{
 		AppWindow* _tmp10_ = NULL;
 		AppWindow* _tmp11_ = NULL;
@@ -10094,7 +10094,7 @@ static void duplicate_multiple_photos_command_real_execute_on_source (MultipleDa
 #line 1118 "/home/jens/Source/shotwell/src/Commands.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 10097 "Commands.c"
-			goto __catch456_g_error;
+			goto __catch457_g_error;
 		}
 #line 1119 "/home/jens/Source/shotwell/src/Commands.vala"
 		_tmp3_ = self->priv->dupes;
@@ -10104,8 +10104,8 @@ static void duplicate_multiple_photos_command_real_execute_on_source (MultipleDa
 		_g_object_unref0 (dupe);
 #line 10106 "Commands.c"
 	}
-	goto __finally456;
-	__catch456_g_error:
+	goto __finally457;
+	__catch457_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp4_ = NULL;
@@ -10145,7 +10145,7 @@ static void duplicate_multiple_photos_command_real_execute_on_source (MultipleDa
 		_g_error_free0 (err);
 #line 10147 "Commands.c"
 	}
-	__finally456:
+	__finally457:
 #line 1117 "/home/jens/Source/shotwell/src/Commands.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1117 "/home/jens/Source/shotwell/src/Commands.vala"
@@ -11543,11 +11543,11 @@ static void adjust_date_time_photo_command_set_time (AdjustDateTimePhotoCommand*
 #line 1345 "/home/jens/Source/shotwell/src/Commands.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 11546 "Commands.c"
-				goto __catch457_g_error;
+				goto __catch458_g_error;
 			}
 		}
-		goto __finally457;
-		__catch457_g_error:
+		goto __finally458;
+		__catch458_g_error:
 		{
 			GError* err = NULL;
 			const gchar* _tmp5_ = NULL;
@@ -11563,7 +11563,7 @@ static void adjust_date_time_photo_command_set_time (AdjustDateTimePhotoCommand*
 			_g_error_free0 (err);
 #line 11565 "Commands.c"
 		}
-		__finally457:
+		__finally458:
 #line 1344 "/home/jens/Source/shotwell/src/Commands.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1344 "/home/jens/Source/shotwell/src/Commands.vala"
@@ -12149,11 +12149,11 @@ static void adjust_date_time_photos_command_set_time (AdjustDateTimePhotosComman
 #line 1435 "/home/jens/Source/shotwell/src/Commands.vala"
 			if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 12152 "Commands.c"
-				goto __catch458_g_error;
+				goto __catch459_g_error;
 			}
 		}
-		goto __finally458;
-		__catch458_g_error:
+		goto __finally459;
+		__catch459_g_error:
 		{
 			GError* err = NULL;
 			GeeArrayList* _tmp5_ = NULL;
@@ -12172,7 +12172,7 @@ static void adjust_date_time_photos_command_set_time (AdjustDateTimePhotosComman
 			_g_error_free0 (err);
 #line 12174 "Commands.c"
 		}
-		__finally458:
+		__finally459:
 #line 1434 "/home/jens/Source/shotwell/src/Commands.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1434 "/home/jens/Source/shotwell/src/Commands.vala"
@@ -14608,7 +14608,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 14611 "Commands.c"
-				goto __catch459_g_regex_error;
+				goto __catch460_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -14633,7 +14633,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 14636 "Commands.c"
-				goto __catch459_g_regex_error;
+				goto __catch460_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -14659,8 +14659,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 14661 "Commands.c"
 	}
-	goto __finally459;
-	__catch459_g_regex_error:
+	goto __finally460;
+	__catch460_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -14673,7 +14673,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 14675 "Commands.c"
 	}
-	__finally459:
+	__finally460:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"

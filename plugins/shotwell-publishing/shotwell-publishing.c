@@ -11,6 +11,8 @@
 #include <glib-object.h>
 #include <shotwell-plugin-dev-1.0.h>
 #include <gio/gio.h>
+#include "shotwell-authenticator.h"
+#include <gee.h>
 #include <stdlib.h>
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -26,6 +28,7 @@
 typedef struct _ShotwellPublishingCoreServices ShotwellPublishingCoreServices;
 typedef struct _ShotwellPublishingCoreServicesClass ShotwellPublishingCoreServicesClass;
 typedef struct _ShotwellPublishingCoreServicesPrivate ShotwellPublishingCoreServicesPrivate;
+#define _g_free0(var) (var = (g_free (var), NULL))
 
 #define TYPE_FACEBOOK_SERVICE (facebook_service_get_type ())
 #define FACEBOOK_SERVICE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_FACEBOOK_SERVICE, FacebookService))
@@ -135,87 +138,87 @@ static void _vala_array_free (gpointer array, gint array_length, GDestroyNotify 
 
 
 static void _vala_array_add1 (SpitPluggable*** array, int* length, int* size, SpitPluggable* value) {
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if ((*length) == (*size)) {
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*array = g_renew (SpitPluggable*, *array, (*size) + 1);
-#line 145 "shotwell-publishing.c"
+#line 148 "shotwell-publishing.c"
 	}
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[(*length)++] = value;
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[*length] = NULL;
-#line 151 "shotwell-publishing.c"
+#line 154 "shotwell-publishing.c"
 }
 
 
 static void _vala_array_add2 (SpitPluggable*** array, int* length, int* size, SpitPluggable* value) {
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if ((*length) == (*size)) {
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*array = g_renew (SpitPluggable*, *array, (*size) + 1);
-#line 162 "shotwell-publishing.c"
+#line 165 "shotwell-publishing.c"
 	}
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[(*length)++] = value;
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[*length] = NULL;
-#line 168 "shotwell-publishing.c"
+#line 171 "shotwell-publishing.c"
 }
 
 
 static void _vala_array_add3 (SpitPluggable*** array, int* length, int* size, SpitPluggable* value) {
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if ((*length) == (*size)) {
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*array = g_renew (SpitPluggable*, *array, (*size) + 1);
-#line 179 "shotwell-publishing.c"
+#line 182 "shotwell-publishing.c"
 	}
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[(*length)++] = value;
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[*length] = NULL;
-#line 185 "shotwell-publishing.c"
+#line 188 "shotwell-publishing.c"
 }
 
 
 static void _vala_array_add4 (SpitPluggable*** array, int* length, int* size, SpitPluggable* value) {
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if ((*length) == (*size)) {
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*array = g_renew (SpitPluggable*, *array, (*size) + 1);
-#line 196 "shotwell-publishing.c"
+#line 199 "shotwell-publishing.c"
 	}
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[(*length)++] = value;
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[*length] = NULL;
-#line 202 "shotwell-publishing.c"
+#line 205 "shotwell-publishing.c"
 }
 
 
 static void _vala_array_add5 (SpitPluggable*** array, int* length, int* size, SpitPluggable* value) {
-#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if ((*length) == (*size)) {
-#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*array = g_renew (SpitPluggable*, *array, (*size) + 1);
-#line 213 "shotwell-publishing.c"
+#line 216 "shotwell-publishing.c"
 	}
-#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[(*length)++] = value;
-#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*array)[*length] = NULL;
-#line 219 "shotwell-publishing.c"
+#line 222 "shotwell-publishing.c"
 }
 
 
@@ -224,21 +227,29 @@ ShotwellPublishingCoreServices* shotwell_publishing_core_services_construct (GTy
 	GFile* resource_directory = NULL;
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
-	SpitPluggable** _tmp2_ = NULL;
-	gint _tmp2__length1 = 0;
-	FacebookService* _tmp3_ = NULL;
-	SpitPluggable** _tmp4_ = NULL;
-	gint _tmp4__length1 = 0;
-	PicasaService* _tmp5_ = NULL;
-	SpitPluggable** _tmp6_ = NULL;
-	gint _tmp6__length1 = 0;
-	FlickrService* _tmp7_ = NULL;
-	SpitPluggable** _tmp8_ = NULL;
-	gint _tmp8__length1 = 0;
-	YouTubeService* _tmp9_ = NULL;
-	SpitPluggable** _tmp10_ = NULL;
-	gint _tmp10__length1 = 0;
-	PiwigoService* _tmp11_ = NULL;
+	PublishingAuthenticatorFactory* factory = NULL;
+	PublishingAuthenticatorFactory* _tmp2_ = NULL;
+	GeeList* authenicators = NULL;
+	PublishingAuthenticatorFactory* _tmp3_ = NULL;
+	GeeList* _tmp4_ = NULL;
+	GFile* _tmp5_ = NULL;
+	gchar* _tmp6_ = NULL;
+	gchar* _tmp7_ = NULL;
+	GeeList* _tmp8_ = NULL;
+	gint _tmp9_ = 0;
+	gint _tmp10_ = 0;
+	GeeList* _tmp11_ = NULL;
+	gboolean _tmp12_ = FALSE;
+	GeeList* _tmp16_ = NULL;
+	gboolean _tmp17_ = FALSE;
+	GeeList* _tmp21_ = NULL;
+	gboolean _tmp22_ = FALSE;
+	GeeList* _tmp26_ = NULL;
+	gboolean _tmp27_ = FALSE;
+	SpitPluggable** _tmp31_ = NULL;
+	gint _tmp31__length1 = 0;
+	GFile* _tmp32_ = NULL;
+	PiwigoService* _tmp33_ = NULL;
 #line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	g_return_val_if_fail (G_IS_FILE (module_file), NULL);
 #line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
@@ -249,58 +260,152 @@ ShotwellPublishingCoreServices* shotwell_publishing_core_services_construct (GTy
 	_tmp1_ = g_file_get_parent (_tmp0_);
 #line 16 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	resource_directory = _tmp1_;
+#line 17 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp2_ = publishing_authenticator_factory_get_instance ();
+#line 17 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	factory = _tmp2_;
 #line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp2_ = self->priv->pluggables;
+	_tmp3_ = factory;
 #line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp2__length1 = self->priv->pluggables_length1;
+	_tmp4_ = spit_publishing_authenticator_factory_get_available_authenticators (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, SPIT_PUBLISHING_TYPE_AUTHENTICATOR_FACTORY, SpitPublishingAuthenticatorFactory));
 #line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp3_ = facebook_service_new (resource_directory);
-#line 18 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_vala_array_add1 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp4_ = self->priv->pluggables;
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp4__length1 = self->priv->pluggables_length1;
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp5_ = picasa_service_new (resource_directory);
-#line 19 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_vala_array_add2 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp6_ = self->priv->pluggables;
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp6__length1 = self->priv->pluggables_length1;
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp7_ = flickr_service_new (resource_directory);
-#line 20 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_vala_array_add3 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp8_ = self->priv->pluggables;
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp8__length1 = self->priv->pluggables_length1;
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp9_ = you_tube_service_new (resource_directory);
-#line 21 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_vala_array_add4 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+	authenicators = _tmp4_;
 #line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp10_ = self->priv->pluggables;
+	_tmp5_ = resource_directory;
 #line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp10__length1 = self->priv->pluggables_length1;
+	_tmp6_ = g_file_get_path (_tmp5_);
 #line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_tmp11_ = piwigo_service_new (resource_directory);
+	_tmp7_ = _tmp6_;
 #line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
-	_vala_array_add5 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+	g_debug ("shotwell-publishing.vala:22: Looking for resources in %s", _tmp7_);
+#line 22 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_g_free0 (_tmp7_);
+#line 23 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp8_ = authenicators;
+#line 23 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp9_ = gee_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_COLLECTION, GeeCollection));
+#line 23 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp10_ = _tmp9_;
+#line 23 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	g_debug ("shotwell-publishing.vala:23: Found %d authenicators", _tmp10_);
+#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp11_ = authenicators;
+#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp12_ = gee_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_COLLECTION, GeeCollection), "facebook");
+#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	if (_tmp12_) {
+#line 298 "shotwell-publishing.c"
+		SpitPluggable** _tmp13_ = NULL;
+		gint _tmp13__length1 = 0;
+		GFile* _tmp14_ = NULL;
+		FacebookService* _tmp15_ = NULL;
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp13_ = self->priv->pluggables;
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp13__length1 = self->priv->pluggables_length1;
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp14_ = resource_directory;
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp15_ = facebook_service_new (_tmp14_);
+#line 27 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_vala_array_add1 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 313 "shotwell-publishing.c"
+	}
+#line 32 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp16_ = authenicators;
+#line 32 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp17_ = gee_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, GEE_TYPE_COLLECTION, GeeCollection), "picasa");
+#line 32 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	if (_tmp17_) {
+#line 321 "shotwell-publishing.c"
+		SpitPluggable** _tmp18_ = NULL;
+		gint _tmp18__length1 = 0;
+		GFile* _tmp19_ = NULL;
+		PicasaService* _tmp20_ = NULL;
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp18_ = self->priv->pluggables;
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp18__length1 = self->priv->pluggables_length1;
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp19_ = resource_directory;
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp20_ = picasa_service_new (_tmp19_);
+#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_vala_array_add2 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 336 "shotwell-publishing.c"
+	}
+#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp21_ = authenicators;
+#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp22_ = gee_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp21_, GEE_TYPE_COLLECTION, GeeCollection), "flickr");
+#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	if (_tmp22_) {
+#line 344 "shotwell-publishing.c"
+		SpitPluggable** _tmp23_ = NULL;
+		gint _tmp23__length1 = 0;
+		GFile* _tmp24_ = NULL;
+		FlickrService* _tmp25_ = NULL;
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp23_ = self->priv->pluggables;
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp23__length1 = self->priv->pluggables_length1;
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp24_ = resource_directory;
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp25_ = flickr_service_new (_tmp24_);
+#line 39 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_vala_array_add3 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp25_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 359 "shotwell-publishing.c"
+	}
+#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp26_ = authenicators;
+#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp27_ = gee_collection_contains (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_COLLECTION, GeeCollection), "youtube");
+#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	if (_tmp27_) {
+#line 367 "shotwell-publishing.c"
+		SpitPluggable** _tmp28_ = NULL;
+		gint _tmp28__length1 = 0;
+		GFile* _tmp29_ = NULL;
+		YouTubeService* _tmp30_ = NULL;
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp28_ = self->priv->pluggables;
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp28__length1 = self->priv->pluggables_length1;
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp29_ = resource_directory;
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_tmp30_ = you_tube_service_new (_tmp29_);
+#line 45 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+		_vala_array_add4 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp30_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 382 "shotwell-publishing.c"
+	}
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp31_ = self->priv->pluggables;
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp31__length1 = self->priv->pluggables_length1;
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp32_ = resource_directory;
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_tmp33_ = piwigo_service_new (_tmp32_);
+#line 50 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_vala_array_add5 (&self->priv->pluggables, &self->priv->pluggables_length1, &self->priv->_pluggables_size_, G_TYPE_CHECK_INSTANCE_CAST (_tmp33_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_g_object_unref0 (authenicators);
+#line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+	_g_object_unref0 (factory);
 #line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_g_object_unref0 (resource_directory);
 #line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return self;
-#line 297 "shotwell-publishing.c"
+#line 402 "shotwell-publishing.c"
 }
 
 
 ShotwellPublishingCoreServices* shotwell_publishing_core_services_new (GFile* module_file) {
 #line 15 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return shotwell_publishing_core_services_construct (TYPE_SHOTWELL_PUBLISHING_CORE_SERVICES, module_file);
-#line 304 "shotwell-publishing.c"
+#line 409 "shotwell-publishing.c"
 }
 
 
@@ -308,41 +413,41 @@ static const gchar* shotwell_publishing_core_services_real_get_module_name (Spit
 	ShotwellPublishingCoreServices * self;
 	const gchar* result = NULL;
 	const gchar* _tmp0_ = NULL;
-#line 25 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 54 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHOTWELL_PUBLISHING_CORE_SERVICES, ShotwellPublishingCoreServices);
-#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 55 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp0_ = _ ("Core Publishing Services");
-#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 55 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	result = _tmp0_;
-#line 26 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 55 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return result;
-#line 320 "shotwell-publishing.c"
+#line 425 "shotwell-publishing.c"
 }
 
 
 static const gchar* shotwell_publishing_core_services_real_get_version (SpitModule* base) {
 	ShotwellPublishingCoreServices * self;
 	const gchar* result = NULL;
-#line 29 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 58 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHOTWELL_PUBLISHING_CORE_SERVICES, ShotwellPublishingCoreServices);
-#line 30 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 59 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	result = _VERSION;
-#line 30 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 59 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return result;
-#line 333 "shotwell-publishing.c"
+#line 438 "shotwell-publishing.c"
 }
 
 
 static const gchar* shotwell_publishing_core_services_real_get_id (SpitModule* base) {
 	ShotwellPublishingCoreServices * self;
 	const gchar* result = NULL;
-#line 33 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 62 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHOTWELL_PUBLISHING_CORE_SERVICES, ShotwellPublishingCoreServices);
-#line 34 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 63 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	result = "org.yorba.shotwell.publishing.core_services";
-#line 34 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 63 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return result;
-#line 346 "shotwell-publishing.c"
+#line 451 "shotwell-publishing.c"
 }
 
 
@@ -353,27 +458,27 @@ static SpitPluggable** shotwell_publishing_core_services_real_get_pluggables (Sp
 	gint _tmp0__length1 = 0;
 	SpitPluggable** _tmp1_ = NULL;
 	gint _tmp1__length1 = 0;
-#line 37 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 66 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, TYPE_SHOTWELL_PUBLISHING_CORE_SERVICES, ShotwellPublishingCoreServices);
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp0_ = self->priv->pluggables;
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp0__length1 = self->priv->pluggables_length1;
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp1_ = _tmp0_;
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp1__length1 = _tmp0__length1;
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if (result_length1) {
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		*result_length1 = _tmp1__length1;
-#line 371 "shotwell-publishing.c"
+#line 476 "shotwell-publishing.c"
 	}
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	result = _tmp1_;
-#line 38 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 67 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return result;
-#line 377 "shotwell-publishing.c"
+#line 482 "shotwell-publishing.c"
 }
 
 
@@ -384,7 +489,7 @@ static void shotwell_publishing_core_services_class_init (ShotwellPublishingCore
 	g_type_class_add_private (klass, sizeof (ShotwellPublishingCoreServicesPrivate));
 #line 10 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	G_OBJECT_CLASS (klass)->finalize = shotwell_publishing_core_services_finalize;
-#line 388 "shotwell-publishing.c"
+#line 493 "shotwell-publishing.c"
 }
 
 
@@ -399,7 +504,7 @@ static void shotwell_publishing_core_services_spit_module_interface_init (SpitMo
 	iface->get_id = (const gchar* (*)(SpitModule*)) shotwell_publishing_core_services_real_get_id;
 #line 10 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	iface->get_pluggables = (SpitPluggable** (*)(SpitModule*, int*)) shotwell_publishing_core_services_real_get_pluggables;
-#line 403 "shotwell-publishing.c"
+#line 508 "shotwell-publishing.c"
 }
 
 
@@ -415,7 +520,7 @@ static void shotwell_publishing_core_services_instance_init (ShotwellPublishingC
 	self->priv->pluggables_length1 = 0;
 #line 11 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	self->priv->_pluggables_size_ = self->priv->pluggables_length1;
-#line 419 "shotwell-publishing.c"
+#line 524 "shotwell-publishing.c"
 }
 
 
@@ -427,7 +532,7 @@ static void shotwell_publishing_core_services_finalize (GObject* obj) {
 	self->priv->pluggables = (_vala_array_free (self->priv->pluggables, self->priv->pluggables_length1, (GDestroyNotify) g_object_unref), NULL);
 #line 10 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	G_OBJECT_CLASS (shotwell_publishing_core_services_parent_class)->finalize (obj);
-#line 431 "shotwell-publishing.c"
+#line 536 "shotwell-publishing.c"
 }
 
 
@@ -455,51 +560,51 @@ SpitModule* spit_entry_point (SpitEntryPointParams* params) {
 	ShotwellPublishingCoreServices* _tmp5_ = NULL;
 	SpitEntryPointParams* _tmp6_ = NULL;
 	gint _tmp7_ = 0;
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp0_ = params;
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp1_ = (*_tmp0_).host_min_spit_interface;
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp2_ = params;
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp3_ = (*_tmp2_).host_max_spit_interface;
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp4_ = spit_negotiate_interfaces (_tmp1_, _tmp3_, SPIT_CURRENT_INTERFACE);
-#line 44 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 73 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	(*params).module_spit_interface = _tmp4_;
-#line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp6_ = params;
-#line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	_tmp7_ = (*_tmp6_).module_spit_interface;
-#line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	if (_tmp7_ != SPIT_UNSUPPORTED_INTERFACE) {
-#line 477 "shotwell-publishing.c"
+#line 582 "shotwell-publishing.c"
 		SpitEntryPointParams* _tmp8_ = NULL;
 		GFile* _tmp9_ = NULL;
 		ShotwellPublishingCoreServices* _tmp10_ = NULL;
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_tmp8_ = params;
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_tmp9_ = (*_tmp8_).module_file;
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_tmp10_ = shotwell_publishing_core_services_new (_tmp9_);
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_g_object_unref0 (_tmp5_);
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_tmp5_ = _tmp10_;
-#line 491 "shotwell-publishing.c"
+#line 596 "shotwell-publishing.c"
 	} else {
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_g_object_unref0 (_tmp5_);
-#line 48 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 77 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 		_tmp5_ = NULL;
-#line 497 "shotwell-publishing.c"
+#line 602 "shotwell-publishing.c"
 	}
-#line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, SPIT_TYPE_MODULE, SpitModule);
-#line 47 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
+#line 76 "/home/jens/Source/shotwell/plugins/shotwell-publishing/shotwell-publishing.vala"
 	return result;
-#line 503 "shotwell-publishing.c"
+#line 608 "shotwell-publishing.c"
 }
 
 

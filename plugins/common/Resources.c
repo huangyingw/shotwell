@@ -115,7 +115,7 @@ GdkPixbuf** resources_load_icon_set (GFile* icon_file, int* result_length1) {
 #line 43 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 97 "Resources.c"
-			goto __catch9_g_error;
+			goto __catch4_g_error;
 		}
 #line 43 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 		_tmp6_ = _tmp0_;
@@ -129,8 +129,8 @@ GdkPixbuf** resources_load_icon_set (GFile* icon_file, int* result_length1) {
 		_g_object_unref0 (_tmp0_);
 #line 110 "Resources.c"
 	}
-	goto __finally9;
-	__catch9_g_error:
+	goto __finally4;
+	__catch4_g_error:
 	{
 		GError* err = NULL;
 		GFile* _tmp7_ = NULL;
@@ -154,7 +154,7 @@ GdkPixbuf** resources_load_icon_set (GFile* icon_file, int* result_length1) {
 		_g_error_free0 (err);
 #line 135 "Resources.c"
 	}
-	__finally9:
+	__finally4:
 #line 42 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 42 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
@@ -281,7 +281,7 @@ GdkPixbuf** resources_load_from_resource (const gchar* resource_path, int* resul
 #line 60 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 263 "Resources.c"
-			goto __catch10_g_error;
+			goto __catch5_g_error;
 		}
 #line 60 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 		_tmp3_ = _tmp0_;
@@ -295,8 +295,8 @@ GdkPixbuf** resources_load_from_resource (const gchar* resource_path, int* resul
 		_g_object_unref0 (_tmp0_);
 #line 276 "Resources.c"
 	}
-	goto __finally10;
-	__catch10_g_error:
+	goto __finally5;
+	__catch5_g_error:
 	{
 		GError* _error_ = NULL;
 		const gchar* _tmp4_ = NULL;
@@ -312,7 +312,7 @@ GdkPixbuf** resources_load_from_resource (const gchar* resource_path, int* resul
 		_g_error_free0 (_error_);
 #line 293 "Resources.c"
 	}
-	__finally10:
+	__finally5:
 #line 59 "/home/jens/Source/shotwell/plugins/common/Resources.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 59 "/home/jens/Source/shotwell/plugins/common/Resources.vala"

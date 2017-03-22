@@ -268,7 +268,11 @@ public abstract class Page : Gtk.ScrolledWindow {
     
     public virtual void switching_from() {
         in_view = false;
-        remove_actions(AppWindow.get_instance());
+        //remove_actions(AppWindow.get_instance());
+        var map = get_container() as GLib.ActionMap;
+        if (map != null) {
+            remove_actions(map);
+        }
         if (toolbar_path != null)
             toolbar = null;
     }
@@ -276,7 +280,10 @@ public abstract class Page : Gtk.ScrolledWindow {
     public virtual void switched_to() {
         in_view = true;
         add_ui();
-        add_actions(AppWindow.get_instance());
+        var map = get_container() as GLib.ActionMap;
+        if (map != null) {
+            add_actions(map);
+        }
         int selected_count = get_view().get_selected_count();
         int count = get_view().get_count();
         init_actions(selected_count, count);
@@ -563,13 +570,12 @@ public abstract class Page : Gtk.ScrolledWindow {
     }
     
     private void init_load_ui(string ui_filename) {
-        File ui_file = Resources.get_ui(ui_filename);
-        
+        var ui_resource = Resources.get_ui(ui_filename);
         try {
-            builder.add_from_file(ui_file.get_path());
+            builder.add_from_resource(ui_resource);
         } catch (Error err) {
-            AppWindow.error_message("Error loading UI file %s: %s".printf(
-                ui_file.get_path(), err.message));
+            AppWindow.error_message("Error loading UI resource %s: %s".printf(
+                ui_resource, err.message));
             Application.get_instance().panic();
         }
     }

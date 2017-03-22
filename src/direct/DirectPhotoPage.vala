@@ -146,10 +146,22 @@ public class DirectPhotoPage : EditingHostPage {
     }
 
     protected override bool on_context_buttonpress(Gdk.EventButton event) {
-//        Gtk.Menu context_menu = (Gtk.Menu) ui.get_widget("/DirectContextMenu");
-//        popup_context_menu(context_menu, event);
+        popup_context_menu(get_context_menu(), event);
 
         return true;
+    }
+
+    private Gtk.Menu context_menu;
+
+    private Gtk.Menu get_context_menu() {
+        if (context_menu == null) {
+            var model = this.builder.get_object ("DirectContextMenu")
+                as GLib.MenuModel;
+            context_menu = new Gtk.Menu.from_model (model);
+            context_menu.attach_to_widget (this, null);
+        }
+
+        return this.context_menu;
     }
 
     private void update_zoom_menu_item_sensitivity() {
@@ -348,8 +360,10 @@ public class DirectPhotoPage : EditingHostPage {
         DirectPhoto photo;
         DirectPhoto.global.fetch(dest, out photo, true);
 
-        DirectView tmp_view = new DirectView(photo);
-        view_controller.add(tmp_view);
+        if (!get_photo().equals(photo)) {
+            DirectView tmp_view = new DirectView(photo);
+            view_controller.add(tmp_view);
+        }
 
         DirectPhoto.global.reimport_photo(photo);
         display_mirror_of(view_controller, photo);

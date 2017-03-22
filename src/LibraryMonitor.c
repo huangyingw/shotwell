@@ -4123,7 +4123,7 @@ static gboolean library_monitor_verify_monitorable_co (LibraryMonitorVerifyMonit
 #line 509 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 						if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 4126 "LibraryMonitor.c"
-							goto __catch484_g_error;
+							goto __catch485_g_error;
 						}
 #line 509 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 						_data_->_tmp31_ = NULL;
@@ -4139,8 +4139,8 @@ static gboolean library_monitor_verify_monitorable_co (LibraryMonitorVerifyMonit
 						_g_object_unref0 (_data_->_tmp27_);
 #line 4141 "LibraryMonitor.c"
 					}
-					goto __finally484;
-					__catch484_g_error:
+					goto __finally485;
+					__catch485_g_error:
 					{
 #line 508 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 						_data_->err = _data_->_inner_error_;
@@ -4150,7 +4150,7 @@ static gboolean library_monitor_verify_monitorable_co (LibraryMonitorVerifyMonit
 						_g_error_free0 (_data_->err);
 #line 4152 "LibraryMonitor.c"
 					}
-					__finally484:
+					__finally485:
 #line 508 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 					if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
 #line 508 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -5384,7 +5384,7 @@ static void library_monitor_on_import_complete (LibraryMonitor* self, BatchImpor
 #line 700 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 				if (_inner_error_->domain == DATABASE_ERROR) {
 #line 5387 "LibraryMonitor.c"
-					goto __catch485_database_error;
+					goto __catch486_database_error;
 				}
 #line 700 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 				_g_object_unref0 (to_tombstone);
@@ -5397,8 +5397,8 @@ static void library_monitor_on_import_complete (LibraryMonitor* self, BatchImpor
 #line 5398 "LibraryMonitor.c"
 			}
 		}
-		goto __finally485;
-		__catch485_database_error:
+		goto __finally486;
+		__catch486_database_error:
 		{
 			GError* err = NULL;
 			GError* _tmp58_ = NULL;
@@ -5414,7 +5414,7 @@ static void library_monitor_on_import_complete (LibraryMonitor* self, BatchImpor
 			_g_error_free0 (err);
 #line 5416 "LibraryMonitor.c"
 		}
-		__finally485:
+		__finally486:
 #line 699 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 699 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -5502,7 +5502,7 @@ void library_monitor_blacklist_file (GFile* file, const gchar* reason) {
 			gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp8_);
 #line 5504 "LibraryMonitor.c"
 		}
-		__finally486:
+		__finally487:
 		{
 			GeeHashSet* _tmp9_ = NULL;
 #line 727 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -5582,7 +5582,7 @@ void library_monitor_unblacklist_file (GFile* file) {
 #line 5583 "LibraryMonitor.c"
 			}
 		}
-		__finally487:
+		__finally488:
 		{
 			GeeHashSet* _tmp10_ = NULL;
 #line 735 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -5632,7 +5632,7 @@ static void library_monitor_on_unblacklist_file (GFile* file) {
 			removed = _tmp3_;
 #line 5634 "LibraryMonitor.c"
 		}
-		__finally488:
+		__finally489:
 		{
 			GeeHashSet* _tmp4_ = NULL;
 #line 743 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -5734,7 +5734,7 @@ gboolean library_monitor_is_blacklisted (GFile* file) {
 			return result;
 #line 5736 "LibraryMonitor.c"
 		}
-		__finally489:
+		__finally490:
 		{
 			GeeHashSet* _tmp5_ = NULL;
 #line 754 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -7858,7 +7858,7 @@ static void library_monitor_find_move_job_real_execute (BackgroundJob* base) {
 #line 133 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 7860 "LibraryMonitor.c"
-			goto __catch490_g_error;
+			goto __catch491_g_error;
 		}
 #line 133 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 		_tmp18_ = _tmp15_;
@@ -7872,8 +7872,8 @@ static void library_monitor_find_move_job_real_execute (BackgroundJob* base) {
 		_g_free0 (_tmp15_);
 #line 7873 "LibraryMonitor.c"
 	}
-	goto __finally490;
-	__catch490_g_error:
+	goto __finally491;
+	__catch491_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp19_ = NULL;
@@ -7900,7 +7900,7 @@ static void library_monitor_find_move_job_real_execute (BackgroundJob* base) {
 		return;
 #line 7901 "LibraryMonitor.c"
 	}
-	__finally490:
+	__finally491:
 #line 132 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 132 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
@@ -8212,7 +8212,7 @@ static void library_monitor_runtime_find_move_job_real_execute (BackgroundJob* b
 #line 179 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 8213 "LibraryMonitor.c"
-			goto __catch491_g_error;
+			goto __catch492_g_error;
 		}
 #line 179 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 		_tmp3_ = _tmp0_;
@@ -8226,8 +8226,8 @@ static void library_monitor_runtime_find_move_job_real_execute (BackgroundJob* b
 		_g_free0 (_tmp0_);
 #line 8226 "LibraryMonitor.c"
 	}
-	goto __finally491;
-	__catch491_g_error:
+	goto __finally492;
+	__catch492_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -8252,7 +8252,7 @@ static void library_monitor_runtime_find_move_job_real_execute (BackgroundJob* b
 		return;
 #line 8252 "LibraryMonitor.c"
 	}
-	__finally491:
+	__finally492:
 #line 178 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 178 "/home/jens/Source/shotwell/src/LibraryMonitor.vala"

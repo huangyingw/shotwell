@@ -234,7 +234,6 @@ struct _PublishingRESTSupportGoogleSessionClass {
 	PublishingRESTSupportSessionClass parent_class;
 	gchar* (*get_user_name) (PublishingRESTSupportGoogleSession* self);
 	gchar* (*get_access_token) (PublishingRESTSupportGoogleSession* self);
-	gchar* (*get_refresh_token) (PublishingRESTSupportGoogleSession* self);
 	void (*deauthenticate) (PublishingRESTSupportGoogleSession* self);
 };
 
@@ -245,6 +244,7 @@ struct _PublishingRESTSupportGooglePublisher {
 
 struct _PublishingRESTSupportGooglePublisherClass {
 	GObjectClass parent_class;
+	SpitPublishingAuthenticator* (*get_authenticator) (PublishingRESTSupportGooglePublisher* self);
 	void (*on_login_flow_complete) (PublishingRESTSupportGooglePublisher* self);
 	void (*do_logout) (PublishingRESTSupportGooglePublisher* self);
 	gboolean (*is_running) (PublishingRESTSupportGooglePublisher* self);
@@ -381,14 +381,13 @@ gchar* publishing_rest_support_asciify_string (const gchar* s);
 GType publishing_rest_support_google_session_get_type (void) G_GNUC_CONST;
 gchar* publishing_rest_support_google_session_get_user_name (PublishingRESTSupportGoogleSession* self);
 gchar* publishing_rest_support_google_session_get_access_token (PublishingRESTSupportGoogleSession* self);
-gchar* publishing_rest_support_google_session_get_refresh_token (PublishingRESTSupportGoogleSession* self);
 void publishing_rest_support_google_session_deauthenticate (PublishingRESTSupportGoogleSession* self);
 PublishingRESTSupportGoogleSession* publishing_rest_support_google_session_construct (GType object_type);
 GType publishing_rest_support_google_publisher_get_type (void) G_GNUC_CONST;
 PublishingRESTSupportGooglePublisher* publishing_rest_support_google_publisher_construct (GType object_type, SpitPublishingService* service, SpitPublishingPluginHost* host, const gchar* scope);
+SpitPublishingAuthenticator* publishing_rest_support_google_publisher_get_authenticator (PublishingRESTSupportGooglePublisher* self);
 SpitPublishingPluginHost* publishing_rest_support_google_publisher_get_host (PublishingRESTSupportGooglePublisher* self);
 PublishingRESTSupportGoogleSession* publishing_rest_support_google_publisher_get_session (PublishingRESTSupportGooglePublisher* self);
-void publishing_rest_support_google_publisher_start_oauth_flow (PublishingRESTSupportGooglePublisher* self, const gchar* refresh_token);
 void publishing_rest_support_google_publisher_on_login_flow_complete (PublishingRESTSupportGooglePublisher* self);
 void publishing_rest_support_google_publisher_do_logout (PublishingRESTSupportGooglePublisher* self);
 gboolean publishing_rest_support_google_publisher_is_running (PublishingRESTSupportGooglePublisher* self);

@@ -2288,7 +2288,7 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 #line 50 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2291 "PixbufCache.c"
-			goto __catch452_g_error;
+			goto __catch453_g_error;
 		}
 #line 50 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp4_ = _tmp0_;
@@ -2302,8 +2302,8 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		_g_object_unref0 (_tmp0_);
 #line 2304 "PixbufCache.c"
 	}
-	goto __finally452;
-	__catch452_g_error:
+	goto __finally453;
+	__catch453_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2324,7 +2324,7 @@ static void pixbuf_cache_baseline_fetch_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 2326 "PixbufCache.c"
 	}
-	__finally452:
+	__finally453:
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 49 "/home/jens/Source/shotwell/src/PixbufCache.vala"
@@ -2427,7 +2427,7 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 #line 65 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 2430 "PixbufCache.c"
-			goto __catch453_g_error;
+			goto __catch454_g_error;
 		}
 #line 65 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 		_tmp4_ = _tmp0_;
@@ -2441,8 +2441,8 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		_g_object_unref0 (_tmp0_);
 #line 2443 "PixbufCache.c"
 	}
-	goto __finally453;
-	__catch453_g_error:
+	goto __finally454;
+	__catch454_g_error:
 	{
 		GError* err = NULL;
 		GError* _tmp5_ = NULL;
@@ -2463,7 +2463,7 @@ static void pixbuf_cache_master_fetch_job_real_execute (BackgroundJob* base) {
 		_g_error_free0 (err);
 #line 2465 "PixbufCache.c"
 	}
-	__finally453:
+	__finally454:
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 64 "/home/jens/Source/shotwell/src/PixbufCache.vala"

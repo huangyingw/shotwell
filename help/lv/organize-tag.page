@@ -22,16 +22,7 @@
 		<item><p>Velciet un nometiet izvēlētās fotogrāfijas uz vēlamā taga.</p></item>
     </list>
      
-    <p>
-		When you use <keyseq><key>Ctrl</key><key>T</key></keyseq> or 
-		<guiseq><gui>Tags</gui><gui>Add Tags...</gui></guiseq> you can type
-		in the names of one or more tags, separated by commas.
-		Once you have created a tag, you can rename it by selecting that 
-		tag in the sidebar and choosing 
-		<guiseq><gui>Tags</gui><gui>Rename Tag "[name]"...</gui></guiseq>,
-		by rightclicking on it and choose <gui>Rename...</gui> or
-		double-click on the tag in the sidebar.
-	</p>
+    <p>Ja izmantojat <keyseq><key>Ctrl</key><key>T</key></keyseq> vai <guiseq><gui>Tagi</gui><gui>Pievienot tagus...</gui></guiseq>, varat ierakstīt vienu vai vairāku tagu nosaukumus, atdalot tos ar komatiem. Kad tags ir izveidots, varat to pārdēvēt, izvēloties to tagu sānu joslā un izvēloties <guiseq><gui>Tagi</gui><gui>Pārdēvēt tagu "[nosaukums]"...</gui></guiseq>, veicot labo klikšķi un izvēloties <gui>Pārdēvēt...</gui> vai dubultklikšķinot tagu sānu joslā.</p>
     
     <p>Lai mainītu, kuri tagi ir saistīti ar kurām fotogrāfijām, izvēlieties attiecīgo fotogrāfiju , izvēlieties <guiseq><gui>Tagi</gui><gui>Modificēt tagus...</gui></guiseq> vai spiediet labo peles pogu uz fotogrāfijas un izvēlieties <gui>Modificēt tagus...</gui> un rediģējiet ar komatiem atdalīto sarakstu. Lai izņemtu tagu no vienas vai vairākām fotogrāfijām, vispirms izvēlieties attiecīgo tagu sānu joslā, tad izvēlieties fotogrāfijas, ko vēlaties izņemt un izvēlieties <guiseq><gui>Tagi</gui><gui>Izņemt tagu "[nosaukums]" no fotogrāfijām</gui></guiseq> vai spiediet labo peles pogu uz fotogrāfijām un izvēlieties <gui>Izņemt tagu "[nosaukums]" no fotogrāfijām</gui>.</p>
     

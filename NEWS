@@ -1,3 +1,132 @@
+Shotwell 0.26.0 - 20 Mar 2017
+  * Translation updates
+  * Fix build on non-glibc systems
+  * Fix missing optimisation in standard configure call
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=779844
+ - https://bugzilla.gnome.org/show_bug.cgi?id=780116
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Piotr Drąg <piotrdrag@gmail.com>
+ - Mario Blättermann <mario.blaettermann@gmail.com>
+ - Marek Černocký <marek@manet.cz>
+ - Josef Andersson <l10nl18nsweja@gmail.com>
+ - gogo <trebelnik2@gmail.com>
+ - Daniel Mustieles <daniel.mustieles@gmail.com>
+ - Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+ - Balázs Úr <urbalazs@gmail.com>
+
+Added/updated translations
+ - cs, courtesy of Marek Černocký
+ - de, courtesy of Mario Blättermann
+ - es, courtesy of Daniel Mustieles
+ - hr, courtesy of gogo
+ - hu, courtesy of Balázs Úr
+ - kk, courtesy of Baurzhan Muftakhidinov
+ - lv, courtesy of Rūdolfs Mazurs
+ - pl, courtesy of Piotr Drąg
+ - sv, courtesy of Josef Andersson
+
+Shotwell 0.25.92 - 13 Mar 2017
+  * Fix navigation issue when deleting image in fullscreen view
+  * Fix toolbox not visible on Mate in fullscreen view
+  * Fix navigation in viewer when saving modified photo
+  * Fix wrong macro in manpage
+  * Clean-up some dependencies
+  * Make it possible to enable/disable individual publishers
+  * Remove obsolete UI file
+  * Move all icons in the resource file
+  * Move ui files into resources
+  * Remove obsolete Glade helpers
+  * Clean-up printing dialog a little
+  * Piwigo: Append .jpg extension to published raw files
+  * Fix keyboard accessibility of CCW rotation
+  * Fix massive memory consumption when importing videos
+  * Fix context menu of viewer
+  * Fix a useless string copy
+  * Use default measurements depending on locale when none are set
+  * Translation updates
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=715501
+ - https://bugzilla.gnome.org/show_bug.cgi?id=729091
+ - https://bugzilla.gnome.org/show_bug.cgi?id=732663
+ - https://bugzilla.gnome.org/show_bug.cgi?id=734816
+ - https://bugzilla.gnome.org/show_bug.cgi?id=775158
+ - https://bugzilla.gnome.org/show_bug.cgi?id=779558
+ - https://bugzilla.gnome.org/show_bug.cgi?id=779844
+ - https://bugzilla.gnome.org/show_bug.cgi?id=779989
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Мирослав Николић <miroslavnikolic@rocketmail.com>
+ - Mario Blättermann <mario.blaettermann@gmail.com>
+ - Jörg Frings-Fürst <debian@jff-webhosting.net>
+ - Jordi Mas <jmas@softcatala.org>
+ - GNOME Translation Robot <gnome-sysadmin@gnome.org>
+ - Gábor Kelemen <kelemeng@openscope.org>
+ - Baurzhan Muftakhidinov <baurthefirst@gmail.com>
+ - Anders Jonsson <anders.jonsson@norsjovallen.se>
+
+Added/updated translations
+ - ca, courtesy of Jordi Mas
+ - de, courtesy of Mario Blättermann
+ - gd, courtesy of GunChleoc
+ - hu, courtesy of Gabor Kelemen
+ - kk, courtesy of Baurzhan Muftakhidinov
+ - sr, courtesy of Мирослав Николић
+ - sr@latin, courtesy of Miroslav Nikolić
+
+Shotwell 0.25.90 - 27 Feb 2017
+  * Remove obsolete option to create new folders on Picasa web albums
+  * Update Google API keys
+  * Fix Youtube upload by porting to libgdata
+  * Use embedded thumbnails in RAW files when default developer is set to
+    Camera
+  * Remove accidental raw development while importing
+  * Fix "Export" menu accidentally being labelled as "Save As"
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=717305
+ - https://bugzilla.gnome.org/show_bug.cgi?id=718248
+ - https://bugzilla.gnome.org/show_bug.cgi?id=777910
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Мирослав Николић <miroslavnikolic@rocketmail.com>
+ - Piotr Drąg <piotrdrag@gmail.com>
+ - Jiri Grönroos <jiri.gronroos@iki.fi>
+
+Added/updated translations
+ - fi, courtesy of Jiri Grönroos
+ - pl, courtesy of Piotr Drąg
+ - sr, courtesy of Мирослав Николић
+ - sr@latin, courtesy of Miroslav Nikolić
+
+Shotwell 0.25.5 - 31 Feb 2017
+  * Fix setting of gamma value and color matrix in libraw
+  * Extract web publishing authenticators into separate library. That should
+    make it possible to easily support UOA and GOA without patching Shotwell.
+  * Translation updates
+
+Bugs fixed in this release:
+ - https://bugzilla.gnome.org/show_bug.cgi?id=778174
+
+All contributors to this release:
+ - Jens Georg <mail@jensge.org>
+ - Debarshi Ray <debarshir@gnome.org>
+ - Piotr Drąg <piotrdrag@gmail.com>
+ - Enrico Nicoletto <liverig@gmail.com>
+ - Anders Jonsson <anders.jonsson@norsjovallen.se>
+ - Alan Mortensen <alanmortensen.am@gmail.com>
+
+Added/updated translations
+ - da, courtesy of Alan Mortensen
+ - pt_BR, courtesy of Enrico Nicoletto
+ - sv, courtesy of Anders Jonsson
+
 Shotwell 0.25.4 - 31 Jan 2017
   * Publishing: Use HTTPS everywhere
   * Translation updates
@@ -24,7 +153,7 @@ Shotwell 0.25.3 - 16 Jan 2017
   * Fix toolbar in camera import page
   * Update glade files for all publishers
   * Flickr: Simplify OAuth parsing by using libsoup
-  * Fix accellerators not coming from menu model
+  * Fix accelerators not coming from menu model
   * Add <Ctrl>-f as shortcut for search bar
   * Remove AppMenu, needs more thinking about the design.
   * Flickr: Use human-readable size of upload quota
@@ -73,7 +202,7 @@ Added/updated translations
 Shotwell 0.25.2 - 12 Dec 2016
   * Fix missing About action
   * Fix setting of initial action state
-  * Fix missing initialzation of several states
+  * Fix missing initialization of several states
   * Fix sort order not working
   * Fix a critical on startup
   * Fix initial sort order
@@ -82,7 +211,7 @@ Shotwell 0.25.2 - 12 Dec 2016
   * Use Gtk.Revealer for bottom toolbar
   * Fix a copy and paste error in the publishing result
   * Use Application menu
-  * Do not make errors in git version check cause false identifiaction of git
+  * Do not make errors in git version check cause false identification of git
     versions
   * Fix debian scripts
   * Fix filter actions not being active
@@ -128,7 +257,7 @@ Shotwell 0.25.1 - 21 Nov 2016
   * Update Piwigo dialogs
   * Remove most of the deprecated API calls for GTK+ <= 3.14
   * Remove some useless warnings generated by Vala
-  * Refactor Plugins to use a common aproach to load panes from glade
+  * Refactor Plugins to use a common approach to load panes from glade
   * Piwigo: Simplify category parsing
   * Remove GtkUIManager and Gtk*Action* from code
   * Fix a crash when clicking on tool window under Wayland

@@ -672,7 +672,7 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 #line 63 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			if (_inner_error_->domain == GPHOTO_ERROR) {
 #line 675 "CameraTable.c"
-				goto __catch56_gphoto_error;
+				goto __catch57_gphoto_error;
 			}
 #line 63 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -683,8 +683,8 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 #line 684 "CameraTable.c"
 		}
 	}
-	goto __finally56;
-	__catch56_gphoto_error:
+	goto __finally57;
+	__catch57_gphoto_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -707,7 +707,7 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 		return result;
 #line 709 "CameraTable.c"
 	}
-	__finally56:
+	__finally57:
 #line 62 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 62 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
@@ -726,7 +726,7 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 #line 71 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			if (_inner_error_->domain == GPHOTO_ERROR) {
 #line 729 "CameraTable.c"
-				goto __catch57_gphoto_error;
+				goto __catch58_gphoto_error;
 			}
 #line 71 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -737,8 +737,8 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 #line 738 "CameraTable.c"
 		}
 	}
-	goto __finally57;
-	__catch57_gphoto_error:
+	goto __finally58;
+	__catch58_gphoto_error:
 	{
 		GError* err = NULL;
 		GError* _tmp4_ = NULL;
@@ -757,7 +757,7 @@ static gboolean camera_table_delayed_init (CameraTable* self) {
 		_g_error_free0 (err);
 #line 759 "CameraTable.c"
 	}
-	__finally57:
+	__finally58:
 #line 70 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 70 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
@@ -1747,7 +1747,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1748 "CameraTable.c"
-				goto __catch58_g_regex_error;
+				goto __catch59_g_regex_error;
 			}
 #line 1382 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -1772,7 +1772,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			if (_inner_error_->domain == G_REGEX_ERROR) {
 #line 1773 "CameraTable.c"
-				goto __catch58_g_regex_error;
+				goto __catch59_g_regex_error;
 			}
 #line 1383 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 			_g_regex_unref0 (regex);
@@ -1798,8 +1798,8 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		return result;
 #line 1798 "CameraTable.c"
 	}
-	goto __finally58;
-	__catch58_g_regex_error:
+	goto __finally59;
+	__catch59_g_regex_error:
 	{
 		GError* e = NULL;
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -1812,7 +1812,7 @@ static gchar* string_replace (const gchar* self, const gchar* old, const gchar* 
 		_g_error_free0 (e);
 #line 1812 "CameraTable.c"
 	}
-	__finally58:
+	__finally59:
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 1381 "/usr/share/vala-0.34/vapi/glib-2.0.vapi"
@@ -4170,7 +4170,7 @@ static void camera_table_on_update_cameras (CameraTable* self) {
 #line 399 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			if (_inner_error_->domain == GPHOTO_ERROR) {
 #line 4171 "CameraTable.c"
-				goto __catch59_gphoto_error;
+				goto __catch60_gphoto_error;
 			}
 #line 399 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
@@ -4181,8 +4181,8 @@ static void camera_table_on_update_cameras (CameraTable* self) {
 #line 4180 "CameraTable.c"
 		}
 	}
-	goto __finally59;
-	__catch59_gphoto_error:
+	goto __finally60;
+	__catch60_gphoto_error:
 	{
 		GError* err = NULL;
 		GError* _tmp2_ = NULL;
@@ -4201,7 +4201,7 @@ static void camera_table_on_update_cameras (CameraTable* self) {
 		_g_error_free0 (err);
 #line 4201 "CameraTable.c"
 	}
-	__finally59:
+	__finally60:
 #line 398 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 398 "/home/jens/Source/shotwell/src/camera/CameraTable.vala"
