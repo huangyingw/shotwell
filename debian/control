@@ -3,12 +3,15 @@ Section: gnome
 Priority: optional
 Maintainer: Jörg Frings-Fürst <debian@jff-webhosting.net>
 Build-Depends:
+ appstream-util,
  debhelper (>= 10),
  desktop-file-utils,
  gnome-doc-utils,
  itstool,
+ libappstream-glib-dev,
  libexif-dev (>= 0.6.16),
  libgcr-3-dev,
+ libgdata-dev,
  libgee-0.8-dev (>= 0.10),
  libgexiv2-dev (>= 0.10.4),
  libglib2.0-dev (>= 2.40),
