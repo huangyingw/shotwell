@@ -9,7 +9,7 @@ Index: trunk/src/camera/ImportPage.vala
 ===================================================================
 --- trunk.orig/src/camera/ImportPage.vala
 +++ trunk/src/camera/ImportPage.vala
-@@ -765,6 +765,15 @@ public class ImportPage : CheckerboardPa
+@@ -773,6 +773,15 @@ public class ImportPage : CheckerboardPa
      ~ImportPage() {
          LibraryPhoto.global.contents_altered.disconnect(on_media_added_removed);
          Video.global.contents_altered.disconnect(on_media_added_removed);
@@ -25,7 +25,7 @@ Index: trunk/src/camera/ImportPage.vala
      }
      
      public override Gtk.Toolbar get_toolbar() {
-@@ -1140,11 +1149,14 @@ public class ImportPage : CheckerboardPa
+@@ -1162,11 +1171,14 @@ public class ImportPage : CheckerboardPa
          update_status(busy, false);
          
          refresh_error = null;
@@ -45,7 +45,7 @@ Index: trunk/src/camera/ImportPage.vala
          }
  
          update_status(true, refreshed);
-@@ -1249,13 +1261,15 @@ public class ImportPage : CheckerboardPa
+@@ -1271,13 +1283,15 @@ public class ImportPage : CheckerboardPa
          progress_bar.set_ellipsize(Pango.EllipsizeMode.NONE);
          progress_bar.set_text("");
          progress_bar.set_fraction(0.0);
@@ -63,7 +63,7 @@ Index: trunk/src/camera/ImportPage.vala
          if (refresh_result == GPhoto.Result.OK) {
              if (import_sources.get_count () == 0) {
                  this.set_page_message (this.get_view_empty_message ());
-@@ -1624,11 +1638,15 @@ public class ImportPage : CheckerboardPa
+@@ -1646,11 +1660,15 @@ public class ImportPage : CheckerboardPa
      }
      
      private void import(Gee.Iterable<DataObject> items) {
@@ -84,7 +84,7 @@ Index: trunk/src/camera/ImportPage.vala
          }
  
          update_status(true, refreshed);
-@@ -1764,12 +1782,15 @@ public class ImportPage : CheckerboardPa
+@@ -1786,12 +1804,15 @@ public class ImportPage : CheckerboardPa
      }
  
      private void close_import() {

@@ -1,3 +1,23 @@
+shotwell (0.26.0-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
+
+shotwell (0.25.4+really0.24.5-0.1) unstable; urgency=medium
+
+  * Revert to last stable release 0.24.5 (Closes: #850149).
+    (Necessary, since unblock request #854912 for 0.25.4-0.1 was turned down.)
+
+ -- Richard B. Kreckel <kreckel@debian.org>  Tue, 14 Feb 2017 18:47:24 +0100
+
+shotwell (0.25.4-0.1) unstable; urgency=medium
+
+  * New upstream release.
+    - Many UI fixes (Closes: #849688).
+
+ -- Richard B. Kreckel <kreckel@debian.org>  Sun, 05 Jan 2017 18:43:12 +0100
+
 shotwell (0.25.4-1) unstable; urgency=medium
 
   * New upstream release (Closes: #849688, #851711).

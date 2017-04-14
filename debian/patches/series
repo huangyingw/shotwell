@@ -5,7 +5,7 @@
 #0501-Dont-pack-webview-into-a-scrolled-window.patch
 #0502-Have-all-soup-sessions-validate-TLS-certificates.patch
 #0503-facebook-Dont-disable-XSS-auditor.patch
-0600-remove_wrong_marco.patch
+#0600-remove_wrong_marco.patch
 0100-ios8.patch
 #0510-Delay_size_request.patch
 #0515-Fix_background_color_drawing.patch
