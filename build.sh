@@ -7,6 +7,7 @@ cd "$SCRIPTPATH"
 ./configure
 make \
     && make install \
-    && ~/loadrc/gitrc/gci.sh
+    && ~/loadrc/gitrc/gci.sh \
+    && echo success !!!
 
 cd -
