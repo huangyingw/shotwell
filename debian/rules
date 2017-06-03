@@ -10,27 +10,16 @@ B_DATE:=$(shell LC_ALL=C date --utc -d "$(CHDATE)")
 	dh $@
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile 
+	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile
 
 override_dh_install:
 	dh_install
-	# Touch the generated C files with mtime of debian/changelog,
-	#  find -type f -name '*.c' -exec touch -r $(CURDIR)/debian/changelog {} \;
-	# then install these C files required for debugging into the shotwell-dbg package.
-	mkdir -p debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
-	find -type f -name '*.c' -exec cp --parent '{}' debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source/ ';'
-	cd debian/shotwell-dbg/usr/share/doc/shotwell-dbg && \
-	tar --mode=go=rX,u+rw,a-s --mtime="$(B_DATE)" -cJf temp-source.tar.xz temp-source
-	rm -fr debian/shotwell-dbg/usr/share/doc/shotwell-dbg/temp-source
 	# Remove unwanted la files
 	rm -f debian/shotwell/usr/lib/shotwell/plugins/builtin/*.la
 	rm -f debian/shotwell/usr/lib/*.la
 
 override_dh_installchangelogs:
 	dh_installchangelogs NEWS
-
-override_dh_strip:
-	dh_strip --dbg-package=shotwell-dbg
 
 override_dh_compress:
 	dh_compress -X.tar.xz

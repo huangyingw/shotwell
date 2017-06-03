@@ -4,6 +4,9 @@ shotwell (0.26.2-1) UNRELEASED; urgency=medium
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
   * New debian/DEVELOP.debian.
+  * Use the automatic debug symbol packages:
+    - Remove shotwell-dbg section from debian/control.
+    - Remove override_dh_strip and some lines on dh_install from debian/rules.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 
