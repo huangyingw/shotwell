@@ -10,6 +10,8 @@ shotwell (0.26.2-1) UNRELEASED; urgency=medium
       on dh_install from debian/rules.
     - Remove debian/shotwell-dbg.README.Debian.
   * Use the upstream ChangeLog as changelog and add NEWS to docs.
+  * Remove debian/shotwell.1 to use the upstream man page.
+  * Don't install man page at shotwell-common.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 
