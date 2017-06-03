@@ -1,6 +1,6 @@
 shotwell (0.26.1-1) UNRELEASED; urgency=medium
 
-  * New upstream release.
+  * New upstream release (Closes: #855681).
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
 
