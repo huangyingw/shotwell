@@ -17,13 +17,3 @@ override_dh_install:
 	# Remove unwanted la files
 	rm -f debian/shotwell/usr/lib/shotwell/plugins/builtin/*.la
 	rm -f debian/shotwell/usr/lib/*.la
-
-override_dh_installchangelogs:
-	dh_installchangelogs NEWS
-
-override_dh_compress:
-	dh_compress -X.tar.xz
-
-override_dh_installman:
-	dh_installman
-	rm -fr debian/shotwell-common/usr/share/man

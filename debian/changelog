@@ -6,7 +6,10 @@ shotwell (0.26.2-1) UNRELEASED; urgency=medium
   * New debian/DEVELOP.debian.
   * Use the automatic debug symbol packages:
     - Remove shotwell-dbg section from debian/control.
-    - Remove override_dh_strip and some lines on dh_install from debian/rules.
+    - Remove override_dh_strip, override_dh_compress and some lines
+      on dh_install from debian/rules.
+    - Remove debian/shotwell-dbg.README.Debian.
+  * Use the upstream ChangeLog as changelog and add NEWS to docs.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 
