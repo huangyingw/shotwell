@@ -278,7 +278,7 @@ typedef struct _SavedSearchDialogSearchRowDatePrivate SavedSearchDialogSearchRow
 
 typedef struct _SearchConditionDate SearchConditionDate;
 typedef struct _SearchConditionDateClass SearchConditionDateClass;
-typedef struct _Block9Data Block9Data;
+typedef struct _Block10Data Block10Data;
 typedef struct _ParamSpecSavedSearchDialog ParamSpecSavedSearchDialog;
 #define _vala_assert(expr, msg) if G_LIKELY (expr) ; else g_assertion_message_expr (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, msg);
 #define _vala_return_if_fail(expr, msg) if G_LIKELY (expr) ; else { g_return_if_fail_warning (G_LOG_DOMAIN, G_STRFUNC, msg); return; }
@@ -534,7 +534,7 @@ typedef enum  {
 	SEARCH_CONDITION_DATE_CONTEXT_IS_NOT_SET
 } SearchConditionDateContext;
 
-struct _Block9Data {
+struct _Block10Data {
 	int _ref_count_;
 	SavedSearchDialogSearchRowDate* self;
 	GtkDialog* d;
@@ -808,14 +808,14 @@ GDateTime* search_condition_date_get_date_one (SearchConditionDate* self);
 GDateTime* search_condition_date_get_date_two (SearchConditionDate* self);
 static gboolean saved_search_dialog_search_row_date_real_is_complete (SavedSearchDialogSearchRow* base);
 static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialogSearchRowDate* self, GtkCalendar* cal);
-static Block9Data* block9_data_ref (Block9Data* _data9_);
-static void block9_data_unref (void * _userdata_);
+static Block10Data* block10_data_ref (Block10Data* _data10_);
+static void block10_data_unref (void * _userdata_);
 #define RESOURCES_CANCEL_LABEL _ ("_Cancel")
 #define RESOURCES_OK_LABEL _ ("_OK")
-static void __lambda12_ (SavedSearchDialogSearchRowDate* self);
-static void ___lambda12__gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self);
-static void __lambda13_ (Block9Data* _data9_);
-static void ___lambda13__gtk_calendar_day_selected_double_click (GtkCalendar* _sender, gpointer self);
+static void __lambda13_ (SavedSearchDialogSearchRowDate* self);
+static void ___lambda13__gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self);
+static void __lambda14_ (Block10Data* _data10_);
+static void ___lambda14__gtk_calendar_day_selected_double_click (GtkCalendar* _sender, gpointer self);
 static void saved_search_dialog_search_row_date_finalize (SavedSearchDialogSearchRow* obj);
 static void saved_search_dialog_finalize (SavedSearchDialog* obj);
 
@@ -5838,71 +5838,71 @@ static void saved_search_dialog_search_row_date_on_changed (SavedSearchDialogSea
 }
 
 
-static Block9Data* block9_data_ref (Block9Data* _data9_) {
+static Block10Data* block10_data_ref (Block10Data* _data10_) {
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	g_atomic_int_inc (&_data9_->_ref_count_);
+	g_atomic_int_inc (&_data10_->_ref_count_);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	return _data9_;
+	return _data10_;
 #line 5847 "SavedSearchDialog.c"
 }
 
 
-static void block9_data_unref (void * _userdata_) {
-	Block9Data* _data9_;
-	_data9_ = (Block9Data*) _userdata_;
+static void block10_data_unref (void * _userdata_) {
+	Block10Data* _data10_;
+	_data10_ = (Block10Data*) _userdata_;
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	if (g_atomic_int_dec_and_test (&_data9_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data10_->_ref_count_)) {
 #line 5856 "SavedSearchDialog.c"
 		SavedSearchDialogSearchRowDate* self;
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		self = _data9_->self;
+		self = _data10_->self;
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		_g_object_unref0 (_data9_->d);
+		_g_object_unref0 (_data10_->d);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 		_saved_search_dialog_search_row_unref0 (self);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-		g_slice_free (Block9Data, _data9_);
+		g_slice_free (Block10Data, _data10_);
 #line 5866 "SavedSearchDialog.c"
 	}
 }
 
 
-static void __lambda12_ (SavedSearchDialogSearchRowDate* self) {
+static void __lambda13_ (SavedSearchDialogSearchRowDate* self) {
 #line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_update_date_labels (self);
 #line 5874 "SavedSearchDialog.c"
 }
 
 
-static void ___lambda12__gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self) {
+static void ___lambda13__gtk_calendar_day_selected (GtkCalendar* _sender, gpointer self) {
 #line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	__lambda12_ ((SavedSearchDialogSearchRowDate*) self);
+	__lambda13_ ((SavedSearchDialogSearchRowDate*) self);
 #line 5881 "SavedSearchDialog.c"
 }
 
 
-static void __lambda13_ (Block9Data* _data9_) {
+static void __lambda14_ (Block10Data* _data10_) {
 	SavedSearchDialogSearchRowDate* self;
 	GtkDialog* _tmp0_ = NULL;
 #line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	self = _data9_->self;
+	self = _data10_->self;
 #line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp0_ = _data9_->d;
+	_tmp0_ = _data10_->d;
 #line 612 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_dialog_response (_tmp0_, (gint) GTK_RESPONSE_ACCEPT);
 #line 5894 "SavedSearchDialog.c"
 }
 
 
-static void ___lambda13__gtk_calendar_day_selected_double_click (GtkCalendar* _sender, gpointer self) {
+static void ___lambda14__gtk_calendar_day_selected_double_click (GtkCalendar* _sender, gpointer self) {
 #line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	__lambda13_ (self);
+	__lambda14_ (self);
 #line 5901 "SavedSearchDialog.c"
 }
 
 
 static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialogSearchRowDate* self, GtkCalendar* cal) {
-	Block9Data* _data9_;
+	Block10Data* _data10_;
 	gint orig_day = 0;
 	GtkCalendar* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
@@ -5943,11 +5943,11 @@ static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialo
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_return_if_fail (GTK_IS_CALENDAR (cal));
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_data9_ = g_slice_new0 (Block9Data);
+	_data10_ = g_slice_new0 (Block10Data);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_data9_->_ref_count_ = 1;
+	_data10_->_ref_count_ = 1;
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_data9_->self = saved_search_dialog_search_row_ref (self);
+	_data10_->self = saved_search_dialog_search_row_ref (self);
 #line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp0_ = cal;
 #line 600 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
@@ -5977,21 +5977,21 @@ static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialo
 #line 603 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_object_ref_sink (_tmp9_);
 #line 603 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_data9_->d = _tmp9_;
+	_data10_->d = _tmp9_;
 #line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp10_ = _data9_->d;
+	_tmp10_ = _data10_->d;
 #line 606 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_window_get_type (), GtkWindow), TRUE);
 #line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp11_ = _data9_->d;
+	_tmp11_ = _data10_->d;
 #line 607 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, gtk_window_get_type (), GtkWindow), FALSE);
 #line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp12_ = _data9_->d;
+	_tmp12_ = _data10_->d;
 #line 608 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_window_set_decorated (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, gtk_window_get_type (), GtkWindow), FALSE);
 #line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp13_ = _data9_->d;
+	_tmp13_ = _data10_->d;
 #line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp14_ = (GtkBox*) gtk_dialog_get_content_area (_tmp13_);
 #line 609 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
@@ -6001,21 +6001,21 @@ static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialo
 #line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp16_ = cal;
 #line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp17_ = g_signal_connect (_tmp16_, "day-selected", (GCallback) ___lambda12__gtk_calendar_day_selected, self);
+	_tmp17_ = g_signal_connect (_tmp16_, "day-selected", (GCallback) ___lambda13__gtk_calendar_day_selected, self);
 #line 610 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	id_1 = _tmp17_;
 #line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp18_ = cal;
 #line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp19_ = g_signal_connect_data (_tmp18_, "day-selected-double-click", (GCallback) ___lambda13__gtk_calendar_day_selected_double_click, block9_data_ref (_data9_), (GClosureNotify) block9_data_unref, 0);
+	_tmp19_ = g_signal_connect_data (_tmp18_, "day-selected-double-click", (GCallback) ___lambda14__gtk_calendar_day_selected_double_click, block10_data_ref (_data10_), (GClosureNotify) block10_data_unref, 0);
 #line 611 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	id_2 = _tmp19_;
 #line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp20_ = _data9_->d;
+	_tmp20_ = _data10_->d;
 #line 614 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, gtk_widget_get_type (), GtkWidget));
 #line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp21_ = _data9_->d;
+	_tmp21_ = _data10_->d;
 #line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	_tmp22_ = gtk_dialog_run (_tmp21_);
 #line 615 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
@@ -6064,15 +6064,15 @@ static void saved_search_dialog_search_row_date_popup_calendar (SavedSearchDialo
 #line 623 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	g_signal_handler_disconnect (G_TYPE_CHECK_INSTANCE_CAST (_tmp32_, G_TYPE_OBJECT, GObject), _tmp33_);
 #line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_tmp34_ = _data9_->d;
+	_tmp34_ = _data10_->d;
 #line 624 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (_tmp34_, gtk_widget_get_type (), GtkWidget));
 #line 625 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
 	saved_search_dialog_search_row_date_update_date_labels (self);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	block9_data_unref (_data9_);
+	block10_data_unref (_data10_);
 #line 599 "/home/jens/Source/shotwell/src/searches/SavedSearchDialog.vala"
-	_data9_ = NULL;
+	_data10_ = NULL;
 #line 6077 "SavedSearchDialog.c"
 }
 

@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: shotwell 0.26.1\n"
+"Project-Id-Version: shotwell 0.26.2\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=Shotwell&component=Internationalization\n"
-"POT-Creation-Date: 2017-04-11 22:36+0200\n"
+"POT-Creation-Date: 2017-06-01 18:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2205,10 +2205,10 @@ msgid "Leave fullscreen"
 msgstr ""
 
 #: src/AppWindow.vala:531 src/AppWindow.vala:552 src/AppWindow.vala:569
-#: src/data_imports/DataImportsUI.vala:301
-#: src/data_imports/DataImportsUI.vala:419 src/Dialogs.vala:20
+#: src/data_imports/DataImportsUI.vala:303
+#: src/data_imports/DataImportsUI.vala:421 src/Dialogs.vala:20
 #: src/Dialogs.vala:28 src/Dialogs.vala:1420 src/Dialogs.vala:1443
-#: src/publishing/PublishingUI.vala:301 src/publishing/PublishingUI.vala:525
+#: src/publishing/PublishingUI.vala:303 src/publishing/PublishingUI.vala:527
 #: src/Resources.vala:158
 msgid "_Cancel"
 msgstr ""
@@ -2790,7 +2790,7 @@ msgstr ""
 msgid "Import media _from:"
 msgstr ""
 
-#: src/data_imports/DataImportsUI.vala:414 src/publishing/PublishingUI.vala:520
+#: src/data_imports/DataImportsUI.vala:416 src/publishing/PublishingUI.vala:522
 msgid "_Close"
 msgstr ""
 
@@ -3706,7 +3706,7 @@ msgid "Save As"
 msgstr ""
 
 #. verify this is a directory
-#: src/DirectoryMonitor.vala:889
+#: src/DirectoryMonitor.vala:891
 #, c-format
 msgid "Unable to monitor %s: Not a directory (%s)"
 msgstr ""
@@ -4481,37 +4481,37 @@ msgstr ""
 msgid "Logging in…"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:193
+#: src/publishing/PublishingUI.vala:195
 msgid "Publish Photos"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:194
+#: src/publishing/PublishingUI.vala:196
 msgid "Publish photos _to:"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:196
+#: src/publishing/PublishingUI.vala:198
 msgid "Publish Videos"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:197
+#: src/publishing/PublishingUI.vala:199
 msgid "Publish videos _to"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:199
+#: src/publishing/PublishingUI.vala:201
 msgid "Publish Photos and Videos"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:200
+#: src/publishing/PublishingUI.vala:202
 msgid "Publish photos and videos _to"
 msgstr ""
 
 #. There are no enabled publishing services that accept this media type,
 #. warn the user.
-#: src/publishing/PublishingUI.vala:410
+#: src/publishing/PublishingUI.vala:412
 msgid "Unable to publish"
 msgstr ""
 
-#: src/publishing/PublishingUI.vala:411
+#: src/publishing/PublishingUI.vala:413
 #, c-format
 msgid ""
 "Shotwell cannot publish the selected items because you do not have a "

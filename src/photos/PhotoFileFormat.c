@@ -270,14 +270,14 @@ gboolean photo_file_format_can_write (PhotoFileFormat self);
 static gboolean ____lambda4__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self);
 static PhotoFileFormat* _vala_array_dup1 (PhotoFileFormat* self, int length);
 PhotoFileFormat* photo_file_format_data_get_image_writeable (int* result_length1);
-static gboolean ___lambda22_ (PhotoFileFormat format);
+static gboolean ___lambda23_ (PhotoFileFormat format);
 gboolean photo_file_format_can_write_image (PhotoFileFormat self);
-static gboolean ____lambda22__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self);
+static gboolean ____lambda23__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self);
 static PhotoFileFormat* _vala_array_dup2 (PhotoFileFormat* self, int length);
 PhotoFileFormat* photo_file_format_data_get_metadata_writeable (int* result_length1);
-static gboolean ___lambda23_ (PhotoFileFormat format);
+static gboolean ___lambda24_ (PhotoFileFormat format);
 gboolean photo_file_format_can_write_metadata (PhotoFileFormat self);
-static gboolean ____lambda23__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self);
+static gboolean ____lambda24__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self);
 static PhotoFileFormat* _vala_array_dup3 (PhotoFileFormat* self, int length);
 PhotoFileFormat* photo_file_format_get_writeable (int* result_length1);
 PhotoFileFormat* photo_file_format_get_image_writeable (int* result_length1);
@@ -610,7 +610,7 @@ PhotoFileFormat* photo_file_format_data_get_writeable (int* result_length1) {
 }
 
 
-static gboolean ___lambda22_ (PhotoFileFormat format) {
+static gboolean ___lambda23_ (PhotoFileFormat format) {
 	gboolean result = FALSE;
 	PhotoFileFormat _tmp0_ = 0;
 	gboolean _tmp1_ = FALSE;
@@ -626,9 +626,9 @@ static gboolean ___lambda22_ (PhotoFileFormat format) {
 }
 
 
-static gboolean ____lambda22__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self) {
+static gboolean ____lambda23__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self) {
 	gboolean result;
-	result = ___lambda22_ (format);
+	result = ___lambda23_ (format);
 #line 41 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
 	return result;
 #line 635 "PhotoFileFormat.c"
@@ -662,7 +662,7 @@ PhotoFileFormat* photo_file_format_data_get_image_writeable (int* result_length1
 		gint _tmp1_ = 0;
 		PhotoFileFormat* _tmp2_ = NULL;
 #line 41 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
-		_tmp2_ = photo_file_format_data_find_applicable (____lambda22__photo_file_format_data_applicable_test, NULL, &_tmp1_);
+		_tmp2_ = photo_file_format_data_find_applicable (____lambda23__photo_file_format_data_applicable_test, NULL, &_tmp1_);
 #line 41 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
 		photo_file_format_data_image_writeable = (g_free (photo_file_format_data_image_writeable), NULL);
 #line 41 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
@@ -699,7 +699,7 @@ PhotoFileFormat* photo_file_format_data_get_image_writeable (int* result_length1
 }
 
 
-static gboolean ___lambda23_ (PhotoFileFormat format) {
+static gboolean ___lambda24_ (PhotoFileFormat format) {
 	gboolean result = FALSE;
 	PhotoFileFormat _tmp0_ = 0;
 	gboolean _tmp1_ = FALSE;
@@ -715,9 +715,9 @@ static gboolean ___lambda23_ (PhotoFileFormat format) {
 }
 
 
-static gboolean ____lambda23__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self) {
+static gboolean ____lambda24__photo_file_format_data_applicable_test (PhotoFileFormat format, gpointer self) {
 	gboolean result;
-	result = ___lambda23_ (format);
+	result = ___lambda24_ (format);
 #line 48 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
 	return result;
 #line 724 "PhotoFileFormat.c"
@@ -751,7 +751,7 @@ PhotoFileFormat* photo_file_format_data_get_metadata_writeable (int* result_leng
 		gint _tmp1_ = 0;
 		PhotoFileFormat* _tmp2_ = NULL;
 #line 48 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
-		_tmp2_ = photo_file_format_data_find_applicable (____lambda23__photo_file_format_data_applicable_test, NULL, &_tmp1_);
+		_tmp2_ = photo_file_format_data_find_applicable (____lambda24__photo_file_format_data_applicable_test, NULL, &_tmp1_);
 #line 48 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"
 		photo_file_format_data_metadata_writeable = (g_free (photo_file_format_data_metadata_writeable), NULL);
 #line 48 "/home/jens/Source/shotwell/src/photos/PhotoFileFormat.vala"

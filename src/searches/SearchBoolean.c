@@ -742,10 +742,10 @@ enum  {
 };
 SearchConditionSearchType* search_condition_search_type_as_array (int* result_length1);
 void search_condition_search_type_sort_array (SearchConditionSearchType** array, int* array_length1);
-static gint __lambda11_ (void* a, void* b);
+static gint __lambda12_ (void* a, void* b);
 gint utf8_cs_compare (void* a, void* b);
 gchar* search_condition_search_type_display_text (SearchConditionSearchType self);
-static gint ___lambda11____compar_fn_t (void* key1, void* key2);
+static gint ___lambda12____compar_fn_t (void* key1, void* key2);
 gchar* search_condition_search_type_to_string (SearchConditionSearchType self);
 SearchConditionSearchType search_condition_search_type_from_string (const gchar* str);
 gboolean search_condition_predicate (SearchCondition* self, MediaSource* source);
@@ -1156,7 +1156,7 @@ SearchConditionSearchType* search_condition_search_type_as_array (int* result_le
 }
 
 
-static gint __lambda11_ (void* a, void* b) {
+static gint __lambda12_ (void* a, void* b) {
 	gint result = 0;
 	void* _tmp0_ = NULL;
 	gchar* _tmp1_ = NULL;
@@ -1181,9 +1181,9 @@ static gint __lambda11_ (void* a, void* b) {
 }
 
 
-static gint ___lambda11____compar_fn_t (void* key1, void* key2) {
+static gint ___lambda12____compar_fn_t (void* key1, void* key2) {
 	gint result;
-	result = __lambda11_ (key1, key2);
+	result = __lambda12_ (key1, key2);
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	return result;
 #line 1190 "SearchBoolean.c"
@@ -1204,7 +1204,7 @@ void search_condition_search_type_sort_array (SearchConditionSearchType** array,
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
 	_tmp1__length1 = *array_length1;
 #line 70 "/home/jens/Source/shotwell/src/searches/SearchBoolean.vala"
-	qsort (_tmp0_, (gsize) _tmp1__length1, (gsize) sizeof (SearchConditionSearchType), ___lambda11____compar_fn_t);
+	qsort (_tmp0_, (gsize) _tmp1__length1, (gsize) sizeof (SearchConditionSearchType), ___lambda12____compar_fn_t);
 #line 1209 "SearchBoolean.c"
 }
 

@@ -395,10 +395,10 @@ struct _DirectoryMonitorExploreAsyncData {
 	gchar* _tmp29_;
 	gchar* _tmp30_;
 	gboolean _tmp31_;
-	GFile* _tmp32_;
-	gchar* _tmp33_;
+	GFileInfo* _tmp32_;
+	GFile* _tmp33_;
 	gchar* _tmp34_;
-	gboolean _tmp35_;
+	gchar* _tmp35_;
 	GFileInfo* _tmp36_;
 	GFileType _tmp37_;
 	const gchar* _tmp38_;
@@ -429,83 +429,91 @@ struct _DirectoryMonitorExploreAsyncData {
 	GFileInfo* _tmp57_;
 	GFileInfo* info;
 	GFileInfo* _tmp58_;
-	gboolean _tmp59_;
-	GFile* _tmp60_;
-	GFileInfo* _tmp61_;
-	const gchar* _tmp62_;
+	gchar* _tmp59_;
+	gchar* _tmp60_;
+	gboolean _tmp61_;
+	GFileInfo* _tmp62_;
 	GFile* _tmp63_;
-	GFile* _tmp64_;
+	gchar* _tmp64_;
 	gchar* _tmp65_;
-	gchar* _tmp66_;
-	GFileInfo* _tmp67_;
-	gboolean _tmp68_;
+	GFileInfo* _tmp66_;
+	gboolean _tmp67_;
+	GFile* _tmp68_;
 	GFileInfo* _tmp69_;
-	GFileType _tmp70_;
-	GeeHashMap* _tmp71_;
-	GeeHashMap* _tmp72_;
-	GeeHashMap* _tmp73_;
-	GFile* _tmp74_;
+	const gchar* _tmp70_;
+	GFile* _tmp71_;
+	GFile* _tmp72_;
+	gchar* _tmp73_;
+	gchar* _tmp74_;
 	GFileInfo* _tmp75_;
-	const gchar* _tmp76_;
-	GFile* _tmp77_;
-	GFile* _tmp78_;
-	GFileInfo* _tmp79_;
+	gboolean _tmp76_;
+	GFileInfo* _tmp77_;
+	GFileType _tmp78_;
+	GeeHashMap* _tmp79_;
 	GeeHashMap* _tmp80_;
 	GeeHashMap* _tmp81_;
-	GeeHashMap* _tmp82_;
-	GFile* _tmp83_;
-	GFileInfo* _tmp84_;
-	const gchar* _tmp85_;
+	GFile* _tmp82_;
+	GFileInfo* _tmp83_;
+	const gchar* _tmp84_;
+	GFile* _tmp85_;
 	GFile* _tmp86_;
-	GFile* _tmp87_;
-	GFileInfo* _tmp88_;
-	GError* err2;
-	GFile* _tmp89_;
-	gchar* _tmp90_;
-	gchar* _tmp91_;
-	GError* _tmp92_;
+	GFileInfo* _tmp87_;
+	GeeHashMap* _tmp88_;
+	GeeHashMap* _tmp89_;
+	GeeHashMap* _tmp90_;
+	GFile* _tmp91_;
+	GFileInfo* _tmp92_;
 	const gchar* _tmp93_;
-	gboolean _tmp94_;
-	gboolean _tmp95_;
-	GFile* _tmp96_;
-	GFileInfo* _tmp97_;
-	GFile* _tmp98_;
-	GFileInfo* _tmp99_;
-	GFile* _tmp100_;
-	GFileInfo* _tmp101_;
-	GeeHashMap* _tmp102_;
-	GeeHashMap* _tmp103_;
-	gboolean _tmp104_;
-	gboolean _tmp105_;
-	gboolean _tmp106_;
-	GeeHashMap* _tmp107_;
+	GFile* _tmp94_;
+	GFile* _tmp95_;
+	GFileInfo* _tmp96_;
+	GError* err2;
+	GFile* _tmp97_;
+	gchar* _tmp98_;
+	gchar* _tmp99_;
+	GError* _tmp100_;
+	const gchar* _tmp101_;
+	gboolean _tmp102_;
+	gboolean _tmp103_;
+	GFile* _tmp104_;
+	GFileInfo* _tmp105_;
+	GFile* _tmp106_;
+	GFileInfo* _tmp107_;
+	GFile* _tmp108_;
+	GFileInfo* _tmp109_;
+	GeeHashMap* _tmp110_;
+	GeeHashMap* _tmp111_;
+	gboolean _tmp112_;
+	gboolean _tmp113_;
+	gboolean _tmp114_;
+	GeeHashMap* _tmp115_;
 	GeeIterator* _subdir_it;
-	GeeHashMap* _tmp108_;
-	GeeSet* _tmp109_;
-	GeeSet* _tmp110_;
-	GeeSet* _tmp111_;
-	GeeIterator* _tmp112_;
-	GeeIterator* _tmp113_;
-	GeeIterator* _tmp114_;
-	gboolean _tmp115_;
+	GeeHashMap* _tmp116_;
+	GeeSet* _tmp117_;
+	GeeSet* _tmp118_;
+	GeeSet* _tmp119_;
+	GeeIterator* _tmp120_;
+	GeeIterator* _tmp121_;
+	GeeIterator* _tmp122_;
+	gboolean _tmp123_;
 	GFile* subdir;
-	GeeIterator* _tmp116_;
-	gpointer _tmp117_;
-	gint _tmp118_;
-	gint _tmp119_;
-	GFile* _tmp120_;
-	GeeHashMap* _tmp121_;
-	GFile* _tmp122_;
-	gpointer _tmp123_;
-	GFileInfo* _tmp124_;
-	gboolean _tmp125_;
-	GFile* _tmp126_;
-	GeeHashMap* _tmp127_;
+	GeeIterator* _tmp124_;
+	gpointer _tmp125_;
+	gint _tmp126_;
+	gint _tmp127_;
 	GFile* _tmp128_;
-	gpointer _tmp129_;
-	GFileInfo* _tmp130_;
-	gboolean _tmp131_;
-	gboolean _tmp132_;
+	GeeHashMap* _tmp129_;
+	GFile* _tmp130_;
+	gpointer _tmp131_;
+	GFileInfo* _tmp132_;
+	gboolean _tmp133_;
+	GFile* _tmp134_;
+	GeeHashMap* _tmp135_;
+	GFile* _tmp136_;
+	gpointer _tmp137_;
+	GFileInfo* _tmp138_;
+	gboolean _tmp139_;
+	gboolean _tmp140_;
 	GError * _inner_error_;
 };
 
@@ -796,9 +804,9 @@ static GType directory_monitor_ftype_get_type (void) {
 
 
 static gpointer _g_object_ref0 (gpointer self) {
-#line 459 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 465 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 802 "DirectoryMonitor.c"
+#line 810 "DirectoryMonitor.c"
 }
 
 
@@ -808,73 +816,73 @@ DirectoryMonitor* directory_monitor_construct (GType object_type, GFile* root, g
 	GFile* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 458 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 464 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (root), NULL);
-#line 458 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 464 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self = (DirectoryMonitor*) g_object_new (object_type, NULL);
-#line 459 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 465 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = root;
-#line 459 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 465 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 459 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 465 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (self->priv->root);
-#line 459 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 465 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->root = _tmp1_;
-#line 460 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 466 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = recurse;
-#line 460 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 466 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->recurse = _tmp2_;
-#line 461 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 467 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = monitoring;
-#line 461 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 467 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->monitoring = _tmp3_;
-#line 458 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 464 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return self;
-#line 834 "DirectoryMonitor.c"
+#line 842 "DirectoryMonitor.c"
 }
 
 
 DirectoryMonitor* directory_monitor_new (GFile* root, gboolean recurse, gboolean monitoring) {
-#line 458 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 464 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return directory_monitor_construct (TYPE_DIRECTORY_MONITOR, root, recurse, monitoring);
-#line 841 "DirectoryMonitor.c"
+#line 849 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_mdbg (const gchar* msg) {
-#line 464 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 470 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (msg != NULL);
-#line 848 "DirectoryMonitor.c"
+#line 856 "DirectoryMonitor.c"
 }
 
 
 gboolean directory_monitor_is_recursive (DirectoryMonitor* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 470 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 476 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 471 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 477 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->recurse;
-#line 471 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 477 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp0_;
-#line 471 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 477 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 863 "DirectoryMonitor.c"
+#line 871 "DirectoryMonitor.c"
 }
 
 
 gboolean directory_monitor_is_monitoring (DirectoryMonitor* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 474 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 480 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 475 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 481 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->monitoring;
-#line 475 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 481 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp0_;
-#line 475 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 481 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 878 "DirectoryMonitor.c"
+#line 886 "DirectoryMonitor.c"
 }
 
 
@@ -883,32 +891,32 @@ static void directory_monitor_real_notify_root_deleted (DirectoryMonitor* self, 
 	GFile* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	GFile* _tmp3_ = NULL;
-#line 478 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 484 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (root));
-#line 479 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->root;
-#line 479 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = root;
-#line 479 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = g_file_equal (_tmp0_, _tmp1_);
-#line 479 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (_tmp2_, "this.root.equal(root)");
-#line 481 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 487 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg ("root deleted");
-#line 482 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 488 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = root;
-#line 482 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 488 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "root-deleted", _tmp3_);
-#line 903 "DirectoryMonitor.c"
+#line 911 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_root_deleted (DirectoryMonitor* self, GFile* root) {
-#line 478 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 484 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 478 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 484 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_root_deleted (self, root);
-#line 912 "DirectoryMonitor.c"
+#line 920 "DirectoryMonitor.c"
 }
 
 
@@ -927,53 +935,53 @@ static void directory_monitor_internal_notify_root_moved (DirectoryMonitor* self
 	GFile* _tmp9_ = NULL;
 	GFile* _tmp10_ = NULL;
 	GFileInfo* _tmp11_ = NULL;
-#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 491 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 491 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_root));
-#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 491 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_root));
-#line 485 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 491 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_root_info));
-#line 486 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 486 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = old_root;
-#line 486 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = directory_monitor_file_info_map_remove (_tmp0_, _tmp1_, NULL);
-#line 486 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	removed = _tmp2_;
-#line 487 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 493 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (removed, "removed");
-#line 489 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 495 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = self->priv->files;
-#line 489 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 495 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = new_root;
-#line 489 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 495 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = new_root_info;
-#line 489 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 495 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = directory_monitor_file_info_map_update (_tmp3_, _tmp4_, _tmp5_);
-#line 489 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 495 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	updated = _tmp6_;
-#line 490 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 496 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (updated, "updated");
-#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = new_root;
-#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = _g_object_ref0 (_tmp7_);
-#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (self->priv->root);
-#line 492 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->root = _tmp8_;
-#line 494 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = old_root;
-#line 494 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = new_root;
-#line 494 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = new_root_info;
-#line 494 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_root_moved (self, _tmp9_, _tmp10_, _tmp11_);
-#line 977 "DirectoryMonitor.c"
+#line 985 "DirectoryMonitor.c"
 }
 
 
@@ -992,80 +1000,80 @@ static void directory_monitor_real_notify_root_moved (DirectoryMonitor* self, GF
 	GFile* _tmp11_ = NULL;
 	GFile* _tmp12_ = NULL;
 	GFileInfo* _tmp13_ = NULL;
-#line 497 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 503 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_root));
-#line 497 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 503 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_root));
-#line 497 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 503 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_root_info));
-#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->root;
-#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = old_root;
-#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = g_file_equal (_tmp0_, _tmp1_);
-#line 498 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (_tmp2_, "this.root.equal(old_root)");
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = old_root;
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = g_file_get_path (_tmp3_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = _tmp4_;
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = new_root;
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = g_file_get_path (_tmp6_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = _tmp7_;
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = g_strdup_printf ("root moved: %s -> %s", _tmp5_, _tmp8_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = _tmp9_;
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp10_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp10_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp8_);
-#line 500 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp5_);
-#line 501 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 507 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = old_root;
-#line 501 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 507 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = new_root;
-#line 501 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 507 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = new_root_info;
-#line 501 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 507 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "root-moved", _tmp11_, _tmp12_, _tmp13_);
-#line 1042 "DirectoryMonitor.c"
+#line 1050 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_root_moved (DirectoryMonitor* self, GFile* old_root, GFile* new_root, GFileInfo* new_root_info) {
-#line 497 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 503 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 497 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 503 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_root_moved (self, old_root, new_root, new_root_info);
-#line 1051 "DirectoryMonitor.c"
+#line 1059 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_notify_discovery_started (DirectoryMonitor* self) {
-#line 505 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg ("discovery started");
-#line 506 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 512 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "discovery-started");
-#line 1060 "DirectoryMonitor.c"
+#line 1068 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_discovery_started (DirectoryMonitor* self) {
-#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 504 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_discovery_started (self);
-#line 1069 "DirectoryMonitor.c"
+#line 1077 "DirectoryMonitor.c"
 }
 
 
@@ -1076,55 +1084,55 @@ static void directory_monitor_real_internal_notify_file_discovered (DirectoryMon
 	gboolean _tmp3_ = FALSE;
 	GFile* _tmp7_ = NULL;
 	GFileInfo* _tmp8_ = NULL;
-#line 509 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 515 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 509 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 515 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 516 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 516 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 516 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 516 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_file_info_map_update (_tmp0_, _tmp1_, _tmp2_);
-#line 510 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 516 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp3_) {
-#line 1094 "DirectoryMonitor.c"
+#line 1102 "DirectoryMonitor.c"
 		GFile* _tmp4_ = NULL;
 		gchar* _tmp5_ = NULL;
 		gchar* _tmp6_ = NULL;
-#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = file;
-#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = g_file_get_path (_tmp4_);
-#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = _tmp5_;
-#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_debug ("DirectoryMonitor.vala:511: DirectoryMonitor.internal_notify_file_disco" \
+#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_debug ("DirectoryMonitor.vala:517: DirectoryMonitor.internal_notify_file_disco" \
 "vered: %s discovered but not added to file map", _tmp6_);
-#line 511 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp6_);
-#line 514 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 520 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return;
-#line 1110 "DirectoryMonitor.c"
-	}
-#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp7_ = file;
-#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp8_ = info;
-#line 517 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_notify_file_discovered (self, _tmp7_, _tmp8_);
 #line 1118 "DirectoryMonitor.c"
+	}
+#line 523 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp7_ = file;
+#line 523 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp8_ = info;
+#line 523 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_notify_file_discovered (self, _tmp7_, _tmp8_);
+#line 1126 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_internal_notify_file_discovered (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 509 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 515 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 509 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 515 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->internal_notify_file_discovered (self, file, info);
-#line 1127 "DirectoryMonitor.c"
+#line 1135 "DirectoryMonitor.c"
 }
 
 
@@ -1136,42 +1144,42 @@ static void directory_monitor_real_notify_file_discovered (DirectoryMonitor* sel
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 520 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 520 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file discovered: %s", _tmp2_);
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 521 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 522 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 528 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 522 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 528 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 522 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 528 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-discovered", _tmp5_, _tmp6_);
-#line 1165 "DirectoryMonitor.c"
+#line 1173 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_discovered (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 520 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 520 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_discovered (self, file, info);
-#line 1174 "DirectoryMonitor.c"
+#line 1182 "DirectoryMonitor.c"
 }
 
 
@@ -1183,38 +1191,38 @@ static void directory_monitor_real_internal_notify_directory_discovered (Directo
 	gboolean _tmp3_ = FALSE;
 	GFile* _tmp4_ = NULL;
 	GFileInfo* _tmp5_ = NULL;
-#line 525 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 531 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 525 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 531 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = dir;
-#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_file_info_map_update (_tmp0_, _tmp1_, _tmp2_);
-#line 526 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	updated = _tmp3_;
-#line 527 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (updated, "updated");
-#line 529 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 535 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = dir;
-#line 529 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 535 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = info;
-#line 529 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 535 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_directory_discovered (self, _tmp4_, _tmp5_);
-#line 1208 "DirectoryMonitor.c"
+#line 1216 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_internal_notify_directory_discovered (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 525 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 531 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 525 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 531 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->internal_notify_directory_discovered (self, dir, info);
-#line 1217 "DirectoryMonitor.c"
+#line 1225 "DirectoryMonitor.c"
 }
 
 
@@ -1226,84 +1234,84 @@ static void directory_monitor_real_notify_directory_discovered (DirectoryMonitor
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory discovered: %s", _tmp2_);
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 533 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 534 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 540 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 534 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 540 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 534 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 540 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-discovered", _tmp5_, _tmp6_);
-#line 1255 "DirectoryMonitor.c"
+#line 1263 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_directory_discovered (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 532 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_discovered (self, dir, info);
-#line 1264 "DirectoryMonitor.c"
+#line 1272 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_notify_discovery_failed (DirectoryMonitor* self, const gchar* reason) {
 	const gchar* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 537 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 543 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (reason != NULL);
-#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 544 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = reason;
-#line 538 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_warning ("DirectoryMonitor.vala:538: discovery failed: %s", _tmp0_);
-#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 544 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_warning ("DirectoryMonitor.vala:544: discovery failed: %s", _tmp0_);
+#line 545 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = reason;
-#line 539 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 545 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "discovery-failed", _tmp1_);
-#line 1281 "DirectoryMonitor.c"
+#line 1289 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_discovery_failed (DirectoryMonitor* self, const gchar* reason) {
-#line 537 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 543 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 537 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 543 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_discovery_failed (self, reason);
-#line 1290 "DirectoryMonitor.c"
+#line 1298 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_notify_discovery_completed (DirectoryMonitor* self) {
-#line 543 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "discovery-completed");
-#line 1297 "DirectoryMonitor.c"
+#line 1305 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_discovery_completed (DirectoryMonitor* self) {
-#line 542 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 548 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 542 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 548 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_discovery_completed (self);
-#line 1306 "DirectoryMonitor.c"
+#line 1314 "DirectoryMonitor.c"
 }
 
 
@@ -1315,41 +1323,41 @@ static void directory_monitor_internal_notify_file_created (DirectoryMonitor* se
 	GFile* _tmp2_ = NULL;
 	GFileInfo* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 546 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 546 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 546 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = info;
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_is_file_create_move (self, _tmp0_, _tmp1_, &_tmp2_, &_tmp3_);
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_file);
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old_file = _tmp2_;
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_file_info);
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old_file_info = _tmp3_;
-#line 549 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp4_) {
-#line 1340 "DirectoryMonitor.c"
+#line 1348 "DirectoryMonitor.c"
 		GFile* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
 		GFileInfo* _tmp7_ = NULL;
-#line 550 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 556 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = old_file;
-#line 550 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 556 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = file;
-#line 550 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 556 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = info;
-#line 550 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 556 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_internal_notify_file_moved (self, _tmp5_, _tmp6_, _tmp7_);
-#line 1352 "DirectoryMonitor.c"
+#line 1360 "DirectoryMonitor.c"
 	} else {
 		gboolean updated = FALSE;
 		DirectoryMonitorFileInfoMap* _tmp8_ = NULL;
@@ -1359,33 +1367,33 @@ static void directory_monitor_internal_notify_file_created (DirectoryMonitor* se
 		gboolean _tmp12_ = FALSE;
 		GFile* _tmp13_ = NULL;
 		GFileInfo* _tmp14_ = NULL;
-#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 558 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = self->priv->files;
-#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 558 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = file;
-#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 558 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = info;
-#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 558 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = directory_monitor_file_info_map_update (_tmp8_, _tmp9_, _tmp10_);
-#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 558 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		updated = _tmp11_;
-#line 553 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = updated;
-#line 553 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_assert (_tmp12_, "updated");
-#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp13_ = file;
-#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp14_ = info;
-#line 555 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_notify_file_created (self, _tmp13_, _tmp14_);
-#line 1382 "DirectoryMonitor.c"
+#line 1390 "DirectoryMonitor.c"
 	}
-#line 546 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_file_info);
-#line 546 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 552 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_file);
-#line 1388 "DirectoryMonitor.c"
+#line 1396 "DirectoryMonitor.c"
 }
 
 
@@ -1397,42 +1405,42 @@ static void directory_monitor_real_notify_file_created (DirectoryMonitor* self, 
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 565 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 565 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file created: %s", _tmp2_);
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 560 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 566 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 561 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-created", _tmp5_, _tmp6_);
-#line 1426 "DirectoryMonitor.c"
+#line 1434 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_created (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 565 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 559 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 565 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_created (self, file, info);
-#line 1435 "DirectoryMonitor.c"
+#line 1443 "DirectoryMonitor.c"
 }
 
 
@@ -1447,41 +1455,41 @@ static void directory_monitor_internal_notify_file_moved (DirectoryMonitor* self
 	GFile* _tmp6_ = NULL;
 	GFile* _tmp7_ = NULL;
 	GFileInfo* _tmp8_ = NULL;
-#line 564 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 564 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (old_file));
-#line 564 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (new_file));
-#line 564 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE_INFO (new_file_info));
-#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp0_ = self->priv->files;
-#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp1_ = old_file;
-#line 567 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_file_info_map_remove (_tmp0_, _tmp1_, NULL);
-#line 569 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp2_ = self->priv->files;
-#line 569 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp3_ = new_file;
-#line 569 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp4_ = new_file_info;
-#line 569 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp5_ = directory_monitor_file_info_map_update (_tmp2_, _tmp3_, _tmp4_);
-#line 569 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	updated = _tmp5_;
 #line 570 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
+#line 570 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (old_file));
+#line 570 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (new_file));
+#line 570 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE_INFO (new_file_info));
+#line 573 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp0_ = self->priv->files;
+#line 573 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp1_ = old_file;
+#line 573 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_file_info_map_remove (_tmp0_, _tmp1_, NULL);
+#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp2_ = self->priv->files;
+#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp3_ = new_file;
+#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp4_ = new_file_info;
+#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp5_ = directory_monitor_file_info_map_update (_tmp2_, _tmp3_, _tmp4_);
+#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	updated = _tmp5_;
+#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (updated, "updated");
-#line 572 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 578 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = old_file;
-#line 572 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 578 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = new_file;
-#line 572 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 578 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = new_file_info;
-#line 572 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 578 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_file_moved (self, _tmp6_, _tmp7_, _tmp8_);
-#line 1484 "DirectoryMonitor.c"
+#line 1492 "DirectoryMonitor.c"
 }
 
 
@@ -1497,54 +1505,54 @@ static void directory_monitor_real_notify_file_moved (DirectoryMonitor* self, GF
 	GFile* _tmp8_ = NULL;
 	GFile* _tmp9_ = NULL;
 	GFileInfo* _tmp10_ = NULL;
-#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_file));
-#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_file));
-#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_file_info));
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = old_file;
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = new_file;
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = g_file_get_path (_tmp3_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = _tmp4_;
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = g_strdup_printf ("file moved: %s -> %s", _tmp2_, _tmp5_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = _tmp6_;
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp7_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp7_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp5_);
-#line 576 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 577 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 583 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = old_file;
-#line 577 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 583 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = new_file;
-#line 577 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 583 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = new_file_info;
-#line 577 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 583 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-moved", _tmp8_, _tmp9_, _tmp10_);
-#line 1538 "DirectoryMonitor.c"
+#line 1546 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_moved (DirectoryMonitor* self, GFile* old_file, GFile* new_file, GFileInfo* new_file_info) {
-#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 575 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_moved (self, old_file, new_file, new_file_info);
-#line 1547 "DirectoryMonitor.c"
+#line 1555 "DirectoryMonitor.c"
 }
 
 
@@ -1555,38 +1563,38 @@ static void directory_monitor_real_notify_file_altered (DirectoryMonitor* self, 
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
-#line 580 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file altered: %s", _tmp2_);
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 581 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 588 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 582 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 588 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-altered", _tmp5_);
-#line 1580 "DirectoryMonitor.c"
+#line 1588 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_altered (DirectoryMonitor* self, GFile* file) {
-#line 580 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 580 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_altered (self, file);
-#line 1589 "DirectoryMonitor.c"
+#line 1597 "DirectoryMonitor.c"
 }
 
 
@@ -1598,31 +1606,31 @@ static void directory_monitor_internal_notify_file_alteration_completed (Directo
 	gboolean _tmp3_ = FALSE;
 	GFile* _tmp4_ = NULL;
 	GFileInfo* _tmp5_ = NULL;
-#line 585 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 591 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 585 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 591 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 585 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 591 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_file_info_map_update (_tmp0_, _tmp1_, _tmp2_);
-#line 586 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	updated = _tmp3_;
-#line 587 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (updated, "updated");
-#line 589 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 595 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = file;
-#line 589 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 595 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = info;
-#line 589 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 595 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_file_alteration_completed (self, _tmp4_, _tmp5_);
-#line 1625 "DirectoryMonitor.c"
+#line 1633 "DirectoryMonitor.c"
 }
 
 
@@ -1634,42 +1642,42 @@ static void directory_monitor_real_notify_file_alteration_completed (DirectoryMo
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file alteration completed: %s", _tmp2_);
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 593 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 594 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 600 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 594 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 600 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 594 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 600 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-alteration-completed", _tmp5_, _tmp6_);
-#line 1663 "DirectoryMonitor.c"
+#line 1671 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_alteration_completed (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 592 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_alteration_completed (self, file, info);
-#line 1672 "DirectoryMonitor.c"
+#line 1680 "DirectoryMonitor.c"
 }
 
 
@@ -1680,38 +1688,38 @@ static void directory_monitor_real_notify_file_attributes_altered (DirectoryMoni
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
-#line 597 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file attributes altered: %s", _tmp2_);
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 598 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 605 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 599 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 605 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-attributes-altered", _tmp5_);
-#line 1705 "DirectoryMonitor.c"
+#line 1713 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_attributes_altered (DirectoryMonitor* self, GFile* file) {
-#line 597 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 597 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_attributes_altered (self, file);
-#line 1714 "DirectoryMonitor.c"
+#line 1722 "DirectoryMonitor.c"
 }
 
 
@@ -1721,25 +1729,25 @@ static void directory_monitor_internal_notify_file_deleted (DirectoryMonitor* se
 	GFile* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
 	GFile* _tmp3_ = NULL;
-#line 602 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 608 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 602 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 608 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = directory_monitor_file_info_map_remove (_tmp0_, _tmp1_, NULL);
-#line 603 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	removed = _tmp2_;
-#line 604 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (removed, "removed");
-#line 606 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 612 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = file;
-#line 606 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 612 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_file_deleted (self, _tmp3_);
-#line 1742 "DirectoryMonitor.c"
+#line 1750 "DirectoryMonitor.c"
 }
 
 
@@ -1750,38 +1758,38 @@ static void directory_monitor_real_notify_file_deleted (DirectoryMonitor* self, 
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
-#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 615 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("file deleted: %s", _tmp2_);
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 610 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 616 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 611 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = file;
-#line 611 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "file-deleted", _tmp5_);
-#line 1775 "DirectoryMonitor.c"
+#line 1783 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_file_deleted (DirectoryMonitor* self, GFile* file) {
-#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 615 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 609 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 615 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_file_deleted (self, file);
-#line 1784 "DirectoryMonitor.c"
+#line 1792 "DirectoryMonitor.c"
 }
 
 
@@ -1793,29 +1801,29 @@ static void directory_monitor_internal_notify_directory_created (DirectoryMonito
 	GFile* _tmp2_ = NULL;
 	GFileInfo* _tmp3_ = NULL;
 	gboolean _tmp4_ = FALSE;
-#line 614 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 620 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 614 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 620 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 614 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 620 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = info;
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_is_file_create_move (self, _tmp0_, _tmp1_, &_tmp2_, &_tmp3_);
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_dir);
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old_dir = _tmp2_;
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_dir_info);
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old_dir_info = _tmp3_;
-#line 617 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp4_) {
-#line 1818 "DirectoryMonitor.c"
+#line 1826 "DirectoryMonitor.c"
 		DirectoryMonitorFileInfoMap* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
 		DirectoryMonitorFileInfoMap* _tmp7_ = NULL;
@@ -1823,25 +1831,25 @@ static void directory_monitor_internal_notify_directory_created (DirectoryMonito
 		GFileInfo* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFileInfo* _tmp11_ = NULL;
-#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 629 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = self->priv->files;
-#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 629 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = old_dir;
-#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 629 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = self->priv->parent_moved;
-#line 623 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 629 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_remove_descendents (_tmp5_, _tmp6_, _tmp7_);
-#line 625 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 631 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = old_dir;
-#line 625 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 631 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = old_dir_info;
-#line 625 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 631 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = dir;
-#line 625 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 631 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = info;
-#line 625 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 631 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_internal_notify_directory_moved (self, _tmp8_, _tmp9_, _tmp10_, _tmp11_);
-#line 1844 "DirectoryMonitor.c"
+#line 1852 "DirectoryMonitor.c"
 	} else {
 		gboolean updated = FALSE;
 		DirectoryMonitorFileInfoMap* _tmp12_ = NULL;
@@ -1851,33 +1859,33 @@ static void directory_monitor_internal_notify_directory_created (DirectoryMonito
 		gboolean _tmp16_ = FALSE;
 		GFile* _tmp17_ = NULL;
 		GFileInfo* _tmp18_ = NULL;
-#line 627 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 633 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = self->priv->files;
-#line 627 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 633 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp13_ = dir;
-#line 627 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 633 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp14_ = info;
-#line 627 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 633 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = directory_monitor_file_info_map_update (_tmp12_, _tmp13_, _tmp14_);
-#line 627 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 633 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		updated = _tmp15_;
-#line 628 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp16_ = updated;
-#line 628 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_assert (_tmp16_, "updated");
-#line 630 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp17_ = dir;
-#line 630 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp18_ = info;
-#line 630 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_notify_directory_created (self, _tmp17_, _tmp18_);
-#line 1874 "DirectoryMonitor.c"
+#line 1882 "DirectoryMonitor.c"
 	}
-#line 614 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 620 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_dir_info);
-#line 614 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 620 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (old_dir);
-#line 1880 "DirectoryMonitor.c"
+#line 1888 "DirectoryMonitor.c"
 }
 
 
@@ -1889,42 +1897,42 @@ static void directory_monitor_real_notify_directory_created (DirectoryMonitor* s
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 640 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 640 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory created: %s", _tmp2_);
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 635 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 642 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 642 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 636 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 642 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-created", _tmp5_, _tmp6_);
-#line 1918 "DirectoryMonitor.c"
+#line 1926 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_directory_created (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 640 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 634 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 640 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_created (self, dir, info);
-#line 1927 "DirectoryMonitor.c"
+#line 1935 "DirectoryMonitor.c"
 }
 
 
@@ -1933,27 +1941,27 @@ static void directory_monitor_internal_notify_directory_moved (DirectoryMonitor*
 	GFileInfo* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GFileInfo* _tmp3_ = NULL;
-#line 639 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 645 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 639 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 645 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_dir));
-#line 639 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 645 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (old_dir_info));
-#line 639 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 645 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_dir));
-#line 639 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 645 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_dir_info));
-#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = old_dir;
-#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = old_dir_info;
-#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = new_dir;
-#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = new_dir_info;
-#line 641 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_internal_notify_directory_moved (self, _tmp0_, _tmp1_, _tmp2_, _tmp3_, NULL, NULL);
-#line 1956 "DirectoryMonitor.c"
+#line 1964 "DirectoryMonitor.c"
 }
 
 
@@ -1972,7 +1980,7 @@ static void directory_monitor_async_internal_notify_directory_moved_data_free (g
 	_g_object_unref0 (_data_->self);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_slice_free (DirectoryMonitorAsyncInternalNotifyDirectoryMovedData, _data_);
-#line 1975 "DirectoryMonitor.c"
+#line 1983 "DirectoryMonitor.c"
 }
 
 
@@ -2031,7 +2039,7 @@ static void directory_monitor_async_internal_notify_directory_moved (DirectoryMo
 	_data_->new_dir_info = _tmp8_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_internal_notify_directory_moved_co (_data_);
-#line 2034 "DirectoryMonitor.c"
+#line 2042 "DirectoryMonitor.c"
 }
 
 
@@ -2039,521 +2047,521 @@ static void directory_monitor_async_internal_notify_directory_moved_finish (Dire
 	DirectoryMonitorAsyncInternalNotifyDirectoryMovedData* _data_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (_res_));
-#line 2042 "DirectoryMonitor.c"
+#line 2050 "DirectoryMonitor.c"
 }
 
 
 static gboolean _file_equal_gee_equal_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gboolean result;
 	result = file_equal ((GFile*) a, (GFile*) b);
-#line 646 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 652 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 2051 "DirectoryMonitor.c"
+#line 2059 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_async_internal_notify_directory_moved_ready (GObject* source_object, GAsyncResult* _res_, gpointer _user_data_) {
 	DirectoryMonitorAsyncInternalNotifyDirectoryMovedData* _data_;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = _user_data_;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_source_object_ = source_object;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_res_ = _res_;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_internal_notify_directory_moved_co (_data_);
-#line 2065 "DirectoryMonitor.c"
+#line 2073 "DirectoryMonitor.c"
 }
 
 
 static gboolean _directory_monitor_async_internal_notify_directory_moved_co_gsource_func (gpointer self) {
 	gboolean result;
 	result = directory_monitor_async_internal_notify_directory_moved_co (self);
-#line 677 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 683 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 2074 "DirectoryMonitor.c"
+#line 2082 "DirectoryMonitor.c"
 }
 
 
 static gboolean directory_monitor_async_internal_notify_directory_moved_co (DirectoryMonitorAsyncInternalNotifyDirectoryMovedData* _data_) {
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_data_->_state_) {
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case 0:
-#line 2083 "DirectoryMonitor.c"
-		goto _state_0;
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 1:
-#line 2087 "DirectoryMonitor.c"
-		goto _state_1;
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 2:
 #line 2091 "DirectoryMonitor.c"
+		goto _state_0;
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 1:
+#line 2095 "DirectoryMonitor.c"
+		goto _state_1;
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 2:
+#line 2099 "DirectoryMonitor.c"
 		goto _state_2;
 		default:
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_assert_not_reached ();
-#line 2096 "DirectoryMonitor.c"
+#line 2104 "DirectoryMonitor.c"
 	}
 	_state_0:
-#line 646 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 652 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = NULL;
-#line 646 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 652 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_equal_gee_equal_data_func, NULL, NULL);
-#line 646 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 652 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->file_children = _data_->_tmp0_;
-#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = NULL;
-#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_equal_gee_equal_data_func, NULL, NULL);
-#line 647 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->dir_children = _data_->_tmp1_;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = NULL;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = _data_->self->priv->files;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = NULL;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = _data_->old_dir;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp4_ = NULL;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp4_ = _data_->file_children;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp5_ = NULL;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp5_ = _data_->dir_children;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp6_ = 0;
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp6_ = directory_monitor_file_info_map_get_children (_data_->_tmp2_, _data_->_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp4_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp5_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 648 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->count = _data_->_tmp6_;
-#line 649 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp7_ = 0;
-#line 649 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp7_ = _data_->count;
-#line 649 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp7_ > 0) {
-#line 2139 "DirectoryMonitor.c"
+#line 2147 "DirectoryMonitor.c"
 		{
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp8_ = NULL;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp8_ = _data_->dir_children;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp9_ = NULL;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp9_ = _g_object_ref0 (_data_->_tmp8_);
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_list = _data_->_tmp9_;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp10_ = NULL;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp10_ = _data_->_dir_child_list;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp10_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = _data_->_tmp11_;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_size = _data_->_tmp12_;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_index = -1;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp13_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp13_ = _data_->_dir_child_index;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_dir_child_index = _data_->_tmp13_ + 1;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp14_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp14_ = _data_->_dir_child_index;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp15_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp15_ = _data_->_dir_child_size;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!(_data_->_tmp14_ < _data_->_tmp15_)) {
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 2187 "DirectoryMonitor.c"
+#line 2195 "DirectoryMonitor.c"
 				}
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp16_ = NULL;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp16_ = _data_->_dir_child_list;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp17_ = 0;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp17_ = _data_->_dir_child_index;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp18_ = NULL;
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp18_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp16_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _data_->_tmp17_);
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->dir_child = (GFile*) _data_->_tmp18_;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp19_ = NULL;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp19_ = _data_->self->priv->files;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp20_ = NULL;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp20_ = _data_->dir_child;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp21_ = NULL;
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp21_ = directory_monitor_file_info_map_get_info (_data_->_tmp19_, _data_->_tmp20_);
-#line 654 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 660 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->dir_info = _data_->_tmp21_;
-#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp22_ = NULL;
-#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp22_ = _data_->dir_info;
-#line 655 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (_data_->_tmp22_ == NULL) {
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp23_ = NULL;
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp23_ = _data_->dir_child;
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp24_ = NULL;
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp24_ = g_file_get_path (_data_->_tmp23_);
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp25_ = NULL;
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp25_ = _data_->_tmp24_;
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					g_warning ("DirectoryMonitor.vala:656: Unable to retrieve directory-moved info for" \
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					g_warning ("DirectoryMonitor.vala:662: Unable to retrieve directory-moved info for" \
 " %s", _data_->_tmp25_);
-#line 656 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 662 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_free0 (_data_->_tmp25_);
-#line 658 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 664 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_data_->dir_info);
-#line 658 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 664 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_data_->dir_child);
-#line 658 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 664 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					continue;
-#line 2245 "DirectoryMonitor.c"
+#line 2253 "DirectoryMonitor.c"
 				}
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp26_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp26_ = _data_->dir_child;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp27_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp27_ = _data_->dir_info;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp28_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp28_ = _data_->new_dir;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp29_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp29_ = _data_->dir_child;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp30_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp30_ = g_file_get_basename (_data_->_tmp29_);
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp31_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp31_ = _data_->_tmp30_;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp32_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp32_ = g_file_get_child (_data_->_tmp28_, _data_->_tmp31_);
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp33_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp33_ = _data_->_tmp32_;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp34_ = NULL;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp34_ = _data_->dir_info;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_state_ = 1;
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_async_internal_notify_directory_moved (_data_->self, _data_->_tmp26_, _data_->_tmp27_, _data_->_tmp33_, _data_->_tmp34_, directory_monitor_async_internal_notify_directory_moved_ready, _data_);
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return FALSE;
-#line 2289 "DirectoryMonitor.c"
+#line 2297 "DirectoryMonitor.c"
 				_state_1:
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_async_internal_notify_directory_moved_finish (_data_->self, _data_->_res_);
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->_tmp33_);
-#line 661 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_data_->_tmp31_);
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->dir_info);
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->dir_child);
-#line 2301 "DirectoryMonitor.c"
+#line 2309 "DirectoryMonitor.c"
 			}
-#line 653 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 659 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_dir_child_list);
-#line 2305 "DirectoryMonitor.c"
+#line 2313 "DirectoryMonitor.c"
 		}
 		{
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp35_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp35_ = _data_->file_children;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp36_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp36_ = _g_object_ref0 (_data_->_tmp35_);
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_list = _data_->_tmp36_;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp37_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp37_ = _data_->_file_child_list;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp38_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp38_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp37_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp39_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp39_ = _data_->_tmp38_;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_size = _data_->_tmp39_;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_index = -1;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp40_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp40_ = _data_->_file_child_index;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_file_child_index = _data_->_tmp40_ + 1;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp41_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp41_ = _data_->_file_child_index;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp42_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp42_ = _data_->_file_child_size;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!(_data_->_tmp41_ < _data_->_tmp42_)) {
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 2354 "DirectoryMonitor.c"
+#line 2362 "DirectoryMonitor.c"
 				}
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp43_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp43_ = _data_->_file_child_list;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp44_ = 0;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp44_ = _data_->_file_child_index;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp45_ = NULL;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp45_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp43_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _data_->_tmp44_);
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->file_child = (GFile*) _data_->_tmp45_;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp46_ = NULL;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp46_ = _data_->self->priv->files;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp47_ = NULL;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp47_ = _data_->file_child;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp48_ = NULL;
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp48_ = directory_monitor_file_info_map_get_info (_data_->_tmp46_, _data_->_tmp47_);
-#line 667 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 673 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->file_info = _data_->_tmp48_;
-#line 668 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp49_ = NULL;
-#line 668 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp49_ = _data_->file_info;
-#line 668 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (_data_->_tmp49_ == NULL) {
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp50_ = NULL;
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp50_ = _data_->file_child;
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp51_ = NULL;
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp51_ = g_file_get_path (_data_->_tmp50_);
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp52_ = NULL;
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp52_ = _data_->_tmp51_;
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					g_warning ("DirectoryMonitor.vala:669: Unable to retrieve directory-moved info for" \
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					g_warning ("DirectoryMonitor.vala:675: Unable to retrieve directory-moved info for" \
 " %s", _data_->_tmp52_);
-#line 669 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 675 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_free0 (_data_->_tmp52_);
-#line 671 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_g_object_unref0 (_data_->file_info);
-#line 671 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_g_object_unref0 (_data_->file_child);
-#line 671 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					continue;
-#line 2412 "DirectoryMonitor.c"
-				}
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp53_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp53_ = _data_->file_child;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp54_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp54_ = _data_->new_dir;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp55_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp55_ = _data_->file_child;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp56_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp56_ = g_file_get_basename (_data_->_tmp55_);
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp57_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp57_ = _data_->_tmp56_;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp58_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp58_ = g_file_get_child (_data_->_tmp54_, _data_->_tmp57_);
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp59_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp59_ = _data_->_tmp58_;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp60_ = NULL;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp60_ = _data_->file_info;
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				directory_monitor_internal_notify_file_moved (_data_->self, _data_->_tmp53_, _data_->_tmp59_, _data_->_tmp60_);
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_g_object_unref0 (_data_->_tmp59_);
-#line 674 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_g_free0 (_data_->_tmp57_);
 #line 677 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_g_object_unref0 (_data_->file_info);
+#line 677 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_g_object_unref0 (_data_->file_child);
+#line 677 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					continue;
+#line 2420 "DirectoryMonitor.c"
+				}
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp53_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp53_ = _data_->file_child;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp54_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp54_ = _data_->new_dir;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp55_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp55_ = _data_->file_child;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp56_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp56_ = g_file_get_basename (_data_->_tmp55_);
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp57_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp57_ = _data_->_tmp56_;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp58_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp58_ = g_file_get_child (_data_->_tmp54_, _data_->_tmp57_);
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp59_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp59_ = _data_->_tmp58_;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp60_ = NULL;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp60_ = _data_->file_info;
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				directory_monitor_internal_notify_file_moved (_data_->self, _data_->_tmp53_, _data_->_tmp59_, _data_->_tmp60_);
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_g_object_unref0 (_data_->_tmp59_);
+#line 680 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_g_free0 (_data_->_tmp57_);
+#line 683 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_idle_add_full (DIRECTORY_MONITOR_DEFAULT_PRIORITY, _directory_monitor_async_internal_notify_directory_moved_co_gsource_func, _data_, NULL);
-#line 678 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_state_ = 2;
-#line 678 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return FALSE;
-#line 2458 "DirectoryMonitor.c"
+#line 2466 "DirectoryMonitor.c"
 				_state_2:
 				;
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->file_info);
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->file_child);
-#line 2465 "DirectoryMonitor.c"
+#line 2473 "DirectoryMonitor.c"
 			}
-#line 666 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 672 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_file_child_list);
-#line 2469 "DirectoryMonitor.c"
+#line 2477 "DirectoryMonitor.c"
 		}
 	}
-#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp61_ = NULL;
-#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp61_ = _data_->self->priv->files;
-#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp62_ = NULL;
-#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp62_ = _data_->old_dir;
-#line 684 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_file_info_map_remove (_data_->_tmp61_, _data_->_tmp62_, NULL);
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp63_ = NULL;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp63_ = _data_->self->priv->files;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp64_ = NULL;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp64_ = _data_->new_dir;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp65_ = NULL;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp65_ = _data_->new_dir_info;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp66_ = FALSE;
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp66_ = directory_monitor_file_info_map_update (_data_->_tmp63_, _data_->_tmp64_, _data_->_tmp65_);
-#line 686 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 692 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->updated = _data_->_tmp66_;
-#line 687 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (_data_->updated, "updated");
-#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp67_ = NULL;
-#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp67_ = _data_->old_dir;
-#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp68_ = NULL;
-#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp68_ = _data_->old_dir_info;
-#line 690 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_remove_monitor (_data_->self, _data_->_tmp67_, _data_->_tmp68_);
-#line 691 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp69_ = NULL;
-#line 691 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp69_ = _data_->new_dir;
-#line 691 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp70_ = NULL;
-#line 691 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp70_ = _data_->new_dir_info;
-#line 691 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_add_monitor (_data_->self, _data_->_tmp69_, _data_->_tmp70_);
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp71_ = NULL;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp71_ = _data_->old_dir;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp72_ = NULL;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp72_ = _data_->new_dir;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp73_ = NULL;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp73_ = _data_->new_dir_info;
-#line 693 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 699 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_directory_moved (_data_->self, _data_->_tmp71_, _data_->_tmp72_, _data_->_tmp73_);
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->dir_children);
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->file_children);
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_state_ == 0) {
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 2544 "DirectoryMonitor.c"
+#line 2552 "DirectoryMonitor.c"
 	} else {
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete (_data_->_async_result);
-#line 2548 "DirectoryMonitor.c"
+#line 2556 "DirectoryMonitor.c"
 	}
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_object_unref (_data_->_async_result);
-#line 644 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 650 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return FALSE;
-#line 2554 "DirectoryMonitor.c"
+#line 2562 "DirectoryMonitor.c"
 }
 
 
@@ -2572,75 +2580,75 @@ static void directory_monitor_real_notify_directory_moved (DirectoryMonitor* sel
 	GFile* _tmp11_ = NULL;
 	GFile* _tmp12_ = NULL;
 	gboolean _tmp13_ = FALSE;
-#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 702 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_dir));
-#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 702 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_dir));
-#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 702 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_dir_info));
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = old_dir;
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = new_dir;
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = g_file_get_path (_tmp3_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = _tmp4_;
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = g_strdup_printf ("directory moved: %s -> %s", _tmp2_, _tmp5_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = _tmp6_;
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp7_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp7_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp5_);
-#line 697 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 703 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 698 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = old_dir;
-#line 698 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = new_dir;
-#line 698 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = new_dir_info;
-#line 698 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-moved", _tmp8_, _tmp9_, _tmp10_);
-#line 700 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = old_dir;
-#line 700 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = self->priv->root;
-#line 700 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = g_file_equal (_tmp11_, _tmp12_);
-#line 700 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp13_) {
-#line 2619 "DirectoryMonitor.c"
+#line 2627 "DirectoryMonitor.c"
 		GFile* _tmp14_ = NULL;
 		GFile* _tmp15_ = NULL;
 		GFileInfo* _tmp16_ = NULL;
-#line 701 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 707 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp14_ = old_dir;
-#line 701 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 707 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = new_dir;
-#line 701 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 707 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp16_ = new_dir_info;
-#line 701 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 707 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_internal_notify_root_moved (self, _tmp14_, _tmp15_, _tmp16_);
-#line 2631 "DirectoryMonitor.c"
+#line 2639 "DirectoryMonitor.c"
 	}
 }
 
 
 void directory_monitor_notify_directory_moved (DirectoryMonitor* self, GFile* old_dir, GFile* new_dir, GFileInfo* new_dir_info) {
-#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 702 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 696 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 702 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_moved (self, old_dir, new_dir, new_dir_info);
-#line 2641 "DirectoryMonitor.c"
+#line 2649 "DirectoryMonitor.c"
 }
 
 
@@ -2651,38 +2659,38 @@ static void directory_monitor_real_notify_directory_altered (DirectoryMonitor* s
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
-#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory altered: %s", _tmp2_);
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 705 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 712 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 706 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 712 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-altered", _tmp5_);
-#line 2674 "DirectoryMonitor.c"
+#line 2682 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_directory_altered (DirectoryMonitor* self, GFile* dir) {
-#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 704 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_altered (self, dir);
-#line 2683 "DirectoryMonitor.c"
+#line 2691 "DirectoryMonitor.c"
 }
 
 
@@ -2694,31 +2702,31 @@ static void directory_monitor_internal_notify_directory_alteration_completed (Di
 	gboolean _tmp3_ = FALSE;
 	GFile* _tmp4_ = NULL;
 	GFileInfo* _tmp5_ = NULL;
-#line 709 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 715 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 709 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 715 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 709 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 715 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = dir;
-#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_file_info_map_update (_tmp0_, _tmp1_, _tmp2_);
-#line 710 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	updated = _tmp3_;
-#line 711 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (updated, "updated");
-#line 713 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 719 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = dir;
-#line 713 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 719 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = info;
-#line 713 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 719 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_directory_alteration_completed (self, _tmp4_, _tmp5_);
-#line 2719 "DirectoryMonitor.c"
+#line 2727 "DirectoryMonitor.c"
 }
 
 
@@ -2730,42 +2738,42 @@ static void directory_monitor_real_notify_directory_alteration_completed (Direct
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
 	GFileInfo* _tmp6_ = NULL;
-#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory alteration completed: %s", _tmp2_);
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 717 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 718 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 724 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 718 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 724 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = info;
-#line 718 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 724 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-alteration-completed", _tmp5_, _tmp6_);
-#line 2757 "DirectoryMonitor.c"
+#line 2765 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_directory_alteration_completed (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 716 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_alteration_completed (self, dir, info);
-#line 2766 "DirectoryMonitor.c"
+#line 2774 "DirectoryMonitor.c"
 }
 
 
@@ -2776,38 +2784,38 @@ static void directory_monitor_real_notify_directory_attributes_altered (Director
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
 	GFile* _tmp5_ = NULL;
-#line 721 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory attributes altered: %s", _tmp2_);
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 722 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 729 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 723 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 729 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-attributes-altered", _tmp5_);
-#line 2799 "DirectoryMonitor.c"
+#line 2807 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_directory_attributes_altered (DirectoryMonitor* self, GFile* dir) {
-#line 721 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 721 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_attributes_altered (self, dir);
-#line 2808 "DirectoryMonitor.c"
+#line 2816 "DirectoryMonitor.c"
 }
 
 
@@ -2818,31 +2826,31 @@ static void directory_monitor_internal_notify_directory_deleted (DirectoryMonito
 	GFileInfo* _tmp2_ = NULL;
 	GFile* _tmp3_ = NULL;
 	GFile* _tmp4_ = NULL;
-#line 726 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 732 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 726 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 732 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = dir;
-#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = directory_monitor_file_info_map_get_info (_tmp0_, _tmp1_);
-#line 727 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	info = _tmp2_;
-#line 728 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 734 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (info != NULL, "info != null");
-#line 731 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 737 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = dir;
-#line 731 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 737 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_remove_monitor (self, _tmp3_, info);
-#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 739 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = dir;
-#line 733 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 739 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_notify_directory_deleted (self, _tmp4_, FALSE, NULL, NULL);
-#line 726 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 732 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (info);
-#line 2843 "DirectoryMonitor.c"
+#line 2851 "DirectoryMonitor.c"
 }
 
 
@@ -2855,7 +2863,7 @@ static void directory_monitor_async_notify_directory_deleted_data_free (gpointer
 	_g_object_unref0 (_data_->self);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_slice_free (DirectoryMonitorAsyncNotifyDirectoryDeletedData, _data_);
-#line 2856 "DirectoryMonitor.c"
+#line 2864 "DirectoryMonitor.c"
 }
 
 
@@ -2889,7 +2897,7 @@ static void directory_monitor_async_notify_directory_deleted (DirectoryMonitor* 
 	_data_->already_removed = _tmp3_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_notify_directory_deleted_co (_data_);
-#line 2890 "DirectoryMonitor.c"
+#line 2898 "DirectoryMonitor.c"
 }
 
 
@@ -2897,320 +2905,320 @@ static void directory_monitor_async_notify_directory_deleted_finish (DirectoryMo
 	DirectoryMonitorAsyncNotifyDirectoryDeletedData* _data_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (_res_));
-#line 2898 "DirectoryMonitor.c"
+#line 2906 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_async_notify_directory_deleted_ready (GObject* source_object, GAsyncResult* _res_, gpointer _user_data_) {
 	DirectoryMonitorAsyncNotifyDirectoryDeletedData* _data_;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = _user_data_;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_source_object_ = source_object;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_res_ = _res_;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_async_notify_directory_deleted_co (_data_);
-#line 2912 "DirectoryMonitor.c"
+#line 2920 "DirectoryMonitor.c"
 }
 
 
 static gboolean _directory_monitor_async_notify_directory_deleted_co_gsource_func (gpointer self) {
 	gboolean result;
 	result = directory_monitor_async_notify_directory_deleted_co (self);
-#line 765 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 2921 "DirectoryMonitor.c"
+#line 2929 "DirectoryMonitor.c"
 }
 
 
 static gboolean directory_monitor_async_notify_directory_deleted_co (DirectoryMonitorAsyncNotifyDirectoryDeletedData* _data_) {
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_data_->_state_) {
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case 0:
-#line 2930 "DirectoryMonitor.c"
-		goto _state_0;
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 1:
-#line 2934 "DirectoryMonitor.c"
-		goto _state_1;
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 2:
 #line 2938 "DirectoryMonitor.c"
+		goto _state_0;
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 1:
+#line 2942 "DirectoryMonitor.c"
+		goto _state_1;
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 2:
+#line 2946 "DirectoryMonitor.c"
 		goto _state_2;
 		default:
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_assert_not_reached ();
-#line 2943 "DirectoryMonitor.c"
+#line 2951 "DirectoryMonitor.c"
 	}
 	_state_0:
-#line 744 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 750 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = NULL;
-#line 744 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 750 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_equal_gee_equal_data_func, NULL, NULL);
-#line 744 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 750 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->file_children = _data_->_tmp0_;
-#line 745 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 751 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = NULL;
-#line 745 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 751 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_equal_gee_equal_data_func, NULL, NULL);
-#line 745 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 751 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->dir_children = _data_->_tmp1_;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = NULL;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = _data_->self->priv->files;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = NULL;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = _data_->dir;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp4_ = NULL;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp4_ = _data_->file_children;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp5_ = NULL;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp5_ = _data_->dir_children;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp6_ = 0;
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp6_ = directory_monitor_file_info_map_get_children (_data_->_tmp2_, _data_->_tmp3_, G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp4_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp5_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 746 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 752 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->count = _data_->_tmp6_;
-#line 747 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 753 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp7_ = 0;
-#line 747 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 753 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp7_ = _data_->count;
-#line 747 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 753 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp7_ > 0) {
-#line 2986 "DirectoryMonitor.c"
+#line 2994 "DirectoryMonitor.c"
 		{
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp8_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp8_ = _data_->dir_children;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp9_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp9_ = _g_object_ref0 (_data_->_tmp8_);
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_list = _data_->_tmp9_;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp10_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp10_ = _data_->_dir_child_list;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp10_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = _data_->_tmp11_;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_size = _data_->_tmp12_;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_dir_child_index = -1;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp13_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp13_ = _data_->_dir_child_index;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_dir_child_index = _data_->_tmp13_ + 1;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp14_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp14_ = _data_->_dir_child_index;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp15_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp15_ = _data_->_dir_child_size;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!(_data_->_tmp14_ < _data_->_tmp15_)) {
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 3034 "DirectoryMonitor.c"
+#line 3042 "DirectoryMonitor.c"
 				}
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp16_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp16_ = _data_->_dir_child_list;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp17_ = 0;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp17_ = _data_->_dir_child_index;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp18_ = NULL;
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp18_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp16_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _data_->_tmp17_);
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->dir_child = (GFile*) _data_->_tmp18_;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp19_ = NULL;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp19_ = _data_->dir_child;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_state_ = 1;
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_async_notify_directory_deleted (_data_->self, _data_->_tmp19_, FALSE, directory_monitor_async_notify_directory_deleted_ready, _data_);
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return FALSE;
-#line 3060 "DirectoryMonitor.c"
+#line 3068 "DirectoryMonitor.c"
 				_state_1:
-#line 756 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 762 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_async_notify_directory_deleted_finish (_data_->self, _data_->_res_);
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->dir_child);
-#line 3066 "DirectoryMonitor.c"
+#line 3074 "DirectoryMonitor.c"
 			}
-#line 755 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_dir_child_list);
-#line 3070 "DirectoryMonitor.c"
+#line 3078 "DirectoryMonitor.c"
 		}
 		{
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp20_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp20_ = _data_->file_children;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp21_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp21_ = _g_object_ref0 (_data_->_tmp20_);
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_list = _data_->_tmp21_;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp22_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp22_ = _data_->_file_child_list;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp23_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp23_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp22_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp24_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp24_ = _data_->_tmp23_;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_size = _data_->_tmp24_;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_file_child_index = -1;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp25_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp25_ = _data_->_file_child_index;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_file_child_index = _data_->_tmp25_ + 1;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp26_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp26_ = _data_->_file_child_index;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp27_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp27_ = _data_->_file_child_size;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!(_data_->_tmp26_ < _data_->_tmp27_)) {
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 3119 "DirectoryMonitor.c"
+#line 3127 "DirectoryMonitor.c"
 				}
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp28_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp28_ = _data_->_file_child_list;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp29_ = 0;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp29_ = _data_->_file_child_index;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp30_ = NULL;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp30_ = gee_abstract_list_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp28_, GEE_TYPE_ABSTRACT_LIST, GeeAbstractList), _data_->_tmp29_);
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->file_child = (GFile*) _data_->_tmp30_;
-#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 767 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp31_ = NULL;
-#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 767 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp31_ = _data_->self->priv->files;
-#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 767 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp32_ = NULL;
-#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 767 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp32_ = _data_->file_child;
-#line 761 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 767 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_file_info_map_remove (_data_->_tmp31_, _data_->_tmp32_, NULL);
-#line 763 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 769 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp33_ = NULL;
-#line 763 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 769 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp33_ = _data_->file_child;
-#line 763 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 769 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_notify_file_deleted (_data_->self, _data_->_tmp33_);
-#line 765 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_idle_add_full (DIRECTORY_MONITOR_DEFAULT_PRIORITY, _directory_monitor_async_notify_directory_deleted_co_gsource_func, _data_, NULL);
-#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 772 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_state_ = 2;
-#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 772 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return FALSE;
-#line 3157 "DirectoryMonitor.c"
+#line 3165 "DirectoryMonitor.c"
 				_state_2:
 				;
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->file_child);
-#line 3162 "DirectoryMonitor.c"
+#line 3170 "DirectoryMonitor.c"
 			}
-#line 760 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 766 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_file_child_list);
-#line 3166 "DirectoryMonitor.c"
+#line 3174 "DirectoryMonitor.c"
 		}
 	}
-#line 770 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp34_ = FALSE;
-#line 770 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp34_ = _data_->already_removed;
-#line 770 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_data_->_tmp34_) {
-#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp35_ = NULL;
-#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp35_ = _data_->self->priv->files;
-#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp36_ = NULL;
-#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp36_ = _data_->dir;
-#line 771 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_remove (_data_->_tmp35_, _data_->_tmp36_, NULL);
-#line 3185 "DirectoryMonitor.c"
+#line 3193 "DirectoryMonitor.c"
 	}
-#line 773 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 779 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp37_ = NULL;
-#line 773 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 779 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp37_ = _data_->dir;
-#line 773 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 779 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_directory_deleted (_data_->self, _data_->_tmp37_);
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->dir_children);
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->file_children);
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_state_ == 0) {
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 3201 "DirectoryMonitor.c"
+#line 3209 "DirectoryMonitor.c"
 	} else {
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete (_data_->_async_result);
-#line 3205 "DirectoryMonitor.c"
+#line 3213 "DirectoryMonitor.c"
 	}
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_object_unref (_data_->_async_result);
-#line 736 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 742 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return FALSE;
-#line 3211 "DirectoryMonitor.c"
+#line 3219 "DirectoryMonitor.c"
 }
 
 
@@ -3224,53 +3232,53 @@ static void directory_monitor_real_notify_directory_deleted (DirectoryMonitor* s
 	GFile* _tmp6_ = NULL;
 	GFile* _tmp7_ = NULL;
 	gboolean _tmp8_ = FALSE;
-#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 782 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = dir;
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("directory deleted: %s", _tmp2_);
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 777 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 783 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 778 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 784 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = dir;
-#line 778 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 784 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "directory-deleted", _tmp5_);
-#line 780 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 786 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = dir;
-#line 780 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 786 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = self->priv->root;
-#line 780 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 786 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = g_file_equal (_tmp6_, _tmp7_);
-#line 780 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 786 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp8_) {
-#line 3255 "DirectoryMonitor.c"
+#line 3263 "DirectoryMonitor.c"
 		GFile* _tmp9_ = NULL;
-#line 781 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 787 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = dir;
-#line 781 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 787 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_notify_root_deleted (self, _tmp9_);
-#line 3261 "DirectoryMonitor.c"
+#line 3269 "DirectoryMonitor.c"
 	}
 }
 
 
 void directory_monitor_notify_directory_deleted (DirectoryMonitor* self, GFile* dir) {
-#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 782 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 776 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 782 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_directory_deleted (self, dir);
-#line 3271 "DirectoryMonitor.c"
+#line 3279 "DirectoryMonitor.c"
 }
 
 
@@ -3280,34 +3288,34 @@ static void directory_monitor_real_notify_closed (DirectoryMonitor* self) {
 	gchar* _tmp2_ = NULL;
 	gchar* _tmp3_ = NULL;
 	gchar* _tmp4_ = NULL;
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->root;
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_get_path (_tmp0_);
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = g_strdup_printf ("monitoring of %s closed", _tmp2_);
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = _tmp3_;
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp4_);
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp4_);
-#line 785 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 791 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp2_);
-#line 786 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 792 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_emit_by_name (self, "closed");
-#line 3299 "DirectoryMonitor.c"
+#line 3307 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_notify_closed (DirectoryMonitor* self) {
-#line 784 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 784 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->notify_closed (self);
-#line 3308 "DirectoryMonitor.c"
+#line 3316 "DirectoryMonitor.c"
 }
 
 
@@ -3315,17 +3323,17 @@ GFile* directory_monitor_get_root (DirectoryMonitor* self) {
 	GFile* result = NULL;
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
-#line 789 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 795 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), NULL);
-#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 796 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->root;
-#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 796 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 796 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp1_;
-#line 790 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 796 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 3326 "DirectoryMonitor.c"
+#line 3334 "DirectoryMonitor.c"
 }
 
 
@@ -3334,72 +3342,72 @@ gboolean directory_monitor_is_in_root (DirectoryMonitor* self, GFile* file) {
 	GFile* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
 	gboolean _tmp2_ = FALSE;
-#line 793 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 799 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 793 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 799 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 794 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 800 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 794 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 800 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = self->priv->root;
-#line 794 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 800 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = g_file_has_prefix (_tmp0_, _tmp1_);
-#line 794 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 800 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp2_;
-#line 794 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 800 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 3349 "DirectoryMonitor.c"
+#line 3357 "DirectoryMonitor.c"
 }
 
 
 gboolean directory_monitor_has_started (DirectoryMonitor* self) {
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
-#line 797 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 803 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 798 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 804 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->started;
-#line 798 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 804 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp0_;
-#line 798 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 804 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 3364 "DirectoryMonitor.c"
+#line 3372 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_start_discovery (DirectoryMonitor* self) {
 	gboolean _tmp0_ = FALSE;
 	GFile* _tmp1_ = NULL;
-#line 801 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 802 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp0_ = self->priv->started;
-#line 802 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_vala_assert (!_tmp0_, "!started");
-#line 804 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->has_discovery_started = TRUE;
-#line 805 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->started = TRUE;
 #line 807 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_notify_discovery_started (self);
+	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
+#line 808 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp0_ = self->priv->started;
+#line 808 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_vala_assert (!_tmp0_, "!started");
 #line 810 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->has_discovery_started = TRUE;
+#line 811 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->started = TRUE;
+#line 813 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_notify_discovery_started (self);
+#line 816 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->outstanding_exploration_dirs = 1;
-#line 811 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 817 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = self->priv->root;
-#line 811 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 817 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_explore_async (self, _tmp1_, NULL, TRUE, NULL, NULL);
-#line 3389 "DirectoryMonitor.c"
+#line 3397 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_close (DirectoryMonitor* self) {
 	GCancellable* _tmp0_ = NULL;
 	GeeHashMap* _tmp12_ = NULL;
-#line 818 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 824 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->cancellable;
-#line 818 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 824 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_cancellable_cancel (_tmp0_);
-#line 3400 "DirectoryMonitor.c"
+#line 3408 "DirectoryMonitor.c"
 	{
 		GeeIterator* _monitor_it = NULL;
 		GeeHashMap* _tmp1_ = NULL;
@@ -3408,75 +3416,75 @@ static void directory_monitor_real_close (DirectoryMonitor* self) {
 		GeeCollection* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
 		GeeIterator* _tmp6_ = NULL;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = self->priv->monitors;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = gee_abstract_map_get_values (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = _tmp2_;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = _tmp3_;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp4_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = _tmp5_;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp4_);
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_monitor_it = _tmp6_;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 3427 "DirectoryMonitor.c"
+#line 3435 "DirectoryMonitor.c"
 			GeeIterator* _tmp7_ = NULL;
 			gboolean _tmp8_ = FALSE;
 			GFileMonitor* monitor = NULL;
 			GeeIterator* _tmp9_ = NULL;
 			gpointer _tmp10_ = NULL;
 			GFileMonitor* _tmp11_ = NULL;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp7_ = _monitor_it;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp8_ = gee_iterator_next (_tmp7_);
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp8_) {
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 3442 "DirectoryMonitor.c"
+#line 3450 "DirectoryMonitor.c"
 			}
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp9_ = _monitor_it;
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp10_ = gee_iterator_get (_tmp9_);
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			monitor = (GFileMonitor*) _tmp10_;
-#line 822 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 828 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp11_ = monitor;
-#line 822 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 828 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_cancel_monitor (self, _tmp11_);
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (monitor);
-#line 3456 "DirectoryMonitor.c"
+#line 3464 "DirectoryMonitor.c"
 		}
-#line 821 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 827 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_monitor_it);
-#line 3460 "DirectoryMonitor.c"
-	}
-#line 824 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp12_ = self->priv->monitors;
-#line 824 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	gee_abstract_map_clear (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 826 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_notify_closed (self);
 #line 3468 "DirectoryMonitor.c"
+	}
+#line 830 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp12_ = self->priv->monitors;
+#line 830 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	gee_abstract_map_clear (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
+#line 832 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_notify_closed (self);
+#line 3476 "DirectoryMonitor.c"
 }
 
 
 void directory_monitor_close (DirectoryMonitor* self) {
-#line 816 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 822 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 816 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 822 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	DIRECTORY_MONITOR_GET_CLASS (self)->close (self);
-#line 3477 "DirectoryMonitor.c"
+#line 3485 "DirectoryMonitor.c"
 }
 
 
@@ -3486,37 +3494,37 @@ static DirectoryMonitorFType directory_monitor_get_ftype (GFileInfo* info) {
 	GFileInfo* _tmp0_ = NULL;
 	GFileType _tmp1_ = 0;
 	GFileType _tmp2_ = 0;
-#line 829 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 835 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), 0);
-#line 830 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 836 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = info;
-#line 830 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 836 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_info_get_file_type (_tmp0_);
-#line 830 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 836 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	file_type = _tmp1_;
-#line 831 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 837 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = file_type;
-#line 831 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 837 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_tmp2_) {
-#line 831 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 837 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_TYPE_REGULAR:
-#line 3501 "DirectoryMonitor.c"
+#line 3509 "DirectoryMonitor.c"
 		{
-#line 833 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = DIRECTORY_MONITOR_FTYPE_FILE;
-#line 833 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 3507 "DirectoryMonitor.c"
+#line 3515 "DirectoryMonitor.c"
 		}
-#line 831 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 837 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_TYPE_DIRECTORY:
-#line 3511 "DirectoryMonitor.c"
+#line 3519 "DirectoryMonitor.c"
 		{
-#line 836 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 842 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = DIRECTORY_MONITOR_FTYPE_DIRECTORY;
-#line 836 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 842 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 3517 "DirectoryMonitor.c"
+#line 3525 "DirectoryMonitor.c"
 		}
 		default:
 		{
@@ -3524,23 +3532,23 @@ static DirectoryMonitorFType directory_monitor_get_ftype (GFileInfo* info) {
 			GEnumValue* _tmp4_;
 			gchar* _tmp5_ = NULL;
 			gchar* _tmp6_ = NULL;
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp3_ = file_type;
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp4_ = g_enum_get_value (g_type_class_ref (g_file_type_get_type ()), _tmp3_);
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp5_ = g_strdup_printf ("query_ftype: Unknown file type %s", (_tmp4_ != NULL) ? _tmp4_->value_name : NULL);
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp6_ = _tmp5_;
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_mdbg (_tmp6_);
-#line 839 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_tmp6_);
-#line 840 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = DIRECTORY_MONITOR_FTYPE_UNSUPPORTED;
-#line 840 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 3541 "DirectoryMonitor.c"
+#line 3549 "DirectoryMonitor.c"
 		}
 	}
 }
@@ -3557,7 +3565,7 @@ static void directory_monitor_explore_async_data_free (gpointer _data) {
 	_g_object_unref0 (_data_->self);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_slice_free (DirectoryMonitorExploreAsyncData, _data_);
-#line 3558 "DirectoryMonitor.c"
+#line 3566 "DirectoryMonitor.c"
 }
 
 
@@ -3601,7 +3609,7 @@ static void directory_monitor_explore_async (DirectoryMonitor* self, GFile* dir,
 	_data_->in_discovery = _tmp5_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_explore_async_co (_data_);
-#line 3602 "DirectoryMonitor.c"
+#line 3610 "DirectoryMonitor.c"
 }
 
 
@@ -3609,1104 +3617,1128 @@ static void directory_monitor_explore_finish (DirectoryMonitor* self, GAsyncResu
 	DirectoryMonitorExploreAsyncData* _data_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (_res_));
-#line 3610 "DirectoryMonitor.c"
+#line 3618 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_explore_async_ready (GObject* source_object, GAsyncResult* _res_, gpointer _user_data_) {
 	DirectoryMonitorExploreAsyncData* _data_;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = _user_data_;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_source_object_ = source_object;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_res_ = _res_;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_explore_async_co (_data_);
-#line 3624 "DirectoryMonitor.c"
+#line 3632 "DirectoryMonitor.c"
 }
 
 
 static void _g_object_unref0_ (gpointer var) {
-#line 911 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	(var == NULL) ? NULL : (var = (g_object_unref (var), NULL));
-#line 3631 "DirectoryMonitor.c"
+#line 3639 "DirectoryMonitor.c"
 }
 
 
 static void _g_list_free__g_object_unref0_ (GList* self) {
-#line 911 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_list_foreach (self, (GFunc) _g_object_unref0_, NULL);
-#line 911 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_list_free (self);
-#line 3640 "DirectoryMonitor.c"
+#line 3648 "DirectoryMonitor.c"
 }
 
 
 static guint _file_hash_gee_hash_data_func (gconstpointer v, gpointer self) {
 	guint result;
 	result = file_hash ((GFile*) v);
-#line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 935 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 3649 "DirectoryMonitor.c"
+#line 3657 "DirectoryMonitor.c"
 }
 
 
 static gboolean directory_monitor_explore_async_co (DirectoryMonitorExploreAsyncData* _data_) {
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_data_->_state_) {
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case 0:
-#line 3658 "DirectoryMonitor.c"
-		goto _state_0;
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 1:
-#line 3662 "DirectoryMonitor.c"
-		goto _state_1;
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 2:
 #line 3666 "DirectoryMonitor.c"
-		goto _state_2;
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 3:
+		goto _state_0;
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 1:
 #line 3670 "DirectoryMonitor.c"
-		goto _state_3;
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 4:
+		goto _state_1;
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 2:
 #line 3674 "DirectoryMonitor.c"
-		goto _state_4;
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		case 5:
+		goto _state_2;
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 3:
 #line 3678 "DirectoryMonitor.c"
+		goto _state_3;
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 4:
+#line 3682 "DirectoryMonitor.c"
+		goto _state_4;
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		case 5:
+#line 3686 "DirectoryMonitor.c"
 		goto _state_5;
 		default:
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_assert_not_reached ();
-#line 3683 "DirectoryMonitor.c"
+#line 3691 "DirectoryMonitor.c"
 	}
 	_state_0:
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = _data_->self->priv->files;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = _data_->dir;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = NULL;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp2_ = _data_->dir_info;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = FALSE;
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp3_ = directory_monitor_file_info_map_contains (_data_->_tmp0_, _data_->_tmp1_, _data_->_tmp2_);
-#line 845 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 851 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp3_) {
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp4_ = NULL;
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp4_ = _data_->dir;
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp5_ = NULL;
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp5_ = g_file_get_path (_data_->_tmp4_);
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp6_ = NULL;
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp6_ = _data_->_tmp5_;
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:846: Directory loop detected at %s, not explorin" \
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_warning ("DirectoryMonitor.vala:852: Directory loop detected at %s, not explorin" \
 "g", _data_->_tmp6_);
-#line 846 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 852 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_data_->_tmp6_);
-#line 848 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp7_ = FALSE;
-#line 848 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp7_ = _data_->in_discovery;
-#line 848 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp7_);
-#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (_data_->_state_ == 0) {
-#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 3730 "DirectoryMonitor.c"
+#line 3738 "DirectoryMonitor.c"
 		} else {
-#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete (_data_->_async_result);
-#line 3734 "DirectoryMonitor.c"
+#line 3742 "DirectoryMonitor.c"
 		}
-#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_object_unref (_data_->_async_result);
-#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 3740 "DirectoryMonitor.c"
+#line 3748 "DirectoryMonitor.c"
 	}
-#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp8_ = NULL;
-#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp8_ = _data_->dir_info;
-#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp9_ = NULL;
-#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp9_ = _g_object_ref0 (_data_->_tmp8_);
-#line 854 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->local_dir_info = _data_->_tmp9_;
-#line 855 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 861 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp10_ = NULL;
-#line 855 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 861 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp10_ = _data_->local_dir_info;
-#line 855 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 861 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp10_ == NULL) {
-#line 3758 "DirectoryMonitor.c"
+#line 3766 "DirectoryMonitor.c"
 		{
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp12_ = _data_->dir;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp13_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp13_ = _data_->self->priv->cancellable;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_state_ = 1;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_file_query_info_async (_data_->_tmp12_, DIRECTORY_MONITOR_SUPPLIED_ATTRIBUTES, DIRECTORY_MONITOR_DIR_INFO_FLAGS, DIRECTORY_MONITOR_DEFAULT_PRIORITY, _data_->_tmp13_, directory_monitor_explore_async_ready, _data_);
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return FALSE;
-#line 3774 "DirectoryMonitor.c"
+#line 3782 "DirectoryMonitor.c"
 			_state_1:
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp14_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp14_ = g_file_query_info_finish (_data_->_tmp12_, _data_->_res_, &_data_->_inner_error_);
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = _data_->_tmp14_;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
-#line 3784 "DirectoryMonitor.c"
+#line 3792 "DirectoryMonitor.c"
 				goto __catch480_g_error;
 			}
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp15_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp15_ = _data_->_tmp11_;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp11_ = NULL;
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->local_dir_info);
-#line 857 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 863 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->local_dir_info = _data_->_tmp15_;
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_tmp11_);
-#line 3799 "DirectoryMonitor.c"
+#line 3807 "DirectoryMonitor.c"
 		}
 		goto __finally480;
 		__catch480_g_error:
 		{
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->err = _data_->_inner_error_;
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_inner_error_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp16_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp16_ = _data_->dir;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp17_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp17_ = g_file_get_path (_data_->_tmp16_);
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp18_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp18_ = _data_->_tmp17_;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp19_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp19_ = _data_->err;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp20_ = NULL;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp20_ = _data_->_tmp19_->message;
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_warning ("DirectoryMonitor.vala:860: Unable to retrieve info on %s: %s", _data_->_tmp18_, _data_->_tmp20_);
-#line 860 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			g_warning ("DirectoryMonitor.vala:866: Unable to retrieve info on %s: %s", _data_->_tmp18_, _data_->_tmp20_);
+#line 866 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_data_->_tmp18_);
-#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp21_ = FALSE;
-#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp21_ = _data_->in_discovery;
-#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp21_);
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_error_free0 (_data_->err);
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->local_dir_info);
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_data_->_state_ == 0) {
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 3846 "DirectoryMonitor.c"
+#line 3854 "DirectoryMonitor.c"
 			} else {
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_simple_async_result_complete (_data_->_async_result);
-#line 3850 "DirectoryMonitor.c"
+#line 3858 "DirectoryMonitor.c"
 			}
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_object_unref (_data_->_async_result);
-#line 864 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 870 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return FALSE;
-#line 3856 "DirectoryMonitor.c"
+#line 3864 "DirectoryMonitor.c"
 		}
 		__finally480:
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->local_dir_info);
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _data_->_inner_error_->message, g_quark_to_string (_data_->_inner_error_->domain), _data_->_inner_error_->code);
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_clear_error (&_data_->_inner_error_);
-#line 856 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 862 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return FALSE;
-#line 3869 "DirectoryMonitor.c"
+#line 3877 "DirectoryMonitor.c"
 		}
 	}
-#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 874 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp22_ = NULL;
-#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 874 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp22_ = _data_->local_dir_info;
-#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 874 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp23_ = FALSE;
-#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 874 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp23_ = g_file_info_get_is_hidden (_data_->_tmp22_);
-#line 868 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 874 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp23_) {
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp24_ = NULL;
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp24_ = _data_->dir;
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp25_ = NULL;
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp25_ = g_file_get_path (_data_->_tmp24_);
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp26_ = NULL;
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp26_ = _data_->_tmp25_;
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:869: Ignoring hidden directory %s", _data_->_tmp26_);
-#line 869 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_warning ("DirectoryMonitor.vala:875: Ignoring hidden directory %s", _data_->_tmp26_);
+#line 875 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_data_->_tmp26_);
-#line 871 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 877 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp27_ = FALSE;
-#line 871 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 877 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp27_ = _data_->in_discovery;
-#line 871 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 877 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp27_);
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (_data_->local_dir_info);
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (_data_->_state_ == 0) {
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 3910 "DirectoryMonitor.c"
-		} else {
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_simple_async_result_complete (_data_->_async_result);
-#line 3914 "DirectoryMonitor.c"
-		}
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_object_unref (_data_->_async_result);
-#line 873 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return FALSE;
-#line 3920 "DirectoryMonitor.c"
-	}
 #line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (_data_->local_dir_info);
+#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (_data_->_state_ == 0) {
+#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			g_simple_async_result_complete_in_idle (_data_->_async_result);
+#line 3918 "DirectoryMonitor.c"
+		} else {
+#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			g_simple_async_result_complete (_data_->_async_result);
+#line 3922 "DirectoryMonitor.c"
+		}
+#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_object_unref (_data_->_async_result);
+#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return FALSE;
+#line 3928 "DirectoryMonitor.c"
+	}
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp28_ = NULL;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp28_ = _data_->local_dir_info;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp29_ = NULL;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp29_ = get_file_info_id (_data_->_tmp28_);
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp30_ = NULL;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp30_ = _data_->_tmp29_;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp31_ = FALSE;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp31_ = _data_->_tmp30_ == NULL;
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_data_->_tmp30_);
-#line 879 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp31_) {
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp32_ = NULL;
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp32_ = _data_->dir;
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp32_ = _data_->local_dir_info;
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp33_ = NULL;
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp33_ = g_file_get_path (_data_->_tmp32_);
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp33_ = _data_->dir;
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp34_ = NULL;
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp34_ = _data_->_tmp33_;
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:880: Unable to retrieve file ID on %s: skipping", _data_->_tmp34_);
-#line 880 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (_data_->_tmp34_);
-#line 882 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp35_ = FALSE;
-#line 882 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp35_ = _data_->in_discovery;
-#line 882 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp35_);
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (_data_->local_dir_info);
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (_data_->_state_ == 0) {
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_simple_async_result_complete_in_idle (_data_->_async_result);
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp34_ = g_file_get_uri (_data_->_tmp33_);
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp35_ = NULL;
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp35_ = _data_->_tmp34_;
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_file_info_set_attribute_string (_data_->_tmp32_, G_FILE_ATTRIBUTE_ID_FILE, _data_->_tmp35_);
+#line 885 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (_data_->_tmp35_);
 #line 3970 "DirectoryMonitor.c"
-		} else {
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_simple_async_result_complete (_data_->_async_result);
-#line 3974 "DirectoryMonitor.c"
-		}
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_object_unref (_data_->_async_result);
-#line 884 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return FALSE;
-#line 3980 "DirectoryMonitor.c"
 	}
-#line 888 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp36_ = NULL;
-#line 888 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp36_ = _data_->local_dir_info;
-#line 888 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp37_ = 0;
-#line 888 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp37_ = g_file_info_get_file_type (_data_->_tmp36_);
-#line 888 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_tmp37_ != G_FILE_TYPE_DIRECTORY) {
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp38_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp38_ = _ ("Unable to monitor %s: Not a directory (%s)");
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp39_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp39_ = _data_->dir;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp40_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp40_ = g_file_get_path (_data_->_tmp39_);
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp41_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp41_ = _data_->_tmp40_;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp42_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp42_ = _data_->local_dir_info;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp43_ = 0;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp43_ = g_file_info_get_file_type (_data_->_tmp42_);
-#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 892 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		memset (&_data_->_tmp44_, 0, sizeof (GEnumValue*));
-#line 890 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 892 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp44_ = g_enum_get_value (g_type_class_ref (g_file_type_get_type ()), _data_->_tmp43_);
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp45_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp45_ = g_strdup_printf (_data_->_tmp38_, _data_->_tmp41_, (_data_->_tmp44_ != NULL) ? _data_->_tmp44_->value_name : NULL);
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp46_ = NULL;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp46_ = _data_->_tmp45_;
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_notify_discovery_failed (_data_->self, _data_->_tmp46_);
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_data_->_tmp46_);
-#line 889 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 891 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_data_->_tmp41_);
-#line 892 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp47_ = FALSE;
-#line 892 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp47_ = _data_->in_discovery;
-#line 892 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp47_);
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->local_dir_info);
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (_data_->_state_ == 0) {
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 4046 "DirectoryMonitor.c"
+#line 4036 "DirectoryMonitor.c"
 		} else {
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete (_data_->_async_result);
-#line 4050 "DirectoryMonitor.c"
+#line 4040 "DirectoryMonitor.c"
 		}
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_object_unref (_data_->_async_result);
-#line 894 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 896 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 4056 "DirectoryMonitor.c"
+#line 4046 "DirectoryMonitor.c"
 	}
-#line 901 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 903 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->dir_map = NULL;
-#line 902 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->file_map = NULL;
-#line 4062 "DirectoryMonitor.c"
+#line 4052 "DirectoryMonitor.c"
 	{
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp48_ = NULL;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp48_ = _data_->dir;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp49_ = NULL;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp49_ = _data_->self->priv->cancellable;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_state_ = 2;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_file_enumerate_children_async (_data_->_tmp48_, DIRECTORY_MONITOR_SUPPLIED_ATTRIBUTES, DIRECTORY_MONITOR_UNKNOWN_INFO_FLAGS, DIRECTORY_MONITOR_DEFAULT_PRIORITY, _data_->_tmp49_, directory_monitor_explore_async_ready, _data_);
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 4078 "DirectoryMonitor.c"
+#line 4068 "DirectoryMonitor.c"
 		_state_2:
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp50_ = NULL;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp50_ = g_file_enumerate_children_finish (_data_->_tmp48_, _data_->_res_, &_data_->_inner_error_);
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->enumerator = _data_->_tmp50_;
-#line 905 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
-#line 4088 "DirectoryMonitor.c"
+#line 4078 "DirectoryMonitor.c"
 			goto __catch481_g_error;
 		}
 		{
-#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 909 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_data_->_tmp51_ = TRUE;
-#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 909 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 909 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!_data_->_tmp51_) {
-#line 4098 "DirectoryMonitor.c"
+#line 4088 "DirectoryMonitor.c"
 				}
-#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 909 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp51_ = FALSE;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp52_ = NULL;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp52_ = _data_->enumerator;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp53_ = NULL;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp53_ = _data_->self->priv->cancellable;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_state_ = 3;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_file_enumerator_next_files_async (_data_->_tmp52_, 10, DIRECTORY_MONITOR_DEFAULT_PRIORITY, _data_->_tmp53_, directory_monitor_explore_async_ready, _data_);
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return FALSE;
-#line 4116 "DirectoryMonitor.c"
+#line 4106 "DirectoryMonitor.c"
 				_state_3:
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp54_ = NULL;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp54_ = g_file_enumerator_next_files_finish (_data_->_tmp52_, _data_->_res_, &_data_->_inner_error_);
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->infos = _data_->_tmp54_;
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
-#line 908 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_data_->enumerator);
-#line 4128 "DirectoryMonitor.c"
+#line 4118 "DirectoryMonitor.c"
 					goto __catch481_g_error;
 				}
-#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 912 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp55_ = NULL;
-#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 912 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp55_ = _data_->infos;
-#line 910 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 912 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (_data_->_tmp55_ == NULL) {
-#line 911 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					__g_list_free__g_object_unref0_0 (_data_->infos);
-#line 911 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 4141 "DirectoryMonitor.c"
+#line 4131 "DirectoryMonitor.c"
 				}
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp56_ = NULL;
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_data_->_tmp56_ = _data_->infos;
-#line 4147 "DirectoryMonitor.c"
+#line 4137 "DirectoryMonitor.c"
 				{
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->info_collection = _data_->_tmp56_;
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					for (_data_->info_it = _data_->info_collection; _data_->info_it != NULL; _data_->info_it = _data_->info_it->next) {
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_data_->_tmp57_ = NULL;
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_data_->_tmp57_ = _g_object_ref0 ((GFileInfo*) _data_->info_it->data);
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_data_->info = _data_->_tmp57_;
-#line 4159 "DirectoryMonitor.c"
+#line 4149 "DirectoryMonitor.c"
 						{
-#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 							_data_->_tmp58_ = NULL;
-#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 							_data_->_tmp58_ = _data_->info;
-#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp59_ = FALSE;
-#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp59_ = g_file_info_get_is_hidden (_data_->_tmp58_);
-#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							if (_data_->_tmp59_) {
 #line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp60_ = NULL;
+							_data_->_tmp59_ = NULL;
 #line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp60_ = _data_->dir;
+							_data_->_tmp59_ = get_file_info_id (_data_->_tmp58_);
 #line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp61_ = NULL;
+							_data_->_tmp60_ = NULL;
 #line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp61_ = _data_->info;
+							_data_->_tmp60_ = _data_->_tmp59_;
 #line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp61_ = FALSE;
+#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp61_ = _data_->_tmp60_ == NULL;
+#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_g_free0 (_data_->_tmp60_);
+#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							if (_data_->_tmp61_) {
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								_data_->_tmp62_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp62_ = g_file_info_get_name (_data_->_tmp61_);
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp62_ = _data_->info;
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								_data_->_tmp63_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp63_ = g_file_get_child (_data_->_tmp60_, _data_->_tmp62_);
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp63_ = _data_->dir;
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								_data_->_tmp64_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp64_ = _data_->_tmp63_;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp64_ = g_file_get_uri (_data_->_tmp63_);
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								_data_->_tmp65_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp65_ = g_file_get_path (_data_->_tmp64_);
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp66_ = NULL;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_data_->_tmp66_ = _data_->_tmp65_;
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								g_warning ("DirectoryMonitor.vala:916: Skipping hidden file/directory %s", _data_->_tmp66_);
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_g_free0 (_data_->_tmp66_);
-#line 916 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_g_object_unref0 (_data_->_tmp64_);
-#line 919 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								_g_object_unref0 (_data_->info);
-#line 919 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								continue;
-#line 4209 "DirectoryMonitor.c"
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp65_ = _data_->_tmp64_;
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								g_file_info_set_attribute_string (_data_->_tmp62_, G_FILE_ATTRIBUTE_ID_FILE, _data_->_tmp65_);
+#line 917 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_g_free0 (_data_->_tmp65_);
+#line 4191 "DirectoryMonitor.c"
 							}
-#line 923 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp67_ = NULL;
-#line 923 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp67_ = _data_->info;
-#line 923 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp68_ = FALSE;
-#line 923 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp68_ = directory_monitor_is_file_symlink_supported (_data_->_tmp67_);
-#line 923 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							if (!_data_->_tmp68_) {
-#line 924 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 921 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp66_ = NULL;
+#line 921 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp66_ = _data_->info;
+#line 921 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp67_ = FALSE;
+#line 921 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp67_ = g_file_info_get_is_hidden (_data_->_tmp66_);
+#line 921 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							if (_data_->_tmp67_) {
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp68_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp68_ = _data_->dir;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp69_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp69_ = _data_->info;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp70_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp70_ = g_file_info_get_name (_data_->_tmp69_);
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp71_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp71_ = g_file_get_child (_data_->_tmp68_, _data_->_tmp70_);
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp72_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp72_ = _data_->_tmp71_;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp73_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp73_ = g_file_get_path (_data_->_tmp72_);
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp74_ = NULL;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_data_->_tmp74_ = _data_->_tmp73_;
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								g_warning ("DirectoryMonitor.vala:922: Skipping hidden file/directory %s", _data_->_tmp74_);
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_g_free0 (_data_->_tmp74_);
+#line 922 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_g_object_unref0 (_data_->_tmp72_);
+#line 925 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								_g_object_unref0 (_data_->info);
-#line 924 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 925 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 								continue;
-#line 4225 "DirectoryMonitor.c"
+#line 4241 "DirectoryMonitor.c"
 							}
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp69_ = NULL;
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp69_ = _data_->info;
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp70_ = 0;
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							_data_->_tmp70_ = g_file_info_get_file_type (_data_->_tmp69_);
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-							switch (_data_->_tmp70_) {
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								case G_FILE_TYPE_REGULAR:
-#line 4239 "DirectoryMonitor.c"
-								{
-#line 928 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp71_ = NULL;
-#line 928 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp71_ = _data_->file_map;
-#line 928 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									if (_data_->_tmp71_ == NULL) {
 #line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->_tmp72_ = NULL;
+							_data_->_tmp75_ = NULL;
 #line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->_tmp72_ = gee_hash_map_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, g_file_info_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL, NULL, NULL, NULL);
+							_data_->_tmp75_ = _data_->info;
 #line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_g_object_unref0 (_data_->file_map);
+							_data_->_tmp76_ = FALSE;
 #line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->file_map = _data_->_tmp72_;
-#line 4255 "DirectoryMonitor.c"
-									}
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp73_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp73_ = _data_->file_map;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp74_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp74_ = _data_->dir;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp75_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp75_ = _data_->info;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp76_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp76_ = g_file_info_get_name (_data_->_tmp75_);
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp77_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp77_ = g_file_get_child (_data_->_tmp74_, _data_->_tmp76_);
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp78_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp78_ = _data_->_tmp77_;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp79_ = NULL;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp79_ = _data_->info;
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp73_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp78_, _data_->_tmp79_);
-#line 931 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_g_object_unref0 (_data_->_tmp78_);
+							_data_->_tmp76_ = directory_monitor_is_file_symlink_supported (_data_->_tmp75_);
+#line 929 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							if (!_data_->_tmp76_) {
+#line 930 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								_g_object_unref0 (_data_->info);
+#line 930 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								continue;
+#line 4257 "DirectoryMonitor.c"
+							}
 #line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									break;
-#line 4291 "DirectoryMonitor.c"
-								}
-#line 926 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-								case G_FILE_TYPE_DIRECTORY:
-#line 4295 "DirectoryMonitor.c"
+							_data_->_tmp77_ = NULL;
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp77_ = _data_->info;
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp78_ = 0;
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							_data_->_tmp78_ = g_file_info_get_file_type (_data_->_tmp77_);
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+							switch (_data_->_tmp78_) {
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								case G_FILE_TYPE_REGULAR:
+#line 4271 "DirectoryMonitor.c"
 								{
+#line 934 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp79_ = NULL;
+#line 934 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp79_ = _data_->file_map;
+#line 934 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									if (_data_->_tmp79_ == NULL) {
 #line 935 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp80_ = NULL;
+										_data_->_tmp80_ = NULL;
 #line 935 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp80_ = _data_->dir_map;
+										_data_->_tmp80_ = gee_hash_map_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, g_file_info_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL, NULL, NULL, NULL);
 #line 935 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									if (_data_->_tmp80_ == NULL) {
-#line 936 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->_tmp81_ = NULL;
-#line 936 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->_tmp81_ = gee_hash_map_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, g_file_info_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL, NULL, NULL, NULL);
-#line 936 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_g_object_unref0 (_data_->dir_map);
-#line 936 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-										_data_->dir_map = _data_->_tmp81_;
-#line 4311 "DirectoryMonitor.c"
+										_g_object_unref0 (_data_->file_map);
+#line 935 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+										_data_->file_map = _data_->_tmp80_;
+#line 4287 "DirectoryMonitor.c"
 									}
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp81_ = NULL;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp81_ = _data_->file_map;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp82_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp82_ = _data_->dir_map;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp82_ = _data_->dir;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp83_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp83_ = _data_->dir;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp83_ = _data_->info;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp84_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp84_ = _data_->info;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp84_ = g_file_info_get_name (_data_->_tmp83_);
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp85_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp85_ = g_file_info_get_name (_data_->_tmp84_);
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp85_ = g_file_get_child (_data_->_tmp82_, _data_->_tmp84_);
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp86_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp86_ = g_file_get_child (_data_->_tmp83_, _data_->_tmp85_);
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp86_ = _data_->_tmp85_;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									_data_->_tmp87_ = NULL;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp87_ = _data_->info;
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp81_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp86_, _data_->_tmp87_);
+#line 937 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_g_object_unref0 (_data_->_tmp86_);
 #line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp87_ = _data_->_tmp86_;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp88_ = NULL;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_data_->_tmp88_ = _data_->info;
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp82_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp87_, _data_->_tmp88_);
-#line 938 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-									_g_object_unref0 (_data_->_tmp87_);
-#line 939 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									break;
-#line 4347 "DirectoryMonitor.c"
+#line 4323 "DirectoryMonitor.c"
+								}
+#line 932 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+								case G_FILE_TYPE_DIRECTORY:
+#line 4327 "DirectoryMonitor.c"
+								{
+#line 941 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp88_ = NULL;
+#line 941 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp88_ = _data_->dir_map;
+#line 941 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									if (_data_->_tmp88_ == NULL) {
+#line 942 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+										_data_->_tmp89_ = NULL;
+#line 942 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+										_data_->_tmp89_ = gee_hash_map_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, g_file_info_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL, NULL, NULL, NULL);
+#line 942 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+										_g_object_unref0 (_data_->dir_map);
+#line 942 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+										_data_->dir_map = _data_->_tmp89_;
+#line 4343 "DirectoryMonitor.c"
+									}
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp90_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp90_ = _data_->dir_map;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp91_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp91_ = _data_->dir;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp92_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp92_ = _data_->info;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp93_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp93_ = g_file_info_get_name (_data_->_tmp92_);
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp94_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp94_ = g_file_get_child (_data_->_tmp91_, _data_->_tmp93_);
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp95_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp95_ = _data_->_tmp94_;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp96_ = NULL;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_data_->_tmp96_ = _data_->info;
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp90_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp95_, _data_->_tmp96_);
+#line 944 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									_g_object_unref0 (_data_->_tmp95_);
+#line 945 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+									break;
+#line 4379 "DirectoryMonitor.c"
 								}
 								default:
 								{
-#line 943 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 949 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 									break;
-#line 4353 "DirectoryMonitor.c"
+#line 4385 "DirectoryMonitor.c"
 								}
 							}
-#line 913 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 915 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 							_g_object_unref0 (_data_->info);
-#line 4358 "DirectoryMonitor.c"
+#line 4390 "DirectoryMonitor.c"
 						}
 					}
 				}
-#line 907 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 909 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				__g_list_free__g_object_unref0_0 (_data_->infos);
-#line 4364 "DirectoryMonitor.c"
+#line 4396 "DirectoryMonitor.c"
 			}
 		}
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->enumerator);
-#line 4369 "DirectoryMonitor.c"
+#line 4401 "DirectoryMonitor.c"
 	}
 	goto __finally481;
 	__catch481_g_error:
 	{
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->err2 = _data_->_inner_error_;
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_inner_error_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp89_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp89_ = _data_->dir;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp90_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp90_ = g_file_get_path (_data_->_tmp89_);
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp91_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp91_ = _data_->_tmp90_;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp92_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp92_ = _data_->err2;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp93_ = NULL;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp93_ = _data_->_tmp92_->message;
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:948: Aborted directory traversal of %s: %s", _data_->_tmp91_, _data_->_tmp93_);
-#line 948 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (_data_->_tmp91_);
-#line 950 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp94_ = FALSE;
-#line 950 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp94_ = _data_->in_discovery;
-#line 950 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp94_);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp97_ = NULL;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp97_ = _data_->dir;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp98_ = NULL;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp98_ = g_file_get_path (_data_->_tmp97_);
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp99_ = NULL;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp99_ = _data_->_tmp98_;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp100_ = NULL;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp100_ = _data_->err2;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp101_ = NULL;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp101_ = _data_->_tmp100_->message;
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_warning ("DirectoryMonitor.vala:954: Aborted directory traversal of %s: %s", _data_->_tmp99_, _data_->_tmp101_);
+#line 954 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (_data_->_tmp99_);
+#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp102_ = FALSE;
+#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp102_ = _data_->in_discovery;
+#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp102_);
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_error_free0 (_data_->err2);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->file_map);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->dir_map);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->local_dir_info);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (_data_->_state_ == 0) {
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 4420 "DirectoryMonitor.c"
+#line 4452 "DirectoryMonitor.c"
 		} else {
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_simple_async_result_complete (_data_->_async_result);
-#line 4424 "DirectoryMonitor.c"
+#line 4456 "DirectoryMonitor.c"
 		}
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_object_unref (_data_->_async_result);
-#line 952 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 958 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 4430 "DirectoryMonitor.c"
+#line 4462 "DirectoryMonitor.c"
 	}
 	__finally481:
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_data_->_inner_error_ != NULL)) {
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->file_map);
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->dir_map);
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_data_->local_dir_info);
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _data_->_inner_error_->message, g_quark_to_string (_data_->_inner_error_->domain), _data_->_inner_error_->code);
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_clear_error (&_data_->_inner_error_);
-#line 904 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 906 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 4447 "DirectoryMonitor.c"
+#line 4479 "DirectoryMonitor.c"
 	}
-#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp95_ = FALSE;
-#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp95_ = _data_->in_discovery;
-#line 956 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_data_->_tmp95_) {
-#line 957 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp96_ = NULL;
-#line 957 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp96_ = _data_->dir;
-#line 957 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp97_ = NULL;
-#line 957 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp97_ = _data_->local_dir_info;
-#line 957 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_internal_notify_directory_discovered (_data_->self, _data_->_tmp96_, _data_->_tmp97_);
-#line 4465 "DirectoryMonitor.c"
+#line 962 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp103_ = FALSE;
+#line 962 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp103_ = _data_->in_discovery;
+#line 962 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_data_->_tmp103_) {
+#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp104_ = NULL;
+#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp104_ = _data_->dir;
+#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp105_ = NULL;
+#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp105_ = _data_->local_dir_info;
+#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		directory_monitor_internal_notify_directory_discovered (_data_->self, _data_->_tmp104_, _data_->_tmp105_);
+#line 4497 "DirectoryMonitor.c"
 	} else {
-#line 959 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp98_ = NULL;
-#line 959 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp98_ = _data_->dir;
-#line 959 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp99_ = NULL;
-#line 959 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp99_ = _data_->local_dir_info;
-#line 959 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_internal_notify_directory_created (_data_->self, _data_->_tmp98_, _data_->_tmp99_);
-#line 4477 "DirectoryMonitor.c"
-	}
-#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp100_ = NULL;
-#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp100_ = _data_->dir;
-#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp101_ = NULL;
-#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp101_ = _data_->local_dir_info;
-#line 963 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_add_monitor (_data_->self, _data_->_tmp100_, _data_->_tmp101_);
-#line 966 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp102_ = NULL;
-#line 966 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp102_ = _data_->file_map;
-#line 966 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_data_->_tmp102_ != NULL) {
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp103_ = NULL;
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp103_ = _data_->file_map;
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp104_ = FALSE;
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp104_ = _data_->in_discovery;
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_state_ = 4;
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_notify_directory_files (_data_->self, G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp103_, GEE_TYPE_MAP, GeeMap), _data_->_tmp104_, directory_monitor_explore_async_ready, _data_);
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return FALSE;
-#line 4509 "DirectoryMonitor.c"
-		_state_4:
-#line 967 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		directory_monitor_notify_directory_files_finish (_data_->self, _data_->_res_);
-#line 4513 "DirectoryMonitor.c"
-	}
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp106_ = FALSE;
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp106_ = _data_->self->priv->recurse;
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_data_->_tmp106_) {
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 965 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp106_ = NULL;
+#line 965 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp106_ = _data_->dir;
+#line 965 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_tmp107_ = NULL;
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp107_ = _data_->dir_map;
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp105_ = _data_->_tmp107_ != NULL;
-#line 4527 "DirectoryMonitor.c"
-	} else {
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp105_ = FALSE;
-#line 4531 "DirectoryMonitor.c"
+#line 965 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp107_ = _data_->local_dir_info;
+#line 965 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		directory_monitor_internal_notify_directory_created (_data_->self, _data_->_tmp106_, _data_->_tmp107_);
+#line 4509 "DirectoryMonitor.c"
 	}
-#line 970 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_data_->_tmp105_) {
-#line 4535 "DirectoryMonitor.c"
+#line 969 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp108_ = NULL;
+#line 969 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp108_ = _data_->dir;
+#line 969 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp109_ = NULL;
+#line 969 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp109_ = _data_->local_dir_info;
+#line 969 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_add_monitor (_data_->self, _data_->_tmp108_, _data_->_tmp109_);
+#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp110_ = NULL;
+#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp110_ = _data_->file_map;
+#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_data_->_tmp110_ != NULL) {
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp111_ = NULL;
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp111_ = _data_->file_map;
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp112_ = FALSE;
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp112_ = _data_->in_discovery;
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_state_ = 4;
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		directory_monitor_notify_directory_files (_data_->self, G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp111_, GEE_TYPE_MAP, GeeMap), _data_->_tmp112_, directory_monitor_explore_async_ready, _data_);
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return FALSE;
+#line 4541 "DirectoryMonitor.c"
+		_state_4:
+#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		directory_monitor_notify_directory_files_finish (_data_->self, _data_->_res_);
+#line 4545 "DirectoryMonitor.c"
+	}
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp114_ = FALSE;
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp114_ = _data_->self->priv->recurse;
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_data_->_tmp114_) {
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp115_ = NULL;
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp115_ = _data_->dir_map;
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp113_ = _data_->_tmp115_ != NULL;
+#line 4559 "DirectoryMonitor.c"
+	} else {
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp113_ = FALSE;
+#line 4563 "DirectoryMonitor.c"
+	}
+#line 976 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_data_->_tmp113_) {
+#line 4567 "DirectoryMonitor.c"
 		{
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp108_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp108_ = _data_->dir_map;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp109_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp109_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp108_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp110_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp110_ = _data_->_tmp109_;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp111_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp111_ = _data_->_tmp110_;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp112_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp112_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp111_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp113_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp113_ = _data_->_tmp112_;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_data_->_tmp111_);
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_subdir_it = _data_->_tmp113_;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp116_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp116_ = _data_->dir_map;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp117_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp117_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp116_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp118_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp118_ = _data_->_tmp117_;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp119_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp119_ = _data_->_tmp118_;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp120_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp120_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp119_, GEE_TYPE_ITERABLE, GeeIterable));
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp121_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp121_ = _data_->_tmp120_;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_data_->_tmp119_);
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_subdir_it = _data_->_tmp121_;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp114_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp114_ = _data_->_subdir_it;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp115_ = FALSE;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp115_ = gee_iterator_next (_data_->_tmp114_);
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				if (!_data_->_tmp115_) {
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp122_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp122_ = _data_->_subdir_it;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp123_ = FALSE;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp123_ = gee_iterator_next (_data_->_tmp122_);
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				if (!_data_->_tmp123_) {
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 4579 "DirectoryMonitor.c"
+#line 4611 "DirectoryMonitor.c"
 				}
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp116_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp116_ = _data_->_subdir_it;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp117_ = NULL;
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp117_ = gee_iterator_get (_data_->_tmp116_);
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->subdir = (GFile*) _data_->_tmp117_;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp118_ = 0;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp118_ = _data_->self->priv->outstanding_exploration_dirs;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->self->priv->outstanding_exploration_dirs = _data_->_tmp118_ + 1;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp119_ = 0;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_data_->_tmp119_ = _data_->self->priv->outstanding_exploration_dirs;
-#line 972 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				if (_data_->_tmp119_ > DIRECTORY_MONITOR_MAX_EXPLORATION_DIRS) {
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp120_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp120_ = _data_->subdir;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp121_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp121_ = _data_->dir_map;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp122_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp122_ = _data_->subdir;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp123_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp123_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp121_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp122_);
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp124_ = NULL;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp124_ = (GFileInfo*) _data_->_tmp123_;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp125_ = FALSE;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp125_ = _data_->in_discovery;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_state_ = 5;
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					directory_monitor_explore_async (_data_->self, _data_->_tmp120_, _data_->_tmp124_, _data_->_tmp125_, directory_monitor_explore_async_ready, _data_);
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					return FALSE;
-#line 4633 "DirectoryMonitor.c"
-					_state_5:
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					directory_monitor_explore_finish (_data_->self, _data_->_res_);
-#line 973 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_g_object_unref0 (_data_->_tmp124_);
-#line 4639 "DirectoryMonitor.c"
-				} else {
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp126_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp126_ = _data_->subdir;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp127_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp127_ = _data_->dir_map;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp124_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp124_ = _data_->_subdir_it;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp125_ = NULL;
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp125_ = gee_iterator_get (_data_->_tmp124_);
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->subdir = (GFile*) _data_->_tmp125_;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp126_ = 0;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp126_ = _data_->self->priv->outstanding_exploration_dirs;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->self->priv->outstanding_exploration_dirs = _data_->_tmp126_ + 1;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp127_ = 0;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_data_->_tmp127_ = _data_->self->priv->outstanding_exploration_dirs;
+#line 978 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				if (_data_->_tmp127_ > DIRECTORY_MONITOR_MAX_EXPLORATION_DIRS) {
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp128_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp128_ = _data_->subdir;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp129_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp129_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp127_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp128_);
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp129_ = _data_->dir_map;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_data_->_tmp130_ = NULL;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp130_ = (GFileInfo*) _data_->_tmp129_;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp131_ = FALSE;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_data_->_tmp131_ = _data_->in_discovery;
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					directory_monitor_explore_async (_data_->self, _data_->_tmp126_, _data_->_tmp130_, _data_->_tmp131_, NULL, NULL);
-#line 975 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_g_object_unref0 (_data_->_tmp130_);
-#line 4669 "DirectoryMonitor.c"
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp130_ = _data_->subdir;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp131_ = NULL;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp131_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp129_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp130_);
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp132_ = NULL;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp132_ = (GFileInfo*) _data_->_tmp131_;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp133_ = FALSE;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp133_ = _data_->in_discovery;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_state_ = 5;
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					directory_monitor_explore_async (_data_->self, _data_->_tmp128_, _data_->_tmp132_, _data_->_tmp133_, directory_monitor_explore_async_ready, _data_);
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					return FALSE;
+#line 4665 "DirectoryMonitor.c"
+					_state_5:
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					directory_monitor_explore_finish (_data_->self, _data_->_res_);
+#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_g_object_unref0 (_data_->_tmp132_);
+#line 4671 "DirectoryMonitor.c"
+				} else {
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp134_ = NULL;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp134_ = _data_->subdir;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp135_ = NULL;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp135_ = _data_->dir_map;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp136_ = NULL;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp136_ = _data_->subdir;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp137_ = NULL;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp137_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_data_->_tmp135_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _data_->_tmp136_);
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp138_ = NULL;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp138_ = (GFileInfo*) _data_->_tmp137_;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp139_ = FALSE;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_data_->_tmp139_ = _data_->in_discovery;
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					directory_monitor_explore_async (_data_->self, _data_->_tmp134_, _data_->_tmp138_, _data_->_tmp139_, NULL, NULL);
+#line 981 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_g_object_unref0 (_data_->_tmp138_);
+#line 4701 "DirectoryMonitor.c"
 				}
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_data_->subdir);
-#line 4673 "DirectoryMonitor.c"
+#line 4705 "DirectoryMonitor.c"
 			}
-#line 971 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 977 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_data_->_subdir_it);
-#line 4677 "DirectoryMonitor.c"
+#line 4709 "DirectoryMonitor.c"
 		}
 	}
-#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp132_ = FALSE;
-#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_data_->_tmp132_ = _data_->in_discovery;
-#line 979 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp132_);
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp140_ = FALSE;
+#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_data_->_tmp140_ = _data_->in_discovery;
+#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_explore_directory_completed (_data_->self, _data_->_tmp140_);
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->file_map);
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->dir_map);
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->local_dir_info);
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_state_ == 0) {
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 4696 "DirectoryMonitor.c"
+#line 4728 "DirectoryMonitor.c"
 	} else {
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete (_data_->_async_result);
-#line 4700 "DirectoryMonitor.c"
+#line 4732 "DirectoryMonitor.c"
 	}
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_object_unref (_data_->_async_result);
-#line 844 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 850 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return FALSE;
-#line 4706 "DirectoryMonitor.c"
+#line 4738 "DirectoryMonitor.c"
 }
 
 
@@ -4719,7 +4751,7 @@ static void directory_monitor_notify_directory_files_data_free (gpointer _data) 
 	_g_object_unref0 (_data_->self);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_slice_free (DirectoryMonitorNotifyDirectoryFilesData, _data_);
-#line 4719 "DirectoryMonitor.c"
+#line 4751 "DirectoryMonitor.c"
 }
 
 
@@ -4753,7 +4785,7 @@ static void directory_monitor_notify_directory_files (DirectoryMonitor* self, Ge
 	_data_->in_discovery = _tmp3_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_notify_directory_files_co (_data_);
-#line 4753 "DirectoryMonitor.c"
+#line 4785 "DirectoryMonitor.c"
 }
 
 
@@ -4761,159 +4793,159 @@ static void directory_monitor_notify_directory_files_finish (DirectoryMonitor* s
 	DirectoryMonitorNotifyDirectoryFilesData* _data_;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_ = g_simple_async_result_get_op_res_gpointer (G_SIMPLE_ASYNC_RESULT (_res_));
-#line 4761 "DirectoryMonitor.c"
+#line 4793 "DirectoryMonitor.c"
 }
 
 
 static gboolean _directory_monitor_notify_directory_files_co_gsource_func (gpointer self) {
 	gboolean result;
 	result = directory_monitor_notify_directory_files_co (self);
-#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 996 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 4770 "DirectoryMonitor.c"
+#line 4802 "DirectoryMonitor.c"
 }
 
 
 static gboolean directory_monitor_notify_directory_files_co (DirectoryMonitorNotifyDirectoryFilesData* _data_) {
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_data_->_state_) {
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case 0:
-#line 4779 "DirectoryMonitor.c"
+#line 4811 "DirectoryMonitor.c"
 		goto _state_0;
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case 1:
-#line 4783 "DirectoryMonitor.c"
+#line 4815 "DirectoryMonitor.c"
 		goto _state_1;
 		default:
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_assert_not_reached ();
-#line 4788 "DirectoryMonitor.c"
+#line 4820 "DirectoryMonitor.c"
 	}
 	_state_0:
-#line 983 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 989 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = NULL;
-#line 983 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 989 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp0_ = _data_->map;
-#line 983 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 989 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = NULL;
-#line 983 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 989 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->_tmp1_ = gee_map_map_iterator (_data_->_tmp0_);
-#line 983 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 989 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_data_->iter = _data_->_tmp1_;
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	while (TRUE) {
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp2_ = NULL;
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp2_ = _data_->iter;
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp3_ = FALSE;
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp3_ = gee_map_iterator_next (_data_->_tmp2_);
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (!_data_->_tmp3_) {
-#line 984 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			break;
-#line 4815 "DirectoryMonitor.c"
-		}
-#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp4_ = FALSE;
-#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_data_->_tmp4_ = _data_->in_discovery;
-#line 985 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (_data_->_tmp4_) {
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp5_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp5_ = _data_->iter;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp6_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp6_ = gee_map_iterator_get_key (_data_->_tmp5_);
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp7_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp7_ = (GFile*) _data_->_tmp6_;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp8_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp8_ = _data_->iter;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp9_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp9_ = gee_map_iterator_get_value (_data_->_tmp8_);
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp10_ = NULL;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp10_ = (GFileInfo*) _data_->_tmp9_;
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			directory_monitor_internal_notify_file_discovered (_data_->self, _data_->_tmp7_, _data_->_tmp10_);
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_data_->_tmp10_);
-#line 986 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_data_->_tmp7_);
-#line 4853 "DirectoryMonitor.c"
-		} else {
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp11_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp11_ = _data_->iter;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp12_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp12_ = gee_map_iterator_get_key (_data_->_tmp11_);
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp13_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp13_ = (GFile*) _data_->_tmp12_;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp14_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp14_ = _data_->iter;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp15_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp15_ = gee_map_iterator_get_value (_data_->_tmp14_);
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp16_ = NULL;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_data_->_tmp16_ = (GFileInfo*) _data_->_tmp15_;
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			directory_monitor_internal_notify_file_created (_data_->self, _data_->_tmp13_, _data_->_tmp16_);
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_data_->_tmp16_);
-#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_data_->_tmp13_);
-#line 4885 "DirectoryMonitor.c"
-		}
 #line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	while (TRUE) {
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp2_ = NULL;
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp2_ = _data_->iter;
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp3_ = FALSE;
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp3_ = gee_map_iterator_next (_data_->_tmp2_);
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (!_data_->_tmp3_) {
+#line 990 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			break;
+#line 4847 "DirectoryMonitor.c"
+		}
+#line 991 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp4_ = FALSE;
+#line 991 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_data_->_tmp4_ = _data_->in_discovery;
+#line 991 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (_data_->_tmp4_) {
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp5_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp5_ = _data_->iter;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp6_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp6_ = gee_map_iterator_get_key (_data_->_tmp5_);
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp7_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp7_ = (GFile*) _data_->_tmp6_;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp8_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp8_ = _data_->iter;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp9_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp9_ = gee_map_iterator_get_value (_data_->_tmp8_);
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp10_ = NULL;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp10_ = (GFileInfo*) _data_->_tmp9_;
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			directory_monitor_internal_notify_file_discovered (_data_->self, _data_->_tmp7_, _data_->_tmp10_);
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_data_->_tmp10_);
+#line 992 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_data_->_tmp7_);
+#line 4885 "DirectoryMonitor.c"
+		} else {
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp11_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp11_ = _data_->iter;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp12_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp12_ = gee_map_iterator_get_key (_data_->_tmp11_);
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp13_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp13_ = (GFile*) _data_->_tmp12_;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp14_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp14_ = _data_->iter;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp15_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp15_ = gee_map_iterator_get_value (_data_->_tmp14_);
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp16_ = NULL;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_data_->_tmp16_ = (GFileInfo*) _data_->_tmp15_;
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			directory_monitor_internal_notify_file_created (_data_->self, _data_->_tmp13_, _data_->_tmp16_);
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_data_->_tmp16_);
+#line 994 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_data_->_tmp13_);
+#line 4917 "DirectoryMonitor.c"
+		}
+#line 996 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_idle_add_full (DIRECTORY_MONITOR_DEFAULT_PRIORITY, _directory_monitor_notify_directory_files_co_gsource_func, _data_, NULL);
-#line 991 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 997 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_data_->_state_ = 1;
-#line 991 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 997 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return FALSE;
-#line 4893 "DirectoryMonitor.c"
+#line 4925 "DirectoryMonitor.c"
 		_state_1:
 		;
 	}
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_data_->iter);
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_data_->_state_ == 0) {
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete_in_idle (_data_->_async_result);
-#line 4903 "DirectoryMonitor.c"
+#line 4935 "DirectoryMonitor.c"
 	} else {
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_simple_async_result_complete (_data_->_async_result);
-#line 4907 "DirectoryMonitor.c"
+#line 4939 "DirectoryMonitor.c"
 	}
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_object_unref (_data_->_async_result);
-#line 982 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 988 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return FALSE;
-#line 4913 "DirectoryMonitor.c"
+#line 4945 "DirectoryMonitor.c"
 }
 
 
@@ -4922,45 +4954,45 @@ static void directory_monitor_explore_directory_completed (DirectoryMonitor* sel
 	gint _tmp1_ = 0;
 	gboolean _tmp2_ = FALSE;
 	gboolean _tmp3_ = FALSE;
-#line 997 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1003 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 998 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1004 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->outstanding_exploration_dirs;
-#line 998 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1004 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (_tmp0_ > 0, "outstanding_exploration_dirs > 0");
-#line 999 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1005 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = self->priv->outstanding_exploration_dirs;
-#line 999 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1005 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->outstanding_exploration_dirs = _tmp1_ - 1;
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = in_discovery;
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp3_) {
-#line 4936 "DirectoryMonitor.c"
+#line 4968 "DirectoryMonitor.c"
 		gint _tmp4_ = 0;
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = self->priv->outstanding_exploration_dirs;
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = _tmp4_ == 0;
-#line 4942 "DirectoryMonitor.c"
+#line 4974 "DirectoryMonitor.c"
 	} else {
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = FALSE;
-#line 4946 "DirectoryMonitor.c"
+#line 4978 "DirectoryMonitor.c"
 	}
-#line 1001 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1007 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_) {
-#line 1002 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1008 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_notify_discovery_completed (self);
-#line 4952 "DirectoryMonitor.c"
+#line 4984 "DirectoryMonitor.c"
 	}
 }
 
 
 static void _directory_monitor_on_monitor_notification_g_file_monitor_changed (GFileMonitor* _sender, GFile* file, GFile* other_file, GFileMonitorEvent event_type, gpointer self) {
-#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1036 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_on_monitor_notification ((DirectoryMonitor*) self, file, other_file, event_type);
-#line 4960 "DirectoryMonitor.c"
+#line 4992 "DirectoryMonitor.c"
 }
 
 
@@ -4987,90 +5019,90 @@ static gboolean directory_monitor_add_monitor (DirectoryMonitor* self, GFile* di
 	gchar* _tmp26_ = NULL;
 	gchar* _tmp27_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 1008 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 1008 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (dir), FALSE);
-#line 1008 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1009 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1015 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->monitoring;
-#line 1009 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1015 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp0_) {
-#line 1010 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1016 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 1010 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1016 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 5001 "DirectoryMonitor.c"
+#line 5033 "DirectoryMonitor.c"
 	}
-#line 1012 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = self->priv->files;
-#line 1012 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = dir;
-#line 1012 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = info;
-#line 1012 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_file_info_map_get_id (_tmp1_, _tmp2_, _tmp3_);
-#line 1012 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp4_;
-#line 1013 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1019 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = id;
-#line 1013 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1019 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp5_ == NULL) {
-#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		result = FALSE;
-#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (id);
-#line 1014 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 5023 "DirectoryMonitor.c"
-	}
-#line 1017 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp6_ = self->priv->monitors;
-#line 1017 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp7_ = id;
-#line 1017 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp8_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp7_);
-#line 1017 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_tmp8_) {
-#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		result = FALSE;
-#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (id);
-#line 1018 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 5039 "DirectoryMonitor.c"
-	}
 #line 1020 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		result = FALSE;
+#line 1020 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (id);
+#line 1020 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 5055 "DirectoryMonitor.c"
+	}
+#line 1023 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp6_ = self->priv->monitors;
+#line 1023 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp7_ = id;
+#line 1023 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp8_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp7_);
+#line 1023 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_tmp8_) {
+#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		result = FALSE;
+#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (id);
+#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 5071 "DirectoryMonitor.c"
+	}
+#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	monitor = NULL;
-#line 5043 "DirectoryMonitor.c"
+#line 5075 "DirectoryMonitor.c"
 	{
 		GFileMonitor* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFileMonitor* _tmp11_ = NULL;
 		GFileMonitor* _tmp12_ = NULL;
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = dir;
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = g_file_monitor_directory (_tmp10_, DIRECTORY_MONITOR_FILE_MONITOR_FLAGS, NULL, &_inner_error_);
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = _tmp11_;
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5057 "DirectoryMonitor.c"
+#line 5089 "DirectoryMonitor.c"
 			goto __catch482_g_error;
 		}
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = _tmp9_;
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = NULL;
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (monitor);
-#line 1022 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1028 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		monitor = _tmp12_;
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp9_);
-#line 5070 "DirectoryMonitor.c"
+#line 5102 "DirectoryMonitor.c"
 	}
 	goto __finally482;
 	__catch482_g_error:
@@ -5081,90 +5113,90 @@ static gboolean directory_monitor_add_monitor (DirectoryMonitor* self, GFile* di
 		gchar* _tmp15_ = NULL;
 		GError* _tmp16_ = NULL;
 		const gchar* _tmp17_ = NULL;
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		err = _inner_error_;
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_inner_error_ = NULL;
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp13_ = dir;
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp14_ = g_file_get_path (_tmp13_);
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = _tmp14_;
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp16_ = err;
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp17_ = _tmp16_->message;
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:1024: Unable to monitor %s: %s", _tmp15_, _tmp17_);
-#line 1024 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_warning ("DirectoryMonitor.vala:1030: Unable to monitor %s: %s", _tmp15_, _tmp17_);
+#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp15_);
-#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_error_free0 (err);
-#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (monitor);
-#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 1026 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 5109 "DirectoryMonitor.c"
+#line 5141 "DirectoryMonitor.c"
 	}
 	__finally482:
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 5114 "DirectoryMonitor.c"
+#line 5146 "DirectoryMonitor.c"
 		gboolean _tmp18_ = FALSE;
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (monitor);
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_clear_error (&_inner_error_);
-#line 1021 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1027 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return _tmp18_;
-#line 5126 "DirectoryMonitor.c"
+#line 5158 "DirectoryMonitor.c"
 	}
-#line 1029 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1035 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp19_ = self->priv->monitors;
-#line 1029 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1035 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp20_ = id;
-#line 1029 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1035 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp21_ = monitor;
-#line 1029 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1035 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp20_, _tmp21_);
-#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1036 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp22_ = monitor;
-#line 1030 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1036 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_connect_object (_tmp22_, "changed", (GCallback) _directory_monitor_on_monitor_notification_g_file_monitor_changed, self, 0);
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp23_ = dir;
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp24_ = g_file_get_path (_tmp23_);
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp25_ = _tmp24_;
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp26_ = g_strdup_printf ("Added monitor for %s", _tmp25_);
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp27_ = _tmp26_;
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp27_);
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp27_);
-#line 1032 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp25_);
-#line 1034 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = TRUE;
-#line 1034 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (monitor);
-#line 1034 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 1034 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 5164 "DirectoryMonitor.c"
+#line 5196 "DirectoryMonitor.c"
 }
 
 
@@ -5193,107 +5225,107 @@ static gboolean directory_monitor_remove_monitor (DirectoryMonitor* self, GFile*
 	gchar* _tmp17_ = NULL;
 	gchar* _tmp18_ = NULL;
 	gchar* _tmp19_ = NULL;
-#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (dir), FALSE);
-#line 1038 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1039 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1045 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->monitoring;
-#line 1039 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1045 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp0_) {
-#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 1040 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 5207 "DirectoryMonitor.c"
+#line 5239 "DirectoryMonitor.c"
 	}
-#line 1042 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = self->priv->files;
-#line 1042 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = dir;
-#line 1042 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = info;
-#line 1042 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_file_info_map_get_id (_tmp1_, _tmp2_, _tmp3_);
-#line 1042 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp4_;
-#line 1043 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1049 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = id;
-#line 1043 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1049 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp5_ == NULL) {
-#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 1044 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 5229 "DirectoryMonitor.c"
+#line 5261 "DirectoryMonitor.c"
 	}
-#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1052 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = self->priv->monitors;
-#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1052 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = id;
-#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1052 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp7_);
-#line 1046 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1052 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	monitor = (GFileMonitor*) _tmp8_;
-#line 1047 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1053 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = monitor;
-#line 1047 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1053 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp9_ == NULL) {
-#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1054 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1054 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (monitor);
-#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1054 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 1048 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1054 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 5251 "DirectoryMonitor.c"
+#line 5283 "DirectoryMonitor.c"
 	}
-#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1056 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = self->priv->monitors;
-#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1056 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = id;
-#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1056 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp11_, NULL);
-#line 1050 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1056 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	removed = _tmp12_;
-#line 1051 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = removed;
-#line 1051 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_assert (_tmp13_, "removed");
-#line 1053 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1059 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp14_ = monitor;
-#line 1053 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1059 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_cancel_monitor (self, _tmp14_);
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp15_ = dir;
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp16_ = g_file_get_path (_tmp15_);
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp17_ = _tmp16_;
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp18_ = g_strdup_printf ("Removed monitor for %s", _tmp17_);
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp19_ = _tmp18_;
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp19_);
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp19_);
-#line 1055 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp17_);
-#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1063 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = TRUE;
-#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1063 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (monitor);
-#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1063 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 1057 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1063 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 5293 "DirectoryMonitor.c"
+#line 5325 "DirectoryMonitor.c"
 }
 
 
@@ -5301,39 +5333,39 @@ static void directory_monitor_cancel_monitor (DirectoryMonitor* self, GFileMonit
 	GFileMonitor* _tmp0_ = NULL;
 	guint _tmp1_ = 0U;
 	GFileMonitor* _tmp2_ = NULL;
-#line 1060 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 1060 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_MONITOR (monitor));
-#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = monitor;
-#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_parse_name ("changed", g_file_monitor_get_type (), &_tmp1_, NULL, FALSE);
-#line 1061 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_handlers_disconnect_matched (_tmp0_, G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, _tmp1_, 0, NULL, (GCallback) _directory_monitor_on_monitor_notification_g_file_monitor_changed, self);
-#line 1062 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1068 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = monitor;
-#line 1062 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1068 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_file_monitor_cancel (_tmp2_);
-#line 5315 "DirectoryMonitor.c"
+#line 5347 "DirectoryMonitor.c"
 }
 
 
 static void _directory_monitor_query_info_queue_element_on_completed_gasync_ready_callback (GObject* source_object, GAsyncResult* res, gpointer self) {
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_query_info_queue_element_on_completed ((DirectoryMonitorQueryInfoQueueElement*) self, source_object, res);
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_query_info_queue_element_unref (self);
-#line 5324 "DirectoryMonitor.c"
+#line 5356 "DirectoryMonitor.c"
 }
 
 
 static gboolean _directory_monitor_check_for_expired_delete_events_gsource_func (gpointer self) {
 	gboolean result;
 	result = directory_monitor_check_for_expired_delete_events ((DirectoryMonitor*) self);
-#line 1091 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1097 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 5333 "DirectoryMonitor.c"
+#line 5365 "DirectoryMonitor.c"
 }
 
 
@@ -5355,182 +5387,182 @@ static void directory_monitor_on_monitor_notification (DirectoryMonitor* self, G
 	GeeQueue* _tmp16_ = NULL;
 	DirectoryMonitorQueryInfoQueueElement* _tmp17_ = NULL;
 	GFileMonitorEvent _tmp18_ = 0;
-#line 1065 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1071 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 1065 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1071 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 1065 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1071 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail ((other_file == NULL) || G_IS_FILE (other_file));
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = other_file;
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp1_ != NULL) {
-#line 5365 "DirectoryMonitor.c"
+#line 5397 "DirectoryMonitor.c"
 		GFile* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = other_file;
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = g_file_get_path (_tmp2_);
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp0_);
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = _tmp3_;
-#line 5376 "DirectoryMonitor.c"
+#line 5408 "DirectoryMonitor.c"
 	} else {
 		gchar* _tmp4_ = NULL;
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = g_strdup ("(none)");
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp0_);
-#line 1067 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1073 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = _tmp4_;
-#line 5385 "DirectoryMonitor.c"
+#line 5417 "DirectoryMonitor.c"
 	}
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = event;
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp5_);
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = file;
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = g_file_get_path (_tmp7_);
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = _tmp8_;
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = g_strdup_printf ("NOTIFY %s: file=%s other_file=%s", (_tmp6_ != NULL) ? _tmp6_->value_name : NULL, _tmp9_, _tmp0_);
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = _tmp10_;
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp11_);
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp11_);
-#line 1066 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1072 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp9_);
-#line 1076 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = file;
-#line 1076 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = other_file;
-#line 1076 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp14_ = event;
-#line 1076 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp15_ = directory_monitor_query_info_queue_element_new (self, _tmp12_, _tmp13_, _tmp14_);
-#line 1076 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	query_info = _tmp15_;
-#line 1077 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1083 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp16_ = self->priv->query_info_queue;
-#line 1077 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1083 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp17_ = query_info;
-#line 1077 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1083 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_queue_offer (_tmp16_, _tmp17_);
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp18_ = event;
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_tmp18_) {
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_CREATED:
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-#line 5431 "DirectoryMonitor.c"
+#line 5463 "DirectoryMonitor.c"
 		{
 			GFile* _tmp19_ = NULL;
 			GCancellable* _tmp20_ = NULL;
 			DirectoryMonitorQueryInfoQueueElement* _tmp21_ = NULL;
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp19_ = file;
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp20_ = self->priv->cancellable;
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp21_ = query_info;
-#line 1082 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1088 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_file_query_info_async (_tmp19_, DIRECTORY_MONITOR_SUPPLIED_ATTRIBUTES, DIRECTORY_MONITOR_UNKNOWN_INFO_FLAGS, DIRECTORY_MONITOR_DEFAULT_PRIORITY, _tmp20_, _directory_monitor_query_info_queue_element_on_completed_gasync_ready_callback, directory_monitor_query_info_queue_element_ref (_tmp21_));
-#line 1084 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1090 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 5446 "DirectoryMonitor.c"
+#line 5478 "DirectoryMonitor.c"
 		}
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_DELETED:
-#line 5450 "DirectoryMonitor.c"
+#line 5482 "DirectoryMonitor.c"
 		{
 			guint _tmp22_ = 0U;
-#line 1090 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1096 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp22_ = self->priv->delete_timer_id;
-#line 1090 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1096 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp22_ == ((guint) 0)) {
-#line 5457 "DirectoryMonitor.c"
+#line 5489 "DirectoryMonitor.c"
 				guint _tmp23_ = 0U;
-#line 1091 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1097 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp23_ = g_timeout_add_full (G_PRIORITY_DEFAULT, DIRECTORY_MONITOR_DELETED_EXPIRATION_MSEC / 2, _directory_monitor_check_for_expired_delete_events_gsource_func, g_object_ref (self), g_object_unref);
-#line 1091 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1097 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				self->priv->delete_timer_id = _tmp23_;
-#line 5463 "DirectoryMonitor.c"
+#line 5495 "DirectoryMonitor.c"
 			}
-#line 1092 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1098 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 5467 "DirectoryMonitor.c"
+#line 5499 "DirectoryMonitor.c"
 		}
-#line 1079 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1085 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_MOVED:
-#line 5471 "DirectoryMonitor.c"
+#line 5503 "DirectoryMonitor.c"
 		{
 			GFile* _tmp24_ = NULL;
-#line 1097 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1103 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp24_ = other_file;
-#line 1097 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1103 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp24_ != NULL) {
-#line 5478 "DirectoryMonitor.c"
+#line 5510 "DirectoryMonitor.c"
 				GFile* _tmp25_ = NULL;
 				GCancellable* _tmp26_ = NULL;
 				DirectoryMonitorQueryInfoQueueElement* _tmp27_ = NULL;
-#line 1098 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1104 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp25_ = other_file;
-#line 1098 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1104 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp26_ = self->priv->cancellable;
-#line 1098 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1104 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp27_ = query_info;
-#line 1098 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1104 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				g_file_query_info_async (_tmp25_, DIRECTORY_MONITOR_SUPPLIED_ATTRIBUTES, DIRECTORY_MONITOR_UNKNOWN_INFO_FLAGS, DIRECTORY_MONITOR_DEFAULT_PRIORITY, _tmp26_, _directory_monitor_query_info_queue_element_on_completed_gasync_ready_callback, directory_monitor_query_info_queue_element_ref (_tmp27_));
-#line 5490 "DirectoryMonitor.c"
+#line 5522 "DirectoryMonitor.c"
 			} else {
 				GeeQueue* _tmp28_ = NULL;
 				DirectoryMonitorQueryInfoQueueElement* _tmp29_ = NULL;
-#line 1101 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				g_warning ("DirectoryMonitor.vala:1101: Unable to process MOVED event: no other_fi" \
+#line 1107 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				g_warning ("DirectoryMonitor.vala:1107: Unable to process MOVED event: no other_fi" \
 "le");
-#line 1102 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1108 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp28_ = self->priv->query_info_queue;
-#line 1102 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1108 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp29_ = query_info;
-#line 1102 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1108 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				gee_collection_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp28_, GEE_TYPE_COLLECTION, GeeCollection), _tmp29_);
-#line 5502 "DirectoryMonitor.c"
+#line 5534 "DirectoryMonitor.c"
 			}
-#line 1104 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 5506 "DirectoryMonitor.c"
+#line 5538 "DirectoryMonitor.c"
 		}
 		default:
 		{
 			DirectoryMonitorQueryInfoQueueElement* _tmp30_ = NULL;
 			DirectoryMonitorQueryInfoQueueElement* _tmp31_ = NULL;
-#line 1108 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1114 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp30_ = query_info;
-#line 1108 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1114 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp30_->completed = TRUE;
-#line 1109 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1115 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp31_ = query_info;
-#line 1109 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1115 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_process_query_queue (self, _tmp31_);
-#line 1110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1116 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 5522 "DirectoryMonitor.c"
+#line 5554 "DirectoryMonitor.c"
 		}
 	}
-#line 1065 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1071 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_directory_monitor_query_info_queue_element_unref0 (query_info);
-#line 1065 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1071 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp0_);
-#line 5529 "DirectoryMonitor.c"
+#line 5561 "DirectoryMonitor.c"
 }
 
 
@@ -5538,88 +5570,88 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	DirectoryMonitorQueryInfoQueueElement* _tmp2_ = NULL;
-#line 1114 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 1114 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail ((query_info == NULL) || DIRECTORY_MONITOR_IS_QUERY_INFO_QUEUE_ELEMENT (query_info));
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = query_info;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_ != NULL) {
-#line 5545 "DirectoryMonitor.c"
+#line 5577 "DirectoryMonitor.c"
 		DirectoryMonitorQueryInfoQueueElement* _tmp3_ = NULL;
 		GFileInfo* _tmp4_ = NULL;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = query_info;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = _tmp3_->info;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = _tmp4_ != NULL;
-#line 5554 "DirectoryMonitor.c"
+#line 5586 "DirectoryMonitor.c"
 	} else {
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = FALSE;
-#line 5558 "DirectoryMonitor.c"
+#line 5590 "DirectoryMonitor.c"
 	}
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp1_) {
-#line 5562 "DirectoryMonitor.c"
+#line 5594 "DirectoryMonitor.c"
 		DirectoryMonitorQueryInfoQueueElement* _tmp5_ = NULL;
 		GFileMonitorEvent _tmp6_ = 0;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = query_info;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = _tmp5_->event;
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = _tmp6_ == G_FILE_MONITOR_EVENT_CREATED;
-#line 5571 "DirectoryMonitor.c"
+#line 5603 "DirectoryMonitor.c"
 	} else {
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = FALSE;
-#line 5575 "DirectoryMonitor.c"
+#line 5607 "DirectoryMonitor.c"
 	}
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp0_) {
-#line 5579 "DirectoryMonitor.c"
+#line 5611 "DirectoryMonitor.c"
 		GFile* match = NULL;
 		DirectoryMonitorFileInfoMap* _tmp7_ = NULL;
 		DirectoryMonitorQueryInfoQueueElement* _tmp8_ = NULL;
 		GFileInfo* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFile* _tmp11_ = NULL;
-#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = self->priv->files;
-#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = query_info;
-#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = _tmp8_->info;
-#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = directory_monitor_file_info_map_find_match (_tmp7_, _tmp9_);
-#line 1120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		match = _tmp10_;
-#line 1121 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1127 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = match;
-#line 1121 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1127 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (_tmp11_ != NULL) {
-#line 5600 "DirectoryMonitor.c"
+#line 5632 "DirectoryMonitor.c"
 			gboolean matched = FALSE;
 			gboolean _tmp48_ = FALSE;
-#line 1122 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			matched = FALSE;
-#line 5605 "DirectoryMonitor.c"
+#line 5637 "DirectoryMonitor.c"
 			{
 				GeeIterator* _enqueued_it = NULL;
 				GeeQueue* _tmp12_ = NULL;
 				GeeIterator* _tmp13_ = NULL;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp12_ = self->priv->query_info_queue;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp13_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp12_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_enqueued_it = _tmp13_;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				while (TRUE) {
-#line 5618 "DirectoryMonitor.c"
+#line 5650 "DirectoryMonitor.c"
 					GeeIterator* _tmp14_ = NULL;
 					gboolean _tmp15_ = FALSE;
 					DirectoryMonitorQueryInfoQueueElement* enqueued = NULL;
@@ -5649,171 +5681,171 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 					GFileInfo* _tmp45_ = NULL;
 					GFileInfo* _tmp46_ = NULL;
 					DirectoryMonitorQueryInfoQueueElement* _tmp47_ = NULL;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp14_ = _enqueued_it;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp15_ = gee_iterator_next (_tmp14_);
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					if (!_tmp15_) {
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						break;
-#line 5656 "DirectoryMonitor.c"
+#line 5688 "DirectoryMonitor.c"
 					}
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp16_ = _enqueued_it;
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp17_ = gee_iterator_get (_tmp16_);
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					enqueued = (DirectoryMonitorQueryInfoQueueElement*) _tmp17_;
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp20_ = enqueued;
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp21_ = _tmp20_->event;
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					if (_tmp21_ != G_FILE_MONITOR_EVENT_DELETED) {
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp19_ = TRUE;
-#line 5672 "DirectoryMonitor.c"
+#line 5704 "DirectoryMonitor.c"
 					} else {
 						DirectoryMonitorQueryInfoQueueElement* _tmp22_ = NULL;
 						gboolean _tmp23_ = FALSE;
-#line 1125 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp22_ = enqueued;
-#line 1125 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp23_ = _tmp22_->completed;
-#line 1125 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp19_ = _tmp23_;
-#line 5682 "DirectoryMonitor.c"
+#line 5714 "DirectoryMonitor.c"
 					}
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					if (_tmp19_) {
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp18_ = TRUE;
-#line 5688 "DirectoryMonitor.c"
+#line 5720 "DirectoryMonitor.c"
 					} else {
 						GFile* _tmp24_ = NULL;
 						DirectoryMonitorQueryInfoQueueElement* _tmp25_ = NULL;
 						GFile* _tmp26_ = NULL;
 						gboolean _tmp27_ = FALSE;
-#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp24_ = match;
-#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp25_ = enqueued;
-#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp26_ = _tmp25_->file;
-#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp27_ = g_file_equal (_tmp24_, _tmp26_);
-#line 1126 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp18_ = !_tmp27_;
-#line 5704 "DirectoryMonitor.c"
+#line 5736 "DirectoryMonitor.c"
 					}
-#line 1124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					if (_tmp18_) {
-#line 1127 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_directory_monitor_query_info_queue_element_unref0 (enqueued);
-#line 1127 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						continue;
-#line 5712 "DirectoryMonitor.c"
+#line 5744 "DirectoryMonitor.c"
 					}
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp28_ = query_info;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp29_ = _tmp28_->file;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp30_ = g_file_get_path (_tmp29_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp31_ = _tmp30_;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp32_ = enqueued;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp33_ = _tmp32_->file;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp34_ = g_file_get_path (_tmp33_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp35_ = _tmp34_;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp36_ = g_strdup_printf ("Matching CREATED %s to DELETED %s for MOVED", _tmp31_, _tmp35_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp37_ = _tmp36_;
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_mdbg (_tmp37_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_free0 (_tmp37_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_free0 (_tmp35_);
-#line 1130 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_free0 (_tmp31_);
-#line 1133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1139 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp38_ = enqueued;
-#line 1133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1139 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp38_->event = G_FILE_MONITOR_EVENT_MOVED;
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp39_ = enqueued;
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp40_ = query_info;
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp41_ = _tmp40_->file;
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp42_ = _g_object_ref0 (_tmp41_);
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_tmp39_->other_file);
-#line 1134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp39_->other_file = _tmp42_;
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp43_ = enqueued;
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp44_ = query_info;
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp45_ = _tmp44_->info;
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp46_ = _g_object_ref0 (_tmp45_);
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (_tmp43_->info);
-#line 1135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp43_->info = _tmp46_;
-#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp47_ = enqueued;
-#line 1136 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp47_->completed = TRUE;
-#line 1138 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					matched = TRUE;
-#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_directory_monitor_query_info_queue_element_unref0 (enqueued);
-#line 1140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 5780 "DirectoryMonitor.c"
+#line 5812 "DirectoryMonitor.c"
 				}
-#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_enqueued_it);
-#line 5784 "DirectoryMonitor.c"
+#line 5816 "DirectoryMonitor.c"
 			}
-#line 1143 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp48_ = matched;
-#line 1143 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp48_) {
-#line 5790 "DirectoryMonitor.c"
+#line 5822 "DirectoryMonitor.c"
 				GeeQueue* _tmp49_ = NULL;
 				DirectoryMonitorQueryInfoQueueElement* _tmp50_ = NULL;
-#line 1144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1150 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp49_ = self->priv->query_info_queue;
-#line 1144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1150 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp50_ = query_info;
-#line 1144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1150 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				gee_collection_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, GEE_TYPE_COLLECTION, GeeCollection), _tmp50_);
-#line 5799 "DirectoryMonitor.c"
+#line 5831 "DirectoryMonitor.c"
 			}
 		}
-#line 1117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1123 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (match);
-#line 5804 "DirectoryMonitor.c"
+#line 5836 "DirectoryMonitor.c"
 	}
 	{
 		gboolean _tmp51_ = FALSE;
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp51_ = TRUE;
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 5812 "DirectoryMonitor.c"
+#line 5844 "DirectoryMonitor.c"
 			DirectoryMonitorQueryInfoQueueElement* next = NULL;
 			GeeQueue* _tmp52_ = NULL;
 			gpointer _tmp53_ = NULL;
@@ -5851,91 +5883,91 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 			GFileInfo* _tmp123_ = NULL;
 			DirectoryMonitorQueryInfoQueueElement* _tmp124_ = NULL;
 			GFileMonitorEvent _tmp125_ = 0;
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp51_) {
-#line 5852 "DirectoryMonitor.c"
+#line 5884 "DirectoryMonitor.c"
 			}
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp51_ = FALSE;
-#line 1151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp52_ = self->priv->query_info_queue;
-#line 1151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp53_ = gee_queue_peek (_tmp52_);
-#line 1151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			next = (DirectoryMonitorQueryInfoQueueElement*) _tmp53_;
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp55_ = next;
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp55_ == NULL) {
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp54_ = TRUE;
-#line 5868 "DirectoryMonitor.c"
+#line 5900 "DirectoryMonitor.c"
 			} else {
 				DirectoryMonitorQueryInfoQueueElement* _tmp56_ = NULL;
 				gboolean _tmp57_ = FALSE;
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp56_ = next;
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp57_ = _tmp56_->completed;
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp54_ = !_tmp57_;
-#line 5878 "DirectoryMonitor.c"
+#line 5910 "DirectoryMonitor.c"
 			}
-#line 1152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp54_) {
-#line 1153 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (next);
-#line 1153 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 5886 "DirectoryMonitor.c"
+#line 5918 "DirectoryMonitor.c"
 			}
-#line 1156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp58_ = self->priv->query_info_queue;
-#line 1156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp59_ = gee_queue_poll (_tmp58_);
-#line 1156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			n = (DirectoryMonitorQueryInfoQueueElement*) _tmp59_;
-#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp60_ = next;
-#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp61_ = n;
-#line 1157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp60_ == _tmp61_, "next == n");
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp62_ = next;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp63_ = _tmp62_->position;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp64_ = next;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp65_ = _tmp64_->event;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp66_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp65_);
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp67_ = next;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp68_ = _tmp67_->file;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp69_ = g_file_get_path (_tmp68_);
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp70_ = _tmp69_;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp71_ = g_strdup_printf ("Completed info query %u for %s on %s", _tmp63_, (_tmp66_ != NULL) ? _tmp66_->value_name : NULL, _tmp70_);
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp72_ = _tmp71_;
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_mdbg (_tmp72_);
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_tmp72_);
-#line 1159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_tmp70_);
-#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp73_ = next;
-#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp74_ = _tmp73_->err;
-#line 1162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp74_ != NULL) {
-#line 5934 "DirectoryMonitor.c"
+#line 5966 "DirectoryMonitor.c"
 				DirectoryMonitorQueryInfoQueueElement* _tmp75_ = NULL;
 				GFile* _tmp76_ = NULL;
 				gchar* _tmp77_ = NULL;
@@ -5948,76 +5980,76 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 				const gchar* _tmp84_ = NULL;
 				gchar* _tmp85_ = NULL;
 				gchar* _tmp86_ = NULL;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp75_ = next;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp76_ = _tmp75_->file;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp77_ = g_file_get_path (_tmp76_);
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp78_ = _tmp77_;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp79_ = next;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp80_ = _tmp79_->event;
-#line 1164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp81_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp80_);
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp82_ = next;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp83_ = _tmp82_->err;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp84_ = _tmp83_->message;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp85_ = g_strdup_printf ("Unable to retrieve file information for %s, dropping %s: %s", _tmp78_, (_tmp81_ != NULL) ? _tmp81_->value_name : NULL, _tmp84_);
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp86_ = _tmp85_;
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_mdbg (_tmp86_);
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp86_);
-#line 1163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp78_);
-#line 1166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1172 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (n);
-#line 1166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1172 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (next);
-#line 1166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1172 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 5983 "DirectoryMonitor.c"
+#line 6015 "DirectoryMonitor.c"
 			}
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp88_ = next;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp89_ = _tmp88_->info;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp89_ != NULL) {
-#line 5991 "DirectoryMonitor.c"
+#line 6023 "DirectoryMonitor.c"
 				DirectoryMonitorQueryInfoQueueElement* _tmp90_ = NULL;
 				GFileInfo* _tmp91_ = NULL;
 				gchar* _tmp92_ = NULL;
 				gchar* _tmp93_ = NULL;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp90_ = next;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp91_ = _tmp90_->info;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp92_ = get_file_info_id (_tmp91_);
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp93_ = _tmp92_;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp87_ = _tmp93_ == NULL;
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp93_);
-#line 6008 "DirectoryMonitor.c"
+#line 6040 "DirectoryMonitor.c"
 			} else {
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp87_ = FALSE;
-#line 6012 "DirectoryMonitor.c"
+#line 6044 "DirectoryMonitor.c"
 			}
-#line 1170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp87_) {
-#line 6016 "DirectoryMonitor.c"
+#line 6048 "DirectoryMonitor.c"
 				DirectoryMonitorQueryInfoQueueElement* _tmp94_ = NULL;
 				GFile* _tmp95_ = NULL;
 				gchar* _tmp96_ = NULL;
@@ -6027,65 +6059,65 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 				GEnumValue* _tmp100_;
 				gchar* _tmp101_ = NULL;
 				gchar* _tmp102_ = NULL;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp94_ = next;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp95_ = _tmp94_->file;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp96_ = g_file_get_path (_tmp95_);
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp97_ = _tmp96_;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp98_ = next;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp99_ = _tmp98_->event;
-#line 1172 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp100_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp99_);
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp101_ = g_strdup_printf ("Unable to retrieve file ID for %s, dropping %s", _tmp97_, (_tmp100_ != NULL) ? _tmp100_->value_name : NULL);
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp102_ = _tmp101_;
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_mdbg (_tmp102_);
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp102_);
-#line 1171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp97_);
-#line 1174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (n);
-#line 1174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (next);
-#line 1174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 6056 "DirectoryMonitor.c"
+#line 6088 "DirectoryMonitor.c"
 			}
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp104_ = next;
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp105_ = _tmp104_->info;
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp105_ != NULL) {
-#line 6064 "DirectoryMonitor.c"
+#line 6096 "DirectoryMonitor.c"
 				DirectoryMonitorQueryInfoQueueElement* _tmp106_ = NULL;
 				GFileInfo* _tmp107_ = NULL;
 				gboolean _tmp108_ = FALSE;
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp106_ = next;
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp107_ = _tmp106_->info;
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp108_ = directory_monitor_is_file_symlink_supported (_tmp107_);
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp103_ = !_tmp108_;
-#line 6076 "DirectoryMonitor.c"
+#line 6108 "DirectoryMonitor.c"
 			} else {
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp103_ = FALSE;
-#line 6080 "DirectoryMonitor.c"
+#line 6112 "DirectoryMonitor.c"
 			}
-#line 1178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp103_) {
-#line 6084 "DirectoryMonitor.c"
+#line 6116 "DirectoryMonitor.c"
 				DirectoryMonitorQueryInfoQueueElement* _tmp109_ = NULL;
 				GFile* _tmp110_ = NULL;
 				gchar* _tmp111_ = NULL;
@@ -6095,61 +6127,61 @@ static void directory_monitor_process_query_queue (DirectoryMonitor* self, Direc
 				GEnumValue* _tmp115_;
 				gchar* _tmp116_ = NULL;
 				gchar* _tmp117_ = NULL;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp109_ = next;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp110_ = _tmp109_->file;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp111_ = g_file_get_path (_tmp110_);
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp112_ = _tmp111_;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp113_ = next;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp114_ = _tmp113_->event;
-#line 1180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1186 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp115_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp114_);
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp116_ = g_strdup_printf ("No symlink support for %s, dropping %s", _tmp112_, (_tmp115_ != NULL) ? _tmp115_->value_name : NULL);
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp117_ = _tmp116_;
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_mdbg (_tmp117_);
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp117_);
-#line 1179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp112_);
-#line 1182 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (n);
-#line 1182 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (next);
-#line 1182 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 6124 "DirectoryMonitor.c"
+#line 6156 "DirectoryMonitor.c"
 			}
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp118_ = next;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp119_ = _tmp118_->file;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp120_ = next;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp121_ = _tmp120_->other_file;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp122_ = next;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp123_ = _tmp122_->info;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp124_ = next;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp125_ = _tmp124_->event;
-#line 1185 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_on_monitor_notification_ready (self, _tmp119_, _tmp121_, _tmp123_, _tmp125_);
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_directory_monitor_query_info_queue_element_unref0 (n);
-#line 1149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_directory_monitor_query_info_queue_element_unref0 (next);
-#line 6148 "DirectoryMonitor.c"
+#line 6180 "DirectoryMonitor.c"
 		}
 	}
 }
@@ -6166,143 +6198,143 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 	gchar* _tmp10_ = NULL;
 	gchar* _tmp11_ = NULL;
 	GFileMonitorEvent _tmp12_ = 0;
-#line 1189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (IS_DIRECTORY_MONITOR (self));
-#line 1189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 1189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail ((other_file == NULL) || G_IS_FILE (other_file));
-#line 1189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail ((info == NULL) || G_IS_FILE_INFO (info));
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = other_file;
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp1_ != NULL) {
-#line 6177 "DirectoryMonitor.c"
+#line 6209 "DirectoryMonitor.c"
 		GFile* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = other_file;
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = g_file_get_path (_tmp2_);
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp0_);
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = _tmp3_;
-#line 6188 "DirectoryMonitor.c"
+#line 6220 "DirectoryMonitor.c"
 	} else {
 		gchar* _tmp4_ = NULL;
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = g_strdup ("(null)");
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp0_);
-#line 1192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = _tmp4_;
-#line 6197 "DirectoryMonitor.c"
+#line 6229 "DirectoryMonitor.c"
 	}
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = event;
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp5_);
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = file;
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = g_file_get_path (_tmp7_);
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = _tmp8_;
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = g_strdup_printf ("READY %s: file=%s other_file=%s", (_tmp6_ != NULL) ? _tmp6_->value_name : NULL, _tmp9_, _tmp0_);
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = _tmp10_;
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg (_tmp11_);
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp11_);
-#line 1191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1197 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp9_);
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = event;
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_tmp12_) {
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_CREATED:
-#line 6225 "DirectoryMonitor.c"
+#line 6257 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp13_ = NULL;
 			DirectoryMonitorFType ftype = 0;
 			GFileInfo* _tmp14_ = NULL;
 			DirectoryMonitorFType _tmp15_ = 0;
 			DirectoryMonitorFType _tmp16_ = 0;
-#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1204 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp13_ = info;
-#line 1198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1204 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp13_ != NULL, "info != null");
-#line 1200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1206 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp14_ = info;
-#line 1200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1206 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp15_ = directory_monitor_get_ftype (_tmp14_);
-#line 1200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1206 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp15_;
-#line 1201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp16_ = ftype;
-#line 1201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp16_) {
-#line 1201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6248 "DirectoryMonitor.c"
+#line 6280 "DirectoryMonitor.c"
 				{
 					GFile* _tmp17_ = NULL;
 					GFileInfo* _tmp18_ = NULL;
-#line 1203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1209 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp17_ = file;
-#line 1203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1209 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp18_ = info;
-#line 1203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1209 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_file_created (self, _tmp17_, _tmp18_);
-#line 1204 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1210 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6260 "DirectoryMonitor.c"
+#line 6292 "DirectoryMonitor.c"
 				}
-#line 1201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6264 "DirectoryMonitor.c"
+#line 6296 "DirectoryMonitor.c"
 				{
 					gint _tmp19_ = 0;
 					GFile* _tmp20_ = NULL;
 					GFileInfo* _tmp21_ = NULL;
-#line 1211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp19_ = self->priv->outstanding_exploration_dirs;
-#line 1211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					self->priv->outstanding_exploration_dirs = _tmp19_ + 1;
-#line 1212 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp20_ = file;
-#line 1212 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp21_ = info;
-#line 1212 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_explore_async (self, _tmp20_, _tmp21_, FALSE, NULL, NULL);
-#line 1213 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6281 "DirectoryMonitor.c"
+#line 6313 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp22_ = 0;
-#line 1216 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1222 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp22_ = ftype;
-#line 1216 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1222 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp22_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6292 "DirectoryMonitor.c"
+#line 6324 "DirectoryMonitor.c"
 				}
 			}
-#line 1219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1225 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6297 "DirectoryMonitor.c"
+#line 6329 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_CHANGED:
-#line 6301 "DirectoryMonitor.c"
+#line 6333 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp23_ = NULL;
 			GFileInfo* local_info = NULL;
@@ -6313,176 +6345,176 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 			GFileInfo* _tmp32_ = NULL;
 			DirectoryMonitorFType _tmp33_ = 0;
 			DirectoryMonitorFType _tmp34_ = 0;
-#line 1223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1229 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp23_ = info;
-#line 1223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1229 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp23_ == NULL, "info == null");
-#line 1225 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp24_ = file;
-#line 1225 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp25_ = directory_monitor_get_file_info (self, _tmp24_);
-#line 1225 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			local_info = _tmp25_;
-#line 1226 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp26_ = local_info;
-#line 1226 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp26_ == NULL) {
-#line 6326 "DirectoryMonitor.c"
+#line 6358 "DirectoryMonitor.c"
 				GFile* _tmp27_ = NULL;
 				gchar* _tmp28_ = NULL;
 				gchar* _tmp29_ = NULL;
 				gchar* _tmp30_ = NULL;
 				gchar* _tmp31_ = NULL;
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp27_ = file;
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp28_ = g_file_get_path (_tmp27_);
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp29_ = _tmp28_;
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp30_ = g_strdup_printf ("Changed event for unknown file %s", _tmp29_);
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp31_ = _tmp30_;
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				directory_monitor_mdbg (_tmp31_);
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp31_);
-#line 1227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp29_);
-#line 1229 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1235 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (local_info);
-#line 1229 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1235 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 6352 "DirectoryMonitor.c"
+#line 6384 "DirectoryMonitor.c"
 			}
-#line 1232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp32_ = local_info;
-#line 1232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp33_ = directory_monitor_get_ftype (_tmp32_);
-#line 1232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp33_;
-#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp34_ = ftype;
-#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp34_) {
-#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6366 "DirectoryMonitor.c"
+#line 6398 "DirectoryMonitor.c"
 				{
 					GFile* _tmp35_ = NULL;
-#line 1235 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp35_ = file;
-#line 1235 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_notify_file_altered (self, _tmp35_);
-#line 1236 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1242 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6375 "DirectoryMonitor.c"
+#line 6407 "DirectoryMonitor.c"
 				}
-#line 1233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6379 "DirectoryMonitor.c"
+#line 6411 "DirectoryMonitor.c"
 				{
 					GFile* _tmp36_ = NULL;
-#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp36_ = file;
-#line 1239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_notify_directory_altered (self, _tmp36_);
-#line 1240 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6388 "DirectoryMonitor.c"
+#line 6420 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp37_ = 0;
-#line 1243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp37_ = ftype;
-#line 1243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp37_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1244 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6399 "DirectoryMonitor.c"
+#line 6431 "DirectoryMonitor.c"
 				}
 			}
-#line 1246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (local_info);
-#line 1246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6406 "DirectoryMonitor.c"
+#line 6438 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
-#line 6410 "DirectoryMonitor.c"
+#line 6442 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp38_ = NULL;
 			DirectoryMonitorFType ftype = 0;
 			GFileInfo* _tmp39_ = NULL;
 			DirectoryMonitorFType _tmp40_ = 0;
 			DirectoryMonitorFType _tmp41_ = 0;
-#line 1249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp38_ = info;
-#line 1249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp38_ != NULL, "info != null");
-#line 1251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1257 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp39_ = info;
-#line 1251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1257 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp40_ = directory_monitor_get_ftype (_tmp39_);
-#line 1251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1257 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp40_;
-#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp41_ = ftype;
-#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp41_) {
-#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6433 "DirectoryMonitor.c"
+#line 6465 "DirectoryMonitor.c"
 				{
 					GFile* _tmp42_ = NULL;
 					GFileInfo* _tmp43_ = NULL;
-#line 1254 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1260 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp42_ = file;
-#line 1254 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1260 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp43_ = info;
-#line 1254 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1260 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_file_alteration_completed (self, _tmp42_, _tmp43_);
-#line 1255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6445 "DirectoryMonitor.c"
+#line 6477 "DirectoryMonitor.c"
 				}
-#line 1252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6449 "DirectoryMonitor.c"
+#line 6481 "DirectoryMonitor.c"
 				{
 					GFile* _tmp44_ = NULL;
 					GFileInfo* _tmp45_ = NULL;
-#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1264 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp44_ = file;
-#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1264 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp45_ = info;
-#line 1258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1264 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_directory_alteration_completed (self, _tmp44_, _tmp45_);
-#line 1259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6461 "DirectoryMonitor.c"
+#line 6493 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp46_ = 0;
-#line 1262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1268 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp46_ = ftype;
-#line 1262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1268 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp46_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6472 "DirectoryMonitor.c"
+#line 6504 "DirectoryMonitor.c"
 				}
 			}
-#line 1265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6477 "DirectoryMonitor.c"
+#line 6509 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_MOVED:
-#line 6481 "DirectoryMonitor.c"
+#line 6513 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp47_ = NULL;
 			GFile* _tmp48_ = NULL;
@@ -6490,46 +6522,46 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 			GFileInfo* _tmp49_ = NULL;
 			DirectoryMonitorFType _tmp50_ = 0;
 			DirectoryMonitorFType _tmp51_ = 0;
-#line 1268 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp47_ = info;
-#line 1268 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp47_ != NULL, "info != null");
-#line 1269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp48_ = other_file;
-#line 1269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp48_ != NULL, "other_file != null");
-#line 1273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp49_ = info;
-#line 1273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp50_ = directory_monitor_get_ftype (_tmp49_);
-#line 1273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp50_;
-#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp51_ = ftype;
-#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp51_) {
-#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6509 "DirectoryMonitor.c"
+#line 6541 "DirectoryMonitor.c"
 				{
 					GFile* _tmp52_ = NULL;
 					GFile* _tmp53_ = NULL;
 					GFileInfo* _tmp54_ = NULL;
-#line 1276 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp52_ = file;
-#line 1276 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp53_ = other_file;
-#line 1276 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp54_ = info;
-#line 1276 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_file_moved (self, _tmp52_, _tmp53_, _tmp54_);
-#line 1277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6524 "DirectoryMonitor.c"
+#line 6556 "DirectoryMonitor.c"
 				}
-#line 1274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6528 "DirectoryMonitor.c"
+#line 6560 "DirectoryMonitor.c"
 				{
 					GFileInfo* old_dir_info = NULL;
 					DirectoryMonitorFileInfoMap* _tmp55_ = NULL;
@@ -6540,73 +6572,73 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 					GFileInfo* _tmp63_ = NULL;
 					GFile* _tmp64_ = NULL;
 					GFileInfo* _tmp65_ = NULL;
-#line 1281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp55_ = self->priv->files;
-#line 1281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp56_ = file;
-#line 1281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp57_ = directory_monitor_file_info_map_get_info (_tmp55_, _tmp56_);
-#line 1281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					old_dir_info = _tmp57_;
-#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp58_ = old_dir_info;
-#line 1282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					if (_tmp58_ == NULL) {
-#line 6551 "DirectoryMonitor.c"
+#line 6583 "DirectoryMonitor.c"
 						GFile* _tmp59_ = NULL;
 						gchar* _tmp60_ = NULL;
 						gchar* _tmp61_ = NULL;
-#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp59_ = file;
-#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp60_ = g_file_get_path (_tmp59_);
-#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_tmp61_ = _tmp60_;
-#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-						g_warning ("DirectoryMonitor.vala:1283: Directory moved event for unknown file %s", _tmp61_);
-#line 1283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+						g_warning ("DirectoryMonitor.vala:1289: Directory moved event for unknown file %s", _tmp61_);
+#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_g_free0 (_tmp61_);
-#line 1285 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1291 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						_g_object_unref0 (old_dir_info);
-#line 1285 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1291 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 						break;
-#line 6569 "DirectoryMonitor.c"
+#line 6601 "DirectoryMonitor.c"
 					}
-#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp62_ = file;
-#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp63_ = old_dir_info;
-#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp64_ = other_file;
-#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp65_ = info;
-#line 1288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_directory_moved (self, _tmp62_, _tmp63_, _tmp64_, _tmp65_);
-#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_g_object_unref0 (old_dir_info);
-#line 1289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6585 "DirectoryMonitor.c"
+#line 6617 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp66_ = 0;
-#line 1292 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp66_ = ftype;
-#line 1292 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp66_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6596 "DirectoryMonitor.c"
+#line 6628 "DirectoryMonitor.c"
 				}
 			}
-#line 1295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1301 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6601 "DirectoryMonitor.c"
+#line 6633 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_DELETED:
-#line 6605 "DirectoryMonitor.c"
+#line 6637 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp67_ = NULL;
 			GFileInfo* local_info = NULL;
@@ -6617,97 +6649,97 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 			GFileInfo* _tmp74_ = NULL;
 			DirectoryMonitorFType _tmp75_ = 0;
 			DirectoryMonitorFType _tmp76_ = 0;
-#line 1298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp67_ = info;
-#line 1298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp67_ == NULL, "info == null");
-#line 1300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp68_ = file;
-#line 1300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp69_ = directory_monitor_get_file_info (self, _tmp68_);
-#line 1300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			local_info = _tmp69_;
-#line 1301 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1307 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp70_ = local_info;
-#line 1301 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1307 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp70_ == NULL) {
-#line 6630 "DirectoryMonitor.c"
+#line 6662 "DirectoryMonitor.c"
 				GFile* _tmp71_ = NULL;
 				gchar* _tmp72_ = NULL;
 				gchar* _tmp73_ = NULL;
-#line 1302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp71_ = file;
-#line 1302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp72_ = g_file_get_path (_tmp71_);
-#line 1302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp73_ = _tmp72_;
-#line 1302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				g_warning ("DirectoryMonitor.vala:1302: Deleted event for unknown file %s", _tmp73_);
-#line 1302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				g_warning ("DirectoryMonitor.vala:1308: Deleted event for unknown file %s", _tmp73_);
+#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp73_);
-#line 1304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1310 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (local_info);
-#line 1304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1310 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 6648 "DirectoryMonitor.c"
+#line 6680 "DirectoryMonitor.c"
 			}
-#line 1307 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp74_ = local_info;
-#line 1307 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp75_ = directory_monitor_get_ftype (_tmp74_);
-#line 1307 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp75_;
-#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp76_ = ftype;
-#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp76_) {
-#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6662 "DirectoryMonitor.c"
+#line 6694 "DirectoryMonitor.c"
 				{
 					GFile* _tmp77_ = NULL;
-#line 1310 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp77_ = file;
-#line 1310 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_file_deleted (self, _tmp77_);
-#line 1311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6671 "DirectoryMonitor.c"
+#line 6703 "DirectoryMonitor.c"
 				}
-#line 1308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6675 "DirectoryMonitor.c"
+#line 6707 "DirectoryMonitor.c"
 				{
 					GFile* _tmp78_ = NULL;
-#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp78_ = file;
-#line 1314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_internal_notify_directory_deleted (self, _tmp78_);
-#line 1315 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6684 "DirectoryMonitor.c"
+#line 6716 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp79_ = 0;
-#line 1318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1324 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp79_ = ftype;
-#line 1318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1324 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp79_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1325 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6695 "DirectoryMonitor.c"
+#line 6727 "DirectoryMonitor.c"
 				}
 			}
-#line 1321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (local_info);
-#line 1321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6702 "DirectoryMonitor.c"
+#line 6734 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
-#line 6706 "DirectoryMonitor.c"
+#line 6738 "DirectoryMonitor.c"
 		{
 			GFileInfo* _tmp80_ = NULL;
 			GFileInfo* local_info = NULL;
@@ -6718,123 +6750,123 @@ static void directory_monitor_on_monitor_notification_ready (DirectoryMonitor* s
 			GFileInfo* _tmp87_ = NULL;
 			DirectoryMonitorFType _tmp88_ = 0;
 			DirectoryMonitorFType _tmp89_ = 0;
-#line 1325 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp80_ = info;
-#line 1325 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp80_ == NULL, "info == null");
-#line 1327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1333 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp81_ = file;
-#line 1327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1333 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp82_ = directory_monitor_get_file_info (self, _tmp81_);
-#line 1327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1333 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			local_info = _tmp82_;
-#line 1328 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1334 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp83_ = local_info;
-#line 1328 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1334 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp83_ == NULL) {
-#line 6731 "DirectoryMonitor.c"
+#line 6763 "DirectoryMonitor.c"
 				GFile* _tmp84_ = NULL;
 				gchar* _tmp85_ = NULL;
 				gchar* _tmp86_ = NULL;
-#line 1329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp84_ = file;
-#line 1329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp85_ = g_file_get_path (_tmp84_);
-#line 1329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp86_ = _tmp85_;
-#line 1329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				g_warning ("DirectoryMonitor.vala:1329: Attribute changed event for unknown file %" \
+#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				g_warning ("DirectoryMonitor.vala:1335: Attribute changed event for unknown file %" \
 "s", _tmp86_);
-#line 1329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (_tmp86_);
-#line 1331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (local_info);
-#line 1331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 6749 "DirectoryMonitor.c"
+#line 6781 "DirectoryMonitor.c"
 			}
-#line 1334 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp87_ = local_info;
-#line 1334 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp88_ = directory_monitor_get_ftype (_tmp87_);
-#line 1334 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp88_;
-#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp89_ = ftype;
-#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp89_) {
-#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 6763 "DirectoryMonitor.c"
+#line 6795 "DirectoryMonitor.c"
 				{
 					GFile* _tmp90_ = NULL;
-#line 1337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp90_ = file;
-#line 1337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_notify_file_attributes_altered (self, _tmp90_);
-#line 1338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6772 "DirectoryMonitor.c"
+#line 6804 "DirectoryMonitor.c"
 				}
-#line 1335 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 6776 "DirectoryMonitor.c"
+#line 6808 "DirectoryMonitor.c"
 				{
 					GFile* _tmp91_ = NULL;
-#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp91_ = file;
-#line 1341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					directory_monitor_notify_directory_attributes_altered (self, _tmp91_);
-#line 1342 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1348 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6785 "DirectoryMonitor.c"
+#line 6817 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp92_ = 0;
-#line 1345 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1351 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp92_ = ftype;
-#line 1345 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1351 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp92_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 6796 "DirectoryMonitor.c"
+#line 6828 "DirectoryMonitor.c"
 				}
 			}
-#line 1348 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1354 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (local_info);
-#line 1348 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1354 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6803 "DirectoryMonitor.c"
+#line 6835 "DirectoryMonitor.c"
 		}
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
-#line 1196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case G_FILE_MONITOR_EVENT_UNMOUNTED:
-#line 6809 "DirectoryMonitor.c"
+#line 6841 "DirectoryMonitor.c"
 		{
-#line 1353 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1359 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6813 "DirectoryMonitor.c"
+#line 6845 "DirectoryMonitor.c"
 		}
 		default:
 		{
 			GFileMonitorEvent _tmp93_ = 0;
 			GEnumValue* _tmp94_;
-#line 1356 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1362 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp93_ = event;
-#line 1356 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1362 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp94_ = g_enum_get_value (g_type_class_ref (g_file_monitor_event_get_type ()), _tmp93_);
-#line 1356 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			g_warning ("DirectoryMonitor.vala:1356: Unknown directory monitor event %s", (_tmp94_ != NULL) ? _tmp94_->value_name : NULL);
-#line 1357 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1362 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			g_warning ("DirectoryMonitor.vala:1362: Unknown directory monitor event %s", (_tmp94_ != NULL) ? _tmp94_->value_name : NULL);
+#line 1363 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			break;
-#line 6827 "DirectoryMonitor.c"
+#line 6859 "DirectoryMonitor.c"
 		}
 	}
-#line 1189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_tmp0_);
-#line 6832 "DirectoryMonitor.c"
+#line 6864 "DirectoryMonitor.c"
 }
 
 
@@ -6847,25 +6879,25 @@ static gboolean directory_monitor_is_file_create_move (DirectoryMonitor* self, G
 	GFileInfo* _tmp1_ = NULL;
 	GFile* _tmp2_ = NULL;
 	GFile* _tmp3_ = NULL;
-#line 1363 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 1363 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 1363 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1366 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->parent_moved;
-#line 1366 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = info;
-#line 1366 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = directory_monitor_file_info_map_find_match (_tmp0_, _tmp1_);
-#line 1366 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	match = _tmp2_;
-#line 1367 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = match;
-#line 1367 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp3_ != NULL) {
-#line 6863 "DirectoryMonitor.c"
+#line 6895 "DirectoryMonitor.c"
 		GFile* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
 		DirectoryMonitorFileInfoMap* _tmp6_ = NULL;
@@ -6874,95 +6906,95 @@ static gboolean directory_monitor_is_file_create_move (DirectoryMonitor* self, G
 		DirectoryMonitorFileInfoMap* _tmp9_ = NULL;
 		GFile* _tmp10_ = NULL;
 		GFileInfo* _tmp11_ = NULL;
-#line 1368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = match;
-#line 1368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = _g_object_ref0 (_tmp4_);
-#line 1368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_vala_old_file);
-#line 1368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_old_file = _tmp5_;
-#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = self->priv->parent_moved;
-#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = match;
-#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = directory_monitor_file_info_map_get_info (_tmp6_, _tmp7_);
-#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_vala_old_file_info);
-#line 1369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_old_file_info = _tmp8_;
-#line 1371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = self->priv->parent_moved;
-#line 1371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = match;
-#line 1371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = info;
-#line 1371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_remove (_tmp9_, _tmp10_, _tmp11_);
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = TRUE;
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (match);
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (old_file) {
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			*old_file = _vala_old_file;
-#line 6906 "DirectoryMonitor.c"
+#line 6938 "DirectoryMonitor.c"
 		} else {
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_vala_old_file);
-#line 6910 "DirectoryMonitor.c"
-		}
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (old_file_info) {
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			*old_file_info = _vala_old_file_info;
-#line 6916 "DirectoryMonitor.c"
-		} else {
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_vala_old_file_info);
-#line 6920 "DirectoryMonitor.c"
-		}
-#line 1373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 6924 "DirectoryMonitor.c"
-	}
-#line 1376 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (_vala_old_file);
-#line 1376 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_vala_old_file = NULL;
-#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (_vala_old_file_info);
-#line 1377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_vala_old_file_info = NULL;
-#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	result = FALSE;
-#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (match);
-#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (old_file) {
-#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		*old_file = _vala_old_file;
 #line 6942 "DirectoryMonitor.c"
-	} else {
+		}
 #line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (_vala_old_file);
-#line 6946 "DirectoryMonitor.c"
-	}
+		if (old_file_info) {
 #line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (old_file_info) {
+			*old_file_info = _vala_old_file_info;
+#line 6948 "DirectoryMonitor.c"
+		} else {
 #line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		*old_file_info = _vala_old_file_info;
+			_g_object_unref0 (_vala_old_file_info);
 #line 6952 "DirectoryMonitor.c"
-	} else {
+		}
 #line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (_vala_old_file_info);
+		return result;
 #line 6956 "DirectoryMonitor.c"
 	}
-#line 1379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1382 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (_vala_old_file);
+#line 1382 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_vala_old_file = NULL;
+#line 1383 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (_vala_old_file_info);
+#line 1383 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_vala_old_file_info = NULL;
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	result = FALSE;
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (match);
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (old_file) {
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		*old_file = _vala_old_file;
+#line 6974 "DirectoryMonitor.c"
+	} else {
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (_vala_old_file);
+#line 6978 "DirectoryMonitor.c"
+	}
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (old_file_info) {
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		*old_file_info = _vala_old_file_info;
+#line 6984 "DirectoryMonitor.c"
+	} else {
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (_vala_old_file_info);
+#line 6988 "DirectoryMonitor.c"
+	}
+#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 6960 "DirectoryMonitor.c"
+#line 6992 "DirectoryMonitor.c"
 }
 
 
@@ -6974,30 +7006,30 @@ static gboolean directory_monitor_check_for_expired_delete_events (DirectoryMoni
 	gboolean any_expired = FALSE;
 	gboolean _tmp13_ = FALSE;
 	gboolean _tmp14_ = FALSE;
-#line 1382 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1388 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), FALSE);
-#line 1383 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1389 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = now_ms ();
-#line 1383 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1389 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	expiration = _tmp0_ - DIRECTORY_MONITOR_DELETED_EXPIRATION_MSEC;
-#line 1385 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1391 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	any_deleted = FALSE;
-#line 1386 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1392 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	any_expired = FALSE;
-#line 6982 "DirectoryMonitor.c"
+#line 7014 "DirectoryMonitor.c"
 	{
 		GeeIterator* _element_it = NULL;
 		GeeQueue* _tmp1_ = NULL;
 		GeeIterator* _tmp2_ = NULL;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = self->priv->query_info_queue;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_element_it = _tmp2_;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 6995 "DirectoryMonitor.c"
+#line 7027 "DirectoryMonitor.c"
 			GeeIterator* _tmp3_ = NULL;
 			gboolean _tmp4_ = FALSE;
 			DirectoryMonitorQueryInfoQueueElement* element = NULL;
@@ -7009,85 +7041,85 @@ static gboolean directory_monitor_check_for_expired_delete_events (DirectoryMoni
 			gulong _tmp10_ = 0UL;
 			gulong _tmp11_ = 0UL;
 			DirectoryMonitorQueryInfoQueueElement* _tmp12_ = NULL;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp3_ = _element_it;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp4_ = gee_iterator_next (_tmp3_);
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp4_) {
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 7015 "DirectoryMonitor.c"
+#line 7047 "DirectoryMonitor.c"
 			}
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp5_ = _element_it;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp6_ = gee_iterator_get (_tmp5_);
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			element = (DirectoryMonitorQueryInfoQueueElement*) _tmp6_;
-#line 1388 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp7_ = element;
-#line 1388 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp8_ = _tmp7_->event;
-#line 1388 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp8_ != G_FILE_MONITOR_EVENT_DELETED) {
-#line 1389 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1395 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (element);
-#line 1389 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1395 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 7033 "DirectoryMonitor.c"
+#line 7065 "DirectoryMonitor.c"
 			}
-#line 1391 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1397 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			any_deleted = TRUE;
-#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1399 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp9_ = element;
-#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1399 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp10_ = _tmp9_->time_created_msec;
-#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1399 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp11_ = expiration;
-#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1399 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp10_ > _tmp11_) {
-#line 1394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1400 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_directory_monitor_query_info_queue_element_unref0 (element);
-#line 1394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1400 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 7049 "DirectoryMonitor.c"
+#line 7081 "DirectoryMonitor.c"
 			}
-#line 1397 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1403 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp12_ = element;
-#line 1397 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1403 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp12_->completed = TRUE;
-#line 1398 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1404 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			any_expired = TRUE;
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_directory_monitor_query_info_queue_element_unref0 (element);
-#line 7059 "DirectoryMonitor.c"
+#line 7091 "DirectoryMonitor.c"
 		}
-#line 1387 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1393 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_element_it);
-#line 7063 "DirectoryMonitor.c"
+#line 7095 "DirectoryMonitor.c"
 	}
-#line 1401 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1407 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = any_expired;
-#line 1401 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1407 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp13_) {
-#line 1402 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1408 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_process_query_queue (self, NULL);
-#line 7071 "DirectoryMonitor.c"
+#line 7103 "DirectoryMonitor.c"
 	}
-#line 1404 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1410 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp14_ = any_deleted;
-#line 1404 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1410 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp14_) {
-#line 1405 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1411 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		self->priv->delete_timer_id = (guint) 0;
-#line 7079 "DirectoryMonitor.c"
+#line 7111 "DirectoryMonitor.c"
 	}
-#line 1407 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = any_deleted;
-#line 1407 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 7085 "DirectoryMonitor.c"
+#line 7117 "DirectoryMonitor.c"
 }
 
 
@@ -7096,21 +7128,21 @@ GFileInfo* directory_monitor_get_file_info (DirectoryMonitor* self, GFile* file)
 	DirectoryMonitorFileInfoMap* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
 	GFileInfo* _tmp2_ = NULL;
-#line 1411 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1417 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), NULL);
-#line 1411 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1417 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 1412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 1412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 1412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = directory_monitor_file_info_map_get_info (_tmp0_, _tmp1_);
-#line 1412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp2_;
-#line 1412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 7108 "DirectoryMonitor.c"
+#line 7140 "DirectoryMonitor.c"
 }
 
 
@@ -7118,17 +7150,17 @@ GeeCollection* directory_monitor_get_files (DirectoryMonitor* self) {
 	GeeCollection* result = NULL;
 	DirectoryMonitorFileInfoMap* _tmp0_ = NULL;
 	GeeCollection* _tmp1_ = NULL;
-#line 1417 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1423 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), NULL);
-#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = directory_monitor_file_info_map_get_all (_tmp0_);
-#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp1_;
-#line 1418 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 7126 "DirectoryMonitor.c"
+#line 7158 "DirectoryMonitor.c"
 }
 
 
@@ -7138,23 +7170,23 @@ GFileInfo* directory_monitor_query_file_info (DirectoryMonitor* self, GFile* fil
 	GFile* _tmp1_ = NULL;
 	GCancellable* _tmp2_ = NULL;
 	GFileInfo* _tmp3_ = NULL;
-#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1430 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (IS_DIRECTORY_MONITOR (self), NULL);
-#line 1424 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1430 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->files;
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = self->priv->cancellable;
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_file_info_map_query_info (_tmp0_, _tmp1_, _tmp2_);
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp3_;
-#line 1425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 7152 "DirectoryMonitor.c"
+#line 7184 "DirectoryMonitor.c"
 }
 
 
@@ -7166,75 +7198,75 @@ gboolean directory_monitor_is_file_symlink_supported (GFileInfo* info) {
 	GFileInfo* _tmp2_ = NULL;
 	DirectoryMonitorFType _tmp3_ = 0;
 	DirectoryMonitorFType _tmp4_ = 0;
-#line 1435 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1441 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 1436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = info;
-#line 1436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = g_file_info_get_is_symlink (_tmp0_);
-#line 1436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp1_) {
-#line 1437 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1443 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = TRUE;
-#line 1437 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1443 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 7176 "DirectoryMonitor.c"
+#line 7208 "DirectoryMonitor.c"
 	}
-#line 1439 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 1439 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = directory_monitor_get_ftype (_tmp2_);
-#line 1439 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	ftype = _tmp3_;
-#line 1440 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1446 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = ftype;
-#line 1440 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1446 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	switch (_tmp4_) {
-#line 1440 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1446 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 7190 "DirectoryMonitor.c"
+#line 7222 "DirectoryMonitor.c"
 		{
-#line 1442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1448 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = DIRECTORY_MONITOR_SUPPORT_DIR_SYMLINKS;
-#line 1442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1448 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 7196 "DirectoryMonitor.c"
+#line 7228 "DirectoryMonitor.c"
 		}
-#line 1440 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1446 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 7200 "DirectoryMonitor.c"
+#line 7232 "DirectoryMonitor.c"
 		{
-#line 1445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1451 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = DIRECTORY_MONITOR_SUPPORT_FILE_SYMLINKS;
-#line 1445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1451 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 7206 "DirectoryMonitor.c"
+#line 7238 "DirectoryMonitor.c"
 		}
 		default:
 		{
 			DirectoryMonitorFType _tmp5_ = 0;
-#line 1448 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1454 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp5_ = ftype;
-#line 1448 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1454 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_assert (_tmp5_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 1450 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1456 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = FALSE;
-#line 1450 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 1456 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 7219 "DirectoryMonitor.c"
+#line 7251 "DirectoryMonitor.c"
 		}
 	}
 }
 
 
 static void directory_monitor_real_root_moved (DirectoryMonitor* self, GFile* old_root, GFile* new_root, GFileInfo* new_root_info) {
-#line 380 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 386 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_root));
-#line 380 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 386 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_root));
-#line 380 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 386 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_root_info));
-#line 7232 "DirectoryMonitor.c"
+#line 7264 "DirectoryMonitor.c"
 }
 
 
@@ -7253,26 +7285,26 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT_OBJECT (GClosure * closu
 		data1 = closure->data;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 7251 "DirectoryMonitor.c"
+#line 7283 "DirectoryMonitor.c"
 	} else {
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data2 = closure->data;
-#line 7257 "DirectoryMonitor.c"
+#line 7289 "DirectoryMonitor.c"
 	}
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT_OBJECT) (marshal_data ? marshal_data : cc->callback);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), g_value_get_object (param_values + 3), data2);
-#line 7263 "DirectoryMonitor.c"
+#line 7295 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_root_deleted (DirectoryMonitor* self, GFile* root) {
-#line 388 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (root));
-#line 7270 "DirectoryMonitor.c"
+#line 7302 "DirectoryMonitor.c"
 }
 
 
@@ -7281,11 +7313,11 @@ static void directory_monitor_real_discovery_started (DirectoryMonitor* self) {
 
 
 static void directory_monitor_real_file_discovered (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 400 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 394 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 400 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 7283 "DirectoryMonitor.c"
+#line 7315 "DirectoryMonitor.c"
 }
 
 
@@ -7304,144 +7336,144 @@ static void g_cclosure_user_marshal_VOID__OBJECT_OBJECT (GClosure * closure, GVa
 		data1 = closure->data;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data2 = param_values->data[0].v_pointer;
-#line 7302 "DirectoryMonitor.c"
+#line 7334 "DirectoryMonitor.c"
 	} else {
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data1 = param_values->data[0].v_pointer;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		data2 = closure->data;
-#line 7308 "DirectoryMonitor.c"
+#line 7340 "DirectoryMonitor.c"
 	}
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	callback = (GMarshalFunc_VOID__OBJECT_OBJECT) (marshal_data ? marshal_data : cc->callback);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	callback (data1, g_value_get_object (param_values + 1), g_value_get_object (param_values + 2), data2);
-#line 7314 "DirectoryMonitor.c"
+#line 7346 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_directory_discovered (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 397 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 403 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 397 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 403 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 7323 "DirectoryMonitor.c"
+#line 7355 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_discovery_failed (DirectoryMonitor* self, const gchar* reason) {
-#line 402 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 408 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (reason != NULL);
-#line 7330 "DirectoryMonitor.c"
+#line 7362 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_discovery_completed (DirectoryMonitor* self) {
-#line 406 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 412 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->has_discovery_started = FALSE;
-#line 407 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_mdbg ("discovery completed");
-#line 7339 "DirectoryMonitor.c"
+#line 7371 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_file_created (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 410 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 416 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 410 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 416 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 7348 "DirectoryMonitor.c"
+#line 7380 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_file_moved (DirectoryMonitor* self, GFile* old_file, GFile* new_file, GFileInfo* new_file_info) {
-#line 413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 419 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_file));
-#line 413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 419 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_file));
-#line 413 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 419 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_file_info));
-#line 7359 "DirectoryMonitor.c"
+#line 7391 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_file_altered (DirectoryMonitor* self, GFile* file) {
-#line 417 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 423 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (file));
-#line 7366 "DirectoryMonitor.c"
-}
-
-
-static void directory_monitor_real_file_alteration_completed (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
-#line 422 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (file));
-#line 422 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 7375 "DirectoryMonitor.c"
-}
-
-
-static void directory_monitor_real_file_attributes_altered (DirectoryMonitor* self, GFile* file) {
-#line 425 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (file));
-#line 7382 "DirectoryMonitor.c"
-}
-
-
-static void directory_monitor_real_file_deleted (DirectoryMonitor* self, GFile* file) {
-#line 428 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (file));
-#line 7389 "DirectoryMonitor.c"
-}
-
-
-static void directory_monitor_real_directory_created (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 432 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE (dir));
-#line 432 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	g_return_if_fail (G_IS_FILE_INFO (info));
 #line 7398 "DirectoryMonitor.c"
 }
 
 
+static void directory_monitor_real_file_alteration_completed (DirectoryMonitor* self, GFile* file, GFileInfo* info) {
+#line 428 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (file));
+#line 428 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE_INFO (info));
+#line 7407 "DirectoryMonitor.c"
+}
+
+
+static void directory_monitor_real_file_attributes_altered (DirectoryMonitor* self, GFile* file) {
+#line 431 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (file));
+#line 7414 "DirectoryMonitor.c"
+}
+
+
+static void directory_monitor_real_file_deleted (DirectoryMonitor* self, GFile* file) {
+#line 434 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (file));
+#line 7421 "DirectoryMonitor.c"
+}
+
+
+static void directory_monitor_real_directory_created (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
+#line 438 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE (dir));
+#line 438 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	g_return_if_fail (G_IS_FILE_INFO (info));
+#line 7430 "DirectoryMonitor.c"
+}
+
+
 static void directory_monitor_real_directory_moved (DirectoryMonitor* self, GFile* old_dir, GFile* new_dir, GFileInfo* new_dir_info) {
-#line 436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (old_dir));
-#line 436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (new_dir));
-#line 436 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 442 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (new_dir_info));
-#line 7409 "DirectoryMonitor.c"
+#line 7441 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_directory_altered (DirectoryMonitor* self, GFile* dir) {
-#line 440 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 446 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 7416 "DirectoryMonitor.c"
+#line 7448 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_directory_alteration_completed (DirectoryMonitor* self, GFile* dir, GFileInfo* info) {
-#line 445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 451 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 445 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 451 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE_INFO (info));
-#line 7425 "DirectoryMonitor.c"
+#line 7457 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_directory_attributes_altered (DirectoryMonitor* self, GFile* dir) {
-#line 448 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 454 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 7432 "DirectoryMonitor.c"
+#line 7464 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_real_directory_deleted (DirectoryMonitor* self, GFile* dir) {
-#line 452 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 458 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (dir));
-#line 7439 "DirectoryMonitor.c"
+#line 7471 "DirectoryMonitor.c"
 }
 
 
@@ -7508,21 +7540,21 @@ static DirectoryMonitorQueryInfoQueueElement* directory_monitor_query_info_queue
 	self->time_created_msec = _tmp8_;
 #line 96 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return self;
-#line 7506 "DirectoryMonitor.c"
+#line 7538 "DirectoryMonitor.c"
 }
 
 
 static DirectoryMonitorQueryInfoQueueElement* directory_monitor_query_info_queue_element_new (DirectoryMonitor* owner, GFile* file, GFile* other_file, GFileMonitorEvent event) {
 #line 96 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return directory_monitor_query_info_queue_element_construct (DIRECTORY_MONITOR_TYPE_QUERY_INFO_QUEUE_ELEMENT, owner, file, other_file, event);
-#line 7513 "DirectoryMonitor.c"
+#line 7545 "DirectoryMonitor.c"
 }
 
 
 static gpointer _g_error_copy0 (gpointer self) {
-#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return self ? g_error_copy (self) : NULL;
-#line 7520 "DirectoryMonitor.c"
+#line 7552 "DirectoryMonitor.c"
 }
 
 
@@ -7530,7 +7562,7 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 	GFile* source_file = NULL;
 	GObject* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
-	DirectoryMonitor* _tmp8_ = NULL;
+	DirectoryMonitor* _tmp16_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 106 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (DIRECTORY_MONITOR_IS_QUERY_INFO_QUEUE_ELEMENT (self));
@@ -7544,12 +7576,16 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 	_tmp1_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, g_file_get_type (), GFile));
 #line 107 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	source_file = _tmp1_;
-#line 7542 "DirectoryMonitor.c"
+#line 7574 "DirectoryMonitor.c"
 	{
 		GFileInfo* _tmp2_ = NULL;
 		GAsyncResult* _tmp3_ = NULL;
 		GFileInfo* _tmp4_ = NULL;
 		GFileInfo* _tmp5_ = NULL;
+		GFileInfo* _tmp6_ = NULL;
+		gchar* _tmp7_ = NULL;
+		gchar* _tmp8_ = NULL;
+		gboolean _tmp9_ = FALSE;
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = aresult;
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -7558,7 +7594,7 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 		_tmp2_ = _tmp4_;
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 7556 "DirectoryMonitor.c"
+#line 7592 "DirectoryMonitor.c"
 			goto __catch483_g_error;
 		}
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -7569,31 +7605,62 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 		_g_object_unref0 (self->info);
 #line 111 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		self->info = _tmp5_;
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp6_ = self->info;
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp7_ = get_file_info_id (_tmp6_);
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp8_ = _tmp7_;
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp9_ = _tmp8_ == NULL;
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (_tmp8_);
+#line 112 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (_tmp9_) {
+#line 7615 "DirectoryMonitor.c"
+			GFileInfo* _tmp10_ = NULL;
+			GFile* _tmp11_ = NULL;
+			gchar* _tmp12_ = NULL;
+			gchar* _tmp13_ = NULL;
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_tmp10_ = self->info;
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_tmp11_ = self->file;
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_tmp12_ = g_file_get_uri (_tmp11_);
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_tmp13_ = _tmp12_;
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			g_file_info_set_attribute_string (_tmp10_, G_FILE_ATTRIBUTE_ID_FILE, _tmp13_);
+#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_free0 (_tmp13_);
+#line 7632 "DirectoryMonitor.c"
+		}
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp2_);
-#line 7569 "DirectoryMonitor.c"
+#line 7636 "DirectoryMonitor.c"
 	}
 	goto __finally483;
 	__catch483_g_error:
 	{
 		GError* err = NULL;
-		GError* _tmp6_ = NULL;
-		GError* _tmp7_ = NULL;
+		GError* _tmp14_ = NULL;
+		GError* _tmp15_ = NULL;
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		err = _inner_error_;
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_inner_error_ = NULL;
-#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_tmp6_ = err;
-#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_tmp7_ = _g_error_copy0 (_tmp6_);
-#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp14_ = err;
+#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp15_ = _g_error_copy0 (_tmp14_);
+#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_error_free0 (self->err);
-#line 113 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		self->err = _tmp7_;
+#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		self->err = _tmp15_;
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_error_free0 (err);
-#line 7591 "DirectoryMonitor.c"
+#line 7658 "DirectoryMonitor.c"
 	}
 	__finally483:
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
@@ -7606,24 +7673,24 @@ static void directory_monitor_query_info_queue_element_on_completed (DirectoryMo
 		g_clear_error (&_inner_error_);
 #line 110 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return;
-#line 7604 "DirectoryMonitor.c"
+#line 7671 "DirectoryMonitor.c"
 	}
-#line 117 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 121 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->completed = TRUE;
-#line 120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp8_ = self->owner;
-#line 120 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	directory_monitor_process_query_queue (_tmp8_, self);
+#line 124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp16_ = self->owner;
+#line 124 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	directory_monitor_process_query_queue (_tmp16_, self);
 #line 106 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (source_file);
-#line 7614 "DirectoryMonitor.c"
+#line 7681 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_value_query_info_queue_element_init (GValue* value) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	value->data[0].v_pointer = NULL;
-#line 7621 "DirectoryMonitor.c"
+#line 7688 "DirectoryMonitor.c"
 }
 
 
@@ -7632,7 +7699,7 @@ static void directory_monitor_value_query_info_queue_element_free_value (GValue*
 	if (value->data[0].v_pointer) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_query_info_queue_element_unref (value->data[0].v_pointer);
-#line 7630 "DirectoryMonitor.c"
+#line 7697 "DirectoryMonitor.c"
 	}
 }
 
@@ -7642,11 +7709,11 @@ static void directory_monitor_value_query_info_queue_element_copy_value (const G
 	if (src_value->data[0].v_pointer) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		dest_value->data[0].v_pointer = directory_monitor_query_info_queue_element_ref (src_value->data[0].v_pointer);
-#line 7640 "DirectoryMonitor.c"
+#line 7707 "DirectoryMonitor.c"
 	} else {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 7644 "DirectoryMonitor.c"
+#line 7711 "DirectoryMonitor.c"
 	}
 }
 
@@ -7654,37 +7721,37 @@ static void directory_monitor_value_query_info_queue_element_copy_value (const G
 static gpointer directory_monitor_value_query_info_queue_element_peek_pointer (const GValue* value) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return value->data[0].v_pointer;
-#line 7652 "DirectoryMonitor.c"
+#line 7719 "DirectoryMonitor.c"
 }
 
 
 static gchar* directory_monitor_value_query_info_queue_element_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (collect_values[0].v_pointer) {
-#line 7659 "DirectoryMonitor.c"
+#line 7726 "DirectoryMonitor.c"
 		DirectoryMonitorQueryInfoQueueElement* object;
 		object = collect_values[0].v_pointer;
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7666 "DirectoryMonitor.c"
+#line 7733 "DirectoryMonitor.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 7670 "DirectoryMonitor.c"
+#line 7737 "DirectoryMonitor.c"
 		}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = directory_monitor_query_info_queue_element_ref (object);
-#line 7674 "DirectoryMonitor.c"
+#line 7741 "DirectoryMonitor.c"
 	} else {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 7678 "DirectoryMonitor.c"
+#line 7745 "DirectoryMonitor.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return NULL;
-#line 7682 "DirectoryMonitor.c"
+#line 7749 "DirectoryMonitor.c"
 }
 
 
@@ -7695,25 +7762,25 @@ static gchar* directory_monitor_value_query_info_queue_element_lcopy_value (cons
 	if (!object_p) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 7693 "DirectoryMonitor.c"
+#line 7760 "DirectoryMonitor.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!value->data[0].v_pointer) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = NULL;
-#line 7699 "DirectoryMonitor.c"
+#line 7766 "DirectoryMonitor.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = value->data[0].v_pointer;
-#line 7703 "DirectoryMonitor.c"
+#line 7770 "DirectoryMonitor.c"
 	} else {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = directory_monitor_query_info_queue_element_ref (value->data[0].v_pointer);
-#line 7707 "DirectoryMonitor.c"
+#line 7774 "DirectoryMonitor.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return NULL;
-#line 7711 "DirectoryMonitor.c"
+#line 7778 "DirectoryMonitor.c"
 }
 
 
@@ -7727,7 +7794,7 @@ static GParamSpec* directory_monitor_param_spec_query_info_queue_element (const 
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return G_PARAM_SPEC (spec);
-#line 7725 "DirectoryMonitor.c"
+#line 7792 "DirectoryMonitor.c"
 }
 
 
@@ -7736,7 +7803,7 @@ static gpointer directory_monitor_value_get_query_info_queue_element (const GVal
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, DIRECTORY_MONITOR_TYPE_QUERY_INFO_QUEUE_ELEMENT), NULL);
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return value->data[0].v_pointer;
-#line 7734 "DirectoryMonitor.c"
+#line 7801 "DirectoryMonitor.c"
 }
 
 
@@ -7756,17 +7823,17 @@ static void directory_monitor_value_set_query_info_queue_element (GValue* value,
 		value->data[0].v_pointer = v_object;
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_query_info_queue_element_ref (value->data[0].v_pointer);
-#line 7754 "DirectoryMonitor.c"
+#line 7821 "DirectoryMonitor.c"
 	} else {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 7758 "DirectoryMonitor.c"
+#line 7825 "DirectoryMonitor.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (old) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_query_info_queue_element_unref (old);
-#line 7764 "DirectoryMonitor.c"
+#line 7831 "DirectoryMonitor.c"
 	}
 }
 
@@ -7785,17 +7852,17 @@ static void directory_monitor_value_take_query_info_queue_element (GValue* value
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = v_object;
-#line 7783 "DirectoryMonitor.c"
+#line 7850 "DirectoryMonitor.c"
 	} else {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 7787 "DirectoryMonitor.c"
+#line 7854 "DirectoryMonitor.c"
 	}
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (old) {
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_query_info_queue_element_unref (old);
-#line 7793 "DirectoryMonitor.c"
+#line 7860 "DirectoryMonitor.c"
 	}
 }
 
@@ -7805,7 +7872,7 @@ static void directory_monitor_query_info_queue_element_class_init (DirectoryMoni
 	directory_monitor_query_info_queue_element_parent_class = g_type_class_peek_parent (klass);
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	((DirectoryMonitorQueryInfoQueueElementClass *) klass)->finalize = directory_monitor_query_info_queue_element_finalize;
-#line 7803 "DirectoryMonitor.c"
+#line 7870 "DirectoryMonitor.c"
 }
 
 
@@ -7818,7 +7885,7 @@ static void directory_monitor_query_info_queue_element_instance_init (DirectoryM
 	self->completed = FALSE;
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->ref_count = 1;
-#line 7816 "DirectoryMonitor.c"
+#line 7883 "DirectoryMonitor.c"
 }
 
 
@@ -7838,7 +7905,7 @@ static void directory_monitor_query_info_queue_element_finalize (DirectoryMonito
 	_g_object_unref0 (self->info);
 #line 93 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_error_free0 (self->err);
-#line 7836 "DirectoryMonitor.c"
+#line 7903 "DirectoryMonitor.c"
 }
 
 
@@ -7863,7 +7930,7 @@ static gpointer directory_monitor_query_info_queue_element_ref (gpointer instanc
 	g_atomic_int_inc (&self->ref_count);
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return instance;
-#line 7861 "DirectoryMonitor.c"
+#line 7928 "DirectoryMonitor.c"
 }
 
 
@@ -7876,25 +7943,25 @@ static void directory_monitor_query_info_queue_element_unref (gpointer instance)
 		DIRECTORY_MONITOR_QUERY_INFO_QUEUE_ELEMENT_GET_CLASS (self)->finalize (self);
 #line 83 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 7874 "DirectoryMonitor.c"
+#line 7941 "DirectoryMonitor.c"
 	}
 }
 
 
 static DirectoryMonitorFileInfoMap* directory_monitor_file_info_map_construct (GType object_type) {
 	DirectoryMonitorFileInfoMap* self = NULL;
-#line 134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 138 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self = (DirectoryMonitorFileInfoMap*) g_type_create_instance (object_type);
-#line 134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 138 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return self;
-#line 7885 "DirectoryMonitor.c"
+#line 7952 "DirectoryMonitor.c"
 }
 
 
 static DirectoryMonitorFileInfoMap* directory_monitor_file_info_map_new (void) {
-#line 134 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 138 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return directory_monitor_file_info_map_construct (DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP);
-#line 7892 "DirectoryMonitor.c"
+#line 7959 "DirectoryMonitor.c"
 }
 
 
@@ -7919,198 +7986,198 @@ static gboolean directory_monitor_file_info_map_normalize_file (DirectoryMonitor
 	GFile* _tmp15_ = NULL;
 	GFile* _tmp16_ = NULL;
 	GFile* _tmp19_ = NULL;
-#line 137 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), FALSE);
-#line 137 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 137 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail ((info == NULL) || G_IS_FILE_INFO (info), FALSE);
-#line 140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = info;
-#line 140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 140 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	local_info = _tmp1_;
-#line 141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 145 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = local_info;
-#line 141 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 145 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_ == NULL) {
-#line 7933 "DirectoryMonitor.c"
+#line 8000 "DirectoryMonitor.c"
 		GeeHashMap* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
 		gpointer _tmp5_ = NULL;
 		GFileInfo* _tmp6_ = NULL;
-#line 142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = self->priv->map;
-#line 142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = file;
-#line 142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp4_);
-#line 142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (local_info);
-#line 142 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 146 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		local_info = (GFileInfo*) _tmp5_;
-#line 143 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = local_info;
-#line 143 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (_tmp6_ == NULL) {
-#line 144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 148 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_vala_normalized);
-#line 144 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 148 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_normalized = NULL;
-#line 145 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_vala_id);
-#line 145 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 149 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_vala_id = NULL;
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = FALSE;
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (local_info);
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (normalized) {
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				*normalized = _vala_normalized;
-#line 7968 "DirectoryMonitor.c"
-			} else {
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_g_object_unref0 (_vala_normalized);
-#line 7972 "DirectoryMonitor.c"
-			}
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			if (id) {
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				*id = _vala_id;
-#line 7978 "DirectoryMonitor.c"
-			} else {
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-				_g_free0 (_vala_id);
-#line 7982 "DirectoryMonitor.c"
-			}
-#line 147 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			return result;
-#line 7986 "DirectoryMonitor.c"
-		}
-	}
-#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp7_ = local_info;
-#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp8_ = get_file_info_id (_tmp7_);
-#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	file_id = _tmp8_;
-#line 152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp9_ = file_id;
-#line 152 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_tmp9_ == NULL) {
-#line 153 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (_vala_normalized);
-#line 153 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_vala_normalized = NULL;
-#line 154 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (_vala_id);
-#line 154 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_vala_id = NULL;
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		result = FALSE;
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (file_id);
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (local_info);
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (normalized) {
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			*normalized = _vala_normalized;
-#line 8017 "DirectoryMonitor.c"
-		} else {
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_object_unref0 (_vala_normalized);
-#line 8021 "DirectoryMonitor.c"
-		}
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		if (id) {
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			*id = _vala_id;
-#line 8027 "DirectoryMonitor.c"
-		} else {
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-			_g_free0 (_vala_id);
-#line 8031 "DirectoryMonitor.c"
-		}
-#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
 #line 8035 "DirectoryMonitor.c"
+			} else {
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_g_object_unref0 (_vala_normalized);
+#line 8039 "DirectoryMonitor.c"
+			}
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			if (id) {
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				*id = _vala_id;
+#line 8045 "DirectoryMonitor.c"
+			} else {
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+				_g_free0 (_vala_id);
+#line 8049 "DirectoryMonitor.c"
+			}
+#line 151 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			return result;
+#line 8053 "DirectoryMonitor.c"
+		}
 	}
-#line 159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp7_ = local_info;
+#line 155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp8_ = get_file_info_id (_tmp7_);
+#line 155 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	file_id = _tmp8_;
+#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp9_ = file_id;
+#line 156 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_tmp9_ == NULL) {
+#line 157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (_vala_normalized);
+#line 157 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_vala_normalized = NULL;
+#line 158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (_vala_id);
+#line 158 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_vala_id = NULL;
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		result = FALSE;
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (file_id);
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (local_info);
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (normalized) {
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			*normalized = _vala_normalized;
+#line 8084 "DirectoryMonitor.c"
+		} else {
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_object_unref0 (_vala_normalized);
+#line 8088 "DirectoryMonitor.c"
+		}
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		if (id) {
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			*id = _vala_id;
+#line 8094 "DirectoryMonitor.c"
+		} else {
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+			_g_free0 (_vala_id);
+#line 8098 "DirectoryMonitor.c"
+		}
+#line 160 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 8102 "DirectoryMonitor.c"
+	}
+#line 163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = self->priv->id_map;
-#line 159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp11_ = file_id;
-#line 159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp12_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp11_);
-#line 159 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 163 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	known_file = (GFile*) _tmp12_;
-#line 161 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = file_id;
-#line 161 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp14_ = g_strdup ((const gchar*) _tmp13_);
-#line 161 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (_vala_id);
-#line 161 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 165 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_id = _tmp14_;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp16_ = known_file;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp16_ != NULL) {
-#line 8057 "DirectoryMonitor.c"
+#line 8124 "DirectoryMonitor.c"
 		GFile* _tmp17_ = NULL;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp17_ = known_file;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = _tmp17_;
-#line 8063 "DirectoryMonitor.c"
+#line 8130 "DirectoryMonitor.c"
 	} else {
 		GFile* _tmp18_ = NULL;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp18_ = file;
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = _tmp18_;
-#line 8070 "DirectoryMonitor.c"
+#line 8137 "DirectoryMonitor.c"
 	}
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp19_ = _g_object_ref0 (_tmp15_);
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (_vala_normalized);
-#line 162 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 166 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_vala_normalized = _tmp19_;
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = TRUE;
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (known_file);
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (file_id);
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (local_info);
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (normalized) {
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*normalized = _vala_normalized;
-#line 8090 "DirectoryMonitor.c"
+#line 8157 "DirectoryMonitor.c"
 	} else {
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_vala_normalized);
-#line 8094 "DirectoryMonitor.c"
+#line 8161 "DirectoryMonitor.c"
 	}
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (id) {
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*id = _vala_id;
-#line 8100 "DirectoryMonitor.c"
+#line 8167 "DirectoryMonitor.c"
 	} else {
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_vala_id);
-#line 8104 "DirectoryMonitor.c"
+#line 8171 "DirectoryMonitor.c"
 	}
-#line 164 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 168 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8108 "DirectoryMonitor.c"
+#line 8175 "DirectoryMonitor.c"
 }
 
 
@@ -8137,145 +8204,145 @@ static gboolean directory_monitor_file_info_map_update (DirectoryMonitorFileInfo
 	GeeHashMap* _tmp26_ = NULL;
 	const gchar* _tmp27_ = NULL;
 	GFile* _tmp28_ = NULL;
-#line 167 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), FALSE);
-#line 167 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 167 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (info), FALSE);
-#line 169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 173 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->map;
-#line 169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 173 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 173 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp1_);
-#line 169 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 173 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_) {
-#line 8149 "DirectoryMonitor.c"
+#line 8216 "DirectoryMonitor.c"
 		gboolean removed = FALSE;
 		GeeHashMap* _tmp3_ = NULL;
 		GFile* _tmp4_ = NULL;
 		gboolean _tmp5_ = FALSE;
 		gboolean _tmp6_ = FALSE;
-#line 170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = self->priv->map;
-#line 170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = file;
-#line 170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp4_, NULL);
-#line 170 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 174 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		removed = _tmp5_;
-#line 171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 175 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = removed;
-#line 171 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 175 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_assert (_tmp6_, "removed");
-#line 8167 "DirectoryMonitor.c"
+#line 8234 "DirectoryMonitor.c"
 	}
-#line 175 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = info;
-#line 175 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = get_file_info_id (_tmp7_);
-#line 175 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 179 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	existing_id = _tmp8_;
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = existing_id;
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp10_ != NULL) {
-#line 8179 "DirectoryMonitor.c"
+#line 8246 "DirectoryMonitor.c"
 		GeeHashMap* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
 		gboolean _tmp13_ = FALSE;
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = self->priv->id_map;
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = existing_id;
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp13_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp12_);
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = _tmp13_;
-#line 8191 "DirectoryMonitor.c"
+#line 8258 "DirectoryMonitor.c"
 	} else {
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = FALSE;
-#line 8195 "DirectoryMonitor.c"
+#line 8262 "DirectoryMonitor.c"
 	}
-#line 176 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 180 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp9_) {
-#line 8199 "DirectoryMonitor.c"
+#line 8266 "DirectoryMonitor.c"
 		gboolean removed = FALSE;
 		GeeHashMap* _tmp14_ = NULL;
 		const gchar* _tmp15_ = NULL;
 		gboolean _tmp16_ = FALSE;
 		gboolean _tmp17_ = FALSE;
-#line 177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 181 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp14_ = self->priv->id_map;
-#line 177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 181 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp15_ = existing_id;
-#line 177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 181 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp16_ = gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp15_, NULL);
-#line 177 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 181 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		removed = _tmp16_;
-#line 178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 182 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp17_ = removed;
-#line 178 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 182 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_vala_assert (_tmp17_, "removed");
-#line 8217 "DirectoryMonitor.c"
+#line 8284 "DirectoryMonitor.c"
 	}
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp18_ = file;
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp19_ = info;
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp22_ = directory_monitor_file_info_map_normalize_file (self, _tmp18_, _tmp19_, &_tmp20_, &_tmp21_);
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	normalized = _tmp20_;
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp21_;
-#line 183 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp22_) {
-#line 184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (normalized);
-#line 184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (existing_id);
-#line 184 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 188 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8245 "DirectoryMonitor.c"
+#line 8312 "DirectoryMonitor.c"
 	}
-#line 186 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 190 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp23_ = self->priv->map;
-#line 186 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 190 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp24_ = normalized;
-#line 186 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 190 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp25_ = info;
-#line 186 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 190 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp24_, _tmp25_);
-#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp26_ = self->priv->id_map;
-#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp27_ = id;
-#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp28_ = normalized;
-#line 187 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 191 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_abstract_map_set (G_TYPE_CHECK_INSTANCE_CAST (_tmp26_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp27_, _tmp28_);
-#line 189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 193 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = TRUE;
-#line 189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 193 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 193 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 193 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (existing_id);
-#line 189 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 193 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8273 "DirectoryMonitor.c"
+#line 8340 "DirectoryMonitor.c"
 }
 
 
@@ -8292,114 +8359,114 @@ static gboolean directory_monitor_file_info_map_remove (DirectoryMonitorFileInfo
 	GFile* _tmp6_ = NULL;
 	GeeHashMap* _tmp7_ = NULL;
 	const gchar* _tmp8_ = NULL;
-#line 192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), FALSE);
-#line 192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 192 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail ((info == NULL) || G_IS_FILE_INFO (info), FALSE);
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = info;
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_file_info_map_normalize_file (self, _tmp0_, _tmp1_, &_tmp2_, &_tmp3_);
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	normalized = _tmp2_;
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp3_;
-#line 195 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp4_) {
-#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (normalized);
-#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 196 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 200 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8320 "DirectoryMonitor.c"
+#line 8387 "DirectoryMonitor.c"
 	}
-#line 198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = self->priv->map;
-#line 198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = normalized;
-#line 198 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 202 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp6_, NULL);
-#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = self->priv->id_map;
-#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = id;
-#line 199 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 203 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	gee_abstract_map_unset (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp8_, NULL);
-#line 201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 205 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = TRUE;
-#line 201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 205 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 205 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 201 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 205 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8342 "DirectoryMonitor.c"
+#line 8409 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_file_info_map_remove_all (DirectoryMonitorFileInfoMap* self, GeeCollection* files) {
-#line 206 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 210 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self));
-#line 206 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 210 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (GEE_IS_COLLECTION (files));
-#line 8351 "DirectoryMonitor.c"
+#line 8418 "DirectoryMonitor.c"
 	{
 		GeeIterator* _file_it = NULL;
 		GeeCollection* _tmp0_ = NULL;
 		GeeIterator* _tmp1_ = NULL;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = files;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_file_it = _tmp1_;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 8364 "DirectoryMonitor.c"
+#line 8431 "DirectoryMonitor.c"
 			GeeIterator* _tmp2_ = NULL;
 			gboolean _tmp3_ = FALSE;
 			GFile* file = NULL;
 			GeeIterator* _tmp4_ = NULL;
 			gpointer _tmp5_ = NULL;
 			GFile* _tmp6_ = NULL;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp2_ = _file_it;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp3_ = gee_iterator_next (_tmp2_);
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp3_) {
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 8379 "DirectoryMonitor.c"
+#line 8446 "DirectoryMonitor.c"
 			}
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp4_ = _file_it;
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp5_ = gee_iterator_get (_tmp4_);
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			file = (GFile*) _tmp5_;
-#line 208 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 212 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp6_ = file;
-#line 208 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 212 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			directory_monitor_file_info_map_remove (self, _tmp6_, NULL);
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (file);
-#line 8393 "DirectoryMonitor.c"
+#line 8460 "DirectoryMonitor.c"
 		}
-#line 207 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_file_it);
-#line 8397 "DirectoryMonitor.c"
+#line 8464 "DirectoryMonitor.c"
 	}
 }
 
@@ -8416,53 +8483,53 @@ static gboolean directory_monitor_file_info_map_contains (DirectoryMonitorFileIn
 	GeeHashMap* _tmp5_ = NULL;
 	const gchar* _tmp6_ = NULL;
 	gboolean _tmp7_ = FALSE;
-#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), FALSE);
-#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
-#line 211 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail ((info == NULL) || G_IS_FILE_INFO (info), FALSE);
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = info;
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = directory_monitor_file_info_map_normalize_file (self, _tmp0_, _tmp1_, &_tmp2_, &_tmp3_);
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	normalized = _tmp2_;
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp3_;
-#line 214 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 218 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp4_) {
-#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = FALSE;
-#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (normalized);
-#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 215 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 219 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8444 "DirectoryMonitor.c"
+#line 8511 "DirectoryMonitor.c"
 	}
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = self->priv->id_map;
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = id;
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = gee_abstract_map_has_key (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp6_);
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = _tmp7_;
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 217 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 221 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8460 "DirectoryMonitor.c"
+#line 8527 "DirectoryMonitor.c"
 }
 
 
@@ -8475,60 +8542,60 @@ static gchar* directory_monitor_file_info_map_get_id (DirectoryMonitorFileInfoMa
 	GFile* _tmp4_ = NULL;
 	gchar* _tmp5_ = NULL;
 	gboolean _tmp6_ = FALSE;
-#line 220 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 224 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), NULL);
-#line 220 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 224 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 220 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 224 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail ((info == NULL) || G_IS_FILE_INFO (info), NULL);
-#line 222 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 226 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = info;
-#line 222 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 226 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp0_ != NULL) {
-#line 8483 "DirectoryMonitor.c"
+#line 8550 "DirectoryMonitor.c"
 		GFileInfo* _tmp1_ = NULL;
 		gchar* _tmp2_ = NULL;
-#line 223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = info;
-#line 223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = get_file_info_id (_tmp1_);
-#line 223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = _tmp2_;
-#line 223 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 8494 "DirectoryMonitor.c"
-	}
 #line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 8561 "DirectoryMonitor.c"
+	}
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = file;
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp6_ = directory_monitor_file_info_map_normalize_file (self, _tmp3_, NULL, &_tmp4_, &_tmp5_);
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	normalized = _tmp4_;
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp5_;
-#line 227 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 231 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp6_) {
-#line 228 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = NULL;
-#line 228 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (normalized);
-#line 228 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 228 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 232 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8518 "DirectoryMonitor.c"
+#line 8585 "DirectoryMonitor.c"
 	}
-#line 230 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = id;
-#line 230 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 230 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8526 "DirectoryMonitor.c"
+#line 8593 "DirectoryMonitor.c"
 }
 
 
@@ -8537,19 +8604,19 @@ static GeeCollection* directory_monitor_file_info_map_get_all (DirectoryMonitorF
 	GeeHashMap* _tmp0_ = NULL;
 	GeeSet* _tmp1_ = NULL;
 	GeeSet* _tmp2_ = NULL;
-#line 233 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 237 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), NULL);
-#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->map;
-#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = _tmp1_;
-#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, GEE_TYPE_COLLECTION, GeeCollection);
-#line 234 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 238 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8547 "DirectoryMonitor.c"
+#line 8614 "DirectoryMonitor.c"
 }
 
 
@@ -8569,71 +8636,71 @@ static GFileInfo* directory_monitor_file_info_map_get_info (DirectoryMonitorFile
 	GeeHashMap* _tmp8_ = NULL;
 	GFile* _tmp9_ = NULL;
 	gpointer _tmp10_ = NULL;
-#line 237 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), NULL);
-#line 237 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = self->priv->map;
-#line 239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = file;
-#line 239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp1_);
-#line 239 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 243 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	info = (GFileInfo*) _tmp2_;
-#line 240 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 244 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = info;
-#line 240 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 244 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp3_ != NULL) {
-#line 241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = info;
-#line 241 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 8587 "DirectoryMonitor.c"
-	}
 #line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 8654 "DirectoryMonitor.c"
+	}
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = file;
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp7_ = directory_monitor_file_info_map_normalize_file (self, _tmp4_, NULL, &_tmp5_, &_tmp6_);
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	normalized = _tmp5_;
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp6_;
-#line 245 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 249 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp7_) {
-#line 246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = NULL;
-#line 246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (normalized);
-#line 246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (id);
-#line 246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (info);
-#line 246 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 250 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8613 "DirectoryMonitor.c"
+#line 8680 "DirectoryMonitor.c"
 	}
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp8_ = self->priv->map;
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp9_ = normalized;
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp10_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp8_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp9_);
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = (GFileInfo*) _tmp10_;
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (info);
-#line 248 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8631 "DirectoryMonitor.c"
+#line 8698 "DirectoryMonitor.c"
 }
 
 
@@ -8651,35 +8718,35 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 	gchar* _tmp17_ = NULL;
 	const gchar* _tmp18_ = NULL;
 	GFile* normalized = NULL;
-	GeeHashMap* _tmp19_ = NULL;
-	const gchar* _tmp20_ = NULL;
-	gpointer _tmp21_ = NULL;
-	GFile* _tmp22_ = NULL;
 	GeeHashMap* _tmp23_ = NULL;
-	GFile* _tmp24_ = NULL;
+	const gchar* _tmp24_ = NULL;
 	gpointer _tmp25_ = NULL;
+	GFile* _tmp26_ = NULL;
+	GeeHashMap* _tmp27_ = NULL;
+	GFile* _tmp28_ = NULL;
+	gpointer _tmp29_ = NULL;
 	GError * _inner_error_ = NULL;
-#line 251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), NULL);
-#line 251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
-#line 251 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 255 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail ((cancellable == NULL) || G_IS_CANCELLABLE (cancellable), NULL);
-#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 256 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = file;
-#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 256 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = directory_monitor_file_info_map_get_info (self, _tmp0_);
-#line 252 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 256 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	info = _tmp1_;
-#line 253 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 257 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = info;
-#line 253 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 257 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_ != NULL) {
-#line 254 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = info;
-#line 254 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8677 "DirectoryMonitor.c"
+#line 8744 "DirectoryMonitor.c"
 	}
 	{
 		GFileInfo* _tmp3_ = NULL;
@@ -8687,30 +8754,30 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 		GCancellable* _tmp5_ = NULL;
 		GFileInfo* _tmp6_ = NULL;
 		GFileInfo* _tmp7_ = NULL;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = file;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = cancellable;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp6_ = g_file_query_info (_tmp4_, G_FILE_ATTRIBUTE_ID_FILE, DIRECTORY_MONITOR_UNKNOWN_INFO_FLAGS, _tmp5_, &_inner_error_);
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = _tmp6_;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 8695 "DirectoryMonitor.c"
+#line 8762 "DirectoryMonitor.c"
 			goto __catch484_g_error;
 		}
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = _tmp3_;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = NULL;
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (info);
-#line 259 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		info = _tmp7_;
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp3_);
-#line 8708 "DirectoryMonitor.c"
+#line 8775 "DirectoryMonitor.c"
 	}
 	goto __finally484;
 	__catch484_g_error:
@@ -8721,124 +8788,133 @@ static GFileInfo* directory_monitor_file_info_map_query_info (DirectoryMonitorFi
 		gchar* _tmp10_ = NULL;
 		GError* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		err = _inner_error_;
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_inner_error_ = NULL;
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = file;
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = g_file_get_path (_tmp8_);
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = _tmp9_;
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = err;
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = _tmp11_->message;
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		g_warning ("DirectoryMonitor.vala:261: Unable to query file ID of %s: %s", _tmp10_, _tmp12_);
-#line 261 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_warning ("DirectoryMonitor.vala:265: Unable to query file ID of %s: %s", _tmp10_, _tmp12_);
+#line 265 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (_tmp10_);
-#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = NULL;
-#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_error_free0 (err);
-#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (info);
-#line 263 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8745 "DirectoryMonitor.c"
+#line 8812 "DirectoryMonitor.c"
 	}
 	__finally484:
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (info);
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_clear_error (&_inner_error_);
-#line 258 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 262 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return NULL;
-#line 8758 "DirectoryMonitor.c"
+#line 8825 "DirectoryMonitor.c"
 	}
-#line 266 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 270 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp13_ = info;
-#line 266 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 270 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp14_ = directory_monitor_is_file_symlink_supported (_tmp13_);
-#line 266 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 270 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!_tmp14_) {
-#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = NULL;
-#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (info);
-#line 267 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8772 "DirectoryMonitor.c"
+#line 8839 "DirectoryMonitor.c"
 	}
-#line 269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp15_ = info;
-#line 269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp16_ = g_file_info_get_attribute_string (_tmp15_, G_FILE_ATTRIBUTE_ID_FILE);
-#line 269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp17_ = g_strdup (_tmp16_);
-#line 269 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	id = _tmp17_;
-#line 270 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp18_ = id;
-#line 270 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp18_ == NULL) {
-#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		result = NULL;
-#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (id);
-#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (info);
-#line 271 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 8794 "DirectoryMonitor.c"
+#line 8853 "DirectoryMonitor.c"
+		GFileInfo* _tmp19_ = NULL;
+		GFile* _tmp20_ = NULL;
+		gchar* _tmp21_ = NULL;
+		gchar* _tmp22_ = NULL;
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp19_ = info;
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp20_ = file;
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp21_ = g_file_get_uri (_tmp20_);
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_tmp22_ = _tmp21_;
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		g_file_info_set_attribute_string (_tmp19_, G_FILE_ATTRIBUTE_ID_FILE, _tmp22_);
+#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (_tmp22_);
+#line 8870 "DirectoryMonitor.c"
 	}
-#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp19_ = self->priv->id_map;
-#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp20_ = id;
-#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp21_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp19_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp20_);
-#line 273 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	normalized = (GFile*) _tmp21_;
-#line 274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp22_ = normalized;
-#line 274 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	if (_tmp22_ == NULL) {
-#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		result = NULL;
-#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (normalized);
-#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_free0 (id);
-#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		_g_object_unref0 (info);
-#line 275 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-		return result;
-#line 8818 "DirectoryMonitor.c"
-	}
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp23_ = self->priv->map;
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp24_ = file;
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp23_ = self->priv->id_map;
+#line 279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp24_ = id;
+#line 279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp25_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp24_);
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	result = (GFileInfo*) _tmp25_;
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 279 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	normalized = (GFile*) _tmp25_;
+#line 280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp26_ = normalized;
+#line 280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	if (_tmp26_ == NULL) {
+#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		result = NULL;
+#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (normalized);
+#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_free0 (id);
+#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		_g_object_unref0 (info);
+#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+		return result;
+#line 8894 "DirectoryMonitor.c"
+	}
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp27_ = self->priv->map;
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp28_ = file;
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp29_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp27_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp28_);
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	result = (GFileInfo*) _tmp29_;
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (normalized);
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (id);
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (info);
-#line 277 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 8836 "DirectoryMonitor.c"
+#line 8912 "DirectoryMonitor.c"
 }
 
 
@@ -8854,41 +8930,41 @@ static GFile* directory_monitor_file_info_map_find_match (DirectoryMonitorFileIn
 	GTimeVal match_time = {0};
 	GFileInfo* _tmp5_ = NULL;
 	GTimeVal _tmp6_ = {0};
-#line 280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 286 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), NULL);
-#line 280 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 286 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE_INFO (match), NULL);
-#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = match;
-#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = get_file_info_id (_tmp0_);
-#line 281 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	match_id = _tmp1_;
-#line 282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp2_ = match_id;
-#line 282 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 288 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp2_ == NULL) {
-#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		result = NULL;
-#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_free0 (match_id);
-#line 283 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return result;
-#line 8872 "DirectoryMonitor.c"
+#line 8948 "DirectoryMonitor.c"
 	}
-#line 286 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 292 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp3_ = match;
-#line 286 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 292 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp4_ = g_file_info_get_size (_tmp3_);
-#line 286 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 292 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	match_size = _tmp4_;
-#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp5_ = match;
-#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_file_info_get_modification_time (_tmp5_, &_tmp6_);
-#line 287 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	match_time = _tmp6_;
-#line 8886 "DirectoryMonitor.c"
+#line 8962 "DirectoryMonitor.c"
 	{
 		GeeIterator* _file_it = NULL;
 		GeeHashMap* _tmp7_ = NULL;
@@ -8897,25 +8973,25 @@ static GFile* directory_monitor_file_info_map_find_match (DirectoryMonitorFileIn
 		GeeSet* _tmp10_ = NULL;
 		GeeIterator* _tmp11_ = NULL;
 		GeeIterator* _tmp12_ = NULL;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp7_ = self->priv->map;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp8_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp9_ = _tmp8_;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp10_ = _tmp9_;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp11_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp12_ = _tmp11_;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp10_);
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_file_it = _tmp12_;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 8913 "DirectoryMonitor.c"
+#line 8989 "DirectoryMonitor.c"
 			GeeIterator* _tmp13_ = NULL;
 			gboolean _tmp14_ = FALSE;
 			GFile* file = NULL;
@@ -8940,134 +9016,134 @@ static GFile* directory_monitor_file_info_map_find_match (DirectoryMonitorFileIn
 			glong _tmp31_ = 0L;
 			GTimeVal _tmp32_ = {0};
 			glong _tmp33_ = 0L;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp13_ = _file_it;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp14_ = gee_iterator_next (_tmp13_);
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp14_) {
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 8946 "DirectoryMonitor.c"
+#line 9022 "DirectoryMonitor.c"
 			}
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp15_ = _file_it;
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp16_ = gee_iterator_get (_tmp15_);
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			file = (GFile*) _tmp16_;
-#line 290 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 296 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp17_ = self->priv->map;
-#line 290 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 296 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp18_ = file;
-#line 290 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 296 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp19_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp18_);
-#line 290 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 296 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			info = (GFileInfo*) _tmp19_;
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp20_ = info;
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp21_ = get_file_info_id (_tmp20_);
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp22_ = _tmp21_;
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp23_ = match_id;
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp24_ = g_strcmp0 (_tmp22_, _tmp23_) == 0;
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (_tmp22_);
-#line 293 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 299 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp24_) {
-#line 294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				result = file;
-#line 294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (info);
-#line 294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (_file_it);
-#line 294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_free0 (match_id);
-#line 294 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				return result;
-#line 8986 "DirectoryMonitor.c"
+#line 9062 "DirectoryMonitor.c"
 			}
-#line 297 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp25_ = match_size;
-#line 297 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp26_ = info;
-#line 297 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp27_ = g_file_info_get_size (_tmp26_);
-#line 297 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp25_ != _tmp27_) {
-#line 298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (info);
-#line 298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (file);
-#line 298 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 304 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 9002 "DirectoryMonitor.c"
+#line 9078 "DirectoryMonitor.c"
 			}
-#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp28_ = info;
-#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			g_file_info_get_modification_time (_tmp28_, &_tmp29_);
-#line 300 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 306 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			time = _tmp29_;
-#line 302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp30_ = time;
-#line 302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp31_ = _tmp30_.tv_sec;
-#line 302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp32_ = match_time;
-#line 302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp33_ = _tmp32_.tv_sec;
-#line 302 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp31_ != _tmp33_) {
-#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 309 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (info);
-#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 309 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (file);
-#line 303 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 309 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 9026 "DirectoryMonitor.c"
+#line 9102 "DirectoryMonitor.c"
 			}
-#line 305 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			result = file;
-#line 305 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (info);
-#line 305 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_file_it);
-#line 305 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_free0 (match_id);
-#line 305 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return result;
-#line 9038 "DirectoryMonitor.c"
+#line 9114 "DirectoryMonitor.c"
 		}
-#line 289 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 295 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_file_it);
-#line 9042 "DirectoryMonitor.c"
+#line 9118 "DirectoryMonitor.c"
 	}
-#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = NULL;
-#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_free0 (match_id);
-#line 308 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 9050 "DirectoryMonitor.c"
+#line 9126 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_file_info_map_remove_descendents (DirectoryMonitorFileInfoMap* self, GFile* root, DirectoryMonitorFileInfoMap* descendents) {
 	GeeArrayList* pruned = NULL;
 	GeeArrayList* _tmp28_ = NULL;
-#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self));
-#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_IS_FILE (root));
-#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (descendents));
-#line 312 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	pruned = NULL;
-#line 9065 "DirectoryMonitor.c"
+#line 9141 "DirectoryMonitor.c"
 	{
 		GeeIterator* _file_it = NULL;
 		GeeHashMap* _tmp0_ = NULL;
@@ -9076,25 +9152,25 @@ static void directory_monitor_file_info_map_remove_descendents (DirectoryMonitor
 		GeeSet* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = self->priv->map;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = _tmp1_;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = _tmp2_;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = _tmp4_;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp3_);
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_file_it = _tmp5_;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 9092 "DirectoryMonitor.c"
+#line 9168 "DirectoryMonitor.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			GFile* file = NULL;
@@ -9103,54 +9179,54 @@ static void directory_monitor_file_info_map_remove_descendents (DirectoryMonitor
 			GFile* parent = NULL;
 			GFile* _tmp10_ = NULL;
 			GFile* _tmp11_ = NULL;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp6_ = _file_it;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp7_ = gee_iterator_next (_tmp6_);
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp7_) {
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 9109 "DirectoryMonitor.c"
+#line 9185 "DirectoryMonitor.c"
 			}
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp8_ = _file_it;
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp9_ = gee_iterator_get (_tmp8_);
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			file = (GFile*) _tmp9_;
-#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp10_ = file;
-#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp11_ = g_file_get_parent (_tmp10_);
-#line 314 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			parent = _tmp11_;
-#line 315 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			while (TRUE) {
-#line 9125 "DirectoryMonitor.c"
+#line 9201 "DirectoryMonitor.c"
 				GFile* _tmp12_ = NULL;
 				GFile* _tmp13_ = NULL;
 				GFile* _tmp14_ = NULL;
 				gboolean _tmp15_ = FALSE;
 				GFile* _tmp26_ = NULL;
 				GFile* _tmp27_ = NULL;
-#line 315 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp12_ = parent;
-#line 315 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (!(_tmp12_ != NULL)) {
-#line 315 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 9138 "DirectoryMonitor.c"
+#line 9214 "DirectoryMonitor.c"
 				}
-#line 316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 322 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp13_ = parent;
-#line 316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 322 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp14_ = root;
-#line 316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 322 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp15_ = g_file_equal (_tmp13_, _tmp14_);
-#line 316 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 322 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				if (_tmp15_) {
-#line 9148 "DirectoryMonitor.c"
+#line 9224 "DirectoryMonitor.c"
 					GeeArrayList* _tmp16_ = NULL;
 					GeeArrayList* _tmp18_ = NULL;
 					GFile* _tmp19_ = NULL;
@@ -9160,98 +9236,98 @@ static void directory_monitor_file_info_map_remove_descendents (DirectoryMonitor
 					GFile* _tmp23_ = NULL;
 					gpointer _tmp24_ = NULL;
 					GFileInfo* _tmp25_ = NULL;
-#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp16_ = pruned;
-#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					if (_tmp16_ == NULL) {
-#line 9162 "DirectoryMonitor.c"
-						GeeArrayList* _tmp17_ = NULL;
-#line 318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-						_tmp17_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL);
-#line 318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-						_g_object_unref0 (pruned);
-#line 318 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-						pruned = _tmp17_;
-#line 9170 "DirectoryMonitor.c"
-					}
-#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp18_ = pruned;
-#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp19_ = file;
-#line 320 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp19_);
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp20_ = descendents;
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp21_ = file;
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp22_ = self->priv->map;
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp23_ = file;
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp24_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp23_);
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_tmp25_ = (GFileInfo*) _tmp24_;
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					directory_monitor_file_info_map_update (_tmp20_, _tmp21_, _tmp25_);
-#line 321 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-					_g_object_unref0 (_tmp25_);
 #line 323 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp16_ = pruned;
+#line 323 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					if (_tmp16_ == NULL) {
+#line 9238 "DirectoryMonitor.c"
+						GeeArrayList* _tmp17_ = NULL;
+#line 324 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+						_tmp17_ = gee_array_list_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL);
+#line 324 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+						_g_object_unref0 (pruned);
+#line 324 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+						pruned = _tmp17_;
+#line 9246 "DirectoryMonitor.c"
+					}
+#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp18_ = pruned;
+#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp19_ = file;
+#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					gee_abstract_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection), _tmp19_);
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp20_ = descendents;
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp21_ = file;
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp22_ = self->priv->map;
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp23_ = file;
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp24_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp22_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp23_);
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_tmp25_ = (GFileInfo*) _tmp24_;
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					directory_monitor_file_info_map_update (_tmp20_, _tmp21_, _tmp25_);
+#line 327 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+					_g_object_unref0 (_tmp25_);
+#line 329 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 9196 "DirectoryMonitor.c"
+#line 9272 "DirectoryMonitor.c"
 				}
-#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 332 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp26_ = parent;
-#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 332 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp27_ = g_file_get_parent (_tmp26_);
-#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 332 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (parent);
-#line 326 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 332 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				parent = _tmp27_;
-#line 9206 "DirectoryMonitor.c"
+#line 9282 "DirectoryMonitor.c"
 			}
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (parent);
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (file);
-#line 9212 "DirectoryMonitor.c"
+#line 9288 "DirectoryMonitor.c"
 		}
-#line 313 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 319 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_file_it);
-#line 9216 "DirectoryMonitor.c"
+#line 9292 "DirectoryMonitor.c"
 	}
-#line 330 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp28_ = pruned;
-#line 330 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (_tmp28_ != NULL) {
-#line 9222 "DirectoryMonitor.c"
+#line 9298 "DirectoryMonitor.c"
 		GeeArrayList* _tmp29_ = NULL;
-#line 331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp29_ = pruned;
-#line 331 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_remove_all (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp29_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 9228 "DirectoryMonitor.c"
+#line 9304 "DirectoryMonitor.c"
 	}
-#line 311 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 317 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (pruned);
-#line 9232 "DirectoryMonitor.c"
+#line 9308 "DirectoryMonitor.c"
 }
 
 
 static gint directory_monitor_file_info_map_get_children (DirectoryMonitorFileInfoMap* self, GFile* root, GeeCollection* files, GeeCollection* dirs) {
 	gint result = 0;
 	gint count = 0;
-#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 342 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (DIRECTORY_MONITOR_IS_FILE_INFO_MAP (self), 0);
-#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 342 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_IS_FILE (root), 0);
-#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 342 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (files), 0);
-#line 336 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 342 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (dirs), 0);
-#line 337 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	count = 0;
-#line 9249 "DirectoryMonitor.c"
+#line 9325 "DirectoryMonitor.c"
 	{
 		GeeIterator* _file_it = NULL;
 		GeeHashMap* _tmp0_ = NULL;
@@ -9260,25 +9336,25 @@ static gint directory_monitor_file_info_map_get_children (DirectoryMonitorFileIn
 		GeeSet* _tmp3_ = NULL;
 		GeeIterator* _tmp4_ = NULL;
 		GeeIterator* _tmp5_ = NULL;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp0_ = self->priv->map;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp1_ = gee_abstract_map_get_keys (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap));
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp2_ = _tmp1_;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp3_ = _tmp2_;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp4_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp3_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_tmp5_ = _tmp4_;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_tmp3_);
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_file_it = _tmp5_;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		while (TRUE) {
-#line 9276 "DirectoryMonitor.c"
+#line 9352 "DirectoryMonitor.c"
 			GeeIterator* _tmp6_ = NULL;
 			gboolean _tmp7_ = FALSE;
 			GFile* file = NULL;
@@ -9297,372 +9373,372 @@ static gint directory_monitor_file_info_map_get_children (DirectoryMonitorFileIn
 			DirectoryMonitorFType _tmp21_ = 0;
 			DirectoryMonitorFType _tmp22_ = 0;
 			DirectoryMonitorFType _tmp23_ = 0;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp6_ = _file_it;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp7_ = gee_iterator_next (_tmp6_);
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (!_tmp7_) {
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				break;
-#line 9303 "DirectoryMonitor.c"
+#line 9379 "DirectoryMonitor.c"
 			}
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp8_ = _file_it;
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp9_ = gee_iterator_get (_tmp8_);
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			file = (GFile*) _tmp9_;
-#line 339 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 345 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp10_ = file;
-#line 339 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 345 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp11_ = g_file_get_parent (_tmp10_);
-#line 339 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 345 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			parent = _tmp11_;
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp13_ = parent;
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp13_ == NULL) {
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp12_ = TRUE;
-#line 9323 "DirectoryMonitor.c"
+#line 9399 "DirectoryMonitor.c"
 			} else {
 				GFile* _tmp14_ = NULL;
 				GFile* _tmp15_ = NULL;
 				gboolean _tmp16_ = FALSE;
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp14_ = parent;
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp15_ = root;
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp16_ = g_file_equal (_tmp14_, _tmp15_);
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_tmp12_ = !_tmp16_;
-#line 9336 "DirectoryMonitor.c"
+#line 9412 "DirectoryMonitor.c"
 			}
-#line 340 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			if (_tmp12_) {
-#line 341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (parent);
-#line 341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				_g_object_unref0 (file);
-#line 341 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				continue;
-#line 9346 "DirectoryMonitor.c"
+#line 9422 "DirectoryMonitor.c"
 			}
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp17_ = self->priv->map;
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp18_ = file;
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp19_ = gee_abstract_map_get (G_TYPE_CHECK_INSTANCE_CAST (_tmp17_, GEE_TYPE_ABSTRACT_MAP, GeeAbstractMap), _tmp18_);
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp20_ = (GFileInfo*) _tmp19_;
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp21_ = directory_monitor_get_ftype (_tmp20_);
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp22_ = _tmp21_;
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (_tmp20_);
-#line 343 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 349 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			ftype = _tmp22_;
-#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 350 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_tmp23_ = ftype;
-#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 350 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			switch (_tmp23_) {
-#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 350 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_FILE:
-#line 9370 "DirectoryMonitor.c"
+#line 9446 "DirectoryMonitor.c"
 				{
 					GeeCollection* _tmp24_ = NULL;
 					GFile* _tmp25_ = NULL;
 					gint _tmp26_ = 0;
-#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp24_ = files;
-#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp25_ = file;
-#line 346 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					gee_collection_add (_tmp24_, _tmp25_);
-#line 347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 353 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp26_ = count;
-#line 347 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 353 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					count = _tmp26_ + 1;
-#line 348 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 354 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 9387 "DirectoryMonitor.c"
+#line 9463 "DirectoryMonitor.c"
 				}
-#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 350 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 				case DIRECTORY_MONITOR_FTYPE_DIRECTORY:
-#line 9391 "DirectoryMonitor.c"
+#line 9467 "DirectoryMonitor.c"
 				{
 					GeeCollection* _tmp27_ = NULL;
 					GFile* _tmp28_ = NULL;
 					gint _tmp29_ = 0;
-#line 351 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 357 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp27_ = dirs;
-#line 351 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 357 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp28_ = file;
-#line 351 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 357 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					gee_collection_add (_tmp27_, _tmp28_);
-#line 352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 358 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp29_ = count;
-#line 352 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 358 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					count = _tmp29_ + 1;
-#line 353 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 359 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 9408 "DirectoryMonitor.c"
+#line 9484 "DirectoryMonitor.c"
 				}
 				default:
 				{
 					DirectoryMonitorFType _tmp30_ = 0;
-#line 356 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 362 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_tmp30_ = ftype;
-#line 356 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 362 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					_vala_assert (_tmp30_ == DIRECTORY_MONITOR_FTYPE_UNSUPPORTED, "ftype == FType.UNSUPPORTED");
-#line 357 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 363 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 					break;
-#line 9419 "DirectoryMonitor.c"
+#line 9495 "DirectoryMonitor.c"
 				}
 			}
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (parent);
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			_g_object_unref0 (file);
-#line 9426 "DirectoryMonitor.c"
+#line 9502 "DirectoryMonitor.c"
 		}
-#line 338 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 344 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		_g_object_unref0 (_file_it);
-#line 9430 "DirectoryMonitor.c"
+#line 9506 "DirectoryMonitor.c"
 	}
-#line 361 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 367 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	result = count;
-#line 361 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 367 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return result;
-#line 9436 "DirectoryMonitor.c"
+#line 9512 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_value_file_info_map_init (GValue* value) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	value->data[0].v_pointer = NULL;
-#line 9443 "DirectoryMonitor.c"
+#line 9519 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_value_file_info_map_free_value (GValue* value) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (value->data[0].v_pointer) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_unref (value->data[0].v_pointer);
-#line 9452 "DirectoryMonitor.c"
+#line 9528 "DirectoryMonitor.c"
 	}
 }
 
 
 static void directory_monitor_value_file_info_map_copy_value (const GValue* src_value, GValue* dest_value) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (src_value->data[0].v_pointer) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		dest_value->data[0].v_pointer = directory_monitor_file_info_map_ref (src_value->data[0].v_pointer);
-#line 9462 "DirectoryMonitor.c"
+#line 9538 "DirectoryMonitor.c"
 	} else {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 9466 "DirectoryMonitor.c"
+#line 9542 "DirectoryMonitor.c"
 	}
 }
 
 
 static gpointer directory_monitor_value_file_info_map_peek_pointer (const GValue* value) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return value->data[0].v_pointer;
-#line 9474 "DirectoryMonitor.c"
+#line 9550 "DirectoryMonitor.c"
 }
 
 
 static gchar* directory_monitor_value_file_info_map_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (collect_values[0].v_pointer) {
-#line 9481 "DirectoryMonitor.c"
+#line 9557 "DirectoryMonitor.c"
 		DirectoryMonitorFileInfoMap* object;
 		object = collect_values[0].v_pointer;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		if (object->parent_instance.g_class == NULL) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9488 "DirectoryMonitor.c"
+#line 9564 "DirectoryMonitor.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 9492 "DirectoryMonitor.c"
+#line 9568 "DirectoryMonitor.c"
 		}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = directory_monitor_file_info_map_ref (object);
-#line 9496 "DirectoryMonitor.c"
+#line 9572 "DirectoryMonitor.c"
 	} else {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 9500 "DirectoryMonitor.c"
+#line 9576 "DirectoryMonitor.c"
 	}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return NULL;
-#line 9504 "DirectoryMonitor.c"
+#line 9580 "DirectoryMonitor.c"
 }
 
 
 static gchar* directory_monitor_value_file_info_map_lcopy_value (const GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 	DirectoryMonitorFileInfoMap** object_p;
 	object_p = collect_values[0].v_pointer;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!object_p) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 9515 "DirectoryMonitor.c"
+#line 9591 "DirectoryMonitor.c"
 	}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (!value->data[0].v_pointer) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = NULL;
-#line 9521 "DirectoryMonitor.c"
+#line 9597 "DirectoryMonitor.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = value->data[0].v_pointer;
-#line 9525 "DirectoryMonitor.c"
+#line 9601 "DirectoryMonitor.c"
 	} else {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		*object_p = directory_monitor_file_info_map_ref (value->data[0].v_pointer);
-#line 9529 "DirectoryMonitor.c"
+#line 9605 "DirectoryMonitor.c"
 	}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return NULL;
-#line 9533 "DirectoryMonitor.c"
+#line 9609 "DirectoryMonitor.c"
 }
 
 
 static GParamSpec* directory_monitor_param_spec_file_info_map (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags) {
 	DirectoryMonitorParamSpecFileInfoMap* spec;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (g_type_is_a (object_type, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP), NULL);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	spec = g_param_spec_internal (G_TYPE_PARAM_OBJECT, name, nick, blurb, flags);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	G_PARAM_SPEC (spec)->value_type = object_type;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return G_PARAM_SPEC (spec);
-#line 9547 "DirectoryMonitor.c"
+#line 9623 "DirectoryMonitor.c"
 }
 
 
 static gpointer directory_monitor_value_get_file_info_map (const GValue* value) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP), NULL);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return value->data[0].v_pointer;
-#line 9556 "DirectoryMonitor.c"
+#line 9632 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_value_set_file_info_map (GValue* value, gpointer v_object) {
 	DirectoryMonitorFileInfoMap* old;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old = value->data[0].v_pointer;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (v_object) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = v_object;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_ref (value->data[0].v_pointer);
-#line 9576 "DirectoryMonitor.c"
+#line 9652 "DirectoryMonitor.c"
 	} else {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 9580 "DirectoryMonitor.c"
+#line 9656 "DirectoryMonitor.c"
 	}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (old) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_unref (old);
-#line 9586 "DirectoryMonitor.c"
+#line 9662 "DirectoryMonitor.c"
 	}
 }
 
 
 static void directory_monitor_value_take_file_info_map (GValue* value, gpointer v_object) {
 	DirectoryMonitorFileInfoMap* old;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_return_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	old = value->data[0].v_pointer;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (v_object) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_return_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (v_object, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = v_object;
-#line 9605 "DirectoryMonitor.c"
+#line 9681 "DirectoryMonitor.c"
 	} else {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		value->data[0].v_pointer = NULL;
-#line 9609 "DirectoryMonitor.c"
+#line 9685 "DirectoryMonitor.c"
 	}
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (old) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		directory_monitor_file_info_map_unref (old);
-#line 9615 "DirectoryMonitor.c"
+#line 9691 "DirectoryMonitor.c"
 	}
 }
 
 
 static void directory_monitor_file_info_map_class_init (DirectoryMonitorFileInfoMapClass * klass) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	directory_monitor_file_info_map_parent_class = g_type_class_peek_parent (klass);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	((DirectoryMonitorFileInfoMapClass *) klass)->finalize = directory_monitor_file_info_map_finalize;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_type_class_add_private (klass, sizeof (DirectoryMonitorFileInfoMapPrivate));
-#line 9627 "DirectoryMonitor.c"
+#line 9703 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_file_info_map_instance_init (DirectoryMonitorFileInfoMap * self) {
 	GeeHashMap* _tmp0_ = NULL;
 	GeeHashMap* _tmp1_ = NULL;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv = DIRECTORY_MONITOR_FILE_INFO_MAP_GET_PRIVATE (self);
-#line 129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp0_ = gee_hash_map_new (g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, g_file_info_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, _file_hash_gee_hash_data_func, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL, NULL, NULL, NULL);
-#line 129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->map = _tmp0_;
-#line 131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_tmp1_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, (GDestroyNotify) g_free, g_file_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, _file_equal_gee_equal_data_func, NULL, NULL);
-#line 131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->id_map = _tmp1_;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->ref_count = 1;
-#line 9646 "DirectoryMonitor.c"
+#line 9722 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_file_info_map_finalize (DirectoryMonitorFileInfoMap* obj) {
 	DirectoryMonitorFileInfoMap * self;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, DIRECTORY_MONITOR_TYPE_FILE_INFO_MAP, DirectoryMonitorFileInfoMap);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_handlers_destroy (self);
-#line 129 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 133 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (self->priv->map);
-#line 131 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 135 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (self->priv->id_map);
-#line 9660 "DirectoryMonitor.c"
+#line 9736 "DirectoryMonitor.c"
 }
 
 
@@ -9683,24 +9759,24 @@ static GType directory_monitor_file_info_map_get_type (void) {
 static gpointer directory_monitor_file_info_map_ref (gpointer instance) {
 	DirectoryMonitorFileInfoMap* self;
 	self = instance;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_atomic_int_inc (&self->ref_count);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	return instance;
-#line 9685 "DirectoryMonitor.c"
+#line 9761 "DirectoryMonitor.c"
 }
 
 
 static void directory_monitor_file_info_map_unref (gpointer instance) {
 	DirectoryMonitorFileInfoMap* self;
 	self = instance;
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	if (g_atomic_int_dec_and_test (&self->ref_count)) {
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		DIRECTORY_MONITOR_FILE_INFO_MAP_GET_CLASS (self)->finalize (self);
-#line 128 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 132 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 9698 "DirectoryMonitor.c"
+#line 9774 "DirectoryMonitor.c"
 	}
 }
 
@@ -9838,7 +9914,7 @@ static void directory_monitor_class_init (DirectoryMonitorClass * klass) {
 	g_signal_new ("directory_deleted", TYPE_DIRECTORY_MONITOR, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (DirectoryMonitorClass, directory_deleted), NULL, NULL, g_cclosure_marshal_VOID__OBJECT, G_TYPE_NONE, 1, g_file_get_type ());
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	g_signal_new ("closed", TYPE_DIRECTORY_MONITOR, G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (DirectoryMonitorClass, closed), NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 9836 "DirectoryMonitor.c"
+#line 9912 "DirectoryMonitor.c"
 }
 
 
@@ -9850,35 +9926,35 @@ static void directory_monitor_instance_init (DirectoryMonitor * self) {
 	GCancellable* _tmp4_ = NULL;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv = DIRECTORY_MONITOR_GET_PRIVATE (self);
-#line 368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp0_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, (GDestroyNotify) g_free, g_file_monitor_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-#line 368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->monitors = _tmp0_;
-#line 369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp1_ = gee_linked_list_new (DIRECTORY_MONITOR_TYPE_QUERY_INFO_QUEUE_ELEMENT, (GBoxedCopyFunc) directory_monitor_query_info_queue_element_ref, (GDestroyNotify) directory_monitor_query_info_queue_element_unref, NULL, NULL, NULL);
-#line 369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->query_info_queue = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_QUEUE, GeeQueue);
-#line 371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp2_ = directory_monitor_file_info_map_new ();
-#line 371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->files = _tmp2_;
-#line 372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp3_ = directory_monitor_file_info_map_new ();
-#line 372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->parent_moved = _tmp3_;
-#line 373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_tmp4_ = g_cancellable_new ();
-#line 373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->cancellable = _tmp4_;
 #line 374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->outstanding_exploration_dirs = 0;
+	_tmp0_ = gee_hash_map_new (G_TYPE_STRING, (GBoxedCopyFunc) g_strdup, (GDestroyNotify) g_free, g_file_monitor_get_type (), (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+#line 374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->monitors = _tmp0_;
 #line 375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->started = FALSE;
-#line 376 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	self->priv->has_discovery_started = FALSE;
+	_tmp1_ = gee_linked_list_new (DIRECTORY_MONITOR_TYPE_QUERY_INFO_QUEUE_ELEMENT, (GBoxedCopyFunc) directory_monitor_query_info_queue_element_ref, (GDestroyNotify) directory_monitor_query_info_queue_element_unref, NULL, NULL, NULL);
+#line 375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->query_info_queue = G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, GEE_TYPE_QUEUE, GeeQueue);
 #line 377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp2_ = directory_monitor_file_info_map_new ();
+#line 377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->files = _tmp2_;
+#line 378 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp3_ = directory_monitor_file_info_map_new ();
+#line 378 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->parent_moved = _tmp3_;
+#line 379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_tmp4_ = g_cancellable_new ();
+#line 379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->cancellable = _tmp4_;
+#line 380 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->outstanding_exploration_dirs = 0;
+#line 381 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->started = FALSE;
+#line 382 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	self->priv->has_discovery_started = FALSE;
+#line 383 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self->priv->delete_timer_id = (guint) 0;
-#line 9876 "DirectoryMonitor.c"
+#line 9952 "DirectoryMonitor.c"
 }
 
 
@@ -9886,21 +9962,21 @@ static void directory_monitor_finalize (GObject* obj) {
 	DirectoryMonitor * self;
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_DIRECTORY_MONITOR, DirectoryMonitor);
-#line 365 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (self->priv->root);
-#line 368 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (self->priv->monitors);
-#line 369 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
-	_g_object_unref0 (self->priv->query_info_queue);
 #line 371 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (self->priv->root);
+#line 374 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (self->priv->monitors);
+#line 375 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+	_g_object_unref0 (self->priv->query_info_queue);
+#line 377 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_directory_monitor_file_info_map_unref0 (self->priv->files);
-#line 372 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 378 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_directory_monitor_file_info_map_unref0 (self->priv->parent_moved);
-#line 373 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
+#line 379 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	_g_object_unref0 (self->priv->cancellable);
 #line 60 "/home/jens/Source/shotwell/src/DirectoryMonitor.vala"
 	G_OBJECT_CLASS (directory_monitor_parent_class)->finalize (obj);
-#line 9898 "DirectoryMonitor.c"
+#line 9974 "DirectoryMonitor.c"
 }
 
 
