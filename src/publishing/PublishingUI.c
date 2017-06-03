@@ -171,6 +171,26 @@ typedef struct _ThumbnailSourceClass ThumbnailSourceClass;
 typedef struct _MediaSource MediaSource;
 typedef struct _MediaSourceClass MediaSourceClass;
 
+#define TYPE_PAGE_WINDOW (page_window_get_type ())
+#define PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGE_WINDOW, PageWindow))
+#define PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGE_WINDOW, PageWindowClass))
+#define IS_PAGE_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PAGE_WINDOW))
+#define IS_PAGE_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_PAGE_WINDOW))
+#define PAGE_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_PAGE_WINDOW, PageWindowClass))
+
+typedef struct _PageWindow PageWindow;
+typedef struct _PageWindowClass PageWindowClass;
+
+#define TYPE_APP_WINDOW (app_window_get_type ())
+#define APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_APP_WINDOW, AppWindow))
+#define APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_APP_WINDOW, AppWindowClass))
+#define IS_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_APP_WINDOW))
+#define IS_APP_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_APP_WINDOW))
+#define APP_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_APP_WINDOW, AppWindowClass))
+
+typedef struct _AppWindow AppWindow;
+typedef struct _AppWindowClass AppWindowClass;
+
 #define PUBLISHING_GLUE_TYPE_MEDIA_SOURCE_PUBLISHABLE_WRAPPER (publishing_glue_media_source_publishable_wrapper_get_type ())
 #define PUBLISHING_GLUE_MEDIA_SOURCE_PUBLISHABLE_WRAPPER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), PUBLISHING_GLUE_TYPE_MEDIA_SOURCE_PUBLISHABLE_WRAPPER, PublishingGlueMediaSourcePublishableWrapper))
 #define PUBLISHING_GLUE_MEDIA_SOURCE_PUBLISHABLE_WRAPPER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), PUBLISHING_GLUE_TYPE_MEDIA_SOURCE_PUBLISHABLE_WRAPPER, PublishingGlueMediaSourcePublishableWrapperClass))
@@ -455,6 +475,9 @@ GType thumbnail_source_get_type (void) G_GNUC_CONST;
 GType media_source_get_type (void) G_GNUC_CONST;
 PublishingUIPublishingDialog* publishing_ui_publishing_dialog_new (GeeCollection* to_publish);
 PublishingUIPublishingDialog* publishing_ui_publishing_dialog_construct (GType object_type, GeeCollection* to_publish);
+GType page_window_get_type (void) G_GNUC_CONST;
+GType app_window_get_type (void) G_GNUC_CONST;
+AppWindow* app_window_get_instance (void);
 static gboolean publishing_ui_publishing_dialog_on_window_close (PublishingUIPublishingDialog* self, GdkEventAny* evt);
 static gboolean _publishing_ui_publishing_dialog_on_window_close_gtk_widget_delete_event (GtkWidget* _sender, GdkEventAny* event, gpointer self);
 PublishingGlueMediaSourcePublishableWrapper* publishing_glue_media_source_publishable_wrapper_new (MediaSource* to_wrap);
@@ -478,9 +501,9 @@ static SpitPublishingService** publishing_ui_publishing_dialog_load_all_services
 GeeCollection* plugins_get_pluggables_for_type (GType type, GCompareDataFunc compare_func, void* compare_func_target, GDestroyNotify compare_func_target_destroy_notify, gboolean include_disabled);
 gchar* plugins_get_pluggable_module_id (SpitPluggable* needle);
 static void _vala_array_add56 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value);
-static gint __lambda14_ (void* a, void* b);
+static gint __lambda15_ (void* a, void* b);
 gint utf8_cs_compare (void* a, void* b);
-static gint ___lambda14____compar_fn_t (void* key1, void* key2);
+static gint ___lambda15____compar_fn_t (void* key1, void* key2);
 static void _vala_array_add57 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value);
 static void _vala_array_add58 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value);
 static void _vala_array_add59 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value);
@@ -525,21 +548,21 @@ PublishingUIConcreteDialogPane* publishing_ui_concrete_dialog_pane_construct (GT
 	self->builder = _tmp0_;
 #line 13 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 529 "PublishingUI.c"
+#line 552 "PublishingUI.c"
 }
 
 
 PublishingUIConcreteDialogPane* publishing_ui_concrete_dialog_pane_new (void) {
 #line 13 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_concrete_dialog_pane_construct (PUBLISHING_UI_TYPE_CONCRETE_DIALOG_PANE);
-#line 536 "PublishingUI.c"
+#line 559 "PublishingUI.c"
 }
 
 
 static gpointer _g_object_ref0 (gpointer self) {
 #line 18 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self ? g_object_ref (self) : NULL;
-#line 543 "PublishingUI.c"
+#line 566 "PublishingUI.c"
 }
 
 
@@ -558,7 +581,7 @@ static GtkWidget* publishing_ui_concrete_dialog_pane_real_get_widget (SpitPublis
 	result = _tmp1_;
 #line 18 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 562 "PublishingUI.c"
+#line 585 "PublishingUI.c"
 }
 
 
@@ -571,7 +594,7 @@ static SpitPublishingDialogPaneGeometryOptions publishing_ui_concrete_dialog_pan
 	result = SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_NONE;
 #line 22 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 575 "PublishingUI.c"
+#line 598 "PublishingUI.c"
 }
 
 
@@ -579,7 +602,7 @@ static void publishing_ui_concrete_dialog_pane_real_on_pane_installed (SpitPubli
 	PublishingUIConcreteDialogPane * self;
 #line 25 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_UI_TYPE_CONCRETE_DIALOG_PANE, PublishingUIConcreteDialogPane);
-#line 583 "PublishingUI.c"
+#line 606 "PublishingUI.c"
 }
 
 
@@ -587,7 +610,7 @@ static void publishing_ui_concrete_dialog_pane_real_on_pane_uninstalled (SpitPub
 	PublishingUIConcreteDialogPane * self;
 #line 28 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (base, PUBLISHING_UI_TYPE_CONCRETE_DIALOG_PANE, PublishingUIConcreteDialogPane);
-#line 591 "PublishingUI.c"
+#line 614 "PublishingUI.c"
 }
 
 
@@ -596,7 +619,7 @@ static void publishing_ui_concrete_dialog_pane_class_init (PublishingUIConcreteD
 	publishing_ui_concrete_dialog_pane_parent_class = g_type_class_peek_parent (klass);
 #line 9 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_ui_concrete_dialog_pane_finalize;
-#line 600 "PublishingUI.c"
+#line 623 "PublishingUI.c"
 }
 
 
@@ -611,7 +634,7 @@ static void publishing_ui_concrete_dialog_pane_spit_publishing_dialog_pane_inter
 	iface->on_pane_installed = (void (*)(SpitPublishingDialogPane*)) publishing_ui_concrete_dialog_pane_real_on_pane_installed;
 #line 9 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	iface->on_pane_uninstalled = (void (*)(SpitPublishingDialogPane*)) publishing_ui_concrete_dialog_pane_real_on_pane_uninstalled;
-#line 615 "PublishingUI.c"
+#line 638 "PublishingUI.c"
 }
 
 
@@ -620,7 +643,7 @@ static void publishing_ui_concrete_dialog_pane_instance_init (PublishingUIConcre
 	self->pane_widget = NULL;
 #line 11 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->builder = NULL;
-#line 624 "PublishingUI.c"
+#line 647 "PublishingUI.c"
 }
 
 
@@ -634,7 +657,7 @@ static void publishing_ui_concrete_dialog_pane_finalize (GObject* obj) {
 	_g_object_unref0 (self->builder);
 #line 9 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (publishing_ui_concrete_dialog_pane_parent_class)->finalize (obj);
-#line 638 "PublishingUI.c"
+#line 661 "PublishingUI.c"
 }
 
 
@@ -689,7 +712,7 @@ PublishingUIStaticMessagePane* publishing_ui_static_message_pane_construct (GTyp
 	_tmp6_ = enable_markup;
 #line 40 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp6_) {
-#line 693 "PublishingUI.c"
+#line 716 "PublishingUI.c"
 		GtkLabel* _tmp7_ = NULL;
 		const gchar* _tmp8_ = NULL;
 		GtkLabel* _tmp9_ = NULL;
@@ -708,7 +731,7 @@ PublishingUIStaticMessagePane* publishing_ui_static_message_pane_construct (GTyp
 		_tmp10_ = self->priv->msg_label;
 #line 43 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_label_set_use_markup (_tmp10_, TRUE);
-#line 712 "PublishingUI.c"
+#line 735 "PublishingUI.c"
 	} else {
 		GtkLabel* _tmp11_ = NULL;
 		const gchar* _tmp12_ = NULL;
@@ -718,18 +741,18 @@ PublishingUIStaticMessagePane* publishing_ui_static_message_pane_construct (GTyp
 		_tmp12_ = message_string;
 #line 45 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_label_set_label (_tmp11_, _tmp12_);
-#line 722 "PublishingUI.c"
+#line 745 "PublishingUI.c"
 	}
 #line 35 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 726 "PublishingUI.c"
+#line 749 "PublishingUI.c"
 }
 
 
 PublishingUIStaticMessagePane* publishing_ui_static_message_pane_new (const gchar* message_string, gboolean enable_markup) {
 #line 35 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_static_message_pane_construct (PUBLISHING_UI_TYPE_STATIC_MESSAGE_PANE, message_string, enable_markup);
-#line 733 "PublishingUI.c"
+#line 756 "PublishingUI.c"
 }
 
 
@@ -740,7 +763,7 @@ static void publishing_ui_static_message_pane_class_init (PublishingUIStaticMess
 	g_type_class_add_private (klass, sizeof (PublishingUIStaticMessagePanePrivate));
 #line 32 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_ui_static_message_pane_finalize;
-#line 744 "PublishingUI.c"
+#line 767 "PublishingUI.c"
 }
 
 
@@ -749,7 +772,7 @@ static void publishing_ui_static_message_pane_instance_init (PublishingUIStaticM
 	self->priv = PUBLISHING_UI_STATIC_MESSAGE_PANE_GET_PRIVATE (self);
 #line 33 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->msg_label = NULL;
-#line 753 "PublishingUI.c"
+#line 776 "PublishingUI.c"
 }
 
 
@@ -761,7 +784,7 @@ static void publishing_ui_static_message_pane_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->msg_label);
 #line 32 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (publishing_ui_static_message_pane_parent_class)->finalize (obj);
-#line 765 "PublishingUI.c"
+#line 788 "PublishingUI.c"
 }
 
 
@@ -780,7 +803,7 @@ GType publishing_ui_static_message_pane_get_type (void) {
 static void _publishing_ui_login_welcome_pane_on_login_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 62 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_login_welcome_pane_on_login_clicked ((PublishingUILoginWelcomePane*) self);
-#line 784 "PublishingUI.c"
+#line 807 "PublishingUI.c"
 }
 
 
@@ -849,14 +872,14 @@ PublishingUILoginWelcomePane* publishing_ui_login_welcome_pane_construct (GType 
 	gtk_label_set_markup (_tmp11_, _tmp12_);
 #line 56 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 853 "PublishingUI.c"
+#line 876 "PublishingUI.c"
 }
 
 
 PublishingUILoginWelcomePane* publishing_ui_login_welcome_pane_new (const gchar* service_welcome_message) {
 #line 56 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_login_welcome_pane_construct (PUBLISHING_UI_TYPE_LOGIN_WELCOME_PANE, service_welcome_message);
-#line 860 "PublishingUI.c"
+#line 883 "PublishingUI.c"
 }
 
 
@@ -865,7 +888,7 @@ static void publishing_ui_login_welcome_pane_on_login_clicked (PublishingUILogin
 	g_return_if_fail (PUBLISHING_UI_IS_LOGIN_WELCOME_PANE (self));
 #line 68 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_signal_emit_by_name (self, "login-requested");
-#line 869 "PublishingUI.c"
+#line 892 "PublishingUI.c"
 }
 
 
@@ -878,7 +901,7 @@ static void publishing_ui_login_welcome_pane_class_init (PublishingUILoginWelcom
 	G_OBJECT_CLASS (klass)->finalize = publishing_ui_login_welcome_pane_finalize;
 #line 50 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_signal_new ("login_requested", PUBLISHING_UI_TYPE_LOGIN_WELCOME_PANE, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 882 "PublishingUI.c"
+#line 905 "PublishingUI.c"
 }
 
 
@@ -889,7 +912,7 @@ static void publishing_ui_login_welcome_pane_instance_init (PublishingUILoginWel
 	self->priv->login_button = NULL;
 #line 52 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->not_logged_in_label = NULL;
-#line 893 "PublishingUI.c"
+#line 916 "PublishingUI.c"
 }
 
 
@@ -903,7 +926,7 @@ static void publishing_ui_login_welcome_pane_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->not_logged_in_label);
 #line 50 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (publishing_ui_login_welcome_pane_parent_class)->finalize (obj);
-#line 907 "PublishingUI.c"
+#line 930 "PublishingUI.c"
 }
 
 
@@ -951,14 +974,14 @@ PublishingUIProgressPane* publishing_ui_progress_pane_construct (GType object_ty
 	self->priv->progress_bar = _tmp5_;
 #line 75 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 955 "PublishingUI.c"
+#line 978 "PublishingUI.c"
 }
 
 
 PublishingUIProgressPane* publishing_ui_progress_pane_new (void) {
 #line 75 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_progress_pane_construct (PUBLISHING_UI_TYPE_PROGRESS_PANE);
-#line 962 "PublishingUI.c"
+#line 985 "PublishingUI.c"
 }
 
 
@@ -975,7 +998,7 @@ void publishing_ui_progress_pane_set_text (PublishingUIProgressPane* self, const
 	_tmp1_ = text;
 #line 82 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_progress_bar_set_text (_tmp0_, _tmp1_);
-#line 979 "PublishingUI.c"
+#line 1002 "PublishingUI.c"
 }
 
 
@@ -990,7 +1013,7 @@ void publishing_ui_progress_pane_set_progress (PublishingUIProgressPane* self, g
 	_tmp1_ = progress;
 #line 86 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_progress_bar_set_fraction (_tmp0_, _tmp1_);
-#line 994 "PublishingUI.c"
+#line 1017 "PublishingUI.c"
 }
 
 
@@ -1011,7 +1034,7 @@ void publishing_ui_progress_pane_set_status (PublishingUIProgressPane* self, con
 	_tmp2_ = gtk_progress_bar_get_text (_tmp1_);
 #line 90 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (g_strcmp0 (_tmp0_, _tmp2_) != 0) {
-#line 1015 "PublishingUI.c"
+#line 1038 "PublishingUI.c"
 		GtkProgressBar* _tmp3_ = NULL;
 		const gchar* _tmp4_ = NULL;
 #line 91 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
@@ -1020,13 +1043,13 @@ void publishing_ui_progress_pane_set_status (PublishingUIProgressPane* self, con
 		_tmp4_ = status_text;
 #line 91 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_progress_bar_set_text (_tmp3_, _tmp4_);
-#line 1024 "PublishingUI.c"
+#line 1047 "PublishingUI.c"
 	}
 #line 93 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp5_ = progress;
 #line 93 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_progress_pane_set_progress (self, _tmp5_);
-#line 1030 "PublishingUI.c"
+#line 1053 "PublishingUI.c"
 }
 
 
@@ -1037,7 +1060,7 @@ static void publishing_ui_progress_pane_class_init (PublishingUIProgressPaneClas
 	g_type_class_add_private (klass, sizeof (PublishingUIProgressPanePrivate));
 #line 72 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_ui_progress_pane_finalize;
-#line 1041 "PublishingUI.c"
+#line 1064 "PublishingUI.c"
 }
 
 
@@ -1046,7 +1069,7 @@ static void publishing_ui_progress_pane_instance_init (PublishingUIProgressPane 
 	self->priv = PUBLISHING_UI_PROGRESS_PANE_GET_PRIVATE (self);
 #line 73 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->progress_bar = NULL;
-#line 1050 "PublishingUI.c"
+#line 1073 "PublishingUI.c"
 }
 
 
@@ -1058,7 +1081,7 @@ static void publishing_ui_progress_pane_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->progress_bar);
 #line 72 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (publishing_ui_progress_pane_parent_class)->finalize (obj);
-#line 1062 "PublishingUI.c"
+#line 1085 "PublishingUI.c"
 }
 
 
@@ -1085,7 +1108,7 @@ PublishingUISuccessPane* publishing_ui_success_pane_construct (GType object_type
 	_tmp0_ = published_media;
 #line 103 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp0_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
-#line 1089 "PublishingUI.c"
+#line 1112 "PublishingUI.c"
 		gint _tmp1_ = 0;
 		const gchar* _tmp2_ = NULL;
 		gchar* _tmp3_ = NULL;
@@ -1099,14 +1122,14 @@ PublishingUISuccessPane* publishing_ui_success_pane_construct (GType object_type
 		_g_free0 (message_string);
 #line 104 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		message_string = _tmp3_;
-#line 1103 "PublishingUI.c"
+#line 1126 "PublishingUI.c"
 	} else {
 		SpitPublishingPublisherMediaType _tmp4_ = 0;
 #line 108 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp4_ = published_media;
 #line 108 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		if (_tmp4_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
-#line 1110 "PublishingUI.c"
+#line 1133 "PublishingUI.c"
 			gint _tmp5_ = 0;
 			const gchar* _tmp6_ = NULL;
 			gchar* _tmp7_ = NULL;
@@ -1120,14 +1143,14 @@ PublishingUISuccessPane* publishing_ui_success_pane_construct (GType object_type
 			_g_free0 (message_string);
 #line 109 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			message_string = _tmp7_;
-#line 1124 "PublishingUI.c"
+#line 1147 "PublishingUI.c"
 		} else {
 			SpitPublishingPublisherMediaType _tmp8_ = 0;
 #line 113 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp8_ = published_media;
 #line 113 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			if (_tmp8_ == (SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO | SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO)) {
-#line 1131 "PublishingUI.c"
+#line 1154 "PublishingUI.c"
 				const gchar* _tmp9_ = NULL;
 				gchar* _tmp10_ = NULL;
 #line 115 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
@@ -1138,11 +1161,11 @@ PublishingUISuccessPane* publishing_ui_success_pane_construct (GType object_type
 				_g_free0 (message_string);
 #line 115 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				message_string = _tmp10_;
-#line 1142 "PublishingUI.c"
+#line 1165 "PublishingUI.c"
 			} else {
 #line 118 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				g_assert_not_reached ();
-#line 1146 "PublishingUI.c"
+#line 1169 "PublishingUI.c"
 			}
 		}
 	}
@@ -1154,21 +1177,21 @@ PublishingUISuccessPane* publishing_ui_success_pane_construct (GType object_type
 	_g_free0 (message_string);
 #line 98 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 1158 "PublishingUI.c"
+#line 1181 "PublishingUI.c"
 }
 
 
 PublishingUISuccessPane* publishing_ui_success_pane_new (SpitPublishingPublisherMediaType published_media, gint num_uploaded) {
 #line 98 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_success_pane_construct (PUBLISHING_UI_TYPE_SUCCESS_PANE, published_media, num_uploaded);
-#line 1165 "PublishingUI.c"
+#line 1188 "PublishingUI.c"
 }
 
 
 static void publishing_ui_success_pane_class_init (PublishingUISuccessPaneClass * klass) {
 #line 97 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_success_pane_parent_class = g_type_class_peek_parent (klass);
-#line 1172 "PublishingUI.c"
+#line 1195 "PublishingUI.c"
 }
 
 
@@ -1197,21 +1220,21 @@ PublishingUIAccountFetchWaitPane* publishing_ui_account_fetch_wait_pane_construc
 	self = (PublishingUIAccountFetchWaitPane*) publishing_ui_static_message_pane_construct (object_type, _tmp0_, FALSE);
 #line 126 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 1201 "PublishingUI.c"
+#line 1224 "PublishingUI.c"
 }
 
 
 PublishingUIAccountFetchWaitPane* publishing_ui_account_fetch_wait_pane_new (void) {
 #line 126 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_account_fetch_wait_pane_construct (PUBLISHING_UI_TYPE_ACCOUNT_FETCH_WAIT_PANE);
-#line 1208 "PublishingUI.c"
+#line 1231 "PublishingUI.c"
 }
 
 
 static void publishing_ui_account_fetch_wait_pane_class_init (PublishingUIAccountFetchWaitPaneClass * klass) {
 #line 125 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_account_fetch_wait_pane_parent_class = g_type_class_peek_parent (klass);
-#line 1215 "PublishingUI.c"
+#line 1238 "PublishingUI.c"
 }
 
 
@@ -1240,21 +1263,21 @@ PublishingUILoginWaitPane* publishing_ui_login_wait_pane_construct (GType object
 	self = (PublishingUILoginWaitPane*) publishing_ui_static_message_pane_construct (object_type, _tmp0_, FALSE);
 #line 132 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 1244 "PublishingUI.c"
+#line 1267 "PublishingUI.c"
 }
 
 
 PublishingUILoginWaitPane* publishing_ui_login_wait_pane_new (void) {
 #line 132 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_login_wait_pane_construct (PUBLISHING_UI_TYPE_LOGIN_WAIT_PANE);
-#line 1251 "PublishingUI.c"
+#line 1274 "PublishingUI.c"
 }
 
 
 static void publishing_ui_login_wait_pane_class_init (PublishingUILoginWaitPaneClass * klass) {
 #line 131 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_login_wait_pane_parent_class = g_type_class_peek_parent (klass);
-#line 1258 "PublishingUI.c"
+#line 1281 "PublishingUI.c"
 }
 
 
@@ -1277,40 +1300,40 @@ GType publishing_ui_login_wait_pane_get_type (void) {
 static gboolean _publishing_ui_publishing_dialog_on_window_close_gtk_widget_delete_event (GtkWidget* _sender, GdkEventAny* event, gpointer self) {
 	gboolean result;
 	result = publishing_ui_publishing_dialog_on_window_close ((PublishingUIPublishingDialog*) self, event);
-#line 171 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 1283 "PublishingUI.c"
+#line 1306 "PublishingUI.c"
 }
 
 
 static void _vala_array_add55 (SpitPublishingPublishable*** array, int* length, int* size, SpitPublishingPublishable* value) {
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((*length) == (*size)) {
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*array = g_renew (SpitPublishingPublishable*, *array, (*size) + 1);
-#line 1294 "PublishingUI.c"
+#line 1317 "PublishingUI.c"
 	}
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[(*length)++] = value;
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[*length] = NULL;
-#line 1300 "PublishingUI.c"
+#line 1323 "PublishingUI.c"
 }
 
 
 static void _publishing_ui_publishing_dialog_on_service_changed_gtk_combo_box_changed (GtkComboBox* _sender, gpointer self) {
-#line 252 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_on_service_changed ((PublishingUIPublishingDialog*) self);
-#line 1307 "PublishingUI.c"
+#line 1330 "PublishingUI.c"
 }
 
 
 static void _publishing_ui_publishing_dialog_on_close_cancel_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 306 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_on_close_cancel_clicked ((PublishingUIPublishingDialog*) self);
-#line 1314 "PublishingUI.c"
+#line 1337 "PublishingUI.c"
 }
 
 
@@ -1324,52 +1347,54 @@ PublishingUIPublishingDialog* publishing_ui_publishing_dialog_construct (GType o
 	gint _tmp4_ = 0;
 	gboolean _tmp5_ = FALSE;
 	gboolean _tmp6_ = FALSE;
-	SpitPublishingPublishable** _tmp8_ = NULL;
+	AppWindow* _tmp8_ = NULL;
+	AppWindow* _tmp9_ = NULL;
+	SpitPublishingPublishable** _tmp10_ = NULL;
 	gboolean has_photos = FALSE;
 	gboolean has_videos = FALSE;
 	gchar* title = NULL;
 	gchar* label = NULL;
-	gboolean _tmp24_ = FALSE;
-	gboolean _tmp25_ = FALSE;
-	const gchar* _tmp42_ = NULL;
-	GtkListStore* _tmp43_ = NULL;
-	GtkListStore* _tmp44_ = NULL;
-	GtkComboBox* _tmp45_ = NULL;
-	GtkCellRendererPixbuf* renderer_pix = NULL;
-	GtkCellRendererPixbuf* _tmp46_ = NULL;
+	gboolean _tmp26_ = FALSE;
+	gboolean _tmp27_ = FALSE;
+	const gchar* _tmp44_ = NULL;
+	GtkListStore* _tmp45_ = NULL;
+	GtkListStore* _tmp46_ = NULL;
 	GtkComboBox* _tmp47_ = NULL;
+	GtkCellRendererPixbuf* renderer_pix = NULL;
 	GtkCellRendererPixbuf* _tmp48_ = NULL;
 	GtkComboBox* _tmp49_ = NULL;
 	GtkCellRendererPixbuf* _tmp50_ = NULL;
+	GtkComboBox* _tmp51_ = NULL;
+	GtkCellRendererPixbuf* _tmp52_ = NULL;
 	GtkCellRendererText* renderer_text = NULL;
-	GtkCellRendererText* _tmp51_ = NULL;
-	GtkComboBox* _tmp52_ = NULL;
 	GtkCellRendererText* _tmp53_ = NULL;
 	GtkComboBox* _tmp54_ = NULL;
 	GtkCellRendererText* _tmp55_ = NULL;
 	GtkComboBox* _tmp56_ = NULL;
+	GtkCellRendererText* _tmp57_ = NULL;
+	GtkComboBox* _tmp58_ = NULL;
 	gchar* last_used_service = NULL;
-	ConfigFacade* _tmp57_ = NULL;
-	ConfigFacade* _tmp58_ = NULL;
-	gchar* _tmp59_ = NULL;
-	gchar* _tmp60_ = NULL;
+	ConfigFacade* _tmp59_ = NULL;
+	ConfigFacade* _tmp60_ = NULL;
+	gchar* _tmp61_ = NULL;
+	gchar* _tmp62_ = NULL;
 	SpitPublishingService** loaded_services = NULL;
-	gboolean _tmp61_ = FALSE;
-	gboolean _tmp62_ = FALSE;
-	gint _tmp63_ = 0;
-	SpitPublishingService** _tmp64_ = NULL;
+	gboolean _tmp63_ = FALSE;
+	gboolean _tmp64_ = FALSE;
+	gint _tmp65_ = 0;
+	SpitPublishingService** _tmp66_ = NULL;
 	gint loaded_services_length1 = 0;
 	gint _loaded_services_size_ = 0;
 	GtkTreeIter iter = {0};
-	SpitPublishingService** _tmp65_ = NULL;
-	gint _tmp65__length1 = 0;
-	GtkComboBox* _tmp103_ = NULL;
-	gboolean _tmp104_ = FALSE;
-	GtkBox* _tmp134_ = NULL;
-	GtkBox* _tmp135_ = NULL;
+	SpitPublishingService** _tmp67_ = NULL;
+	gint _tmp67__length1 = 0;
+	GtkComboBox* _tmp105_ = NULL;
+	gboolean _tmp106_ = FALSE;
 	GtkBox* _tmp136_ = NULL;
-	gboolean _tmp137_ = FALSE;
-	GtkButton* _tmp147_ = NULL;
+	GtkBox* _tmp137_ = NULL;
+	GtkBox* _tmp138_ = NULL;
+	gboolean _tmp139_ = FALSE;
+	GtkButton* _tmp149_ = NULL;
 #line 161 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_val_if_fail (GEE_IS_COLLECTION (to_publish), NULL);
 #line 162 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
@@ -1392,11 +1417,11 @@ PublishingUIPublishingDialog* publishing_ui_publishing_dialog_construct (GType o
 	if (_tmp5_) {
 #line 166 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp4_ = 1;
-#line 1396 "PublishingUI.c"
+#line 1421 "PublishingUI.c"
 	} else {
 #line 166 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp4_ = 0;
-#line 1400 "PublishingUI.c"
+#line 1425 "PublishingUI.c"
 	}
 #line 166 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self = (PublishingUIPublishingDialog*) g_object_new (object_type, "use-header-bar", _tmp4_, NULL);
@@ -1404,760 +1429,770 @@ PublishingUIPublishingDialog* publishing_ui_publishing_dialog_construct (GType o
 	_tmp6_ = use_header;
 #line 167 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp6_) {
-#line 1408 "PublishingUI.c"
+#line 1433 "PublishingUI.c"
 		GtkWidget* _tmp7_ = NULL;
 #line 168 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp7_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
 #line 168 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_header_bar_set_show_close_button (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, gtk_header_bar_get_type (), GtkHeaderBar), FALSE);
-#line 1414 "PublishingUI.c"
+#line 1439 "PublishingUI.c"
 	}
 #line 170 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
 #line 171 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_window_set_modal (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
+#line 172 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp8_ = app_window_get_instance ();
+#line 172 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp9_ = _tmp8_;
+#line 172 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_window_set_transient_for (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_window_get_type (), GtkWindow));
+#line 172 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_g_object_unref0 (_tmp9_);
+#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_signal_connect_object (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), "delete-event", (GCallback) _publishing_ui_publishing_dialog_on_window_close_gtk_widget_delete_event, self, 0);
-#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp8_ = g_new0 (SpitPublishingPublishable*, 0 + 1);
-#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->publishables = _tmp8_;
-#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->publishables_length1 = 0;
-#line 173 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->_publishables_size_ = self->priv->publishables_length1;
-#line 174 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	has_photos = FALSE;
 #line 175 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp10_ = g_new0 (SpitPublishingPublishable*, 0 + 1);
+#line 175 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->publishables = (_vala_array_free (self->priv->publishables, self->priv->publishables_length1, (GDestroyNotify) g_object_unref), NULL);
+#line 175 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->publishables = _tmp10_;
+#line 175 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->publishables_length1 = 0;
+#line 175 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->_publishables_size_ = self->priv->publishables_length1;
+#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	has_photos = FALSE;
+#line 177 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	has_videos = FALSE;
-#line 1434 "PublishingUI.c"
+#line 1469 "PublishingUI.c"
 	{
 		GeeIterator* _media_it = NULL;
-		GeeCollection* _tmp9_ = NULL;
-		GeeIterator* _tmp10_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp9_ = to_publish;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp10_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_media_it = _tmp10_;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		GeeCollection* _tmp11_ = NULL;
+		GeeIterator* _tmp12_ = NULL;
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp11_ = to_publish;
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp12_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp11_, GEE_TYPE_ITERABLE, GeeIterable));
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_media_it = _tmp12_;
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		while (TRUE) {
-#line 1447 "PublishingUI.c"
-			GeeIterator* _tmp11_ = NULL;
-			gboolean _tmp12_ = FALSE;
-			MediaSource* media = NULL;
+#line 1482 "PublishingUI.c"
 			GeeIterator* _tmp13_ = NULL;
-			gpointer _tmp14_ = NULL;
+			gboolean _tmp14_ = FALSE;
+			MediaSource* media = NULL;
+			GeeIterator* _tmp15_ = NULL;
+			gpointer _tmp16_ = NULL;
 			SpitPublishingPublishable* publishable = NULL;
-			MediaSource* _tmp15_ = NULL;
-			PublishingGlueMediaSourcePublishableWrapper* _tmp16_ = NULL;
-			SpitPublishingPublishable* _tmp17_ = NULL;
-			SpitPublishingPublisherMediaType _tmp18_ = 0;
-			SpitPublishingPublishable** _tmp21_ = NULL;
-			gint _tmp21__length1 = 0;
-			SpitPublishingPublishable* _tmp22_ = NULL;
-			SpitPublishingPublishable* _tmp23_ = NULL;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp11_ = _media_it;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp12_ = gee_iterator_next (_tmp11_);
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			if (!_tmp12_) {
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				break;
-#line 1470 "PublishingUI.c"
-			}
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			MediaSource* _tmp17_ = NULL;
+			PublishingGlueMediaSourcePublishableWrapper* _tmp18_ = NULL;
+			SpitPublishingPublishable* _tmp19_ = NULL;
+			SpitPublishingPublisherMediaType _tmp20_ = 0;
+			SpitPublishingPublishable** _tmp23_ = NULL;
+			gint _tmp23__length1 = 0;
+			SpitPublishingPublishable* _tmp24_ = NULL;
+			SpitPublishingPublishable* _tmp25_ = NULL;
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp13_ = _media_it;
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp14_ = gee_iterator_get (_tmp13_);
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			media = (MediaSource*) _tmp14_;
-#line 177 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp15_ = media;
-#line 177 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp16_ = publishing_glue_media_source_publishable_wrapper_new (_tmp15_);
-#line 177 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			publishable = G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, SPIT_PUBLISHING_TYPE_PUBLISHABLE, SpitPublishingPublishable);
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp14_ = gee_iterator_next (_tmp13_);
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			if (!_tmp14_) {
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				break;
+#line 1505 "PublishingUI.c"
+			}
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp15_ = _media_it;
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp16_ = gee_iterator_get (_tmp15_);
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			media = (MediaSource*) _tmp16_;
 #line 179 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp17_ = publishable;
+			_tmp17_ = media;
 #line 179 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp18_ = spit_publishing_publishable_get_media_type (_tmp17_);
+			_tmp18_ = publishing_glue_media_source_publishable_wrapper_new (_tmp17_);
 #line 179 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			if (_tmp18_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
-#line 180 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				has_photos = TRUE;
-#line 1492 "PublishingUI.c"
-			} else {
-				SpitPublishingPublishable* _tmp19_ = NULL;
-				SpitPublishingPublisherMediaType _tmp20_ = 0;
+			publishable = G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, SPIT_PUBLISHING_TYPE_PUBLISHABLE, SpitPublishingPublishable);
 #line 181 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp19_ = publishable;
+			_tmp19_ = publishable;
 #line 181 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp20_ = spit_publishing_publishable_get_media_type (_tmp19_);
+			_tmp20_ = spit_publishing_publishable_get_media_type (_tmp19_);
 #line 181 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				if (_tmp20_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
+			if (_tmp20_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) {
 #line 182 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					has_videos = TRUE;
-#line 1504 "PublishingUI.c"
-				} else {
+				has_photos = TRUE;
+#line 1527 "PublishingUI.c"
+			} else {
+				SpitPublishingPublishable* _tmp21_ = NULL;
+				SpitPublishingPublisherMediaType _tmp22_ = 0;
+#line 183 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp21_ = publishable;
+#line 183 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp22_ = spit_publishing_publishable_get_media_type (_tmp21_);
+#line 183 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				if (_tmp22_ == SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) {
 #line 184 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					has_videos = TRUE;
+#line 1539 "PublishingUI.c"
+				} else {
+#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					g_assert_not_reached ();
-#line 1508 "PublishingUI.c"
+#line 1543 "PublishingUI.c"
 				}
 			}
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp21_ = self->priv->publishables;
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp21__length1 = self->priv->publishables_length1;
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp22_ = publishable;
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp23_ = _g_object_ref0 (_tmp22_);
-#line 186 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_vala_array_add55 (&self->priv->publishables, &self->priv->publishables_length1, &self->priv->_publishables_size_, _tmp23_);
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp23_ = self->priv->publishables;
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp23__length1 = self->priv->publishables_length1;
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp24_ = publishable;
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp25_ = _g_object_ref0 (_tmp24_);
+#line 188 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_vala_array_add55 (&self->priv->publishables, &self->priv->publishables_length1, &self->priv->_publishables_size_, _tmp25_);
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_g_object_unref0 (publishable);
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_g_object_unref0 (media);
-#line 1525 "PublishingUI.c"
+#line 1560 "PublishingUI.c"
 		}
-#line 176 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 178 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (_media_it);
-#line 1529 "PublishingUI.c"
+#line 1564 "PublishingUI.c"
 	}
-#line 189 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 191 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	title = NULL;
-#line 190 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	label = NULL;
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp25_ = has_photos;
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	if (_tmp25_) {
-#line 1539 "PublishingUI.c"
-		gboolean _tmp26_ = FALSE;
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp26_ = has_videos;
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp24_ = !_tmp26_;
-#line 1545 "PublishingUI.c"
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp27_ = has_photos;
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	if (_tmp27_) {
+#line 1574 "PublishingUI.c"
+		gboolean _tmp28_ = FALSE;
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp28_ = has_videos;
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp26_ = !_tmp28_;
+#line 1580 "PublishingUI.c"
 	} else {
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp24_ = FALSE;
-#line 1549 "PublishingUI.c"
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp26_ = FALSE;
+#line 1584 "PublishingUI.c"
 	}
-#line 192 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	if (_tmp24_) {
-#line 1553 "PublishingUI.c"
-		const gchar* _tmp27_ = NULL;
-		gchar* _tmp28_ = NULL;
+#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	if (_tmp26_) {
+#line 1588 "PublishingUI.c"
 		const gchar* _tmp29_ = NULL;
 		gchar* _tmp30_ = NULL;
-#line 193 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp27_ = _ ("Publish Photos");
-#line 193 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp28_ = g_strdup (_tmp27_);
-#line 193 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_g_free0 (title);
-#line 193 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		title = _tmp28_;
-#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp29_ = _ ("Publish photos _to:");
-#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		const gchar* _tmp31_ = NULL;
+		gchar* _tmp32_ = NULL;
+#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp29_ = _ ("Publish Photos");
+#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp30_ = g_strdup (_tmp29_);
-#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_g_free0 (title);
+#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		title = _tmp30_;
+#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp31_ = _ ("Publish photos _to:");
+#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp32_ = g_strdup (_tmp31_);
+#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_free0 (label);
-#line 194 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		label = _tmp30_;
-#line 1574 "PublishingUI.c"
+#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		label = _tmp32_;
+#line 1609 "PublishingUI.c"
 	} else {
-		gboolean _tmp31_ = FALSE;
-		gboolean _tmp32_ = FALSE;
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp32_ = has_photos;
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		if (!_tmp32_) {
-#line 1582 "PublishingUI.c"
-			gboolean _tmp33_ = FALSE;
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp33_ = has_videos;
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp31_ = _tmp33_;
-#line 1588 "PublishingUI.c"
+		gboolean _tmp33_ = FALSE;
+		gboolean _tmp34_ = FALSE;
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp34_ = has_photos;
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		if (!_tmp34_) {
+#line 1617 "PublishingUI.c"
+			gboolean _tmp35_ = FALSE;
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp35_ = has_videos;
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp33_ = _tmp35_;
+#line 1623 "PublishingUI.c"
 		} else {
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp31_ = FALSE;
-#line 1592 "PublishingUI.c"
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp33_ = FALSE;
+#line 1627 "PublishingUI.c"
 		}
-#line 195 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		if (_tmp31_) {
-#line 1596 "PublishingUI.c"
-			const gchar* _tmp34_ = NULL;
-			gchar* _tmp35_ = NULL;
+#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		if (_tmp33_) {
+#line 1631 "PublishingUI.c"
 			const gchar* _tmp36_ = NULL;
 			gchar* _tmp37_ = NULL;
-#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp34_ = _ ("Publish Videos");
-#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp35_ = g_strdup (_tmp34_);
-#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_g_free0 (title);
-#line 196 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			title = _tmp35_;
-#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp36_ = _ ("Publish videos _to");
-#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp37_ = g_strdup (_tmp36_);
-#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_g_free0 (label);
-#line 197 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			label = _tmp37_;
-#line 1617 "PublishingUI.c"
-		} else {
 			const gchar* _tmp38_ = NULL;
 			gchar* _tmp39_ = NULL;
-			const gchar* _tmp40_ = NULL;
-			gchar* _tmp41_ = NULL;
+#line 198 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp36_ = _ ("Publish Videos");
+#line 198 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp37_ = g_strdup (_tmp36_);
+#line 198 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_g_free0 (title);
+#line 198 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			title = _tmp37_;
 #line 199 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp38_ = _ ("Publish Photos and Videos");
+			_tmp38_ = _ ("Publish videos _to");
 #line 199 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp39_ = g_strdup (_tmp38_);
 #line 199 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_g_free0 (title);
-#line 199 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			title = _tmp39_;
-#line 200 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp40_ = _ ("Publish photos and videos _to");
-#line 200 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp41_ = g_strdup (_tmp40_);
-#line 200 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_g_free0 (label);
-#line 200 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			label = _tmp41_;
-#line 1639 "PublishingUI.c"
+#line 199 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			label = _tmp39_;
+#line 1652 "PublishingUI.c"
+		} else {
+			const gchar* _tmp40_ = NULL;
+			gchar* _tmp41_ = NULL;
+			const gchar* _tmp42_ = NULL;
+			gchar* _tmp43_ = NULL;
+#line 201 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp40_ = _ ("Publish Photos and Videos");
+#line 201 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp41_ = g_strdup (_tmp40_);
+#line 201 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_g_free0 (title);
+#line 201 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			title = _tmp41_;
+#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp42_ = _ ("Publish photos and videos _to");
+#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp43_ = g_strdup (_tmp42_);
+#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_g_free0 (label);
+#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			label = _tmp43_;
+#line 1674 "PublishingUI.c"
 		}
 	}
-#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp42_ = title;
-#line 202 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp42_);
 #line 204 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp43_ = gtk_list_store_new (2, gdk_pixbuf_get_type (), G_TYPE_STRING, -1);
+	_tmp44_ = title;
 #line 204 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_window_set_title (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), _tmp44_);
+#line 206 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp45_ = gtk_list_store_new (2, gdk_pixbuf_get_type (), G_TYPE_STRING, -1);
+#line 206 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->service_selector_box_model);
-#line 204 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->service_selector_box_model = _tmp43_;
-#line 205 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp44_ = self->priv->service_selector_box_model;
-#line 205 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp45_ = (GtkComboBox*) gtk_combo_box_new_with_model (G_TYPE_CHECK_INSTANCE_CAST (_tmp44_, GTK_TYPE_TREE_MODEL, GtkTreeModel));
-#line 205 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_object_ref_sink (_tmp45_);
-#line 205 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 206 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->service_selector_box_model = _tmp45_;
+#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp46_ = self->priv->service_selector_box_model;
+#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp47_ = (GtkComboBox*) gtk_combo_box_new_with_model (G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, GTK_TYPE_TREE_MODEL, GtkTreeModel));
+#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_object_ref_sink (_tmp47_);
+#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->service_selector_box);
-#line 205 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->service_selector_box = _tmp45_;
 #line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp46_ = (GtkCellRendererPixbuf*) gtk_cell_renderer_pixbuf_new ();
-#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_object_ref_sink (_tmp46_);
-#line 207 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	renderer_pix = _tmp46_;
-#line 208 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp47_ = self->priv->service_selector_box;
-#line 208 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp48_ = renderer_pix;
-#line 208 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp47_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp48_, gtk_cell_renderer_get_type (), GtkCellRenderer), TRUE);
+	self->priv->service_selector_box = _tmp47_;
 #line 209 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp48_ = (GtkCellRendererPixbuf*) gtk_cell_renderer_pixbuf_new ();
+#line 209 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_object_ref_sink (_tmp48_);
+#line 209 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	renderer_pix = _tmp48_;
+#line 210 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp49_ = self->priv->service_selector_box;
-#line 209 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 210 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp50_ = renderer_pix;
-#line 209 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_cell_renderer_get_type (), GtkCellRenderer), "pixbuf", 0);
+#line 210 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp49_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp50_, gtk_cell_renderer_get_type (), GtkCellRenderer), TRUE);
 #line 211 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp51_ = (GtkCellRendererText*) gtk_cell_renderer_text_new ();
+	_tmp51_ = self->priv->service_selector_box;
 #line 211 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_object_ref_sink (_tmp51_);
+	_tmp52_ = renderer_pix;
 #line 211 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	renderer_text = _tmp51_;
-#line 212 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp52_ = self->priv->service_selector_box;
-#line 212 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp53_ = renderer_text;
-#line 212 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp53_, gtk_cell_renderer_get_type (), GtkCellRenderer), TRUE);
+	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp51_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp52_, gtk_cell_renderer_get_type (), GtkCellRenderer), "pixbuf", 0);
 #line 213 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp53_ = (GtkCellRendererText*) gtk_cell_renderer_text_new ();
+#line 213 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_object_ref_sink (_tmp53_);
+#line 213 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	renderer_text = _tmp53_;
+#line 214 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp54_ = self->priv->service_selector_box;
-#line 213 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 214 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp55_ = renderer_text;
-#line 213 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, gtk_cell_renderer_get_type (), GtkCellRenderer), "text", 1);
+#line 214 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_cell_layout_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp54_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp55_, gtk_cell_renderer_get_type (), GtkCellRenderer), TRUE);
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp56_ = self->priv->service_selector_box;
 #line 215 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_combo_box_set_active (_tmp56_, 0);
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp57_ = config_facade_get_instance ();
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp58_ = _tmp57_;
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp59_ = configuration_facade_get_last_used_service (G_TYPE_CHECK_INSTANCE_CAST (_tmp58_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp57_ = renderer_text;
+#line 215 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_cell_layout_add_attribute (G_TYPE_CHECK_INSTANCE_CAST (_tmp56_, GTK_TYPE_CELL_LAYOUT, GtkCellLayout), G_TYPE_CHECK_INSTANCE_CAST (_tmp57_, gtk_cell_renderer_get_type (), GtkCellRenderer), "text", 1);
+#line 217 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp58_ = self->priv->service_selector_box;
+#line 217 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_combo_box_set_active (_tmp58_, 0);
+#line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp59_ = config_facade_get_instance ();
+#line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp60_ = _tmp59_;
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_g_object_unref0 (_tmp58_);
-#line 218 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	last_used_service = _tmp60_;
 #line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp61_ = has_photos;
+	_tmp61_ = configuration_facade_get_last_used_service (G_TYPE_CHECK_INSTANCE_CAST (_tmp60_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade));
 #line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp62_ = has_videos;
+	_tmp62_ = _tmp61_;
 #line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp64_ = publishing_ui_publishing_dialog_load_services (_tmp61_, _tmp62_, &_tmp63_);
+	_g_object_unref0 (_tmp60_);
 #line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	loaded_services = _tmp64_;
-#line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	loaded_services_length1 = _tmp63_;
-#line 220 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	last_used_service = _tmp62_;
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp63_ = has_photos;
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp64_ = has_videos;
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp66_ = publishing_ui_publishing_dialog_load_services (_tmp63_, _tmp64_, &_tmp65_);
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	loaded_services = _tmp66_;
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	loaded_services_length1 = _tmp65_;
+#line 222 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_loaded_services_size_ = loaded_services_length1;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp65_ = loaded_services;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp65__length1 = loaded_services_length1;
-#line 1730 "PublishingUI.c"
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp67_ = loaded_services;
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp67__length1 = loaded_services_length1;
+#line 1765 "PublishingUI.c"
 	{
 		SpitPublishingService** service_collection = NULL;
 		gint service_collection_length1 = 0;
 		gint _service_collection_size_ = 0;
 		gint service_it = 0;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		service_collection = _tmp65_;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		service_collection_length1 = _tmp65__length1;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		for (service_it = 0; service_it < _tmp65__length1; service_it = service_it + 1) {
-#line 1742 "PublishingUI.c"
-			SpitPublishingService* _tmp66_ = NULL;
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		service_collection = _tmp67_;
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		service_collection_length1 = _tmp67__length1;
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		for (service_it = 0; service_it < _tmp67__length1; service_it = service_it + 1) {
+#line 1777 "PublishingUI.c"
+			SpitPublishingService* _tmp68_ = NULL;
 			SpitPublishingService* service = NULL;
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp66_ = _g_object_ref0 (service_collection[service_it]);
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			service = _tmp66_;
-#line 1749 "PublishingUI.c"
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp68_ = _g_object_ref0 (service_collection[service_it]);
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			service = _tmp68_;
+#line 1784 "PublishingUI.c"
 			{
-				GtkListStore* _tmp67_ = NULL;
-				GtkTreeIter _tmp68_ = {0};
+				GtkListStore* _tmp69_ = NULL;
+				GtkTreeIter _tmp70_ = {0};
 				gchar* curr_service_id = NULL;
-				SpitPublishingService* _tmp69_ = NULL;
-				const gchar* _tmp70_ = NULL;
-				gchar* _tmp71_ = NULL;
-				SpitPublishingService* _tmp72_ = NULL;
-				gboolean _tmp73_ = FALSE;
-				SpitPluggableInfo _tmp74_ = {0};
-				GdkPixbuf** _tmp75_ = NULL;
-				gint _tmp75__length1 = 0;
-				const gchar* _tmp93_ = NULL;
-#line 225 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp67_ = self->priv->service_selector_box_model;
-#line 225 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				gtk_list_store_append (_tmp67_, &_tmp68_);
-#line 225 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				iter = _tmp68_;
+				SpitPublishingService* _tmp71_ = NULL;
+				const gchar* _tmp72_ = NULL;
+				gchar* _tmp73_ = NULL;
+				SpitPublishingService* _tmp74_ = NULL;
+				gboolean _tmp75_ = FALSE;
+				SpitPluggableInfo _tmp76_ = {0};
+				GdkPixbuf** _tmp77_ = NULL;
+				gint _tmp77__length1 = 0;
+				const gchar* _tmp95_ = NULL;
 #line 227 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp69_ = service;
+				_tmp69_ = self->priv->service_selector_box_model;
 #line 227 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp70_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp69_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+				gtk_list_store_append (_tmp69_, &_tmp70_);
 #line 227 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp71_ = g_strdup (_tmp70_);
-#line 227 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				curr_service_id = _tmp71_;
+				iter = _tmp70_;
 #line 229 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp72_ = service;
+				_tmp71_ = service;
 #line 229 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				spit_pluggable_get_info (G_TYPE_CHECK_INSTANCE_CAST (_tmp72_, SPIT_TYPE_PLUGGABLE, SpitPluggable), &self->priv->info);
+				_tmp72_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp71_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 229 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp73_ = g_strdup (_tmp72_);
+#line 229 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				curr_service_id = _tmp73_;
 #line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp74_ = self->priv->info;
+				_tmp74_ = service;
 #line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp75_ = _tmp74_.icons;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp75__length1 = _tmp74_.icons_length1;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				if (NULL != _tmp75_) {
-#line 1789 "PublishingUI.c"
-					SpitPluggableInfo _tmp76_ = {0};
-					GdkPixbuf** _tmp77_ = NULL;
-					gint _tmp77__length1 = 0;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp76_ = self->priv->info;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp77_ = _tmp76_.icons;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp77__length1 = _tmp76_.icons_length1;
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp73_ = 0 < _tmp77__length1;
-#line 1801 "PublishingUI.c"
+				spit_pluggable_get_info (G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, SPIT_TYPE_PLUGGABLE, SpitPluggable), &self->priv->info);
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp76_ = self->priv->info;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp77_ = _tmp76_.icons;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				_tmp77__length1 = _tmp76_.icons_length1;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				if (NULL != _tmp77_) {
+#line 1824 "PublishingUI.c"
+					SpitPluggableInfo _tmp78_ = {0};
+					GdkPixbuf** _tmp79_ = NULL;
+					gint _tmp79__length1 = 0;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp78_ = self->priv->info;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp79_ = _tmp78_.icons;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp79__length1 = _tmp78_.icons_length1;
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp75_ = 0 < _tmp79__length1;
+#line 1836 "PublishingUI.c"
 				} else {
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp73_ = FALSE;
-#line 1805 "PublishingUI.c"
+#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp75_ = FALSE;
+#line 1840 "PublishingUI.c"
 				}
-#line 231 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				if (_tmp73_) {
-#line 1809 "PublishingUI.c"
-					GtkListStore* _tmp78_ = NULL;
-					GtkTreeIter _tmp79_ = {0};
-					SpitPluggableInfo _tmp80_ = {0};
-					GdkPixbuf** _tmp81_ = NULL;
-					gint _tmp81__length1 = 0;
-					GdkPixbuf* _tmp82_ = NULL;
-					SpitPublishingService* _tmp83_ = NULL;
-					const gchar* _tmp84_ = NULL;
-					GdkPixbuf* _tmp85_ = NULL;
-					GdkPixbuf* _tmp86_ = NULL;
 #line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp78_ = self->priv->service_selector_box_model;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp79_ = iter;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp80_ = self->priv->info;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp81_ = _tmp80_.icons;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp81__length1 = _tmp80_.icons_length1;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp82_ = _tmp81_[0];
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp83_ = service;
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp84_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 233 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					gtk_list_store_set (_tmp78_, &_tmp79_, 0, _tmp82_, 1, _tmp84_, -1);
-#line 237 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp85_ = resources_get_icon (RESOURCES_ICON_GENERIC_PLUGIN, RESOURCES_DEFAULT_ICON_SCALE);
-#line 237 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				if (_tmp75_) {
+#line 1844 "PublishingUI.c"
+					GtkListStore* _tmp80_ = NULL;
+					GtkTreeIter _tmp81_ = {0};
+					SpitPluggableInfo _tmp82_ = {0};
+					GdkPixbuf** _tmp83_ = NULL;
+					gint _tmp83__length1 = 0;
+					GdkPixbuf* _tmp84_ = NULL;
+					SpitPublishingService* _tmp85_ = NULL;
+					const gchar* _tmp86_ = NULL;
+					GdkPixbuf* _tmp87_ = NULL;
+					GdkPixbuf* _tmp88_ = NULL;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp80_ = self->priv->service_selector_box_model;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp81_ = iter;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp82_ = self->priv->info;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp83_ = _tmp82_.icons;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp83__length1 = _tmp82_.icons_length1;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp84_ = _tmp83_[0];
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp85_ = service;
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp86_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp85_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 235 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					gtk_list_store_set (_tmp80_, &_tmp81_, 0, _tmp84_, 1, _tmp86_, -1);
+#line 239 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp87_ = resources_get_icon (RESOURCES_ICON_GENERIC_PLUGIN, RESOURCES_DEFAULT_ICON_SCALE);
+#line 239 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_g_object_unref0 (self->priv->info.icons[0]);
-#line 237 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					self->priv->info.icons[0] = _tmp85_;
-#line 237 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp86_ = self->priv->info.icons[0];
-#line 1846 "PublishingUI.c"
+#line 239 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					self->priv->info.icons[0] = _tmp87_;
+#line 239 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp88_ = self->priv->info.icons[0];
+#line 1881 "PublishingUI.c"
 				} else {
-					GtkListStore* _tmp87_ = NULL;
-					GtkTreeIter _tmp88_ = {0};
-					GdkPixbuf* _tmp89_ = NULL;
-					GdkPixbuf* _tmp90_ = NULL;
-					SpitPublishingService* _tmp91_ = NULL;
-					const gchar* _tmp92_ = NULL;
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp87_ = self->priv->service_selector_box_model;
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp88_ = iter;
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp89_ = resources_get_icon (RESOURCES_ICON_GENERIC_PLUGIN, RESOURCES_DEFAULT_ICON_SCALE);
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp90_ = _tmp89_;
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp91_ = service;
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp92_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp91_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					gtk_list_store_set (_tmp87_, &_tmp88_, 0, _tmp90_, 1, _tmp92_, -1);
-#line 240 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_g_object_unref0 (_tmp90_);
-#line 1870 "PublishingUI.c"
+					GtkListStore* _tmp89_ = NULL;
+					GtkTreeIter _tmp90_ = {0};
+					GdkPixbuf* _tmp91_ = NULL;
+					GdkPixbuf* _tmp92_ = NULL;
+					SpitPublishingService* _tmp93_ = NULL;
+					const gchar* _tmp94_ = NULL;
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp89_ = self->priv->service_selector_box_model;
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp90_ = iter;
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp91_ = resources_get_icon (RESOURCES_ICON_GENERIC_PLUGIN, RESOURCES_DEFAULT_ICON_SCALE);
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp92_ = _tmp91_;
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp93_ = service;
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp94_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp93_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					gtk_list_store_set (_tmp89_, &_tmp90_, 0, _tmp92_, 1, _tmp94_, -1);
+#line 242 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_g_object_unref0 (_tmp92_);
+#line 1905 "PublishingUI.c"
 				}
-#line 244 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				_tmp93_ = last_used_service;
-#line 244 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				if (_tmp93_ == NULL) {
-#line 1876 "PublishingUI.c"
-					GtkComboBox* _tmp94_ = NULL;
-					GtkTreeIter _tmp95_ = {0};
-					SpitPublishingService* _tmp96_ = NULL;
-					const gchar* _tmp97_ = NULL;
-					gchar* _tmp98_ = NULL;
-#line 245 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp94_ = self->priv->service_selector_box;
-#line 245 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp95_ = iter;
-#line 245 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					gtk_combo_box_set_active_iter (_tmp94_, &_tmp95_);
 #line 246 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp96_ = service;
+				_tmp95_ = last_used_service;
 #line 246 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp97_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp96_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 246 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp98_ = g_strdup (_tmp97_);
-#line 246 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_g_free0 (last_used_service);
-#line 246 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					last_used_service = _tmp98_;
-#line 1898 "PublishingUI.c"
-				} else {
+				if (_tmp95_ == NULL) {
+#line 1911 "PublishingUI.c"
+					GtkComboBox* _tmp96_ = NULL;
+					GtkTreeIter _tmp97_ = {0};
+					SpitPublishingService* _tmp98_ = NULL;
 					const gchar* _tmp99_ = NULL;
-					const gchar* _tmp100_ = NULL;
+					gchar* _tmp100_ = NULL;
 #line 247 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp99_ = last_used_service;
+					_tmp96_ = self->priv->service_selector_box;
 #line 247 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					_tmp100_ = curr_service_id;
+					_tmp97_ = iter;
 #line 247 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-					if (g_strcmp0 (_tmp99_, _tmp100_) == 0) {
-#line 1908 "PublishingUI.c"
-						GtkComboBox* _tmp101_ = NULL;
-						GtkTreeIter _tmp102_ = {0};
+					gtk_combo_box_set_active_iter (_tmp96_, &_tmp97_);
 #line 248 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-						_tmp101_ = self->priv->service_selector_box;
+					_tmp98_ = service;
 #line 248 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-						_tmp102_ = iter;
+					_tmp99_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp98_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
 #line 248 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-						gtk_combo_box_set_active_iter (_tmp101_, &_tmp102_);
-#line 1917 "PublishingUI.c"
+					_tmp100_ = g_strdup (_tmp99_);
+#line 248 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_g_free0 (last_used_service);
+#line 248 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					last_used_service = _tmp100_;
+#line 1933 "PublishingUI.c"
+				} else {
+					const gchar* _tmp101_ = NULL;
+					const gchar* _tmp102_ = NULL;
+#line 249 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp101_ = last_used_service;
+#line 249 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					_tmp102_ = curr_service_id;
+#line 249 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+					if (g_strcmp0 (_tmp101_, _tmp102_) == 0) {
+#line 1943 "PublishingUI.c"
+						GtkComboBox* _tmp103_ = NULL;
+						GtkTreeIter _tmp104_ = {0};
+#line 250 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+						_tmp103_ = self->priv->service_selector_box;
+#line 250 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+						_tmp104_ = iter;
+#line 250 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+						gtk_combo_box_set_active_iter (_tmp103_, &_tmp104_);
+#line 1952 "PublishingUI.c"
 					}
 				}
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_free0 (curr_service_id);
-#line 224 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 226 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_object_unref0 (service);
-#line 1924 "PublishingUI.c"
+#line 1959 "PublishingUI.c"
 			}
 		}
 	}
-#line 252 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp103_ = self->priv->service_selector_box;
-#line 252 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_signal_connect_object (_tmp103_, "changed", (GCallback) _publishing_ui_publishing_dialog_on_service_changed_gtk_combo_box_changed, self, 0);
 #line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp104_ = use_header;
+	_tmp105_ = self->priv->service_selector_box;
 #line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	if (!_tmp104_) {
-#line 1936 "PublishingUI.c"
+	g_signal_connect_object (_tmp105_, "changed", (GCallback) _publishing_ui_publishing_dialog_on_service_changed_gtk_combo_box_changed, self, 0);
+#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp106_ = use_header;
+#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	if (!_tmp106_) {
+#line 1971 "PublishingUI.c"
 		GtkLabel* service_selector_box_label = NULL;
-		const gchar* _tmp105_ = NULL;
-		GtkLabel* _tmp106_ = NULL;
-		GtkLabel* _tmp107_ = NULL;
-		GtkComboBox* _tmp108_ = NULL;
+		const gchar* _tmp107_ = NULL;
+		GtkLabel* _tmp108_ = NULL;
 		GtkLabel* _tmp109_ = NULL;
-		GtkLabel* _tmp110_ = NULL;
-		GtkComboBox* _tmp111_ = NULL;
-		GtkComboBox* _tmp112_ = NULL;
+		GtkComboBox* _tmp110_ = NULL;
+		GtkLabel* _tmp111_ = NULL;
+		GtkLabel* _tmp112_ = NULL;
 		GtkComboBox* _tmp113_ = NULL;
 		GtkComboBox* _tmp114_ = NULL;
+		GtkComboBox* _tmp115_ = NULL;
+		GtkComboBox* _tmp116_ = NULL;
 		GtkBox* service_selector_layouter = NULL;
-		GtkBox* _tmp115_ = NULL;
-		GtkBox* _tmp116_ = NULL;
 		GtkBox* _tmp117_ = NULL;
 		GtkBox* _tmp118_ = NULL;
-		GtkLabel* _tmp119_ = NULL;
+		GtkBox* _tmp119_ = NULL;
 		GtkBox* _tmp120_ = NULL;
-		GtkComboBox* _tmp121_ = NULL;
-		GtkBox* service_area_layouter = NULL;
+		GtkLabel* _tmp121_ = NULL;
 		GtkBox* _tmp122_ = NULL;
-		GtkBox* _tmp123_ = NULL;
+		GtkComboBox* _tmp123_ = NULL;
+		GtkBox* service_area_layouter = NULL;
 		GtkBox* _tmp124_ = NULL;
 		GtkBox* _tmp125_ = NULL;
-		GtkSeparator* _tmp126_ = NULL;
-		GtkSeparator* _tmp127_ = NULL;
-		GtkBox* _tmp128_ = NULL;
-		GtkBox* _tmp129_ = NULL;
+		GtkBox* _tmp126_ = NULL;
+		GtkBox* _tmp127_ = NULL;
+		GtkSeparator* _tmp128_ = NULL;
+		GtkSeparator* _tmp129_ = NULL;
 		GtkBox* _tmp130_ = NULL;
 		GtkBox* _tmp131_ = NULL;
 		GtkBox* _tmp132_ = NULL;
 		GtkBox* _tmp133_ = NULL;
-#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp105_ = label;
-#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp106_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp105_);
-#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_object_ref_sink (_tmp106_);
-#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		service_selector_box_label = _tmp106_;
-#line 257 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp107_ = service_selector_box_label;
-#line 257 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp108_ = self->priv->service_selector_box;
-#line 257 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_label_set_mnemonic_widget (_tmp107_, G_TYPE_CHECK_INSTANCE_CAST (_tmp108_, gtk_widget_get_type (), GtkWidget));
+		GtkBox* _tmp134_ = NULL;
+		GtkBox* _tmp135_ = NULL;
 #line 258 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp107_ = label;
+#line 258 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp108_ = (GtkLabel*) gtk_label_new_with_mnemonic (_tmp107_);
+#line 258 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_object_ref_sink (_tmp108_);
+#line 258 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		service_selector_box_label = _tmp108_;
+#line 259 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp109_ = service_selector_box_label;
-#line 258 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp109_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
 #line 259 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp110_ = service_selector_box_label;
+		_tmp110_ = self->priv->service_selector_box;
 #line 259 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp110_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
-#line 265 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp111_ = self->priv->service_selector_box;
-#line 265 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp111_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_END);
-#line 266 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp112_ = self->priv->service_selector_box;
-#line 266 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_label_set_mnemonic_widget (_tmp109_, G_TYPE_CHECK_INSTANCE_CAST (_tmp110_, gtk_widget_get_type (), GtkWidget));
+#line 260 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp111_ = service_selector_box_label;
+#line 260 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp111_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
+#line 261 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp112_ = service_selector_box_label;
+#line 261 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp112_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
 #line 267 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp113_ = self->priv->service_selector_box;
 #line 267 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp113_, gtk_widget_get_type (), GtkWidget), FALSE);
+		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp113_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_END);
 #line 268 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp114_ = self->priv->service_selector_box;
 #line 268 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp114_, gtk_widget_get_type (), GtkWidget), FALSE);
+		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp114_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_CENTER);
+#line 269 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp115_ = self->priv->service_selector_box;
+#line 269 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp115_, gtk_widget_get_type (), GtkWidget), FALSE);
 #line 270 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp115_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
+		_tmp116_ = self->priv->service_selector_box;
 #line 270 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_object_ref_sink (_tmp115_);
-#line 270 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		service_selector_layouter = _tmp115_;
-#line 271 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp116_ = service_selector_layouter;
-#line 271 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp116_, gtk_container_get_type (), GtkContainer), (guint) 12);
+		gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp116_, gtk_widget_get_type (), GtkWidget), FALSE);
 #line 272 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp117_ = service_selector_layouter;
+		_tmp117_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
 #line 272 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp117_, gtk_widget_get_type (), GtkWidget), TRUE);
+		g_object_ref_sink (_tmp117_);
+#line 272 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		service_selector_layouter = _tmp117_;
 #line 273 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp118_ = service_selector_layouter;
 #line 273 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp119_ = service_selector_box_label;
-#line 273 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp118_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp119_, gtk_widget_get_type (), GtkWidget));
+		gtk_container_set_border_width (G_TYPE_CHECK_INSTANCE_CAST (_tmp118_, gtk_container_get_type (), GtkContainer), (guint) 12);
 #line 274 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp119_ = service_selector_layouter;
+#line 274 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp119_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 275 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp120_ = service_selector_layouter;
-#line 274 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp121_ = self->priv->service_selector_box;
-#line 274 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_box_pack_start (_tmp120_, G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
-#line 278 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp122_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 278 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_object_ref_sink (_tmp122_);
-#line 278 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		service_area_layouter = _tmp122_;
-#line 279 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp123_ = service_area_layouter;
-#line 279 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp124_ = service_selector_layouter;
-#line 279 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp123_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp124_, gtk_widget_get_type (), GtkWidget));
+#line 275 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp121_ = service_selector_box_label;
+#line 275 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp120_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp121_, gtk_widget_get_type (), GtkWidget));
+#line 276 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp122_ = service_selector_layouter;
+#line 276 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp123_ = self->priv->service_selector_box;
+#line 276 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_box_pack_start (_tmp122_, G_TYPE_CHECK_INSTANCE_CAST (_tmp123_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
 #line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp124_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_object_ref_sink (_tmp124_);
+#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		service_area_layouter = _tmp124_;
+#line 281 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp125_ = service_area_layouter;
-#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp126_ = (GtkSeparator*) gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_object_ref_sink (_tmp126_);
-#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp127_ = _tmp126_;
-#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp125_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp127_, gtk_widget_get_type (), GtkWidget));
-#line 280 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_g_object_unref0 (_tmp127_);
 #line 281 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp128_ = service_area_layouter;
+		_tmp126_ = service_selector_layouter;
 #line 281 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp128_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp125_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp126_, gtk_widget_get_type (), GtkWidget));
 #line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp129_ = service_area_layouter;
+		_tmp127_ = service_area_layouter;
 #line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp129_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
+		_tmp128_ = (GtkSeparator*) gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+#line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_object_ref_sink (_tmp128_);
+#line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp129_ = _tmp128_;
+#line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_container_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp127_, gtk_container_get_type (), GtkContainer), G_TYPE_CHECK_INSTANCE_CAST (_tmp129_, gtk_widget_get_type (), GtkWidget));
+#line 282 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_g_object_unref0 (_tmp129_);
 #line 283 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp130_ = service_area_layouter;
 #line 283 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp130_, gtk_widget_get_type (), GtkWidget), TRUE);
+		gtk_widget_set_halign (G_TYPE_CHECK_INSTANCE_CAST (_tmp130_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_FILL);
 #line 284 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp131_ = service_area_layouter;
 #line 284 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp131_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 286 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp132_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+		gtk_widget_set_valign (G_TYPE_CHECK_INSTANCE_CAST (_tmp131_, gtk_widget_get_type (), GtkWidget), GTK_ALIGN_START);
+#line 285 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp132_ = service_area_layouter;
+#line 285 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_hexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp132_, gtk_widget_get_type (), GtkWidget), TRUE);
 #line 286 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp133_ = service_area_layouter;
 #line 286 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_box_pack_start (_tmp132_, G_TYPE_CHECK_INSTANCE_CAST (_tmp133_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
-#line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_vexpand (G_TYPE_CHECK_INSTANCE_CAST (_tmp133_, gtk_widget_get_type (), GtkWidget), FALSE);
+#line 288 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp134_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 288 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp135_ = service_area_layouter;
+#line 288 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_box_pack_start (_tmp134_, G_TYPE_CHECK_INSTANCE_CAST (_tmp135_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 0);
+#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (service_area_layouter);
-#line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (service_selector_layouter);
-#line 254 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 256 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (service_selector_box_label);
-#line 2085 "PublishingUI.c"
+#line 2120 "PublishingUI.c"
 	}
-#line 289 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp134_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 289 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_object_ref_sink (_tmp134_);
-#line 289 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp136_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_object_ref_sink (_tmp136_);
+#line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->central_area_layouter);
-#line 289 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->central_area_layouter = _tmp134_;
 #line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp135_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp136_ = self->priv->central_area_layouter;
-#line 291 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_box_pack_start (_tmp135_, G_TYPE_CHECK_INSTANCE_CAST (_tmp136_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+	self->priv->central_area_layouter = _tmp136_;
 #line 293 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp137_ = use_header;
+	_tmp137_ = (GtkBox*) gtk_dialog_get_content_area (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
 #line 293 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	if (_tmp137_) {
-#line 2105 "PublishingUI.c"
-		GtkButton* _tmp138_ = NULL;
-		GtkButton* _tmp139_ = NULL;
-		GtkWidget* _tmp140_ = NULL;
+	_tmp138_ = self->priv->central_area_layouter;
+#line 293 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_box_pack_start (_tmp137_, G_TYPE_CHECK_INSTANCE_CAST (_tmp138_, gtk_widget_get_type (), GtkWidget), TRUE, TRUE, (guint) 0);
+#line 295 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp139_ = use_header;
+#line 295 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	if (_tmp139_) {
+#line 2140 "PublishingUI.c"
+		GtkButton* _tmp140_ = NULL;
 		GtkButton* _tmp141_ = NULL;
 		GtkWidget* _tmp142_ = NULL;
-		GtkComboBox* _tmp143_ = NULL;
-#line 294 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp138_ = (GtkButton*) gtk_button_new_with_mnemonic ("_Cancel");
-#line 294 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_object_ref_sink (_tmp138_);
-#line 294 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		GtkButton* _tmp143_ = NULL;
+		GtkWidget* _tmp144_ = NULL;
+		GtkComboBox* _tmp145_ = NULL;
+#line 296 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp140_ = (GtkButton*) gtk_button_new_with_mnemonic ("_Cancel");
+#line 296 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_object_ref_sink (_tmp140_);
+#line 296 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (self->priv->close_cancel_button);
-#line 294 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		self->priv->close_cancel_button = _tmp138_;
-#line 295 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp139_ = self->priv->close_cancel_button;
-#line 295 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp139_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 297 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp140_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 296 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		self->priv->close_cancel_button = _tmp140_;
 #line 297 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp141_ = self->priv->close_cancel_button;
 #line 297 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_header_bar_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp140_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp141_, gtk_widget_get_type (), GtkWidget));
-#line 298 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_widget_set_can_default (G_TYPE_CHECK_INSTANCE_CAST (_tmp141_, gtk_widget_get_type (), GtkWidget), TRUE);
+#line 299 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp142_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 298 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp143_ = self->priv->service_selector_box;
-#line 298 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_header_bar_pack_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp142_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp143_, gtk_widget_get_type (), GtkWidget));
-#line 2136 "PublishingUI.c"
+#line 299 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp143_ = self->priv->close_cancel_button;
+#line 299 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_header_bar_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp142_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp143_, gtk_widget_get_type (), GtkWidget));
+#line 300 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp144_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 300 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp145_ = self->priv->service_selector_box;
+#line 300 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_header_bar_pack_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp144_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp145_, gtk_widget_get_type (), GtkWidget));
+#line 2171 "PublishingUI.c"
 	} else {
-		const gchar* _tmp144_ = NULL;
-		GtkWidget* _tmp145_ = NULL;
-		GtkButton* _tmp146_ = NULL;
-#line 301 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp144_ = _ ("_Cancel");
-#line 301 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), _tmp144_, (gint) GTK_RESPONSE_CANCEL);
-#line 302 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp145_ = gtk_dialog_get_widget_for_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_CANCEL);
-#line 302 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp146_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp145_, gtk_button_get_type ()) ? ((GtkButton*) _tmp145_) : NULL);
-#line 302 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		const gchar* _tmp146_ = NULL;
+		GtkWidget* _tmp147_ = NULL;
+		GtkButton* _tmp148_ = NULL;
+#line 303 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp146_ = _ ("_Cancel");
+#line 303 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), _tmp146_, (gint) GTK_RESPONSE_CANCEL);
+#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp147_ = gtk_dialog_get_widget_for_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_CANCEL);
+#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp148_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp147_, gtk_button_get_type ()) ? ((GtkButton*) _tmp147_) : NULL);
+#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (self->priv->close_cancel_button);
-#line 302 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		self->priv->close_cancel_button = _tmp146_;
-#line 2153 "PublishingUI.c"
+#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		self->priv->close_cancel_button = _tmp148_;
+#line 2188 "PublishingUI.c"
 	}
-#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp147_ = self->priv->close_cancel_button;
-#line 304 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_signal_connect_object (_tmp147_, "clicked", (GCallback) _publishing_ui_publishing_dialog_on_close_cancel_clicked_gtk_button_clicked, self, 0);
 #line 306 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	publishing_ui_publishing_dialog_set_standard_window_mode (self);
+	_tmp149_ = self->priv->close_cancel_button;
+#line 306 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_signal_connect_object (_tmp149_, "clicked", (GCallback) _publishing_ui_publishing_dialog_on_close_cancel_clicked_gtk_button_clicked, self, 0);
 #line 308 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	publishing_ui_publishing_dialog_set_standard_window_mode (self);
+#line 310 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
 #line 161 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	loaded_services = (_vala_array_free (loaded_services, loaded_services_length1, (GDestroyNotify) g_object_unref), NULL);
@@ -2173,65 +2208,65 @@ PublishingUIPublishingDialog* publishing_ui_publishing_dialog_construct (GType o
 	_g_free0 (title);
 #line 161 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return self;
-#line 2177 "PublishingUI.c"
+#line 2212 "PublishingUI.c"
 }
 
 
 PublishingUIPublishingDialog* publishing_ui_publishing_dialog_new (GeeCollection* to_publish) {
 #line 161 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return publishing_ui_publishing_dialog_construct (PUBLISHING_UI_TYPE_PUBLISHING_DIALOG, to_publish);
-#line 2184 "PublishingUI.c"
+#line 2219 "PublishingUI.c"
 }
 
 
 static void _vala_array_add56 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value) {
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((*length) == (*size)) {
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*array = g_renew (SpitPublishingService*, *array, (*size) + 1);
-#line 2195 "PublishingUI.c"
+#line 2230 "PublishingUI.c"
 	}
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[(*length)++] = value;
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[*length] = NULL;
-#line 2201 "PublishingUI.c"
+#line 2236 "PublishingUI.c"
 }
 
 
-static gint __lambda14_ (void* a, void* b) {
+static gint __lambda15_ (void* a, void* b) {
 	gint result = 0;
 	void* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	void* _tmp2_ = NULL;
 	const gchar* _tmp3_ = NULL;
 	gint _tmp4_ = 0;
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = a;
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (*((SpitPublishingService**) _tmp0_), SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp2_ = b;
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp3_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (*((SpitPublishingService**) _tmp2_), SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp4_ = utf8_cs_compare (_tmp1_, _tmp3_);
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = _tmp4_;
-#line 341 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 2226 "PublishingUI.c"
+#line 2261 "PublishingUI.c"
 }
 
 
-static gint ___lambda14____compar_fn_t (void* key1, void* key2) {
+static gint ___lambda15____compar_fn_t (void* key1, void* key2) {
 	gint result;
-	result = __lambda14_ (key1, key2);
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	result = __lambda15_ (key1, key2);
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 2235 "PublishingUI.c"
+#line 2270 "PublishingUI.c"
 }
 
 
@@ -2252,41 +2287,41 @@ static SpitPublishingService** publishing_ui_publishing_dialog_load_all_services
 	gint _tmp26__length1 = 0;
 	SpitPublishingService** _tmp27_ = NULL;
 	gint _tmp27__length1 = 0;
-#line 312 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 314 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = g_new0 (SpitPublishingService*, 0 + 1);
-#line 312 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 314 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	loaded_services = _tmp0_;
-#line 312 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 314 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	loaded_services_length1 = 0;
-#line 312 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 314 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_loaded_services_size_ = loaded_services_length1;
-#line 315 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 317 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = plugins_get_pluggables_for_type (SPIT_PUBLISHING_TYPE_SERVICE, NULL, NULL, NULL, FALSE);
-#line 315 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 317 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	pluggables = _tmp1_;
-#line 318 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp2_ = pluggables;
-#line 318 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp3_ = gee_collection_get_size (_tmp2_);
-#line 318 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp4_ = _tmp3_;
-#line 318 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_debug ("PublishingUI.vala:318: PublisingDialog: discovered %d pluggable publis" \
+#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_debug ("PublishingUI.vala:320: PublisingDialog: discovered %d pluggable publis" \
 "hing services.", _tmp4_);
-#line 2276 "PublishingUI.c"
+#line 2311 "PublishingUI.c"
 	{
 		GeeIterator* _pluggable_it = NULL;
 		GeeCollection* _tmp5_ = NULL;
 		GeeIterator* _tmp6_ = NULL;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp5_ = pluggables;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp6_ = gee_iterable_iterator (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_ITERABLE, GeeIterable));
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_pluggable_it = _tmp6_;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		while (TRUE) {
-#line 2289 "PublishingUI.c"
+#line 2324 "PublishingUI.c"
 			GeeIterator* _tmp7_ = NULL;
 			gboolean _tmp8_ = FALSE;
 			SpitPluggable* pluggable = NULL;
@@ -2305,167 +2340,167 @@ static SpitPublishingService** publishing_ui_publishing_dialog_load_all_services
 			gint _tmp22__length1 = 0;
 			SpitPublishingService* _tmp23_ = NULL;
 			SpitPublishingService* _tmp24_ = NULL;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp7_ = _pluggable_it;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp8_ = gee_iterator_next (_tmp7_);
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			if (!_tmp8_) {
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				break;
-#line 2316 "PublishingUI.c"
+#line 2351 "PublishingUI.c"
 			}
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp9_ = _pluggable_it;
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp10_ = gee_iterator_get (_tmp9_);
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			pluggable = (SpitPluggable*) _tmp10_;
-#line 321 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 323 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp11_ = pluggable;
-#line 321 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 323 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp12_ = spit_pluggable_get_pluggable_interface (_tmp11_, SPIT_PUBLISHING_CURRENT_INTERFACE, SPIT_PUBLISHING_CURRENT_INTERFACE);
-#line 321 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 323 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			pluggable_interface = _tmp12_;
-#line 323 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 325 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp13_ = pluggable_interface;
-#line 323 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 325 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			if (_tmp13_ != SPIT_PUBLISHING_CURRENT_INTERFACE) {
-#line 2334 "PublishingUI.c"
+#line 2369 "PublishingUI.c"
 				SpitPluggable* _tmp14_ = NULL;
 				gchar* _tmp15_ = NULL;
 				gchar* _tmp16_ = NULL;
 				gint _tmp17_ = 0;
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp14_ = pluggable;
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp15_ = plugins_get_pluggable_module_id (_tmp14_);
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp16_ = _tmp15_;
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp17_ = pluggable_interface;
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-				g_warning ("PublishingUI.vala:324: Unable to load publisher %s: reported interface" \
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+				g_warning ("PublishingUI.vala:326: Unable to load publisher %s: reported interface" \
 " %d.", _tmp16_, _tmp17_);
-#line 324 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_free0 (_tmp16_);
-#line 327 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 329 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_object_unref0 (pluggable);
-#line 327 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 329 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				continue;
-#line 2355 "PublishingUI.c"
+#line 2390 "PublishingUI.c"
 			}
-#line 330 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 332 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp18_ = pluggable;
-#line 330 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 332 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp19_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, SPIT_PUBLISHING_TYPE_SERVICE, SpitPublishingService));
-#line 330 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 332 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			service = _tmp19_;
-#line 333 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 335 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp20_ = service;
-#line 333 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 335 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp21_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp20_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 333 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			g_debug ("PublishingUI.vala:333: PublishingDialog: discovered pluggable publishi" \
+#line 335 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			g_debug ("PublishingUI.vala:335: PublishingDialog: discovered pluggable publishi" \
 "ng service '%s'.", _tmp21_);
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp22_ = loaded_services;
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp22__length1 = loaded_services_length1;
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp23_ = service;
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp24_ = _g_object_ref0 (_tmp23_);
-#line 336 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 338 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_vala_array_add56 (&loaded_services, &loaded_services_length1, &_loaded_services_size_, _tmp24_);
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_g_object_unref0 (service);
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_g_object_unref0 (pluggable);
-#line 2383 "PublishingUI.c"
+#line 2418 "PublishingUI.c"
 		}
-#line 320 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 322 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (_pluggable_it);
-#line 2387 "PublishingUI.c"
+#line 2422 "PublishingUI.c"
 	}
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp25_ = loaded_services;
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp25__length1 = loaded_services_length1;
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp26_ = loaded_services;
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp26__length1 = loaded_services_length1;
-#line 340 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	qsort (_tmp25_, (gsize) _tmp26__length1, (gsize) sizeof (SpitPublishingService*), ___lambda14____compar_fn_t);
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 342 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	qsort (_tmp25_, (gsize) _tmp26__length1, (gsize) sizeof (SpitPublishingService*), ___lambda15____compar_fn_t);
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp27_ = loaded_services;
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp27__length1 = loaded_services_length1;
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (result_length1) {
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*result_length1 = _tmp27__length1;
-#line 2407 "PublishingUI.c"
+#line 2442 "PublishingUI.c"
 	}
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = _tmp27_;
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (pluggables);
-#line 345 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 347 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 2415 "PublishingUI.c"
+#line 2450 "PublishingUI.c"
 }
 
 
 static void _vala_array_add57 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value) {
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((*length) == (*size)) {
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*array = g_renew (SpitPublishingService*, *array, (*size) + 1);
-#line 2426 "PublishingUI.c"
+#line 2461 "PublishingUI.c"
 	}
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[(*length)++] = value;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[*length] = NULL;
-#line 2432 "PublishingUI.c"
+#line 2467 "PublishingUI.c"
 }
 
 
 static void _vala_array_add58 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value) {
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((*length) == (*size)) {
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*array = g_renew (SpitPublishingService*, *array, (*size) + 1);
-#line 2443 "PublishingUI.c"
+#line 2478 "PublishingUI.c"
 	}
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[(*length)++] = value;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[*length] = NULL;
-#line 2449 "PublishingUI.c"
+#line 2484 "PublishingUI.c"
 }
 
 
 static void _vala_array_add59 (SpitPublishingService*** array, int* length, int* size, SpitPublishingService* value) {
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((*length) == (*size)) {
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*size = (*size) ? (2 * (*size)) : 4;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*array = g_renew (SpitPublishingService*, *array, (*size) + 1);
-#line 2460 "PublishingUI.c"
+#line 2495 "PublishingUI.c"
 	}
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[(*length)++] = value;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	(*array)[*length] = NULL;
-#line 2466 "PublishingUI.c"
+#line 2501 "PublishingUI.c"
 }
 
 
@@ -2486,226 +2521,226 @@ static SpitPublishingService** publishing_ui_publishing_dialog_load_services (gb
 	gint _tmp6__length1 = 0;
 	SpitPublishingService** _tmp32_ = NULL;
 	gint _tmp32__length1 = 0;
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = has_photos;
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp1_) {
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp0_ = TRUE;
-#line 2493 "PublishingUI.c"
+#line 2528 "PublishingUI.c"
 	} else {
 		gboolean _tmp2_ = FALSE;
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp2_ = has_videos;
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp0_ = _tmp2_;
-#line 2500 "PublishingUI.c"
+#line 2535 "PublishingUI.c"
 	}
-#line 349 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_vala_assert (_tmp0_, "has_photos || has_videos");
-#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 353 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp3_ = g_new0 (SpitPublishingService*, 0 + 1);
-#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 353 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	filtered_services = _tmp3_;
-#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 353 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	filtered_services_length1 = 0;
-#line 351 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 353 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_filtered_services_size_ = filtered_services_length1;
-#line 352 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp5_ = publishing_ui_publishing_dialog_load_all_services (&_tmp4_);
-#line 352 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	all_services = _tmp5_;
-#line 352 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	all_services_length1 = _tmp4_;
-#line 352 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_all_services_size_ = all_services_length1;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp6_ = all_services;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp6__length1 = all_services_length1;
-#line 2524 "PublishingUI.c"
+#line 2559 "PublishingUI.c"
 	{
 		SpitPublishingService** service_collection = NULL;
 		gint service_collection_length1 = 0;
 		gint _service_collection_size_ = 0;
 		gint service_it = 0;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		service_collection = _tmp6_;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		service_collection_length1 = _tmp6__length1;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		for (service_it = 0; service_it < _tmp6__length1; service_it = service_it + 1) {
-#line 2536 "PublishingUI.c"
+#line 2571 "PublishingUI.c"
 			SpitPublishingService* _tmp7_ = NULL;
 			SpitPublishingService* service = NULL;
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp7_ = _g_object_ref0 (service_collection[service_it]);
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			service = _tmp7_;
-#line 2543 "PublishingUI.c"
+#line 2578 "PublishingUI.c"
 			{
 				gboolean _tmp8_ = FALSE;
 				gboolean _tmp9_ = FALSE;
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp9_ = has_photos;
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				if (_tmp9_) {
-#line 2551 "PublishingUI.c"
+#line 2586 "PublishingUI.c"
 					gboolean _tmp10_ = FALSE;
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp10_ = has_videos;
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp8_ = !_tmp10_;
-#line 2557 "PublishingUI.c"
+#line 2592 "PublishingUI.c"
 				} else {
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp8_ = FALSE;
-#line 2561 "PublishingUI.c"
+#line 2596 "PublishingUI.c"
 				}
-#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				if (_tmp8_) {
-#line 2565 "PublishingUI.c"
+#line 2600 "PublishingUI.c"
 					SpitPublishingService* _tmp11_ = NULL;
 					SpitPublishingPublisherMediaType _tmp12_ = 0;
-#line 357 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp11_ = service;
-#line 357 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp12_ = spit_publishing_service_get_supported_media (_tmp11_);
-#line 357 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					if ((_tmp12_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0) {
-#line 2574 "PublishingUI.c"
+#line 2609 "PublishingUI.c"
 						SpitPublishingService** _tmp13_ = NULL;
 						gint _tmp13__length1 = 0;
 						SpitPublishingService* _tmp14_ = NULL;
 						SpitPublishingService* _tmp15_ = NULL;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp13_ = filtered_services;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp13__length1 = filtered_services_length1;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp14_ = service;
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp15_ = _g_object_ref0 (_tmp14_);
-#line 358 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_vala_array_add57 (&filtered_services, &filtered_services_length1, &_filtered_services_size_, _tmp15_);
-#line 2589 "PublishingUI.c"
+#line 2624 "PublishingUI.c"
 					}
 				} else {
 					gboolean _tmp16_ = FALSE;
 					gboolean _tmp17_ = FALSE;
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp17_ = has_photos;
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					if (!_tmp17_) {
-#line 2598 "PublishingUI.c"
+#line 2633 "PublishingUI.c"
 						gboolean _tmp18_ = FALSE;
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp18_ = has_videos;
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp16_ = _tmp18_;
-#line 2604 "PublishingUI.c"
+#line 2639 "PublishingUI.c"
 					} else {
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp16_ = FALSE;
-#line 2608 "PublishingUI.c"
+#line 2643 "PublishingUI.c"
 					}
-#line 359 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					if (_tmp16_) {
-#line 2612 "PublishingUI.c"
+#line 2647 "PublishingUI.c"
 						SpitPublishingService* _tmp19_ = NULL;
 						SpitPublishingPublisherMediaType _tmp20_ = 0;
-#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 362 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp19_ = service;
-#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 362 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp20_ = spit_publishing_service_get_supported_media (_tmp19_);
-#line 360 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 362 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						if ((_tmp20_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) != 0) {
-#line 2621 "PublishingUI.c"
+#line 2656 "PublishingUI.c"
 							SpitPublishingService** _tmp21_ = NULL;
 							gint _tmp21__length1 = 0;
 							SpitPublishingService* _tmp22_ = NULL;
 							SpitPublishingService* _tmp23_ = NULL;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp21_ = filtered_services;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp21__length1 = filtered_services_length1;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp22_ = service;
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp23_ = _g_object_ref0 (_tmp22_);
-#line 361 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_vala_array_add58 (&filtered_services, &filtered_services_length1, &_filtered_services_size_, _tmp23_);
-#line 2636 "PublishingUI.c"
+#line 2671 "PublishingUI.c"
 						}
 					} else {
 						gboolean _tmp24_ = FALSE;
 						SpitPublishingService* _tmp25_ = NULL;
 						SpitPublishingPublisherMediaType _tmp26_ = 0;
-#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp25_ = service;
-#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						_tmp26_ = spit_publishing_service_get_supported_media (_tmp25_);
-#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						if ((_tmp26_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_PHOTO) != 0) {
-#line 2648 "PublishingUI.c"
+#line 2683 "PublishingUI.c"
 							SpitPublishingService* _tmp27_ = NULL;
 							SpitPublishingPublisherMediaType _tmp28_ = 0;
-#line 364 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 366 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp27_ = service;
-#line 364 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 366 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp28_ = spit_publishing_service_get_supported_media (_tmp27_);
-#line 364 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 366 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp24_ = (_tmp28_ & SPIT_PUBLISHING_PUBLISHER_MEDIA_TYPE_VIDEO) != 0;
-#line 2657 "PublishingUI.c"
+#line 2692 "PublishingUI.c"
 						} else {
-#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp24_ = FALSE;
-#line 2661 "PublishingUI.c"
+#line 2696 "PublishingUI.c"
 						}
-#line 363 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 						if (_tmp24_) {
-#line 2665 "PublishingUI.c"
+#line 2700 "PublishingUI.c"
 							SpitPublishingService** _tmp29_ = NULL;
 							gint _tmp29__length1 = 0;
 							SpitPublishingService* _tmp30_ = NULL;
 							SpitPublishingService* _tmp31_ = NULL;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp29_ = filtered_services;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp29__length1 = filtered_services_length1;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp30_ = service;
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_tmp31_ = _g_object_ref0 (_tmp30_);
-#line 365 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 367 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 							_vala_array_add59 (&filtered_services, &filtered_services_length1, &_filtered_services_size_, _tmp31_);
-#line 2680 "PublishingUI.c"
+#line 2715 "PublishingUI.c"
 						}
 					}
 				}
-#line 354 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 356 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_object_unref0 (service);
-#line 2686 "PublishingUI.c"
+#line 2721 "PublishingUI.c"
 			}
 		}
 	}
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp32_ = filtered_services;
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp32__length1 = filtered_services_length1;
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (result_length1) {
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		*result_length1 = _tmp32__length1;
-#line 2698 "PublishingUI.c"
+#line 2733 "PublishingUI.c"
 	}
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = _tmp32_;
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	all_services = (_vala_array_free (all_services, all_services_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 369 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 371 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 2706 "PublishingUI.c"
+#line 2741 "PublishingUI.c"
 }
 
 
@@ -2736,208 +2771,208 @@ void publishing_ui_publishing_dialog_go (GeeCollection* to_publish) {
 	PublishingUIPublishingDialog* _tmp29_ = NULL;
 	PublishingUIPublishingDialog* _tmp30_ = NULL;
 	GTimer* _tmp31_ = NULL;
-#line 383 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_return_if_fail (GEE_IS_COLLECTION (to_publish));
-#line 384 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = publishing_ui_publishing_dialog_active_instance;
-#line 384 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	if (_tmp0_ != NULL) {
 #line 385 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_return_if_fail (GEE_IS_COLLECTION (to_publish));
+#line 386 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp0_ = publishing_ui_publishing_dialog_active_instance;
+#line 386 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	if (_tmp0_ != NULL) {
+#line 387 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		return;
-#line 2745 "PublishingUI.c"
+#line 2780 "PublishingUI.c"
 	}
-#line 387 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 389 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = publishing_ui_publishing_dialog_since_last_start;
-#line 387 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 389 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp1_ == NULL) {
-#line 2751 "PublishingUI.c"
+#line 2786 "PublishingUI.c"
 		GTimer* _tmp2_ = NULL;
 		GTimer* _tmp3_ = NULL;
 		GTimer* _tmp4_ = NULL;
-#line 390 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 392 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp2_ = g_timer_new ();
-#line 390 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 392 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_timer_destroy0 (publishing_ui_publishing_dialog_since_last_start);
-#line 390 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 392 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		publishing_ui_publishing_dialog_since_last_start = _tmp2_;
-#line 391 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp3_ = publishing_ui_publishing_dialog_since_last_start;
-#line 391 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_timer_stop (_tmp3_);
-#line 392 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp4_ = publishing_ui_publishing_dialog_since_last_start;
-#line 392 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_timer_reset (_tmp4_);
 #line 393 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp3_ = publishing_ui_publishing_dialog_since_last_start;
+#line 393 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_timer_stop (_tmp3_);
+#line 394 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp4_ = publishing_ui_publishing_dialog_since_last_start;
+#line 394 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_timer_reset (_tmp4_);
+#line 395 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		publishing_ui_publishing_dialog_elapsed_is_valid = FALSE;
-#line 2771 "PublishingUI.c"
+#line 2806 "PublishingUI.c"
 	} else {
 		gdouble elapsed = 0.0;
 		GTimer* _tmp5_ = NULL;
 		gdouble _tmp6_ = 0.0;
 		gboolean _tmp7_ = FALSE;
 		gdouble _tmp8_ = 0.0;
-#line 395 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp5_ = publishing_ui_publishing_dialog_since_last_start;
-#line 395 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp6_ = g_timer_elapsed (_tmp5_, NULL);
-#line 395 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		elapsed = _tmp6_;
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		_tmp8_ = elapsed;
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		if (_tmp8_ < 0.05) {
-#line 2788 "PublishingUI.c"
-			gboolean _tmp9_ = FALSE;
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp9_ = publishing_ui_publishing_dialog_elapsed_is_valid;
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp7_ = _tmp9_;
-#line 2794 "PublishingUI.c"
-		} else {
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			_tmp7_ = FALSE;
-#line 2798 "PublishingUI.c"
-		}
-#line 396 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		if (_tmp7_) {
 #line 397 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp5_ = publishing_ui_publishing_dialog_since_last_start;
+#line 397 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp6_ = g_timer_elapsed (_tmp5_, NULL);
+#line 397 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		elapsed = _tmp6_;
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		_tmp8_ = elapsed;
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		if (_tmp8_ < 0.05) {
+#line 2823 "PublishingUI.c"
+			gboolean _tmp9_ = FALSE;
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp9_ = publishing_ui_publishing_dialog_elapsed_is_valid;
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp7_ = _tmp9_;
+#line 2829 "PublishingUI.c"
+		} else {
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			_tmp7_ = FALSE;
+#line 2833 "PublishingUI.c"
+		}
+#line 398 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		if (_tmp7_) {
+#line 399 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			return;
-#line 2804 "PublishingUI.c"
+#line 2839 "PublishingUI.c"
 		}
 	}
-#line 400 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp10_ = gee_array_list_new (TYPE_LIBRARY_PHOTO, (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL);
-#line 400 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	photos = _tmp10_;
-#line 401 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 403 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp11_ = gee_array_list_new (TYPE_VIDEO, (GBoxedCopyFunc) g_object_ref, (GDestroyNotify) g_object_unref, NULL, NULL, NULL);
-#line 401 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 403 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	videos = _tmp11_;
-#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp12_ = to_publish;
-#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp13_ = photos;
-#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp14_ = videos;
-#line 402 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	media_source_collection_filter_media (_tmp12_, G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, GEE_TYPE_COLLECTION, GeeCollection), G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, GEE_TYPE_COLLECTION, GeeCollection));
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp15_ = photos;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp16_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp17_ = _tmp16_;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp18_ = videos;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp19_ = gee_abstract_collection_get_size (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, GEE_TYPE_ABSTRACT_COLLECTION, GeeAbstractCollection));
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp20_ = _tmp19_;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp22_ = publishing_ui_publishing_dialog_load_services (_tmp17_ > 0, _tmp20_ > 0, &_tmp21_);
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	avail_services = _tmp22_;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	avail_services_length1 = _tmp21_;
-#line 404 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 406 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_avail_services_size_ = avail_services_length1;
-#line 407 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 409 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp23_ = avail_services;
-#line 407 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 409 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp23__length1 = avail_services_length1;
-#line 407 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 409 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp23__length1 == 0) {
-#line 2849 "PublishingUI.c"
+#line 2884 "PublishingUI.c"
 		const gchar* _tmp24_ = NULL;
 		const gchar* _tmp25_ = NULL;
 		gchar* _tmp26_ = NULL;
 		gchar* _tmp27_ = NULL;
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp24_ = _ ("Unable to publish");
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp25_ = _ ("Shotwell cannot publish the selected items because you do not have a c" \
 "ompatible publishing plugin enabled. To correct this, choose <b>Edit %" \
 "s Preferences</b> and enable one or more of the publishing plugins on " \
 "the <b>Plugins</b> tab.");
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp26_ = g_strdup_printf (_tmp25_, "▸");
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp27_ = _tmp26_;
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		app_window_error_message_with_title (_tmp24_, _tmp27_, NULL, FALSE);
-#line 410 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_free0 (_tmp27_);
-#line 414 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		avail_services = (_vala_array_free (avail_services, avail_services_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 414 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (videos);
-#line 414 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (photos);
-#line 414 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		return;
-#line 2874 "PublishingUI.c"
+#line 2909 "PublishingUI.c"
 	}
-#line 420 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_debug ("PublishingUI.vala:420: PublishingDialog.go( )");
 #line 422 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_debug ("PublishingUI.vala:422: PublishingDialog.go( )");
+#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp28_ = to_publish;
-#line 422 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp29_ = publishing_ui_publishing_dialog_new (_tmp28_);
-#line 422 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_object_ref_sink (_tmp29_);
-#line 422 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (publishing_ui_publishing_dialog_active_instance);
-#line 422 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_active_instance = _tmp29_;
-#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 426 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp30_ = publishing_ui_publishing_dialog_active_instance;
-#line 424 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 426 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_run (_tmp30_);
-#line 426 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 428 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (publishing_ui_publishing_dialog_active_instance);
-#line 426 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 428 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_active_instance = NULL;
-#line 429 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 431 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp31_ = publishing_ui_publishing_dialog_since_last_start;
-#line 429 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 431 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_timer_start (_tmp31_);
-#line 430 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 432 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_elapsed_is_valid = TRUE;
-#line 383 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 385 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	avail_services = (_vala_array_free (avail_services, avail_services_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 383 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 385 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (videos);
-#line 383 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 385 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (photos);
-#line 2908 "PublishingUI.c"
+#line 2943 "PublishingUI.c"
 }
 
 
 static gboolean publishing_ui_publishing_dialog_on_window_close (PublishingUIPublishingDialog* self, GdkEventAny* evt) {
 	gboolean result = FALSE;
 	SpitPublishingConcretePublishingHost* _tmp0_ = NULL;
-#line 433 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 435 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_val_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self), FALSE);
-#line 433 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 435 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_val_if_fail (evt != NULL, FALSE);
-#line 434 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = self->priv->host;
-#line 434 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	spit_publishing_plugin_host_stop_publishing (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_PUBLISHING_TYPE_PLUGIN_HOST, SpitPublishingPluginHost));
-#line 435 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_g_object_unref0 (self->priv->host);
-#line 435 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->host = NULL;
 #line 436 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+	_tmp0_ = self->priv->host;
+#line 436 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	spit_publishing_plugin_host_stop_publishing (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_PUBLISHING_TYPE_PLUGIN_HOST, SpitPublishingPluginHost));
 #line 437 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_g_object_unref0 (self->priv->host);
+#line 437 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->host = NULL;
+#line 438 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 439 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 439 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 441 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = TRUE;
-#line 439 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 441 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 2935 "PublishingUI.c"
+#line 2970 "PublishingUI.c"
 }
 
 
@@ -2973,253 +3008,253 @@ static void publishing_ui_publishing_dialog_on_service_changed (PublishingUIPubl
 	gint _tmp27__length1 = 0;
 	SpitPublishingConcretePublishingHost* _tmp28_ = NULL;
 	SpitPublishingConcretePublishingHost* _tmp29_ = NULL;
-#line 442 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
 #line 444 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
+#line 446 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	have_active_iter = FALSE;
-#line 445 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->service_selector_box;
-#line 445 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp2_ = gtk_combo_box_get_active_iter (_tmp0_, &_tmp1_);
-#line 445 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	iter = _tmp1_;
-#line 445 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	have_active_iter = _tmp2_;
-#line 448 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 450 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp3_ = have_active_iter;
-#line 448 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 450 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (!_tmp3_) {
-#line 2987 "PublishingUI.c"
+#line 3022 "PublishingUI.c"
 		GtkComboBox* _tmp4_ = NULL;
 		GtkComboBox* _tmp5_ = NULL;
 		GtkTreeIter _tmp6_ = {0};
-#line 450 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 452 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp4_ = self->priv->service_selector_box;
-#line 450 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 452 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_combo_box_set_active (_tmp4_, 0);
-#line 453 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 455 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp5_ = self->priv->service_selector_box;
-#line 453 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 455 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_combo_box_get_active_iter (_tmp5_, &_tmp6_);
-#line 453 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 455 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		iter = _tmp6_;
-#line 3001 "PublishingUI.c"
+#line 3036 "PublishingUI.c"
 	}
-#line 457 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp7_ = self->priv->service_selector_box_model;
-#line 457 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp8_ = iter;
-#line 457 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_tree_model_get_value (G_TYPE_CHECK_INSTANCE_CAST (_tmp7_, GTK_TYPE_TREE_MODEL, GtkTreeModel), &_tmp8_, 1, &_tmp9_);
-#line 457 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_IS_VALUE (&service_name_val) ? (g_value_unset (&service_name_val), NULL) : NULL;
-#line 457 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	service_name_val = _tmp9_;
-#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp10_ = service_name_val;
-#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp11_ = g_strdup (g_value_get_string (&_tmp10_));
-#line 459 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	service_name = _tmp11_;
 #line 461 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp10_ = service_name_val;
+#line 461 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp11_ = g_strdup (g_value_get_string (&_tmp10_));
+#line 461 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	service_name = _tmp11_;
+#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	selected_service = NULL;
-#line 462 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp13_ = publishing_ui_publishing_dialog_load_all_services (&_tmp12_);
-#line 462 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	services = _tmp13_;
-#line 462 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	services_length1 = _tmp12_;
-#line 462 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_services_size_ = services_length1;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp14_ = services;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp14__length1 = services_length1;
-#line 3033 "PublishingUI.c"
+#line 3068 "PublishingUI.c"
 	{
 		SpitPublishingService** service_collection = NULL;
 		gint service_collection_length1 = 0;
 		gint _service_collection_size_ = 0;
 		gint service_it = 0;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		service_collection = _tmp14_;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		service_collection_length1 = _tmp14__length1;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		for (service_it = 0; service_it < _tmp14__length1; service_it = service_it + 1) {
-#line 3045 "PublishingUI.c"
+#line 3080 "PublishingUI.c"
 			SpitPublishingService* _tmp15_ = NULL;
 			SpitPublishingService* service = NULL;
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			_tmp15_ = _g_object_ref0 (service_collection[service_it]);
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			service = _tmp15_;
-#line 3052 "PublishingUI.c"
+#line 3087 "PublishingUI.c"
 			{
 				SpitPublishingService* _tmp16_ = NULL;
 				const gchar* _tmp17_ = NULL;
 				const gchar* _tmp18_ = NULL;
-#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp16_ = service;
-#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp17_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp16_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_tmp18_ = service_name;
-#line 464 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				if (g_strcmp0 (_tmp17_, _tmp18_) == 0) {
-#line 3065 "PublishingUI.c"
+#line 3100 "PublishingUI.c"
 					SpitPublishingService* _tmp19_ = NULL;
 					SpitPublishingService* _tmp20_ = NULL;
-#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 467 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp19_ = service;
-#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 467 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_tmp20_ = _g_object_ref0 (_tmp19_);
-#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 467 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_g_object_unref0 (selected_service);
-#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 467 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					selected_service = _tmp20_;
-#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 468 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					_g_object_unref0 (service);
-#line 466 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 468 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 					break;
-#line 3080 "PublishingUI.c"
+#line 3115 "PublishingUI.c"
 				}
-#line 463 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 465 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 				_g_object_unref0 (service);
-#line 3084 "PublishingUI.c"
+#line 3119 "PublishingUI.c"
 			}
 		}
 	}
-#line 469 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp21_ = selected_service;
-#line 469 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_vala_assert (_tmp21_ != NULL, "selected_service != null");
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp22_ = config_facade_get_instance ();
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp23_ = _tmp22_;
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp24_ = selected_service;
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp25_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp24_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	configuration_facade_set_last_used_service (G_TYPE_CHECK_INSTANCE_CAST (_tmp23_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp25_);
-#line 471 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (_tmp23_);
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp26_ = selected_service;
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp27_ = self->priv->publishables;
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp27__length1 = self->priv->publishables_length1;
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp28_ = spit_publishing_concrete_publishing_host_new (_tmp26_, self, _tmp27_, _tmp27__length1);
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->host);
-#line 473 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 475 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->host = _tmp28_;
-#line 474 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 476 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp29_ = self->priv->host;
-#line 474 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 476 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	spit_publishing_concrete_publishing_host_start_publishing (_tmp29_);
-#line 442 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 444 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	services = (_vala_array_free (services, services_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 442 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 444 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (selected_service);
-#line 442 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 444 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_free0 (service_name);
-#line 442 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 444 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_IS_VALUE (&service_name_val) ? (g_value_unset (&service_name_val), NULL) : NULL;
-#line 3128 "PublishingUI.c"
+#line 3163 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_on_close_cancel_clicked (PublishingUIPublishingDialog* self) {
 	SpitPublishingConcretePublishingHost* _tmp0_ = NULL;
-#line 477 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 479 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 478 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_debug ("PublishingUI.vala:478: PublishingDialog: on_close_cancel_clicked( ): i" \
+#line 480 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_debug ("PublishingUI.vala:480: PublishingDialog: on_close_cancel_clicked( ): i" \
 "nvoked.");
-#line 480 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = self->priv->host;
-#line 480 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	spit_publishing_plugin_host_stop_publishing (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_PUBLISHING_TYPE_PLUGIN_HOST, SpitPublishingPluginHost));
-#line 481 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_g_object_unref0 (self->priv->host);
-#line 481 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	self->priv->host = NULL;
 #line 482 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+	_tmp0_ = self->priv->host;
+#line 482 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	spit_publishing_plugin_host_stop_publishing (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, SPIT_PUBLISHING_TYPE_PLUGIN_HOST, SpitPublishingPluginHost));
 #line 483 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_g_object_unref0 (self->priv->host);
+#line 483 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	self->priv->host = NULL;
+#line 484 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
+#line 485 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 3150 "PublishingUI.c"
+#line 3185 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_set_large_window_mode (PublishingUIPublishingDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 486 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 488 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 487 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 489 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_HEIGHT);
-#line 488 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 488 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
 #line 490 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 490 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_LARGE_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
+#line 492 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 3166 "PublishingUI.c"
+#line 3201 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_set_colossal_window_mode (PublishingUIPublishingDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 493 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 495 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 494 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 496 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_HEIGHT);
-#line 495 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 495 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
 #line 497 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 497 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_COLOSSAL_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
+#line 499 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 3182 "PublishingUI.c"
+#line 3217 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_set_standard_window_mode (PublishingUIPublishingDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 500 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 502 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 501 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 503 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_HEIGHT);
-#line 502 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 502 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
 #line 504 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 504 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_WIDTH - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_WIDTH, PUBLISHING_UI_PUBLISHING_DIALOG_STANDARD_WINDOW_HEIGHT - PUBLISHING_UI_PUBLISHING_DIALOG_BORDER_REGION_HEIGHT);
+#line 506 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 3198 "PublishingUI.c"
+#line 3233 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_set_free_sizable_window_mode (PublishingUIPublishingDialog* self) {
-#line 507 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 509 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 508 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 510 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 3207 "PublishingUI.c"
+#line 3242 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_clear_free_sizable_window_mode (PublishingUIPublishingDialog* self) {
-#line 511 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 513 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 512 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 514 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 3216 "PublishingUI.c"
+#line 3251 "PublishingUI.c"
 }
 
 
@@ -3227,17 +3262,17 @@ SpitPublishingDialogPane* publishing_ui_publishing_dialog_get_active_pane (Publi
 	SpitPublishingDialogPane* result = NULL;
 	SpitPublishingDialogPane* _tmp0_ = NULL;
 	SpitPublishingDialogPane* _tmp1_ = NULL;
-#line 515 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 517 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_val_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self), NULL);
-#line 516 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 518 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->active_pane;
-#line 516 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 518 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 516 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 518 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = _tmp1_;
-#line 516 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 518 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 3234 "PublishingUI.c"
+#line 3269 "PublishingUI.c"
 }
 
 
@@ -3245,58 +3280,58 @@ void publishing_ui_publishing_dialog_set_close_button_mode (PublishingUIPublishi
 	GtkButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	GtkButton* _tmp2_ = NULL;
-#line 519 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 521 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 520 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 522 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->close_cancel_button;
-#line 520 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 522 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = _ ("_Close");
-#line 520 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 522 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_button_set_label (_tmp0_, _tmp1_);
-#line 521 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 523 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp2_ = self->priv->close_cancel_button;
-#line 521 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 523 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_window_set_default (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 3254 "PublishingUI.c"
+#line 3289 "PublishingUI.c"
 }
 
 
 void publishing_ui_publishing_dialog_set_cancel_button_mode (PublishingUIPublishingDialog* self) {
 	GtkButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 524 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 526 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 525 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 527 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->close_cancel_button;
-#line 525 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 527 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp1_ = _ ("_Cancel");
-#line 525 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 527 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_button_set_label (_tmp0_, _tmp1_);
-#line 3269 "PublishingUI.c"
+#line 3304 "PublishingUI.c"
 }
 
 
 void publishing_ui_publishing_dialog_lock_service (PublishingUIPublishingDialog* self) {
 	GtkComboBox* _tmp0_ = NULL;
-#line 528 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 530 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 529 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 531 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->service_selector_box;
-#line 529 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 531 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 3281 "PublishingUI.c"
+#line 3316 "PublishingUI.c"
 }
 
 
 void publishing_ui_publishing_dialog_unlock_service (PublishingUIPublishingDialog* self) {
 	GtkComboBox* _tmp0_ = NULL;
-#line 532 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 534 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 533 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 535 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->service_selector_box;
-#line 533 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 535 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 3293 "PublishingUI.c"
+#line 3328 "PublishingUI.c"
 }
 
 
@@ -3314,110 +3349,110 @@ void publishing_ui_publishing_dialog_install_pane (PublishingUIPublishingDialog*
 	SpitPublishingDialogPane* _tmp15_ = NULL;
 	SpitPublishingDialogPane* _tmp16_ = NULL;
 	SpitPublishingDialogPane* _tmp17_ = NULL;
-#line 536 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 538 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self));
-#line 536 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 538 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_if_fail (SPIT_PUBLISHING_IS_DIALOG_PANE (pane));
-#line 537 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-	g_debug ("PublishingUI.vala:537: PublishingDialog: install_pane( ): invoked.");
 #line 539 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+	g_debug ("PublishingUI.vala:539: PublishingDialog: install_pane( ): invoked.");
+#line 541 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = self->priv->active_pane;
-#line 539 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 541 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if (_tmp0_ != NULL) {
-#line 3321 "PublishingUI.c"
+#line 3356 "PublishingUI.c"
 		SpitPublishingDialogPane* _tmp1_ = NULL;
 		GtkBox* _tmp2_ = NULL;
 		SpitPublishingDialogPane* _tmp3_ = NULL;
 		GtkWidget* _tmp4_ = NULL;
 		GtkWidget* _tmp5_ = NULL;
-#line 540 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		g_debug ("PublishingUI.vala:540: PublishingDialog: install_pane( ): a pane is al" \
+#line 542 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		g_debug ("PublishingUI.vala:542: PublishingDialog: install_pane( ): a pane is al" \
 "ready installed; removing it.");
-#line 542 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 544 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp1_ = self->priv->active_pane;
-#line 542 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 544 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		spit_publishing_dialog_pane_on_pane_uninstalled (_tmp1_);
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp2_ = self->priv->central_area_layouter;
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp3_ = self->priv->active_pane;
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp4_ = spit_publishing_dialog_pane_get_widget (_tmp3_);
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp5_ = _tmp4_;
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		gtk_container_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_container_get_type (), GtkContainer), _tmp5_);
-#line 543 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 545 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_g_object_unref0 (_tmp5_);
-#line 3345 "PublishingUI.c"
+#line 3380 "PublishingUI.c"
 	}
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp6_ = self->priv->central_area_layouter;
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp7_ = pane;
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp8_ = spit_publishing_dialog_pane_get_widget (_tmp7_);
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp9_ = _tmp8_;
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_box_pack_start (_tmp6_, _tmp9_, TRUE, TRUE, (guint) 0);
-#line 546 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 548 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (_tmp9_);
-#line 547 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 549 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 549 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 551 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp10_ = pane;
-#line 549 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 551 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp11_ = spit_publishing_dialog_pane_get_preferred_geometry (_tmp10_);
-#line 549 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 551 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	geometry_options = _tmp11_;
-#line 551 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 553 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp12_ = geometry_options;
-#line 551 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 553 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((_tmp12_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_EXTENDED_SIZE) != 0) {
-#line 552 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 554 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		publishing_ui_publishing_dialog_set_large_window_mode (self);
-#line 3373 "PublishingUI.c"
+#line 3408 "PublishingUI.c"
 	} else {
 		SpitPublishingDialogPaneGeometryOptions _tmp13_ = 0;
-#line 553 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 555 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		_tmp13_ = geometry_options;
-#line 553 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 555 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		if ((_tmp13_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_COLOSSAL_SIZE) != 0) {
-#line 554 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-			publishing_ui_publishing_dialog_set_colossal_window_mode (self);
-#line 3382 "PublishingUI.c"
-		} else {
 #line 556 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+			publishing_ui_publishing_dialog_set_colossal_window_mode (self);
+#line 3417 "PublishingUI.c"
+		} else {
+#line 558 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 			publishing_ui_publishing_dialog_set_standard_window_mode (self);
-#line 3386 "PublishingUI.c"
+#line 3421 "PublishingUI.c"
 		}
 	}
-#line 558 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 560 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp14_ = geometry_options;
-#line 558 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 560 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	if ((_tmp14_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_RESIZABLE) != 0) {
-#line 559 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
-		publishing_ui_publishing_dialog_set_free_sizable_window_mode (self);
-#line 3395 "PublishingUI.c"
-	} else {
 #line 561 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+		publishing_ui_publishing_dialog_set_free_sizable_window_mode (self);
+#line 3430 "PublishingUI.c"
+	} else {
+#line 563 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 		publishing_ui_publishing_dialog_clear_free_sizable_window_mode (self);
-#line 3399 "PublishingUI.c"
+#line 3434 "PublishingUI.c"
 	}
-#line 563 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 565 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp15_ = pane;
-#line 563 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 565 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp16_ = _g_object_ref0 (_tmp15_);
-#line 563 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 565 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->active_pane);
-#line 563 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 565 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->active_pane = _tmp16_;
-#line 564 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 566 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp17_ = pane;
-#line 564 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 566 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	spit_publishing_dialog_pane_on_pane_installed (_tmp17_);
-#line 3413 "PublishingUI.c"
+#line 3448 "PublishingUI.c"
 }
 
 
@@ -3425,23 +3460,23 @@ gint publishing_ui_publishing_dialog_run (PublishingUIPublishingDialog* self) {
 	gint result = 0;
 	gint _result_ = 0;
 	gint _tmp0_ = 0;
-#line 567 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 569 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	g_return_val_if_fail (PUBLISHING_UI_IS_PUBLISHING_DIALOG (self), 0);
-#line 568 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 570 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	publishing_ui_publishing_dialog_on_service_changed (self);
-#line 570 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 572 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_tmp0_ = gtk_dialog_run (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
-#line 570 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 572 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_result_ = _tmp0_;
-#line 572 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 574 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	_g_object_unref0 (self->priv->host);
-#line 572 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 574 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv->host = NULL;
-#line 574 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 576 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	result = _result_;
-#line 574 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
+#line 576 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	return result;
-#line 3437 "PublishingUI.c"
+#line 3472 "PublishingUI.c"
 }
 
 
@@ -3452,14 +3487,14 @@ static void publishing_ui_publishing_dialog_class_init (PublishingUIPublishingDi
 	g_type_class_add_private (klass, sizeof (PublishingUIPublishingDialogPrivate));
 #line 137 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (klass)->finalize = publishing_ui_publishing_dialog_finalize;
-#line 3448 "PublishingUI.c"
+#line 3483 "PublishingUI.c"
 }
 
 
 static void publishing_ui_publishing_dialog_instance_init (PublishingUIPublishingDialog * self) {
 #line 137 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	self->priv = PUBLISHING_UI_PUBLISHING_DIALOG_GET_PRIVATE (self);
-#line 3455 "PublishingUI.c"
+#line 3490 "PublishingUI.c"
 }
 
 
@@ -3485,7 +3520,7 @@ static void publishing_ui_publishing_dialog_finalize (GObject* obj) {
 	spit_pluggable_info_destroy (&self->priv->info);
 #line 137 "/home/jens/Source/shotwell/src/publishing/PublishingUI.vala"
 	G_OBJECT_CLASS (publishing_ui_publishing_dialog_parent_class)->finalize (obj);
-#line 3481 "PublishingUI.c"
+#line 3516 "PublishingUI.c"
 }
 
 

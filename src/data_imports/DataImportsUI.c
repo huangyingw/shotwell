@@ -54,8 +54,8 @@ typedef struct _DataImportsUILibrarySelectionPane DataImportsUILibrarySelectionP
 typedef struct _DataImportsUILibrarySelectionPaneClass DataImportsUILibrarySelectionPaneClass;
 typedef struct _DataImportsUILibrarySelectionPanePrivate DataImportsUILibrarySelectionPanePrivate;
 #define _g_free0(var) (var = (g_free (var), NULL))
-typedef struct _Block10Data Block10Data;
 typedef struct _Block11Data Block11Data;
+typedef struct _Block12Data Block12Data;
 
 #define DATA_IMPORTS_UI_TYPE_PROGRESS_PANE (data_imports_ui_progress_pane_get_type ())
 #define DATA_IMPORTS_UI_PROGRESS_PANE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), DATA_IMPORTS_UI_TYPE_PROGRESS_PANE, DataImportsUIProgressPane))
@@ -162,13 +162,13 @@ struct _DataImportsUILibrarySelectionPanePrivate {
 	GtkRadioButton* file_radio;
 };
 
-struct _Block10Data {
+struct _Block11Data {
 	int _ref_count_;
 	DataImportsUILibrarySelectionPane* self;
 	GtkFileChooserButton* file_chooser;
 };
 
-struct _Block11Data {
+struct _Block12Data {
 	int _ref_count_;
 	DataImportsUILibrarySelectionPane* self;
 	GtkRadioButton* button;
@@ -251,18 +251,18 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_new (S
 DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_construct (GType object_type, SpitDataImportsPluginHost* host, const gchar* welcome_message, SpitDataImportsImportableLibrary** discovered_libraries, int discovered_libraries_length1, const gchar* file_select_label);
 static void data_imports_ui_library_selection_pane_on_file_selected (DataImportsUILibrarySelectionPane* self, GFile* file);
 static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_button (DataImportsUILibrarySelectionPane* self, GtkBox* box, GtkRadioButton* group, SpitDataImportsImportableLibrary* library, const gchar* label, gint margin_left, gint margin_right);
-static Block10Data* block10_data_ref (Block10Data* _data10_);
-static void block10_data_unref (void * _userdata_);
-static void ___lambda19_ (Block10Data* _data10_);
-static void data_imports_ui_library_selection_pane_set_import_button_sensitivity (DataImportsUILibrarySelectionPane* self);
-static void ____lambda19__gtk_file_chooser_selection_changed (GtkFileChooser* _sender, gpointer self);
-static void __lambda20_ (DataImportsUILibrarySelectionPane* self);
-static void data_imports_ui_library_selection_pane_on_library_selected (DataImportsUILibrarySelectionPane* self, SpitDataImportsImportableLibrary* library);
-static void ___lambda20__gtk_button_clicked (GtkButton* _sender, gpointer self);
 static Block11Data* block11_data_ref (Block11Data* _data11_);
 static void block11_data_unref (void * _userdata_);
-static void __lambda18_ (Block11Data* _data11_);
-static void ___lambda18__gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self);
+static void ___lambda20_ (Block11Data* _data11_);
+static void data_imports_ui_library_selection_pane_set_import_button_sensitivity (DataImportsUILibrarySelectionPane* self);
+static void ____lambda20__gtk_file_chooser_selection_changed (GtkFileChooser* _sender, gpointer self);
+static void __lambda21_ (DataImportsUILibrarySelectionPane* self);
+static void data_imports_ui_library_selection_pane_on_library_selected (DataImportsUILibrarySelectionPane* self, SpitDataImportsImportableLibrary* library);
+static void ___lambda21__gtk_button_clicked (GtkButton* _sender, gpointer self);
+static Block12Data* block12_data_ref (Block12Data* _data12_);
+static void block12_data_unref (void * _userdata_);
+static void __lambda19_ (Block12Data* _data12_);
+static void ___lambda19__gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self);
 static void data_imports_ui_library_selection_pane_finalize (GObject* obj);
 GType data_imports_ui_progress_pane_get_type (void) G_GNUC_CONST;
 #define DATA_IMPORTS_UI_PROGRESS_PANE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DATA_IMPORTS_UI_TYPE_PROGRESS_PANE, DataImportsUIProgressPanePrivate))
@@ -596,44 +596,44 @@ GType data_imports_ui_static_message_pane_get_type (void) {
 }
 
 
-static Block10Data* block10_data_ref (Block10Data* _data10_) {
+static Block11Data* block11_data_ref (Block11Data* _data11_) {
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_atomic_int_inc (&_data10_->_ref_count_);
+	g_atomic_int_inc (&_data11_->_ref_count_);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	return _data10_;
+	return _data11_;
 #line 601 "DataImportsUI.c"
 }
 
 
-static void block10_data_unref (void * _userdata_) {
-	Block10Data* _data10_;
-	_data10_ = (Block10Data*) _userdata_;
+static void block11_data_unref (void * _userdata_) {
+	Block11Data* _data11_;
+	_data11_ = (Block11Data*) _userdata_;
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	if (g_atomic_int_dec_and_test (&_data10_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data11_->_ref_count_)) {
 #line 610 "DataImportsUI.c"
 		DataImportsUILibrarySelectionPane* self;
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		self = _data10_->self;
+		self = _data11_->self;
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_g_object_unref0 (_data10_->file_chooser);
+		_g_object_unref0 (_data11_->file_chooser);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (self);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		g_slice_free (Block10Data, _data10_);
+		g_slice_free (Block11Data, _data11_);
 #line 620 "DataImportsUI.c"
 	}
 }
 
 
-static void ___lambda19_ (Block10Data* _data10_) {
+static void ___lambda20_ (Block11Data* _data11_) {
 	DataImportsUILibrarySelectionPane* self;
 	GtkFileChooserButton* _tmp0_ = NULL;
 	GFile* _tmp1_ = NULL;
 	GtkRadioButton* _tmp2_ = NULL;
 #line 101 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	self = _data10_->self;
+	self = _data11_->self;
 #line 102 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = _data10_->file_chooser;
+	_tmp0_ = _data11_->file_chooser;
 #line 102 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = gtk_file_chooser_get_file (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser));
 #line 102 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -658,14 +658,14 @@ static void ___lambda19_ (Block10Data* _data10_) {
 }
 
 
-static void ____lambda19__gtk_file_chooser_selection_changed (GtkFileChooser* _sender, gpointer self) {
+static void ____lambda20__gtk_file_chooser_selection_changed (GtkFileChooser* _sender, gpointer self) {
 #line 101 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	___lambda19_ (self);
+	___lambda20_ (self);
 #line 661 "DataImportsUI.c"
 }
 
 
-static void __lambda20_ (DataImportsUILibrarySelectionPane* self) {
+static void __lambda21_ (DataImportsUILibrarySelectionPane* self) {
 	SpitDataImportsImportableLibrary* _tmp0_ = NULL;
 #line 114 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->selected_library;
@@ -701,9 +701,9 @@ static void __lambda20_ (DataImportsUILibrarySelectionPane* self) {
 }
 
 
-static void ___lambda20__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+static void ___lambda21__gtk_button_clicked (GtkButton* _sender, gpointer self) {
 #line 113 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	__lambda20_ ((DataImportsUILibrarySelectionPane*) self);
+	__lambda21_ ((DataImportsUILibrarySelectionPane*) self);
 #line 703 "DataImportsUI.c"
 }
 
@@ -954,7 +954,7 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_constr
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if (_tmp37_ != NULL) {
 #line 952 "DataImportsUI.c"
-		Block10Data* _data10_;
+		Block11Data* _data11_;
 		const gchar* _tmp38_ = NULL;
 		GtkFileChooserButton* _tmp39_ = NULL;
 		GtkFileChooserButton* _tmp40_ = NULL;
@@ -965,11 +965,11 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_constr
 		GtkBox* _tmp45_ = NULL;
 		GtkFileChooserButton* _tmp46_ = NULL;
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_data10_ = g_slice_new0 (Block10Data);
+		_data11_ = g_slice_new0 (Block11Data);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_data10_->_ref_count_ = 1;
+		_data11_->_ref_count_ = 1;
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_data10_->self = g_object_ref (self);
+		_data11_->self = g_object_ref (self);
 #line 100 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp38_ = _ ("Database file:");
 #line 100 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -977,19 +977,19 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_constr
 #line 100 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		g_object_ref_sink (_tmp39_);
 #line 100 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_data10_->file_chooser = _tmp39_;
+		_data11_->file_chooser = _tmp39_;
 #line 101 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp40_ = _data10_->file_chooser;
+		_tmp40_ = _data11_->file_chooser;
 #line 101 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		g_signal_connect_data (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), "selection-changed", (GCallback) ____lambda19__gtk_file_chooser_selection_changed, block10_data_ref (_data10_), (GClosureNotify) block10_data_unref, 0);
+		g_signal_connect_data (G_TYPE_CHECK_INSTANCE_CAST (_tmp40_, GTK_TYPE_FILE_CHOOSER, GtkFileChooser), "selection-changed", (GCallback) ____lambda20__gtk_file_chooser_selection_changed, block11_data_ref (_data11_), (GClosureNotify) block11_data_unref, 0);
 #line 107 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp41_ = _data10_->file_chooser;
+		_tmp41_ = _data11_->file_chooser;
 #line 107 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp42_ = chooser_margin_left;
 #line 107 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp41_, gtk_widget_get_type (), GtkWidget), _tmp42_);
 #line 108 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp43_ = _data10_->file_chooser;
+		_tmp43_ = _data11_->file_chooser;
 #line 108 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp44_ = chooser_margin_right;
 #line 108 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -997,13 +997,13 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_constr
 #line 109 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp45_ = content_box;
 #line 109 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp46_ = _data10_->file_chooser;
+		_tmp46_ = _data11_->file_chooser;
 #line 109 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		gtk_box_pack_start (_tmp45_, G_TYPE_CHECK_INSTANCE_CAST (_tmp46_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 6);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		block10_data_unref (_data10_);
+		block11_data_unref (_data11_);
 #line 99 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_data10_ = NULL;
+		_data11_ = NULL;
 #line 1003 "DataImportsUI.c"
 	}
 #line 112 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1019,7 +1019,7 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_constr
 #line 113 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp49_ = self->priv->import_button;
 #line 113 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_signal_connect_object (_tmp49_, "clicked", (GCallback) ___lambda20__gtk_button_clicked, self, 0);
+	g_signal_connect_object (_tmp49_, "clicked", (GCallback) ___lambda21__gtk_button_clicked, self, 0);
 #line 121 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp50_ = (GtkButtonBox*) gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 #line 121 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1077,46 +1077,46 @@ DataImportsUILibrarySelectionPane* data_imports_ui_library_selection_pane_new (S
 }
 
 
-static Block11Data* block11_data_ref (Block11Data* _data11_) {
+static Block12Data* block12_data_ref (Block12Data* _data12_) {
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_atomic_int_inc (&_data11_->_ref_count_);
+	g_atomic_int_inc (&_data12_->_ref_count_);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	return _data11_;
+	return _data12_;
 #line 1081 "DataImportsUI.c"
 }
 
 
-static void block11_data_unref (void * _userdata_) {
-	Block11Data* _data11_;
-	_data11_ = (Block11Data*) _userdata_;
+static void block12_data_unref (void * _userdata_) {
+	Block12Data* _data12_;
+	_data12_ = (Block12Data*) _userdata_;
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	if (g_atomic_int_dec_and_test (&_data11_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data12_->_ref_count_)) {
 #line 1090 "DataImportsUI.c"
 		DataImportsUILibrarySelectionPane* self;
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		self = _data11_->self;
+		self = _data12_->self;
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_g_object_unref0 (_data11_->button);
+		_g_object_unref0 (_data12_->button);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_g_object_unref0 (_data11_->library);
+		_g_object_unref0 (_data12_->library);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (self);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		g_slice_free (Block11Data, _data11_);
+		g_slice_free (Block12Data, _data12_);
 #line 1102 "DataImportsUI.c"
 	}
 }
 
 
-static void __lambda18_ (Block11Data* _data11_) {
+static void __lambda19_ (Block12Data* _data12_) {
 	DataImportsUILibrarySelectionPane* self;
 	GtkRadioButton* _tmp0_ = NULL;
 	gboolean _tmp1_ = FALSE;
 	gboolean _tmp2_ = FALSE;
 #line 140 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	self = _data11_->self;
+	self = _data12_->self;
 #line 141 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = _data11_->button;
+	_tmp0_ = _data12_->button;
 #line 141 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = gtk_toggle_button_get_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_toggle_button_get_type (), GtkToggleButton));
 #line 141 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1127,7 +1127,7 @@ static void __lambda18_ (Block11Data* _data11_) {
 		SpitDataImportsImportableLibrary* _tmp3_ = NULL;
 		SpitDataImportsImportableLibrary* _tmp4_ = NULL;
 #line 142 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp3_ = _data11_->library;
+		_tmp3_ = _data12_->library;
 #line 142 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp4_ = _g_object_ref0 (_tmp3_);
 #line 142 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1141,16 +1141,16 @@ static void __lambda18_ (Block11Data* _data11_) {
 }
 
 
-static void ___lambda18__gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self) {
+static void ___lambda19__gtk_toggle_button_toggled (GtkToggleButton* _sender, gpointer self) {
 #line 140 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	__lambda18_ (self);
+	__lambda19_ (self);
 #line 1143 "DataImportsUI.c"
 }
 
 
 static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_button (DataImportsUILibrarySelectionPane* self, GtkBox* box, GtkRadioButton* group, SpitDataImportsImportableLibrary* library, const gchar* label, gint margin_left, gint margin_right) {
 	GtkRadioButton* result = NULL;
-	Block11Data* _data11_;
+	Block12Data* _data12_;
 	SpitDataImportsImportableLibrary* _tmp0_ = NULL;
 	SpitDataImportsImportableLibrary* _tmp1_ = NULL;
 	GtkRadioButton* _tmp2_ = NULL;
@@ -1177,19 +1177,19 @@ static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_butto
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_val_if_fail (label != NULL, NULL);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_ = g_slice_new0 (Block11Data);
+	_data12_ = g_slice_new0 (Block12Data);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_->_ref_count_ = 1;
+	_data12_->_ref_count_ = 1;
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_->self = g_object_ref (self);
+	_data12_->self = g_object_ref (self);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = library;
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_g_object_unref0 (_data11_->library);
+	_g_object_unref0 (_data12_->library);
 #line 131 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_->library = _tmp1_;
+	_data12_->library = _tmp1_;
 #line 135 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp2_ = group;
 #line 135 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1199,7 +1199,7 @@ static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_butto
 #line 135 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_object_ref_sink (_tmp4_);
 #line 135 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_->button = _tmp4_;
+	_data12_->button = _tmp4_;
 #line 136 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp5_ = group;
 #line 136 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1209,11 +1209,11 @@ static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_butto
 		SpitDataImportsImportableLibrary* _tmp7_ = NULL;
 		SpitDataImportsImportableLibrary* _tmp8_ = NULL;
 #line 137 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp6_ = _data11_->button;
+		_tmp6_ = _data12_->button;
 #line 137 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		gtk_toggle_button_set_active (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, gtk_toggle_button_get_type (), GtkToggleButton), TRUE);
 #line 138 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp7_ = _data11_->library;
+		_tmp7_ = _data12_->library;
 #line 138 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp8_ = _g_object_ref0 (_tmp7_);
 #line 138 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1223,17 +1223,17 @@ static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_butto
 #line 1219 "DataImportsUI.c"
 	}
 #line 140 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp9_ = _data11_->button;
+	_tmp9_ = _data12_->button;
 #line 140 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_signal_connect_data (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_toggle_button_get_type (), GtkToggleButton), "toggled", (GCallback) ___lambda18__gtk_toggle_button_toggled, block11_data_ref (_data11_), (GClosureNotify) block11_data_unref, 0);
+	g_signal_connect_data (G_TYPE_CHECK_INSTANCE_CAST (_tmp9_, gtk_toggle_button_get_type (), GtkToggleButton), "toggled", (GCallback) ___lambda19__gtk_toggle_button_toggled, block12_data_ref (_data12_), (GClosureNotify) block12_data_unref, 0);
 #line 147 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp10_ = _data11_->button;
+	_tmp10_ = _data12_->button;
 #line 147 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp11_ = margin_left;
 #line 147 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_margin_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp10_, gtk_widget_get_type (), GtkWidget), _tmp11_);
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp12_ = _data11_->button;
+	_tmp12_ = _data12_->button;
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp13_ = margin_right;
 #line 148 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -1241,19 +1241,19 @@ static GtkRadioButton* data_imports_ui_library_selection_pane_create_radio_butto
 #line 149 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp14_ = box;
 #line 149 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp15_ = _data11_->button;
+	_tmp15_ = _data12_->button;
 #line 149 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_box_pack_start (_tmp14_, G_TYPE_CHECK_INSTANCE_CAST (_tmp15_, gtk_widget_get_type (), GtkWidget), FALSE, FALSE, (guint) 6);
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp16_ = _data11_->button;
+	_tmp16_ = _data12_->button;
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp17_ = _g_object_ref0 (_tmp16_);
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	result = _tmp17_;
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	block11_data_unref (_data11_);
+	block12_data_unref (_data12_);
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_data11_ = NULL;
+	_data12_ = NULL;
 #line 150 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return result;
 #line 1255 "DataImportsUI.c"
@@ -1582,7 +1582,7 @@ static void _data_imports_ui_data_imports_dialog_on_service_changed_gtk_combo_bo
 
 
 static void _data_imports_ui_data_imports_dialog_on_close_cancel_clicked_gtk_button_clicked (GtkButton* _sender, gpointer self) {
-#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 306 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_on_close_cancel_clicked ((DataImportsUIDataImportsDialog*) self);
 #line 1583 "DataImportsUI.c"
 }
@@ -1613,9 +1613,9 @@ DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_construct (G
 	GtkBox* _tmp68_ = NULL;
 	GtkBox* _tmp69_ = NULL;
 	gboolean _tmp70_ = FALSE;
-	GtkButton* _tmp80_ = NULL;
-	SpitDataImportsService** _tmp81_ = NULL;
-	gint _tmp81__length1 = 0;
+	GtkButton* _tmp81_ = NULL;
+	SpitDataImportsService** _tmp82_ = NULL;
+	gint _tmp82__length1 = 0;
 #line 211 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	use_header = FALSE;
 #line 212 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -2023,8 +2023,7 @@ DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_construct (G
 		GtkButton* _tmp72_ = NULL;
 		GtkWidget* _tmp73_ = NULL;
 		GtkButton* _tmp74_ = NULL;
-		GtkWidget* _tmp75_ = NULL;
-		GtkComboBoxText* _tmp76_ = NULL;
+		GtkComboBoxText* _tmp75_ = NULL;
 #line 295 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp71_ = (GtkButton*) gtk_button_new_with_mnemonic ("_Cancel");
 #line 295 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
@@ -2044,61 +2043,69 @@ DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_construct (G
 #line 297 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		gtk_header_bar_pack_start (G_TYPE_CHECK_INSTANCE_CAST (_tmp73_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp74_, gtk_widget_get_type (), GtkWidget));
 #line 298 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp75_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+		_tmp75_ = self->priv->service_selector_box;
 #line 298 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp76_ = self->priv->service_selector_box;
-#line 298 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		gtk_header_bar_pack_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp75_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_widget_get_type (), GtkWidget));
-#line 2048 "DataImportsUI.c"
+		if (_tmp75_ != NULL) {
+#line 2045 "DataImportsUI.c"
+			GtkWidget* _tmp76_ = NULL;
+			GtkComboBoxText* _tmp77_ = NULL;
+#line 299 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+			_tmp76_ = gtk_dialog_get_header_bar (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog));
+#line 299 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+			_tmp77_ = self->priv->service_selector_box;
+#line 299 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+			gtk_header_bar_pack_end (G_TYPE_CHECK_INSTANCE_CAST (_tmp76_, gtk_header_bar_get_type (), GtkHeaderBar), G_TYPE_CHECK_INSTANCE_CAST (_tmp77_, gtk_widget_get_type (), GtkWidget));
+#line 2054 "DataImportsUI.c"
+		}
 	} else {
-		const gchar* _tmp77_ = NULL;
-		GtkWidget* _tmp78_ = NULL;
-		GtkButton* _tmp79_ = NULL;
-#line 301 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp77_ = _ ("_Cancel");
-#line 301 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), _tmp77_, (gint) GTK_RESPONSE_CANCEL);
-#line 302 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp78_ = gtk_dialog_get_widget_for_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_CANCEL);
-#line 302 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp79_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp78_, gtk_button_get_type ()) ? ((GtkButton*) _tmp78_) : NULL);
-#line 302 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		const gchar* _tmp78_ = NULL;
+		GtkWidget* _tmp79_ = NULL;
+		GtkButton* _tmp80_ = NULL;
+#line 303 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_tmp78_ = _ ("_Cancel");
+#line 303 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		gtk_dialog_add_button (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), _tmp78_, (gint) GTK_RESPONSE_CANCEL);
+#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_tmp79_ = gtk_dialog_get_widget_for_response (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_dialog_get_type (), GtkDialog), (gint) GTK_RESPONSE_CANCEL);
+#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_tmp80_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp79_, gtk_button_get_type ()) ? ((GtkButton*) _tmp79_) : NULL);
+#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (self->priv->close_cancel_button);
-#line 302 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		self->priv->close_cancel_button = _tmp79_;
-#line 2065 "DataImportsUI.c"
+#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		self->priv->close_cancel_button = _tmp80_;
+#line 2072 "DataImportsUI.c"
 	}
-#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp80_ = self->priv->close_cancel_button;
-#line 304 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_signal_connect_object (_tmp80_, "clicked", (GCallback) _data_imports_ui_data_imports_dialog_on_close_cancel_clicked_gtk_button_clicked, self, 0);
 #line 306 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp81_ = self->priv->close_cancel_button;
+#line 306 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_signal_connect_object (_tmp81_, "clicked", (GCallback) _data_imports_ui_data_imports_dialog_on_close_cancel_clicked_gtk_button_clicked, self, 0);
+#line 308 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_set_standard_window_mode (self);
-#line 308 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp81_ = loaded_services;
-#line 308 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp81__length1 = loaded_services_length1;
-#line 308 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	if (_tmp81__length1 > 0) {
 #line 310 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp82_ = loaded_services;
+#line 310 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp82__length1 = loaded_services_length1;
+#line 310 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	if (_tmp82__length1 > 0) {
+#line 312 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_on_service_changed (self);
-#line 2081 "DataImportsUI.c"
+#line 2088 "DataImportsUI.c"
 	} else {
-		DataImportsUIStaticMessagePane* _tmp82_ = NULL;
 		DataImportsUIStaticMessagePane* _tmp83_ = NULL;
-#line 313 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp82_ = data_imports_ui_static_message_pane_new_with_pango (DATA_IMPORTS_UI_NO_PLUGINS_ENABLED_MESSAGE);
-#line 313 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_tmp83_ = _tmp82_;
-#line 313 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		data_imports_ui_data_imports_dialog_install_pane (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp83_, SPIT_DATA_IMPORTS_TYPE_DIALOG_PANE, SpitDataImportsDialogPane));
-#line 313 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		_g_object_unref0 (_tmp83_);
-#line 314 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		DataImportsUIStaticMessagePane* _tmp84_ = NULL;
+#line 315 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_tmp83_ = data_imports_ui_static_message_pane_new_with_pango (DATA_IMPORTS_UI_NO_PLUGINS_ENABLED_MESSAGE);
+#line 315 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_tmp84_ = _tmp83_;
+#line 315 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		data_imports_ui_data_imports_dialog_install_pane (self, G_TYPE_CHECK_INSTANCE_CAST (_tmp84_, SPIT_DATA_IMPORTS_TYPE_DIALOG_PANE, SpitDataImportsDialogPane));
+#line 315 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		_g_object_unref0 (_tmp84_);
+#line 316 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_set_close_button_mode (self);
-#line 2095 "DataImportsUI.c"
+#line 2102 "DataImportsUI.c"
 	}
-#line 317 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 319 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
 #line 210 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	loaded_services = (_vala_array_free (loaded_services, loaded_services_length1, (GDestroyNotify) g_object_unref), NULL);
@@ -2108,14 +2115,14 @@ DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_construct (G
 	_g_free0 (title);
 #line 210 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return self;
-#line 2107 "DataImportsUI.c"
+#line 2114 "DataImportsUI.c"
 }
 
 
 DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_new (void) {
 #line 210 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return data_imports_ui_data_imports_dialog_construct (DATA_IMPORTS_UI_TYPE_DATA_IMPORTS_DIALOG);
-#line 2114 "DataImportsUI.c"
+#line 2121 "DataImportsUI.c"
 }
 
 
@@ -2124,72 +2131,72 @@ DataImportsUIDataImportsDialog* data_imports_ui_data_imports_dialog_get_or_creat
 	DataImportsUIDataImportsDialog* _tmp0_ = NULL;
 	DataImportsUIDataImportsDialog* _tmp2_ = NULL;
 	DataImportsUIDataImportsDialog* _tmp3_ = NULL;
-#line 321 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 323 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = data_imports_ui_data_imports_dialog_instance;
-#line 321 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 323 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if (_tmp0_ == NULL) {
-#line 2127 "DataImportsUI.c"
+#line 2134 "DataImportsUI.c"
 		DataImportsUIDataImportsDialog* _tmp1_ = NULL;
-#line 322 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp1_ = data_imports_ui_data_imports_dialog_new ();
-#line 322 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		g_object_ref_sink (_tmp1_);
-#line 322 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (data_imports_ui_data_imports_dialog_instance);
-#line 322 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_instance = _tmp1_;
-#line 2137 "DataImportsUI.c"
+#line 2144 "DataImportsUI.c"
 	}
-#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp2_ = data_imports_ui_data_imports_dialog_instance;
-#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp3_ = _g_object_ref0 (_tmp2_);
-#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	result = _tmp3_;
-#line 324 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 326 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return result;
-#line 2147 "DataImportsUI.c"
+#line 2154 "DataImportsUI.c"
 }
 
 
 void data_imports_ui_data_imports_dialog_terminate_instance (void) {
 	DataImportsUIDataImportsDialog* _tmp0_ = NULL;
-#line 328 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 330 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = data_imports_ui_data_imports_dialog_instance;
-#line 328 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 330 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if (_tmp0_ != NULL) {
-#line 2157 "DataImportsUI.c"
+#line 2164 "DataImportsUI.c"
 		DataImportsUIDataImportsDialog* _tmp1_ = NULL;
-#line 329 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 331 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp1_ = data_imports_ui_data_imports_dialog_instance;
-#line 329 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 331 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_terminate (_tmp1_);
-#line 2163 "DataImportsUI.c"
+#line 2170 "DataImportsUI.c"
 	}
-#line 331 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 333 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (data_imports_ui_data_imports_dialog_instance);
-#line 331 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 333 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_instance = NULL;
-#line 2169 "DataImportsUI.c"
+#line 2176 "DataImportsUI.c"
 }
 
 
 static gboolean data_imports_ui_data_imports_dialog_on_window_close (DataImportsUIDataImportsDialog* self, GdkEventAny* evt) {
 	gboolean result = FALSE;
-#line 334 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_return_val_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self), FALSE);
-#line 334 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_return_val_if_fail (evt != NULL, FALSE);
-#line 335 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_debug ("DataImportsUI.vala:335: DataImportsDialog: on_window_close( ): invoked" \
-".");
 #line 336 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_return_val_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self), FALSE);
+#line 336 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_return_val_if_fail (evt != NULL, FALSE);
+#line 337 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_debug ("DataImportsUI.vala:337: DataImportsDialog: on_window_close( ): invoked" \
+".");
+#line 338 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_terminate (self);
-#line 338 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 340 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	result = TRUE;
-#line 338 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 340 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return result;
-#line 2187 "DataImportsUI.c"
+#line 2194 "DataImportsUI.c"
 }
 
 
@@ -2213,232 +2220,232 @@ static void data_imports_ui_data_imports_dialog_on_service_changed (DataImportsU
 	SpitDataImportsService* _tmp16_ = NULL;
 	SpitDataImportsConcreteDataImportsHost* _tmp17_ = NULL;
 	SpitDataImportsConcreteDataImportsHost* _tmp18_ = NULL;
-#line 341 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 342 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_debug ("DataImportsUI.vala:342: DataImportsDialog: on_service_changed invoked.");
-#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = self->priv->service_selector_box;
-#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp1_ = gtk_combo_box_text_get_active_text (_tmp0_);
-#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	service_name = _tmp1_;
+#line 344 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_debug ("DataImportsUI.vala:344: DataImportsDialog: on_service_changed invoked.");
 #line 345 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp0_ = self->priv->service_selector_box;
+#line 345 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp1_ = gtk_combo_box_text_get_active_text (_tmp0_);
+#line 345 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	service_name = _tmp1_;
+#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	selected_service = NULL;
-#line 346 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp3_ = spit_data_imports_load_all_services (&_tmp2_);
-#line 346 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	services = _tmp3_;
-#line 346 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	services_length1 = _tmp2_;
-#line 346 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_services_size_ = services_length1;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp4_ = services;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp4__length1 = services_length1;
-#line 2235 "DataImportsUI.c"
+#line 2242 "DataImportsUI.c"
 	{
 		SpitDataImportsService** service_collection = NULL;
 		gint service_collection_length1 = 0;
 		gint _service_collection_size_ = 0;
 		gint service_it = 0;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		service_collection = _tmp4_;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		service_collection_length1 = _tmp4__length1;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		for (service_it = 0; service_it < _tmp4__length1; service_it = service_it + 1) {
-#line 2247 "DataImportsUI.c"
+#line 2254 "DataImportsUI.c"
 			SpitDataImportsService* _tmp5_ = NULL;
 			SpitDataImportsService* service = NULL;
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 			_tmp5_ = _g_object_ref0 (service_collection[service_it]);
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 			service = _tmp5_;
-#line 2254 "DataImportsUI.c"
+#line 2261 "DataImportsUI.c"
 			{
 				SpitDataImportsService* _tmp6_ = NULL;
 				const gchar* _tmp7_ = NULL;
 				const gchar* _tmp8_ = NULL;
-#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 				_tmp6_ = service;
-#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 				_tmp7_ = spit_pluggable_get_pluggable_name (G_TYPE_CHECK_INSTANCE_CAST (_tmp6_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 				_tmp8_ = service_name;
-#line 348 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 				if (g_strcmp0 (_tmp7_, _tmp8_) == 0) {
-#line 2267 "DataImportsUI.c"
+#line 2274 "DataImportsUI.c"
 					SpitDataImportsService* _tmp9_ = NULL;
 					SpitDataImportsService* _tmp10_ = NULL;
-#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					_tmp9_ = service;
-#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					_tmp10_ = _g_object_ref0 (_tmp9_);
-#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					_g_object_unref0 (selected_service);
-#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 351 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					selected_service = _tmp10_;
-#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 352 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					_g_object_unref0 (service);
-#line 350 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 352 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 					break;
-#line 2282 "DataImportsUI.c"
+#line 2289 "DataImportsUI.c"
 				}
-#line 347 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 349 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 				_g_object_unref0 (service);
-#line 2286 "DataImportsUI.c"
+#line 2293 "DataImportsUI.c"
 			}
 		}
 	}
-#line 353 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp11_ = selected_service;
-#line 353 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_vala_assert (_tmp11_ != NULL, "selected_service != null");
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp12_ = config_facade_get_instance ();
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp13_ = _tmp12_;
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp14_ = selected_service;
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp15_ = spit_pluggable_get_id (G_TYPE_CHECK_INSTANCE_CAST (_tmp14_, SPIT_TYPE_PLUGGABLE, SpitPluggable));
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	configuration_facade_set_last_used_dataimports_service (G_TYPE_CHECK_INSTANCE_CAST (_tmp13_, TYPE_CONFIGURATION_FACADE, ConfigurationFacade), _tmp15_);
-#line 355 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (_tmp13_);
-#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp16_ = selected_service;
-#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp17_ = spit_data_imports_concrete_data_imports_host_new (_tmp16_, self);
-#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (self->priv->host);
-#line 357 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 359 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	self->priv->host = _tmp17_;
-#line 358 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp18_ = self->priv->host;
-#line 358 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 360 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	spit_data_imports_plugin_host_start_importing (G_TYPE_CHECK_INSTANCE_CAST (_tmp18_, SPIT_DATA_IMPORTS_TYPE_PLUGIN_HOST, SpitDataImportsPluginHost));
-#line 341 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	services = (_vala_array_free (services, services_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 341 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (selected_service);
-#line 341 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 343 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_free0 (service_name);
-#line 2324 "DataImportsUI.c"
+#line 2331 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_on_close_cancel_clicked (DataImportsUIDataImportsDialog* self) {
-#line 361 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 363 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 362 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_debug ("DataImportsUI.vala:362: DataImportsDialog: on_close_cancel_clicked( ):" \
-" invoked.");
 #line 364 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_debug ("DataImportsUI.vala:364: DataImportsDialog: on_close_cancel_clicked( ):" \
+" invoked.");
+#line 366 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_terminate (self);
-#line 2335 "DataImportsUI.c"
+#line 2342 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_terminate (DataImportsUIDataImportsDialog* self) {
 	SpitDataImportsConcreteDataImportsHost* _tmp0_ = NULL;
-#line 367 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 369 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 368 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_debug ("DataImportsUI.vala:368: DataImportsDialog: terminate( ): invoked.");
 #line 370 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_debug ("DataImportsUI.vala:370: DataImportsDialog: terminate( ): invoked.");
+#line 372 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->host;
-#line 370 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 372 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if (_tmp0_ != NULL) {
-#line 2349 "DataImportsUI.c"
+#line 2356 "DataImportsUI.c"
 		SpitDataImportsConcreteDataImportsHost* _tmp1_ = NULL;
-#line 371 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 373 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp1_ = self->priv->host;
-#line 371 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 373 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		spit_data_imports_plugin_host_stop_importing (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, SPIT_DATA_IMPORTS_TYPE_PLUGIN_HOST, SpitDataImportsPluginHost));
-#line 372 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 374 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (self->priv->host);
-#line 372 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 374 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		self->priv->host = NULL;
-#line 2359 "DataImportsUI.c"
+#line 2366 "DataImportsUI.c"
 	}
-#line 375 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 377 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_hide (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 376 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 378 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_destroy (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 377 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 379 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (data_imports_ui_data_imports_dialog_instance);
-#line 377 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 379 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	data_imports_ui_data_imports_dialog_instance = NULL;
-#line 2369 "DataImportsUI.c"
+#line 2376 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_set_large_window_mode (DataImportsUIDataImportsDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 380 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 382 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 381 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 383 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_HEIGHT);
-#line 382 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 382 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
 #line 384 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 384 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_LARGE_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
+#line 386 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2385 "DataImportsUI.c"
+#line 2392 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_set_colossal_window_mode (DataImportsUIDataImportsDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 387 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 389 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 388 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 390 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_HEIGHT);
-#line 389 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 389 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
 #line 391 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 391 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_COLOSSAL_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
+#line 393 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2401 "DataImportsUI.c"
+#line 2408 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_set_standard_window_mode (DataImportsUIDataImportsDialog* self) {
 	GtkBox* _tmp0_ = NULL;
-#line 394 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 396 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 395 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 397 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_HEIGHT);
-#line 396 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	_tmp0_ = self->priv->central_area_layouter;
-#line 396 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
 #line 398 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	_tmp0_ = self->priv->central_area_layouter;
+#line 398 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	gtk_widget_set_size_request (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_WIDTH - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_WIDTH, DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_STANDARD_WINDOW_HEIGHT - DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_BORDER_REGION_HEIGHT);
+#line 400 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2417 "DataImportsUI.c"
+#line 2424 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_set_free_sizable_window_mode (DataImportsUIDataImportsDialog* self) {
-#line 401 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 403 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 402 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 404 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), TRUE);
-#line 2426 "DataImportsUI.c"
+#line 2433 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_clear_free_sizable_window_mode (DataImportsUIDataImportsDialog* self) {
-#line 405 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 407 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 406 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 408 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_resizable (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), FALSE);
-#line 2435 "DataImportsUI.c"
+#line 2442 "DataImportsUI.c"
 }
 
 
@@ -2446,17 +2453,17 @@ SpitDataImportsDialogPane* data_imports_ui_data_imports_dialog_get_active_pane (
 	SpitDataImportsDialogPane* result = NULL;
 	SpitDataImportsDialogPane* _tmp0_ = NULL;
 	SpitDataImportsDialogPane* _tmp1_ = NULL;
-#line 409 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 411 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_val_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self), NULL);
-#line 410 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->active_pane;
-#line 410 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = _g_object_ref0 (_tmp0_);
-#line 410 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	result = _tmp1_;
-#line 410 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 412 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	return result;
-#line 2453 "DataImportsUI.c"
+#line 2460 "DataImportsUI.c"
 }
 
 
@@ -2464,58 +2471,58 @@ void data_imports_ui_data_imports_dialog_set_close_button_mode (DataImportsUIDat
 	GtkButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
 	GtkButton* _tmp2_ = NULL;
-#line 413 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 415 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 414 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->close_cancel_button;
-#line 414 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = _ ("_Close");
-#line 414 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 416 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_button_set_label (_tmp0_, _tmp1_);
-#line 415 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 417 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp2_ = self->priv->close_cancel_button;
-#line 415 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 417 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_window_set_default (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_window_get_type (), GtkWindow), G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_widget_get_type (), GtkWidget));
-#line 2473 "DataImportsUI.c"
+#line 2480 "DataImportsUI.c"
 }
 
 
 void data_imports_ui_data_imports_dialog_set_cancel_button_mode (DataImportsUIDataImportsDialog* self) {
 	GtkButton* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
-#line 418 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 420 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 419 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 421 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->close_cancel_button;
-#line 419 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 421 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp1_ = _ ("_Cancel");
-#line 419 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 421 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_button_set_label (_tmp0_, _tmp1_);
-#line 2488 "DataImportsUI.c"
+#line 2495 "DataImportsUI.c"
 }
 
 
 void data_imports_ui_data_imports_dialog_lock_service (DataImportsUIDataImportsDialog* self) {
 	GtkComboBoxText* _tmp0_ = NULL;
-#line 422 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 424 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 423 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 425 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->service_selector_box;
-#line 423 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 425 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), FALSE);
-#line 2500 "DataImportsUI.c"
+#line 2507 "DataImportsUI.c"
 }
 
 
 void data_imports_ui_data_imports_dialog_unlock_service (DataImportsUIDataImportsDialog* self) {
 	GtkComboBoxText* _tmp0_ = NULL;
-#line 426 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 428 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 427 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 429 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->service_selector_box;
-#line 427 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 429 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_set_sensitive (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, gtk_widget_get_type (), GtkWidget), TRUE);
-#line 2512 "DataImportsUI.c"
+#line 2519 "DataImportsUI.c"
 }
 
 
@@ -2533,110 +2540,110 @@ void data_imports_ui_data_imports_dialog_install_pane (DataImportsUIDataImportsD
 	SpitDataImportsDialogPane* _tmp15_ = NULL;
 	SpitDataImportsDialogPane* _tmp16_ = NULL;
 	SpitDataImportsDialogPane* _tmp17_ = NULL;
-#line 430 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 432 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (DATA_IMPORTS_UI_IS_DATA_IMPORTS_DIALOG (self));
-#line 430 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 432 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	g_return_if_fail (SPIT_DATA_IMPORTS_IS_DIALOG_PANE (pane));
-#line 431 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-	g_debug ("DataImportsUI.vala:431: DataImportsDialog: install_pane( ): invoked.");
 #line 433 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+	g_debug ("DataImportsUI.vala:433: DataImportsDialog: install_pane( ): invoked.");
+#line 435 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp0_ = self->priv->active_pane;
-#line 433 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 435 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if (_tmp0_ != NULL) {
-#line 2540 "DataImportsUI.c"
+#line 2547 "DataImportsUI.c"
 		SpitDataImportsDialogPane* _tmp1_ = NULL;
 		GtkBox* _tmp2_ = NULL;
 		SpitDataImportsDialogPane* _tmp3_ = NULL;
 		GtkWidget* _tmp4_ = NULL;
 		GtkWidget* _tmp5_ = NULL;
-#line 434 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		g_debug ("DataImportsUI.vala:434: DataImportsDialog: install_pane( ): a pane is " \
+#line 436 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		g_debug ("DataImportsUI.vala:436: DataImportsDialog: install_pane( ): a pane is " \
 "already installed; removing it.");
-#line 436 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 438 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp1_ = self->priv->active_pane;
-#line 436 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 438 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		spit_data_imports_dialog_pane_on_pane_uninstalled (_tmp1_);
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp2_ = self->priv->central_area_layouter;
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp3_ = self->priv->active_pane;
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp4_ = spit_data_imports_dialog_pane_get_widget (_tmp3_);
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp5_ = _tmp4_;
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		gtk_container_remove (G_TYPE_CHECK_INSTANCE_CAST (_tmp2_, gtk_container_get_type (), GtkContainer), _tmp5_);
-#line 437 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 439 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_g_object_unref0 (_tmp5_);
-#line 2564 "DataImportsUI.c"
+#line 2571 "DataImportsUI.c"
 	}
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp6_ = self->priv->central_area_layouter;
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp7_ = pane;
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp8_ = spit_data_imports_dialog_pane_get_widget (_tmp7_);
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp9_ = _tmp8_;
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_box_pack_start (_tmp6_, _tmp9_, TRUE, TRUE, (guint) 0);
-#line 440 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 442 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (_tmp9_);
-#line 441 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 443 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	gtk_widget_show_all (G_TYPE_CHECK_INSTANCE_CAST (self, gtk_widget_get_type (), GtkWidget));
-#line 443 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 445 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp10_ = pane;
-#line 443 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 445 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp11_ = spit_data_imports_dialog_pane_get_preferred_geometry (_tmp10_);
-#line 443 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 445 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	geometry_options = _tmp11_;
-#line 445 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp12_ = geometry_options;
-#line 445 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if ((_tmp12_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_EXTENDED_SIZE) != 0) {
-#line 446 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 448 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_set_large_window_mode (self);
-#line 2592 "DataImportsUI.c"
+#line 2599 "DataImportsUI.c"
 	} else {
 		SpitDataImportsDialogPaneGeometryOptions _tmp13_ = 0;
-#line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 449 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		_tmp13_ = geometry_options;
-#line 447 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 449 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		if ((_tmp13_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_COLOSSAL_SIZE) != 0) {
-#line 448 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-			data_imports_ui_data_imports_dialog_set_colossal_window_mode (self);
-#line 2601 "DataImportsUI.c"
-		} else {
 #line 450 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+			data_imports_ui_data_imports_dialog_set_colossal_window_mode (self);
+#line 2608 "DataImportsUI.c"
+		} else {
+#line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 			data_imports_ui_data_imports_dialog_set_standard_window_mode (self);
-#line 2605 "DataImportsUI.c"
+#line 2612 "DataImportsUI.c"
 		}
 	}
-#line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 454 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp14_ = geometry_options;
-#line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 454 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	if ((_tmp14_ & SPIT_PUBLISHING_DIALOG_PANE_GEOMETRY_OPTIONS_RESIZABLE) != 0) {
-#line 453 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
-		data_imports_ui_data_imports_dialog_set_free_sizable_window_mode (self);
-#line 2614 "DataImportsUI.c"
-	} else {
 #line 455 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+		data_imports_ui_data_imports_dialog_set_free_sizable_window_mode (self);
+#line 2621 "DataImportsUI.c"
+	} else {
+#line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 		data_imports_ui_data_imports_dialog_clear_free_sizable_window_mode (self);
-#line 2618 "DataImportsUI.c"
+#line 2625 "DataImportsUI.c"
 	}
-#line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp15_ = pane;
-#line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp16_ = _g_object_ref0 (_tmp15_);
-#line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_g_object_unref0 (self->priv->active_pane);
-#line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 459 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	self->priv->active_pane = _tmp16_;
-#line 458 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 460 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	_tmp17_ = pane;
-#line 458 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
+#line 460 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	spit_data_imports_dialog_pane_on_pane_installed (_tmp17_);
-#line 2632 "DataImportsUI.c"
+#line 2639 "DataImportsUI.c"
 }
 
 
@@ -2647,14 +2654,14 @@ static void data_imports_ui_data_imports_dialog_class_init (DataImportsUIDataImp
 	g_type_class_add_private (klass, sizeof (DataImportsUIDataImportsDialogPrivate));
 #line 191 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	G_OBJECT_CLASS (klass)->finalize = data_imports_ui_data_imports_dialog_finalize;
-#line 2643 "DataImportsUI.c"
+#line 2650 "DataImportsUI.c"
 }
 
 
 static void data_imports_ui_data_imports_dialog_instance_init (DataImportsUIDataImportsDialog * self) {
 #line 191 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	self->priv = DATA_IMPORTS_UI_DATA_IMPORTS_DIALOG_GET_PRIVATE (self);
-#line 2650 "DataImportsUI.c"
+#line 2657 "DataImportsUI.c"
 }
 
 
@@ -2674,7 +2681,7 @@ static void data_imports_ui_data_imports_dialog_finalize (GObject* obj) {
 	_g_object_unref0 (self->priv->host);
 #line 191 "/home/jens/Source/shotwell/src/data_imports/DataImportsUI.vala"
 	G_OBJECT_CLASS (data_imports_ui_data_imports_dialog_parent_class)->finalize (obj);
-#line 2670 "DataImportsUI.c"
+#line 2677 "DataImportsUI.c"
 }
 
 

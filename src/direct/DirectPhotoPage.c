@@ -359,7 +359,7 @@ typedef struct _AppWindowClass AppWindowClass;
 typedef struct _PrintManager PrintManager;
 typedef struct _PrintManagerClass PrintManagerClass;
 #define _print_manager_unref0(var) ((var == NULL) ? NULL : (var = (print_manager_unref (var), NULL)))
-typedef struct _Block6Data Block6Data;
+typedef struct _Block7Data Block7Data;
 
 #define TYPE_DIRECT_FULLSCREEN_PHOTO_PAGE (direct_fullscreen_photo_page_get_type ())
 #define DIRECT_FULLSCREEN_PHOTO_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_DIRECT_FULLSCREEN_PHOTO_PAGE, DirectFullscreenPhotoPage))
@@ -577,7 +577,7 @@ struct _ExportFormatParameters {
 	gboolean export_metadata;
 };
 
-struct _Block6Data {
+struct _Block7Data {
 	int _ref_count_;
 	DirectPhotoPage* self;
 	gboolean should_allow_rotation;
@@ -844,11 +844,11 @@ GType print_manager_get_type (void) G_GNUC_CONST;
 PrintManager* print_manager_get_instance (void);
 void print_manager_spool_photo (PrintManager* self, GeeCollection* to_print);
 GeeList* view_collection_get_selected_sources_of_type (ViewCollection* self, GType t);
-static Block6Data* block6_data_ref (Block6Data* _data6_);
-static void block6_data_unref (void * _userdata_);
-static gboolean __lambda15_ (Block6Data* _data6_);
+static Block7Data* block7_data_ref (Block7Data* _data7_);
+static void block7_data_unref (void * _userdata_);
+static gboolean __lambda16_ (Block7Data* _data7_);
 void editing_host_page_enable_rotate (EditingHostPage* self, gboolean should_enable);
-static gboolean ___lambda15__gsource_func (gpointer self);
+static gboolean ___lambda16__gsource_func (gpointer self);
 static DataView* direct_photo_page_real_create_photo_view (EditingHostPage* base, DataSource* source);
 static void direct_photo_page_finalize (GObject* obj);
 GType direct_fullscreen_photo_page_get_type (void) G_GNUC_CONST;
@@ -3679,41 +3679,41 @@ static void direct_photo_page_on_print (DirectPhotoPage* self) {
 }
 
 
-static Block6Data* block6_data_ref (Block6Data* _data6_) {
+static Block7Data* block7_data_ref (Block7Data* _data7_) {
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	g_atomic_int_inc (&_data6_->_ref_count_);
+	g_atomic_int_inc (&_data7_->_ref_count_);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	return _data6_;
+	return _data7_;
 #line 3688 "DirectPhotoPage.c"
 }
 
 
-static void block6_data_unref (void * _userdata_) {
-	Block6Data* _data6_;
-	_data6_ = (Block6Data*) _userdata_;
+static void block7_data_unref (void * _userdata_) {
+	Block7Data* _data7_;
+	_data7_ = (Block7Data*) _userdata_;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	if (g_atomic_int_dec_and_test (&_data6_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data7_->_ref_count_)) {
 #line 3697 "DirectPhotoPage.c"
 		DirectPhotoPage* self;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-		self = _data6_->self;
+		self = _data7_->self;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 		_g_object_unref0 (self);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-		g_slice_free (Block6Data, _data6_);
+		g_slice_free (Block7Data, _data7_);
 #line 3705 "DirectPhotoPage.c"
 	}
 }
 
 
-static gboolean __lambda15_ (Block6Data* _data6_) {
+static gboolean __lambda16_ (Block7Data* _data7_) {
 	DirectPhotoPage* self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 #line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	self = _data6_->self;
+	self = _data7_->self;
 #line 467 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_tmp0_ = _data6_->should_allow_rotation;
+	_tmp0_ = _data7_->should_allow_rotation;
 #line 467 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	editing_host_page_enable_rotate (G_TYPE_CHECK_INSTANCE_CAST (self, TYPE_EDITING_HOST_PAGE, EditingHostPage), _tmp0_);
 #line 469 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
@@ -3724,9 +3724,9 @@ static gboolean __lambda15_ (Block6Data* _data6_) {
 }
 
 
-static gboolean ___lambda15__gsource_func (gpointer self) {
+static gboolean ___lambda16__gsource_func (gpointer self) {
 	gboolean result;
-	result = __lambda15_ (self);
+	result = __lambda16_ (self);
 #line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	return result;
 #line 3733 "DirectPhotoPage.c"
@@ -3734,26 +3734,26 @@ static gboolean ___lambda15__gsource_func (gpointer self) {
 
 
 static void direct_photo_page_on_dphoto_can_rotate_changed (DirectPhotoPage* self, gboolean should_allow_rotation) {
-	Block6Data* _data6_;
+	Block7Data* _data7_;
 	gboolean _tmp0_ = FALSE;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	g_return_if_fail (IS_DIRECT_PHOTO_PAGE (self));
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_data6_ = g_slice_new0 (Block6Data);
+	_data7_ = g_slice_new0 (Block7Data);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_data6_->_ref_count_ = 1;
+	_data7_->_ref_count_ = 1;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_data6_->self = g_object_ref (self);
+	_data7_->self = g_object_ref (self);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
 	_tmp0_ = should_allow_rotation;
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_data6_->should_allow_rotation = _tmp0_;
+	_data7_->should_allow_rotation = _tmp0_;
 #line 466 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, ___lambda15__gsource_func, block6_data_ref (_data6_), block6_data_unref);
+	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, ___lambda16__gsource_func, block7_data_ref (_data7_), block7_data_unref);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	block6_data_unref (_data6_);
+	block7_data_unref (_data7_);
 #line 462 "/home/jens/Source/shotwell/src/direct/DirectPhotoPage.vala"
-	_data6_ = NULL;
+	_data7_ = NULL;
 #line 3758 "DirectPhotoPage.c"
 }
 

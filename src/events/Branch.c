@@ -303,8 +303,8 @@ typedef struct _EventID EventID;
 typedef struct _SidebarRenameableEntry SidebarRenameableEntry;
 typedef struct _SidebarRenameableEntryIface SidebarRenameableEntryIface;
 #define _alteration_unref0(var) ((var == NULL) ? NULL : (var = (alteration_unref (var), NULL)))
-typedef struct _Block7Data Block7Data;
 typedef struct _Block8Data Block8Data;
+typedef struct _Block9Data Block9Data;
 
 #define SIDEBAR_TYPE_SELECTABLE_ENTRY (sidebar_selectable_entry_get_type ())
 #define SIDEBAR_SELECTABLE_ENTRY(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SIDEBAR_TYPE_SELECTABLE_ENTRY, SidebarSelectableEntry))
@@ -594,14 +594,14 @@ struct _SidebarRenameableEntryIface {
 	gboolean (*is_user_renameable) (SidebarRenameableEntry* self);
 };
 
-struct _Block7Data {
+struct _Block8Data {
 	int _ref_count_;
 	EventsBranch* self;
 	gint event_month;
 };
 
 typedef gboolean (*Locator) (gconstpointer item, void* user_data);
-struct _Block8Data {
+struct _Block9Data {
 	int _ref_count_;
 	EventsBranch* self;
 	gint event_year;
@@ -871,16 +871,16 @@ static void events_branch_reparent_event (EventsBranch* self, Event* event, Side
 SidebarEntry* sidebar_branch_get_parent (SidebarBranch* self, SidebarEntry* entry);
 void sidebar_branch_prune (SidebarBranch* self, SidebarEntry* entry);
 gint sidebar_branch_get_child_count (SidebarBranch* self, SidebarEntry* parent);
-static Block7Data* block7_data_ref (Block7Data* _data7_);
-static void block7_data_unref (void * _userdata_);
-static SidebarEntry* events_branch_find_event_year (EventsBranch* self, Event* event, struct tm* event_tm);
-SidebarEntry* sidebar_branch_find_first_child (SidebarBranch* self, SidebarEntry* parent, Locator locator, void* locator_target);
-static gboolean __lambda17_ (Block7Data* _data7_, SidebarEntry* entry);
-static gboolean ___lambda17__locator (gconstpointer item, gpointer self);
 static Block8Data* block8_data_ref (Block8Data* _data8_);
 static void block8_data_unref (void * _userdata_);
-static gboolean __lambda16_ (Block8Data* _data8_, SidebarEntry* entry);
-static gboolean ___lambda16__locator (gconstpointer item, gpointer self);
+static SidebarEntry* events_branch_find_event_year (EventsBranch* self, Event* event, struct tm* event_tm);
+SidebarEntry* sidebar_branch_find_first_child (SidebarBranch* self, SidebarEntry* parent, Locator locator, void* locator_target);
+static gboolean __lambda18_ (Block8Data* _data8_, SidebarEntry* entry);
+static gboolean ___lambda18__locator (gconstpointer item, gpointer self);
+static Block9Data* block9_data_ref (Block9Data* _data9_);
+static void block9_data_unref (void * _userdata_);
+static gboolean __lambda17_ (Block9Data* _data9_, SidebarEntry* entry);
+static gboolean ___lambda17__locator (gconstpointer item, gpointer self);
 gboolean sidebar_branch_has_entry (SidebarBranch* self, SidebarEntry* entry);
 static gint _events_branch_undated_event_comparator_gcompare_func (gconstpointer a, gconstpointer b);
 EventsEventEntry* events_event_entry_new (Event* event);
@@ -2646,41 +2646,41 @@ static void events_branch_remove_event (EventsBranch* self, Event* event) {
 }
 
 
-static Block7Data* block7_data_ref (Block7Data* _data7_) {
+static Block8Data* block8_data_ref (Block8Data* _data8_) {
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	g_atomic_int_inc (&_data7_->_ref_count_);
+	g_atomic_int_inc (&_data8_->_ref_count_);
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	return _data7_;
+	return _data8_;
 #line 2655 "Branch.c"
 }
 
 
-static void block7_data_unref (void * _userdata_) {
-	Block7Data* _data7_;
-	_data7_ = (Block7Data*) _userdata_;
+static void block8_data_unref (void * _userdata_) {
+	Block8Data* _data8_;
+	_data8_ = (Block8Data*) _userdata_;
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	if (g_atomic_int_dec_and_test (&_data7_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data8_->_ref_count_)) {
 #line 2664 "Branch.c"
 		EventsBranch* self;
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		self = _data7_->self;
+		self = _data8_->self;
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		_g_object_unref0 (self);
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		g_slice_free (Block7Data, _data7_);
+		g_slice_free (Block8Data, _data8_);
 #line 2672 "Branch.c"
 	}
 }
 
 
-static gboolean __lambda17_ (Block7Data* _data7_, SidebarEntry* entry) {
+static gboolean __lambda18_ (Block8Data* _data8_, SidebarEntry* entry) {
 	EventsBranch* self;
 	gboolean result = FALSE;
 	SidebarEntry* _tmp0_ = NULL;
 	gint _tmp1_ = 0;
 	gint _tmp2_ = 0;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	self = _data7_->self;
+	self = _data8_->self;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	g_return_val_if_fail (SIDEBAR_IS_ENTRY (entry), FALSE);
 #line 308 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2688,7 +2688,7 @@ static gboolean __lambda17_ (Block7Data* _data7_, SidebarEntry* entry) {
 #line 308 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp1_ = events_month_directory_entry_get_month (G_TYPE_CHECK_INSTANCE_CAST (_tmp0_, EVENTS_TYPE_MONTH_DIRECTORY_ENTRY, EventsMonthDirectoryEntry));
 #line 308 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_tmp2_ = _data7_->event_month;
+	_tmp2_ = _data8_->event_month;
 #line 308 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	result = _tmp1_ == _tmp2_;
 #line 308 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2697,9 +2697,9 @@ static gboolean __lambda17_ (Block7Data* _data7_, SidebarEntry* entry) {
 }
 
 
-static gboolean ___lambda17__locator (gconstpointer item, gpointer self) {
+static gboolean ___lambda18__locator (gconstpointer item, gpointer self) {
 	gboolean result;
-	result = __lambda17_ (self, (SidebarEntry*) item);
+	result = __lambda18_ (self, (SidebarEntry*) item);
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	return result;
 #line 2706 "Branch.c"
@@ -2709,7 +2709,7 @@ static gboolean ___lambda17__locator (gconstpointer item, gpointer self) {
 static SidebarEntry* events_branch_find_event_month (EventsBranch* self, Event* event, struct tm* event_tm, SidebarEntry** found_year) {
 	SidebarEntry* _vala_found_year = NULL;
 	SidebarEntry* result = NULL;
-	Block7Data* _data7_;
+	Block8Data* _data8_;
 	Event* _tmp0_ = NULL;
 	struct tm _tmp1_ = {0};
 	SidebarEntry* _tmp2_ = NULL;
@@ -2725,11 +2725,11 @@ static SidebarEntry* events_branch_find_event_month (EventsBranch* self, Event* 
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	g_return_val_if_fail (event_tm != NULL, NULL);
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data7_ = g_slice_new0 (Block7Data);
+	_data8_ = g_slice_new0 (Block8Data);
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data7_->_ref_count_ = 1;
+	_data8_->_ref_count_ = 1;
 #line 298 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data7_->self = g_object_ref (self);
+	_data8_->self = g_object_ref (self);
 #line 300 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp0_ = event;
 #line 300 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2747,9 +2747,9 @@ static SidebarEntry* events_branch_find_event_month (EventsBranch* self, Event* 
 #line 302 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		result = NULL;
 #line 302 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		block7_data_unref (_data7_);
+		block8_data_unref (_data8_);
 #line 302 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		_data7_ = NULL;
+		_data8_ = NULL;
 #line 302 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		if (found_year) {
 #line 302 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2769,17 +2769,17 @@ static SidebarEntry* events_branch_find_event_month (EventsBranch* self, Event* 
 #line 304 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp5_ = _tmp4_.tm_mon;
 #line 304 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data7_->event_month = _tmp5_ + 1;
+	_data8_->event_month = _tmp5_ + 1;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp6_ = _vala_found_year;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_tmp7_ = sidebar_branch_find_first_child (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp6_, ___lambda17__locator, _data7_);
+	_tmp7_ = sidebar_branch_find_first_child (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp6_, ___lambda18__locator, _data8_);
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	result = _tmp7_;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	block7_data_unref (_data7_);
+	block8_data_unref (_data8_);
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data7_ = NULL;
+	_data8_ = NULL;
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	if (found_year) {
 #line 307 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2796,41 +2796,41 @@ static SidebarEntry* events_branch_find_event_month (EventsBranch* self, Event* 
 }
 
 
-static Block8Data* block8_data_ref (Block8Data* _data8_) {
+static Block9Data* block9_data_ref (Block9Data* _data9_) {
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	g_atomic_int_inc (&_data8_->_ref_count_);
+	g_atomic_int_inc (&_data9_->_ref_count_);
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	return _data8_;
+	return _data9_;
 #line 2805 "Branch.c"
 }
 
 
-static void block8_data_unref (void * _userdata_) {
-	Block8Data* _data8_;
-	_data8_ = (Block8Data*) _userdata_;
+static void block9_data_unref (void * _userdata_) {
+	Block9Data* _data9_;
+	_data9_ = (Block9Data*) _userdata_;
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	if (g_atomic_int_dec_and_test (&_data8_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data9_->_ref_count_)) {
 #line 2814 "Branch.c"
 		EventsBranch* self;
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		self = _data8_->self;
+		self = _data9_->self;
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		_g_object_unref0 (self);
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		g_slice_free (Block8Data, _data8_);
+		g_slice_free (Block9Data, _data9_);
 #line 2822 "Branch.c"
 	}
 }
 
 
-static gboolean __lambda16_ (Block8Data* _data8_, SidebarEntry* entry) {
+static gboolean __lambda17_ (Block9Data* _data9_, SidebarEntry* entry) {
 	EventsBranch* self;
 	gboolean result = FALSE;
 	gboolean _tmp0_ = FALSE;
 	gboolean _tmp1_ = FALSE;
 	SidebarEntry* _tmp2_ = NULL;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	self = _data8_->self;
+	self = _data9_->self;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	g_return_val_if_fail (SIDEBAR_IS_ENTRY (entry), FALSE);
 #line 316 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2876,7 +2876,7 @@ static gboolean __lambda16_ (Block8Data* _data8_, SidebarEntry* entry) {
 #line 320 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		_tmp6_ = events_year_directory_entry_get_year (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, EVENTS_TYPE_YEAR_DIRECTORY_ENTRY, EventsYearDirectoryEntry));
 #line 320 "/home/jens/Source/shotwell/src/events/Branch.vala"
-		result = _tmp6_ == _data8_->event_year;
+		result = _tmp6_ == _data9_->event_year;
 #line 320 "/home/jens/Source/shotwell/src/events/Branch.vala"
 		return result;
 #line 2883 "Branch.c"
@@ -2884,9 +2884,9 @@ static gboolean __lambda16_ (Block8Data* _data8_, SidebarEntry* entry) {
 }
 
 
-static gboolean ___lambda16__locator (gconstpointer item, gpointer self) {
+static gboolean ___lambda17__locator (gconstpointer item, gpointer self) {
 	gboolean result;
-	result = __lambda16_ (self, (SidebarEntry*) item);
+	result = __lambda17_ (self, (SidebarEntry*) item);
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	return result;
 #line 2893 "Branch.c"
@@ -2895,7 +2895,7 @@ static gboolean ___lambda16__locator (gconstpointer item, gpointer self) {
 
 static SidebarEntry* events_branch_find_event_year (EventsBranch* self, Event* event, struct tm* event_tm) {
 	SidebarEntry* result = NULL;
-	Block8Data* _data8_;
+	Block9Data* _data9_;
 	struct tm _tmp0_ = {0};
 	gint _tmp1_ = 0;
 	SidebarEntry* _tmp2_ = NULL;
@@ -2909,23 +2909,23 @@ static SidebarEntry* events_branch_find_event_year (EventsBranch* self, Event* e
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	g_return_val_if_fail (event_tm != NULL, NULL);
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data8_ = g_slice_new0 (Block8Data);
+	_data9_ = g_slice_new0 (Block9Data);
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data8_->_ref_count_ = 1;
+	_data9_->_ref_count_ = 1;
 #line 312 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data8_->self = g_object_ref (self);
+	_data9_->self = g_object_ref (self);
 #line 313 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp0_ = *event_tm;
 #line 313 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp1_ = _tmp0_.tm_year;
 #line 313 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data8_->event_year = _tmp1_ + 1900;
+	_data9_->event_year = _tmp1_ + 1900;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp2_ = sidebar_branch_get_root (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch));
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp3_ = _tmp2_;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_tmp4_ = sidebar_branch_find_first_child (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp3_, ___lambda16__locator, _data8_);
+	_tmp4_ = sidebar_branch_find_first_child (G_TYPE_CHECK_INSTANCE_CAST (self, SIDEBAR_TYPE_BRANCH, SidebarBranch), _tmp3_, ___lambda17__locator, _data9_);
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	_tmp5_ = _tmp4_;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
@@ -2933,9 +2933,9 @@ static SidebarEntry* events_branch_find_event_year (EventsBranch* self, Event* e
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	result = _tmp5_;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	block8_data_unref (_data8_);
+	block9_data_unref (_data9_);
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
-	_data8_ = NULL;
+	_data9_ = NULL;
 #line 315 "/home/jens/Source/shotwell/src/events/Branch.vala"
 	return result;
 #line 2942 "Branch.c"
