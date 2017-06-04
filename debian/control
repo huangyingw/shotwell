@@ -44,6 +44,8 @@ Depends:
  dconf-cli,
  default-dbus-session-bus | dbus-session-bus,
  librsvg2-common
+Breaks: shotwell-common (<< 0.26.2-1)
+Replaces: shotwell-common (<< 0.26.2-1)
 Description: digital photo organizer
  Shotwell is a digital photo organizer designed for the GNOME desktop
  environment. It allows you to import photos, pictures, images and videos
@@ -58,6 +60,7 @@ Package: shotwell-common
 Architecture: all
 Depends: ${misc:Depends}
 Recommends: shotwell
+Breaks: shotwell (<< 0.26.2-1)
 Description: digital photo organizer - common files
  Shotwell is a digital photo organizer designed for the GNOME desktop
  environment. It allows you to import photos, pictures, images and videos

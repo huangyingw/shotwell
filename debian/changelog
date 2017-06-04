@@ -12,6 +12,9 @@ shotwell (0.26.2-1) UNRELEASED; urgency=medium
   * Use the upstream ChangeLog as changelog and add NEWS to docs.
   * Remove debian/shotwell.1 to use the upstream man page.
   * Don't install man page at shotwell-common.
+  * Some packaging improvements (Closes:# 856708):
+    - Move .desktop and appstream metadata from shotwell-common to shotwell.
+    - Thanks to Jeremy Bicha <jbicha@ubuntu.com>
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 
