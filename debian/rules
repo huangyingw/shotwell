@@ -10,10 +10,13 @@ B_DATE:=$(shell LC_ALL=C date --utc -d "$(CHDATE)")
 	dh $@
 
 override_dh_auto_configure:
-	./configure --prefix=/usr --libexec=/usr/lib --disable-schemas-compile
+	dh_auto_configure -- --prefix=/usr \
+		--libexec=/usr/lib \
+		--disable-schemas-compile
 
 override_dh_install:
 	dh_install
 	# Remove unwanted la files
-	rm -f debian/shotwell/usr/lib/shotwell/plugins/builtin/*.la
-	rm -f debian/shotwell/usr/lib/*.la
+	rm -f debian/shotwell/usr/lib/*/shotwell/plugins/builtin/*.la
+	rm -f debian/shotwell/usr/lib/*/*shotwell*.a
+	rm -f debian/shotwell/usr/lib/*/*shotwell*.la
