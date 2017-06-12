@@ -28,3 +28,4 @@ help/*
 shotwell
 var/log
 var/logs
+files.proj
