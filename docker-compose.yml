@@ -6,5 +6,5 @@ services:
             service: dbuntu
         volumes:
             - ./:/shotwell
-            - ./var/log/:/var/log/
-        command: /bin/sh -c "/shotwell/build.sh > /var/log/containner.log 2>&1"
+            - ./var/logs/:/var/logs/
+        command: /bin/sh -c "/shotwell/build.sh > /var/logs/containner.log 2>&1"
