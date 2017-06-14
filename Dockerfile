@@ -16,5 +16,6 @@ RUN apt-get update && apt-get build-dep -y shotwell
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 WORKDIR /root
 COPY ./entrypoint.sh /entrypoint.sh
+RUN mkdir -p /Users/huangyingw
 
 CMD ["/entrypoint.sh"]

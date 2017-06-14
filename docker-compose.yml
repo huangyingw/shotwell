@@ -10,6 +10,7 @@ services:
             - ./:/shotwell
             - ./var/logs/:/var/logs/
             - ~/.m2/:/root/.m2/
+            - ~/BareReps/:/root/BareReps/
             - ~/loadrc/:/root/loadrc/
             - ~/loadrc/gitrc/.gitconfig:/root/.gitconfig
         command: /bin/sh -c "/shotwell/build.sh > /var/logs/containner.log 2>&1"
