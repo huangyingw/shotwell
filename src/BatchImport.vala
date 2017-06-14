@@ -867,7 +867,7 @@ public class BatchImport : Object {
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       result_code);
 
-                if (result_code == ImportResult.SUCCESS && prepared_file.file.get_path() != duplicated_file.get_file().get_path()) {
+                if (result_code == ImportResult.SUCCESS) {
                     manifest.add_result(import_result);
 
                     continue;
