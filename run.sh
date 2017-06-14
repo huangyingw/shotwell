@@ -3,6 +3,6 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
-docker-compose -f docker-compose.yml restart shotwell
+docker-compose -f docker-compose.yml up
 
 cd -
