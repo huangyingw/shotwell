@@ -1807,10 +1807,10 @@ private class PrepareFilesJob : BackgroundImportJob {
 
         if (is_video && full_md5 == null) {
             try {
+                message("import MD5 for file %s = %s", file.get_path(), full_md5);
                 full_md5 = md5_file(file);
 #if TRACE_MD5
                 debug("import MD5 for file %s = %s", file.get_path(), full_md5);
-                message("import MD5 for file %s = %s", file.get_path(), full_md5);
 #endif
             } catch (Error err) {
                 warning("Unable to perform MD5 checksum on file %s: %s", file.get_path(),
