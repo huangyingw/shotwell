@@ -6,10 +6,10 @@
 
 public errordomain VideoError {
     FILE,          // there's a problem reading the video container file (doesn't exist, no read
-        // permission, etc.)
+    // permission, etc.)
 
-        CONTENTS,      // we can read the container file but its contents are indecipherable (no codec,
-        // malformed data, etc.)
+    CONTENTS,      // we can read the container file but its contents are indecipherable (no codec,
+    // malformed data, etc.)
 }
 
 public class VideoImportParams {
@@ -26,7 +26,7 @@ public class VideoImportParams {
     public VideoRow row = new VideoRow();
 
     public VideoImportParams(File file, ImportID import_id, string? md5,
-            Thumbnails? thumbnails = null, time_t exposure_time_override = 0) {
+                             Thumbnails? thumbnails = null, time_t exposure_time_override = 0) {
         this.file = file;
         this.import_id = import_id;
         this.md5 = md5;
@@ -87,7 +87,7 @@ public class VideoReader {
         FileInfo info = null;
         try {
             info = file.query_info(DirectoryMonitor.SUPPLIED_ATTRIBUTES,
-                    FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
+                                   FileQueryInfoFlags.NOFOLLOW_SYMLINKS, null);
         } catch (Error err) {
             return ImportResult.FILE_ERROR;
         }
@@ -145,7 +145,7 @@ public class VideoReader {
         if (exposure_time == 0) {
             // Use time reported by Gstreamer, if available.
             exposure_time = (time_t) (reader.timestamp != null ?
-                    reader.timestamp.to_unix() : 0);
+                                      reader.timestamp.to_unix() : 0);
         }
 
         params.row.video_id = VideoID();
@@ -181,7 +181,7 @@ public class VideoReader {
     private void read_internal() throws VideoError {
         if (!does_file_exist())
             throw new VideoError.FILE("video file '%s' does not exist or is inaccessible".printf(
-                        file.get_path()));
+                    file.get_path()));
 
         try {
             Gst.PbUtils.Discoverer d = new Gst.PbUtils.Discoverer((Gst.ClockTime) (Gst.SECOND * 5));
@@ -197,13 +197,13 @@ public class VideoReader {
                 // possible for get_date() to return true and a null Date
                 if (video_date != null) {
                     timestamp = new DateTime.local(video_date.get_year(), video_date.get_month(),
-                            video_date.get_day(), 0, 0, 0);
+                    video_date.get_day(), 0, 0, 0);
                 }
             }
         } catch (Error e) {
             debug("Video read error: %s", e.message);
             throw new VideoError.CONTENTS("GStreamer couldn't extract clip information: %s"
-                    .printf(e.message));
+                                          .printf(e.message));
         }
     }
 
@@ -226,8 +226,8 @@ public class VideoReader {
         int child_stdout;
         try {
             GLib.Process.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH |
-                    GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, out thumbnailer_pid, null, out child_stdout,
-                    null);
+                                                GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, out thumbnailer_pid, null, out child_stdout,
+                                                null);
             debug("Spawned thumbnailer, child pid: %d", (int) thumbnailer_pid);
         } catch (Error e) {
             debug("Error spawning process: %s", e.message);
@@ -329,7 +329,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
                     video.notify_thumbnail_altered();
                 } catch (Error err) {
                     message("Unable to update video thumbnails for %s: %s", video.to_string(),
-                            err.message);
+                    err.message);
                 }
             }
         }
@@ -446,14 +446,14 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
     }
 
     public static ExporterUI? export_many(Gee.Collection<Video> videos, Exporter.CompletionCallback done,
-            bool export_in_place = false) {
+                                          bool export_in_place = false) {
         if (videos.size == 0)
             return null;
 
         // in place export is relatively easy -- provide a fast, separate code path for it
         if (export_in_place) {
             ExporterUI temp_exporter = new ExporterUI(new Exporter.for_temp_file(videos,
-                        Scaling.for_original(), ExportFormatParameters.unmodified()));
+                                                                                 Scaling.for_original(), ExportFormatParameters.unmodified()));
             temp_exporter.export(done);
             return temp_exporter;
         }
@@ -488,7 +488,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
             return null;
 
         ExporterUI exporter = new ExporterUI(new Exporter(videos, export_dir,
-                    Scaling.for_original(), ExportFormatParameters.unmodified()));
+                                                          Scaling.for_original(), ExportFormatParameters.unmodified()));
         exporter.export(done);
 
         return exporter;
@@ -514,6 +514,11 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
 
             return committed;
         }
+    }
+
+    public static string get_md5(File? file) {
+        assert(file != null);
+        return VideoTable.get_instance().get_md5(file);
     }
 
     public static bool is_duplicate(File? file, string? full_md5) {
@@ -554,7 +559,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
         BackingFileState[] backing = new BackingFileState[1];
         lock (backing_row) {
             backing[0] = new BackingFileState(backing_row.filepath, backing_row.filesize,
-                    backing_row.timestamp, backing_row.md5);
+                                              backing_row.timestamp, backing_row.md5);
         }
 
         return backing;
@@ -834,7 +839,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
     public void export(File dest_file) throws Error {
         File source_file = File.new_for_path(get_filename());
         source_file.copy(dest_file, FileCopyFlags.OVERWRITE | FileCopyFlags.TARGET_DEFAULT_PERMS,
-                null, null);
+                         null, null);
     }
 
     public double get_clip_duration() {
@@ -1070,15 +1075,15 @@ public class VideoSourceCollection : MediaSourceCollection {
     }
 
     private void on_trashcan_contents_altered(Gee.Collection<DataSource>? added,
-            Gee.Collection<DataSource>? removed) {
+                                              Gee.Collection<DataSource>? removed) {
         trashcan_contents_altered((Gee.Collection<Video>?) added,
-                (Gee.Collection<Video>?) removed);
+        (Gee.Collection<Video>?) removed);
     }
 
     private void on_offline_contents_altered(Gee.Collection<DataSource>? added,
-            Gee.Collection<DataSource>? removed) {
+                                             Gee.Collection<DataSource>? removed) {
         offline_contents_altered((Gee.Collection<Video>?) added,
-                (Gee.Collection<Video>?) removed);
+        (Gee.Collection<Video>?) removed);
     }
 
     protected override MediaSource? fetch_by_numeric_id(int64 numeric_id) {
@@ -1152,7 +1157,7 @@ public class VideoSourceCollection : MediaSourceCollection {
     }
 
     protected override void notify_contents_altered(Gee.Iterable<DataObject>? added,
-            Gee.Iterable<DataObject>? removed) {
+                                                    Gee.Iterable<DataObject>? removed) {
         if (added != null) {
             foreach (DataObject object in added) {
                 Video video = (Video) object;
