@@ -8,6 +8,6 @@ rsync -aHv --force --progress \
     --exclude-from="excludeFile" \
     . \
     "$server":~/shotwell
-ssh -n "$server" "~/shotwell/build.sh"
+ssh -n "$server" "cd ~/shotwell/ && make install && echo installation success !!!"
 
 cd -

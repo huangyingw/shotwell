@@ -6,8 +6,6 @@ cd "$SCRIPTPATH"
 [ -f configure ] || ./autogen.sh
 ./configure
 make \
-    && make install \
-    && ~/loadrc/gitrc/gci.sh \
-    && echo success !!!
+    && ~/loadrc/gitrc/gci.sh
 
 cd -
