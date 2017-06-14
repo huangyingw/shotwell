@@ -1803,6 +1803,7 @@ private class PrepareFilesJob : BackgroundImportJob {
         string exif_only_md5 = null;
         string thumbnail_md5 = null;
         string full_md5 = Video.get_md5(file);
+        message("full_md5  --> %s", full_md5);
 
         if (is_video && full_md5 == null) {
             try {
