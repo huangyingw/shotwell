@@ -1,10 +1,15 @@
 version: '2.1'
 services:
     shotwell:
-        extends:
-            file: ~/myproject/git/docker/dbuntu/docker-compose.yml
-            service: dbuntu
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: huangyingw/shotwell
         volumes:
+            - ./.bashrc:/root/.bashrc
             - ./:/shotwell
             - ./var/logs/:/var/logs/
+            - ~/.m2/:/root/.m2/
+            - ~/loadrc/:/root/loadrc/
+            - ~/loadrc/gitrc/.gitconfig:/root/.gitconfig
         command: /bin/sh -c "/shotwell/build.sh > /var/logs/containner.log 2>&1"
