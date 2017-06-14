@@ -859,7 +859,7 @@ public class BatchImport : Object {
                         report_progress(dupe_video.get_filesize());
                         file_import_complete();
 
-                        result_code = ImportResult.SUCCESS;
+                        //result_code = ImportResult.SUCCESS;
                     }
                 }
 
