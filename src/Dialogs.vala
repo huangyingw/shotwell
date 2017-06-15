@@ -553,6 +553,8 @@ namespace ImportUI {
                     current_file_summary = result.src_identifier + " " +
                         _("duplicates existing media item") + "\n\t" +
                         result.duplicate_of.get_file().get_path() + "\n\n";
+                    message("result.src_identifier: %s", result.src_identifier);
+                    message("result.duplicate_of.get_file().get_path(): %s", result.duplicate_of.get_file().get_path());
                     builder.append(current_file_summary);
                 }
 
