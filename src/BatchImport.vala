@@ -1861,6 +1861,8 @@ private class PrepareFilesJob : BackgroundImportJob {
         // never copy file if already in library directory
         bool is_in_library_dir = file.has_prefix(library_dir);
 
+        message("new PreparedFile file.get_path(): %s", file.get_path());
+        message("new PreparedFile full_md5: %s", full_md5);
         // notify the BatchImport this is ready to go
         prepared_file = new PreparedFile(job, file, associated_file, job.get_source_identifier(),
         job.get_dest_identifier(), copy_to_library && !is_in_library_dir, exif_only_md5,

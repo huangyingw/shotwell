@@ -551,8 +551,8 @@ namespace ImportUI {
             foreach (BatchImportResult result in manifest.already_imported) {
                 if (result.src_identifier != result.duplicate_of.get_file().get_path()) {
                     current_file_summary = result.src_identifier + " " +
-                        _("duplicates existing media item") + "\n\t" +
-                        result.duplicate_of.get_file().get_path() + "\n\n";
+                        _(" == >>  ") +
+                        result.duplicate_of.get_file().get_path() + "\n";
                     message("result.src_identifier: %s", result.src_identifier);
                     message("result.duplicate_of.get_file().get_path(): %s", result.duplicate_of.get_file().get_path());
                     builder.append(current_file_summary);
