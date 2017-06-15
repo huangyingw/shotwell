@@ -867,7 +867,7 @@ public class BatchImport : Object {
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       result_code);
 
-                if (result_code == ImportResult.SUCCESS) {
+                if (result_code == ImportResult.SUCCESS && prepared_file.file.get_path() != duplicated_file.get_file().get_path()) {
                     manifest.add_result(import_result);
 
                     continue;
@@ -1807,6 +1807,7 @@ private class PrepareFilesJob : BackgroundImportJob {
 
         if (is_video && full_md5 == null) {
             try {
+                message("import MD5 for file %s = %s", file.get_path(), full_md5);
                 full_md5 = md5_file(file);
 #if TRACE_MD5
                 debug("import MD5 for file %s = %s", file.get_path(), full_md5);
