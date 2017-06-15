@@ -11,11 +11,11 @@ RUN \
 RUN apt-get update && apt-get install -y inetutils-traceroute
 COPY ./sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get build-dep -y shotwell
+RUN apt-get install -y ssh rsync
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 WORKDIR /root
 COPY ./entrypoint.sh /entrypoint.sh
-RUN mkdir -p /Users/huangyingw
 
 CMD ["/entrypoint.sh"]
