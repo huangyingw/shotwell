@@ -4,10 +4,10 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
 server=ubuntu
-rsync -aHv --force --progress \
-    --exclude-from="excludeFile" \
+ssh -n "$server" "mkdir -p ~/myproject/git/linux/shotwell/"
+rsync -aHv --delete --force --progress \
     . \
-    "$server":~/shotwell
-ssh -n "$server" "~/shotwell/install.sh"
+    "$server":~/myproject/git/linux/shotwell/
+ssh -n "$server" "~/myproject/git/linux/shotwell/install.sh"
 
 cd -
