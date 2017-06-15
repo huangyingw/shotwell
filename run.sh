@@ -4,6 +4,6 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
 ./build.sh \
-    && deploy.sh
+    && ./deploy.sh
 
 cd -
