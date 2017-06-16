@@ -121,6 +121,7 @@ public class VideoTable : DatabaseTable {
         
         ulong time_created = now_sec();
         
+        message("video_row.filepath: %s", video_row.filepath);
         res = stmt.bind_text(1, video_row.filepath);
         assert(res == Sqlite.OK);
         res = stmt.bind_int(2, video_row.width);
@@ -141,6 +142,7 @@ public class VideoTable : DatabaseTable {
         assert(res == Sqlite.OK);
         res = stmt.bind_int64(10, EventID.INVALID);
         assert(res == Sqlite.OK);
+        message("video_row.md5: %s", video_row.md5);
         res = stmt.bind_text(11, video_row.md5);
         assert(res == Sqlite.OK);
         res = stmt.bind_int64(12, time_created);
