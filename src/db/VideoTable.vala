@@ -390,9 +390,9 @@ public class VideoTable : DatabaseTable {
         
         if (md5 != null) {
             if (!first)
-                sql += " OR ";
+                sql += " AND ";
             
-            sql += " md5=?";
+            sql += " md5 IS NOT NULL";
         }
         
         Sqlite.Statement stmt;
