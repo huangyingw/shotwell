@@ -3,7 +3,7 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
-server=ubuntu
+server=movie
 ssh -n "$server" "mkdir -p ~/myproject/git/linux/shotwell/"
 rsync -aHv --delete --force --progress \
     . \
