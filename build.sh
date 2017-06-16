@@ -7,5 +7,3 @@ cd "$SCRIPTPATH"
 ./configure
 make \
     && ~/loadrc/gitrc/gci.sh
-
-cd -
