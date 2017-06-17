@@ -1730,6 +1730,7 @@ private class PrepareFilesJob : BackgroundImportJob {
                 result);
             }
 
+            message("list.size %d prepared files are ready", list.size);
             if (list.size >= BatchImport.REPORT_EVERY_N_PREPARED_FILES
                 || ((timer.elapsed() * 1000.0) > BatchImport.REPORT_PREPARED_FILES_EVERY_N_MSEC && list.size > 0)) {
 #if TRACE_IMPORT
