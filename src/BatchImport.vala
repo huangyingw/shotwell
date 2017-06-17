@@ -831,6 +831,8 @@ public class BatchImport : Object {
             // now check if the file is a duplicate
 
             if (prepared_file.is_video && Video.is_duplicate(prepared_file.file, prepared_file.full_md5)) {
+                message("prepared_file.file  --> %s", prepared_file.file.get_path());
+                message("prepared_file.full_md5  --> %s", prepared_file.full_md5);
                 VideoID[] duplicate_ids =
                     VideoTable.get_instance().get_duplicate_ids(prepared_file.file,
                                                                 prepared_file.full_md5);
