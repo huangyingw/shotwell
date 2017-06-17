@@ -8,6 +8,7 @@ services:
         volumes:
             - ./.bashrc:/root/.bashrc
             - ./:/shotwell
+            - ./etc/ssh/ssh_config:/etc/ssh/ssh_config
             - ./var/logs/:/var/logs/
             - ~/.m2/:/root/.m2/
             - ~/.ssh/:/root/.ssh/
