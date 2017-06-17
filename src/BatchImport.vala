@@ -535,8 +535,8 @@ public class BatchImport : Object {
     private void log_status(string where) {
 #if TRACE_IMPORT
         message("%s: to_perform=%d completed=%d ready_files=%d ready_thumbnails=%d display_queue=%d ready_sources=%d",
-              where, file_imports_to_perform, file_imports_completed, ready_files.size,
-              ready_thumbnails.size, display_imported_queue.size, ready_sources.size);
+                where, file_imports_to_perform, file_imports_completed, ready_files.size,
+                ready_thumbnails.size, display_imported_queue.size, ready_sources.size);
         message("%s workers: feeder=%d import=%d", where, feeder_workers.get_pending_job_count(),
         import_workers.get_pending_job_count());
 #endif
@@ -850,7 +850,7 @@ public class BatchImport : Object {
 
                     if(dupe_video != null) {
                         message("duplicate video found offline, marking as online: %s",
-                              prepared_file.file.get_path());
+                                prepared_file.file.get_path());
 
                         dupe_video.set_master_file(prepared_file.file);
                         dupe_video.mark_online();
@@ -895,7 +895,7 @@ public class BatchImport : Object {
 
                     if (photo != null) {
                         message("duplicate linked photo found in trash, untrashing and removing transforms for %s",
-                              prepared_file.file.get_path());
+                                prepared_file.file.get_path());
 
                         photo.set_master_file(prepared_file.file);
                         photo.untrash();
@@ -912,7 +912,7 @@ public class BatchImport : Object {
 
                     if (photo != null) {
                         message("duplicate photo found marked offline, marking online: %s",
-                              prepared_file.file.get_path());
+                                prepared_file.file.get_path());
 
                         photo.set_master_file(prepared_file.file);
                         photo.mark_online();
@@ -1246,7 +1246,7 @@ public class BatchImport : Object {
 #if TRACE_IMPORT
         if (total > 1) {
             message("DISPLAY IMPORT QUEUE: hysteresis, dumping %d/%d media sources", total,
-                  display_imported_queue.size);
+                    display_imported_queue.size);
         }
 #endif
 
@@ -1721,9 +1721,11 @@ private class PrepareFilesJob : BackgroundImportJob {
             PreparedFile prepared_file;
             result = prepare_file(job, file, associated, copy_to_library, out prepared_file);
             if (result == ImportResult.SUCCESS) {
+                message("prepared_file.file.get_path() success %s ", prepared_file.file.get_path());
                 prepared_files++;
                 list.add(prepared_file);
             } else {
+                message("prepared_file.file.get_path() failure %s ", prepared_file.file.get_path());
                 report_failure(job, file, job.get_source_identifier(), file.get_path(),
                 result);
             }
