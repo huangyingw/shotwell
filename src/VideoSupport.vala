@@ -83,7 +83,6 @@ public class VideoReader {
         Timer total_time = new Timer();
 #endif
         File file = params.file;
-        message("importing %s: file is marked as a video file ", file.get_path());
 
         FileInfo info = null;
         try {
