@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y inetutils-traceroute
 COPY ./sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get build-dep -y shotwell
 RUN apt-get install -y ssh rsync
+COPY ./etc/ssh/ssh_config /etc/ssh/ssh_config
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
