@@ -121,7 +121,7 @@ public class VideoReader {
                 is_interpretable = false;
                 clip_duration = 0.0;
             } else {
-                error("can't prepare video for import: an unknown kind of video error occurred");
+                message("can't prepare video for import: an unknown kind of video error occurred");
             }
         }
 
@@ -139,7 +139,7 @@ public class VideoReader {
             if (video_comment != null)
                 comment = video_comment;
         } catch (Error err) {
-            warning("Unable to read video metadata: %s", err.message);
+            message("Unable to read video metadata: %s", err.message);
         }
 
         if (exposure_time == 0) {
@@ -173,7 +173,7 @@ public class VideoReader {
         }
 
 #if MEASURE_IMPORT
-        debug("IMPORT: total time to import video = %lf", total_time.elapsed());
+        message("IMPORT: total time to import video = %lf", total_time.elapsed());
 #endif
         return ImportResult.SUCCESS;
     }
@@ -201,7 +201,7 @@ public class VideoReader {
                 }
             }
         } catch (Error e) {
-            debug("Video read error: %s", e.message);
+            message("Video read error: %s", e.message);
             throw new VideoError.CONTENTS("GStreamer couldn't extract clip information: %s"
                                           .printf(e.message));
         }
@@ -209,9 +209,9 @@ public class VideoReader {
 
     // Used by thumbnailer() to kill the external process if need be.
     private bool on_thumbnailer_timer() {
-        debug("Thumbnailer timer called");
+        message("Thumbnailer timer called");
         if (thumbnailer_pid != 0) {
-            debug("Killing thumbnailer process: %d", thumbnailer_pid);
+            message("Killing thumbnailer process: %d", thumbnailer_pid);
             Posix.kill(thumbnailer_pid, Posix.SIGKILL);
         }
         return false; // Don't call again.
@@ -221,16 +221,16 @@ public class VideoReader {
     // Note: not thread-safe if called from the same instance of the class.
     private Gdk.Pixbuf? thumbnailer(string video_file) {
         // Use Shotwell's thumbnailer, redirect output to stdout.
-        debug("Launching thumbnailer process: %s", AppDirs.get_thumbnailer_bin().get_path());
+        message("Launching thumbnailer process: %s", AppDirs.get_thumbnailer_bin().get_path());
         string[] argv = {AppDirs.get_thumbnailer_bin().get_path(), video_file};
         int child_stdout;
         try {
             GLib.Process.spawn_async_with_pipes(null, argv, null, GLib.SpawnFlags.SEARCH_PATH |
                                                 GLib.SpawnFlags.DO_NOT_REAP_CHILD, null, out thumbnailer_pid, null, out child_stdout,
                                                 null);
-            debug("Spawned thumbnailer, child pid: %d", (int) thumbnailer_pid);
+            message("Spawned thumbnailer, child pid: %d", (int) thumbnailer_pid);
         } catch (Error e) {
-            debug("Error spawning process: %s", e.message);
+            message("Error spawning process: %s", e.message);
             if (thumbnailer_pid != 0)
                 GLib.Process.close_pid(thumbnailer_pid);
             return null;
@@ -245,7 +245,7 @@ public class VideoReader {
             GLib.UnixInputStream unix_input = new GLib.UnixInputStream(child_stdout, true);
             buf = new Gdk.Pixbuf.from_stream(unix_input, null);
         } catch (Error e) {
-            debug("Error creating pixbuf: %s", e.message);
+            message("Error creating pixbuf: %s", e.message);
             buf = null;
         }
 
@@ -253,10 +253,10 @@ public class VideoReader {
         int child_status = 0;
         int ret_waitpid = Posix.waitpid(thumbnailer_pid, out child_status, 0);
         if (ret_waitpid < 0) {
-            debug("waitpid returned error code: %d", ret_waitpid);
+            message("waitpid returned error code: %d", ret_waitpid);
             buf = null;
         } else if (0 != posix_wexitstatus(child_status)) {
-            debug("Thumbnailer exited with error code: %d", posix_wexitstatus(child_status));
+            message("Thumbnailer exited with error code: %d", posix_wexitstatus(child_status));
             buf = null;
         }
 
@@ -501,7 +501,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
                 backing_row.backlinks = backlinks;
             }
         } catch (DatabaseError err) {
-            warning("Unable to update link state for %s: %s", to_string(), err.message);
+            message("Unable to update link state for %s: %s", to_string(), err.message);
         }
     }
 
@@ -768,7 +768,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
             try {
                 VideoTable.get_instance().set_exposure_time(backing_row.video_id, time);
             } catch (Error e) {
-                debug("Warning - %s", e.message);
+                message("Warning - %s", e.message);
             }
             backing_row.exposure_time = time;
         }
@@ -899,7 +899,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
             return results;
         }
 
-        debug("video %s has become interpretable", get_file().get_basename());
+        message("video %s has become interpretable", get_file().get_basename());
 
         // save this here, this can be done in background thread
         lock (backing_row) {
@@ -921,7 +921,7 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
         try {
             VideoTable.get_instance().remove(video_id);
         } catch (DatabaseError err) {
-            error("failed to remove video %s from video table", to_string());
+            message("failed to remove video %s from video table", to_string());
         }
 
         base.destroy();
