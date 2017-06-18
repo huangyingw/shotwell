@@ -332,6 +332,7 @@ public class ImportManifest {
 
         if (pre_already_imported != null) {
             foreach (BatchImportJob job in pre_already_imported) {
+                message("prepared_file.file  --> 1 %s", job.get_source_identifier());
                 BatchImportResult batch_result = new BatchImportResult(job,
                                                                        File.new_for_path(job.get_basename()),
                                                                        job.get_source_identifier(), job.get_dest_identifier(),
@@ -778,6 +779,7 @@ public class BatchImport : Object {
                     case LibraryPhotoSourceCollection.State.OFFLINE:
                     case LibraryPhotoSourceCollection.State.EDITABLE:
                     case LibraryPhotoSourceCollection.State.DEVELOPER:
+                        message("prepared_file.file  --> 2 %s", prepared_file.file.get_path());
                         import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                               prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                               DuplicatedFile.create_from_file(photo.get_master_file()),
@@ -809,6 +811,7 @@ public class BatchImport : Object {
                 switch (video_state) {
                     case VideoSourceCollection.State.ONLINE:
                     case VideoSourceCollection.State.OFFLINE:
+                        message("prepared_file.file  --> 3 %s", prepared_file.file.get_path());
                         import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                               prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                               DuplicatedFile.create_from_file(video.get_master_file()),
@@ -837,7 +840,7 @@ public class BatchImport : Object {
             // now check if the file is a duplicate
 
             if (prepared_file.is_video && Video.is_duplicate(prepared_file.file, prepared_file.full_md5)) {
-                message("prepared_file.file  --> %s", prepared_file.file.get_path());
+                message("prepared_file.file  --> 4 %s", prepared_file.file.get_path());
                 message("prepared_file.full_md5  --> %s", prepared_file.full_md5);
                 VideoID[] duplicate_ids =
                     VideoTable.get_instance().get_duplicate_ids(prepared_file.file,
@@ -874,6 +877,8 @@ public class BatchImport : Object {
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       result_code);
+                message("result_code  --> 2 %s", result_code.to_string());
+                message("prepared_file.file  --> 5 %s", prepared_file.file.get_path());
 
                 if (result_code == ImportResult.SUCCESS && prepared_file.file.get_path() != duplicated_file.get_file().get_path()) {
                     manifest.add_result(import_result);
@@ -885,6 +890,7 @@ public class BatchImport : Object {
             if (get_in_current_import(prepared_file) != null) {
                 // this looks for duplicates within the import set, since Photo.is_duplicate
                 // only looks within already-imported photos for dupes
+                message("prepared_file.file  --> 6 %s", prepared_file.file.get_path());
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                       DuplicatedFile.create_from_file(get_in_current_import(prepared_file)),
@@ -948,6 +954,7 @@ public class BatchImport : Object {
 
                 DuplicatedFile duplicated_file = DuplicatedFile.create_from_photo_id(photo_ids[0]);
 
+                message("prepared_file.file  --> 7 %s", prepared_file.file.get_path());
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       ImportResult.PHOTO_EXISTS);

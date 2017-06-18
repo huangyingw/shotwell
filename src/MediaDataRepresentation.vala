@@ -293,6 +293,7 @@ public class MediaSourceHoldingTank : DatabaseSourceHoldingTank {
         if (added != null) {
             foreach (DataSource source in added) {
                 MediaSource media_source = (MediaSource) source;
+                message("master_file_map.set  --> 1 %s", media_source.get_master_file().get_path());
                 master_file_map.set(media_source.get_master_file(), media_source);
                 media_source.master_replaced.connect(on_master_source_replaced);
             }
@@ -314,6 +315,7 @@ public class MediaSourceHoldingTank : DatabaseSourceHoldingTank {
         bool removed = master_file_map.unset(old_file);
         assert(removed);
 
+        message("master_file_map.set  --> 2 %s", new_file.get_path());
         master_file_map.set(new_file, media_source);
     }
 }
