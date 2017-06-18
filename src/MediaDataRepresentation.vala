@@ -275,6 +275,7 @@ public class MediaSourceHoldingTank : DatabaseSourceHoldingTank {
     }
     
     public MediaSource? fetch_by_master_file(File file) {
+        message("fetch_by_master_file  --> 3 %s", file.get_path());
         return master_file_map.get(file);
     }
     
