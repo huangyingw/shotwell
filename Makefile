@@ -14,7 +14,7 @@ VALAC := $(shell which $(VALAC))
 endif
 
 VALAC_VERSION := `$(VALAC) --version | awk '{print $$2}'`
-MIN_VALAC_VERSION := 0.28.0
+MIN_VALAC_VERSION := 0.20.1
 INSTALL_PROGRAM := install
 INSTALL_DATA := install -m 644
 
@@ -35,7 +35,7 @@ CORE_SUPPORTED_LANGUAGES=$(shell cat po/LINGUAS)
 LOCAL_LANG_DIR=locale-langpack
 SYSTEM_LANG_DIR := $(DESTDIR)$(PREFIX)/share/locale
 
-VALAFLAGS := $(foreach w,$(CPPFLAGS) $(CFLAGS) $(LDFLAGS),-X $(w)) --enable-checking --target-glib=2.32 --thread --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
+VALAFLAGS := -g --enable-checking --target-glib=2.32 --thread --fatal-warnings --enable-experimental --enable-deprecated $(USER_VALAFLAGS)
 ifdef UNITY_SUPPORT
 VALAFLAGS := $(VALAFLAGS) --define UNITY_SUPPORT
 endif
@@ -120,10 +120,12 @@ VAPI_FILES = \
 	LConv.vapi \
 	libexif.vapi \
 	libraw.vapi \
+	webkitgtk-3.0.vapi \
 	unique-3.0.vapi \
 	unity.vapi
 
 DEPS_FILES = \
+	webkitgtk-3.0.deps \
 	unique-3.0.deps \
 	unity.deps
 
@@ -161,11 +163,7 @@ RESOURCE_FILES = \
 
 SYS_INTEGRATION_FILES = \
 	shotwell.appdata.xml \
-	shotwell.application \
 	shotwell.desktop.head \
-	shotwell-sharing-facebook.service \
-	shotwell-sharing-flickr.service \
-	shotwell-sharing-picasa.service \
 	shotwell-viewer.desktop.head \
 	org.yorba.shotwell.gschema.xml \
 	org.yorba.shotwell-extras.gschema.xml \
@@ -256,7 +254,6 @@ LOCAL_PKGS = \
 EXT_PKGS = \
 	atk \
 	gdk-3.0 \
-	gdk-x11-3.0 \
 	gee-0.8 \
 	gexiv2 \
 	gio-unix-2.0 \
@@ -274,7 +271,7 @@ EXT_PKGS = \
 	libsoup-2.4 \
 	libxml-2.0 \
 	sqlite3 \
-	webkit2gtk-4.0
+	webkitgtk-3.0
 ifdef UNITY_SUPPORT
 EXT_PKGS += unity
 endif
@@ -306,7 +303,7 @@ EXT_PKG_VERSIONS = \
 	libxml-2.0 >= 2.6.32 \
 	rest-0.7 >= 0.7 \
 	sqlite3 >= 3.5.9 \
-	webkit2gtk-4.0 \
+	webkitgtk-3.0 >= 1.4.0 \
 	gnome-doc-utils
 
 DIRECT_LIBS_VERSIONS =
@@ -475,6 +472,15 @@ package:
 
 misc/shotwell.desktop: misc/shotwell.desktop.head $(EXPANDED_CORE_PO_FILES)
 	cp misc/shotwell.desktop.head misc/shotwell.desktop
+	@ $(foreach lang,$(CORE_SUPPORTED_LANGUAGES), echo X-GNOME-FullName[$(lang)]=`TEXTDOMAINDIR=locale-langpack \
+		LANGUAGE=$(lang) gettext --domain=shotwell $(DESKTOP_APP_FULL_NAME)` \
+		>> misc/shotwell.desktop ; \
+		echo GenericName[$(lang)]=`TEXTDOMAINDIR=locale-langpack LANGUAGE=$(lang) \
+		gettext --domain=shotwell $(DESKTOP_APPLICATION_CLASS)` >> misc/shotwell.desktop ; \
+		echo Comment[$(lang)]=`TEXTDOMAINDIR=locale-langpack LANGUAGE=$(lang) gettext \
+		--domain=shotwell $(DESKTOP_APPLICATION_COMMENT)` >> misc/shotwell.desktop ; \
+		echo Keywords[$(lang)]=`TEXTDOMAINDIR=locale-langpack LANGUAGE=$(lang) gettext \
+		--domain=shotwell $(DESKTOP_APP_KEYWORDS)` >> misc/shotwell.desktop ;) 
 ifndef DISABLE_DESKTOP_VALIDATE
 	@ desktop-file-validate misc/shotwell.desktop 1>misc/shotwell.desktop.errors 2>&1; \
 	if test -s misc/shotwell.desktop.errors; then \
@@ -486,6 +492,11 @@ endif
 	
 misc/shotwell-viewer.desktop: misc/shotwell-viewer.desktop.head $(EXPANDED_CORE_PO_FILES)
 	cp misc/shotwell-viewer.desktop.head misc/shotwell-viewer.desktop
+	$(foreach lang,$(CORE_SUPPORTED_LANGUAGES), echo X-GNOME-FullName[$(lang)]=`TEXTDOMAINDIR=locale-langpack \
+		LANGUAGE=$(lang) gettext --domain=shotwell $(DIRECT_EDIT_DESKTOP_APP_FULL_NAME)` \
+		>> misc/shotwell-viewer.desktop ; \
+		echo GenericName[$(lang)]=`TEXTDOMAINDIR=locale-langpack LANGUAGE=$(lang) gettext \
+		--domain=shotwell $(DIRECT_EDIT_DESKTOP_APPLICATION_CLASS)` >> misc/shotwell-viewer.desktop ;)
 ifndef DISABLE_DESKTOP_VALIDATE
 	@ desktop-file-validate misc/shotwell-viewer.desktop 1>misc/shotwell-viewer.desktop.errors 2>&1; \
 	if test -s misc/shotwell-viewer.desktop.errors; then \
@@ -518,12 +529,6 @@ install:
 	mkdir -p $(DESTDIR)$(LIBEXECDIR)
 	$(INSTALL_PROGRAM) $(THUMBNAILER_BIN) $(DESTDIR)$(LIBEXECDIR)
 	$(INSTALL_PROGRAM) $(MIGRATOR_BIN) $(DESTDIR)$(LIBEXECDIR)
-	mkdir -p $(DESTDIR)$(PREFIX)/share/accounts/applications
-	$(INSTALL_DATA) misc/shotwell.application $(DESTDIR)$(PREFIX)/share/accounts/applications
-	mkdir -p $(DESTDIR)$(PREFIX)/share/accounts/services
-	$(INSTALL_DATA) misc/shotwell-sharing-facebook.service $(DESTDIR)$(PREFIX)/share/accounts/services
-	$(INSTALL_DATA) misc/shotwell-sharing-flickr.service $(DESTDIR)$(PREFIX)/share/accounts/services
-	$(INSTALL_DATA) misc/shotwell-sharing-picasa.service $(DESTDIR)$(PREFIX)/share/accounts/services
 	mkdir -p $(DESTDIR)$(PREFIX)/share/shotwell/icons
 	$(INSTALL_DATA) icons/* $(DESTDIR)$(PREFIX)/share/shotwell/icons
 	mkdir -p $(DESTDIR)$(PREFIX)/share/icons/hicolor/scalable/apps
@@ -667,7 +672,7 @@ $(EXPANDED_C_FILES): $(VALA_STAMP)
 	@
 
 $(EXPANDED_OBJ_FILES): %.o: %.c $(CONFIG_IN) Makefile
-	$(CC) -c $(VALA_CFLAGS) $(CPPFLAGS) $(CFLAGS) -o $@ $<
+	$(CC) -c $(VALA_CFLAGS) $(CFLAGS) -o $@ $<
 
 $(PROGRAM): $(EXPANDED_OBJ_FILES) $(RESOURCES) $(LANG_STAMP) $(THUMBNAILER_BIN) misc/gschemas.compiled $(DOC_LANG_STAMP)
 	$(CC) $(EXPANDED_OBJ_FILES) $(CFLAGS) $(LDFLAGS) $(RESOURCES) $(VALA_LDFLAGS) $(EXPORT_FLAGS) -o $@

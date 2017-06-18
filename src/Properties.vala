@@ -630,9 +630,7 @@ private class ExtendedPropertiesWindow : Gtk.Dialog {
     }
 
     public ExtendedPropertiesWindow(Gtk.Window owner) {
-        bool use_header;
-        Gtk.Settings.get_default ().get ("gtk-dialogs-use-header", out use_header);
-        Object(use_header_bar: use_header ? 1 : 0);
+        Object(use_header_bar: 1);
         
         add_events(Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.KEY_PRESS_MASK);
         focus_on_map = true;
