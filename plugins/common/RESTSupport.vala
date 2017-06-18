@@ -20,7 +20,6 @@ public abstract class Session {
     public Session(string? endpoint_url = null) {
         this.endpoint_url = endpoint_url;
         soup_session = new Soup.SessionAsync();
-        this.soup_session.ssl_use_system_ca_file = true;
     }
     
     protected void notify_wire_message_unqueued(Soup.Message message) {
@@ -312,7 +311,7 @@ public class Transaction {
             old_url = message.get_uri().to_string(false);
             url_with_query = get_endpoint_url() + "?" + formdata_string;
             message.set_uri(new Soup.URI(url_with_query));
-        } else if (get_method() == HttpMethod.POST) {
+        } else {
             message.set_request("application/x-www-form-urlencoded", Soup.MemoryUse.COPY,
                 formdata_string.data);
         }
@@ -726,6 +725,7 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
         
         private WebKit.WebView webview;
         private Gtk.Box pane_widget;
+        private Gtk.ScrolledWindow webview_frame;
         private string auth_sequence_start_url;
 
         public signal void authorized(string auth_code);
@@ -735,20 +735,26 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
 
             pane_widget = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
+            webview_frame = new Gtk.ScrolledWindow(null, null);
+            webview_frame.set_shadow_type(Gtk.ShadowType.ETCHED_IN);
+            webview_frame.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+
             webview = new WebKit.WebView();
             webview.get_settings().enable_plugins = false;
+            webview.get_settings().enable_default_context_menu = false;
 
-            webview.load_changed.connect(on_page_load_changed);
-            webview.context_menu.connect(() => { return false; });
+            webview.load_finished.connect(on_page_load);
+            webview.load_started.connect(on_load_started);
 
-            pane_widget.pack_start(webview, true, true, 0);
+            webview_frame.add(webview);
+            pane_widget.pack_start(webview_frame, true, true, 0);
         }
         
         public static bool is_cache_dirty() {
             return cache_dirty;
         }
         
-        private void on_page_load() {
+        private void on_page_load(WebKit.WebFrame origin_frame) {
             pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
             
             string page_title = webview.get_title();
@@ -766,21 +772,8 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
             }
         }
 
-        private void on_load_started() {
+        private void on_load_started(WebKit.WebFrame frame) {
             pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.WATCH));
-        }
-
-        private void on_page_load_changed (WebKit.LoadEvent load_event) {
-            switch (load_event) {
-                case WebKit.LoadEvent.STARTED:
-                    on_load_started();
-                    break;
-                case WebKit.LoadEvent.FINISHED:
-                    on_page_load();
-                    break;
-            }
-
-            return;
         }
         
         public Spit.Publishing.DialogPane.GeometryOptions get_preferred_geometry() {
@@ -792,7 +785,7 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
         }
 
         public void on_pane_installed() {
-            webview.load_uri(auth_sequence_start_url);
+            webview.open(auth_sequence_start_url);
         }
 
         public void on_pane_uninstalled() {
@@ -873,21 +866,6 @@ public abstract class GooglePublisher : Object, Spit.Publishing.Publisher {
             return;
         
         do_get_access_tokens(auth_code);
-    }
-
-    protected void on_authenticator_authenticated(owned Variant session_data) {
-        host.install_account_fetch_wait_pane();
-
-        Variant? v_token = session_data.lookup_value("AccessToken", null);
-        if (v_token != null) {
-            string token = v_token.get_string();
-            debug("OAuth Access Token: %s", token);
-            session.access_token = token;
-
-            do_fetch_username();
-        } else {
-            debug("Access token not present!");
-        }
     }
 
     private void on_get_access_tokens_complete(Publishing.RESTSupport.Transaction txn) {

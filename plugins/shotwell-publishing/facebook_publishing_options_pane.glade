@@ -190,17 +190,15 @@ anything put into this field won't display)</property>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">center</property>
             <property name="spacing">32</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkButton" id="publish_button">
-                <property name="label" translatable="yes">_Publish</property>
+              <object class="GtkButton" id="logout_button">
+                <property name="label" translatable="yes">_Logout</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_underline">True</property>
-                <property name="width_request">96</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -209,10 +207,25 @@ anything put into this field won't display)</property>
                 <property name="position">0</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="publish_button">
+                <property name="label" translatable="yes">_Publish</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">80</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="padding">2</property>
             <property name="position">3</property>
           </packing>

@@ -45,7 +45,7 @@ public class TumblrService : Object, Spit.Pluggable, Spit.Publishing.Service {
     public void activation(bool enabled) {
     }
 
-    public Spit.Publishing.Publisher create_publisher(string? account, Spit.Publishing.PluginHost host) {
+    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host) {
         return new Publishing.Tumblr.TumblrPublisher(this, host);
     }
     

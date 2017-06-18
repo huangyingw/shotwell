@@ -28,7 +28,7 @@ public class YandexService : Object, Spit.Pluggable, Spit.Publishing.Service {
         info.license = Resources.LICENSE;
     }
     
-    public Spit.Publishing.Publisher create_publisher(string? account, Spit.Publishing.PluginHost host) {
+    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host) {
         return new Publishing.Yandex.YandexPublisher(this, host);
     }
 
@@ -120,68 +120,41 @@ internal class WebAuthPane : Spit.Publishing.DialogPane, GLib.Object {
 
         webview = new WebKit.WebView();
         webview.get_settings().enable_plugins = false;
+        webview.get_settings().enable_default_context_menu = false;
 
-        webview.load_changed.connect(on_page_load_changed);
-        webview.decide_policy.connect(on_decide_policy);
-        webview.context_menu.connect(() => { return false; });
+        webview.load_finished.connect(on_page_load);
+        webview.load_started.connect(on_load_started);
+        webview.navigation_requested.connect(navigation_requested);
 
         webview_frame.add(webview);
         pane_widget.pack_start(webview_frame, true, true, 0);
     }
 
-    private void on_page_load() {
+    private void on_page_load(WebKit.WebFrame origin_frame) {
         pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
     }
 
-    private bool on_decide_policy (WebKit.PolicyDecision decision,
-                                   WebKit.PolicyDecisionType type) {
-        switch (type) {
-            case WebKit.PolicyDecisionType.NAVIGATION_ACTION:
-                WebKit.NavigationPolicyDecision n_decision = (WebKit.NavigationPolicyDecision) decision;
-                WebKit.NavigationAction action = n_decision.navigation_action;
-                string uri = action.get_request().uri;
-                debug("Navigating to '%s'", uri);
+    private WebKit.NavigationResponse navigation_requested (WebKit.WebFrame frame, WebKit.NetworkRequest req) {
+        debug("Navigating to '%s'", req.uri);
 
-                MatchInfo info = null;
+        MatchInfo info = null;
 
-                if (re.match(uri, 0, out info)) {
-                    string access_token = info.fetch_all()[2];
+        if (re.match(req.uri, 0, out info)) {
+            string access_token = info.fetch_all()[2];
 
-                    debug("Load completed: %s", access_token);
-                    pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
-                    if (access_token != null) {
-                        login_succeeded(access_token);
-                        decision.ignore();
-                        break;
-                    } else
-                        login_failed();
-                }
-                decision.use();
-                break;
-            case WebKit.PolicyDecisionType.RESPONSE:
-                decision.use();
-                break;
-            default:
-                return false;
+            debug("Load completed: %s", access_token);
+            pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.LEFT_PTR));
+            if (access_token != null) {
+                login_succeeded(access_token);
+                return WebKit.NavigationResponse.IGNORE;
+            } else
+                login_failed();
         }
-        return true;
+        return WebKit.NavigationResponse.ACCEPT;
     }
 
-    private void on_load_started() {
+    private void on_load_started(WebKit.WebFrame frame) {
         pane_widget.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.WATCH));
-    }
-
-    private void on_page_load_changed (WebKit.LoadEvent load_event) {
-        switch (load_event) {
-            case WebKit.LoadEvent.STARTED:
-                on_load_started();
-                break;
-            case WebKit.LoadEvent.FINISHED:
-                on_page_load();
-                break;
-        }
-
-        return;
     }
 
     public Gtk.Widget get_widget() {
@@ -193,7 +166,7 @@ internal class WebAuthPane : Spit.Publishing.DialogPane, GLib.Object {
     }
 
     public void on_pane_installed() {
-        webview.load_uri(login_url);
+        webview.open(login_url);
     }
 
     public void on_pane_uninstalled() {

@@ -4,28 +4,30 @@
  * (version 2.1 or later).  See the COPYING file in this distribution.
  */
 
-using Publishing.Accounts;
-
-public class PicasaService : UOAPublishingService {
+public class PicasaService : Object, Spit.Pluggable, Spit.Publishing.Service {
     private const string ICON_FILENAME = "picasa.png";
 
     private static Gdk.Pixbuf[] icon_pixbuf_set = null;
     
     public PicasaService(GLib.File resource_directory) {
-        base("google");
         if (icon_pixbuf_set == null)
             icon_pixbuf_set = Resources.load_icon_set(resource_directory.get_child(ICON_FILENAME));
     }
 
-    public override unowned string get_id() {
+    public int get_pluggable_interface(int min_host_interface, int max_host_interface) {
+        return Spit.negotiate_interfaces(min_host_interface, max_host_interface,
+            Spit.Publishing.CURRENT_INTERFACE);
+    }
+    
+    public unowned string get_id() {
         return "org.yorba.shotwell.publishing.picasa";
     }
     
-    public override unowned string get_pluggable_name() {
+    public unowned string get_pluggable_name() {
         return "Picasa Web Albums";
     }
     
-    public override void get_info(ref Spit.PluggableInfo info) {
+    public void get_info(ref Spit.PluggableInfo info) {
         info.authors = "Lucas Beeler";
         info.copyright = _("Copyright 2009-2015 Yorba Foundation");
         info.translators = Resources.TRANSLATORS;
@@ -37,14 +39,16 @@ public class PicasaService : UOAPublishingService {
         info.icons = icon_pixbuf_set;
     }
     
-    public override Spit.Publishing.Publisher create_publisher(string? account_name, Spit.Publishing.PluginHost host) {
-        SharingAccount account = find_account(account_name);
-        return new Publishing.Picasa.PicasaPublisher(this, account, host);
+    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host) {
+        return new Publishing.Picasa.PicasaPublisher(this, host);
     }
 
-    public override Spit.Publishing.Publisher.MediaType get_supported_media() {
+    public Spit.Publishing.Publisher.MediaType get_supported_media() {
         return (Spit.Publishing.Publisher.MediaType.PHOTO |
             Spit.Publishing.Publisher.MediaType.VIDEO);
+    }
+    
+    public void activation(bool enabled) {
     }
 }
 
@@ -58,25 +62,21 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
     private bool running;
     private Spit.Publishing.ProgressCallback progress_reporter;
     private PublishingParameters publishing_parameters;
-    private UOAPublisherAuthenticator authenticator = null;
+    private string? refresh_token;
 
     public PicasaPublisher(Spit.Publishing.Service service,
-        SharingAccount account,
         Spit.Publishing.PluginHost host) {
         base(service, host, "http://picasaweb.google.com/data/");
         
         this.publishing_parameters = new PublishingParameters();
         load_parameters_from_configuration_system(publishing_parameters);
         
-        authenticator = new UOAPublisherAuthenticator(account, host,
-                                                      SERVICE_WELCOME_MESSAGE);
-        authenticator.authenticated.connect(on_authenticator_authenticated);
-
         Spit.Publishing.Publisher.MediaType media_type = Spit.Publishing.Publisher.MediaType.NONE;
         foreach(Spit.Publishing.Publishable p in host.get_publishables())
             media_type |= p.get_media_type();
         publishing_parameters.set_media_type(media_type);
         
+        this.refresh_token = host.get_config_string("refresh_token", null);
         this.progress_reporter = null;
     }
 
@@ -131,8 +131,19 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
         get_host().set_config_string("last-album", parameters.get_target_album_name());
     }
 
+    private void on_service_welcome_login() {
+        debug("EVENT: user clicked 'Login' in welcome pane.");
+
+        if (!is_running())
+            return;
+        
+        start_oauth_flow(refresh_token);
+    }
+
     protected override void on_login_flow_complete() {
         debug("EVENT: OAuth login flow complete.");
+
+        get_host().set_config_string("refresh_token", get_session().get_refresh_token());
 
         publishing_parameters.set_user_name(get_session().get_user_name());
         
@@ -162,7 +173,21 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
         debug("EVENT: fetching account and album information failed; response = '%s'.",
             bad_txn.get_response());
 
-        get_host().post_error(err);
+        if (bad_txn.get_status_code() == 403 || bad_txn.get_status_code() == 404) {
+            do_logout();
+        } else {
+            // If we get any other kind of error, we can't recover, so just post it to the user
+            get_host().post_error(err);
+        }
+    }
+
+    private void on_publishing_options_logout() {
+        if (!is_running())
+            return;
+
+        debug("EVENT: user clicked 'Logout' in the publishing options pane.");
+
+        do_logout();
     }
 
     private void on_publishing_options_publish() {
@@ -270,6 +295,12 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
         get_host().post_error(err);
     }
 
+    private void do_show_service_welcome_pane() {
+        debug("ACTION: showing service welcome pane.");
+
+        get_host().install_welcome_pane(SERVICE_WELCOME_MESSAGE, on_service_welcome_login);
+    }
+
     private void do_fetch_account_information() {
         debug("ACTION: fetching account and album information.");
 
@@ -333,6 +364,7 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
 
         PublishingOptionsPane opts_pane = new PublishingOptionsPane(builder, publishing_parameters);
         opts_pane.publish.connect(on_publishing_options_publish);
+        opts_pane.logout.connect(on_publishing_options_logout);
         get_host().install_dialog_pane(opts_pane);
 
         get_host().set_service_locked(false);
@@ -393,6 +425,13 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
 
     protected override void do_logout() {
         debug("ACTION: logging out user.");
+        
+        get_session().deauthenticate();
+        refresh_token = null;
+        get_host().unset_config_key("refresh_token");
+          
+
+        do_show_service_welcome_pane();
     }
 
     public override bool is_running() {
@@ -407,7 +446,10 @@ public class PicasaPublisher : Publishing.RESTSupport.GooglePublisher {
 
         running = true;
 
-        authenticator.authenticate();
+        if (refresh_token == null)
+            do_show_service_welcome_pane();
+        else
+            start_oauth_flow(refresh_token);
     }
 
     public override void stop() {
@@ -583,6 +625,7 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
     private Gtk.ComboBoxText size_combo = null;
     private Gtk.CheckButton strip_metadata_check = null;
     private Gtk.Button publish_button = null;
+    private Gtk.Button logout_button = null;
     private SizeDescription[] size_descriptions;
     private PublishingParameters parameters;
 
@@ -610,6 +653,7 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         size_combo = (Gtk.ComboBoxText) builder.get_object("size_combo");
         strip_metadata_check = (Gtk.CheckButton) this.builder.get_object("strip_metadata_check");
         publish_button = (Gtk.Button) builder.get_object("publish_button");
+        logout_button = (Gtk.Button) builder.get_object("logout_button");
 
         // populate any widgets whose contents are programmatically-generated.
         login_identity_label.set_label(_("You are logged into Picasa Web Albums as %s.").printf(
@@ -636,6 +680,7 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         use_existing_radio.clicked.connect(on_use_existing_radio_clicked);
         create_new_radio.clicked.connect(on_create_new_radio_clicked);
         new_album_entry.changed.connect(on_new_album_entry_changed);
+        logout_button.clicked.connect(on_logout_clicked);
         publish_button.clicked.connect(on_publish_clicked);
     }
 
@@ -679,6 +724,10 @@ internal class PublishingOptionsPane : Spit.Publishing.DialogPane, GLib.Object {
         new_album_entry.grab_focus();
         update_publish_button_sensitivity();
         public_check.set_sensitive(true);
+    }
+
+    private void on_logout_clicked() {
+        logout();
     }
 
     private void update_publish_button_sensitivity() {

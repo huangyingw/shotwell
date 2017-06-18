@@ -45,7 +45,7 @@ public class RajceService : Object, Spit.Pluggable, Spit.Publishing.Service
         info.icons = icon_pixbuf_set;
     }
     
-    public Spit.Publishing.Publisher create_publisher(string? account, Spit.Publishing.PluginHost host)
+    public Spit.Publishing.Publisher create_publisher(Spit.Publishing.PluginHost host)
 	{
         return new Publishing.Rajce.RajcePublisher(this, host);
     }

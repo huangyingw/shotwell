@@ -27,8 +27,6 @@ PKGS := $(shell sed ':a;N;$$!ba;s/\n/ /g' ../shotwell-plugin-dev-1.0.deps) $(PKG
 # automatically include the shotwell-plugin-dev-1.0 package as a local dependency
 EXT_PKGS := $(PKGS)
 PKGS := shotwell-plugin-dev-1.0 $(PKGS) $(PLUGIN_PKGS)
-EXT_PKGS := libsignon-glib libaccounts-glib $(EXT_PKGS)
-PKGS := signon libaccounts-glib $(PKGS)
 
 # automatically include the Resources.vala common file
 SRC_FILES := ../common/Resources.vala $(SRC_FILES)
@@ -43,7 +41,7 @@ DEFINES := -D_VERSION='"$(PLUGINS_VERSION)"' -DGETTEXT_PACKAGE='"shotwell"'
 all: $(PLUGIN).so
 
 .stamp: $(SRC_FILES) $(MAKE_FILES) $(HEADER_FILES)
-	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --save-temps --compile --enable-deprecated \
+	$(VALAC) --target-glib=$(MIN_GLIB_VERSION) -g --enable-checking --fatal-warnings --save-temps --compile --enable-deprecated \
 		--vapidir=../ $(foreach pkg,$(PKGS),--pkg=$(pkg)) $(foreach pkg,$(CUSTOM_VAPI_PKGS),--pkg=$(pkg)) \
 		-X -I../.. -X -fPIC \
 		$(foreach dfn,$(DEFINES),-X $(dfn)) \

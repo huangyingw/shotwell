@@ -4,10 +4,7 @@ include plugins.mk
 DIST_FILES := \
 	Makefile \
 	Makefile.plugin.mk \
-	plugins.mk \
-	Accounts.vapi \
-	Accounts.deps \
-	Signon.vapi
+	plugins.mk
 
 .PHONY: all
 all: $(ALL_PLUGINS)
