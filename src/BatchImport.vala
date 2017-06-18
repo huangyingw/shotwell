@@ -346,6 +346,7 @@ public class ImportManifest {
         bool reported = true;
         switch (batch_result.result) {
             case ImportResult.SUCCESS:
+                message("ImportResult.SUCCESS  --> %s", batch_result.file.get_path());
                 success.add(batch_result);
                 break;
 
@@ -357,15 +358,18 @@ public class ImportManifest {
                 break;
 
             case ImportResult.UNSUPPORTED_FORMAT:
+                message("UNSUPPORTED_FORMAT  --> %s", batch_result.file.get_path());
                 skipped_photos.add(batch_result);
                 break;
 
             case ImportResult.NOT_A_FILE:
             case ImportResult.NOT_AN_IMAGE:
+                message("NOT_AN_IMAGE  --> %s", batch_result.file.get_path());
                 skipped_files.add(batch_result);
                 break;
 
             case ImportResult.PHOTO_EXISTS:
+                message("ImportResult.PHOTO_EXISTS  --> %s", batch_result.file.get_path());
                 already_imported.add(batch_result);
                 break;
 
@@ -374,6 +378,7 @@ public class ImportManifest {
                 break;
 
             case ImportResult.FILE_WRITE_ERROR:
+                message("FILE_WRITE_ERROR  --> %s", batch_result.file.get_path());
                 write_failed.add(batch_result);
                 break;
 
@@ -382,6 +387,7 @@ public class ImportManifest {
                 break;
 
             default:
+                message("failed.add  --> %s", batch_result.file.get_path());
                 failed.add(batch_result);
                 break;
         }
