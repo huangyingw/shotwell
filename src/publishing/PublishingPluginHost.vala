@@ -21,8 +21,7 @@ public class ConcretePublishingHost : Plugins.StandardHostInterface,
     private Spit.Publishing.Publisher.MediaType media_type =
         Spit.Publishing.Publisher.MediaType.NONE;
     
-    public ConcretePublishingHost(Service service, string? account,
-        PublishingUI.PublishingDialog dialog,
+    public ConcretePublishingHost(Service service, PublishingUI.PublishingDialog dialog,
         Publishable[] publishables) {
         base(service, "sharing");
         this.dialog = dialog;
@@ -31,7 +30,7 @@ public class ConcretePublishingHost : Plugins.StandardHostInterface,
         foreach (Publishable curr_publishable in publishables)
             this.media_type |= curr_publishable.get_media_type();
         
-        this.active_publisher = service.create_publisher(account, this);
+        this.active_publisher = service.create_publisher(this);
     }
     
     private void on_login_clicked() {
@@ -232,13 +231,6 @@ public class ConcretePublishingHost : Plugins.StandardHostInterface,
         }
         
         return report_plugin_upload_progress;
-    }
-
-    public ulong get_dialog_xid() {
-        if (dialog == null) return 0;
-
-        Gdk.Window window = dialog.get_window();
-        return Gdk.X11Window.get_xid(window);
     }
 }
 
