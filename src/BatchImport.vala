@@ -497,6 +497,7 @@ public class BatchImport : Object {
         if (skip_manifest != null) {
             skipset = new Gee.HashSet<File>(file_hash, file_equal);
             foreach (MediaSource source in skip_manifest.imported) {
+                message("skipset.add  --> 3 %s", source.get_file().get_path());
                 skipset.add(source.get_file());
             }
         }
