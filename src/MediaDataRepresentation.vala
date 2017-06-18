@@ -282,6 +282,7 @@ public class MediaSourceHoldingTank : DatabaseSourceHoldingTank {
     public MediaSource? fetch_by_md5(string md5) {
         foreach (MediaSource source in master_file_map.values) {
             if (source.get_master_md5() == md5) {
+                message("fetch_by_md5  --> 3 %s", source.get_master_file().get_path());
                 return source;
             }
         }
@@ -303,6 +304,7 @@ public class MediaSourceHoldingTank : DatabaseSourceHoldingTank {
         if (removed != null) {
             foreach (DataSource source in removed) {
                 MediaSource media_source = (MediaSource) source;
+                message("master_file_map.unset 1 %s", media_source.get_master_file().get_path());
                 bool is_removed = master_file_map.unset(media_source.get_master_file());
                 assert(is_removed);
                 media_source.master_replaced.disconnect(on_master_source_replaced);
