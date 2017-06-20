@@ -5,7 +5,7 @@ PLUGIN_PKGS := \
 	gtk+-3.0 \
 	libsoup-2.4 \
 	libxml-2.0 \
-	webkitgtk-3.0 \
+	webkit2gtk-4.0 \
 	gexiv2 \
 	rest-0.7 \
 	gee-0.8 \
@@ -18,6 +18,7 @@ SRC_FILES := \
 	FlickrPublishing.vala \
 	YouTubePublishing.vala \
 	PiwigoPublishing.vala \
+	../common/accounts.vala \
 	../../src/util/string.vala \
 	../common/RESTSupport.vala
 

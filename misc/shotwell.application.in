@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<application id="shotwell">
+  <description>Shotwell</description>
+  <desktop-entry>shotwell.desktop</desktop-entry>
+  <translations>shotwell</translations>
+
+  <services>
+    <service id="shotwell-sharing-picasa">
+      <_description>Publish your pictures to Picasa</_description>
+    </service>
+    <service id="shotwell-sharing-facebook">
+      <_description>Publish your pictures to Facebook</_description>
+    </service>
+    <service id="shotwell-sharing-flickr">
+      <_description>Publish your pictures to Flickr</_description>
+    </service>
+  </services>
+
+</application>
