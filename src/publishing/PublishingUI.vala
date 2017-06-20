@@ -130,6 +130,11 @@ public class LoginWaitPane : StaticMessagePane {
 }
 
 public class PublishingDialog : Gtk.Dialog {
+    private struct AccountService {
+        Spit.Publishing.Service service;
+        string? account;
+    }
+
     private const int LARGE_WINDOW_WIDTH = 860;
     private const int LARGE_WINDOW_HEIGHT = 688;
     private const int COLOSSAL_WINDOW_WIDTH = 1024;
@@ -152,16 +157,22 @@ public class PublishingDialog : Gtk.Dialog {
     private Spit.Publishing.Publishable[] publishables;
     private Spit.Publishing.ConcretePublishingHost host;
     private Spit.PluggableInfo info;
+    private Gee.HashMap<string,AccountService?> services;
 
     protected PublishingDialog(Gee.Collection<MediaSource> to_publish) {
         assert(to_publish.size > 0);
 
-        Object(use_header_bar: 1);
-        ((Gtk.HeaderBar) get_header_bar()).set_show_close_button(false);
+        bool use_header;
+        Gtk.Settings.get_default ().get ("gtk-dialogs-use-header", out use_header);
+        Object(use_header_bar: use_header ? 1 : 0);
+        if (use_header)
+            ((Gtk.HeaderBar) get_header_bar()).set_show_close_button(false);
         
         resizable = false;
         delete_event.connect(on_window_close);
         
+        services = new Gee.HashMap<string,AccountService?>();
+
         publishables = new Spit.Publishing.Publishable[0];
         bool has_photos = false;
         bool has_videos = false;
@@ -209,40 +220,93 @@ public class PublishingDialog : Gtk.Dialog {
         // get the name of the service the user last used
         string? last_used_service = Config.Facade.get_instance().get_last_used_service();
 
-        Spit.Publishing.Service[] loaded_services = load_services(has_photos, has_videos);
+        Spit.Publishing.Service[] loaded_services = load_services(has_photos, has_videos, null);
 
         Gtk.TreeIter iter;
 
         foreach (Spit.Publishing.Service service in loaded_services) {
-            service_selector_box_model.append(out iter);
-
             string curr_service_id = service.get_id();
 
             service.get_info(ref info);
 
-            if (null != info.icons && 0 < info.icons.length) {
-                // check if the icons object is set -- if set use that icon
-                service_selector_box_model.set(iter, 0, info.icons[0], 1,
-                    service.get_pluggable_name());
-                
-                // in case the icons object is not set on the next iteration
-                info.icons[0] = Resources.get_icon(Resources.ICON_GENERIC_PLUGIN);
-            } else {
-                // if icons object is null or zero length use a generic icon
-                service_selector_box_model.set(iter, 0, Resources.get_icon(
-                    Resources.ICON_GENERIC_PLUGIN), 1, service.get_pluggable_name());
+            var account_names = service.list_account_names();
+            if (account_names.length == 0) {
+                account_names += null;
             }
+
+            foreach (string? account_name in account_names) {
+                service_selector_box_model.append(out iter);
+
+                string service_name = service.get_pluggable_name();
+                if (account_name != null) {
+                    service_name += " (%s)".printf(account_name);
+                }
+
+                AccountService account_service = {
+                    service: service,
+                    account: account_name
+                };
+                services.set(service_name, account_service);
+
+                if (null != info.icons && 0 < info.icons.length) {
+                    // check if the icons object is set -- if set use that icon
+                    service_selector_box_model.set(iter, 0, info.icons[0], 1,
+                        service_name);
+
+                    // in case the icons object is not set on the next iteration
+                    info.icons[0] = Resources.get_icon(Resources.ICON_GENERIC_PLUGIN);
+                } else {
+                    // if icons object is null or zero length use a generic icon
+                    service_selector_box_model.set(iter, 0, Resources.get_icon(
+                        Resources.ICON_GENERIC_PLUGIN), 1, service_name);
+                }
             
-            if (last_used_service == null) {
-                service_selector_box.set_active_iter(iter);
-                last_used_service = service.get_id();
-            } else if (last_used_service == curr_service_id) {
-                service_selector_box.set_active_iter(iter);
+                if (last_used_service == null) {
+                    service_selector_box.set_active_iter(iter);
+                    last_used_service = service.get_id();
+                } else if (last_used_service == curr_service_id) {
+                    service_selector_box.set_active_iter(iter);
+                }
             }
         }
 
+        service_selector_box_model.append(out iter);
+        service_selector_box_model.set(iter,
+                                       0, Resources.get_icon(Resources.ICON_GENERIC_PLUGIN),
+                                       1, _("Add more accounts..."));
+
         service_selector_box.changed.connect(on_service_changed);
         
+        if (!use_header)
+        {
+            var service_selector_box_label = new Gtk.Label.with_mnemonic(label);
+            service_selector_box_label.set_mnemonic_widget(service_selector_box);
+            service_selector_box_label.set_alignment(0.0f, 0.5f);
+
+            /* the wrapper is not an extraneous widget -- it's necessary to prevent the service
+               selection box from growing and shrinking whenever its parent's size changes.
+               When wrapped inside a Gtk.Alignment, the Alignment grows and shrinks instead of
+               the service selection box. */
+            Gtk.Alignment service_selector_box_wrapper = new Gtk.Alignment(1.0f, 0.5f, 0.0f, 0.0f);
+            service_selector_box_wrapper.add(service_selector_box);
+
+            Gtk.Box service_selector_layouter = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 8);
+            service_selector_layouter.set_border_width(12);
+            service_selector_layouter.add(service_selector_box_label);
+            service_selector_layouter.pack_start(service_selector_box_wrapper, true, true, 0);
+
+            /* 'service area' is the selector assembly plus the horizontal rule dividing it from the
+               rest of the dialog */
+            Gtk.Box service_area_layouter = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            service_area_layouter.add(service_selector_layouter);
+            service_area_layouter.add(new Gtk.Separator(Gtk.Orientation.HORIZONTAL));
+
+            Gtk.Alignment service_area_wrapper = new Gtk.Alignment(0.0f, 0.0f, 1.0f, 0.0f);
+            service_area_wrapper.add(service_area_layouter);
+
+            get_content_area().pack_start(service_area_wrapper, false, false, 0);
+        }
+
         central_area_layouter = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
         get_content_area().pack_start(central_area_layouter, true, true, 0);
@@ -250,8 +314,12 @@ public class PublishingDialog : Gtk.Dialog {
         close_cancel_button = new Gtk.Button.with_mnemonic("_Cancel");
         close_cancel_button.set_can_default(true);
         close_cancel_button.clicked.connect(on_close_cancel_clicked);
-        ((Gtk.HeaderBar) get_header_bar()).pack_start(close_cancel_button);
-        ((Gtk.HeaderBar) get_header_bar()).pack_end(service_selector_box);
+        if (use_header) {
+            ((Gtk.HeaderBar) get_header_bar()).pack_start(close_cancel_button);
+            ((Gtk.HeaderBar) get_header_bar()).pack_end(service_selector_box);
+        }
+        else
+            ((Gtk.Container) get_action_area()).add(close_cancel_button);
 
         set_standard_window_mode();
         
@@ -295,24 +363,35 @@ public class PublishingDialog : Gtk.Dialog {
         return loaded_services;
     }
     
-    private static Spit.Publishing.Service[] load_services(bool has_photos, bool has_videos) {
+    private static Spit.Publishing.Service[] load_services(bool has_photos, bool has_videos,
+                                                           out bool has_disabled_services) {
         assert (has_photos || has_videos);
         
         Spit.Publishing.Service[] filtered_services = new Spit.Publishing.Service[0];        
         Spit.Publishing.Service[] all_services = load_all_services();
 
+        has_disabled_services = false;
         foreach (Spit.Publishing.Service service in all_services) {
+            bool supports_media = false;
             
             if (has_photos && !has_videos) {
                 if ((service.get_supported_media() & Spit.Publishing.Publisher.MediaType.PHOTO) != 0)
-                    filtered_services += service;
+                    supports_media = true;
             } else if (!has_photos && has_videos) {
                 if ((service.get_supported_media() & Spit.Publishing.Publisher.MediaType.VIDEO) != 0)
-                    filtered_services += service;
+                    supports_media = true;
             } else {
                 if (((service.get_supported_media() & Spit.Publishing.Publisher.MediaType.PHOTO) != 0) &&
                     ((service.get_supported_media() & Spit.Publishing.Publisher.MediaType.VIDEO) != 0))
+                    supports_media = true;
+            }
+
+            if (supports_media) {
+                if (service.is_enabled()) {
                     filtered_services += service;
+                } else {
+                    has_disabled_services = true;
+                }
             }
         }
         
@@ -351,15 +430,26 @@ public class PublishingDialog : Gtk.Dialog {
         Gee.ArrayList<Video> videos = new Gee.ArrayList<Video>();
         MediaSourceCollection.filter_media(to_publish, photos, videos);
         
+        bool has_disabled_services = false;
         Spit.Publishing.Service[] avail_services =
-            load_services((photos.size > 0), (videos.size > 0));
+            load_services((photos.size > 0), (videos.size > 0), out has_disabled_services);
         
         if (avail_services.length == 0) {
-            // There are no enabled publishing services that accept this media type,
-            // warn the user.
-            AppWindow.error_message_with_title(_("Unable to publish"),
-                _("Shotwell cannot publish the selected items because you do not have a compatible publishing plugin enabled. To correct this, choose <b>Edit %s Preferences</b> and enable one or more of the publishing plugins on the <b>Plugins</b> tab.").printf("▸"),
-                null, false);
+            if (has_disabled_services) {
+                try {
+                    DesktopAppInfo app_info =
+                        new DesktopAppInfo ("unity-credentials-panel.desktop");
+                    GLib.Process.spawn_command_line_async(app_info.get_commandline() + " application=shotwell");
+                } catch (Error e) {
+                    warning ("Error launching Online Accounts: %s", e.message);
+                }
+            } else {
+                // There are no enabled publishing services that accept this media type,
+                // warn the user.
+                AppWindow.error_message_with_title(_("Unable to publish"),
+                    _("Shotwell cannot publish the selected items because you do not have a compatible publishing plugin enabled. To correct this, choose <b>Edit %s Preferences</b> and enable one or more of the publishing plugins on the <b>Plugins</b> tab.").printf("▸"),
+                    null, false);
+            }
 
             return;
         }
@@ -408,19 +498,29 @@ public class PublishingDialog : Gtk.Dialog {
         
         string service_name = (string) service_name_val;
         
-        Spit.Publishing.Service? selected_service = null;
-        Spit.Publishing.Service[] services = load_all_services();
-        foreach (Spit.Publishing.Service service in services) {
-            if (service.get_pluggable_name() == service_name) {
-                selected_service = service;
-                break;
+        if (!services.has_key(service_name)) {
+            debug("Starting Online Accounts...");
+            try {
+                DesktopAppInfo app_info =
+                    new DesktopAppInfo ("unity-credentials-panel.desktop");
+                GLib.Process.spawn_command_line_async(app_info.get_commandline() + " application=shotwell");
+            } catch (Error e) {
+                warning ("Error launching Online Accounts: %s", e.message);
             }
+
+            on_close_cancel_clicked();
+            return;
+
         }
-        assert(selected_service != null);
+
+        AccountService account_service = services.get(service_name);
+        Spit.Publishing.Service? selected_service = account_service.service;
 
         Config.Facade.get_instance().set_last_used_service(selected_service.get_id());
 
-        host = new Spit.Publishing.ConcretePublishingHost(selected_service, this, publishables);
+        host = new Spit.Publishing.ConcretePublishingHost(selected_service,
+                                                          account_service.account,
+                                                          this, publishables);
         host.start_publishing();
     }
     
