@@ -332,7 +332,6 @@ public class ImportManifest {
 
         if (pre_already_imported != null) {
             foreach (BatchImportJob job in pre_already_imported) {
-                message("prepared_file.file  --> 1 %s", job.get_source_identifier());
                 BatchImportResult batch_result = new BatchImportResult(job,
                                                                        File.new_for_path(job.get_basename()),
                                                                        job.get_source_identifier(), job.get_dest_identifier(),
@@ -347,7 +346,6 @@ public class ImportManifest {
         bool reported = true;
         switch (batch_result.result) {
             case ImportResult.SUCCESS:
-                message("ImportResult.SUCCESS  --> %s", batch_result.file.get_path());
                 success.add(batch_result);
                 break;
 
@@ -359,18 +357,15 @@ public class ImportManifest {
                 break;
 
             case ImportResult.UNSUPPORTED_FORMAT:
-                message("UNSUPPORTED_FORMAT  --> %s", batch_result.file.get_path());
                 skipped_photos.add(batch_result);
                 break;
 
             case ImportResult.NOT_A_FILE:
             case ImportResult.NOT_AN_IMAGE:
-                message("NOT_AN_IMAGE  --> %s", batch_result.file.get_path());
                 skipped_files.add(batch_result);
                 break;
 
             case ImportResult.PHOTO_EXISTS:
-                message("ImportResult.PHOTO_EXISTS  --> %s", batch_result.file.get_path());
                 already_imported.add(batch_result);
                 break;
 
@@ -379,7 +374,6 @@ public class ImportManifest {
                 break;
 
             case ImportResult.FILE_WRITE_ERROR:
-                message("FILE_WRITE_ERROR  --> %s", batch_result.file.get_path());
                 write_failed.add(batch_result);
                 break;
 
@@ -388,7 +382,6 @@ public class ImportManifest {
                 break;
 
             default:
-                message("failed.add  --> %s", batch_result.file.get_path());
                 failed.add(batch_result);
                 break;
         }
@@ -497,7 +490,6 @@ public class BatchImport : Object {
         if (skip_manifest != null) {
             skipset = new Gee.HashSet<File>(file_hash, file_equal);
             foreach (MediaSource source in skip_manifest.imported) {
-                message("skipset.add  --> 3 %s", source.get_file().get_path());
                 skipset.add(source.get_file());
             }
         }
@@ -511,7 +503,7 @@ public class BatchImport : Object {
 
     ~BatchImport() {
 #if TRACE_DTORS
-        message("DTOR: BatchImport (%s)", name);
+        debug("DTOR: BatchImport (%s)", name);
 #endif
         Application.get_instance().exiting.disconnect(user_halt);
     }
@@ -542,10 +534,10 @@ public class BatchImport : Object {
 
     private void log_status(string where) {
 #if TRACE_IMPORT
-        message("%s: to_perform=%d completed=%d ready_files=%d ready_thumbnails=%d display_queue=%d ready_sources=%d",
-                where, file_imports_to_perform, file_imports_completed, ready_files.size,
-                ready_thumbnails.size, display_imported_queue.size, ready_sources.size);
-        message("%s workers: feeder=%d import=%d", where, feeder_workers.get_pending_job_count(),
+        debug("%s: to_perform=%d completed=%d ready_files=%d ready_thumbnails=%d display_queue=%d ready_sources=%d",
+              where, file_imports_to_perform, file_imports_completed, ready_files.size,
+              ready_thumbnails.size, display_imported_queue.size, ready_sources.size);
+        debug("%s workers: feeder=%d import=%d", where, feeder_workers.get_pending_job_count(),
         import_workers.get_pending_job_count());
 #endif
     }
@@ -780,7 +772,6 @@ public class BatchImport : Object {
                     case LibraryPhotoSourceCollection.State.OFFLINE:
                     case LibraryPhotoSourceCollection.State.EDITABLE:
                     case LibraryPhotoSourceCollection.State.DEVELOPER:
-                        message("prepared_file.file  --> 2 %s", prepared_file.file.get_path());
                         import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                               prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                               DuplicatedFile.create_from_file(photo.get_master_file()),
@@ -812,7 +803,6 @@ public class BatchImport : Object {
                 switch (video_state) {
                     case VideoSourceCollection.State.ONLINE:
                     case VideoSourceCollection.State.OFFLINE:
-                        message("prepared_file.file  --> 3 %s", prepared_file.file.get_path());
                         import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                               prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                               DuplicatedFile.create_from_file(video.get_master_file()),
@@ -841,8 +831,6 @@ public class BatchImport : Object {
             // now check if the file is a duplicate
 
             if (prepared_file.is_video && Video.is_duplicate(prepared_file.file, prepared_file.full_md5)) {
-                message("prepared_file.file  --> 4 %s", prepared_file.file.get_path());
-                message("prepared_file.full_md5  --> %s", prepared_file.full_md5);
                 VideoID[] duplicate_ids =
                     VideoTable.get_instance().get_duplicate_ids(prepared_file.file,
                                                                 prepared_file.full_md5);
@@ -859,8 +847,8 @@ public class BatchImport : Object {
                         dupe_video = (Video) Video.global.get_offline_bin().fetch_by_md5(prepared_file.full_md5);
 
                     if(dupe_video != null) {
-                        message("duplicate video found offline, marking as online: %s",
-                                prepared_file.file.get_path());
+                        debug("duplicate video found offline, marking as online: %s",
+                              prepared_file.file.get_path());
 
                         dupe_video.set_master_file(prepared_file.file);
                         dupe_video.mark_online();
@@ -878,10 +866,8 @@ public class BatchImport : Object {
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       result_code);
-                message("result_code  --> 2 %s", result_code.to_string());
-                message("prepared_file.file  --> 5 %s", prepared_file.file.get_path());
 
-                if (result_code == ImportResult.SUCCESS && prepared_file.file.get_path() != duplicated_file.get_file().get_path()) {
+                if (result_code == ImportResult.SUCCESS) {
                     manifest.add_result(import_result);
 
                     continue;
@@ -891,7 +877,6 @@ public class BatchImport : Object {
             if (get_in_current_import(prepared_file) != null) {
                 // this looks for duplicates within the import set, since Photo.is_duplicate
                 // only looks within already-imported photos for dupes
-                message("prepared_file.file  --> 6 %s", prepared_file.file.get_path());
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(),
                                                       DuplicatedFile.create_from_file(get_in_current_import(prepared_file)),
@@ -907,8 +892,8 @@ public class BatchImport : Object {
                         photo = LibraryPhoto.global.get_trashed_by_md5(prepared_file.full_md5);
 
                     if (photo != null) {
-                        message("duplicate linked photo found in trash, untrashing and removing transforms for %s",
-                                prepared_file.file.get_path());
+                        debug("duplicate linked photo found in trash, untrashing and removing transforms for %s",
+                              prepared_file.file.get_path());
 
                         photo.set_master_file(prepared_file.file);
                         photo.untrash();
@@ -924,8 +909,8 @@ public class BatchImport : Object {
                         photo = LibraryPhoto.global.get_offline_by_md5(prepared_file.full_md5);
 
                     if (photo != null) {
-                        message("duplicate photo found marked offline, marking online: %s",
-                                prepared_file.file.get_path());
+                        debug("duplicate photo found marked offline, marking online: %s",
+                              prepared_file.file.get_path());
 
                         photo.set_master_file(prepared_file.file);
                         photo.mark_online();
@@ -946,7 +931,7 @@ public class BatchImport : Object {
                     continue;
                 }
 
-                message("duplicate photo detected, not importing %s", prepared_file.file.get_path());
+                debug("duplicate photo detected, not importing %s", prepared_file.file.get_path());
 
                 PhotoID[] photo_ids =
                     PhotoTable.get_instance().get_duplicate_ids(prepared_file.file, null,
@@ -955,7 +940,6 @@ public class BatchImport : Object {
 
                 DuplicatedFile duplicated_file = DuplicatedFile.create_from_photo_id(photo_ids[0]);
 
-                message("prepared_file.file  --> 7 %s", prepared_file.file.get_path());
                 import_result = new BatchImportResult(prepared_file.job, prepared_file.file,
                                                       prepared_file.file.get_path(), prepared_file.file.get_path(), duplicated_file,
                                                       ImportResult.PHOTO_EXISTS);
@@ -1053,7 +1037,7 @@ public class BatchImport : Object {
                     BackingPhotoRow bpr = new BackingPhotoRow();
                     bpr.file_format = PhotoFileFormat.JFIF;
                     bpr.filepath = job.ready.photo_import_params.final_associated_file.get_path();
-                    message("Associating %s with sibling %s", ((Photo) source).get_file().get_path(),
+                    debug("Associating %s with sibling %s", ((Photo) source).get_file().get_path(),
                     bpr.filepath);
                     try {
                         ((Photo) source).add_backing_photo_for_development(RawDeveloper.CAMERA, bpr);
@@ -1075,7 +1059,7 @@ public class BatchImport : Object {
             }
 
             if (job.ready.batch_result.result != ImportResult.SUCCESS) {
-                message("on_import_file_completed: %s", job.ready.batch_result.result.to_string());
+                debug("on_import_file_completed: %s", job.ready.batch_result.result.to_string());
 
                 report_failure(job.ready.batch_result);
                 file_import_complete();
@@ -1233,7 +1217,7 @@ public class BatchImport : Object {
             return !completed;
 
         if (cancellable.is_cancelled())
-            message("Importing %d photos at once", display_imported_queue.size);
+            debug("Importing %d photos at once", display_imported_queue.size);
 
         log_status("display_imported_timer");
 
@@ -1259,8 +1243,8 @@ public class BatchImport : Object {
 
 #if TRACE_IMPORT
         if (total > 1) {
-            message("DISPLAY IMPORT QUEUE: hysteresis, dumping %d/%d media sources", total,
-                    display_imported_queue.size);
+            debug("DISPLAY IMPORT QUEUE: hysteresis, dumping %d/%d media sources", total,
+                  display_imported_queue.size);
         }
 #endif
 
@@ -1735,20 +1719,17 @@ private class PrepareFilesJob : BackgroundImportJob {
             PreparedFile prepared_file;
             result = prepare_file(job, file, associated, copy_to_library, out prepared_file);
             if (result == ImportResult.SUCCESS) {
-                message("prepared_file.file.get_path() success %s ", prepared_file.file.get_path());
                 prepared_files++;
                 list.add(prepared_file);
             } else {
-                message("prepared_file.file.get_path() failure %s ", prepared_file.file.get_path());
                 report_failure(job, file, job.get_source_identifier(), file.get_path(),
                 result);
             }
 
-            message("list.size %d prepared files are ready", list.size);
             if (list.size >= BatchImport.REPORT_EVERY_N_PREPARED_FILES
                 || ((timer.elapsed() * 1000.0) > BatchImport.REPORT_PREPARED_FILES_EVERY_N_MSEC && list.size > 0)) {
 #if TRACE_IMPORT
-                message("Notifying that %d prepared files are ready", list.size);
+                debug("Notifying that %d prepared files are ready", list.size);
 #endif
                 PreparedFileCluster cluster = new PreparedFileCluster(list);
                 list = new Gee.ArrayList<PreparedFile>();
@@ -1822,14 +1803,12 @@ private class PrepareFilesJob : BackgroundImportJob {
         string exif_only_md5 = null;
         string thumbnail_md5 = null;
         string full_md5 = Video.get_md5(file);
-        message("full_md5  --> %s", full_md5);
 
         if (is_video && full_md5 == null) {
             try {
-                message("import MD5 for file %s = %s", file.get_path(), full_md5);
                 full_md5 = md5_file(file);
 #if TRACE_MD5
-                message("import MD5 for file %s = %s", file.get_path(), full_md5);
+                debug("import MD5 for file %s = %s", file.get_path(), full_md5);
 #endif
             } catch (Error err) {
                 warning("Unable to perform MD5 checksum on file %s: %s", file.get_path(),
@@ -1880,8 +1859,6 @@ private class PrepareFilesJob : BackgroundImportJob {
         // never copy file if already in library directory
         bool is_in_library_dir = file.has_prefix(library_dir);
 
-        message("new PreparedFile file.get_path(): %s", file.get_path());
-        message("new PreparedFile full_md5: %s", full_md5);
         // notify the BatchImport this is ready to go
         prepared_file = new PreparedFile(job, file, associated_file, job.get_source_identifier(),
         job.get_dest_identifier(), copy_to_library && !is_in_library_dir, exif_only_md5,
@@ -1918,7 +1895,7 @@ private class ReadyForImport {
     public BatchImportResult abort() {
         // if file copied, delete it
         if (final_file != null && final_file != prepared_file.file) {
-            message("Deleting aborted import copy %s", final_file.get_path());
+            debug("Deleting aborted import copy %s", final_file.get_path());
             try {
                 final_file.delete(null);
             } catch (Error err) {
@@ -1989,7 +1966,7 @@ private class PreparedFileImportJob : BackgroundJob {
             }
         }
 
-        message("Importing %s", final_file.get_path());
+        debug("Importing %s", final_file.get_path());
 
         ImportResult result = ImportResult.SUCCESS;
         VideoImportParams? video_import_params = null;
@@ -2009,7 +1986,7 @@ private class PreparedFileImportJob : BackgroundJob {
         }
 
         if (result != ImportResult.SUCCESS && final_file != prepared_file.file) {
-            message("Deleting failed imported copy %s", final_file.get_path());
+            debug("Deleting failed imported copy %s", final_file.get_path());
             try {
                 final_file.delete(null);
             } catch (Error err) {

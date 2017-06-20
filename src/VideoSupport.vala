@@ -393,10 +393,8 @@ public class Video : VideoSource, Flaggable, Monitorable, Dateable {
 
             if (video.is_trashed())
                 trashed_videos.add(video);
-            else if (video.is_offline()) {
-                message("offline_videos.add  --> 3 %s", video.get_filename());
+            else if (video.is_offline())
                 offline_videos.add(video);
-            }
             else
                 all_videos.add(video);
 
