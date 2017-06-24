@@ -29,7 +29,7 @@ Build-Depends:
  libwebkit2gtk-4.0-dev,
  libxml2 (>= 2.6.32),
  valac (>= 0.22.0)
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Homepage: https://wiki.gnome.org/Apps/Shotwell
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/shotwell.git/
 Vcs-Git: https://anonscm.debian.org/cgit/collab-maint/shotwell.git/
