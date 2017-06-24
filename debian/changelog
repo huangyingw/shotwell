@@ -21,6 +21,8 @@ shotwell (0.26.2-1) UNRELEASED; urgency=medium
       + Don't install the .a file either.
     - Remove build-depend m4 since debhelper version 10 use autoconf.
     - Thanks to Jeremy Bicha <jbicha@ubuntu.com>
+  * debian/watch:
+    Rewrite to find only stable releases.
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 
