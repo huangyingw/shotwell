@@ -1,8 +1,9 @@
-shotwell (0.26.2-1) UNRELEASED; urgency=medium
+shotwell (0.26.3-1) UNRELEASED; urgency=medium
 
   * New upstream release (Closes: #855681, Closes: #841859).
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
+    - debian/shotwell.install: Drop now empty directory usr/share/appdata.
   * New README.source to explain the branching model used.
   * Use the automatic debug symbol packages:
     - Remove shotwell-dbg section from debian/control.
