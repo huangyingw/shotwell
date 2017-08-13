@@ -22,13 +22,13 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Christian Kirbach</mal:name>
       <mal:email>christian.kirbach@gmail.com</mal:email>
-      <mal:years>2014, 2106</mal:years>
+      <mal:years>2014, 2016, 2017</mal:years>
     </mal:credit>
   </info>
 
 	<title>Ins Internet veröffentlichen</title>
 
-    <p>Mit Hilfe von <link xref="other-plugins">Plugins</link> kann Shotwell Fotos und Videos bei den folgenden Diensten veröffentlichen. Jeder Dienst erfordert ein Benutzerkonto:</p>
+    <p>Mit Hilfe von <link xref="other-plugins">Erweiterungen</link> kann Shotwell Fotos und Videos bei den folgenden Diensten veröffentlichen. Jeder Dienst erfordert ein Benutzerkonto:</p>
     
     <list>
     <item><p><link href="http://facebook.com">Facebook</link></p></item>
