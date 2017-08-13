@@ -1,8 +1,30 @@
-shotwell (0.26.1-1) UNRELEASED; urgency=medium
+shotwell (0.26.3-1) UNRELEASED; urgency=medium
 
-  * New upstream release (Closes: #855681).
+  * New upstream release (Closes: #855681, Closes: #841859).
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
+    - debian/shotwell.install: Drop now empty directory usr/share/appdata.
+  * New README.source to explain the branching model used.
+  * Use the automatic debug symbol packages:
+    - Remove shotwell-dbg section from debian/control.
+    - Remove override_dh_strip, override_dh_compress and some lines
+      on dh_install from debian/rules.
+    - Remove debian/shotwell-dbg.README.Debian.
+  * Use the upstream ChangeLog as changelog and add NEWS to docs.
+  * Remove debian/shotwell.1 to use the upstream man page.
+  * Don't install man page at shotwell-common.
+  * Remove unnecessary debian/menu.
+  * Some packaging improvements (Closes:# 856708):
+    - Move .desktop and appstream metadata from shotwell-common to shotwell.
+    - debian/rules:
+      + Use dh_auto_configure instead of ./configure.
+      + Update rm paths for multiarch.
+      + Don't install the .a file either.
+    - Remove build-depend m4 since debhelper version 10 use autoconf.
+    - Thanks to Jeremy Bicha <jbicha@ubuntu.com>
+  * debian/watch:
+    Rewrite to find only stable releases.
+  * Declare compliance with Debian Policy 4.0.0. (No changes needed).
 
  -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
 

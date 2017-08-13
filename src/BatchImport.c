@@ -2124,9 +2124,9 @@ enum  {
 };
 static void work_sniffer_real_execute (BackgroundJob* base);
 static void work_sniffer_sniff_job (WorkSniffer* self, BatchImportJob* job, GError** error);
-static gint __lambda10_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b);
+static gint __lambda11_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b);
 gint utf8_cs_compare (void* a, void* b);
-static gint ___lambda10__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self);
+static gint ___lambda11__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self);
 void disassemble_filename (const gchar* basename, gchar** name, gchar** ext);
 gboolean is_string_empty (const gchar* s);
 gpointer photo_file_format_properties_ref (gpointer instance);
@@ -11771,7 +11771,7 @@ WorkSniffer* work_sniffer_new (BatchImport* owner, GeeIterable* jobs, Completion
 }
 
 
-static gint __lambda10_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) {
+static gint __lambda11_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) {
 	gint result = 0;
 	FileToPrepare* file_a = NULL;
 	FileToPrepare* _tmp0_ = NULL;
@@ -11826,9 +11826,9 @@ static gint __lambda10_ (WorkSniffer* self, FileToPrepare* a, FileToPrepare* b) 
 }
 
 
-static gint ___lambda10__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
+static gint ___lambda11__gcompare_data_func (gconstpointer a, gconstpointer b, gpointer self) {
 	gint result;
-	result = __lambda10_ ((WorkSniffer*) self, (FileToPrepare*) a, (FileToPrepare*) b);
+	result = __lambda11_ ((WorkSniffer*) self, (FileToPrepare*) a, (FileToPrepare*) b);
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	return result;
 #line 11828 "BatchImport.c"
@@ -12106,7 +12106,7 @@ static void work_sniffer_real_execute (BackgroundJob* base) {
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
 	_tmp42_ = sorted;
 #line 1483 "/home/jens/Source/shotwell/src/BatchImport.vala"
-	gee_list_sort (_tmp42_, ___lambda10__gcompare_data_func, background_job_ref (self), background_job_unref);
+	gee_list_sort (_tmp42_, ___lambda11__gcompare_data_func, background_job_ref (self), background_job_unref);
 #line 12104 "BatchImport.c"
 	{
 		gint i = 0;

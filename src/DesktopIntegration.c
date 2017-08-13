@@ -1839,13 +1839,17 @@ static void desktop_integration_background_slideshow_xml_builder_write_transitio
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
-	GDataOutputStream* _tmp11_ = NULL;
-	GFile* _tmp12_ = NULL;
-	gchar* _tmp13_ = NULL;
-	gchar* _tmp14_ = NULL;
+	gchar* _tmp11_ = NULL;
+	gchar* _tmp12_ = NULL;
+	GDataOutputStream* _tmp13_ = NULL;
+	GFile* _tmp14_ = NULL;
 	gchar* _tmp15_ = NULL;
 	gchar* _tmp16_ = NULL;
-	GDataOutputStream* _tmp17_ = NULL;
+	gchar* _tmp17_ = NULL;
+	gchar* _tmp18_ = NULL;
+	gchar* _tmp19_ = NULL;
+	gchar* _tmp20_ = NULL;
+	GDataOutputStream* _tmp21_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 215 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	g_return_if_fail (DESKTOP_INTEGRATION_IS_BACKGROUND_SLIDESHOW_XML_BUILDER (self));
@@ -1863,7 +1867,7 @@ static void desktop_integration_background_slideshow_xml_builder_write_transitio
 		g_propagate_error (error, _inner_error_);
 #line 216 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1867 "DesktopIntegration.c"
+#line 1871 "DesktopIntegration.c"
 	}
 #line 217 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp1_ = self->priv->outs;
@@ -1883,7 +1887,7 @@ static void desktop_integration_background_slideshow_xml_builder_write_transitio
 		g_propagate_error (error, _inner_error_);
 #line 217 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1887 "DesktopIntegration.c"
+#line 1891 "DesktopIntegration.c"
 	}
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp5_ = self->priv->outs;
@@ -1894,11 +1898,17 @@ static void desktop_integration_background_slideshow_xml_builder_write_transitio
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp8_ = _tmp7_;
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp9_ = g_strdup_printf ("    <from>%s</from>\n", _tmp8_);
+	_tmp9_ = g_markup_escape_text (_tmp8_, (gssize) -1);
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp10_ = _tmp9_;
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	g_data_output_stream_put_string (_tmp5_, _tmp10_, NULL, &_inner_error_);
+	_tmp11_ = g_strdup_printf ("    <from>%s</from>\n", _tmp10_);
+#line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_tmp12_ = _tmp11_;
+#line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	g_data_output_stream_put_string (_tmp5_, _tmp12_, NULL, &_inner_error_);
+#line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_g_free0 (_tmp12_);
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_free0 (_tmp10_);
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -1909,45 +1919,51 @@ static void desktop_integration_background_slideshow_xml_builder_write_transitio
 		g_propagate_error (error, _inner_error_);
 #line 218 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1913 "DesktopIntegration.c"
+#line 1923 "DesktopIntegration.c"
 	}
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp11_ = self->priv->outs;
+	_tmp13_ = self->priv->outs;
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp12_ = to;
+	_tmp14_ = to;
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp13_ = g_file_get_path (_tmp12_);
-#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp14_ = _tmp13_;
-#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp15_ = g_strdup_printf ("    <to>%s</to>\n", _tmp14_);
+	_tmp15_ = g_file_get_path (_tmp14_);
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp16_ = _tmp15_;
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	g_data_output_stream_put_string (_tmp11_, _tmp16_, NULL, &_inner_error_);
+	_tmp17_ = g_markup_escape_text (_tmp16_, (gssize) -1);
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_tmp18_ = _tmp17_;
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_tmp19_ = g_strdup_printf ("    <to>%s</to>\n", _tmp18_);
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_tmp20_ = _tmp19_;
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	g_data_output_stream_put_string (_tmp13_, _tmp20_, NULL, &_inner_error_);
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_g_free0 (_tmp20_);
+#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_g_free0 (_tmp18_);
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_free0 (_tmp16_);
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_g_free0 (_tmp14_);
-#line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		g_propagate_error (error, _inner_error_);
 #line 219 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1939 "DesktopIntegration.c"
+#line 1955 "DesktopIntegration.c"
 	}
 #line 220 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp17_ = self->priv->outs;
+	_tmp21_ = self->priv->outs;
 #line 220 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	g_data_output_stream_put_string (_tmp17_, "  </transition>\n", NULL, &_inner_error_);
+	g_data_output_stream_put_string (_tmp21_, "  </transition>\n", NULL, &_inner_error_);
 #line 220 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 220 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		g_propagate_error (error, _inner_error_);
 #line 220 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1951 "DesktopIntegration.c"
+#line 1967 "DesktopIntegration.c"
 	}
 }
 
@@ -1964,7 +1980,9 @@ static void desktop_integration_background_slideshow_xml_builder_write_static (D
 	gchar* _tmp8_ = NULL;
 	gchar* _tmp9_ = NULL;
 	gchar* _tmp10_ = NULL;
-	GDataOutputStream* _tmp11_ = NULL;
+	gchar* _tmp11_ = NULL;
+	gchar* _tmp12_ = NULL;
+	GDataOutputStream* _tmp13_ = NULL;
 	GError * _inner_error_ = NULL;
 #line 223 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	g_return_if_fail (DESKTOP_INTEGRATION_IS_BACKGROUND_SLIDESHOW_XML_BUILDER (self));
@@ -1980,7 +1998,7 @@ static void desktop_integration_background_slideshow_xml_builder_write_static (D
 		g_propagate_error (error, _inner_error_);
 #line 224 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 1984 "DesktopIntegration.c"
+#line 2002 "DesktopIntegration.c"
 	}
 #line 225 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp1_ = self->priv->outs;
@@ -2000,7 +2018,7 @@ static void desktop_integration_background_slideshow_xml_builder_write_static (D
 		g_propagate_error (error, _inner_error_);
 #line 225 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2004 "DesktopIntegration.c"
+#line 2022 "DesktopIntegration.c"
 	}
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp5_ = self->priv->outs;
@@ -2011,11 +2029,17 @@ static void desktop_integration_background_slideshow_xml_builder_write_static (D
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp8_ = _tmp7_;
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp9_ = g_strdup_printf ("    <file>%s</file>\n", _tmp8_);
+	_tmp9_ = g_markup_escape_text (_tmp8_, (gssize) -1);
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp10_ = _tmp9_;
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	g_data_output_stream_put_string (_tmp5_, _tmp10_, NULL, &_inner_error_);
+	_tmp11_ = g_strdup_printf ("    <file>%s</file>\n", _tmp10_);
+#line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_tmp12_ = _tmp11_;
+#line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	g_data_output_stream_put_string (_tmp5_, _tmp12_, NULL, &_inner_error_);
+#line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
+	_g_free0 (_tmp12_);
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_free0 (_tmp10_);
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2026,19 +2050,19 @@ static void desktop_integration_background_slideshow_xml_builder_write_static (D
 		g_propagate_error (error, _inner_error_);
 #line 226 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2030 "DesktopIntegration.c"
+#line 2054 "DesktopIntegration.c"
 	}
 #line 227 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	_tmp11_ = self->priv->outs;
+	_tmp13_ = self->priv->outs;
 #line 227 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
-	g_data_output_stream_put_string (_tmp11_, "  </static>\n", NULL, &_inner_error_);
+	g_data_output_stream_put_string (_tmp13_, "  </static>\n", NULL, &_inner_error_);
 #line 227 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (G_UNLIKELY (_inner_error_ != NULL)) {
 #line 227 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		g_propagate_error (error, _inner_error_);
 #line 227 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2042 "DesktopIntegration.c"
+#line 2066 "DesktopIntegration.c"
 	}
 }
 
@@ -2063,7 +2087,7 @@ void desktop_integration_background_slideshow_xml_builder_add_photo (DesktopInte
 	_tmp1_ = self->priv->first_file;
 #line 233 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp1_ == NULL) {
-#line 2067 "DesktopIntegration.c"
+#line 2091 "DesktopIntegration.c"
 		GFile* _tmp2_ = NULL;
 		GFile* _tmp3_ = NULL;
 #line 234 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2074,13 +2098,13 @@ void desktop_integration_background_slideshow_xml_builder_add_photo (DesktopInte
 		_g_object_unref0 (self->priv->first_file);
 #line 234 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		self->priv->first_file = _tmp3_;
-#line 2078 "DesktopIntegration.c"
+#line 2102 "DesktopIntegration.c"
 	}
 #line 236 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp4_ = self->priv->last_file;
 #line 236 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp4_ != NULL) {
-#line 2084 "DesktopIntegration.c"
+#line 2108 "DesktopIntegration.c"
 		GFile* _tmp5_ = NULL;
 		GFile* _tmp6_ = NULL;
 #line 237 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2095,7 +2119,7 @@ void desktop_integration_background_slideshow_xml_builder_add_photo (DesktopInte
 			g_propagate_error (error, _inner_error_);
 #line 237 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			return;
-#line 2099 "DesktopIntegration.c"
+#line 2123 "DesktopIntegration.c"
 		}
 	}
 #line 239 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2108,7 +2132,7 @@ void desktop_integration_background_slideshow_xml_builder_add_photo (DesktopInte
 		g_propagate_error (error, _inner_error_);
 #line 239 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2112 "DesktopIntegration.c"
+#line 2136 "DesktopIntegration.c"
 	}
 #line 241 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp8_ = file;
@@ -2118,7 +2142,7 @@ void desktop_integration_background_slideshow_xml_builder_add_photo (DesktopInte
 	_g_object_unref0 (self->priv->last_file);
 #line 241 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	self->priv->last_file = _tmp9_;
-#line 2122 "DesktopIntegration.c"
+#line 2146 "DesktopIntegration.c"
 }
 
 
@@ -2147,27 +2171,27 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 		result = NULL;
 #line 246 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return result;
-#line 2151 "DesktopIntegration.c"
+#line 2175 "DesktopIntegration.c"
 	}
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp2_ = self->priv->first_file;
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp2_ != NULL) {
-#line 2157 "DesktopIntegration.c"
+#line 2181 "DesktopIntegration.c"
 		GFile* _tmp3_ = NULL;
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp3_ = self->priv->last_file;
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp1_ = _tmp3_ != NULL;
-#line 2163 "DesktopIntegration.c"
+#line 2187 "DesktopIntegration.c"
 	} else {
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp1_ = FALSE;
-#line 2167 "DesktopIntegration.c"
+#line 2191 "DesktopIntegration.c"
 	}
 #line 249 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp1_) {
-#line 2171 "DesktopIntegration.c"
+#line 2195 "DesktopIntegration.c"
 		GFile* _tmp4_ = NULL;
 		GFile* _tmp5_ = NULL;
 #line 250 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2182,7 +2206,7 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 			g_propagate_error (error, _inner_error_);
 #line 250 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			return NULL;
-#line 2186 "DesktopIntegration.c"
+#line 2210 "DesktopIntegration.c"
 		}
 	}
 #line 252 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2195,7 +2219,7 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 		g_propagate_error (error, _inner_error_);
 #line 252 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return NULL;
-#line 2199 "DesktopIntegration.c"
+#line 2223 "DesktopIntegration.c"
 	}
 #line 254 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp7_ = self->priv->outs;
@@ -2207,7 +2231,7 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 		g_propagate_error (error, _inner_error_);
 #line 254 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return NULL;
-#line 2211 "DesktopIntegration.c"
+#line 2235 "DesktopIntegration.c"
 	}
 #line 255 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_object_unref0 (self->priv->outs);
@@ -2225,7 +2249,7 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 		g_propagate_error (error, _inner_error_);
 #line 258 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return NULL;
-#line 2229 "DesktopIntegration.c"
+#line 2253 "DesktopIntegration.c"
 	}
 #line 259 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp10_ = self->priv->destination;
@@ -2245,14 +2269,14 @@ GFile* desktop_integration_background_slideshow_xml_builder_close (DesktopIntegr
 	result = _tmp14_;
 #line 261 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return result;
-#line 2249 "DesktopIntegration.c"
+#line 2273 "DesktopIntegration.c"
 }
 
 
 static void desktop_integration_value_background_slideshow_xml_builder_init (GValue* value) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	value->data[0].v_pointer = NULL;
-#line 2256 "DesktopIntegration.c"
+#line 2280 "DesktopIntegration.c"
 }
 
 
@@ -2261,7 +2285,7 @@ static void desktop_integration_value_background_slideshow_xml_builder_free_valu
 	if (value->data[0].v_pointer) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		desktop_integration_background_slideshow_xml_builder_unref (value->data[0].v_pointer);
-#line 2265 "DesktopIntegration.c"
+#line 2289 "DesktopIntegration.c"
 	}
 }
 
@@ -2271,11 +2295,11 @@ static void desktop_integration_value_background_slideshow_xml_builder_copy_valu
 	if (src_value->data[0].v_pointer) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		dest_value->data[0].v_pointer = desktop_integration_background_slideshow_xml_builder_ref (src_value->data[0].v_pointer);
-#line 2275 "DesktopIntegration.c"
+#line 2299 "DesktopIntegration.c"
 	} else {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		dest_value->data[0].v_pointer = NULL;
-#line 2279 "DesktopIntegration.c"
+#line 2303 "DesktopIntegration.c"
 	}
 }
 
@@ -2283,37 +2307,37 @@ static void desktop_integration_value_background_slideshow_xml_builder_copy_valu
 static gpointer desktop_integration_value_background_slideshow_xml_builder_peek_pointer (const GValue* value) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return value->data[0].v_pointer;
-#line 2287 "DesktopIntegration.c"
+#line 2311 "DesktopIntegration.c"
 }
 
 
 static gchar* desktop_integration_value_background_slideshow_xml_builder_collect_value (GValue* value, guint n_collect_values, GTypeCValue* collect_values, guint collect_flags) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (collect_values[0].v_pointer) {
-#line 2294 "DesktopIntegration.c"
+#line 2318 "DesktopIntegration.c"
 		DesktopIntegrationBackgroundSlideshowXMLBuilder* object;
 		object = collect_values[0].v_pointer;
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (object->parent_instance.g_class == NULL) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			return g_strconcat ("invalid unclassed object pointer for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2301 "DesktopIntegration.c"
+#line 2325 "DesktopIntegration.c"
 		} else if (!g_value_type_compatible (G_TYPE_FROM_INSTANCE (object), G_VALUE_TYPE (value))) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			return g_strconcat ("invalid object type `", g_type_name (G_TYPE_FROM_INSTANCE (object)), "' for value type `", G_VALUE_TYPE_NAME (value), "'", NULL);
-#line 2305 "DesktopIntegration.c"
+#line 2329 "DesktopIntegration.c"
 		}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		value->data[0].v_pointer = desktop_integration_background_slideshow_xml_builder_ref (object);
-#line 2309 "DesktopIntegration.c"
+#line 2333 "DesktopIntegration.c"
 	} else {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		value->data[0].v_pointer = NULL;
-#line 2313 "DesktopIntegration.c"
+#line 2337 "DesktopIntegration.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return NULL;
-#line 2317 "DesktopIntegration.c"
+#line 2341 "DesktopIntegration.c"
 }
 
 
@@ -2324,25 +2348,25 @@ static gchar* desktop_integration_value_background_slideshow_xml_builder_lcopy_v
 	if (!object_p) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return g_strdup_printf ("value location for `%s' passed as NULL", G_VALUE_TYPE_NAME (value));
-#line 2328 "DesktopIntegration.c"
+#line 2352 "DesktopIntegration.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (!value->data[0].v_pointer) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		*object_p = NULL;
-#line 2334 "DesktopIntegration.c"
+#line 2358 "DesktopIntegration.c"
 	} else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		*object_p = value->data[0].v_pointer;
-#line 2338 "DesktopIntegration.c"
+#line 2362 "DesktopIntegration.c"
 	} else {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		*object_p = desktop_integration_background_slideshow_xml_builder_ref (value->data[0].v_pointer);
-#line 2342 "DesktopIntegration.c"
+#line 2366 "DesktopIntegration.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return NULL;
-#line 2346 "DesktopIntegration.c"
+#line 2370 "DesktopIntegration.c"
 }
 
 
@@ -2356,7 +2380,7 @@ GParamSpec* desktop_integration_param_spec_background_slideshow_xml_builder (con
 	G_PARAM_SPEC (spec)->value_type = object_type;
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return G_PARAM_SPEC (spec);
-#line 2360 "DesktopIntegration.c"
+#line 2384 "DesktopIntegration.c"
 }
 
 
@@ -2365,7 +2389,7 @@ gpointer desktop_integration_value_get_background_slideshow_xml_builder (const G
 	g_return_val_if_fail (G_TYPE_CHECK_VALUE_TYPE (value, DESKTOP_INTEGRATION_TYPE_BACKGROUND_SLIDESHOW_XML_BUILDER), NULL);
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return value->data[0].v_pointer;
-#line 2369 "DesktopIntegration.c"
+#line 2393 "DesktopIntegration.c"
 }
 
 
@@ -2385,17 +2409,17 @@ void desktop_integration_value_set_background_slideshow_xml_builder (GValue* val
 		value->data[0].v_pointer = v_object;
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		desktop_integration_background_slideshow_xml_builder_ref (value->data[0].v_pointer);
-#line 2389 "DesktopIntegration.c"
+#line 2413 "DesktopIntegration.c"
 	} else {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		value->data[0].v_pointer = NULL;
-#line 2393 "DesktopIntegration.c"
+#line 2417 "DesktopIntegration.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (old) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		desktop_integration_background_slideshow_xml_builder_unref (old);
-#line 2399 "DesktopIntegration.c"
+#line 2423 "DesktopIntegration.c"
 	}
 }
 
@@ -2414,17 +2438,17 @@ void desktop_integration_value_take_background_slideshow_xml_builder (GValue* va
 		g_return_if_fail (g_value_type_compatible (G_TYPE_FROM_INSTANCE (v_object), G_VALUE_TYPE (value)));
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		value->data[0].v_pointer = v_object;
-#line 2418 "DesktopIntegration.c"
+#line 2442 "DesktopIntegration.c"
 	} else {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		value->data[0].v_pointer = NULL;
-#line 2422 "DesktopIntegration.c"
+#line 2446 "DesktopIntegration.c"
 	}
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (old) {
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		desktop_integration_background_slideshow_xml_builder_unref (old);
-#line 2428 "DesktopIntegration.c"
+#line 2452 "DesktopIntegration.c"
 	}
 }
 
@@ -2436,7 +2460,7 @@ static void desktop_integration_background_slideshow_xml_builder_class_init (Des
 	((DesktopIntegrationBackgroundSlideshowXMLBuilderClass *) klass)->finalize = desktop_integration_background_slideshow_xml_builder_finalize;
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	g_type_class_add_private (klass, sizeof (DesktopIntegrationBackgroundSlideshowXMLBuilderPrivate));
-#line 2440 "DesktopIntegration.c"
+#line 2464 "DesktopIntegration.c"
 }
 
 
@@ -2451,7 +2475,7 @@ static void desktop_integration_background_slideshow_xml_builder_instance_init (
 	self->priv->last_file = NULL;
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	self->ref_count = 1;
-#line 2455 "DesktopIntegration.c"
+#line 2479 "DesktopIntegration.c"
 }
 
 
@@ -2471,7 +2495,7 @@ static void desktop_integration_background_slideshow_xml_builder_finalize (Deskt
 	_g_object_unref0 (self->priv->first_file);
 #line 200 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_object_unref0 (self->priv->last_file);
-#line 2475 "DesktopIntegration.c"
+#line 2499 "DesktopIntegration.c"
 }
 
 
@@ -2496,7 +2520,7 @@ gpointer desktop_integration_background_slideshow_xml_builder_ref (gpointer inst
 	g_atomic_int_inc (&self->ref_count);
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	return instance;
-#line 2500 "DesktopIntegration.c"
+#line 2524 "DesktopIntegration.c"
 }
 
 
@@ -2509,7 +2533,7 @@ void desktop_integration_background_slideshow_xml_builder_unref (gpointer instan
 		DESKTOP_INTEGRATION_BACKGROUND_SLIDESHOW_XML_BUILDER_GET_CLASS (self)->finalize (self);
 #line 193 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		g_type_free_instance ((GTypeInstance *) self);
-#line 2513 "DesktopIntegration.c"
+#line 2537 "DesktopIntegration.c"
 	}
 }
 
@@ -2517,7 +2541,7 @@ void desktop_integration_background_slideshow_xml_builder_unref (gpointer instan
 static void _desktop_integration_on_desktop_slideshow_exported_exporter_completion_callback (Exporter* exporter, gboolean is_cancelled, gpointer self) {
 #line 290 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	desktop_integration_on_desktop_slideshow_exported (exporter, is_cancelled);
-#line 2521 "DesktopIntegration.c"
+#line 2545 "DesktopIntegration.c"
 }
 
 
@@ -2553,7 +2577,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 	if (_tmp0_ != NULL) {
 #line 268 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2557 "DesktopIntegration.c"
+#line 2581 "DesktopIntegration.c"
 	}
 #line 270 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp1_ = desktop_background;
@@ -2575,7 +2599,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 	_tmp5_ = exceptions;
 #line 276 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	gee_collection_add (G_TYPE_CHECK_INSTANCE_CAST (_tmp5_, GEE_TYPE_COLLECTION, GeeCollection), DESKTOP_INTEGRATION_DESKTOP_SLIDESHOW_XML_FILENAME);
-#line 2579 "DesktopIntegration.c"
+#line 2603 "DesktopIntegration.c"
 	{
 		GFile* _tmp6_ = NULL;
 		GeeSet* _tmp7_ = NULL;
@@ -2587,7 +2611,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 		delete_all_files (_tmp6_, _tmp7_, NULL, NULL, (guint64) 0, NULL, &_inner_error_);
 #line 278 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2591 "DesktopIntegration.c"
+#line 2615 "DesktopIntegration.c"
 			goto __catch568_g_error;
 		}
 	}
@@ -2610,7 +2634,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 "tory: %s", _tmp9_);
 #line 277 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_g_error_free0 (err);
-#line 2613 "DesktopIntegration.c"
+#line 2637 "DesktopIntegration.c"
 	}
 	__finally568:
 #line 277 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2625,7 +2649,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 		g_clear_error (&_inner_error_);
 #line 277 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2628 "DesktopIntegration.c"
+#line 2652 "DesktopIntegration.c"
 	}
 #line 283 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp10_ = duration;
@@ -2673,7 +2697,7 @@ void desktop_integration_set_background_slideshow (GeeCollection* photos, gdoubl
 	_g_object_unref0 (exceptions);
 #line 265 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_object_unref0 (wallpaper_dir);
-#line 2676 "DesktopIntegration.c"
+#line 2700 "DesktopIntegration.c"
 }
 
 
@@ -2704,7 +2728,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 	if (_tmp0_) {
 #line 297 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2707 "DesktopIntegration.c"
+#line 2731 "DesktopIntegration.c"
 	}
 #line 299 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	xml_file = NULL;
@@ -2730,7 +2754,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 	_g_object_unref0 (_tmp2_);
 #line 300 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	xml_builder = _tmp8_;
-#line 2733 "DesktopIntegration.c"
+#line 2757 "DesktopIntegration.c"
 	{
 		DesktopIntegrationBackgroundSlideshowXMLBuilder* _tmp9_ = NULL;
 		Exporter* _tmp10_ = NULL;
@@ -2746,14 +2770,14 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		desktop_integration_background_slideshow_xml_builder_open (_tmp9_, &_inner_error_);
 #line 304 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2749 "DesktopIntegration.c"
+#line 2773 "DesktopIntegration.c"
 			goto __catch569_g_error;
 		}
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp10_ = exporter;
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp12_ = exporter_get_exported_files (_tmp10_, &_tmp11_);
-#line 2756 "DesktopIntegration.c"
+#line 2780 "DesktopIntegration.c"
 		{
 			GFile** file_collection = NULL;
 			gint file_collection_length1 = 0;
@@ -2765,14 +2789,14 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 			file_collection_length1 = _tmp11_;
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			for (file_it = 0; file_it < _tmp11_; file_it = file_it + 1) {
-#line 2768 "DesktopIntegration.c"
+#line 2792 "DesktopIntegration.c"
 				GFile* _tmp13_ = NULL;
 				GFile* file = NULL;
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 				_tmp13_ = _g_object_ref0 (file_collection[file_it]);
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 				file = _tmp13_;
-#line 2775 "DesktopIntegration.c"
+#line 2799 "DesktopIntegration.c"
 				{
 					DesktopIntegrationBackgroundSlideshowXMLBuilder* _tmp14_ = NULL;
 					GFile* _tmp15_ = NULL;
@@ -2788,17 +2812,17 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 						_g_object_unref0 (file);
 #line 307 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 						file_collection = (_vala_array_free (file_collection, file_collection_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2791 "DesktopIntegration.c"
+#line 2815 "DesktopIntegration.c"
 						goto __catch569_g_error;
 					}
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 					_g_object_unref0 (file);
-#line 2796 "DesktopIntegration.c"
+#line 2820 "DesktopIntegration.c"
 				}
 			}
 #line 306 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 			file_collection = (_vala_array_free (file_collection, file_collection_length1, (GDestroyNotify) g_object_unref), NULL);
-#line 2801 "DesktopIntegration.c"
+#line 2825 "DesktopIntegration.c"
 		}
 #line 309 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_tmp17_ = xml_builder;
@@ -2808,7 +2832,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		_tmp16_ = _tmp18_;
 #line 309 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		if (G_UNLIKELY (_inner_error_ != NULL)) {
-#line 2811 "DesktopIntegration.c"
+#line 2835 "DesktopIntegration.c"
 			goto __catch569_g_error;
 		}
 #line 309 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2821,7 +2845,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		xml_file = _tmp19_;
 #line 303 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_g_object_unref0 (_tmp16_);
-#line 2824 "DesktopIntegration.c"
+#line 2848 "DesktopIntegration.c"
 	}
 	goto __finally569;
 	__catch569_g_error:
@@ -2858,7 +2882,7 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		_g_object_unref0 (xml_file);
 #line 314 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2861 "DesktopIntegration.c"
+#line 2885 "DesktopIntegration.c"
 	}
 	__finally569:
 #line 303 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
@@ -2873,13 +2897,13 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		g_clear_error (&_inner_error_);
 #line 303 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		return;
-#line 2876 "DesktopIntegration.c"
+#line 2900 "DesktopIntegration.c"
 	}
 #line 317 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp25_ = desktop_integration_set_desktop_background;
 #line 317 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp25_) {
-#line 2882 "DesktopIntegration.c"
+#line 2906 "DesktopIntegration.c"
 		ConfigFacade* _tmp26_ = NULL;
 		ConfigFacade* _tmp27_ = NULL;
 		GFile* _tmp28_ = NULL;
@@ -2901,13 +2925,13 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		_g_free0 (_tmp30_);
 #line 318 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_g_object_unref0 (_tmp27_);
-#line 2904 "DesktopIntegration.c"
+#line 2928 "DesktopIntegration.c"
 	}
 #line 320 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_tmp31_ = desktop_integration_set_screensaver;
 #line 320 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	if (_tmp31_) {
-#line 2910 "DesktopIntegration.c"
+#line 2934 "DesktopIntegration.c"
 		ConfigFacade* _tmp32_ = NULL;
 		ConfigFacade* _tmp33_ = NULL;
 		GFile* _tmp34_ = NULL;
@@ -2929,13 +2953,13 @@ void desktop_integration_on_desktop_slideshow_exported (Exporter* exporter, gboo
 		_g_free0 (_tmp36_);
 #line 321 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 		_g_object_unref0 (_tmp33_);
-#line 2932 "DesktopIntegration.c"
+#line 2956 "DesktopIntegration.c"
 	}
 #line 293 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_desktop_integration_background_slideshow_xml_builder_unref0 (xml_builder);
 #line 293 "/home/jens/Source/shotwell/src/DesktopIntegration.vala"
 	_g_object_unref0 (xml_file);
-#line 2938 "DesktopIntegration.c"
+#line 2962 "DesktopIntegration.c"
 }
 
 

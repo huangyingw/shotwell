@@ -624,9 +624,9 @@ SpitDataImportsService** spit_data_imports_load_services (gboolean load_all, int
 GeeCollection* plugins_get_pluggables_for_type (GType type, GCompareDataFunc compare_func, void* compare_func_target, GDestroyNotify compare_func_target_destroy_notify, gboolean include_disabled);
 gchar* plugins_get_pluggable_module_id (SpitPluggable* needle);
 static void _vala_array_add69 (SpitDataImportsService*** array, int* length, int* size, SpitDataImportsService* value);
-static gint __lambda21_ (void* a, void* b);
+static gint __lambda22_ (void* a, void* b);
 gint utf8_cs_compare (void* a, void* b);
-static gint ___lambda21____compar_fn_t (void* key1, void* key2);
+static gint ___lambda22____compar_fn_t (void* key1, void* key2);
 GType data_object_get_type (void) G_GNUC_CONST;
 GType data_source_get_type (void) G_GNUC_CONST;
 GType thumbnail_source_get_type (void) G_GNUC_CONST;
@@ -3060,7 +3060,7 @@ static void _vala_array_add69 (SpitDataImportsService*** array, int* length, int
 }
 
 
-static gint __lambda21_ (void* a, void* b) {
+static gint __lambda22_ (void* a, void* b) {
 	gint result = 0;
 	void* _tmp0_ = NULL;
 	const gchar* _tmp1_ = NULL;
@@ -3085,9 +3085,9 @@ static gint __lambda21_ (void* a, void* b) {
 }
 
 
-static gint ___lambda21____compar_fn_t (void* key1, void* key2) {
+static gint ___lambda22____compar_fn_t (void* key1, void* key2) {
 	gint result;
-	result = __lambda21_ (key1, key2);
+	result = __lambda22_ (key1, key2);
 #line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	return result;
 #line 3086 "DataImportsPluginHost.c"
@@ -3259,7 +3259,7 @@ SpitDataImportsService** spit_data_imports_load_services (gboolean load_all, int
 #line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	_tmp27__length1 = loaded_services_length1;
 #line 452 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
-	qsort (_tmp26_, (gsize) _tmp27__length1, (gsize) sizeof (SpitDataImportsService*), ___lambda21____compar_fn_t);
+	qsort (_tmp26_, (gsize) _tmp27__length1, (gsize) sizeof (SpitDataImportsService*), ___lambda22____compar_fn_t);
 #line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"
 	_tmp28_ = loaded_services;
 #line 457 "/home/jens/Source/shotwell/src/data_imports/DataImportsPluginHost.vala"

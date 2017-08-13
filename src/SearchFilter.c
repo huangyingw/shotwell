@@ -7955,7 +7955,7 @@ SearchFilterToolbarSavedSearchFilterButton* search_filter_toolbar_saved_search_f
 #line 860 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	gtk_button_set_always_show_image (G_TYPE_CHECK_INSTANCE_CAST (_tmp1_, gtk_button_get_type (), GtkButton), TRUE);
 #line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"
-	_tmp2_ = (GtkImage*) gtk_image_new_from_icon_name ("find", GTK_ICON_SIZE_SMALL_TOOLBAR);
+	_tmp2_ = (GtkImage*) gtk_image_new_from_icon_name ("edit-find", GTK_ICON_SIZE_SMALL_TOOLBAR);
 #line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"
 	g_object_ref_sink (_tmp2_);
 #line 862 "/home/jens/Source/shotwell/src/SearchFilter.vala"

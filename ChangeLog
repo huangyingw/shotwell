@@ -1,6 +1,213 @@
+commit c2d999c39385c7889b191b2b3b15a6b3d334e579
+Author: Jens Georg <mail@jensge.org>
+Date:   Thu Aug 10 20:53:37 2017 +0200
+
+    Prepare 0.26.3
+
+M	NEWS
+M	configure.ac
+
+commit 6d4c0ff11a496b5d2a47f9269c4e154bf251d987
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Aug 10 19:18:10 2017 +0200
+
+    Do not close FileDescriptor passed to CameraFile
+
+    CameraFile takes ownership of the file descriptor and closes it, so we
+    end up closing random file descriptors.
+
+    Big thanks to Stefan for debugging this
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785503
+
+M	src/camera/GPhoto.vala
+
+commit 553c35470798f959ac2cc2e44cddcccb88d23fdd
+Author: Brian Masney <masneyb@onstation.org>
+Date:	Wed Jul 12 19:29:12 2017 -0400
+
+    build: use APPSTREAM_XML instead of APPDATA_XML
+
+    According to commit 8c0c9ec747bc in the appstream-glib project
+    (https://github.com/hughsie/appstream-glib), APPDATA_XML has been
+    deprecated and APPSTREAM_XML should be used insted. Fedora 26
+    no longer ships with appdata-xml.m4 in the libappstream-glib-devel
+    package. This patch converts the build system to use APPSTREAM_XML.
+
+    Signed-off-by: Brian Masney <masneyb@onstation.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=784883
+
+M	configure.ac
+M	misc/Makefile.am
+
+commit 682bd5511f128d8f09759a3883a00231b23d44c9
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Aug 3 10:11:33 2017 +0200
+
+    Remove deprecated "find" icon
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785761
+
+M	src/SearchFilter.vala
+M	src/searches/Branch.vala
+
+commit 85d118b62b947a7f63b784faf0a9a128244e3653
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Aug 6 19:33:23 2017 +0200
+
+    Reset menubar injection state after re-loading ui
+
+    Fixes menu items disappearing from Photos menu
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785196
+
+M	src/Page.vala
+
+commit 000e9a5f5da10f87b739b35901842f0a261fd240
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Fri Aug 4 20:33:46 2017 +0000
+
+    Update German translation
+
+M	help/de/de.po
+
+commit 8f10d5901e633262e1ddccae9d67127a251d7776
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Jul 8 08:09:56 2017 +0200
+
+    Escape file names in wallpaper.xml
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=784661
+
+M	src/DesktopIntegration.vala
+
+commit ba32876ab09a524dafbea46929fd936716f29ba4
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Jun 3 09:20:05 2017 +0200
+
+    debian: Depend on libexiv2 explicitly
+
+M	debian/control
+
+commit a4eb756865037d74f71c7b43ffe345dc8fa915e2
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sat Jun 24 10:40:53 2017 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
+commit 4f0174c855ca28b2b1f51e51120333de89edf994
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Jun 1 18:52:56 2017 +0200
+
+    Prepare Shotwell 0.26.2
+
+M	NEWS
+M	configure.ac
+M	debian/changelog
+
+commit e54216f18f6984a78c9a07f1b150a1c72cfc49a1
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Jun 1 18:42:47 2017 +0200
+
+    Fix crash when no import plugin is enabled
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=783250
+
+M	src/data_imports/DataImportsUI.vala
+
+commit 56d69796770c5b8f29930224f851b2b445ca1863
+Author: Jens Georg <mail@jensge.org>
+Date:	Mon May 1 18:29:34 2017 +0200
+
+    Do not strip newlines from comments on write-back
+
+    Stripping newlines makes sense for titles etc, but it makes sense
+    to keep them
+    for comments.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=781897
+
+M	src/photos/PhotoMetadata.vala
+
+commit d822571fd8529d931c5740b402c18e9ce2962b42
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Apr 2 19:52:30 2017 +0200
+
+    Fix browsing on gvfs filesystems
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=733652
+
+M	src/DirectoryMonitor.vala
+
+commit c01a8b79df0f10b5d206b70d508c322c830962ac
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Mar 24 19:47:52 2017 +0100
+
+    Disable minimize button on Unity
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=719240
+
+M	src/publishing/PublishingUI.vala
+
+commit 5674371e83b382bf1db5b5df246068b5a6e076b2
+Author: Мирослав Николић <miroslavnikolic@rocketmail.com>
+Date:	Fri May 5 07:00:25 2017 +0200
+
+    Updated Serbian translation
+
+M	po/sr.po
+M	po/sr@latin.po
+
+commit 8bb3e2be9bac5519aa183beeca70c3a796b5c821
+Author: Rafael Fontenelle <rafaelff@gnome.org>
+Date:	Sun Apr 30 21:44:51 2017 +0000
+
+    Update Brazilian Portuguese translation
+
+M	po/pt_BR.po
+
+commit 0c23fdd826e9330c254b2b5293c1458980e3a91d
+Author: Andika Triwidada <atriwidada@gnome.org>
+Date:	Sun Apr 30 10:04:31 2017 +0000
+
+    Update Indonesian translation
+
+M	po/id.po
+
+commit 85d55e4b6b68aa02dff4da7f0a3081f9c82687a4
+Author: Andika Triwidada <atriwidada@gnome.org>
+Date:	Sat Apr 29 10:59:45 2017 +0000
+
+    Update Indonesian translation
+
+M	po/id.po
+
+commit ce5e8576276481f15b015017283afa8d0f119646
+Author: Daniel Mustieles <daniel.mustieles@gmail.com>
+Date:	Tue Apr 18 10:17:32 2017 +0000
+
+    Update Spanish translation
+
+M	po/es.po
+
+commit 0860f8657c1bf69c04fc37bac0901faf57022ce6
+Author: Dušan Kazik <prescott66@gmail.com>
+Date:	Sat Apr 15 17:29:54 2017 +0000
+
+    Update Slovak translation
+
+M	po/sk.po
+
 commit 23f098ffa0b6fb7586829ff171c57dfa74f2d7f6
 Author: Jens Georg <mail@jensge.org>
-Date:   Tue Apr 11 22:34:52 2017 +0200
+Date:	Tue Apr 11 22:34:52 2017 +0200
 
     Prepare 0.26.1
 
@@ -19011,7 +19218,7 @@ M	src/photos/PhotoMetadata.vala
 M	src/tags/HierarchicalTagUtilities.vala
 
 commit 22f8b1fdf900d0e10cbcc430b6845d13179bf40a
-Merge: 2b98be9 eb47fe1
+Merge: 2b98be9b eb47fe1e
 Author: Clint Rogers <clinton@oneiric-sandbox.(none)>
 Date:	Fri Sep 2 17:55:49 2011 -0700
 
@@ -19584,7 +19791,7 @@ Date:	Mon Aug 22 12:09:50 2011 -0700
 M	src/config/HybridEngine.vala
 
 commit 2111b2e46324e12511143b6a1683dc71e1be3451
-Merge: 949612a 8303d2c
+Merge: 949612a6 8303d2cb
 Author: Clint Rogers <clinton@oneiric-sandbox.(none)>
 Date:	Mon Aug 22 12:08:40 2011 -0700
 
@@ -20430,7 +20637,7 @@ Date:	Mon Jun 27 12:35:03 2011 -0700
 M	plugins/shotwell-publishing-extras/YandexPublishing.vala
 
 commit efe7d92b4d1a177dc29f6c3bb1f23e308c606bc1
-Merge: a30225a 86624e8
+Merge: a30225a8 86624e84
 Author: Clint Rogers <clinton@yorba.org>
 Date:	Fri Jun 24 13:05:38 2011 -0700
 
@@ -20818,7 +21025,7 @@ Date:	Thu May 26 16:49:38 2011 -0700
 M	Makefile
 
 commit 8d39a139b7f9fdea1dfa3dc266884528706eb6bc
-Merge: 6b8e5da 80750b1
+Merge: 6b8e5dae 80750b13
 Author: Eric Gregory <eric@yorba.org>
 Date:	Thu May 26 16:44:50 2011 -0700
 
@@ -21174,7 +21381,7 @@ Date:	Thu May 19 13:23:00 2011 -0700
 M	src/publishing/PublishingUI.vala
 
 commit 3d646abb99f2a506b63487bc8d78d1aaaf488e7d
-Merge: 8cb6c4f fbf5893
+Merge: 8cb6c4fd fbf5893c
 Author: Eric Gregory <eric@yorba.org>
 Date:	Thu May 19 12:45:00 2011 -0700
 
@@ -21576,7 +21783,7 @@ M	src/sidebar/Tree.vala
 A	ui/sidebar_default.ui
 
 commit 5c8cbb87df1562c165c020ae310c45753352b4e2
-Merge: e70cbd0 17cc617
+Merge: e70cbd0d 17cc6173
 Author: Clint Rogers <clinton@yorba.org>
 Date:	Thu May 12 16:22:10 2011 -0700
 
@@ -21691,7 +21898,7 @@ M	Makefile
 M	configure
 
 commit d847941a826b481e6f49317aadaa9d70fe1cfa74
-Merge: 8932d5f 5034bcd
+Merge: 8932d5fa 5034bcd4
 Author: Clint Rogers <clinton@yorba.org>
 Date:	Mon May 9 11:30:30 2011 -0700
 
@@ -22215,7 +22422,7 @@ Date:	Mon May 2 18:18:34 2011 -0700
 M	src/db/DatabaseTable.vala
 
 commit 96fe5e59724bd3592add9ebcf073f6c464d77ff0
-Merge: ed6a2f1 7c4d4ee
+Merge: ed6a2f1f 7c4d4ee5
 Author: Eric Gregory <eric@polaris.(none)>
 Date:	Mon May 2 17:50:33 2011 -0700
 
@@ -22461,7 +22668,7 @@ M	debian/changelog
 M	po/shotwell.pot
 
 commit f7e761752fa61b0afb94583c835738c86b997068
-Merge: 0e810be be61743
+Merge: 0e810be0 be61743b
 Author: Lucas Beeler <lucas@yorba.org>
 Date:	Thu Apr 21 13:12:00 2011 -0700
 
@@ -22476,7 +22683,7 @@ Date:	Thu Apr 21 12:54:17 2011 -0700
 M	src/Config.vala
 
 commit 0e810be0f45757842686af5e82ab3d332a0c7458
-Merge: 60c59ae 56da5c0
+Merge: 60c59ae4 56da5c08
 Author: Eric Gregory <eric@polaris.(none)>
 Date:	Wed Apr 20 16:31:32 2011 -0700
 
@@ -22516,7 +22723,7 @@ Date:	Wed Apr 20 10:04:26 2011 -0700
 M	po/ru.po
 
 commit d4cd7fbd59e02403ce331eec0719756956af0cee
-Merge: bad6f3d a1f2d40
+Merge: bad6f3d4 a1f2d406
 Author: Vera Yin <vera@yorba.org>
 Date:	Tue Apr 19 19:54:57 2011 -0700
 
@@ -22585,7 +22792,7 @@ Date:	Tue Apr 19 16:29:55 2011 -0700
 M	src/searches/SavedSearchDialog.vala
 
 commit 9bae9f9d3f95eeaf825013ecd487f517b35b8fce
-Merge: 8d3bc46 a1f2d40
+Merge: 8d3bc465 a1f2d406
 Author: Eric Gregory <eric@polaris.(none)>
 Date:	Tue Apr 19 16:16:51 2011 -0700
 
@@ -22661,7 +22868,7 @@ Date:	Mon Apr 18 16:42:56 2011 -0700
 M	src/searches/SearchBoolean.vala
 
 commit 22bdb60e88140f3b1b4878788d6ef9630aaf3dab
-Merge: 350d7ce 23a8a0a
+Merge: 350d7ce6 23a8a0ab
 Author: Eric Gregory <eric@yorba-laptop.(none)>
 Date:	Mon Apr 18 12:53:09 2011 -0700
 
@@ -23214,7 +23421,7 @@ M	src/unit/rc/unitize_entry.m4
 M	units.mk
 
 commit 8783510f20d3f86b77a0a85a68879894909aeb42
-Merge: 6d6c06c f0a4651
+Merge: 6d6c06ca f0a46515
 Author: Jim Nelson <jim@yorba.org>
 Date:	Tue Mar 22 21:47:51 2011 +0000
 
@@ -23245,7 +23452,7 @@ Date:	Tue Mar 22 20:47:24 2011 +0000
 M	Makefile
 
 commit e625748ef4e32081d12ff46c3f373ba1ad26b78a
-Merge: a5321df 85206d1
+Merge: a5321df6 85206d1e
 Author: Eric Gregory <eric@yorba.org>
 Date:	Tue Mar 22 20:45:50 2011 +0000
 
@@ -26264,7 +26471,7 @@ Date:	Mon Jan 10 23:11:48 2011 +0000
 M	src/Dialogs.vala
 
 commit 30fb90b3f6a53f84bc4a178cefeb7ca03c18b4a9
-Merge: dcda7c9 3434f5c
+Merge: dcda7c93 3434f5c6
 Author: Jim Nelson <jim@yorba.org>
 Date:	Fri Jan 7 23:10:44 2011 +0000
 
@@ -26289,7 +26496,7 @@ M	THANKS
 M	ui/video.ui
 
 commit dcda7c9344f4cb21ef16a63617d225fdcaf78c9b
-Merge: 678e772 e893015
+Merge: 678e772b e8930156
 Author: Jim Nelson <jim@yorba.org>
 Date:	Fri Jan 7 00:58:08 2011 +0000
 
@@ -26333,7 +26540,7 @@ M	src/MetadataWriter.vala
 M	src/PhotoMetadata.vala
 
 commit 4d27bbf23c7757cfcba6e8685ebf99b98ee0de9c
-Merge: 25f0eb5 31333fe
+Merge: 25f0eb52 31333fee
 Author: Jim Nelson <jim@yorba.org>
 Date:	Wed Jan 5 02:17:11 2011 +0000
 
@@ -29405,7 +29612,7 @@ M	po/sr.po
 M	po/sv.po
 
 commit 192ca547af59c965113904e2c062a097c7909d9a
-Merge: b9ae51a c5bd728
+Merge: b9ae51a7 c5bd728d
 Author: Jim Nelson <jim@yorba.org>
 Date:	Sat Sep 11 01:20:50 2010 +0000
 
@@ -29669,7 +29876,7 @@ Date:	Wed Sep 8 00:25:12 2010 +0000
 M	src/WebConnectors.vala
 
 commit 7b2de4180264d97631d5fe36cd49e472a06d663f
-Merge: 0f499a2 af61ecf
+Merge: 0f499a29 af61ecfc
 Author: Jim Nelson <jim@yorba.org>
 Date:	Wed Sep 8 00:21:20 2010 +0000
 
@@ -29724,7 +29931,7 @@ Date:	Fri Sep 3 18:25:40 2010 +0000
 M	po/ko.po
 
 commit 0f499a29fe52c2fbcf772d39ab71f6bda80601fd
-Merge: 9ad4f31 6024a6e
+Merge: 9ad4f31d 6024a6e1
 Author: Jim Nelson <jim@yorba.org>
 Date:	Thu Sep 2 20:29:46 2010 +0000
 
@@ -29933,7 +30140,7 @@ Date:	Fri Aug 27 00:06:35 2010 +0000
 A	po/kk.po
 
 commit 28ef3d0109f86e0c53c70cf0390b4d14b5fe2e0b
-Merge: 66ac9e9 f065768
+Merge: 66ac9e94 f065768b
 Author: Jim Nelson <jim@yorba.org>
 Date:	Fri Aug 27 00:03:03 2010 +0000
 
@@ -30186,7 +30393,7 @@ M	src/image_util.vala
 M	src/util.vala
 
 commit 787e50875e3901eba6a864f920054928e59075ee
-Merge: 5f2f05d 72b6b52
+Merge: 5f2f05d9 72b6b52e
 Author: Jim Nelson <jim@yorba.org>
 Date:	Tue Aug 24 23:05:27 2010 +0000
 
@@ -30308,7 +30515,7 @@ M	po/ru.po
 M	po/zh_TW.po
 
 commit 9d37b9449966a3507e18b0d9173a78985a16233f
-Merge: 2b8b515 4bfac1e
+Merge: 2b8b5158 4bfac1e7
 Author: Adam Dingle <adam@yorba.org>
 Date:	Sat Aug 21 10:25:20 2010 +0000
 
@@ -32541,7 +32748,7 @@ Date:	Thu Jul 1 18:20:45 2010 +0000
 M	po/es.po
 
 commit dabe06104126412ec5eb62267534736b45f1db39
-Merge: b59d046 7bb2969
+Merge: b59d0461 7bb29693
 Author: Allison Barlow <allison@yorba.org>
 Date:	Wed Jun 30 22:09:29 2010 +0000
 
@@ -32696,7 +32903,7 @@ Date:	Tue Jun 29 01:16:51 2010 +0000
 M	Makefile
 
 commit b9ea83f46efae43c960a5dca96e09fb85b7d5034
-Merge: 42daba6 4608a46
+Merge: 42daba67 4608a461
 Author: Allison Barlow <allison@yorba.org>
 Date:	Tue Jun 29 00:29:47 2010 +0000
 
@@ -36081,7 +36288,7 @@ Date:	Thu Mar 18 18:37:06 2010 +0000
 M	debian/control
 
 commit e8b6640d7c020d044fb20442a6602487232ee413
-Merge: b9270b3 d9b9e58
+Merge: b9270b3d d9b9e584
 Author: Lucas Beeler <lucas@yorba.org>
 Date:	Wed Mar 17 23:11:47 2010 +0000
 
@@ -38060,7 +38267,7 @@ M	ui/direct.ui
 M	ui/photo.ui
 
 commit cd883d802a35841924b9da6abd31589d6cf8ac74
-Merge: 2bd7dbd 02720bd
+Merge: 2bd7dbd4 02720bde
 Author: Jim Nelson <jim@yorba.org>
 Date:	Mon Jan 18 22:59:44 2010 +0000
 
@@ -38220,7 +38427,7 @@ M	ui/collection.ui
 M	ui/photo.ui
 
 commit 411da615e8694a2667b7fe04292d007b3ddf65e6
-Merge: a46fd2b 4b2d878
+Merge: a46fd2b8 4b2d8784
 Author: Jim Nelson <jim@yorba.org>
 Date:	Thu Jan 7 22:38:53 2010 +0000
 
@@ -38254,7 +38461,7 @@ Date:	Wed Jan 6 22:34:44 2010 +0000
 M	src/SortedList.vala
 
 commit 579a2f522053e64bfcf6bc083c55a8f13fb1e807
-Merge: e60183e 74235cf
+Merge: e60183ea 74235cf8
 Author: Jim Nelson <jim@yorba.org>
 Date:	Wed Jan 6 02:34:20 2010 +0000
 
@@ -38299,7 +38506,7 @@ Date:	Tue Jan 5 19:49:33 2010 +0000
 M	Makefile
 
 commit cd9a204a3114a63482725439072df6ac1067c972
-Merge: 9296063 8b5cc75
+Merge: 9296063c 8b5cc758
 Author: Jim Nelson <jim@yorba.org>
 Date:	Tue Jan 5 00:31:52 2010 +0000
 
@@ -38454,7 +38661,7 @@ M	src/Photo.vala
 M	src/PhotoPage.vala
 
 commit 171b030e74ac7e2c815281e45b7b6e2517ed16a2
-Merge: 19107f1 ae7a8eb
+Merge: 19107f19 ae7a8ebd
 Author: Jim Nelson <jim@yorba.org>
 Date:	Tue Dec 29 19:11:12 2009 +0000
 
@@ -38480,7 +38687,7 @@ Date:	Thu Dec 24 12:39:02 2009 +0000
 M	Makefile
 
 commit 19107f19907e7d70f6b35975f15c6e2aa874ee3b
-Merge: 2ea50d0 8035f57
+Merge: 2ea50d0a 8035f57a
 Author: Jim Nelson <jim@yorba.org>
 Date:	Thu Dec 24 01:21:38 2009 +0000
 
@@ -38509,7 +38716,7 @@ M	debian/control
 M	debian/copyright
 
 commit 2ea50d0a866e5407313a52478090d7dcf4378c70
-Merge: d57c15e 39583c7
+Merge: d57c15e5 39583c73
 Author: Jim Nelson <jim@yorba.org>
 Date:	Wed Dec 23 22:28:12 2009 +0000
 
@@ -38772,7 +38979,7 @@ Date:	Fri Dec 18 18:23:46 2009 +0000
 M	misc/shotwell.schemas
 
 commit 670a708d5fc380e6ffb1b292cdd6690cb625d40e
-Merge: 201d857 e44d0ff
+Merge: 201d8572 e44d0ffa
 Author: Jim Nelson <jim@yorba.org>
 Date:	Fri Dec 18 01:31:56 2009 +0000
 
@@ -40134,7 +40341,7 @@ M	ui/events_directory.ui
 M	ui/photo.ui
 
 commit 7649c34c185200712a58cb06c816759499330dc0
-Merge: a33ec8f ed7fb71
+Merge: a33ec8f5 ed7fb71c
 Author: Jim Nelson <jim@yorba.org>
 Date:	Thu Nov 12 19:56:16 2009 +0000
 
@@ -40149,7 +40356,7 @@ Date:	Thu Nov 12 19:55:19 2009 +0000
 M	Makefile
 
 commit a33ec8f5da69873d95d0c3977f05b5a0b05d45f6
-Merge: 9bb87f0 166ccb5
+Merge: 9bb87f0c 166ccb58
 Author: Jim Nelson <jim@yorba.org>
 Date:	Thu Nov 12 00:08:37 2009 +0000
 
@@ -40239,7 +40446,7 @@ M	src/SortedList.vala
 M	ui/collection.ui
 
 commit fba1e5ada30c803312e073d41d07ada28251931f
-Merge: 4f2830d 8634ac0
+Merge: 4f2830dc 8634ac02
 Author: Jim Nelson <jim@yorba.org>
 Date:	Mon Nov 9 23:55:16 2009 +0000
 
@@ -40260,7 +40467,7 @@ M	debian/control
 M	debian/copyright
 
 commit 4f2830dcd570a2788b092749edc89d9744e16586
-Merge: 71b7914 5613559
+Merge: 71b7914f 56135595
 Author: Jim Nelson <jim@yorba.org>
 Date:	Mon Nov 9 23:28:08 2009 +0000
 
@@ -40369,7 +40576,7 @@ Date:	Tue Nov 3 20:32:19 2009 +0000
 M	src/EventsDirectoryPage.vala
 
 commit 1b379f71b4b1826481d84426a41a8fc49da58be8
-Merge: 574cce1 f9b19cf
+Merge: 574cce1b f9b19cf5
 Author: Jim Nelson <jim@yorba.org>
 Date:	Tue Nov 3 19:32:46 2009 +0000
 
@@ -40455,7 +40662,7 @@ Date:	Mon Nov 2 19:45:15 2009 +0000
 M	po/shotwell.pot
 
 commit 9a9544bb6ca9ec883ed6271a94d1294b95c42e56
-Merge: 0ce4554 b9a5300
+Merge: 0ce4554f b9a5300b
 Author: Jim Nelson <jim@yorba.org>
 Date:	Mon Nov 2 19:14:32 2009 +0000
 
@@ -40471,7 +40678,7 @@ M	src/Dialogs.vala
 M	src/ImportPage.vala
 
 commit 0ce4554f314cae170fbbff9bca6f98aa7383ad78
-Merge: 05ab194 bc7951b
+Merge: 05ab1943 bc7951bb
 Author: Jim Nelson <jim@yorba.org>
 Date:	Mon Nov 2 18:59:23 2009 +0000
 
