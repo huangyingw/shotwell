@@ -1,6 +1,106 @@
+commit c2d999c39385c7889b191b2b3b15a6b3d334e579
+Author: Jens Georg <mail@jensge.org>
+Date:   Thu Aug 10 20:53:37 2017 +0200
+
+    Prepare 0.26.3
+
+M	NEWS
+M	configure.ac
+
+commit 6d4c0ff11a496b5d2a47f9269c4e154bf251d987
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Aug 10 19:18:10 2017 +0200
+
+    Do not close FileDescriptor passed to CameraFile
+
+    CameraFile takes ownership of the file descriptor and closes it, so we
+    end up closing random file descriptors.
+
+    Big thanks to Stefan for debugging this
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785503
+
+M	src/camera/GPhoto.vala
+
+commit 553c35470798f959ac2cc2e44cddcccb88d23fdd
+Author: Brian Masney <masneyb@onstation.org>
+Date:	Wed Jul 12 19:29:12 2017 -0400
+
+    build: use APPSTREAM_XML instead of APPDATA_XML
+
+    According to commit 8c0c9ec747bc in the appstream-glib project
+    (https://github.com/hughsie/appstream-glib), APPDATA_XML has been
+    deprecated and APPSTREAM_XML should be used insted. Fedora 26
+    no longer ships with appdata-xml.m4 in the libappstream-glib-devel
+    package. This patch converts the build system to use APPSTREAM_XML.
+
+    Signed-off-by: Brian Masney <masneyb@onstation.org>
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=784883
+
+M	configure.ac
+M	misc/Makefile.am
+
+commit 682bd5511f128d8f09759a3883a00231b23d44c9
+Author: Jens Georg <mail@jensge.org>
+Date:	Thu Aug 3 10:11:33 2017 +0200
+
+    Remove deprecated "find" icon
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785761
+
+M	src/SearchFilter.vala
+M	src/searches/Branch.vala
+
+commit 85d118b62b947a7f63b784faf0a9a128244e3653
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Aug 6 19:33:23 2017 +0200
+
+    Reset menubar injection state after re-loading ui
+
+    Fixes menu items disappearing from Photos menu
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=785196
+
+M	src/Page.vala
+
+commit 000e9a5f5da10f87b739b35901842f0a261fd240
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Fri Aug 4 20:33:46 2017 +0000
+
+    Update German translation
+
+M	help/de/de.po
+
+commit 8f10d5901e633262e1ddccae9d67127a251d7776
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Jul 8 08:09:56 2017 +0200
+
+    Escape file names in wallpaper.xml
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=784661
+
+M	src/DesktopIntegration.vala
+
+commit ba32876ab09a524dafbea46929fd936716f29ba4
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Jun 3 09:20:05 2017 +0200
+
+    debian: Depend on libexiv2 explicitly
+
+M	debian/control
+
+commit a4eb756865037d74f71c7b43ffe345dc8fa915e2
+Author: Marek Černocký <marek@manet.cz>
+Date:	Sat Jun 24 10:40:53 2017 +0200
+
+    Updated Czech translation
+
+M	po/cs.po
+
 commit 4f0174c855ca28b2b1f51e51120333de89edf994
 Author: Jens Georg <mail@jensge.org>
-Date:   Thu Jun 1 18:52:56 2017 +0200
+Date:	Thu Jun 1 18:52:56 2017 +0200
 
     Prepare Shotwell 0.26.2
 

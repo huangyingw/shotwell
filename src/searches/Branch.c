@@ -1447,7 +1447,7 @@ static void searches_sidebar_entry_class_init (SearchesSidebarEntryClass * klass
 #line 90 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	G_OBJECT_CLASS (klass)->finalize = searches_sidebar_entry_finalize;
 #line 92 "/home/jens/Source/shotwell/src/searches/Branch.vala"
-	_tmp0_ = g_strdup ("find");
+	_tmp0_ = g_strdup ("edit-find");
 #line 92 "/home/jens/Source/shotwell/src/searches/Branch.vala"
 	searches_sidebar_entry_single_search_icon = _tmp0_;
 #line 1454 "Branch.c"

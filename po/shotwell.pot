@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: shotwell 0.26.2\n"
+"Project-Id-Version: shotwell 0.26.3\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=Shotwell&component=Internationalization\n"
-"POT-Creation-Date: 2017-06-01 18:54+0200\n"
+"POT-Creation-Date: 2017-08-11 11:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4196,15 +4196,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/Page.vala:1318
+#: src/Page.vala:1319
 msgid "No photos/videos"
 msgstr ""
 
-#: src/Page.vala:1322
+#: src/Page.vala:1323
 msgid "No photos/videos found which match the current filter"
 msgstr ""
 
-#: src/Page.vala:2628
+#: src/Page.vala:2629
 msgid "Photos cannot be exported to this directory."
 msgstr ""
 

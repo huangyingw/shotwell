@@ -22,7 +22,7 @@
     <mal:credit xmlns:mal="http://projectmallard.org/1.0/" type="translator copyright">
       <mal:name>Christian Kirbach</mal:name>
       <mal:email>christian.kirbach@gmail.com</mal:email>
-      <mal:years>2014, 2106</mal:years>
+      <mal:years>2014, 2016, 2017</mal:years>
     </mal:credit>
   </info>
 
@@ -48,17 +48,12 @@
                 images, videos, or raw camera files, respectively. 
             </p>
             
-            <p>
-                Disabling the search bar or exiting Shotwell automatically resets the search bar.
-            </p>
+            <p>Durch Deaktivieren der Suchleiste oder Beenden von Shotwell wird die Suchleiste automatisch zurückgesetzt.</p>
     </section>
     
     <section id="savedsearch">
         <title>Gespeicherte Suche</title>
-            <p>
-                A saved search persists across Shotwell sessions, and is updated as photos and videos are added 
-                and removed from your Shotwell library.
-            </p>
+            <p>Eine gespeicherte Suche bleibt auch für eine spätere Shotwell-Sitzung erhalten. Sie wird durch Hinzufügen und Entfernen von Fotos und Videos zur beziehungsweise aus der Shotwell-Bibliothek aktualisiert.</p>
             
             <p>
                 Create a new saved search with <guiseq><gui>Edit</gui><gui>New Saved Search...</gui></guiseq> or by hitting
