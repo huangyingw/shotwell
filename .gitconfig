@@ -1,16 +1,21 @@
 [remote "collab-maint"]
-	url = git://anonscm.debian.org/collab-maint/shotwell.git
-	fetch = +refs/heads/*:refs/remotes/collab-maint/*
+    url = git://anonscm.debian.org/collab-maint/shotwell.git
+    fetch = +refs/heads/*:refs/remotes/collab-maint/*
 [remote "github"]
-	url = git@github.com:huangyingw/shotwell.git
-	fetch = +refs/heads/*:refs/remotes/github/*
+    url = git@github.com:huangyingw/shotwell.git
+    fetch = +refs/heads/*:refs/remotes/github/*
 [push]
     remote = origin
     remote = github
-[gsync]
-    remote = collab-maint
-    branch = master
 [gdif]
+    ignore = .bashrc
     ignore = .gitconfig
     ignore = .gitignore
+    ignore = Dockerfile
+    ignore = build.sh
+    ignore = deploy.sh
+    ignore = docker-compose.yml
+    ignore = entrypoint.sh
+    ignore = etc/ssh/ssh_config
+    ignore = excludeFile
     ignore = prunefile.conf
