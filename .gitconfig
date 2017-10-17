@@ -10,3 +10,7 @@
 [gsync]
     remote = collab-maint
     branch = master
+[gdif]
+    ignore = .gitconfig
+    ignore = .gitignore
+    ignore = prunefile.conf
