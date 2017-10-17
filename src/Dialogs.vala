@@ -549,13 +549,11 @@ public string create_result_report_from_manifest(ImportManifest manifest) {
         builder.append(_("Duplicate Photos/Videos Not Imported:") + "\n\n");
         
         foreach (BatchImportResult result in manifest.already_imported) {
-                if (result.src_identifier != result.duplicate_of.get_file().get_path()) {
             current_file_summary = result.src_identifier + " " +
-                        _(" == >>  ") +
-                        result.duplicate_of.get_file().get_path() + "\n";
-                    builder.append(current_file_summary);
-                }
+            _("duplicates existing media item") + "\n\t" +
+            result.duplicate_of.get_file().get_path() + "\n\n";
             
+            builder.append(current_file_summary);
         }
     }
     
