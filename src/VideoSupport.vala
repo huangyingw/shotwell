@@ -104,9 +104,6 @@ public class VideoReader {
         
         TimeVal timestamp = info.get_modification_time();
         
-        // make sure params has a valid md5
-        assert(params.md5 != null);
-
         time_t exposure_time = params.exposure_time_override;
         string title = "";
         string comment = "";

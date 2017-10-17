@@ -1804,18 +1804,6 @@ private class PrepareFilesJob : BackgroundImportJob {
         string thumbnail_md5 = null;
         string full_md5 = null;
         
-        try {
-            full_md5 = md5_file(file);
-#if TRACE_MD5
-            debug("import MD5 for file %s = %s", file.get_path(), full_md5);
-#endif
-        } catch (Error err) {
-            warning("Unable to perform MD5 checksum on file %s: %s", file.get_path(),
-                err.message);
-                
-            return ImportResult.convert_error(err, ImportResult.FILE_ERROR);
-        }
-        
         // we only care about file extensions and metadata if we're importing a photo --
         // we don't care about these things for video
         PhotoFileFormat file_format = PhotoFileFormat.get_by_file_extension(file);
