@@ -1,7 +1,7 @@
 Source: shotwell
 Section: gnome
 Priority: optional
-Maintainer: Jörg Frings-Fürst <debian@jff-webhosting.net>
+Maintainer: Jörg Frings-Fürst <debian@jff.email>
 Build-Depends:
  appstream-util,
  debhelper (>= 10),
