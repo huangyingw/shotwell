@@ -1,4 +1,4 @@
-shotwell (0.26.4-1) UNRELEASED; urgency=medium
+shotwell (0.26.4-1) unstable; urgency=medium
 
   * New upstream release (Closes: #855681, Closes: #841859).
     - debian/control: Add new appstream-util, libappstream-glib-dev and
@@ -31,7 +31,7 @@ shotwell (0.26.4-1) UNRELEASED; urgency=medium
     - debian/control,
     - debian/copyright.
 
- -- Jörg Frings-Fürst <debian@jff.email>  Wed, 22 Mar 2017 06:51:19 +0100
+ -- Jörg Frings-Fürst <debian@jff.email>  Sun, 12 Nov 2017 17:17:13 +0100
 
 shotwell (0.25.4+really0.24.5-0.1) unstable; urgency=medium
 
