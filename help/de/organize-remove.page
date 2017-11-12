@@ -29,7 +29,7 @@
 	<title>Fotos entfernen und löschen</title>
 
     <p>Sie können Fotos aus Ihrer Bibliothek entfernen und diese zusätzlich vollständig von der Festplatte löschen.</p>
-<media type="image" src="figures/trash_process.png">Löschvorgang</media>
+<media type="image" src="figures/trash_process.png"><p>Löschvorgang</p></media>
 <p>Das Diagramm zeigt, wie ein Foto beim Löschen zunächst in den Shotwell-eigenen Papierkorb verschoben wird. Wenn Sie es aus dem Papierkorb entfernen, wird es in den systemeigenen Papierkorb verschoben. Sobald Sie es aus diesem globalen Papierkorb entfernen, wird es unwiderruflich und endgültig von Ihrem Rechner entfernt.</p>
 <section id="delete-remove">
 	<title>Fotos werden aus Bibliothek entfernt</title>

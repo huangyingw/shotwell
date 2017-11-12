@@ -34,7 +34,7 @@
 
 <p>Si los colores y el contraste de la foto son adecuados, pulse <gui>Aceptar</gui> para guardar los cambios. El botón <gui>Restablecer</gui> devolverá la imagen a su estado original. El botón <gui>Cancelar</gui> deshace todos los cambios realizados.</p>
 
-<section>
+<section id="color-adjustments">
  <title>¿Qué hacen los ajustes del color?</title>
  <terms>
   <item>

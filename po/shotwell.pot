@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: shotwell 0.26.3\n"
+"Project-Id-Version: shotwell 0.26.4\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?"
 "product=Shotwell&component=Internationalization\n"
-"POT-Creation-Date: 2017-08-11 11:47+0200\n"
+"POT-Creation-Date: 2017-11-10 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2853,7 +2853,7 @@ msgstr[1] ""
 
 #: src/Dialogs.vala:20 src/Dialogs.vala:28 src/Dialogs.vala:1388
 #: src/Resources.vala:159 src/Resources.vala:362 src/Resources.vala:415
-#: src/Resources.vala:659 ui/savedsearch.ui:15 ui/tags.ui:460 ui/trash.ui:63
+#: src/Resources.vala:659 ui/savedsearch.ui:14 ui/tags.ui:460 ui/trash.ui:63
 #: ui/trash.ui:216 ui/trash.ui:258
 msgid "_Delete"
 msgstr ""
@@ -3922,21 +3922,21 @@ msgstr ""
 msgid "Events"
 msgstr ""
 
-#: src/events/EventDirectoryItem.vala:83
+#: src/events/EventDirectoryItem.vala:97
 #, c-format
 msgid "%d Photo/Video"
 msgid_plural "%d Photos/Videos"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/events/EventDirectoryItem.vala:85 src/Properties.vala:358
+#: src/events/EventDirectoryItem.vala:99 src/Properties.vala:358
 #, c-format
 msgid "%d Video"
 msgid_plural "%d Videos"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/events/EventDirectoryItem.vala:87 src/Properties.vala:356
+#: src/events/EventDirectoryItem.vala:101 src/Properties.vala:356
 #, c-format
 msgid "%d Photo"
 msgid_plural "%d Photos"
@@ -4015,12 +4015,12 @@ msgstr ""
 msgid "Library"
 msgstr ""
 
-#: src/library/Branch.vala:97 src/SearchFilter.vala:1083
+#: src/library/Branch.vala:97 src/SearchFilter.vala:1079
 msgid "Photos"
 msgstr ""
 
-#: src/library/FlaggedPage.vala:8 src/SearchFilter.vala:1102
-#: src/SearchFilter.vala:1103
+#: src/library/FlaggedPage.vala:8 src/SearchFilter.vala:1098
+#: src/SearchFilter.vala:1099
 msgid "Flagged"
 msgstr ""
 
@@ -4196,15 +4196,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/Page.vala:1319
+#: src/Page.vala:1339
 msgid "No photos/videos"
 msgstr ""
 
-#: src/Page.vala:1323
+#: src/Page.vala:1343
 msgid "No photos/videos found which match the current filter"
 msgstr ""
 
-#: src/Page.vala:2629
+#: src/Page.vala:2649
 msgid "Photos cannot be exported to this directory."
 msgstr ""
 
@@ -5135,7 +5135,7 @@ msgid "Unable to rename search to “%s” because the search already exists."
 msgstr ""
 
 #. Saved search button
-#: src/Resources.vala:411 src/SearchFilter.vala:1124
+#: src/Resources.vala:411 src/SearchFilter.vala:1120
 msgid "Saved Search"
 msgstr ""
 
@@ -5143,11 +5143,11 @@ msgstr ""
 msgid "Delete Search"
 msgstr ""
 
-#: src/Resources.vala:416 ui/savedsearch.ui:11
+#: src/Resources.vala:416 ui/savedsearch.ui:10
 msgid "_Edit…"
 msgstr ""
 
-#: src/Resources.vala:417 ui/savedsearch.ui:7
+#: src/Resources.vala:417 ui/savedsearch.ui:6
 msgid "Re_name…"
 msgstr ""
 
@@ -5477,8 +5477,8 @@ msgstr ""
 msgid "Photo state"
 msgstr ""
 
-#: src/searches/SearchBoolean.vala:184 src/SearchFilter.vala:831
-#: src/SearchFilter.vala:1114
+#: src/searches/SearchBoolean.vala:184 src/SearchFilter.vala:827
+#: src/SearchFilter.vala:1110
 msgid "Rating"
 msgstr ""
 
@@ -5486,27 +5486,27 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: src/SearchFilter.vala:815
+#: src/SearchFilter.vala:811
 msgid "★+ Rating"
 msgstr ""
 
-#: src/SearchFilter.vala:818
+#: src/SearchFilter.vala:814
 msgid "★★+ Rating"
 msgstr ""
 
-#: src/SearchFilter.vala:821
+#: src/SearchFilter.vala:817
 msgid "★★★+ Rating"
 msgstr ""
 
-#: src/SearchFilter.vala:824
+#: src/SearchFilter.vala:820
 msgid "★★★★+ Rating"
 msgstr ""
 
-#: src/SearchFilter.vala:828
+#: src/SearchFilter.vala:824
 msgid "★★★★★+ Rating"
 msgstr ""
 
-#: src/SearchFilter.vala:1064
+#: src/SearchFilter.vala:1060
 #, c-format
 msgid "Error loading search bar UI: %s"
 msgstr ""
@@ -5516,24 +5516,24 @@ msgstr ""
 #. Prepare the close menu for use, but don't
 #. display it yet; we'll connect it to secondary
 #. click later on.
-#: src/SearchFilter.vala:1073
+#: src/SearchFilter.vala:1069
 msgid "Close"
 msgstr ""
 
 #. Type label and toggles
-#: src/SearchFilter.vala:1079
+#: src/SearchFilter.vala:1075
 msgid "Type"
 msgstr ""
 
-#: src/SearchFilter.vala:1086
+#: src/SearchFilter.vala:1082
 msgid "Videos"
 msgstr ""
 
-#: src/SearchFilter.vala:1089
+#: src/SearchFilter.vala:1085
 msgid "RAW Photos"
 msgstr ""
 
-#: src/SearchFilter.vala:1125
+#: src/SearchFilter.vala:1121
 msgid "Use a saved search to filter items in the current view"
 msgstr ""
 
@@ -5609,7 +5609,7 @@ msgid "untitled"
 msgstr ""
 
 #. multiple videos
-#: src/VideoSupport.vala:523
+#: src/VideoSupport.vala:524
 msgid "Export Videos"
 msgstr ""
 

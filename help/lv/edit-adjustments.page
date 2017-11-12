@@ -16,7 +16,7 @@
 
 <p>Kad fotogrāfijas krāsas un kontrasts atbilst jūsu vēlmēm, spiediet <gui>Labi</gui>, lai saglabātu izmaiņas. <gui>Atiestatīt</gui> atgriezīs bildi tās sākotnējā stāvoklī. <gui>Atcelt</gui> atmetīs visas veiktās izmaiņas.</p>
 
-<section>
+<section id="color-adjustments">
  <title>Ko dara krāsu pielabošana?</title>
  <terms>
   <item>

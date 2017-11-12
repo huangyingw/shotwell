@@ -10,11 +10,13 @@
 
 	<title>Atbalstītie fotogrāfiju un video formāti</title>
 
-   <p>Shotwell atbalsta JPEG, PNG, TIFF, BMP un <link type="guide" xref="other-raw">RAW</link> fotogrāfiju datnes. Shotwell vēl neatbalsta citus grafikas formātus, piemēram, GIF.</p>
+   <p>Shotwell supports JPEG, PNG, TIFF, BMP and <link xref="other-raw">RAW</link> photo files. Shotwell does not yet support other graphics format such as GIF.</p>
 
 <p>Pašlaik Shotwell jēlattēlu (RAW) formātu atbalsts ir ierobežots. Skatoties jēlattēlu, jūs redzat JPEG datni, kas ir izvilkta no jēlattēla, nevis pašu jēlattēlu. Bez tam, RAW rediģēšanas konveijers nav pilnībā 16 bitu — rediģētās fotogrāfijas var eksportēt tikai kā 8 bitu datnes. Eksportēšanai var izmantot visus atbalstītos formātus (JPEG, PNG, TIFF, BMP).</p>
 
-<p>Lai uzzinātu vairāk par jēlā formāta fotogrāfijām Shotwell lietotnē, skatiet nodaļu par <link type="guide" xref="other-raw">jēlattēliem</link>.</p>
+<p>For more information about RAW-format photos in Shotwell, please see
+the <link xref="other-raw">RAW</link> section.
+</p>
 
 <p>Shotwell atbalsta arī video datnes visos formātos, ko atbalsta GStreamer multimediju bibliotēka sistēmā, uz kuras darbojas Shotwell. Tas parasti iekļauj šos formātus:</p>
 <list>

@@ -28,11 +28,13 @@
 
 	<title>Unterstützte Foto- und Video-Formate</title>
 
-   <p>Shotwell unterstützt JPEG, PNG, TIFF, BMP und <link type="guide" xref="other-raw">RAW</link>-Fotodateien. Andere Grafikformate, wie beispielsweise GIF, unterstützt Shotwell noch nicht.</p>
+   <p>Shotwell supports JPEG, PNG, TIFF, BMP and <link xref="other-raw">RAW</link> photo files. Shotwell does not yet support other graphics format such as GIF.</p>
 
 <p>Die Unterstützung des RAW-Formats in Shotwell ist derzeit eingeschränkt. Wenn Sie ein RAW-Foto betrachten, sehen Sie tatsächlich ein JPEG-Bild, das aus dem RAW-Foto abgeleitet wurde, und nicht das tatsächliche RAW-Bild. Darüber hinaus sind die Bearbeitungsschritte nicht vollständig in 16 Bit. Bearbeitete Fotos werden nur als 8-Bit-Dateien exportiert. Alle unterstützten Formate können exportiert werden (JPEG, PNG, TIFF, BMP).</p>
 
-<p>Für weiterführende Informationen über Fotos im RAW-Format in Shotwell lesen Sie bitte den Abschnitt <link type="guide" xref="other-raw">RAW</link>.</p>
+<p>For more information about RAW-format photos in Shotwell, please see
+the <link xref="other-raw">RAW</link> section.
+</p>
 
 <p>Shotwell unterstützt Video-Dateien in jedem Format, das auch von der GStreamer Medienbibliothek auf dem System unterstützt wird, auf dem Shotwell ausgeführt wird. Typischerweise zählen dazu unter anderen folgende Formate:</p>
 <list>

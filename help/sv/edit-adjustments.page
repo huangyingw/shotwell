@@ -28,7 +28,7 @@
 
 <p>När du är nöjd med bildens färg och kontrast, tryck <gui>OK</gui> för att spara ändringarna. <gui>Återställ</gui> kommer att återställa bilden till dess ursprungliga tillstånd. <gui>Avbryt</gui> förkastar alla ändringar du har gjort.</p>
 
-<section>
+<section id="color-adjustments">
  <title>Vad gör färgjusteringarna?</title>
  <terms>
   <item>
