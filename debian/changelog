@@ -24,7 +24,7 @@ shotwell (0.26.4-1) UNRELEASED; urgency=medium
     - Thanks to Jeremy Bicha <jbicha@ubuntu.com>
   * debian/watch:
     Rewrite to find only stable releases.
-  * Declare compliance with Debian Policy 4.0.0. (No changes needed).
+  * Declare compliance with Debian Policy 4.1.1 (No changes needed).
   * Change to my new email-address:
     - debian/control,
     - debian/copyright.
