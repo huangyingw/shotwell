@@ -18,7 +18,7 @@
 
 <p>Shotwell piedāvā iespēju attēlot fotogrāfijas pilnekrāna režīmā. Izvēlieties <guiseq><gui>Skats</gui><gui>Pilnekrāns</gui></guiseq> vai spiediet <key>F11</key>. Lai redzētu pilnekrāna rīkjoslu, novietojiet peli ekrāna apakšpusē. Rīkjosla piedāvā pogas, ar kurām var pārvietoties pa kolekciju, nofiksēt rīkjoslu (lai tā nepazūd, kad pārvietojat peli kur citur), un pamest pilnekrāna skatu.</p>
 
-<section>
+<section id="viewing-videos">
 <title>Video atskaņošana</title>
 <p>Dubultklikšķinot uz video, Shotwell palaidīs ārējo video atskaņotāju, lai atskaņotu video. Pašlaik nevar attēlot video Shotwell pilnekrāna režīmā, vai atskaņot video pašā Shotwell.</p>
 </section>

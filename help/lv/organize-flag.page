@@ -16,7 +16,7 @@
     
     <p>Marķēšana ir arī noderīga, jo varat darboties ar visām marķētajām fotogrāfijām kā ar vienu kopumu. Piemēram, varat izvēlēties <gui>Ar karodziņu</gui> skatu un augšupielādēt visas marķētās fotogrāfijas uz publicēšanas pakalpojumu.</p>
     
-    <section>
+    <section id="flag-unflag">
     <title>Lai marķētu vai noņemtu marķējumu no fotogrāfijas</title>
     <p>Lai marķētu vai noņemtu marķējumu no fotogrāfijas, spiediet peles labo pogu uz fotogrāfijas, izvēlieties <gui>Marķēt</gui> vai <gui>Noņemt marķējumu</gui> konteksta izvēlnē. Vai lietojat tastatūras saīsnes <keyseq><key>Ctrl</key><key>G</key></keyseq> vai <key>/</key>.</p>
     </section>

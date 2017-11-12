@@ -1,6 +1,240 @@
+commit 5bd7d9a736997289de10c3bcdbaa089955e46233
+Author: Jens Georg <mail@jensge.org>
+Date:   Fri Nov 10 17:30:17 2017 +0100
+
+    Prepare 0.26.4
+
+M	NEWS
+M	configure.ac
+
+commit 6beec4d6cfa7c5a54186f99a04b3ef9e456d8842
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Nov 10 16:28:47 2017 +0100
+
+    Wayland: Fix scroll and zoom
+
+    Scroll and zoom with mouse wheel did not work anymore on Wayland
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=781472
+
+M	src/Page.vala
+
+commit 102c304d32f605081871bda77c23a5c021f87245
+Author: stefan <stefan.home@aon.at>
+Date:	Wed Aug 30 21:11:13 2017 +0200
+
+    Fix assertion on removing photo from last import
+
+    The state of raw development does not affect filtering
+    anymore. Filtering
+    photos shows: JPEG, RAW only and RAW+JPEG Filtering RAW shows:
+    RAW only
+    and RAW+JPEG
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=719142
+
+M	src/MediaViewTracker.vala
+M	src/SearchFilter.vala
+
+commit 28d0ef17c13f0a8e892a50a5488333a4f93b7150
+Author: Andre Klapper <a9016009@gmx.de>
+Date:	Mon Sep 25 18:11:43 2017 +0200
+
+    Put <media> fallback text into <p> so yelp-check validates
+
+M	help/C/organize-remove.page
+
+commit 65bc6811cc8db3366f73ab479ad077cabd92d968
+Author: Andre Klapper <a9016009@gmx.de>
+Date:	Mon Sep 25 18:10:10 2017 +0200
+
+    Remove unsupported link parameter from <link>s so yelp-check validates
+
+M	help/C/formats.page
+
+commit d7a68d2364f351dd551ccc0c514897d9c801ade9
+Author: Andre Klapper <a9016009@gmx.de>
+Date:	Mon Sep 25 18:08:33 2017 +0200
+
+    Add missing id parameters to <section>s so yelp-check validates
+
+M	help/C/edit-adjustments.page
+M	help/C/edit-crop.page
+M	help/C/index.page
+M	help/C/organize-event.page
+M	help/C/organize-flag.page
+M	help/C/view-displaying.page
+
+commit 747f1be1d4f86d4d5e0487e0e40f6b54c3c74a48
+Author: Andre Klapper <a9016009@gmx.de>
+Date:	Sun Sep 24 23:50:03 2017 +0200
+
+    de: Fix a typo
+
+M	help/de/de.po
+
+commit 9389c1b62f7be8d58b5042eb3d4b9168143a3663
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Sep 23 08:05:29 2017 +0200
+
+    Fix criticals on right-click
+
+    Events etc. don't have a context menu so unconditionally trying to add
+    one causes criticals.
+
+M	src/Page.vala
+
+commit 24cebbc5535ad0bbd2eb50d101557bdf3eb56977
+Author: Jens Georg <mail@jensge.org>
+Date:	Fri Sep 22 22:55:42 2017 +0200
+
+    Remove useless submenu on saved search context
+
+    Signed-off-by: Jens Georg <mail@jensge.org>
+
+M	ui/savedsearch.ui
+
+commit 8f489ada52ae9340df0aad2f2b8eef0ce72cd8b0
+Author: Jens Georg <mail@jensge.org>
+Date:	Tue Sep 19 22:35:01 2017 +0200
+
+    Fix missing event pictures
+
+    The large thumbnails are not re-generated when accessing the event
+    only;
+    to work-around this, do not bail out but use the pixbuf and
+    schedule the
+    thumbnail generation in background for the next start-up.
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=748666
+
+M	src/events/EventDirectoryItem.vala
+
+commit 79d74903a0b7ac330c8ccec3b0510e1462da5b14
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Sep 16 09:13:39 2017 +0200
+
+    Do not filter out application/x-extension-mp4 from VideoSupport
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=773206
+
+M	src/VideoSupport.vala
+
+commit 5b888386b8c0e40a94a356bf6d5420e741ebfda1
+Author: Peter Seiderer <ps.report@gmx.net>
+Date:	Sun Feb 5 00:08:00 2012 +0000
+
+    Remove postfix trimming of thumbs on Canon files
+
+    Apparently, exiv2 now also gets them out of the images, breaking the
+    duplicate detection (for Canon cameras)
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=717735
+
+M	src/camera/GPhoto.vala
+
+commit b576977462ed4f987f24f47a029a3aff25d7e3c6
+Author: Jens Georg <mail@jensge.org>
+Date:	Sat Aug 26 15:37:12 2017 +0200
+
+    When Trash is not available, also remove RAW file
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=719186
+
+M	src/MediaDataRepresentation.vala
+
+commit fc42ea3448cd742b3bc041ee5d5c0175a16d2a89
+Author: Stefan Willinger <stefan.home@aon.at>
+Date:	Sun Aug 20 23:11:09 2017 +0200
+
+    Rename backing photo to lower case as well
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=777626
+
+M	src/LibraryFiles.vala
+M	src/photos/RawSupport.vala
+
+commit 68b9564e4f3a7cecc769523433b5f2b51f3ce2d8
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Aug 20 14:59:50 2017 +0200
+
+    Fix import progress when importing RAW files
+
+M	src/BatchImport.vala
+
+commit 431f5681b177608638c6472ce7ea13c539ae7cb5
+Author: Jeremy Bicha <jbicha@ubuntu.com>
+Date:	Tue Oct 3 09:21:48 2017 -0400
+
+    Fix typo in Indonesian translation
+
+M	po/id.po
+
+commit 6bb7858c26260415155cc40ea003a88cef568ed6
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Mon Oct 2 10:18:41 2017 +0000
+
+    Update German translation
+
+M	help/de/de.po
+
+commit fb214d3c2ad6e7dd3ea52c329ed82943978e416a
+Author: Mario Blättermann <mario.blaettermann@gmail.com>
+Date:	Wed Sep 20 19:46:13 2017 +0200
+
+    Added image for doc translation
+
+A	help/de/figures/trash_process.png
+
+commit 7a7d69fea2124f8627aa7808bcdbd15acd443a30
+Author: Marcos Lans <marcoslansgarza@gmail.com>
+Date:	Mon Sep 11 17:40:13 2017 +0000
+
+    Update Galician translation
+
+M	po/gl.po
+
+commit 7220b65989637a961d5b46540d41b8e928b5ca60
+Author: Balázs Meskó <meskobalazs@fedoraproject.org>
+Date:	Sun Sep 10 12:55:01 2017 +0000
+
+    Update Hungarian translation
+
+M	po/hu.po
+
+commit f792157bf60a93dcf7a764bfaa664bcedd533287
+Author: Cheng-Chia Tseng <pswo10680@gmail.com>
+Date:	Thu Aug 31 04:36:39 2017 +0000
+
+    Update Chinese (Taiwan) translation
+
+M	po/zh_TW.po
+
+commit 15cc83b25c44939571d42210cbb02a7825756b8c
+Author: Thomas Moschny <thomas.moschny@gmx.de>
+Date:	Sun Aug 13 09:47:00 2017 +0000
+
+    Fix rules for appstream files
+
+    The appdata file is neither created nor installed, as the rules in
+    @APPSTREAM_XML_RULES@ expect files to be listed in $(appstream_XML)
+    rather than in $(appdata_XML).
+
+    https://bugzilla.gnome.org/show_bug.cgi?id=784883
+
+M	misc/Makefile.am
+
+commit f4f06a401a9cd13594dcae4bfd0aaeaaa4df410d
+Author: Jens Georg <mail@jensge.org>
+Date:	Sun Aug 13 09:04:54 2017 +0200
+
+    Update debian
+
+M	debian/changelog
+
 commit c2d999c39385c7889b191b2b3b15a6b3d334e579
 Author: Jens Georg <mail@jensge.org>
-Date:   Thu Aug 10 20:53:37 2017 +0200
+Date:	Thu Aug 10 20:53:37 2017 +0200
 
     Prepare 0.26.3
 

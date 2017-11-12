@@ -34,7 +34,7 @@
 
 <p>Wenn die Farben und der Kontrast des Fotos Ihren Vorstellungen entsprechen, klicken Sie auf <gui>OK</gui>, um die Änderungen zu speichern. Durch <gui>Zurücksetzen</gui> wird das Bild in seinen ursprünglichen Zustand zurückversetzt. <gui>Abbrechen</gui> verwirft alle von Ihnen vorgenommenen Änderungen.</p>
 
-<section>
+<section id="color-adjustments">
  <title>Was bewirken die Farbregler?</title>
  <terms>
   <item>

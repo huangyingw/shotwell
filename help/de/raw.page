@@ -27,7 +27,7 @@
   </info>
    
     <title>RAW-Unterstützung in Shotwell</title> 
-    <p>Einige Kameras können Daten direkt vom Sensor ablesen und mit zusätzlichen " "Farbinformationen in eine Datei schreiben. Diese werden allgemein als »RAW«-Dateien bezeichnet. Shotwell unterstützt diese Dateien.</p>
+    <p>Einige Kameras können die direkt vom Sensor ausgelesenen Daten mit zusätzlichen Farbinformationen versehen und in eine Datei schreiben. Diese werden allgemein als »RAW«-Dateien bezeichnet. Shotwell unterstützt diese Dateien.</p>
     
     <p>Weil RAW-Fotos normalerweise nicht direkt dargestellt werden können, müssen diese zunächst entwickelt werden. Das heißt, die zusätzlichen Informationen werden interpretiert und für die Anzeige vorbereitet. Die meisten Kameras betten bei einer Aufnahme ein JPEG in einer RAW-Datei ein oder erstellen eine zusätzliche JPEG-Datei. Letzteres Verfahren wird in diesem Dokument als RAW+JPEG bezeichnet. Wenn Sie ein RAW+JPEG-Paar importieren, wird Shotwell beide gemeinsam behalten und als ein Objekt in Ihrer Bibliothek führen.</p>
     
