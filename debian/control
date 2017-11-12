@@ -1,7 +1,7 @@
 Source: shotwell
 Section: gnome
 Priority: optional
-Maintainer: Jörg Frings-Fürst <debian@jff-webhosting.net>
+Maintainer: Jörg Frings-Fürst <debian@jff.email>
 Build-Depends:
  appstream-util,
  debhelper (>= 10),
@@ -29,7 +29,7 @@ Build-Depends:
  libwebkit2gtk-4.0-dev,
  libxml2 (>= 2.6.32),
  valac (>= 0.22.0)
-Standards-Version: 4.0.0
+Standards-Version: 4.1.1
 Homepage: https://wiki.gnome.org/Apps/Shotwell
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/shotwell.git/
 Vcs-Git: https://anonscm.debian.org/cgit/collab-maint/shotwell.git/

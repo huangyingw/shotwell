@@ -36,7 +36,7 @@
 
 <p>Shotwell kann Fotos auf dem gesamten Bildschirm darstellen. Wählen Sie dazu <guiseq><gui>Ansicht</gui><gui>Bildschirmfüllend</gui></guiseq> oder drücken Sie <key>F11</key>. Bewegen Sie den Mauszeiger unten auf den Bildschirm, um die Werkzeugleiste im Vollbildmodus einzublenden. Die Werkzeugleiste hat Knöpfe zum Blättern in der Sammlung, zum Anheften der Werkzeugleiste (so dass diese nicht mehr automatisch verborgen wird) und zum Verlassen des Vollbildmodus.</p>
 
-<section>
+<section id="viewing-videos">
 <title>Videos ansehen</title>
 <p>Wenn Sie zweimal auf ein Video klicken, startet Shotwell ein externes Wiedergabeprogramm zum Abspielen. Es ist derzeit nicht möglich, ein Video im Vollbildmodus in Shotwell darzustellen oder das Video in Shotwell selbst anzuzeigen.</p>
 </section>

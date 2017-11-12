@@ -34,39 +34,37 @@
     
     <p>Falls ein Foto nicht über eingebettete Informationen zu Datum und Zeit verfügt, kann Shotwell es nicht automatisch in einem Ereignis ablegen. In diesem Fall erscheint es in der Ansicht <gui>Ereignislos</gui>, die über die Seitenleiste erreichbar ist. Sie können das Foto dennoch zu einem beliebigen Ereignis hinzufügen, wie nachfolgend beschrieben.</p>
     
-    <section>
+    <section id="renaming">
     <title>Ereignisse umbenennen</title>
 
     <p>Zum Benennen eines Ereignisses wählen Sie das entsprechende Ereignis aus und wählen Sie dann <guiseq><gui>Ereignisse</gui><gui>Ereignis umbenennen …</gui></guiseq> und geben Sie einen neuen Namen ein. Alternativ klicken Sie zum Umbenennen zweimal auf den Namen in der Seitenleiste, geben Sie den neuen Namen ein und drücken anschließend die <key>Eingabetaste</key>.</p>
     </section>
 
-    <section>
+    <section id="moving-photos">
     <title>Fotos zwischen Ereignissen verschieben</title>
 
     <p>Obwohl Fotos anfänglich anhand deren Zeitstempeln in Ereignisse eingeordnet werden, können Sie sie zwischen Ereignissen verschieben. Ziehen Sie dazu ein beliebiges Foto in die Seitenleiste und legen Sie es auf einem Ereignis ab.</p>
     </section>
 
-    <section>
+    <section id="creating-events">
     <title>Ereignisse erstellen und zusammenführen</title>
     <p>Um ein neues Ereignis zu erstellen, wählen Sie die gewünschten Fotos aus und wählen Sie <guiseq><gui>Ereignisse</gui><gui>Neues Ereignis</gui></guiseq>.</p>
     <p>Wählen Sie zum Zusammenlegen von Ereignissen den Punkt <guiseq><gui>Ereignisse</gui></guiseq> in der Seitenleiste. Halten Sie anschließend <key>Strg</key> gedrückt und klicken Sie auf diejenigen Ereignisse, die Sie zusammenführen wollen. Wählen Sie abschließend <guiseq><gui>Ereignisse</gui><gui>Ereignisse zusammenführen</gui></guiseq>.</p>
     </section>
 
-    <section>
+    <section id="sorting-events">
     <title>Ereignisse sortieren</title>
 
-    <p>Events are displayed in a tree in the sidebar, organized by the year and month of the earliest photo in the event.
-    To change the event sort order, click <guiseq><gui>View</gui><gui>Sort Events</gui></guiseq> and select either ascending or descending.</p>
+    <p>Ereignisse werden in einer Baumansicht in der Seitenleiste angezeigt, geordnet anhand der Jahres- und Monatsangabe des ältesten Fotos in dem Ereignis. Um die Sortierreihenfolge des Ereignisses zu ändern, wählen Sie <guiseq><gui>Ansicht</gui><gui>Ereignisse sortieren</gui></guiseq>. Wählen Sie dann die aufsteigende oder absteigende Sortierung aus.</p>
     
     </section>
     
-    <section>
+    <section id="change-photo">
     <title>Das Foto ändern, welches das Ereignis repräsentiert</title>
 
     <p>Wenn Sie den Menüpunkt <gui>Ereignisse</gui> in der Seitenleiste wählen, so wird für jedes Ereignis ein einzelnes Foto angezeigt. Dieses wird Hauptfoto genannt.</p>
 
-    <p>By default, Shotwell uses the first photo in each event as its key photo.
-    To use a different key photo, select the photo and choose <guiseq><gui>Photos</gui><gui>Make Key Photo for Event</gui></guiseq>.</p>
+    <p>In der Voreinstellung verwendet Shotwell des erste Foto in einem Ereignis als <em>Schlüsselfoto</em>. Um ein anderes Foto als Schlüsselfoto zu verwenden, wählen Sie das Foto aus und wählen Sie <guiseq><gui>Fotos</gui><gui>Zum Schlüsselfoto für dieses Ereignis machen</gui></guiseq>.</p>
     
     </section>
     
