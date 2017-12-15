@@ -1,1 +1,4 @@
-usr/share
+usr/share/glib-2.0
+usr/share/help
+usr/share/icons
+usr/share/locale

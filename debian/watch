@@ -1,2 +1,3 @@
 version=4
-http://ftp.gnome.org/pub/gnome/sources/shotwell/([\d\.]+)/shotwell-([\d\.]+)\.tar\.xz
+https://download.gnome.org/sources/@PACKAGE@/([\d\.]+[02468])/ \
+    @PACKAGE@@ANY_VERSION@\.tar\.xz

@@ -1,10 +1,37 @@
-shotwell (0.26.1-1) UNRELEASED; urgency=medium
+shotwell (0.26.4-1) unstable; urgency=medium
 
-  * New upstream release (Closes: #855681).
+  * New upstream release (Closes: #855681, #841859, #870027):
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
+    - debian/shotwell.install: Drop now empty directory usr/share/appdata.
+  * New README.source to explain the branching model used.
+  * Use the automatic debug symbol packages:
+    - Remove shotwell-dbg section from debian/control.
+    - Remove override_dh_strip, override_dh_compress and some lines
+      on dh_install from debian/rules.
+    - Remove debian/shotwell-dbg.README.Debian.
+  * Use the upstream ChangeLog as changelog and add NEWS to docs.
+  * Remove debian/shotwell.1 to use the upstream man page.
+  * Don't install man page at shotwell-common.
+  * Remove unnecessary debian/menu.
+  * Some packaging improvements (Closes:# 856708):
+    - Move .desktop and appstream metadata from shotwell-common to shotwell.
+    - debian/rules:
+      + Use dh_auto_configure instead of ./configure.
+      + Update rm paths for multiarch.
+      + Don't install the .a file either.
+    - Remove build-depend m4 since debhelper version 10 use autoconf.
+    - Thanks to Jeremy Bicha <jbicha@ubuntu.com>
+  * debian/changelog:
+    - Remove trailing white spaces.
+  * debian/watch:
+    Rewrite to find only stable releases.
+  * Declare compliance with Debian Policy 4.1.2.0 (No changes needed).
+  * Change to my new email-address:
+    - debian/control,
+    - debian/copyright.
 
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Wed, 22 Mar 2017 06:51:19 +0100
+ -- Jörg Frings-Fürst <debian@jff.email>  Fri, 15 Dec 2017 11:52:17 +0100
 
 shotwell (0.25.4+really0.24.5-0.1) unstable; urgency=medium
 
@@ -603,7 +630,7 @@ shotwell (0.8.1-4) unstable; urgency=low
 shotwell (0.8.1-3) unstable; urgency=low
 
   * Update debian/patches/non-linux-fixes.patch patch (Closes: #619682).
-  * Add debian/patches/vala-0_10_4.patch patch, fix FTBFS caused by 
+  * Add debian/patches/vala-0_10_4.patch patch, fix FTBFS caused by
     valac 0.10.4.
   * debian/control: modify valac-0.10 (>= 0.9.8) to valac-0.10 (>= 0.10.4)
     in Build-Depends field.

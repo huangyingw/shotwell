@@ -1,8 +1,0 @@
-
-For debugging you can copy the files from temp-source.tar.xz into
-your source directory (//usr/src/shotwell-VERSION) or you can
-set the dircetory for gdb with the commandline parameter --directory=DIR.
-
-For other debugger please read the docs.
-
- -- Jörg Frings-Fürst <debian@jff-webhosting.net>  Fri, 03 Apr 2015 13:16:32 +0200

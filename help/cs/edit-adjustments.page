@@ -16,7 +16,7 @@
 
 <p>Až barevnost a kontrast fotografie odpovídají vašim představám, zmáčkněte <gui>Budiž</gui> a změny se uloží. Tlačítko <gui>Původní</gui> vrací obrázek do původního stavu. Pomocí <gui>Zrušit</gui> se všechny provedené změny zahodí a s úpravami se skončí.</p>
 
-<section>
+<section id="color-adjustments">
  <title>Co dělá která úprava barvy?</title>
  <terms>
   <item>

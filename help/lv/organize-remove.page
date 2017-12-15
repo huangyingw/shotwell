@@ -11,7 +11,7 @@
 	<title>Fotogrāfiju izņemšana un dzēšana</title>
 
     <p>Jūs varat izņemt fotogrāfijas ārā no savas bibliotēkas un jūs varat tās pavisam izdzēst ārā no cietā diska.</p>
-<media type="image" src="figures/trash_process.png">Dzēšanas process</media>
+<media type="image" src="figures/trash_process.png"><p>Dzēšanas process</p></media>
 <p>Šī diagramma rāda, kā dzēstā fotogrāfija vispirms tiek ievietota Shotwell miskastē. Ja izdzēsīsiet to ārā no Shotwell miskastes, tā tiks ievietota datora miskastē. Ja izdzēsīsiet to ārā no tās, fotogrāfija tiks neatgriezeniski izdzēsta no datora.</p>
 <section id="delete-remove">
 	<title>Fotogrāfiju izņemšana no bibliotēkas</title>

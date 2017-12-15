@@ -169,20 +169,6 @@ namespace GPhoto {
         
         raw_length = raw.length;
         
-        // Try to make sure last two bytes are JPEG footer.
-        // This is necessary because GPhoto sometimes includes a few extra bytes. See
-        // Yorba bug #2905 and the following GPhoto bug:
-        // http://sourceforge.net/tracker/?func=detail&aid=3141521&group_id=8874&atid=108874
-        if (raw_length > 32) {
-            for (size_t i = raw_length - 2; i > raw_length - 32; i--) {
-                if (raw[i] == Jpeg.MARKER_PREFIX && raw[i + 1] == Jpeg.Marker.EOI) {
-                    debug("Adjusted length of thumbnail for: %s", filename);
-                    raw_length = i + 2;
-                    break;
-                }
-            }
-        }
-        
         MemoryInputStream mins = new MemoryInputStream.from_data(raw, null);
         return new Gdk.Pixbuf.from_stream_at_scale(mins, ImportPreview.MAX_SCALE, ImportPreview.MAX_SCALE, true, null);
     }
@@ -205,18 +191,14 @@ namespace GPhoto {
         GPhoto.CameraFile camera_file;
         GPhoto.Result res = GPhoto.CameraFile.create_from_fd(out camera_file, fd);
         if (res != Result.OK) {
-            Posix.close(fd);
             throw new GPhotoError.LIBRARY("[%d] Error allocating camera file: %s", (int) res, res.as_string());
         }
         
         res = camera.get_file(folder, filename, GPhoto.CameraFileType.NORMAL, camera_file, context);
         if (res != Result.OK) {
-            Posix.close(fd);
             throw new GPhotoError.LIBRARY("[%d] Error retrieving file object for %s/%s: %s", 
                 (int) res, folder, filename, res.as_string());
         }
-
-        Posix.close(fd);
     }
     
     public PhotoMetadata? load_metadata(Context context, Camera camera, string folder, string filename)

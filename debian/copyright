@@ -13,7 +13,7 @@ License: LGPL-2.1
 
 Files: debian/*
 Copyright: 2009-2011 Devid Antonio Filoni <d.filoni@ubuntu.com>
-           2014-2017 Jörg Frings-Fürst <debian@jff-webhosting.net>
+           2014-2017 Jörg Frings-Fürst <debian@jff.email>
 License: GPL-2+
 
 Files: icons/pin-toolbar.svg

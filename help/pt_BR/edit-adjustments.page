@@ -22,7 +22,7 @@
 
 <p>Após ajustar as cores e o contraste da foto, clique em <gui>OK</gui> para salvar as alterações. O botão <gui>Reiniciar</gui> irá retornar a imagem ao seu estado original. O botão <gui>Cancelar</gui> descarta todas as mudanças que você fez.</p>
 
-<section>
+<section id="color-adjustments">
  <title>O que os ajustes fazem?</title>
  <terms>
   <item>

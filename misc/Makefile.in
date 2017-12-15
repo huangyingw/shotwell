@@ -90,7 +90,8 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = misc
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/ax_generate_changelog.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/appstream-xml.m4 \
+	$(top_srcdir)/m4/ax_generate_changelog.m4 \
 	$(top_srcdir)/m4/ax_is_release.m4 \
 	$(top_srcdir)/m4/ax_require_defined.m4 \
 	$(top_srcdir)/m4/gettext.m4 $(top_srcdir)/m4/gsettings.m4 \
@@ -297,7 +298,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-appdataxmldir = @appdataxmldir@
+appstreamxmldir = @appstreamxmldir@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -344,18 +345,18 @@ gsettings_SCHEMAS = \
 	org.yorba.shotwell.gschema.xml \
 	org.yorba.shotwell-extras.gschema.xml
 
-appdata_in_files = $(srcdir)/shotwell.appdata.xml.in
-appdata_XML = \
+appstream_in_files = $(srcdir)/shotwell.appdata.xml.in
+appstream_XML = \
 	shotwell.appdata.xml
 
 desktopdir = $(datadir)/applications
 desktop_DATA = shotwell.desktop shotwell-viewer.desktop
-CLEANFILES = $(appdata_XML) $(desktop_DATA) $(desktop_in_files)
+CLEANFILES = $(appstream_XML) $(desktop_DATA) $(desktop_in_files)
 dist_noinst_DATA = \
 	$(srcdir)/shotwell.desktop.in.in \
 	$(srcdir)/shotwell-viewer.desktop.in.in \
 	$(gsettings_SCHEMAS) \
-	$(appdata_in_files)
+	$(appstream_in_files)
 
 all: all-am
 
@@ -575,7 +576,7 @@ uninstall-am: uninstall-desktopDATA
 .PRECIOUS: Makefile
 
 
-$(appdata_XML) : $(appdata_in_files)
+$(appstream_XML) : $(appstream_in_files)
 	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 %.desktop.in : %.desktop.in.in
@@ -585,7 +586,7 @@ $(appdata_XML) : $(appdata_in_files)
 	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 @GSETTINGS_RULES@
-@APPDATA_XML_RULES@
+@APPSTREAM_XML_RULES@
 
 -include $(top_srcdir)/git.mk
 
