@@ -1,6 +1,6 @@
 shotwell (0.26.4-1) unstable; urgency=medium
 
-  * New upstream release (Closes: #855681, Closes: #841859).
+  * New upstream release (Closes: #855681, #841859, #870027):
     - debian/control: Add new appstream-util, libappstream-glib-dev and
       libgdata-dev to Build-Depends.
     - debian/shotwell.install: Drop now empty directory usr/share/appdata.
@@ -26,7 +26,7 @@ shotwell (0.26.4-1) unstable; urgency=medium
     - Remove trailing white spaces.
   * debian/watch:
     Rewrite to find only stable releases.
-  * Declare compliance with Debian Policy 4.1.1 (No changes needed).
+  * Declare compliance with Debian Policy 4.1.2.0 (No changes needed).
   * Change to my new email-address:
     - debian/control,
     - debian/copyright.
