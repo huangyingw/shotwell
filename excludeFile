@@ -1,0 +1,4 @@
+*.findresult
+*.o
+.git/
+src/.unitize/
