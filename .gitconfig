@@ -19,3 +19,5 @@
     ignore = etc/ssh/ssh_config
     ignore = excludeFile
     ignore = prunefile.conf
+[commit]
+    message = n

@@ -3,7 +3,7 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
-make install \
+sudo make install \
     && echo installation success !!!
 
 cd -
