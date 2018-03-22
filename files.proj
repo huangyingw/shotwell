@@ -260,6 +260,7 @@
 "./src/library/TrashPage.vala"
 "./src/library/TrashSidebarEntry.vala"
 "./src/library/mk/library.mk"
+"./src/libshotwell.deps"
 "./src/main.vala"
 "./src/photos/BmpSupport.vala"
 "./src/photos/GRaw.vala"

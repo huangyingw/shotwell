@@ -3,4 +3,3 @@ hardening.patch
 06_uoa.patch
 update_translation_list.patch
 no_headerbar.patch
-CVE-2017-1000024.patch

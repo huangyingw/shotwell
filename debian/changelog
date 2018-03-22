@@ -1,16 +1,3 @@
-shotwell (0.22.0+git20160108.r1.f2fb1f7-0ubuntu1.1) xenial-security; urgency=medium
-
-  * SECURITY UPDATE: information disclosure vulnerability through
-    plugins
-    - debian/patches/CVE-2017-1000024.patch: uses HTTPS everywhere
-      plugins/shotwell-publishing-extras/TumblrPublishing.vala,
-      plugins/shotwell-publishing-extras/YandexPublishing.vala,
-      plugins/shotwell-publishing/PicasaPublishing.vala,
-      plugins/shotwell-publishing/YouTubePublishing.vala.
-    - CVE-2017-1000024
-
- -- Leonidas S. Barbosa <leo.barbosa@canonical.com>  Thu, 03 Aug 2017 16:45:09 -0300
-
 shotwell (0.22.0+git20160108.r1.f2fb1f7-0ubuntu1) xenial; urgency=medium
 
   * New upstream git snapshot.
