@@ -74,8 +74,8 @@ public abstract class SearchViewFilter : ViewFilter {
             break;
             
             case RatingFilter.ONE_OR_HIGHER:
-                rating = Rating.UNRATED;
-                rating_allow_higher = false;
+                rating = Rating.ONE;
+                rating_allow_higher = true;
             break;
             
             case RatingFilter.ONE_ONLY:
@@ -126,7 +126,7 @@ public abstract class SearchViewFilter : ViewFilter {
             case RatingFilter.UNRATED_OR_HIGHER:
             default:
                 rating = Rating.UNRATED;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
         }
     }
