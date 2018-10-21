@@ -4,8 +4,11 @@
 [remote "github"]
     url = git@github.com:huangyingw/shotwell.git
     fetch = +refs/heads/*:refs/remotes/github/*
+[remote "bitbucket"]
+	url = git@bitbucket.org:huangyingw/shotwell.git
+	fetch = +refs/heads/*:refs/remotes/bitbucket/*
 [push]
-    remote = origin
+    remote = bitbucket
     remote = github
 [gdif]
     ignore = .bashrc

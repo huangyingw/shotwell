@@ -14,4 +14,4 @@ services:
             - ~/BareReps/:/root/BareReps/
             - ~/loadrc/:/root/loadrc/
             - ~/loadrc/gitrc/.gitconfig:/root/.gitconfig
-        command: /bin/sh -c "/shotwell/build.sh > /var/logs/containner.log 2>&1"
+        command: /bin/sh -c "/shotwell/build.sh 2>&1 | tee /var/logs/containner.log"
