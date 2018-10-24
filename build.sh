@@ -3,7 +3,8 @@ SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 cd "$SCRIPTPATH"
 
-[ -f configure ] || ./autogen.sh
-./configure
-make \
-    && sudo make install
+apt-get build-dep -y shotwell
+apt-get install -y libwebp-dev
+meson build && \
+    ninja -C build && \
+    ninja -C build install
