@@ -74,12 +74,12 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.REJECTED_OR_HIGHER:
                 rating = Rating.REJECTED;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
             case RatingFilter.ONE_OR_HIGHER:
                 rating = Rating.ONE;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
             case RatingFilter.ONE_ONLY:
@@ -89,7 +89,7 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.TWO_OR_HIGHER:
                 rating = Rating.TWO;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
              case RatingFilter.TWO_ONLY:
@@ -99,7 +99,7 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.THREE_OR_HIGHER:
                 rating = Rating.THREE;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
             case RatingFilter.THREE_ONLY:
@@ -109,7 +109,7 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.FOUR_OR_HIGHER:
                 rating = Rating.FOUR;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
             case RatingFilter.FOUR_ONLY:
@@ -119,7 +119,7 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.FIVE_OR_HIGHER:
                 rating = Rating.FIVE;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
             
             case RatingFilter.FIVE_ONLY:
