@@ -1,13 +1,13 @@
-[remote "GNOME"]
+[remote "origin"]
     url = git@github.com:GNOME/shotwell.git
-    fetch = +refs/heads/*:refs/remotes/GNOME/*
+    fetch = +refs/heads/*:refs/remotes/origin/*
 [remote "github"]
     url = git@github.com:huangyingw/shotwell.git
     fetch = +refs/heads/*:refs/remotes/github/*
 [push]
     remote = github
 [gsync]
-    remote = GNOME
+    remote = origin
     branch = master
 [merge]
     allow = true
@@ -15,7 +15,7 @@
     remote = github
     merge = refs/heads/dev
 [branch "master"]
-    remote = GNOME
+    remote = origin
     merge = refs/heads/master
 [commit]
     message = n
