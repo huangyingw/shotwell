@@ -130,7 +130,7 @@ public abstract class SearchViewFilter : ViewFilter {
             case RatingFilter.UNRATED_OR_HIGHER:
             default:
                 rating = Rating.UNRATED;
-                rating_allow_higher = true;
+                rating_allow_higher = false;
             break;
         }
     }
