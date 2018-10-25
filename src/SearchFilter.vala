@@ -74,7 +74,7 @@ public abstract class SearchViewFilter : ViewFilter {
             
             case RatingFilter.REJECTED_OR_HIGHER:
                 rating = Rating.REJECTED;
-                rating_allow_higher = false;
+                rating_allow_higher = true;
             break;
             
             case RatingFilter.ONE_OR_HIGHER:
