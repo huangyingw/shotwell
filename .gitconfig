@@ -10,7 +10,7 @@
     remote = GNOME
     branch = master
 [merge]
-	allow = true
+    allow = true
 [branch "dev"]
     remote = github
     merge = refs/heads/dev
@@ -18,10 +18,19 @@
     remote = GNOME
     merge = refs/heads/master
 [commit]
-	message = n
+    message = n
 [vrun]
-	silent = false
-	async = false
+    silent = false
+    async = false
 [deploy]
-	host = u1804
-	path = ~/myproject/git/linux/GNOME/shotwell
+    host = ubuntu
+    path = ~/myproject/git/linux/GNOME/shotwell
+[gdif]
+    ignore = .bashrc
+    ignore = .gitignore
+    ignore = Dockerfile
+    ignore = build.rsh
+    ignore = docker-compose.yml
+    ignore = entrypoint.sh
+    ignore = etc/ssh/ssh_config
+    ignore = sources.list
