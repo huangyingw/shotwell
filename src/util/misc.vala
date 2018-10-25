@@ -73,25 +73,7 @@ public inline time_t now_time_t() {
 }
 
 public string md5_file(File file) throws Error {
-    Checksum md5 = new Checksum(ChecksumType.MD5);
-    uint8[] buffer = new uint8[64 * 1024];
-    
-    FileInputStream fins = file.read(null);
-    for (;;) {
-        size_t bytes_read = fins.read(buffer, null);
-        if (bytes_read <= 0)
-            break;
-        
-        md5.update((uchar[]) buffer, bytes_read);
-    }
-    
-    try {
-        fins.close(null);
-    } catch (Error err) {
-        warning("Unable to close MD5 input stream for %s: %s", file.get_path(), err.message);
-    }
-    
-    return md5.get_string();
+    return "";
 }
 
 // Once generic functions are available in Vala, this could be genericized.
