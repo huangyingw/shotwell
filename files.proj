@@ -509,7 +509,6 @@
 "./src/util/ui.vala"
 "./test/NaturalCollate-Test.vala"
 "./test/meson.build"
-"./test/naturalcollate.vala"
 "./test/server.py"
 "./thumbnailer/meson.build"
 "./thumbnailer/shotwell-video-thumbnailer.vala"
